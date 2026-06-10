@@ -1,0 +1,458 @@
+[
+  {
+    "id": "ALT-001",
+    "name": "CPU使用率过高",
+    "category": "资源",
+    "severity": "critical",
+    "description": "服务器CPU使用率持续超过90%，可能导致服务响应缓慢或不可用",
+    "possibleCauses": [
+      "应用程序出现死循环或计算密集型操作",
+      "并发请求量突增超出系统承载能力",
+      "JVM GC频繁导致CPU飙升",
+      "数据库慢查询耗尽CPU资源",
+      "恶意攻击或爬虫流量激增"
+    ],
+    "diagnosticSteps": [
+      "SSH登录目标服务器，执行 top 或 htop 查看CPU占用最高的进程",
+      "使用 jstack 获取Java进程的线程dump，分析线程状态",
+      "检查应用日志中是否有异常堆栈或慢请求记录",
+      "查看Prometheus监控确认CPU使用趋势和峰值时间",
+      "检查是否有定时任务或批处理在运行"
+    ],
+    "resolutionSteps": [
+      "如果单个进程异常，先 kill 该进程并通知开发排查代码",
+      "如果是流量突增，启用限流或扩容实例",
+      "如果是GC问题，调整JVM参数（-Xmx/-Xms）或排查内存泄漏",
+      "如果是数据库慢查询，优化SQL或添加索引",
+      "临时措施：重启服务以快速恢复，但需保留现场日志供事后分析"
+    ],
+    "escalationRule": "持续超过95%且5分钟内未恢复 → 升级至P1，通知值班SRE和对应业务负责人",
+    "relatedDocs": ["cpu_high_usage.md"]
+  },
+  {
+    "id": "ALT-002",
+    "name": "内存使用率过高",
+    "category": "资源",
+    "severity": "critical",
+    "description": "服务器内存使用率持续超过85%，可能导致OOM Killer杀进程或服务崩溃",
+    "possibleCauses": [
+      "应用程序存在内存泄漏",
+      "缓存配置过大导致堆内存不足",
+      "大对象频繁创建未及时回收",
+      "线程池配置不当导致线程堆积",
+      "堆外内存（Direct Buffer）泄漏"
+    ],
+    "diagnosticSteps": [
+      "执行 free -h 查看系统内存使用情况",
+      "使用 jmap -heap <pid> 查看JVM堆内存分布",
+      "生成heap dump: jmap -dump:format=b,file=heap.hprof <pid>",
+      "检查GC日志，分析GC频率和回收效果",
+      "查看应用是否有大量文件句柄或Socket未关闭"
+    ],
+    "resolutionSteps": [
+      "如果是内存泄漏，先重启服务恢复，dump文件交开发分析",
+      "调整JVM参数：-Xmx（最大堆）、-Xms（初始堆）、-XX:MaxMetaspaceSize",
+      "减少本地缓存大小或改用Redis等外部缓存",
+      "优化线程池配置和连接池大小",
+      "短期方案：扩容内存或增加实例数"
+    ],
+    "escalationRule": "触发OOM或使用率超过95% → 升级至P1，通知值班SRE和架构师",
+    "relatedDocs": ["memory_high_usage.md"]
+  },
+  {
+    "id": "ALT-003",
+    "name": "磁盘使用率过高",
+    "category": "资源",
+    "severity": "warning",
+    "description": "磁盘使用率超过80%，可能导致日志写入失败或数据丢失",
+    "possibleCauses": [
+      "日志文件未做轮转导致磁盘写满",
+      "临时文件未及时清理",
+      "数据备份文件堆积",
+      "数据库表空间膨胀",
+      "Docker镜像或容器层堆积"
+    ],
+    "diagnosticSteps": [
+      "执行 df -h 查看各分区使用情况",
+      "使用 du -sh /* 逐级排查大目录",
+      "检查 /var/log 目录下日志文件大小",
+      "检查 /tmp 目录下临时文件",
+      "查看Docker存储: docker system df"
+    ],
+    "resolutionSteps": [
+      "配置logrotate进行日志轮转和压缩",
+      "清理过期日志和临时文件",
+      "扩展磁盘空间或挂载新磁盘",
+      "配置监控告警在75%时提前预警",
+      "将日志和数据分离到不同磁盘"
+    ],
+    "escalationRule": "磁盘使用率超过90% → 升级至P2，通知运维团队立即处理",
+    "relatedDocs": ["disk_high_usage.md"]
+  },
+  {
+    "id": "ALT-004",
+    "name": "服务不可用",
+    "category": "服务",
+    "severity": "critical",
+    "description": "核心业务服务健康检查失败，服务完全不可访问",
+    "possibleCauses": [
+      "应用进程崩溃或异常退出",
+      "端口被占用或防火墙策略变更",
+      "依赖服务(数据库/Redis/MQ)不可用",
+      "SSL证书过期",
+      "负载均衡健康检查配置错误",
+      "DNS解析异常"
+    ],
+    "diagnosticSteps": [
+      "检查服务进程是否存活: ps aux | grep <service>",
+      "检查端口监听状态: netstat -tlnp",
+      "查看应用启动日志和应用日志中的ERROR",
+      "验证依赖服务连通性: telnet <db-host> 3306",
+      "检查负载均衡器健康检查状态",
+      "使用curl从不同网络测试服务可达性"
+    ],
+    "resolutionSteps": [
+      "如果进程挂了，立即重启服务并分析crash日志",
+      "如果是依赖服务问题，先恢复依赖服务",
+      "检查最近是否有部署变更，如有则考虑回滚",
+      "如果是DNS问题，修改hosts或切换DNS",
+      "启用服务降级和熔断机制作为预防措施",
+      "更新监控告警规则，缩短不可用检测时间"
+    ],
+    "escalationRule": "核心服务不可用超过2分钟 → 立即升级至P0，启动应急响应流程",
+    "relatedDocs": ["service_unavailable.md"]
+  },
+  {
+    "id": "ALT-005",
+    "name": "接口响应缓慢",
+    "category": "性能",
+    "severity": "warning",
+    "description": "API接口P99响应时间超过正常值3倍以上，用户体验明显下降",
+    "possibleCauses": [
+      "数据库慢查询或锁等待",
+      "下游服务响应超时",
+      "网络延迟或丢包",
+      "线程池耗尽导致请求排队",
+      "缓存失效导致大量请求穿透到数据库",
+      "Full GC导致STW暂停"
+    ],
+    "diagnosticSteps": [
+      "查看APM工具(SkyWalking/Pinpoint)定位慢调用链",
+      "分析数据库慢查询日志",
+      "检查Redis命中率和响应时间",
+      "查看JVM线程dump分析线程状态",
+      "使用arthas trace命令追踪方法耗时",
+      "检查网络: ping/traceroute 目标服务"
+    ],
+    "resolutionSteps": [
+      "优化慢SQL或添加数据库索引",
+      "增加缓存预热和缓存过期策略优化",
+      "调整下游服务超时时间和重试策略",
+      "扩容线程池或调整限流参数",
+      "优化GC策略减少停顿时间",
+      "考虑引入异步处理或消息队列解耦"
+    ],
+    "escalationRule": "P99延迟持续超过5秒且持续10分钟以上 → 升级至P2",
+    "relatedDocs": ["slow_response.md"]
+  },
+  {
+    "id": "ALT-006",
+    "name": "数据库连接池耗尽",
+    "category": "数据库",
+    "severity": "critical",
+    "description": "数据库连接池全部被占用，新请求无法获取连接，导致服务异常",
+    "possibleCauses": [
+      "慢查询导致连接长时间持有",
+      "连接泄漏：应用未正确关闭连接",
+      "并发量超出连接池最大配置",
+      "数据库本身性能下降导致查询变慢",
+      "连接池配置过小"
+    ],
+    "diagnosticSteps": [
+      "查看连接池监控(如HikariCP metrics)",
+      "检查数据库当前连接数: SHOW PROCESSLIST",
+      "分析是否有长时间运行的查询",
+      "检查应用日志中是否有连接超时错误",
+      "查看数据库性能指标(CPU/IO/锁)"
+    ],
+    "resolutionSteps": [
+      "Kill长时间运行的慢查询释放连接",
+      "调大连接池最大连接数(需评估数据库承载能力)",
+      "修复代码中的连接泄漏问题",
+      "优化慢SQL减少连接占用时间",
+      "配置连接池的泄漏检测和超时回收"
+    ],
+    "escalationRule": "连接池耗尽超过3分钟 → 升级至P1",
+    "relatedDocs": []
+  },
+  {
+    "id": "ALT-007",
+    "name": "Redis不可用",
+    "category": "中间件",
+    "severity": "critical",
+    "description": "Redis服务不可用或连接超时，影响缓存和Session管理",
+    "possibleCauses": [
+      "Redis进程崩溃或OOM",
+      "内存使用达到maxmemory上限",
+      "网络分区导致无法连接",
+      "主从切换异常",
+      "Redis哨兵或集群故障",
+      "慢查询阻塞Redis单线程"
+    ],
+    "diagnosticSteps": [
+      "检查Redis进程状态和日志",
+      "使用 redis-cli ping 测试连通性",
+      "检查Redis内存使用: INFO memory",
+      "查看慢查询日志: SLOWLOG GET 100",
+      "检查主从复制状态: INFO replication",
+      "验证网络连通性和防火墙规则"
+    ],
+    "resolutionSteps": [
+      "重启Redis服务或触发主从切换",
+      "清理过期Key释放内存",
+      "调整maxmemory-policy策略",
+      "扩容Redis内存或增加分片",
+      "确认应用有Redis降级逻辑",
+      "配置Redis持久化防止数据丢失"
+    ],
+    "escalationRule": "Redis不可用超过5分钟 → 升级至P1",
+    "relatedDocs": []
+  },
+  {
+    "id": "ALT-008",
+    "name": "消息队列积压",
+    "category": "中间件",
+    "severity": "warning",
+    "description": "消息队列中消息大量积压，消费者处理能力不足",
+    "possibleCauses": [
+      "消费者服务处理速度下降",
+      "生产者发送速率突增",
+      "消费者实例减少或下线",
+      "消息处理逻辑中存在慢操作",
+      "消费者异常导致消息重复消费"
+    ],
+    "diagnosticSteps": [
+      "查看MQ控制台的消息积压量",
+      "检查消费者服务状态和吞吐量",
+      "分析消息处理的平均耗时",
+      "查看消费者日志中是否有异常",
+      "确认是否有消费者下线或重启"
+    ],
+    "resolutionSteps": [
+      "扩容消费者实例数量",
+      "优化消息处理逻辑提高吞吐量",
+      "检查并修复消费者异常",
+      "临时增加消费者线程数",
+      "如果是偶发峰值，确认积压能自动消化"
+    ],
+    "escalationRule": "积压量超过10万且持续增长 → 升级至P2",
+    "relatedDocs": []
+  },
+  {
+    "id": "ALT-009",
+    "name": "SSL证书即将过期",
+    "category": "安全",
+    "severity": "warning",
+    "description": "SSL/TLS证书将在30天内过期，需及时续期避免服务中断",
+    "possibleCauses": [
+      "证书到期日临近未及时续期",
+      "自动续期脚本失败",
+      "证书管理流程遗漏"
+    ],
+    "diagnosticSteps": [
+      "使用 openssl 检查证书到期时间",
+      "确认证书域名覆盖范围",
+      "检查证书链完整性",
+      "验证新证书是否已准备好"
+    ],
+    "resolutionSteps": [
+      "登录CA平台申请续期证书",
+      "更新Nginx/网关的SSL配置",
+      "重启相关服务使新证书生效",
+      "验证HTTPS访问正常",
+      "设置证书到期前45天的自动提醒"
+    ],
+    "escalationRule": "证书到期前7天仍未更新 → 升级至P1",
+    "relatedDocs": []
+  },
+  {
+    "id": "ALT-010",
+    "name": "JVM Full GC频繁",
+    "category": "性能",
+    "severity": "warning",
+    "description": "JVM Full GC频率超过每小时5次或单次GC时间超过2秒",
+    "possibleCauses": [
+      "堆内存配置过小",
+      "内存泄漏导致老年代持续增长",
+      "大对象直接分配到老年代",
+      "元空间(Metaspace)不足",
+      "GC算法选择不当"
+    ],
+    "diagnosticSteps": [
+      "查看GC日志分析GC频率和耗时",
+      "使用 jstat -gcutil <pid> 监控GC",
+      "分析堆dump中老年代的对象分布",
+      "检查元空间使用: jstat -gc <pid>",
+      "确认是否有System.gc()显式调用"
+    ],
+    "resolutionSteps": [
+      "增大堆内存: -Xmx/-Xms",
+      "优化代码减少对象创建",
+      "调整新生代与老年代比例",
+      "更换GC算法(如G1GC): -XX:+UseG1GC",
+      "排查并修复内存泄漏"
+    ],
+    "escalationRule": "Full GC导致服务连续超时 → 升级至P2",
+    "relatedDocs": []
+  },
+  {
+    "id": "ALT-011",
+    "name": "网络丢包率过高",
+    "category": "网络",
+    "severity": "warning",
+    "description": "服务器网络丢包率超过1%，可能影响服务间调用和用户体验",
+    "possibleCauses": [
+      "网络带宽不足",
+      "交换机或路由器故障",
+      "网卡硬件故障或驱动问题",
+      "防火墙规则限制",
+      "DDoS攻击"
+    ],
+    "diagnosticSteps": [
+      "使用 ping -c 100 测试丢包率",
+      "使用 mtr 进行路由追踪",
+      "检查网卡错误计数: ifconfig 或 ip -s link",
+      "查看交换机端口流量和错误统计",
+      "检查防火墙连接数是否达到上限"
+    ],
+    "resolutionSteps": [
+      "联系网络团队排查交换机/路由器",
+      "如果是带宽不足，申请扩容",
+      "更换故障网卡或更新驱动",
+      "调整防火墙连接限制",
+      "启用多网卡绑定增加冗余"
+    ],
+    "escalationRule": "丢包率超过5%且持续5分钟 → 升级至P2",
+    "relatedDocs": []
+  },
+  {
+    "id": "ALT-012",
+    "name": "容器Pod频繁重启",
+    "category": "容器",
+    "severity": "warning",
+    "description": "Kubernetes Pod在短时间内被反复重启，影响服务稳定性",
+    "possibleCauses": [
+      "应用进程异常退出",
+      "健康检查探针配置不当",
+      "OOM Killer杀死容器进程",
+      "节点资源不足导致Pod被驱逐",
+      "镜像问题或启动脚本错误"
+    ],
+    "diagnosticSteps": [
+      "kubectl describe pod <pod-name> 查看事件",
+      "kubectl logs <pod-name> --previous 查看前一个容器日志",
+      "检查节点资源: kubectl top nodes",
+      "查看OOM事件: dmesg | grep -i oom",
+      "确认健康检查配置(liveness/readiness)"
+    ],
+    "resolutionSteps": [
+      "修复应用代码中的崩溃问题",
+      "调整容器内存限制(requests/limits)",
+      "优化健康检查探针的初始延迟和阈值",
+      "增加节点资源或迁移Pod到其他节点",
+      "检查镜像是否正确且启动命令无误"
+    ],
+    "escalationRule": "1小时内重启超过10次 → 升级至P2",
+    "relatedDocs": []
+  },
+  {
+    "id": "ALT-013",
+    "name": "API错误率飙升",
+    "category": "服务",
+    "severity": "critical",
+    "description": "API接口的5xx错误率超过5%，影响用户正常使用",
+    "possibleCauses": [
+      "后端服务异常或超时",
+      "数据库连接问题",
+      "第三方服务不可用",
+      "代码逻辑Bug触发",
+      "配置错误或环境变量缺失"
+    ],
+    "diagnosticSteps": [
+      "查看错误日志获取异常堆栈",
+      "按错误码分类统计错误类型和分布",
+      "检查近期的代码部署或配置变更",
+      "查看依赖服务的健康状态",
+      "分析错误请求的特征(URI/参数/用户)"
+    ],
+    "resolutionSteps": [
+      "回滚最近的变更",
+      "修复导致错误的代码问题",
+      "恢复依赖服务或切换到备用服务",
+      "启用熔断和降级逻辑",
+      "更新配置或环境变量"
+    ],
+    "escalationRule": "5xx错误率超过10%持续3分钟 → 升级至P0，启动应急响应",
+    "relatedDocs": []
+  },
+  {
+    "id": "ALT-014",
+    "name": "定时任务执行失败",
+    "category": "任务",
+    "severity": "warning",
+    "description": "关键定时任务未按时执行或执行失败，影响业务流程",
+    "possibleCauses": [
+      "调度服务异常",
+      "任务执行超时",
+      "依赖资源不可用",
+      "权限或配置变更",
+      "代码更新引入Bug"
+    ],
+    "diagnosticSteps": [
+      "检查调度系统的任务执行记录",
+      "查看任务执行日志中的错误信息",
+      "确认调度服务是否正常运行",
+      "手动触发任务测试",
+      "检查任务依赖的数据库/接口是否正常"
+    ],
+    "resolutionSteps": [
+      "手动执行任务补数据",
+      "修复任务逻辑中的错误",
+      "恢复依赖服务",
+      "调整任务超时时间",
+      "添加任务失败告警和自动重试"
+    ],
+    "escalationRule": "关键任务失败超过2次 → 升级至P2",
+    "relatedDocs": []
+  },
+  {
+    "id": "ALT-015",
+    "name": "数据同步延迟",
+    "category": "数据",
+    "severity": "warning",
+    "description": "主从数据库或跨数据中心数据同步延迟超过正常阈值",
+    "possibleCauses": [
+      "网络带宽不足",
+      "主库写入压力大导致binlog堆积",
+      "从库性能不足",
+      "大事务阻塞复制",
+      "复制配置错误"
+    ],
+    "diagnosticSteps": [
+      "查看从库复制状态: SHOW SLAVE STATUS",
+      "检查Seconds_Behind_Master延迟时间",
+      "检查网络延迟和带宽使用",
+      "查看主库binlog生成速率",
+      "是否有长时间未提交的事务"
+    ],
+    "resolutionSteps": [
+      "优化大事务改为小批量提交",
+      "升级从库硬件配置",
+      "增加网络带宽",
+      "调整并行复制参数",
+      "如果是临时高峰，等待自动追平"
+    ],
+    "escalationRule": "延迟超过30分钟 → 升级至P2",
+    "relatedDocs": []
+  }
+]

@@ -1,0 +1,23 @@
+#!/bin/sh
+# Maven Wrapper for Unix/Linux/Git Bash
+
+BASE_DIR=$(cd "$(dirname "$0")" && pwd)
+export MAVEN_PROJECTBASEDIR="$BASE_DIR"
+
+JAVA_HOME="${JAVA_HOME:-$(dirname "$(dirname "$(which java 2>/dev/null)")")}"
+JAVACMD="$JAVA_HOME/bin/java"
+
+if [ ! -x "$JAVACMD" ]; then
+    JAVACMD="$(which java)"
+fi
+
+if [ -z "$JAVACMD" ] || [ ! -x "$JAVACMD" ]; then
+    echo "ERROR: Java not found. Please install JDK 17+ and set JAVA_HOME." >&2
+    exit 1
+fi
+
+exec "$JAVACMD" \
+    -classpath "$BASE_DIR/.mvn/wrapper/maven-wrapper.jar" \
+    -Dmaven.multiModuleProjectDirectory="$BASE_DIR" \
+    org.apache.maven.wrapper.MavenWrapperMain \
+    "$@"
