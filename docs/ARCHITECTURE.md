@@ -25,6 +25,7 @@ OpsPilot 解决的是企业信息系统发生故障后的协同闭环，而不�
 | Investigation | Agent 计划、只读工具执行、再规划、证据报告与轨迹查询 | 自动执行高风险变更 |
 | Remediation | 高风险动作草案、独立审批、版本控制与治理留痕 | 直接调用生产执行器 |
 | Postmortem | 脱敏证据快照、无责复盘、独立发布和防复发行动项 | 提前断言根因或替代行动项执行 |
+| Analytics | 响应里程碑口径、严重等级分布、慢事故和行动项运营 | 篡改源数据或推断不存在的里程碑 |
 | Assistant | 持久化会话、Incident 上下文、SSE 输出和证据引用 | 绕过状态机修改生产数据 |
 | Audit | 记录关键操作 | 修改业务数据 |
 
@@ -73,6 +74,14 @@ OPEN -> ACKNOWLEDGED -> INVESTIGATING -> MITIGATED -> RESOLVED -> CLOSED
 草稿包含事件摘要、用户/业务影响、直接与系统性原因、促成因素、经验与改进五类正文。任一字段为空或仍含 `【待补充】`，以及没有行动项时，均不能进入复核。行动项必须指向具有运维处置权限的活跃用户并设置不早于当天的截止日期；父复盘和子行动项分别带版本号，新增/编辑子项也先递增父版本，避免提交与修改并发穿透。
 
 提交后正文和行动项冻结，只有 `ADMIN/OPS_MANAGER` 可以复核，且提交人不能复核自己的内容。`REQUEST_CHANGES` 回到草稿，`PUBLISH` 后正文永久只读；行动项仍由负责人或管理角色完成，并在 Incident 时间线和审计日志中留下引用。这个边界参考 [Google SRE 的 Postmortem Culture](https://sre.google/sre-book/postmortem-culture/) 对影响、原因、行动项、无责文化和正式复核的要求，以及 [FireHydrant retrospectives](https://docs.firehydrant.com/docs/conducting-retrospectives) 与 [follow-ups](https://docs.firehydrant.com/docs/managing-follow-ups) 对事故证据汇集、复盘后跟踪工作的划分。OpsPilot 实现的是本项目内的确定性治理流程，不宣称复制这些产品的全部能力。
+
+### 事故指标与行动项运营
+
+指标窗口按 `incident.created_at` 纳入，`from/to` 均包含，默认最近 30 日、最长 366 日；严重等级是可选过滤条件。MTTA 读取 `acknowledged_at - created_at`，MTTM 读取时间线中首次进入 `MITIGATED` 的时间，MTTR 读取 `resolved_at - created_at`。每个指标只接纳自身里程碑存在且时长非负的样本，分别返回样本数、均值和中位数；缺失不补 0，异常值不改写源 Incident。最慢已恢复事故和严重等级分布用于下钻解释，而不是用单个平均数代替事故详情。
+
+行动项运营查询跨越单份复盘，按全部/本人、开放/完成和是否逾期筛选。逾期定义为 `OPEN && due_date < Asia/Shanghai 业务日`，截止当天不算逾期。定时任务每日 09:05 扫描，管理角色也可以显式传业务日期复现边界；每个候选先锁定行动项，再由 `follow_up_id` 唯一约束保证最多一条升级事实。重复扫描只计为已存在，不重复写 Incident 时间线和审计。完成行动项时同一事务关闭开放升级事实并保留首次发现/关闭元数据。
+
+`postmortem_follow_up_escalation` 表示“系统发现并治理逾期”的内部事实，不复用 `notification_log`，也不代表邮件、短信或企业 IM 已送达。指标筛选提供事故窗口；行动项摘要始终返回当前业务日状态，因为当前模型不是保存每次负责人/状态变化的双时态历史库。
 
 ## 5. 可解释 Agent 调查
 
@@ -209,8 +218,10 @@ incident 1---n remediation_proposal n---1 agent_investigation_run
 remediation_proposal n---1 change_record
 sys_user 1---n remediation_proposal(requested/reviewed)
 incident 1---0..1 incident_postmortem 1---n postmortem_follow_up
+postmortem_follow_up 1---0..1 postmortem_follow_up_escalation
 sys_user 1---n incident_postmortem(created/submitted/reviewed)
 sys_user 1---n postmortem_follow_up(owner/created/completed)
+sys_user 1---n postmortem_follow_up_escalation(created/resolved)
 sys_user 1---n assistant_session 1---n assistant_message
 incident 1---n assistant_session (optional context)
 runbook_document(stable_key) 1---n immutable versions
@@ -224,7 +235,7 @@ cmdb_resource 1---n oncall_schedule 1---n oncall_shift
 cmdb_resource 1---n escalation_policy 1---n escalation_step
 ```
 
-数据库变更由 Flyway 管理。H2 使用 MySQL 兼容模式保证本地零配置体验，Compose 提供 MySQL 部署路径；Testcontainers 已在真实 MySQL 8.4 上从空库执行 V1–V13，并验证关键索引、中文数据、Runbook 召回、调查主链路和复盘发布/行动项闭环。`flyway-mysql` 作为正式运行依赖加载 MySQL 方言支持；最新直接证据以验收报告为准。
+数据库变更由 Flyway 管理。H2 使用 MySQL 兼容模式保证本地零配置体验，Compose 提供 MySQL 部署路径；Testcontainers 已在真实 MySQL 8.4 上从空库执行 V1–V14，并验证关键索引、中文数据、Runbook 召回、调查主链路、复盘发布、逾期扫描幂等和行动项关闭。`flyway-mysql` 作为正式运行依赖加载 MySQL 方言支持；最新直接证据以验收报告为准。
 
 ## 9. 可观测性和失败策略
 
@@ -239,6 +250,7 @@ cmdb_resource 1---n escalation_policy 1---n escalation_step
 - Agent 调查使用幂等键、有界队列、截止时间和显式取消控制；取消、超时和拒绝均进入可审计终态。
 - Prometheus/Loki 失败由超时、重试、跨请求熔断和本地 Provider 降级保护；日志进入证据链前脱敏。
 - 高风险提案只能独立审批，使用 RBAC、自批禁止和乐观锁保护；审批不会自动触发生产变更。
+- 逾期扫描使用唯一事实、行锁和幂等时间线/审计；内部升级不冒充外部通知送达。
 
 ## 10. 交付与回归门禁
 
@@ -250,10 +262,10 @@ cmdb_resource 1---n escalation_policy 1---n escalation_step
 ## 11. 后续演进
 
 1. Alert Intake 前置 Kafka，用唯一键与消费者幂等扩展吞吐。
-2. 通知模块接企业微信、短信或邮件，并实现确认回执和定时升级任务。
+2. 通知模块接企业微信、短信或邮件，把已实现的内部逾期事实发送到外部渠道，并实现确认回执、重试和死信。
 3. 将数据范围权限细化到部门、系统和资源负责人。
 4. 增加系统级并发压测、真实 socket 断流恢复，以及外部 Provider 组合故障注入。
 5. 为多实例事件广播和任务协调接入消息组件。
 6. 将对话 SSE 从完整回答分块升级为模型 Provider 原生 token 流。
-7. 在已完成 Postmortem 主链路之上加入 SLA/SLO、MTTA/MTTR、重复事故分析和行动项逾期升级。
+7. 在已完成 MTTA/MTTM/MTTR 与行动项逾期治理之上加入服务 SLA/SLO 目标线、重复事故分析、Runbook 命中率趋势和跨 Incident 相似聚类。
 8. 从真实但脱敏的历史 Incident/查询流量持续扩充已实现的双评分 qrels，加入第三方仲裁、超过两名标注人的一致性和分层抽样；将现有保留任务扩展到备份/导出副本和面向单条数据的受控删除，再以 NDCG/Recall 验证真实 Embedding 与 cross-encoder rerank 是否稳定优于 BM25/RRF，决定是否引入 ANN/OpenSearch/Milvus。

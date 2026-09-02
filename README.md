@@ -19,6 +19,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 - OnCall 助手：持久化多轮会话、SSE 流式输出、Incident 上下文绑定、证据引用、会话清空/删除和 Markdown 导出。
 - 受控处置：高置信度变更关联可生成回滚草案；管理员或运维经理独立审批，禁止申请人自批，并用乐观锁防止并发覆盖。审批只解除治理门禁，不自动修改生产环境。
 - 无责事故复盘：只有已恢复/已关闭 Incident 才能从当时的时间线、告警、调查报告和变更引用生成脱敏快照；五类复盘内容必须补全，并绑定有负责人和期限的防复发行动项后才能提交。提交人不能自审，发布后正文冻结，行动项仍可由负责人闭环，全部过程进入时间线和审计。
+- 事故运营分析：按创建窗口与严重等级计算 MTTA/MTTM/MTTR 的均值、中位数和独立样本数，排除缺失与负时长，并提供慢事故下钻；跨 Incident 管理行动项、逾期天数和持久化升级事实，重复扫描幂等、完成后关闭且不冒充外部通知送达。
 - 安全审计：JWT、BCrypt、角色权限、关键操作审计、Prometheus 指标和健康检查。
 - 运维控制台：Vue 3 + TypeScript，高密度桌面工作台及移动端响应式视图。
 
@@ -223,6 +224,9 @@ AGENT_QUEUE_CAPACITY=50
 | POST | `/api/v1/postmortems/{id}/reviews` | 管理员/运维经理发布或退回复盘，禁止提交人自审 |
 | POST/PATCH | `/api/v1/postmortems/{id}/follow-ups`、`/api/v1/postmortem-follow-ups/{id}` | 创建或更新带负责人、期限和版本的防复发行动项 |
 | POST | `/api/v1/postmortem-follow-ups/{id}/complete` | 负责人或管理角色完成行动项并写入证据链 |
+| GET | `/api/v1/analytics/incidents` | 按日期/严重等级读取 MTTA、MTTM、MTTR、样本数、分布、慢事故和当前行动项摘要 |
+| GET | `/api/v1/postmortem-follow-ups` | 按本人/全部、状态与逾期筛选跨 Incident 行动项 |
+| POST | `/api/v1/postmortem-follow-ups/escalations/run` | 管理员/运维经理按业务日期幂等生成逾期升级事实 |
 | GET | `/api/v1/observability/providers` | 查询指标/日志 Provider 与熔断状态 |
 | GET | `/api/v1/runbooks/search?q={query}&topK=3&mode=AUTO` | 按角色过滤并返回 BM25/Hybrid 实际引擎、排名轨迹、降级说明和稳定引用 |
 | POST | `/api/v1/runbooks/searches/{searchId}/judgments` | 查询本人对快照返回文档提交 0–3 级相关性判断 |
@@ -253,7 +257,7 @@ Swagger UI: [http://localhost:9900/swagger-ui/index.html](http://localhost:9900/
 cd web && npm run build
 cd .. && ./mvnw test
 
-# 需要本机 Docker；在真实 MySQL 8.4 上执行 V1-V13 迁移和关键业务链路
+# 需要本机 Docker；在真实 MySQL 8.4 上执行 V1-V14 迁移和关键业务链路
 ./mvnw -Dopspilot.mysql.it.enabled=true -Dtest=MySqlCompatibilityIntegrationTest test
 ```
 
@@ -280,9 +284,11 @@ cd .. && ./mvnw test
 - 复核评分必填、原始评分/提交人盲化、最终等级晋级、拒绝样本隔离、线性加权 κ 公式及空/无类别变化边界。
 - 检索查询/结果/评论入库前脱敏、保留期权限、过期待办自动拒绝、批量清理幂等、擦除审计，以及原始快照清理后 qrel 继续可用。
 - 复盘仅在 Incident 恢复后生成、证据快照写前脱敏、草稿完备门禁、不可自审、退回再提交、发布冻结、父子版本冲突、行动项责任权限和时间线/审计留痕。
-- MySQL 8.4 Testcontainers：Flyway V1-V13、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查，以及复盘创建/发布/行动项完成链路。
+- MTTA/MTTM/MTTR 均值、中位数、独立分母、日期/严重等级筛选、缺失/负时长排除、慢事故下钻和 SPA 深链。
+- 跨 Incident 行动项筛选、截止当天边界、逾期天数、扫描角色限制、唯一升级事实、重复扫描幂等和完成后关闭。
+- MySQL 8.4 Testcontainers：Flyway V1-V14、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布，以及逾期扫描/行动项完成闭环。
 
-默认后端套件发现 35 项测试：34 项执行通过，1 项 Docker-MySQL 条件测试默认跳过。另行启用条件测试后，MySQL 8.4 已从空库执行 Flyway V1–V13，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路，以及复盘发布和行动项闭环。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、容器构建与健康启动拆成四个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+默认后端套件发现 37 项测试：36 项执行通过，1 项 Docker-MySQL 条件测试默认跳过。另行启用条件测试后，MySQL 8.4 已从空库执行 Flyway V1–V14，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等和行动项关闭。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、容器构建与健康启动拆成四个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 
@@ -292,7 +298,8 @@ src/main/java/org/trigger/opspilot/
   incident/       Incident 状态机与时间线
   investigation/ Agent 编排、只读工具、执行轨迹、规则结论和可选 AI 摘要
   remediation/   高风险处置提案、独立审批与并发控制
-  postmortem/    无责复盘、证据快照、独立发布与防复发行动项
+  postmortem/    无责复盘、独立发布、防复发行动项与逾期升级
+  analytics/     事故响应指标、样本口径、严重等级分布与慢事故下钻
   observability/ Metrics/Logs Provider、Prometheus/Loki 适配、可靠性保护和日志脱敏
   runbook/       文档版本/ACL、BM25/向量 RRF、检索快照、相关性复核和评测
   assistant/      多轮会话、Incident 上下文、SSE 与导出
