@@ -301,6 +301,56 @@ button:active:not(:disabled) { transform: scale(0.98); }
 .remediation-card > footer { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; color: #85858a; font-size: 8px; }
 .remediation-card > footer strong { color: #4c4c51; font-size: 9px; font-weight: 560; }
 .remediation-empty { min-height: 72px; display: flex; align-items: center; justify-content: center; gap: 7px; border: 1px dashed #d7d7db; border-radius: 8px; color: #8d8d92; font-size: 9px; }
+.postmortem-card { padding: 15px; border: 1px solid #c8d9ec; border-left: 3px solid #467fb8; border-radius: 8px; background: #fbfdff; }
+.postmortem-card.in_review { border-color: #e2c58f; border-left-color: #bd7d19; background: #fffdf8; }
+.postmortem-card.published { border-color: #b7d7c3; border-left-color: #2f8c58; background: #f9fcfa; }
+.postmortem-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.postmortem-head > div:first-child { display: flex; align-items: center; gap: 8px; color: #2b689f; }
+.postmortem-head strong { display: block; color: #303034; font-size: 11px; }
+.postmortem-head small { display: block; margin-top: 2px; color: #85858a; font-size: 8px; }
+.postmortem-evidence { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 5px; }
+.postmortem-evidence span { padding: 4px 6px; border-radius: 5px; color: #326c9d; background: #edf5ff; font-size: 7px; font-weight: 700; }
+.postmortem-note { margin: 12px 0; padding: 9px 10px; border-radius: 7px; color: #55616d; background: rgba(70,127,184,.07); font-size: 8px; line-height: 1.55; }
+.postmortem-form { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.postmortem-form label, .follow-up-form label { display: flex; flex-direction: column; gap: 5px; }
+.postmortem-form label > span, .follow-up-form label > span { color: #5d5d62; font-size: 8px; font-weight: 650; }
+.postmortem-form textarea, .follow-up-form input, .follow-up-form textarea, .follow-up-form select { min-width: 0; padding: 8px 9px; border: 1px solid #d8d8dc; border-radius: 7px; color: #303034; background: #fff; font: inherit; font-size: 9px; outline: 0; }
+.postmortem-form textarea { min-height: 78px; resize: vertical; line-height: 1.55; }
+.postmortem-form textarea:focus, .follow-up-form input:focus, .follow-up-form textarea:focus, .follow-up-form select:focus { border-color: #8bbcf0; box-shadow: 0 0 0 3px rgba(0,113,227,.08); }
+.postmortem-actions { display: flex; justify-content: flex-end; gap: 7px; }
+.postmortem-actions button, .follow-up-form button { display: flex; align-items: center; justify-content: center; gap: 5px; }
+.postmortem-content { display: grid; grid-template-columns: 1fr; gap: 9px; }
+.postmortem-content article { padding: 10px; border: 1px solid rgba(0,0,0,.06); border-radius: 7px; background: rgba(255,255,255,.65); }
+.postmortem-content span { color: #85858a; font-size: 7px; }
+.postmortem-content p { margin: 5px 0 0; overflow-wrap: anywhere; color: #3f3f44; font-size: 9px; line-height: 1.6; white-space: pre-line; }
+.follow-up-heading { margin-top: 15px; padding-top: 13px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(0,0,0,.07); }
+.follow-up-heading > div { display: flex; align-items: center; gap: 6px; color: #50555b; }
+.follow-up-heading strong { font-size: 9px; }
+.follow-up-heading > span { color: #85858a; font-size: 8px; }
+.follow-up-list { margin-top: 8px; display: flex; flex-direction: column; gap: 7px; }
+.follow-up-list article { padding: 10px; border: 1px solid #e0e0e3; border-radius: 7px; background: #fff; }
+.follow-up-list article.done { border-color: #c7ddcf; background: #f8fcf9; }
+.follow-up-list header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.follow-up-list header span { padding: 3px 5px; border-radius: 5px; color: #9a5e05; background: #fff0d1; font-size: 7px; font-weight: 700; }
+.follow-up-list header em { color: #85858a; font-size: 7px; font-style: normal; }
+.follow-up-list article.done header span { color: #23794d; background: #e6f5eb; }
+.follow-up-list article > strong { display: block; margin-top: 7px; color: #333338; font-size: 9px; }
+.follow-up-list p { margin: 5px 0 0; color: #66666b; font-size: 8px; line-height: 1.5; }
+.follow-up-list footer { margin-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; color: #85858a; font-size: 8px; }
+.follow-up-list footer button { height: 27px; padding: 0 8px; display: flex; align-items: center; gap: 4px; border: 0; border-radius: 6px; color: #196f43; background: #e4f4ea; font-size: 8px; font-weight: 700; }
+.follow-up-list footer small { color: #23794d; }
+.follow-up-empty { padding: 14px; border: 1px dashed #d7d7db; border-radius: 7px; color: #8d8d92; text-align: center; font-size: 8px; }
+.follow-up-form { margin-top: 9px; padding: 11px; display: grid; grid-template-columns: 1fr; gap: 8px; border-radius: 7px; background: rgba(0,0,0,.025); }
+.follow-up-form textarea { min-height: 56px; resize: vertical; line-height: 1.45; }
+.follow-up-form button { align-self: end; }
+.postmortem-review { margin-top: 12px; display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 7px; }
+.postmortem-review input { min-width: 0; height: 32px; padding: 0 9px; border: 1px solid #d7d7db; border-radius: 6px; background: #fff; font-size: 9px; outline: 0; }
+.postmortem-review > span { grid-column: 1 / -1; color: #8a5b0f; font-size: 8px; }
+.postmortem-review button { height: 32px; padding: 0 9px; display: flex; align-items: center; gap: 4px; border: 0; border-radius: 6px; font-size: 8px; font-weight: 700; }
+.postmortem-review .approve { color: #196f43; background: #e4f4ea; }
+.postmortem-review .reject { color: #9e3b3b; background: #ffe9e9; }
+.postmortem-published { margin-top: 12px; padding: 9px 10px; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 4px 7px; border-radius: 7px; color: #23794d; background: #eaf7ef; font-size: 8px; }
+.postmortem-published strong { grid-column: 2; color: #4c5b51; font-weight: 560; }
 .empty-action, .empty-state { min-height: 112px; border-color: #d8d8dc; border-radius: 8px; background: #fafafa; font-size: 12px; }
 .note-form { height: 42px; padding: 0 7px 0 11px; gap: 8px; border-color: #dedee1; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.025); }
 .note-form:focus-within { border-color: #8bbcf0; box-shadow: 0 0 0 3px rgba(0,113,227,.1); }
@@ -659,6 +709,11 @@ button:active:not(:disabled) { transform: scale(0.98); }
   .remediation-card dl { grid-template-columns: 1fr; }
   .remediation-review { grid-template-columns: 1fr 1fr; }
   .remediation-review input { grid-column: 1 / -1; }
+  .postmortem-head { align-items: flex-start; flex-direction: column; }
+  .postmortem-evidence { justify-content: flex-start; }
+  .postmortem-actions { flex-direction: column; }
+  .postmortem-review { grid-template-columns: 1fr 1fr; }
+  .postmortem-review input { grid-column: 1 / -1; }
   .resource-detail-panel > header { padding: 19px 17px; }
   .resource-detail-panel .section-heading { padding-inline: 16px; }
   .relation-list, .change-list { padding-inline: 16px; }

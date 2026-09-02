@@ -18,6 +18,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 - 证据报告：规则引擎离线生成假设、置信度和建议，可选 DashScope 生成受约束摘要；单工具失败时保留其他证据并降级为部分完成。
 - OnCall 助手：持久化多轮会话、SSE 流式输出、Incident 上下文绑定、证据引用、会话清空/删除和 Markdown 导出。
 - 受控处置：高置信度变更关联可生成回滚草案；管理员或运维经理独立审批，禁止申请人自批，并用乐观锁防止并发覆盖。审批只解除治理门禁，不自动修改生产环境。
+- 无责事故复盘：只有已恢复/已关闭 Incident 才能从当时的时间线、告警、调查报告和变更引用生成脱敏快照；五类复盘内容必须补全，并绑定有负责人和期限的防复发行动项后才能提交。提交人不能自审，发布后正文冻结，行动项仍可由负责人闭环，全部过程进入时间线和审计。
 - 安全审计：JWT、BCrypt、角色权限、关键操作审计、Prometheus 指标和健康检查。
 - 运维控制台：Vue 3 + TypeScript，高密度桌面工作台及移动端响应式视图。
 
@@ -60,6 +61,10 @@ Prometheus / APM / manual event
               +--------> remediation proposal --> independent approval
               |
               +----> OnCall conversation (history + SSE + evidence refs)
+              |
+              +----> resolved incident -> evidence snapshot -> blameless postmortem
+                                                      |            |
+                                                      +-> follow-up +-> independent publish
 
  Observability providers: Prometheus -> local metrics / Loki -> local logs
  Agent controls: idempotency -> bounded queue -> deadline / cancel -> terminal event
@@ -212,6 +217,12 @@ AGENT_QUEUE_CAPACITY=50
 | POST | `/api/v1/agent-runs/{runId}/cancel` | 显式取消排队中或运行中的调查 |
 | GET | `/api/v1/incidents/{id}/remediation-proposals` | 查询 Incident 的受控处置提案 |
 | POST | `/api/v1/remediation-proposals/{id}/reviews` | 独立批准或拒绝高风险提案 |
+| GET/POST | `/api/v1/incidents/{id}/postmortem` | 读取或从已恢复 Incident 的脱敏证据生成复盘草稿 |
+| PATCH | `/api/v1/postmortems/{id}` | 以乐观锁更新复盘五类正文 |
+| POST | `/api/v1/postmortems/{id}/submit` | 校验正文和行动项后提交独立复核 |
+| POST | `/api/v1/postmortems/{id}/reviews` | 管理员/运维经理发布或退回复盘，禁止提交人自审 |
+| POST/PATCH | `/api/v1/postmortems/{id}/follow-ups`、`/api/v1/postmortem-follow-ups/{id}` | 创建或更新带负责人、期限和版本的防复发行动项 |
+| POST | `/api/v1/postmortem-follow-ups/{id}/complete` | 负责人或管理角色完成行动项并写入证据链 |
 | GET | `/api/v1/observability/providers` | 查询指标/日志 Provider 与熔断状态 |
 | GET | `/api/v1/runbooks/search?q={query}&topK=3&mode=AUTO` | 按角色过滤并返回 BM25/Hybrid 实际引擎、排名轨迹、降级说明和稳定引用 |
 | POST | `/api/v1/runbooks/searches/{searchId}/judgments` | 查询本人对快照返回文档提交 0–3 级相关性判断 |
@@ -242,7 +253,7 @@ Swagger UI: [http://localhost:9900/swagger-ui/index.html](http://localhost:9900/
 cd web && npm run build
 cd .. && ./mvnw test
 
-# 需要本机 Docker；在真实 MySQL 8.4 上执行 V1-V12 迁移和调查链路
+# 需要本机 Docker；在真实 MySQL 8.4 上执行 V1-V13 迁移和关键业务链路
 ./mvnw -Dopspilot.mysql.it.enabled=true -Dtest=MySqlCompatibilityIntegrationTest test
 ```
 
@@ -268,9 +279,10 @@ cd .. && ./mvnw test
 - 同一查询多相关文档聚合、分级 qrels、重复标注平均、查询/qrels 双计数，以及 Recall@3、MRR、NDCG@3 的精确回归值。
 - 复核评分必填、原始评分/提交人盲化、最终等级晋级、拒绝样本隔离、线性加权 κ 公式及空/无类别变化边界。
 - 检索查询/结果/评论入库前脱敏、保留期权限、过期待办自动拒绝、批量清理幂等、擦除审计，以及原始快照清理后 qrel 继续可用。
-- MySQL 8.4 Testcontainers：Flyway V1-V12、中文数据、幂等复合唯一索引、Runbook BM25 和完整 9 步/18 事件调查链路。
+- 复盘仅在 Incident 恢复后生成、证据快照写前脱敏、草稿完备门禁、不可自审、退回再提交、发布冻结、父子版本冲突、行动项责任权限和时间线/审计留痕。
+- MySQL 8.4 Testcontainers：Flyway V1-V13、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查，以及复盘创建/发布/行动项完成链路。
 
-默认后端套件发现 34 项测试：33 项执行通过，1 项 Docker-MySQL 条件测试默认跳过。另行启用条件测试后，MySQL 8.4 已从空库执行 Flyway V1–V12，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索及完整调查链路。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、容器构建与健康启动拆成四个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+默认后端套件发现 35 项测试：34 项执行通过，1 项 Docker-MySQL 条件测试默认跳过。另行启用条件测试后，MySQL 8.4 已从空库执行 Flyway V1–V13，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路，以及复盘发布和行动项闭环。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、容器构建与健康启动拆成四个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 
@@ -280,6 +292,7 @@ src/main/java/org/trigger/opspilot/
   incident/       Incident 状态机与时间线
   investigation/ Agent 编排、只读工具、执行轨迹、规则结论和可选 AI 摘要
   remediation/   高风险处置提案、独立审批与并发控制
+  postmortem/    无责复盘、证据快照、独立发布与防复发行动项
   observability/ Metrics/Logs Provider、Prometheus/Loki 适配、可靠性保护和日志脱敏
   runbook/       文档版本/ACL、BM25/向量 RRF、检索快照、相关性复核和评测
   assistant/      多轮会话、Incident 上下文、SSE 与导出

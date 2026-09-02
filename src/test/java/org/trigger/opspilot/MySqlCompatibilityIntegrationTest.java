@@ -12,12 +12,14 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.trigger.opspilot.investigation.AgentRunEventService;
 import org.trigger.opspilot.investigation.AgentRunQueryService;
 import org.trigger.opspilot.investigation.InvestigationService;
+import org.trigger.opspilot.postmortem.PostmortemService;
 import org.trigger.opspilot.runbook.RunbookRetrievalFeedbackService;
 import org.trigger.opspilot.runbook.RunbookService;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -59,6 +61,9 @@ class MySqlCompatibilityIntegrationTest {
     @Autowired
     private RunbookRetrievalFeedbackService feedbackService;
 
+    @Autowired
+    private PostmortemService postmortemService;
+
     @Test
     void shouldApplyAllMigrationsAndRunIdempotentInvestigationOnMySql() throws SQLException {
         try (var connection = dataSource.getConnection()) {
@@ -66,7 +71,7 @@ class MySqlCompatibilityIntegrationTest {
         }
         assertThat(jdbcClient.sql("""
                         SELECT COUNT(*) FROM flyway_schema_history
-                        WHERE version = '12' AND success = 1
+                        WHERE version = '13' AND success = 1
                         """).query(Integer.class).single()).isEqualTo(1);
         assertThat(jdbcClient.sql("SELECT title FROM incident WHERE id = 1")
                 .query(String.class).single()).isEqualTo("统一结算接口持续超时");
@@ -86,6 +91,10 @@ class MySqlCompatibilityIntegrationTest {
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM runbook_relevance_judgment WHERE reviewer_grade IS NOT NULL")
                 .query(Integer.class).single()).isZero();
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM runbook_retrieval_query WHERE snapshot_status = 'PURGED'")
+                .query(Integer.class).single()).isZero();
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM incident_postmortem")
+                .query(Integer.class).single()).isZero();
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM postmortem_follow_up")
                 .query(Integer.class).single()).isZero();
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM runbook_retrieval_eval_case WHERE source_type = 'SEED'")
                 .query(Integer.class).single()).isEqualTo(13);
@@ -143,5 +152,36 @@ class MySqlCompatibilityIntegrationTest {
         assertThat(events).hasSize(18);
         assertThat(events.get(0).eventType()).isEqualTo("RUN_QUEUED");
         assertThat(events.get(events.size() - 1).eventType()).isEqualTo("RUN_COMPLETED");
+
+        PostmortemService.PostmortemView draft = postmortemService.createDraft(2, 3);
+        assertThat(draft.status()).isEqualTo("DRAFT");
+        assertThat(draft.timelineSnapshot()).hasSize(3);
+        PostmortemService.PostmortemView edited = postmortemService.update(draft.id(), 0,
+                new PostmortemService.DraftContent(
+                        "认证服务发布后旧客户端 token 刷新失败",
+                        "部分旧客户端会话续期失败，没有数据丢失",
+                        "旧 token 格式的兼容分支缺少发布前契约回归",
+                        "灰度指标没有按客户端版本拆分",
+                        "补充三个客户端大版本的兼容矩阵并保留回滚开关"));
+        assertThat(edited.version()).isEqualTo(1);
+        PostmortemService.PostmortemView withFollowUp = postmortemService.addFollowUp(
+                draft.id(), 1, 3,
+                new PostmortemService.FollowUpContent(
+                        "补齐旧客户端兼容回归", "覆盖三个客户端大版本并接入发布门禁",
+                        PostmortemService.Priority.HIGH, 2, LocalDate.now().plusDays(7)));
+        assertThat(withFollowUp.version()).isEqualTo(2);
+        long followUpId = withFollowUp.followUps().get(0).id();
+        PostmortemService.PostmortemView submitted = postmortemService.submit(draft.id(), 2, 3);
+        assertThat(submitted.status()).isEqualTo("IN_REVIEW");
+        PostmortemService.PostmortemView published = postmortemService.review(
+                draft.id(), 3, 1, PostmortemService.ReviewDecision.PUBLISH,
+                "证据和行动项完整，同意发布");
+        assertThat(published.status()).isEqualTo("PUBLISHED");
+        assertThat(published.version()).isEqualTo(4);
+        PostmortemService.PostmortemView completed = postmortemService.completeFollowUp(
+                followUpId, 0, 2, "ON_CALL");
+        assertThat(completed.followUps().get(0).status()).isEqualTo("DONE");
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM audit_log WHERE target_type LIKE '%POSTMORTEM%'")
+                .query(Integer.class).single()).isEqualTo(6);
     }
 }

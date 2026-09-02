@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Bot, Check, CheckCircle2, ChevronDown, ChevronRight, CircleCheck, CircleStop, Clock3, Database, FileText, LoaderCircle, MessageSquarePlus, MessageSquareText, Radio, RefreshCw, Send, ShieldAlert, UserRound, Workflow, XCircle } from 'lucide-vue-next'
+import { Bot, Check, CheckCircle2, ChevronDown, ChevronRight, CircleCheck, CircleStop, ClipboardCheck, Clock3, Database, FileText, ListChecks, LoaderCircle, MessageSquarePlus, MessageSquareText, Plus, Radio, RefreshCw, Save, Send, ShieldAlert, UserRound, Workflow, XCircle } from 'lucide-vue-next'
 import StatusBadge from '@/components/StatusBadge.vue'
 import { api, formatTime, type PageResponse } from '@/services/api'
 import { clearAgentInvestigationIdempotency, streamAgentInvestigation } from '@/services/agentStream'
@@ -22,6 +22,20 @@ interface IncidentDetail {
   investigations: { id: number; engine: string; status: string; summary: string; hypothesis: string; confidence: number; suggestions: string; evidenceJson: string; createdAt: string }[]
   agentRuns: AgentRun[]
   remediationProposals: RemediationProposal[]
+  postmortem: Postmortem | null
+}
+
+interface UserOption { id: number; displayName: string; roleCode: string; department: string }
+interface FollowUp {
+  id: number; postmortemId: number; title: string; description: string; priority: string; status: string
+  ownerId: number; ownerName: string; dueDate: string; completedByName: string | null; completedAt: string | null; version: number
+}
+interface Postmortem {
+  id: number; incidentId: number; incidentCode: string; incidentTitle: string; severity: string; status: string
+  summary: string; customerImpact: string; rootCause: string; contributingFactors: string; lessonsLearned: string
+  timelineSnapshot: { eventType: string; content: string; evidenceRef: string | null; actor: string | null; createdAt: string }[]
+  evidenceRefs: string[]; createdById: number; createdByName: string; submittedById: number | null; submittedByName: string | null
+  reviewedByName: string | null; reviewComment: string | null; publishedAt: string | null; version: number; followUps: FollowUp[]
 }
 
 const route = useRoute()
@@ -41,6 +55,11 @@ const agentControlLoading = ref(false)
 const liveAgentEvents = ref<AgentRunEvent[]>([])
 const reviewComments = ref<Record<number, string>>({})
 const reviewLoadingId = ref<number | null>(null)
+const users = ref<UserOption[]>([])
+const postmortemLoading = ref(false)
+const postmortemReviewComment = ref('')
+const postmortemDraft = ref({ summary: '', customerImpact: '', rootCause: '', contributingFactors: '', lessonsLearned: '' })
+const followUpDraft = ref({ title: '', description: '', priority: 'HIGH', ownerId: '', dueDate: futureDate(7) })
 let agentAbortController: AbortController | null = null
 
 const transitionMap: Record<string, { value: string; label: string }[]> = {
@@ -51,6 +70,12 @@ const transitionMap: Record<string, { value: string; label: string }[]> = {
   RESOLVED: [{ value: 'INVESTIGATING', label: '重新打开' }, { value: 'CLOSED', label: '关闭 Incident' }],
 }
 const availableTransitions = computed(() => selected.value ? transitionMap[selected.value.incident.status] ?? [] : [])
+const canReviewPostmortem = computed(() => {
+  const postmortem = selected.value?.postmortem
+  const role = auth.state.user?.roleCode
+  return postmortem?.status === 'IN_REVIEW' && (role === 'ADMIN' || role === 'OPS_MANAGER')
+    && postmortem.submittedById !== auth.state.user?.id
+})
 
 async function loadList(preferredId?: number) {
   loading.value = true
@@ -70,14 +95,144 @@ async function loadList(preferredId?: number) {
 }
 
 async function selectIncident(id: number) {
-  const [detail, remediationProposals] = await Promise.all([
-    api<Omit<IncidentDetail, 'remediationProposals'>>(`/incidents/${id}`),
+  const [detail, remediationProposals, postmortem] = await Promise.all([
+    api<Omit<IncidentDetail, 'remediationProposals' | 'postmortem'>>(`/incidents/${id}`),
     api<RemediationProposal[]>(`/incidents/${id}/remediation-proposals`),
+    api<Postmortem | null>(`/incidents/${id}/postmortem`),
   ])
-  selected.value = { ...detail, remediationProposals }
+  selected.value = { ...detail, remediationProposals, postmortem }
+  syncPostmortemDraft(postmortem)
   activeAgentRunId.value = detail.agentRuns.find(run => run.status === 'QUEUED' || run.status === 'RUNNING')?.id ?? null
   expandedRunId.value = detail.agentRuns[0]?.id ?? null
   if (Number(route.query.selected) !== id) void router.replace({ query: { ...route.query, selected: String(id) } })
+}
+
+function futureDate(days: number) {
+  const date = new Date()
+  date.setDate(date.getDate() + days)
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+function syncPostmortemDraft(postmortem: Postmortem | null) {
+  if (!postmortem) {
+    postmortemDraft.value = { summary: '', customerImpact: '', rootCause: '', contributingFactors: '', lessonsLearned: '' }
+    return
+  }
+  postmortemDraft.value = {
+    summary: postmortem.summary, customerImpact: postmortem.customerImpact,
+    rootCause: postmortem.rootCause, contributingFactors: postmortem.contributingFactors,
+    lessonsLearned: postmortem.lessonsLearned,
+  }
+}
+
+function applyPostmortem(postmortem: Postmortem) {
+  if (!selected.value || selected.value.incident.id !== postmortem.incidentId) return
+  selected.value.postmortem = postmortem
+  syncPostmortemDraft(postmortem)
+}
+
+async function createPostmortem() {
+  if (!selected.value) return
+  postmortemLoading.value = true
+  try {
+    const postmortem = await api<Postmortem>(`/incidents/${selected.value.incident.id}/postmortem`, { method: 'POST' })
+    applyPostmortem(postmortem)
+    toast.value = '已从真实时间线和调查证据生成复盘草稿'
+  } catch (caught) { toast.value = caught instanceof Error ? caught.message : '创建复盘失败' }
+  finally { postmortemLoading.value = false }
+}
+
+async function savePostmortem() {
+  const postmortem = selected.value?.postmortem
+  if (!postmortem) return
+  postmortemLoading.value = true
+  try {
+    const updated = await api<Postmortem>(`/postmortems/${postmortem.id}`, {
+      method: 'PATCH', body: JSON.stringify({ expectedVersion: postmortem.version, ...postmortemDraft.value }),
+    })
+    applyPostmortem(updated)
+    toast.value = '复盘草稿已保存'
+  } catch (caught) {
+    toast.value = caught instanceof Error ? caught.message : '保存复盘失败'
+    await selectIncident(postmortem.incidentId)
+  } finally { postmortemLoading.value = false }
+}
+
+async function addPostmortemFollowUp() {
+  const postmortem = selected.value?.postmortem
+  if (!postmortem || !followUpDraft.value.title.trim() || !followUpDraft.value.description.trim() || !followUpDraft.value.ownerId) return
+  postmortemLoading.value = true
+  try {
+    const updated = await api<Postmortem>(`/postmortems/${postmortem.id}/follow-ups`, {
+      method: 'POST', body: JSON.stringify({ expectedPostmortemVersion: postmortem.version, expectedVersion: 0,
+        ...followUpDraft.value, ownerId: Number(followUpDraft.value.ownerId) }),
+    })
+    applyPostmortem(updated)
+    followUpDraft.value = { title: '', description: '', priority: 'HIGH', ownerId: '', dueDate: futureDate(7) }
+    toast.value = '防复发行动项已创建'
+  } catch (caught) {
+    toast.value = caught instanceof Error ? caught.message : '创建行动项失败'
+    await selectIncident(postmortem.incidentId)
+  } finally { postmortemLoading.value = false }
+}
+
+async function submitPostmortem() {
+  const postmortem = selected.value?.postmortem
+  if (!postmortem) return
+  postmortemLoading.value = true
+  try {
+    const updated = await api<Postmortem>(`/postmortems/${postmortem.id}/submit`, {
+      method: 'POST', body: JSON.stringify({ expectedVersion: postmortem.version }),
+    })
+    applyPostmortem(updated)
+    toast.value = '复盘已提交，等待独立复核'
+  } catch (caught) { toast.value = caught instanceof Error ? caught.message : '提交复盘失败' }
+  finally { postmortemLoading.value = false }
+}
+
+async function reviewPostmortem(decision: 'PUBLISH' | 'REQUEST_CHANGES') {
+  const postmortem = selected.value?.postmortem
+  if (!postmortem || postmortemReviewComment.value.trim().length < 3) {
+    toast.value = '请填写至少 3 个字的复核意见'
+    return
+  }
+  postmortemLoading.value = true
+  try {
+    const updated = await api<Postmortem>(`/postmortems/${postmortem.id}/reviews`, {
+      method: 'POST', body: JSON.stringify({ expectedVersion: postmortem.version, decision,
+        comment: postmortemReviewComment.value.trim() }),
+    })
+    applyPostmortem(updated)
+    postmortemReviewComment.value = ''
+    toast.value = decision === 'PUBLISH' ? '复盘已发布' : '已退回修改'
+  } catch (caught) {
+    toast.value = caught instanceof Error ? caught.message : '复核失败'
+    await selectIncident(postmortem.incidentId)
+  } finally { postmortemLoading.value = false }
+}
+
+async function completePostmortemFollowUp(followUp: FollowUp) {
+  postmortemLoading.value = true
+  try {
+    const updated = await api<Postmortem>(`/postmortem-follow-ups/${followUp.id}/complete`, {
+      method: 'POST', body: JSON.stringify({ expectedVersion: followUp.version }),
+    })
+    applyPostmortem(updated)
+    toast.value = '行动项已完成并写入时间线'
+  } catch (caught) { toast.value = caught instanceof Error ? caught.message : '完成行动项失败' }
+  finally { postmortemLoading.value = false }
+}
+
+function postmortemStatusLabel(status: string) {
+  return ({ DRAFT: '草稿', IN_REVIEW: '待独立复核', PUBLISHED: '已发布' } as Record<string, string>)[status] ?? status
+}
+
+function canCompleteFollowUp(followUp: FollowUp) {
+  const role = auth.state.user?.roleCode
+  return followUp.status === 'OPEN' && (followUp.ownerId === auth.state.user?.id || role === 'ADMIN' || role === 'OPS_MANAGER')
 }
 
 async function transition(targetStatus: string, label: string) {
@@ -241,7 +396,10 @@ async function addNote() {
 }
 
 watch([statusFilter, severityFilter], () => void loadList())
-onMounted(() => loadList())
+onMounted(async () => {
+  users.value = await api<UserOption[]>('/reference/users')
+  await loadList()
+})
 onBeforeUnmount(() => agentAbortController?.abort())
 </script>
 
@@ -337,6 +495,57 @@ onBeforeUnmount(() => agentAbortController?.abort())
               </article>
               <div v-if="!selected.remediationProposals.length" class="remediation-empty"><ShieldAlert :size="18" />当前没有待治理动作</div>
             </div>
+
+            <div class="section-heading"><h3>无责事故复盘</h3><span>{{ selected.postmortem ? 1 : 0 }}</span></div>
+            <section v-if="selected.postmortem" class="postmortem-card" :class="selected.postmortem.status.toLowerCase()">
+              <header class="postmortem-head">
+                <div><ClipboardCheck :size="17" /><span><strong>{{ postmortemStatusLabel(selected.postmortem.status) }}</strong><small>v{{ selected.postmortem.version }} · {{ selected.postmortem.createdByName }}</small></span></div>
+                <div class="postmortem-evidence"><span>{{ selected.postmortem.timelineSnapshot.length }} 条固化时间线</span><span>{{ selected.postmortem.evidenceRefs.length }} 个证据引用</span></div>
+              </header>
+              <p class="postmortem-note">聚焦系统与流程，不归责个人；发布前必须独立复核，并至少绑定一个有负责人和期限的防复发行动项。</p>
+
+              <form v-if="selected.postmortem.status === 'DRAFT'" class="postmortem-form" @submit.prevent="savePostmortem">
+                <label><span>事件摘要</span><textarea v-model="postmortemDraft.summary" maxlength="4000" /></label>
+                <label><span>用户/业务影响</span><textarea v-model="postmortemDraft.customerImpact" maxlength="4000" /></label>
+                <label><span>直接与系统性原因</span><textarea v-model="postmortemDraft.rootCause" maxlength="4000" /></label>
+                <label><span>促成与放大因素</span><textarea v-model="postmortemDraft.contributingFactors" maxlength="4000" /></label>
+                <label><span>经验与改进</span><textarea v-model="postmortemDraft.lessonsLearned" maxlength="4000" /></label>
+                <div class="postmortem-actions"><button class="secondary-button" :disabled="postmortemLoading"><Save :size="14" />保存草稿</button><button type="button" class="primary-button" :disabled="postmortemLoading" @click="submitPostmortem"><Send :size="14" />提交独立复核</button></div>
+              </form>
+              <div v-else class="postmortem-content">
+                <article><span>事件摘要</span><p>{{ selected.postmortem.summary }}</p></article>
+                <article><span>用户/业务影响</span><p>{{ selected.postmortem.customerImpact }}</p></article>
+                <article><span>直接与系统性原因</span><p>{{ selected.postmortem.rootCause }}</p></article>
+                <article><span>促成与放大因素</span><p class="pre-line">{{ selected.postmortem.contributingFactors }}</p></article>
+                <article><span>经验与改进</span><p>{{ selected.postmortem.lessonsLearned }}</p></article>
+              </div>
+
+              <div class="follow-up-heading"><div><ListChecks :size="15" /><strong>防复发行动项</strong></div><span>{{ selected.postmortem.followUps.filter(item => item.status === 'DONE').length }}/{{ selected.postmortem.followUps.length }} 已完成</span></div>
+              <div class="follow-up-list">
+                <article v-for="followUp in selected.postmortem.followUps" :key="followUp.id" :class="followUp.status.toLowerCase()">
+                  <header><span>{{ followUp.priority }}</span><em>{{ followUp.status === 'DONE' ? '已完成' : '进行中' }}</em></header>
+                  <strong>{{ followUp.title }}</strong><p>{{ followUp.description }}</p>
+                  <footer><span>{{ followUp.ownerName }} · 截止 {{ followUp.dueDate }}</span><button v-if="canCompleteFollowUp(followUp)" :disabled="postmortemLoading" @click="completePostmortemFollowUp(followUp)"><CheckCircle2 :size="13" />完成</button><small v-else-if="followUp.completedByName">{{ followUp.completedByName }} 完成</small></footer>
+                </article>
+                <div v-if="!selected.postmortem.followUps.length" class="follow-up-empty">尚未创建行动项，不能提交复核</div>
+              </div>
+              <form v-if="selected.postmortem.status === 'DRAFT'" class="follow-up-form" @submit.prevent="addPostmortemFollowUp">
+                <input v-model="followUpDraft.title" maxlength="240" placeholder="行动项标题" />
+                <input v-model="followUpDraft.description" maxlength="1000" placeholder="可验证的完成标准" />
+                <select v-model="followUpDraft.priority" aria-label="行动项优先级"><option value="HIGH">高优先级</option><option value="MEDIUM">中优先级</option><option value="LOW">低优先级</option></select>
+                <select v-model="followUpDraft.ownerId" aria-label="行动项负责人"><option value="">选择负责人</option><option v-for="user in users.filter(item => ['ADMIN', 'OPS_MANAGER', 'ON_CALL'].includes(item.roleCode))" :key="user.id" :value="String(user.id)">{{ user.displayName }} · {{ user.roleCode }}</option></select>
+                <input v-model="followUpDraft.dueDate" type="date" :min="futureDate(0)" aria-label="行动项截止日期" />
+                <button class="secondary-button" :disabled="postmortemLoading || !followUpDraft.title.trim() || !followUpDraft.description.trim() || !followUpDraft.ownerId"><Plus :size="14" />添加行动项</button>
+              </form>
+
+              <div v-if="selected.postmortem.status === 'IN_REVIEW'" class="postmortem-review">
+                <template v-if="canReviewPostmortem"><input v-model="postmortemReviewComment" maxlength="500" placeholder="填写证据完整性与行动项复核意见" /><button class="approve" :disabled="postmortemLoading" @click="reviewPostmortem('PUBLISH')"><CheckCircle2 :size="14" />发布</button><button class="reject" :disabled="postmortemLoading" @click="reviewPostmortem('REQUEST_CHANGES')"><XCircle :size="14" />退回修改</button></template>
+                <span v-else>由 {{ selected.postmortem.submittedByName }} 提交，等待另一名管理员或运维经理复核</span>
+              </div>
+              <footer v-if="selected.postmortem.status === 'PUBLISHED'" class="postmortem-published"><CheckCircle2 :size="15" /><span>{{ selected.postmortem.reviewedByName }} 于 {{ formatTime(selected.postmortem.publishedAt, true) }} 发布</span><strong>{{ selected.postmortem.reviewComment }}</strong></footer>
+            </section>
+            <button v-else-if="selected.incident.status === 'RESOLVED' || selected.incident.status === 'CLOSED'" class="empty-action" :disabled="postmortemLoading" @click="createPostmortem"><ClipboardCheck :size="20" />从真实证据生成复盘草稿</button>
+            <div v-else class="remediation-empty"><ClipboardCheck :size="18" />Incident 恢复后开放复盘，当前不会提前生成结论</div>
           </div>
 
           <aside class="timeline-column">

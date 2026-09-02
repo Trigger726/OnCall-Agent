@@ -24,6 +24,7 @@ OpsPilot 解决的是企业信息系统发生故障后的协同闭环，而不�
 | On-call | 排班、当前责任人、升级链 | Incident 业务状态 |
 | Investigation | Agent 计划、只读工具执行、再规划、证据报告与轨迹查询 | 自动执行高风险变更 |
 | Remediation | 高风险动作草案、独立审批、版本控制与治理留痕 | 直接调用生产执行器 |
+| Postmortem | 脱敏证据快照、无责复盘、独立发布和防复发行动项 | 提前断言根因或替代行动项执行 |
 | Assistant | 持久化会话、Incident 上下文、SSE 输出和证据引用 | 绕过状态机修改生产数据 |
 | Audit | 记录关键操作 | 修改业务数据 |
 
@@ -64,6 +65,14 @@ OPEN -> ACKNOWLEDGED -> INVESTIGATING -> MITIGATED -> RESOLVED -> CLOSED
 - `MITIGATED -> INVESTIGATING` 支持缓解失败回退。
 - `RESOLVED -> INVESTIGATING` 支持故障复发。
 - 更新条件包含 `id AND version`。受影响行数为 0 时返回 `409 INCIDENT_VERSION_CONFLICT`，防止两名值班人员互相覆盖。
+
+### 无责复盘与防复发行动
+
+复盘不是调查阶段的即时总结。只有 `RESOLVED/CLOSED` Incident 才能创建，创建事务会先读取当时已有的时间线、告警、最近调查报告和相关变更，经过 `LogRedactor` 后保存 JSON 快照，再写 `POSTMORTEM_CREATED` 事件。因此后续新增时间线不会悄悄改变复盘依据，重复创建也只返回同一份草稿。
+
+草稿包含事件摘要、用户/业务影响、直接与系统性原因、促成因素、经验与改进五类正文。任一字段为空或仍含 `【待补充】`，以及没有行动项时，均不能进入复核。行动项必须指向具有运维处置权限的活跃用户并设置不早于当天的截止日期；父复盘和子行动项分别带版本号，新增/编辑子项也先递增父版本，避免提交与修改并发穿透。
+
+提交后正文和行动项冻结，只有 `ADMIN/OPS_MANAGER` 可以复核，且提交人不能复核自己的内容。`REQUEST_CHANGES` 回到草稿，`PUBLISH` 后正文永久只读；行动项仍由负责人或管理角色完成，并在 Incident 时间线和审计日志中留下引用。这个边界参考 [Google SRE 的 Postmortem Culture](https://sre.google/sre-book/postmortem-culture/) 对影响、原因、行动项、无责文化和正式复核的要求，以及 [FireHydrant retrospectives](https://docs.firehydrant.com/docs/conducting-retrospectives) 与 [follow-ups](https://docs.firehydrant.com/docs/managing-follow-ups) 对事故证据汇集、复盘后跟踪工作的划分。OpsPilot 实现的是本项目内的确定性治理流程，不宣称复制这些产品的全部能力。
 
 ## 5. 可解释 Agent 调查
 
@@ -199,6 +208,9 @@ agent_investigation_run n---0..1 investigation_report
 incident 1---n remediation_proposal n---1 agent_investigation_run
 remediation_proposal n---1 change_record
 sys_user 1---n remediation_proposal(requested/reviewed)
+incident 1---0..1 incident_postmortem 1---n postmortem_follow_up
+sys_user 1---n incident_postmortem(created/submitted/reviewed)
+sys_user 1---n postmortem_follow_up(owner/created/completed)
 sys_user 1---n assistant_session 1---n assistant_message
 incident 1---n assistant_session (optional context)
 runbook_document(stable_key) 1---n immutable versions
@@ -212,7 +224,7 @@ cmdb_resource 1---n oncall_schedule 1---n oncall_shift
 cmdb_resource 1---n escalation_policy 1---n escalation_step
 ```
 
-数据库变更由 Flyway 管理。H2 使用 MySQL 兼容模式保证本地零配置体验，Compose 提供 MySQL 部署路径；Testcontainers 目标是在真实 MySQL 8.4 上从空库执行 V1–V12，并验证关键索引、中文数据、Runbook 召回和调查主链路。`flyway-mysql` 作为正式运行依赖加载 MySQL 方言支持；最新直接证据和宿主机阻塞以验收报告为准。
+数据库变更由 Flyway 管理。H2 使用 MySQL 兼容模式保证本地零配置体验，Compose 提供 MySQL 部署路径；Testcontainers 已在真实 MySQL 8.4 上从空库执行 V1–V13，并验证关键索引、中文数据、Runbook 召回、调查主链路和复盘发布/行动项闭环。`flyway-mysql` 作为正式运行依赖加载 MySQL 方言支持；最新直接证据以验收报告为准。
 
 ## 9. 可观测性和失败策略
 
@@ -243,5 +255,5 @@ cmdb_resource 1---n escalation_policy 1---n escalation_step
 4. 增加系统级并发压测、真实 socket 断流恢复，以及外部 Provider 组合故障注入。
 5. 为多实例事件广播和任务协调接入消息组件。
 6. 将对话 SSE 从完整回答分块升级为模型 Provider 原生 token 流。
-7. 加入 Postmortem、SLA/SLO、MTTR 和重复事故分析。
+7. 在已完成 Postmortem 主链路之上加入 SLA/SLO、MTTA/MTTR、重复事故分析和行动项逾期升级。
 8. 从真实但脱敏的历史 Incident/查询流量持续扩充已实现的双评分 qrels，加入第三方仲裁、超过两名标注人的一致性和分层抽样；将现有保留任务扩展到备份/导出副本和面向单条数据的受控删除，再以 NDCG/Recall 验证真实 Embedding 与 cross-encoder rerank 是否稳定优于 BM25/RRF，决定是否引入 ANN/OpenSearch/Milvus。

@@ -15,6 +15,7 @@
 | V1.6 | 04：分级 qrels、唯一查询聚合与 NDCG@3 | 部分通过，H2/API/前端/JAR 闭环完成，真实历史样本与 MySQL V10 待验 | [V1.6-checkpoint-04.md](V1.6-checkpoint-04.md) |
 | V1.6 | 05：盲化双评分与标注一致性 | 部分通过，真实历史样本待验；MySQL 已在 06 复验 | [V1.6-checkpoint-05.md](V1.6-checkpoint-05.md) |
 | V1.6 | 06：检索快照脱敏、保留期与可审计清理 | 通过，主库生命周期、H2/MySQL、前端与 JAR 闭环完成 | [V1.6-checkpoint-06.md](V1.6-checkpoint-06.md) |
+| V1.7 | 01：证据驱动无责复盘与防复发行动项 | 通过，H2/MySQL、权限并发、响应式前端与 JAR 闭环完成 | [V1.7-checkpoint-01.md](V1.7-checkpoint-01.md) |
 
 ## 状态约定
 
