@@ -1,0 +1,45 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: opspilot
+      MYSQL_USER: opspilot
+      MYSQL_PASSWORD: opspilot-local
+      MYSQL_ROOT_PASSWORD: root-local-change-me
+      TZ: Asia/Shanghai
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  opspilot:
+    build: .
+    ports:
+      - "9900:9900"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/opspilot?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+      DB_USERNAME: opspilot
+      DB_PASSWORD: opspilot-local
+      DB_DRIVER: com.mysql.cj.jdbc.Driver
+      JWT_SECRET: local-compose-secret-replace-before-deployment-2026
+      AI_ENABLED: "false"
+      DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY:-}
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  prometheus:
+    image: prom/prometheus:v3.4.2
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./deploy/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - opspilot
+
+volumes:
+  mysql-data:

@@ -1,15 +1,15 @@
-# Environment & Secrets
-.env
-*.env
-**/.env
-
-# Maven
 target/
+data/
+.env
+web/node_modules/
+web/dist/
+*.tsbuildinfo
+*.local
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-# IntelliJ IDEA
+### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
@@ -19,8 +19,8 @@ target/
 *.iws
 *.iml
 *.ipr
-
-# Eclipse
+.idea/*
+### Eclipse ###
 .apt_generated
 .classpath
 .factorypath
@@ -29,7 +29,7 @@ target/
 .springBeans
 .sts4-cache
 
-# NetBeans
+### NetBeans ###
 /nbproject/private/
 /nbbuild/
 /dist/
@@ -39,27 +39,25 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-# VS Code
+### VS Code ###
 .vscode/
 
-# Mac OS
+### Mac OS ###
 .DS_Store
 
-# Application Logs
+### Application Logs ###
 *.log
 app.log
 logs/
 
-# Upload Files
+### Upload Files ###
 uploads/
 
-# Docker volumes
-/volumes
-server.pid
-
-# Claude AI (local config)
-.claude/
-
-# Temp Scripts
+### Temp Scripts ###
 *.sh
 *.py
+
+### docker
+/volumes
+/server.pid
+docker-data/
