@@ -3,6 +3,7 @@ package org.trigger.opspilot.runbook;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.trigger.opspilot.audit.AuditService;
 import org.trigger.opspilot.common.ApiException;
+import org.trigger.opspilot.observability.LogRedactor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -24,45 +26,56 @@ import java.time.LocalDateTime;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
 public class RunbookRetrievalFeedbackService {
     private static final Logger log = LoggerFactory.getLogger(RunbookRetrievalFeedbackService.class);
     private static final Set<String> REVIEW_DECISIONS = Set.of("APPROVE", "REJECT");
+    private static final Set<String> SNAPSHOT_TEXT_FIELDS = Set.of(
+            "serviceCode", "title", "heading", "excerpt"
+    );
 
     private final JdbcClient jdbcClient;
     private final ObjectMapper objectMapper;
     private final AuditService auditService;
+    private final LogRedactor logRedactor;
+    private final RunbookRetrievalLifecycleProperties lifecycleProperties;
 
     public RunbookRetrievalFeedbackService(JdbcClient jdbcClient, ObjectMapper objectMapper,
-                                           AuditService auditService) {
+                                           AuditService auditService, LogRedactor logRedactor,
+                                           RunbookRetrievalLifecycleProperties lifecycleProperties) {
         this.jdbcClient = jdbcClient;
         this.objectMapper = objectMapper;
         this.auditService = auditService;
+        this.logRedactor = logRedactor;
+        this.lifecycleProperties = lifecycleProperties;
     }
 
     Long recordSearch(String query, String sourceType, String requestedMode, String actualEngine,
                       String roleCode, String semanticStatus, java.math.BigDecimal semanticCoverage,
-                      int candidateChunkCount, int topK, long latencyMs,
-                      List<RunbookService.SearchResult> results, Long actorId) {
+                       int candidateChunkCount, int topK, long latencyMs,
+                       List<RunbookService.SearchResult> results, Long actorId) {
         try {
+            SnapshotPayload snapshot = sanitizeSnapshot(query, results);
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcClient.sql("""
                             INSERT INTO runbook_retrieval_query(
                               query_text, query_hash, source_type, requested_mode, actual_engine, role_code,
                               semantic_status, semantic_coverage, candidate_chunk_count, top_k, latency_ms,
-                              results_json, created_by)
+                              results_json, created_by, redacted_fields)
                             VALUES (:query, :queryHash, :sourceType, :requestedMode, :actualEngine, :roleCode,
                               :semanticStatus, :semanticCoverage, :candidateCount, :topK, :latencyMs,
-                              :results, :createdBy)
+                              :results, :createdBy, :redactedFields)
                             """)
-                    .param("query", query).param("queryHash", sha256(query))
+                    .param("query", snapshot.query()).param("queryHash", sha256(snapshot.query()))
                     .param("sourceType", sourceType).param("requestedMode", requestedMode)
                     .param("actualEngine", actualEngine).param("roleCode", roleCode)
                     .param("semanticStatus", semanticStatus).param("semanticCoverage", semanticCoverage)
                     .param("candidateCount", candidateChunkCount).param("topK", topK)
-                    .param("latencyMs", latencyMs).param("results", json(results))
+                    .param("latencyMs", latencyMs).param("results", snapshot.resultsJson())
+                    .param("redactedFields", snapshot.redactedFields())
                     .param("createdBy", actorId).update(keyHolder, "id");
             return keyHolder.getKey() == null ? null : keyHolder.getKey().longValue();
         } catch (RuntimeException exception) {
@@ -83,6 +96,10 @@ public class RunbookRetrievalFeedbackService {
         }
         String normalizedKey = normalizeStableKey(stableKey);
         RetrievalQuery query = queryById(searchId);
+        if ("PURGED".equals(query.snapshotStatus())) {
+            throw new ApiException(HttpStatus.GONE, "RUNBOOK_SEARCH_SNAPSHOT_PURGED",
+                    "检索快照已按保留策略清理，不能再提交判断");
+        }
         if (!actorId.equals(query.createdBy())) {
             throw new ApiException(HttpStatus.FORBIDDEN, "RUNBOOK_JUDGMENT_NOT_SEARCH_OWNER",
                     "只能评价本人执行的检索");
@@ -105,7 +122,7 @@ public class RunbookRetrievalFeedbackService {
                                   search_id, document_stable_key, relevance_grade, comment, judged_by)
                                 VALUES (:searchId, :stableKey, :grade, :comment, :actorId)
                                 """).param("searchId", searchId).param("stableKey", normalizedKey)
-                        .param("grade", grade).param("comment", optionalText(comment, 500))
+                        .param("grade", grade).param("comment", redactedOptionalText(comment, 500))
                         .param("actorId", actorId).update(keyHolder, "id");
             } catch (DuplicateKeyException exception) {
                 throw new ApiException(HttpStatus.CONFLICT, "RUNBOOK_JUDGMENT_CONFLICT", "相关性判断并发冲突，请重试");
@@ -117,7 +134,7 @@ public class RunbookRetrievalFeedbackService {
                             UPDATE runbook_relevance_judgment
                             SET relevance_grade = :grade, comment = :comment, version_no = version_no + 1
                             WHERE id = :id AND review_status = 'PENDING'
-                            """).param("grade", grade).param("comment", optionalText(comment, 500))
+                            """).param("grade", grade).param("comment", redactedOptionalText(comment, 500))
                     .param("id", existingId).update();
             if (updated == 0) {
                 throw new ApiException(HttpStatus.CONFLICT, "RUNBOOK_JUDGMENT_ALREADY_REVIEWED",
@@ -137,6 +154,7 @@ public class RunbookRetrievalFeedbackService {
                         FROM runbook_relevance_judgment j
                         JOIN runbook_retrieval_query q ON q.id = j.search_id
                         WHERE j.review_status = 'PENDING' AND j.judged_by <> :reviewerId
+                          AND q.snapshot_status = 'ACTIVE'
                         ORDER BY j.created_at, j.id
                         LIMIT 100
                         """).param("reviewerId", reviewerId)
@@ -181,7 +199,7 @@ public class RunbookRetrievalFeedbackService {
                         WHERE id = :id AND version_no = :expectedVersion AND review_status = 'PENDING'
                         """).param("status", status).param("reviewerId", reviewerId)
                 .param("reviewerGrade", reviewerGrade)
-                .param("note", optionalText(note, 500)).param("id", judgmentId)
+                .param("note", redactedOptionalText(note, 500)).param("id", judgmentId)
                 .param("expectedVersion", expectedVersion).update();
         if (updated == 0) {
             throw new ApiException(HttpStatus.CONFLICT, "RUNBOOK_JUDGMENT_VERSION_CONFLICT",
@@ -219,13 +237,97 @@ public class RunbookRetrievalFeedbackService {
         return calculateAgreement(pairs);
     }
 
+    public RetentionStatus retentionStatus() {
+        LocalDateTime cutoff = LocalDateTime.now().minus(lifecycleProperties.getRetention());
+        long activeSnapshots = count("snapshot_status = 'ACTIVE'", null);
+        long expiredSnapshots = count("snapshot_status = 'ACTIVE' AND created_at < :cutoff", cutoff);
+        long purgedSnapshots = count("snapshot_status = 'PURGED'", null);
+        long redactedFields = jdbcClient.sql("""
+                        SELECT COALESCE(SUM(redacted_fields), 0)
+                        FROM runbook_retrieval_query
+                        """).query(Long.class).single();
+        LocalDateTime oldestActiveAt = jdbcClient.sql("""
+                        SELECT MIN(created_at) FROM runbook_retrieval_query
+                        WHERE snapshot_status = 'ACTIVE'
+                        """).query(LocalDateTime.class).optional().orElse(null);
+        return new RetentionStatus(lifecycleProperties.getRetention().toString(),
+                lifecycleProperties.getCleanupBatchSize(), activeSnapshots, expiredSnapshots,
+                purgedSnapshots, redactedFields, cutoff, oldestActiveAt);
+    }
+
+    @Transactional
+    public RetentionCleanupResult purgeExpired(Long actorId) {
+        LocalDateTime completedAt = LocalDateTime.now();
+        LocalDateTime cutoff = completedAt.minus(lifecycleProperties.getRetention());
+        List<Long> searchIds = jdbcClient.sql("""
+                        SELECT id FROM runbook_retrieval_query
+                        WHERE snapshot_status = 'ACTIVE' AND created_at < :cutoff
+                        ORDER BY created_at, id
+                        LIMIT :batchSize
+                        """).param("cutoff", cutoff)
+                .param("batchSize", lifecycleProperties.getCleanupBatchSize())
+                .query(Long.class).list();
+        if (searchIds.isEmpty()) {
+            return new RetentionCleanupResult(0, 0, 0, cutoff, completedAt);
+        }
+
+        long preservedEvaluationCases = jdbcClient.sql("""
+                        SELECT COUNT(*)
+                        FROM runbook_retrieval_eval_case e
+                        JOIN runbook_relevance_judgment j ON j.id = e.judgment_id
+                        WHERE j.search_id IN (:searchIds)
+                        """).param("searchIds", searchIds).query(Long.class).single();
+        int expiredPendingJudgments = jdbcClient.sql("""
+                        UPDATE runbook_relevance_judgment
+                        SET review_status = 'REJECTED', reviewed_at = CURRENT_TIMESTAMP,
+                            reviewed_by = NULL, reviewer_grade = NULL,
+                            review_note = 'AUTO_EXPIRED_BY_RETENTION',
+                            comment = NULL, version_no = version_no + 1
+                        WHERE search_id IN (:searchIds) AND review_status = 'PENDING'
+                        """).param("searchIds", searchIds).update();
+        jdbcClient.sql("""
+                        UPDATE runbook_relevance_judgment
+                        SET comment = NULL,
+                            review_note = CASE
+                              WHEN review_status = 'REJECTED' AND reviewed_by IS NULL
+                                THEN 'AUTO_EXPIRED_BY_RETENTION'
+                              ELSE NULL
+                            END
+                        WHERE search_id IN (:searchIds)
+                        """).param("searchIds", searchIds).update();
+        int purgedSnapshots = jdbcClient.sql("""
+                        UPDATE runbook_retrieval_query
+                        SET query_text = '[PURGED]', query_hash = :purgedHash,
+                            results_json = '[]', created_by = NULL,
+                            snapshot_status = 'PURGED', purged_at = CURRENT_TIMESTAMP
+                        WHERE id IN (:searchIds) AND snapshot_status = 'ACTIVE'
+                        """).param("purgedHash", sha256("PURGED"))
+                .param("searchIds", searchIds).update();
+        if (purgedSnapshots == 0) {
+            return new RetentionCleanupResult(0, 0, 0, cutoff, completedAt);
+        }
+        auditService.recordAs(actorId, null, "RUNBOOK_RETRIEVAL_PURGE", "RUNBOOK_RETRIEVAL_QUERY",
+                searchIds.get(0), "到期快照 " + purgedSnapshots + " 条；自动拒绝待复核 "
+                        + expiredPendingJudgments + " 条；保留评测 qrel " + preservedEvaluationCases
+                        + " 条；截止 " + cutoff);
+        return new RetentionCleanupResult(purgedSnapshots, expiredPendingJudgments,
+                preservedEvaluationCases, cutoff, completedAt);
+    }
+
+    private long count(String whereClause, LocalDateTime cutoff) {
+        var statement = jdbcClient.sql("SELECT COUNT(*) FROM runbook_retrieval_query WHERE " + whereClause);
+        if (cutoff != null) statement = statement.param("cutoff", cutoff);
+        return statement.query(Long.class).single();
+    }
+
     private RetrievalQuery queryById(long id) {
         return jdbcClient.sql("""
-                        SELECT id, query_text, results_json, created_by
+                        SELECT id, query_text, results_json, created_by, snapshot_status
                         FROM runbook_retrieval_query WHERE id = :id
                         """).param("id", id)
                 .query((rs, rowNum) -> new RetrievalQuery(rs.getLong("id"), rs.getString("query_text"),
-                        rs.getString("results_json"), rs.getObject("created_by", Long.class)))
+                        rs.getString("results_json"), rs.getObject("created_by", Long.class),
+                        rs.getString("snapshot_status")))
                 .optional().orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND,
                         "RUNBOOK_SEARCH_NOT_FOUND", "检索记录不存在"));
     }
@@ -342,6 +444,26 @@ public class RunbookRetrievalFeedbackService {
         }
     }
 
+    private SnapshotPayload sanitizeSnapshot(String query, List<RunbookService.SearchResult> results) {
+        String safeQuery = logRedactor.redact(query);
+        int redactedFields = Objects.equals(query, safeQuery) ? 0 : 1;
+        JsonNode snapshot = objectMapper.valueToTree(results);
+        for (JsonNode result : snapshot) {
+            if (!(result instanceof ObjectNode object)) continue;
+            for (String field : SNAPSHOT_TEXT_FIELDS) {
+                JsonNode value = object.get(field);
+                if (value == null || !value.isTextual()) continue;
+                String original = value.asText();
+                String safe = logRedactor.redact(original);
+                if (!Objects.equals(original, safe)) {
+                    object.put(field, safe);
+                    redactedFields++;
+                }
+            }
+        }
+        return new SnapshotPayload(safeQuery, json(snapshot), redactedFields);
+    }
+
     private String json(Object value) {
         try {
             return objectMapper.writeValueAsString(value);
@@ -361,6 +483,10 @@ public class RunbookRetrievalFeedbackService {
         if (value == null || value.isBlank()) return null;
         String normalized = value.trim();
         return normalized.length() <= maxLength ? normalized : normalized.substring(0, maxLength);
+    }
+
+    private String redactedOptionalText(String value, int maxLength) {
+        return logRedactor.redact(optionalText(value, maxLength));
     }
 
     private static String sha256(String value) {
@@ -386,11 +512,23 @@ public class RunbookRetrievalFeedbackService {
     }
 
     public record AgreementView(int sampleCount, BigDecimal exactAgreementRate,
-                                BigDecimal withinOneAgreementRate, BigDecimal linearWeightedKappa,
-                                String note) {
+                                 BigDecimal withinOneAgreementRate, BigDecimal linearWeightedKappa,
+                                 String note) {
     }
 
-    private record RetrievalQuery(long id, String query, String resultsJson, Long createdBy) {
+    public record RetentionStatus(String retention, int cleanupBatchSize,
+                                  long activeSnapshots, long expiredSnapshots,
+                                  long purgedSnapshots, long redactedFields,
+                                  LocalDateTime cutoff, LocalDateTime oldestActiveAt) {
+    }
+
+    public record RetentionCleanupResult(int purgedSnapshots, int expiredPendingJudgments,
+                                         long preservedEvaluationCases,
+                                         LocalDateTime cutoff, LocalDateTime completedAt) {
+    }
+
+    private record RetrievalQuery(long id, String query, String resultsJson, Long createdBy,
+                                  String snapshotStatus) {
     }
 
     private record JudgmentRow(long id, String query, String stableKey, int relevanceGrade, long judgedBy) {
@@ -400,5 +538,8 @@ public class RunbookRetrievalFeedbackService {
     }
 
     private record SnapshotDocument(String title, String excerpt, String citation) {
+    }
+
+    private record SnapshotPayload(String query, String resultsJson, int redactedFields) {
     }
 }

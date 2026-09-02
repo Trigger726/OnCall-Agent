@@ -75,6 +75,19 @@ public class RunbookController {
         return ApiResponse.ok(feedbackService.agreement());
     }
 
+    @GetMapping("/searches/retention")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
+    public ApiResponse<RunbookRetrievalFeedbackService.RetentionStatus> retrievalRetention() {
+        return ApiResponse.ok(feedbackService.retentionStatus());
+    }
+
+    @PostMapping("/searches/retention/purge")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
+    public ApiResponse<RunbookRetrievalFeedbackService.RetentionCleanupResult> purgeRetrievalSnapshots(
+            @AuthenticationPrincipal UserPrincipal user) {
+        return ApiResponse.ok(feedbackService.purgeExpired(user.id()));
+    }
+
     @PostMapping("/judgments/{judgmentId}/reviews")
     @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
     public ApiResponse<RunbookRetrievalFeedbackService.JudgmentView> reviewJudgment(

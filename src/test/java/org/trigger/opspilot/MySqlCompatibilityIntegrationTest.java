@@ -12,11 +12,13 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.trigger.opspilot.investigation.AgentRunEventService;
 import org.trigger.opspilot.investigation.AgentRunQueryService;
 import org.trigger.opspilot.investigation.InvestigationService;
+import org.trigger.opspilot.runbook.RunbookRetrievalFeedbackService;
 import org.trigger.opspilot.runbook.RunbookService;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,6 +56,9 @@ class MySqlCompatibilityIntegrationTest {
     @Autowired
     private RunbookService runbookService;
 
+    @Autowired
+    private RunbookRetrievalFeedbackService feedbackService;
+
     @Test
     void shouldApplyAllMigrationsAndRunIdempotentInvestigationOnMySql() throws SQLException {
         try (var connection = dataSource.getConnection()) {
@@ -61,7 +66,7 @@ class MySqlCompatibilityIntegrationTest {
         }
         assertThat(jdbcClient.sql("""
                         SELECT COUNT(*) FROM flyway_schema_history
-                        WHERE version = '11' AND success = 1
+                        WHERE version = '12' AND success = 1
                         """).query(Integer.class).single()).isEqualTo(1);
         assertThat(jdbcClient.sql("SELECT title FROM incident WHERE id = 1")
                 .query(String.class).single()).isEqualTo("统一结算接口持续超时");
@@ -80,6 +85,8 @@ class MySqlCompatibilityIntegrationTest {
                 .query(Integer.class).single()).isZero();
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM runbook_relevance_judgment WHERE reviewer_grade IS NOT NULL")
                 .query(Integer.class).single()).isZero();
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM runbook_retrieval_query WHERE snapshot_status = 'PURGED'")
+                .query(Integer.class).single()).isZero();
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM runbook_retrieval_eval_case WHERE source_type = 'SEED'")
                 .query(Integer.class).single()).isEqualTo(13);
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM runbook_retrieval_eval_case " +
@@ -87,6 +94,24 @@ class MySqlCompatibilityIntegrationTest {
                 .query(Integer.class).single()).isEqualTo(13);
         assertThat(runbookService.search("Redis 连接池 pending", "ON_CALL", 3).results().get(0).citation())
                 .isEqualTo("runbook:legacy-runbook-2:v1#chunk-0");
+
+        jdbcClient.sql("""
+                        INSERT INTO runbook_retrieval_query(
+                          query_text, query_hash, source_type, requested_mode, actual_engine, role_code,
+                          semantic_status, semantic_coverage, candidate_chunk_count, top_k, latency_ms,
+                          results_json, created_by, redacted_fields, created_at)
+                        VALUES ('expired mysql snapshot', :queryHash, 'CONSOLE', 'BM25', 'BM25_LOCAL_V1',
+                          'ON_CALL', 'NOT_REQUESTED', 0, 1, 3, 5, '[]', 2, 0, :createdAt)
+                        """).param("queryHash", "a".repeat(64))
+                .param("createdAt", LocalDateTime.now().minusDays(31)).update();
+        RunbookRetrievalFeedbackService.RetentionCleanupResult cleanup = feedbackService.purgeExpired(null);
+        assertThat(cleanup.purgedSnapshots()).isEqualTo(1);
+        assertThat(feedbackService.purgeExpired(null).purgedSnapshots()).isZero();
+        assertThat(jdbcClient.sql("""
+                        SELECT COUNT(*) FROM runbook_retrieval_query
+                        WHERE snapshot_status = 'PURGED' AND query_text = '[PURGED]'
+                          AND results_json = '[]' AND created_by IS NULL AND purged_at IS NOT NULL
+                        """).query(Integer.class).single()).isEqualTo(1);
 
         InvestigationService.RunActor actor = new InvestigationService.RunActor(1L, "127.0.0.1");
         String idempotencyKey = "mysql-it-" + UUID.randomUUID();

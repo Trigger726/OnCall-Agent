@@ -13,7 +13,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 - 可解释 Agent 调查：以 `PLAN -> EXECUTE -> REPLAN -> FINISH` 编排告警、CMDB、指标、变更、日志和 Runbook 六个只读工具；每步持久化输入、查询范围、数据源、证据、失败原因和耗时。
 - 可恢复调查事件流：运行事件先落库再通过 SSE 实时发送，事件 ID 同时作为断线回放游标；客户端退出不取消后台调查，结果仍会完整进入时间线和审计。
 - Agent 运行控制：同一 Incident 使用幂等键抑制重复 run；任务先进入有界队列，可显式取消并受截止时间预算约束；取消、超时和队列拒绝都形成可回放的持久化终态。
-- Runbook 知识库：Markdown/PDF 入库、内容哈希幂等、不可变版本、角色 ACL 和标题分块；本地 BM25 与可选 DashScope 向量召回通过 RRF 融合，返回 `runbook:{stableKey}:v{version}#chunk-{index}` 稳定引用。向量未启用、覆盖不足或 Provider 失败时显式降级 BM25；真实检索保存结果快照，提交人与复核人分别给出 0–3 级评分，复核前隐藏原始等级，并以线性加权 Cohen's kappa 量化一致性；批准后的分级 qrels 按唯一查询计算 Recall@3、MRR、NDCG@3 和引用命中率。
+- Runbook 知识库：Markdown/PDF 入库、内容哈希幂等、不可变版本、角色 ACL 和标题分块；本地 BM25 与可选 DashScope 向量召回通过 RRF 融合，返回 `runbook:{stableKey}:v{version}#chunk-{index}` 稳定引用。向量未启用、覆盖不足或 Provider 失败时显式降级 BM25；真实检索快照在入库前脱敏并按可配置保留期自动擦除，提交人与复核人分别给出 0–3 级评分，复核前隐藏原始等级，并以线性加权 Cohen's kappa 量化一致性；批准后的分级 qrels 在原快照清理后仍可按唯一查询计算 Recall@3、MRR、NDCG@3 和引用命中率。
 - 可观测数据适配：统一 Metrics/Logs Provider SPI；默认使用可复现的本地证据库，可选调用 Prometheus 与 Loki HTTP API，外部失败后自动重试、熔断并降级到本地证据。
 - 证据报告：规则引擎离线生成假设、置信度和建议，可选 DashScope 生成受约束摘要；单工具失败时保留其他证据并降级为部分完成。
 - OnCall 助手：持久化多轮会话、SSE 流式输出、Incident 上下文绑定、证据引用、会话清空/删除和 Markdown 导出。
@@ -65,7 +65,9 @@ Prometheus / APM / manual event
  Agent controls: idempotency -> bounded queue -> deadline / cancel -> terminal event
  Runbook retrieval: immutable ACL chunks -> BM25 + optional vectors -> RRF / fallback -> citation
                          |                                      |
-                         +-> snapshot -> hidden first grade -> reviewer grade -> agreement / graded qrels
+                         +-> redact -> retained snapshot -> blind review -> graded qrels
+                                             |                    |
+                                             +-> timed purge ---->+ (qrels survive)
 ```
 
 详细设计见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
@@ -192,6 +194,8 @@ AGENT_QUEUE_CAPACITY=50
 
 控制台和 Agent 的真实检索会保存查询、角色、请求/实际引擎、向量状态、耗时与返回结果快照；离线评测调用不记入查询日志，避免评测流量污染真实样本。查询本人只能评价快照中实际返回的文档，管理员或运维经理不能复核自己的判断，并以版本号阻止并发覆盖。待办只向复核人展示查询和当时的标题、摘要、引用，不暴露提交人身份、原始等级或评论；复核人独立给出 0–3 级，复核等级作为最终 qrel 等级，达到 2 才生成 `HUMAN_JUDGMENT` case。系统统计精确一致率、相差不超过一级的比例和线性加权 Cohen's kappa；拒绝样本及没有第二评分的历史记录不混入统计。评测时再把相同查询的多个相关文档聚合成 qrels，同一 query-document 的多个最终等级取平均，避免重复计权。当前闭环证明数据治理流程，不代表已经积累了生产规模标注。
 
+查询文本和结果快照在写入数据库前统一屏蔽密码、Token、Authorization、邮箱和完整 IPv4，评分评论与复核备注也经过同一清洗。默认保留 30 天，每日定时按批处理到期记录；清理会把查询正文、哈希、结果 JSON 和查询人擦成不可逆墓碑，将尚未完成的复核自动拒绝并写入审计。已经晋级的 qrel 复制了脱敏查询、稳定文档键和最终等级，因此快照清理不会破坏后续评测。可通过 `RUNBOOK_RETRIEVAL_RETENTION`、`RUNBOOK_RETRIEVAL_CLEANUP_BATCH_SIZE` 和 `RUNBOOK_RETRIEVAL_CLEANUP_CRON` 调整策略。
+
 ## 关键接口
 
 | 方法 | 路径 | 说明 |
@@ -214,6 +218,8 @@ AGENT_QUEUE_CAPACITY=50
 | GET | `/api/v1/runbooks/judgments/pending` | 管理员/运维经理读取排除本人、隐藏原始评分的待复核快照 |
 | GET | `/api/v1/runbooks/judgments/agreement` | 读取双评分样本数、精确/相邻一致率和线性加权 κ |
 | POST | `/api/v1/runbooks/judgments/{id}/reviews` | 提交复核评分并批准/拒绝；最终等级 ≥ 2 才进入评测集 |
+| GET | `/api/v1/runbooks/searches/retention` | 管理员/运维经理读取快照保留期、活跃/到期/已擦除数量和脱敏字段计数 |
+| POST | `/api/v1/runbooks/searches/retention/purge` | 按保留策略幂等清理一批到期快照并记录审计 |
 | GET | `/api/v1/runbooks/{stableKey}/versions` | 查询可访问的不可变版本历史 |
 | POST | `/api/v1/runbooks/imports/markdown` | 管理员/运维经理导入并发布 Markdown |
 | POST | `/api/v1/runbooks/imports/file` | 管理员/运维经理上传 Markdown/PDF |
@@ -236,7 +242,7 @@ Swagger UI: [http://localhost:9900/swagger-ui/index.html](http://localhost:9900/
 cd web && npm run build
 cd .. && ./mvnw test
 
-# 需要本机 Docker；在真实 MySQL 8.4 上执行 V1-V11 迁移和调查链路
+# 需要本机 Docker；在真实 MySQL 8.4 上执行 V1-V12 迁移和调查链路
 ./mvnw -Dopspilot.mysql.it.enabled=true -Dtest=MySqlCompatibilityIntegrationTest test
 ```
 
@@ -261,9 +267,10 @@ cd .. && ./mvnw test
 - 真实检索快照、结果范围校验、查询归属、0–3 级相关性判断、角色限制、自审禁止、复核版本冲突、正/负样本分流和离线评测流量隔离。
 - 同一查询多相关文档聚合、分级 qrels、重复标注平均、查询/qrels 双计数，以及 Recall@3、MRR、NDCG@3 的精确回归值。
 - 复核评分必填、原始评分/提交人盲化、最终等级晋级、拒绝样本隔离、线性加权 κ 公式及空/无类别变化边界。
-- MySQL 8.4 Testcontainers：Flyway V1-V11、中文数据、幂等复合唯一索引、Runbook BM25 和完整 9 步/18 事件调查链路。
+- 检索查询/结果/评论入库前脱敏、保留期权限、过期待办自动拒绝、批量清理幂等、擦除审计，以及原始快照清理后 qrel 继续可用。
+- MySQL 8.4 Testcontainers：Flyway V1-V12、中文数据、幂等复合唯一索引、Runbook BM25 和完整 9 步/18 事件调查链路。
 
-默认后端套件发现 33 项测试：32 项执行通过，1 项 Docker-MySQL 条件测试默认跳过。V1.5 曾显式通过真实 MySQL；V1.6 的 V7–V11 复验因本机 Docker Desktop 引擎不可用暂未取得新证据，状态以最新验收报告为准。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、容器构建与健康启动拆成四个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+默认后端套件发现 34 项测试：33 项执行通过，1 项 Docker-MySQL 条件测试默认跳过。另行启用条件测试后，MySQL 8.4 已从空库执行 Flyway V1–V12，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索及完整调查链路。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、容器构建与健康启动拆成四个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 

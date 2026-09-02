@@ -13,7 +13,8 @@
 | V1.6 | 02：持久化向量索引、RRF 与可解释降级 | 部分通过，H2/测试替身/UI 已闭环，真实 Embedding 与 MySQL V8 待验 | [V1.6-checkpoint-02.md](V1.6-checkpoint-02.md) |
 | V1.6 | 03：真实检索快照、人工标注与独立复核 | 部分通过，H2/API/UI 闭环完成，真实历史样本与 MySQL V9 待验 | [V1.6-checkpoint-03.md](V1.6-checkpoint-03.md) |
 | V1.6 | 04：分级 qrels、唯一查询聚合与 NDCG@3 | 部分通过，H2/API/前端/JAR 闭环完成，真实历史样本与 MySQL V10 待验 | [V1.6-checkpoint-04.md](V1.6-checkpoint-04.md) |
-| V1.6 | 05：盲化双评分与标注一致性 | 部分通过，H2/API/前端/JAR 闭环完成，真实历史样本与 MySQL V11 待验 | [V1.6-checkpoint-05.md](V1.6-checkpoint-05.md) |
+| V1.6 | 05：盲化双评分与标注一致性 | 部分通过，真实历史样本待验；MySQL 已在 06 复验 | [V1.6-checkpoint-05.md](V1.6-checkpoint-05.md) |
+| V1.6 | 06：检索快照脱敏、保留期与可审计清理 | 通过，主库生命周期、H2/MySQL、前端与 JAR 闭环完成 | [V1.6-checkpoint-06.md](V1.6-checkpoint-06.md) |
 
 ## 状态约定
 

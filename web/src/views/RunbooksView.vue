@@ -90,6 +90,23 @@ interface Agreement {
   note: string
 }
 
+interface RetentionStatus {
+  retention: string
+  cleanupBatchSize: number
+  activeSnapshots: number
+  expiredSnapshots: number
+  purgedSnapshots: number
+  redactedFields: number
+  cutoff: string
+  oldestActiveAt: string | null
+}
+
+interface RetentionCleanupResult {
+  purgedSnapshots: number
+  expiredPendingJudgments: number
+  preservedEvaluationCases: number
+}
+
 interface EngineMetric {
   engine: string
   available: boolean
@@ -145,8 +162,10 @@ const evaluation = ref<Evaluation | null>(null)
 const semanticIndex = ref<SemanticIndex | null>(null)
 const pendingJudgments = ref<PendingJudgment[]>([])
 const agreement = ref<Agreement | null>(null)
+const retentionStatus = ref<RetentionStatus | null>(null)
 const judgmentsByKey = ref<Record<string, Judgment>>({})
 const feedbackLoadingKey = ref('')
+const retentionLoading = ref(false)
 const loading = ref(false)
 const error = ref('')
 const notice = ref('')
@@ -177,7 +196,7 @@ onMounted(async () => {
   await loadDocuments()
   await loadSemanticIndex()
   await loadLatestEvaluation()
-  if (canManage.value) await Promise.all([loadPendingJudgments(), loadAgreement()])
+  if (canManage.value) await Promise.all([loadPendingJudgments(), loadAgreement(), loadRetentionStatus()])
   await search()
 })
 
@@ -205,6 +224,10 @@ async function loadAgreement() {
   agreement.value = await api<Agreement>('/runbooks/judgments/agreement')
 }
 
+async function loadRetentionStatus() {
+  retentionStatus.value = await api<RetentionStatus>('/runbooks/searches/retention')
+}
+
 async function search() {
   if (!query.value.trim()) {
     searchResponse.value = null
@@ -215,6 +238,7 @@ async function search() {
   try {
     judgmentsByKey.value = {}
     searchResponse.value = await api<SearchResponse>(`/runbooks/search?q=${encodeURIComponent(query.value.trim())}&topK=5&mode=${searchMode.value}`)
+    if (canManage.value) await loadRetentionStatus()
   } catch (caught) {
     error.value = caught instanceof Error ? caught.message : '检索失败'
   } finally {
@@ -304,6 +328,23 @@ async function runEvaluation() {
   }
 }
 
+async function purgeExpiredSnapshots() {
+  retentionLoading.value = true
+  error.value = ''
+  notice.value = ''
+  try {
+    const result = await api<RetentionCleanupResult>('/runbooks/searches/retention/purge', { method: 'POST' })
+    notice.value = result.purgedSnapshots
+      ? `已擦除 ${result.purgedSnapshots} 条到期快照，自动拒绝 ${result.expiredPendingJudgments} 条待复核样本；保留 ${result.preservedEvaluationCases} 条评测 qrel`
+      : '当前没有到期检索快照'
+    await Promise.all([loadRetentionStatus(), loadPendingJudgments(), loadAgreement()])
+  } catch (caught) {
+    error.value = caught instanceof Error ? caught.message : '快照清理失败'
+  } finally {
+    retentionLoading.value = false
+  }
+}
+
 async function submitImport() {
   loading.value = true
   error.value = ''
@@ -358,12 +399,17 @@ function metric(value: number | null | undefined) {
 function kappa(value: number | null | undefined) {
   return value == null ? 'N/A' : Number(value).toFixed(2)
 }
+
+function retentionLabel(value: string) {
+  const hours = /^PT(\d+)H$/.exec(value)?.[1]
+  return hours && Number(hours) % 24 === 0 ? `${Number(hours) / 24} 天` : value
+}
 </script>
 
 <template>
   <div class="page-content runbook-page">
     <div class="page-toolbar runbook-toolbar">
-      <div><strong>版本化 Runbook 知识库</strong><span>{{ documents.length }} 份文档 · ACL 过滤 · BM25 / 向量 RRF · 分级 qrels 评测</span></div>
+      <div><strong>版本化 Runbook 知识库</strong><span>{{ documents.length }} 份文档 · ACL 过滤 · BM25 / 向量 RRF · 分级 qrels 评测 · 快照留存治理</span></div>
       <div class="toolbar-group">
         <button v-if="canManage && semanticIndex?.enabled" class="secondary-button" :disabled="loading" @click="rebuildSemanticIndex"><RefreshCw :size="15" />重建向量索引</button>
         <button v-if="canManage" class="secondary-button" :disabled="loading" @click="runEvaluation"><FlaskConical :size="15" />运行评测</button>
@@ -430,6 +476,19 @@ function kappa(value: number | null | undefined) {
         </article>
       </div>
       <div v-else class="empty-state">当前没有可由你独立复核的判断</div>
+    </section>
+
+    <section v-if="canManage && retentionStatus" class="content-panel retention-panel">
+      <header class="panel-heading">
+        <div><h2>检索快照生命周期</h2><span>入库前屏蔽凭据、邮箱和完整 IPv4；到期擦除正文与操作者，结构化 qrel 继续可用</span></div>
+        <button class="secondary-button" :disabled="retentionLoading || retentionStatus.expiredSnapshots === 0" @click="purgeExpiredSnapshots"><ShieldCheck :size="14" />{{ retentionLoading ? '清理中…' : '清理到期快照' }}</button>
+      </header>
+      <div class="retention-stats">
+        <article><span>保留期</span><strong>{{ retentionLabel(retentionStatus.retention) }}</strong><small>单批最多 {{ retentionStatus.cleanupBatchSize }}</small></article>
+        <article><span>活跃快照</span><strong>{{ retentionStatus.activeSnapshots }}</strong><small>{{ retentionStatus.expiredSnapshots }} 条已到期</small></article>
+        <article><span>已擦除</span><strong>{{ retentionStatus.purgedSnapshots }}</strong><small>保留结构化统计墓碑</small></article>
+        <article><span>脱敏字段</span><strong>{{ retentionStatus.redactedFields }}</strong><small>在写入数据库前处理</small></article>
+      </div>
     </section>
 
     <section class="section-heading runbook-section-heading"><div><h2>已发布文档</h2><span>旧版本保留为 SUPERSEDED，不覆盖历史引用</span></div></section>
@@ -508,6 +567,12 @@ function kappa(value: number | null | undefined) {
 .judgment-list p { max-width: 680px; margin: 2px 0; color: #55555a; font-size: 9px; line-height: 1.5; }
 .agreement-summary { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 9px; }
 .judgment-actions { flex: 0 0 auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
+.retention-panel { overflow: hidden; }
+.retention-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.retention-stats article { padding: 13px 16px; display: flex; flex-direction: column; gap: 4px; border-right: 1px solid var(--line); }
+.retention-stats article:last-child { border-right: 0; }
+.retention-stats span, .retention-stats small { color: var(--text-muted); font-size: 9px; }
+.retention-stats strong { font-size: 17px; font-variant-numeric: tabular-nums; }
 .runbook-section-heading { padding: 2px 0 0; }
 .runbook-summary { min-height: 34px; margin: 7px 0 0; color: var(--text-muted); font-size: 10px; line-height: 1.55; }
 .runbook-meta { margin-top: 12px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
@@ -519,5 +584,5 @@ function kappa(value: number | null | undefined) {
 .role-options input { width: 15px; min-height: 15px; }
 @media (min-width: 1101px) { .runbook-comparison { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (max-width: 1100px) { .runbook-comparison { grid-template-columns: repeat(2, minmax(0, 1fr)); }.runbook-comparison article:nth-child(2) { border-right: 0; }.runbook-comparison article:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }
-@media (max-width: 640px) { .runbook-comparison { grid-template-columns: 1fr; }.runbook-comparison article { min-height: 72px; border-right: 0; border-bottom: 1px solid var(--line); }.runbook-comparison article:last-child { border-bottom: 0; }.runbook-toolbar { align-items: flex-start; flex-direction: column; }.runbook-toolbar .toolbar-group { width: 100%; flex-wrap: wrap; }.runbook-toolbar button { flex: 1; }.runbook-search { align-items: stretch; flex-wrap: wrap; }.runbook-search input { min-height: 34px; }.runbook-search > button { width: 100%; }.search-mode { width: 100%; }.search-mode button { flex: 1; }.retrieval-results article { grid-template-columns: 1fr; gap: 5px; }.retrieval-results header { align-items: flex-start; flex-direction: column; }.judgment-list article { align-items: flex-start; flex-direction: column; }.judgment-actions { width: 100%; }.judgment-actions button { flex: 1; }.form-grid { grid-template-columns: 1fr; }.span-2 { grid-column: 1; }.role-options { align-items: flex-start; flex-direction: column; gap: 8px; } }
+@media (max-width: 640px) { .runbook-comparison { grid-template-columns: 1fr; }.runbook-comparison article { min-height: 72px; border-right: 0; border-bottom: 1px solid var(--line); }.runbook-comparison article:last-child { border-bottom: 0; }.runbook-toolbar { align-items: flex-start; flex-direction: column; }.runbook-toolbar .toolbar-group { width: 100%; flex-wrap: wrap; }.runbook-toolbar button { flex: 1; }.runbook-search { align-items: stretch; flex-wrap: wrap; }.runbook-search input { min-height: 34px; }.runbook-search > button { width: 100%; }.search-mode { width: 100%; }.search-mode button { flex: 1; }.retrieval-results article { grid-template-columns: 1fr; gap: 5px; }.retrieval-results header { align-items: flex-start; flex-direction: column; }.judgment-list article { align-items: flex-start; flex-direction: column; }.judgment-actions { width: 100%; }.judgment-actions button { flex: 1; }.retention-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }.retention-stats article:nth-child(2) { border-right: 0; }.retention-stats article:nth-child(-n+2) { border-bottom: 1px solid var(--line); }.form-grid { grid-template-columns: 1fr; }.span-2 { grid-column: 1; }.role-options { align-items: flex-start; flex-direction: column; gap: 8px; } }
 </style>

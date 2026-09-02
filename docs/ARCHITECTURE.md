@@ -122,7 +122,9 @@ Markdown / extractable PDF
   -> optional version-bound embedding + cosine --+-> RRF -> actual engine / ranks / warning
                                       unavailable +-> deterministic BM25 fallback
   -> score + runbook:{stableKey}:v{version}#chunk-{index}
-  -> immutable snapshot -> hidden first grade -> reviewer grade -> agreement / graded qrels
+  -> redact -> retained snapshot -> hidden first grade -> reviewer grade -> agreement / graded qrels
+                    |                                      |
+                    +-> timed payload purge -------------->+ qrels remain evaluable
 ```
 
 BM25 使用小型本地语料实现，词元包含 ASCII 单词、中文单字和相邻二元组；标题与分段标题加权，结果按分数和 chunk ID 稳定排序。检索先做 ACL 过滤，因此无权文档不会进入候选集或分数统计。
@@ -139,7 +141,9 @@ V10 把评测 case 的正相关等级 1–3 一并持久化。评测前先以查
 
 V11 将“审批判断”升级为可量化的双评分：待复核响应不返回提交人身份、原始等级或评论，只从不可变检索快照提取查询、文档标题、摘要和稳定引用；复核人必须独立给出 0–3 级，批准时该评分成为最终 qrel 等级。拒绝项没有可比较的第二评分，历史记录也不回填伪标签，因此二者都不进入一致性样本。系统同时计算精确一致率、相差不超过一级的比例和线性加权 Cohen's kappa：`κ = 1 - observedWeightedDisagreement / expectedWeightedDisagreement`，四级序数标签的权重为 `|i-j|/3`。当没有样本或两边标签都没有类别变化时 κ 返回 `null` 而不是误报 0。该定义与 [scikit-learn Cohen kappa](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.cohen_kappa_score.html) 的双标注人、线性权重和未定义边界一致；当前不把少量隔离样本的 κ 当成生产标注质量。
 
-这一模型对应 [OpenSearch Judgments](https://docs.opensearch.org/latest/search-plugins/search-relevance/judgments/) 的 query-document 相关性等级与显式/隐式判断边界，以及 [OpenSearch Query Sets](https://docs.opensearch.org/latest/search-plugins/search-relevance/query-sets/) 从真实用户查询构造评测集合的思路；其 [Search Relevance Workbench](https://docs.opensearch.org/latest/search-plugins/search-relevance/using-search-relevance-workbench/) 进一步把 query set、search configuration、judgment list 和 experiment 分离。OpsPilot 当前只实现业务所需的显式人工闭环，不用点击即相关的隐式假设，也不让 LLM 自动批准自己的标注。查询原文和结果摘要属于内部运维数据，生产化前仍需补保留期限、字段级脱敏/删除和部门级访问范围。
+V12 把检索遥测从“永久保存完整快照”改为显式生命周期。写入前对查询、结果中的标题/摘要/服务字段，以及评分评论和复核备注统一屏蔽密码、Token、Authorization、邮箱和完整 IPv4，并记录发生脱敏的字段数。默认保留 30 天，定时任务或管理员接口按批选择仍为 `ACTIVE` 的到期快照：先把未完成复核标为 `REJECTED/AUTO_EXPIRED_BY_RETENTION`，再清空自由文本评论，最后将查询正文、查询哈希、结果 JSON 和查询人替换为不可逆 `PURGED` 墓碑。操作只选 `ACTIVE`，因此重复执行幂等；每个有效批次写一条不含原文的清理审计。已批准的正相关 qrel 在复核时已经复制脱敏查询、稳定文档键和最终等级，所以原快照擦除后仍能参与离线评测。该取舍遵循 [OWASP Logging Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html) 关于记录前排除/掩码敏感数据、测试日志机制和不得超期保存的建议；定时、批量、幂等保留任务参考 [Grafana Loki Compactor retention](https://grafana.com/docs/loki/latest/operations/storage/retention/) 的运行边界。当前不是物理删除整行，因为查询、判断、审计和 qrel 之间存在可追溯外键；擦除的是敏感 payload，保留的是非敏感结构事实。
+
+这一模型对应 [OpenSearch Judgments](https://docs.opensearch.org/latest/search-plugins/search-relevance/judgments/) 的 query-document 相关性等级与显式/隐式判断边界，以及 [OpenSearch Query Sets](https://docs.opensearch.org/latest/search-plugins/search-relevance/query-sets/) 从真实用户查询构造评测集合的思路；其 [Search Relevance Workbench](https://docs.opensearch.org/latest/search-plugins/search-relevance/using-search-relevance-workbench/) 进一步把 query set、search configuration、judgment list 和 experiment 分离。OpsPilot 当前只实现业务所需的显式人工闭环，不用点击即相关的隐式假设，也不让 LLM 自动批准自己的标注。生产化仍需把保留期绑定真实法律/合同要求、细化部门/资源访问范围，并覆盖数据库备份和导出副本的同等删除策略。
 
 设计还借鉴了 [Backstage TechDocs](https://backstage.io/docs/features/techdocs/) 的 docs-like-code 与可搜索文档思路、[Rundeck](https://docs.rundeck.com/docs/about/introduction.html) 的 Runbook 自动化权限/历史边界，以及 [OpenSearch BM25](https://docs.opensearch.org/latest/im-plugin/similarity/) 的关键词检索模型。当前仍是单机小语料与可选外部 Embedding：没有向量 ANN/OpenSearch，未接 cross-encoder rerank，PDF 不含 OCR，导入即发布且没有内容审核流。
 
@@ -208,7 +212,7 @@ cmdb_resource 1---n oncall_schedule 1---n oncall_shift
 cmdb_resource 1---n escalation_policy 1---n escalation_step
 ```
 
-数据库变更由 Flyway 管理。H2 使用 MySQL 兼容模式保证本地零配置体验，Compose 提供 MySQL 部署路径；Testcontainers 目标是在真实 MySQL 8.4 上从空库执行 V1–V11，并验证关键索引、中文数据、Runbook 召回和调查主链路。`flyway-mysql` 作为正式运行依赖加载 MySQL 方言支持；最新直接证据和宿主机阻塞以验收报告为准。
+数据库变更由 Flyway 管理。H2 使用 MySQL 兼容模式保证本地零配置体验，Compose 提供 MySQL 部署路径；Testcontainers 目标是在真实 MySQL 8.4 上从空库执行 V1–V12，并验证关键索引、中文数据、Runbook 召回和调查主链路。`flyway-mysql` 作为正式运行依赖加载 MySQL 方言支持；最新直接证据和宿主机阻塞以验收报告为准。
 
 ## 9. 可观测性和失败策略
 
@@ -240,4 +244,4 @@ cmdb_resource 1---n escalation_policy 1---n escalation_step
 5. 为多实例事件广播和任务协调接入消息组件。
 6. 将对话 SSE 从完整回答分块升级为模型 Provider 原生 token 流。
 7. 加入 Postmortem、SLA/SLO、MTTR 和重复事故分析。
-8. 从真实但脱敏的历史 Incident/查询流量持续扩充已实现的双评分 qrels，加入第三方仲裁、超过两名标注人的一致性、分层抽样和保留策略；再以现有 NDCG/Recall 指标验证真实 Embedding 与 cross-encoder rerank 是否稳定优于 BM25/RRF，决定是否引入 ANN/OpenSearch/Milvus。
+8. 从真实但脱敏的历史 Incident/查询流量持续扩充已实现的双评分 qrels，加入第三方仲裁、超过两名标注人的一致性和分层抽样；将现有保留任务扩展到备份/导出副本和面向单条数据的受控删除，再以 NDCG/Recall 验证真实 Embedding 与 cross-encoder rerank 是否稳定优于 BM25/RRF，决定是否引入 ANN/OpenSearch/Milvus。
