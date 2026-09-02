@@ -31,13 +31,16 @@ public class PostmortemService {
     private final ObjectMapper objectMapper;
     private final AuditService auditService;
     private final LogRedactor logRedactor;
+    private final FollowUpEscalationService followUpEscalationService;
 
     public PostmortemService(JdbcClient jdbcClient, ObjectMapper objectMapper,
-                             AuditService auditService, LogRedactor logRedactor) {
+                             AuditService auditService, LogRedactor logRedactor,
+                             FollowUpEscalationService followUpEscalationService) {
         this.jdbcClient = jdbcClient;
         this.objectMapper = objectMapper;
         this.auditService = auditService;
         this.logRedactor = logRedactor;
+        this.followUpEscalationService = followUpEscalationService;
     }
 
     public PostmortemView findByIncident(long incidentId) {
@@ -280,6 +283,7 @@ public class PostmortemService {
                 "完成复盘行动项：" + followUp.title(), "postmortem-follow-up:" + followUpId);
         auditService.record("POSTMORTEM_FOLLOW_UP_COMPLETED", "POSTMORTEM_FOLLOW_UP", followUpId,
                 "完成行动项版本 " + expectedVersion + " -> " + (expectedVersion + 1));
+        followUpEscalationService.resolve(followUpId, actorId, auditService.currentIp());
         return get(current.id());
     }
 

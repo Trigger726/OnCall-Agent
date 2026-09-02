@@ -3,7 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   Activity, AlarmClock, BellRing, BookOpenCheck, Boxes, ChevronLeft, ChevronRight,
-  ClipboardList, LayoutDashboard, LogOut, Menu, MessageSquareText, RadioTower, Search, ShieldCheck, X,
+  BarChart3, ClipboardList, LayoutDashboard, LogOut, Menu, MessageSquareText, RadioTower, Search, ShieldCheck, X,
 } from 'lucide-vue-next'
 import { auth } from '@/stores/auth'
 
@@ -22,6 +22,7 @@ const nav = [
   { to: '/cmdb', label: '资源与拓扑', icon: Boxes },
   { to: '/on-call', label: '值班与升级', icon: AlarmClock },
   { to: '/runbooks', label: '处置手册', icon: BookOpenCheck },
+  { to: '/analytics', label: '运营分析', icon: BarChart3 },
   { to: '/audit', label: '审计日志', icon: ClipboardList },
 ]
 

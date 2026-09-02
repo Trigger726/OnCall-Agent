@@ -68,6 +68,10 @@ opspilot:
         retention: ${RUNBOOK_RETRIEVAL_RETENTION:P30D}
         cleanup-batch-size: ${RUNBOOK_RETRIEVAL_CLEANUP_BATCH_SIZE:500}
         cleanup-cron: "${RUNBOOK_RETRIEVAL_CLEANUP_CRON:0 15 3 * * *}"
+  postmortem:
+    follow-up:
+      escalation-cron: "${FOLLOW_UP_ESCALATION_CRON:0 5 9 * * *}"
+      timezone: ${FOLLOW_UP_TIMEZONE:Asia/Shanghai}
   observability:
     reliability:
       max-attempts: ${OBSERVABILITY_MAX_ATTEMPTS:2}

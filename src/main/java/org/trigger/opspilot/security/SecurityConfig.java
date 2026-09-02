@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.ASYNC, DispatcherType.ERROR).permitAll()
                         .requestMatchers("/api/v1/auth/login", "/actuator/health", "/actuator/prometheus", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**",
-                                "/", "/index.html", "/favicon.svg", "/assets/**", "/login", "/incidents", "/assistant", "/alerts", "/cmdb", "/on-call", "/runbooks", "/audit").permitAll()
+                                "/", "/index.html", "/favicon.svg", "/assets/**", "/login", "/incidents", "/assistant", "/alerts", "/cmdb", "/on-call", "/runbooks", "/audit", "/analytics").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/alerts/intake").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

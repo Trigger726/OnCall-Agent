@@ -12,6 +12,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.trigger.opspilot.investigation.AgentRunEventService;
 import org.trigger.opspilot.investigation.AgentRunQueryService;
 import org.trigger.opspilot.investigation.InvestigationService;
+import org.trigger.opspilot.postmortem.FollowUpEscalationService;
 import org.trigger.opspilot.postmortem.PostmortemService;
 import org.trigger.opspilot.runbook.RunbookRetrievalFeedbackService;
 import org.trigger.opspilot.runbook.RunbookService;
@@ -64,6 +65,9 @@ class MySqlCompatibilityIntegrationTest {
     @Autowired
     private PostmortemService postmortemService;
 
+    @Autowired
+    private FollowUpEscalationService followUpEscalationService;
+
     @Test
     void shouldApplyAllMigrationsAndRunIdempotentInvestigationOnMySql() throws SQLException {
         try (var connection = dataSource.getConnection()) {
@@ -71,7 +75,7 @@ class MySqlCompatibilityIntegrationTest {
         }
         assertThat(jdbcClient.sql("""
                         SELECT COUNT(*) FROM flyway_schema_history
-                        WHERE version = '13' AND success = 1
+                        WHERE version = '14' AND success = 1
                         """).query(Integer.class).single()).isEqualTo(1);
         assertThat(jdbcClient.sql("SELECT title FROM incident WHERE id = 1")
                 .query(String.class).single()).isEqualTo("统一结算接口持续超时");
@@ -95,6 +99,8 @@ class MySqlCompatibilityIntegrationTest {
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM incident_postmortem")
                 .query(Integer.class).single()).isZero();
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM postmortem_follow_up")
+                .query(Integer.class).single()).isZero();
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM postmortem_follow_up_escalation")
                 .query(Integer.class).single()).isZero();
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM runbook_retrieval_eval_case WHERE source_type = 'SEED'")
                 .query(Integer.class).single()).isEqualTo(13);
@@ -178,10 +184,22 @@ class MySqlCompatibilityIntegrationTest {
                 "证据和行动项完整，同意发布");
         assertThat(published.status()).isEqualTo("PUBLISHED");
         assertThat(published.version()).isEqualTo(4);
+        jdbcClient.sql("UPDATE postmortem_follow_up SET due_date = :dueDate WHERE id = :id")
+                .param("dueDate", LocalDate.now().minusDays(1)).param("id", followUpId).update();
+        FollowUpEscalationService.EscalationScanResult firstScan = followUpEscalationService.scan(
+                LocalDate.now(), 1L, "mysql-testcontainers");
+        FollowUpEscalationService.EscalationScanResult repeatedScan = followUpEscalationService.scan(
+                LocalDate.now(), 1L, "mysql-testcontainers");
+        assertThat(firstScan.createdEscalations()).isEqualTo(1);
+        assertThat(repeatedScan.createdEscalations()).isZero();
         PostmortemService.PostmortemView completed = postmortemService.completeFollowUp(
                 followUpId, 0, 2, "ON_CALL");
         assertThat(completed.followUps().get(0).status()).isEqualTo("DONE");
+        assertThat(jdbcClient.sql("""
+                        SELECT status FROM postmortem_follow_up_escalation WHERE follow_up_id = :id
+                        """).param("id", followUpId).query(String.class).single())
+                .isEqualTo("RESOLVED");
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM audit_log WHERE target_type LIKE '%POSTMORTEM%'")
-                .query(Integer.class).single()).isEqualTo(6);
+                .query(Integer.class).single()).isEqualTo(8);
     }
 }

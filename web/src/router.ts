@@ -10,6 +10,7 @@ import OnCallView from '@/views/OnCallView.vue'
 import RunbooksView from '@/views/RunbooksView.vue'
 import AuditView from '@/views/AuditView.vue'
 import AssistantView from '@/views/AssistantView.vue'
+import AnalyticsView from '@/views/AnalyticsView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -27,6 +28,7 @@ const router = createRouter({
         { path: 'on-call', name: 'on-call', component: OnCallView, meta: { title: '值班与升级' } },
         { path: 'runbooks', name: 'runbooks', component: RunbooksView, meta: { title: '处置手册' } },
         { path: 'audit', name: 'audit', component: AuditView, meta: { title: '审计日志' } },
+        { path: 'analytics', name: 'analytics', component: AnalyticsView, meta: { title: '运营分析' } },
       ],
     },
   ],
