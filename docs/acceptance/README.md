@@ -18,10 +18,11 @@
 | V1.7 | 01：证据驱动无责复盘与防复发行动项 | 通过，H2/MySQL、权限并发、响应式前端与 JAR 闭环完成 | [V1.7-checkpoint-01.md](V1.7-checkpoint-01.md) |
 | V1.7 | 02：事故响应指标与防复发行动项运营 | 通过，H2/MySQL、幂等升级、响应式分析页、JAR 与远端四段式 CI 已验收 | [V1.7-checkpoint-02.md](V1.7-checkpoint-02.md) |
 | V1.7 | 03：可解释重复事故与 Problem Management | 通过，本地验收与远端四段式 CI 已闭环 | [V1.7-checkpoint-03.md](V1.7-checkpoint-03.md) |
+| V1.7 | 04：长标题边界与证据保留 | 通过，41 项本地回归、JAR 与远端四段式 CI 已闭环 | [V1.7-checkpoint-04.md](V1.7-checkpoint-04.md) |
 
 ## 状态约定
 
-最新补强：[V1.7-checkpoint-04.md](V1.7-checkpoint-04.md) 记录长标题导致登记失败的复现与修复；本地 41 项回归和 JAR 通过，远端待验。
+最新补强：[V1.7-checkpoint-04.md](V1.7-checkpoint-04.md) 记录长标题失败的复现与修复，以及 MySQL 并发覆盖仍待补足的具体范围。
 
 - `通过`：该检查点的功能、测试、运行和文档证据均已闭环。
 - `部分通过`：实现和部分验证已经完成，但仍有明确待验项。
