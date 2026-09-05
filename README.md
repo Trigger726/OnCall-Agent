@@ -20,6 +20,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 - 受控处置：高置信度变更关联可生成回滚草案；管理员或运维经理独立审批，禁止申请人自批，并用乐观锁防止并发覆盖。审批只解除治理门禁，不自动修改生产环境。
 - 无责事故复盘：只有已恢复/已关闭 Incident 才能从当时的时间线、告警、调查报告和变更引用生成脱敏快照；五类复盘内容必须补全，并绑定有负责人和期限的防复发行动项后才能提交。提交人不能自审，发布后正文冻结，行动项仍可由负责人闭环，全部过程进入时间线和审计。
 - 事故运营分析：按创建窗口与严重等级计算 MTTA/MTTM/MTTR 的均值、中位数和独立样本数，排除缺失与负时长，并提供慢事故下钻；跨 Incident 管理行动项、逾期天数和持久化升级事实，重复扫描幂等、完成后关闭且不冒充外部通知送达。
+- 重复事故与 Problem 治理：按“归属服务 + 精确告警指纹”识别跨 Incident 复发，明确区分独立事故数和单次事故内的告警 occurrence；管理角色可将候选提升为唯一 Problem，维护 `OPEN / KNOWN_ERROR / RESOLVED`、根因、规避方案和长期解决说明。新同指纹 Incident 自动幂等关联，已解决后复发只显示事实、不静默重开。
 - 安全审计：JWT、BCrypt、角色权限、关键操作审计、Prometheus 指标和健康检查。
 - 运维控制台：Vue 3 + TypeScript，高密度桌面工作台及移动端响应式视图。
 
@@ -66,6 +67,10 @@ Prometheus / APM / manual event
               +----> resolved incident -> evidence snapshot -> blameless postmortem
                                                       |            |
                                                       +-> follow-up +-> independent publish
+              |
+              +----> exact cross-incident fingerprint -> recurrence candidate
+                                                          |
+                                                          +-> Problem lifecycle / known error
 
  Observability providers: Prometheus -> local metrics / Loki -> local logs
  Agent controls: idempotency -> bounded queue -> deadline / cancel -> terminal event
@@ -227,6 +232,9 @@ AGENT_QUEUE_CAPACITY=50
 | GET | `/api/v1/analytics/incidents` | 按日期/严重等级读取 MTTA、MTTM、MTTR、样本数、分布、慢事故和当前行动项摘要 |
 | GET | `/api/v1/postmortem-follow-ups` | 按本人/全部、状态与逾期筛选跨 Incident 行动项 |
 | POST | `/api/v1/postmortem-follow-ups/escalations/run` | 管理员/运维经理按业务日期幂等生成逾期升级事实 |
+| GET | `/api/v1/problems/recurrence-candidates` | 按窗口查询精确指纹复发候选、独立事故分母、信号总量和治理状态 |
+| GET/POST | `/api/v1/problems` | 查询 Problem 台账，或由管理角色幂等登记候选并固化 Incident 关联 |
+| GET/PATCH | `/api/v1/problems/{id}` | 读取或以乐观锁更新 Problem、已知错误和解决结论 |
 | GET | `/api/v1/observability/providers` | 查询指标/日志 Provider 与熔断状态 |
 | GET | `/api/v1/runbooks/search?q={query}&topK=3&mode=AUTO` | 按角色过滤并返回 BM25/Hybrid 实际引擎、排名轨迹、降级说明和稳定引用 |
 | POST | `/api/v1/runbooks/searches/{searchId}/judgments` | 查询本人对快照返回文档提交 0–3 级相关性判断 |
@@ -257,7 +265,7 @@ Swagger UI: [http://localhost:9900/swagger-ui/index.html](http://localhost:9900/
 cd web && npm run build
 cd .. && ./mvnw test
 
-# 需要本机 Docker；在真实 MySQL 8.4 上执行 V1-V14 迁移和关键业务链路
+# 需要本机 Docker；在真实 MySQL 8.4 上执行 V1-V15 迁移和关键业务链路
 ./mvnw -Dopspilot.mysql.it.enabled=true -Dtest=MySqlCompatibilityIntegrationTest test
 ```
 
@@ -286,9 +294,10 @@ cd .. && ./mvnw test
 - 复盘仅在 Incident 恢复后生成、证据快照写前脱敏、草稿完备门禁、不可自审、退回再提交、发布冻结、父子版本冲突、行动项责任权限和时间线/审计留痕。
 - MTTA/MTTM/MTTR 均值、中位数、独立分母、日期/严重等级筛选、缺失/负时长排除、慢事故下钻和 SPA 深链。
 - 跨 Incident 行动项筛选、截止当天边界、逾期天数、扫描角色限制、唯一升级事实、重复扫描幂等和完成后关闭。
-- MySQL 8.4 Testcontainers：Flyway V1-V14、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布，以及逾期扫描/行动项完成闭环。
+- 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
+- MySQL 8.4 Testcontainers：Flyway V1-V15、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项完成，以及 Problem 创建和状态闭环。
 
-默认后端套件发现 37 项测试：36 项执行通过，1 项 Docker-MySQL 条件测试默认跳过。另行启用条件测试后，MySQL 8.4 已从空库执行 Flyway V1–V14，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等和行动项关闭。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、容器构建与健康启动拆成四个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+默认后端套件发现 40 项测试：39 项执行通过，1 项 Docker-MySQL 条件测试默认跳过。另行启用条件测试后，MySQL 8.4 已从空库执行 Flyway V1–V15，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭，以及 Problem 创建和状态流转。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、容器构建与健康启动拆成四个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 
@@ -300,6 +309,7 @@ src/main/java/org/trigger/opspilot/
   remediation/   高风险处置提案、独立审批与并发控制
   postmortem/    无责复盘、独立发布、防复发行动项与逾期升级
   analytics/     事故响应指标、样本口径、严重等级分布与慢事故下钻
+  problem/       重复事故候选、Problem 生命周期、已知错误与关联证据
   observability/ Metrics/Logs Provider、Prometheus/Loki 适配、可靠性保护和日志脱敏
   runbook/       文档版本/ACL、BM25/向量 RRF、检索快照、相关性复核和评测
   assistant/      多轮会话、Incident 上下文、SSE 与导出

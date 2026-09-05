@@ -17,6 +17,7 @@
 | V1.6 | 06：检索快照脱敏、保留期与可审计清理 | 通过，主库生命周期、H2/MySQL、前端与 JAR 闭环完成 | [V1.6-checkpoint-06.md](V1.6-checkpoint-06.md) |
 | V1.7 | 01：证据驱动无责复盘与防复发行动项 | 通过，H2/MySQL、权限并发、响应式前端与 JAR 闭环完成 | [V1.7-checkpoint-01.md](V1.7-checkpoint-01.md) |
 | V1.7 | 02：事故响应指标与防复发行动项运营 | 通过，H2/MySQL、幂等升级、响应式分析页、JAR 与远端四段式 CI 已验收 | [V1.7-checkpoint-02.md](V1.7-checkpoint-02.md) |
+| V1.7 | 03：可解释重复事故与 Problem Management | 本地功能与验收通过，远端四段式 CI 待本次提交确认 | [V1.7-checkpoint-03.md](V1.7-checkpoint-03.md) |
 
 ## 状态约定
 

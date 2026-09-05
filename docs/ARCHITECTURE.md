@@ -2,7 +2,7 @@
 
 ## 1. 设计目标
 
-OpsPilot 解决的是企业信息系统发生故障后的协同闭环，而不是物理设备预测性维护。系统必须回答九个问题：
+OpsPilot 解决的是企业信息系统发生故障后的协同闭环，而不是物理设备预测性维护。系统必须回答十个问题：
 
 1. 哪些原始事件属于同一问题？
 2. 哪项业务服务受影响，依赖链是什么？
@@ -12,7 +12,8 @@ OpsPilot 解决的是企业信息系统发生故障后的协同闭环，而不�
 6. 值班人员能否围绕同一 Incident 持续追问而不丢失证据上下文？
 7. 调查连接断开后，能否恢复过程并保证结果继续落库？
 8. 高风险建议由谁独立复核，如何避免自批和并发覆盖？
-9. 谁在什么时间执行了什么操作？
+9. 同一种故障是否跨 Incident 复发，长期问题、根因和规避方案由谁维护？
+10. 谁在什么时间执行了什么操作？
 
 ## 2. 模块边界
 
@@ -26,6 +27,7 @@ OpsPilot 解决的是企业信息系统发生故障后的协同闭环，而不�
 | Remediation | 高风险动作草案、独立审批、版本控制与治理留痕 | 直接调用生产执行器 |
 | Postmortem | 脱敏证据快照、无责复盘、独立发布和防复发行动项 | 提前断言根因或替代行动项执行 |
 | Analytics | 响应里程碑口径、严重等级分布、慢事故和行动项运营 | 篡改源数据或推断不存在的里程碑 |
+| Problem | 精确指纹复发候选、跨事故关联、已知错误和长期解决生命周期 | 在没有标注与评测时冒充语义聚类或自动根因判断 |
 | Assistant | 持久化会话、Incident 上下文、SSE 输出和证据引用 | 绕过状态机修改生产数据 |
 | Audit | 记录关键操作 | 修改业务数据 |
 
@@ -82,6 +84,14 @@ OPEN -> ACKNOWLEDGED -> INVESTIGATING -> MITIGATED -> RESOLVED -> CLOSED
 行动项运营查询跨越单份复盘，按全部/本人、开放/完成和是否逾期筛选。逾期定义为 `OPEN && due_date < Asia/Shanghai 业务日`，截止当天不算逾期。定时任务每日 09:05 扫描，管理角色也可以显式传业务日期复现边界；每个候选先锁定行动项，再由 `follow_up_id` 唯一约束保证最多一条升级事实。重复扫描只计为已存在，不重复写 Incident 时间线和审计。完成行动项时同一事务关闭开放升级事实并保留首次发现/关闭元数据。
 
 `postmortem_follow_up_escalation` 表示“系统发现并治理逾期”的内部事实，不复用 `notification_log`，也不代表邮件、短信或企业 IM 已送达。指标筛选提供事故窗口；行动项摘要始终返回当前业务日状态，因为当前模型不是保存每次负责人/状态变化的双时态历史库。
+
+### 重复事故与 Problem Management
+
+复发识别使用高精度、低召回的确定性基线：在最多 366 日的 Incident 创建窗口内，只有相同归属服务、相同 `alert_event.fingerprint` 且关联至少两个不同 Incident 的信号才形成候选。分母固定为 `COUNT(DISTINCT incident_id)`；同一事故中 `occurrence_count=100` 仍是一个事故证据，告警发生总量只用于说明噪声和影响规模。候选同时返回匹配依据、不同日期数、首次/最近事故、未关闭事故数和下钻明细，不返回没有训练/标注依据的相似度概率。
+
+管理角色可将候选提升为 `problem_record`。`recurrence_key=serviceId:fingerprint` 的唯一约束与事务内冲突复用共同保证重复请求和并发点击只产生一个 Problem；`problem_incident_link(problem_id, incident_id)` 的唯一约束保证历史证据与时间线幂等。创建时固化当前窗口的所有匹配 Incident，以后 Alert Intake 在完成告警聚合后按服务与指纹查找已登记 Problem，并自动补充新 Incident 关联。
+
+Problem 状态为 `OPEN / KNOWN_ERROR / RESOLVED`：已知错误必须同时具备已确认根因与可执行规避方案，解决必须具备长期解决说明，更新使用 `expectedVersion` 乐观锁。已解决后出现新匹配 Incident 时，系统保留 `RESOLVED` 并计算 `recurredAfterResolution=true`，要求负责人显式判断是否重开，避免后台任务静默改写治理结论。该模型参考 ITIL Problem/known error 的职责划分，但当前不声称具备 PagerDuty 式机器学习相似度、跨服务因果聚类或外部 Jira 同步。
 
 ## 5. 可解释 Agent 调查
 
@@ -235,7 +245,7 @@ cmdb_resource 1---n oncall_schedule 1---n oncall_shift
 cmdb_resource 1---n escalation_policy 1---n escalation_step
 ```
 
-数据库变更由 Flyway 管理。H2 使用 MySQL 兼容模式保证本地零配置体验，Compose 提供 MySQL 部署路径；Testcontainers 已在真实 MySQL 8.4 上从空库执行 V1–V14，并验证关键索引、中文数据、Runbook 召回、调查主链路、复盘发布、逾期扫描幂等和行动项关闭。`flyway-mysql` 作为正式运行依赖加载 MySQL 方言支持；最新直接证据以验收报告为准。
+数据库变更由 Flyway 管理。H2 使用 MySQL 兼容模式保证本地零配置体验，Compose 提供 MySQL 部署路径；Testcontainers 已在真实 MySQL 8.4 上从空库执行 V1–V15，并验证关键索引、中文数据、Runbook 召回、调查主链路、复盘发布、逾期扫描幂等、行动项关闭和 Problem 生命周期。`flyway-mysql` 作为正式运行依赖加载 MySQL 方言支持；最新直接证据以验收报告为准。
 
 ## 9. 可观测性和失败策略
 
@@ -267,5 +277,5 @@ cmdb_resource 1---n escalation_policy 1---n escalation_step
 4. 增加系统级并发压测、真实 socket 断流恢复，以及外部 Provider 组合故障注入。
 5. 为多实例事件广播和任务协调接入消息组件。
 6. 将对话 SSE 从完整回答分块升级为模型 Provider 原生 token 流。
-7. 在已完成 MTTA/MTTM/MTTR 与行动项逾期治理之上加入服务 SLA/SLO 目标线、重复事故分析、Runbook 命中率趋势和跨 Incident 相似聚类。
+7. 在已完成 MTTA/MTTM/MTTR、行动项逾期治理和精确指纹复发之上加入服务 SLA/SLO 目标线、Runbook 命中率趋势和跨 Incident 语义相似/依赖共因聚类。
 8. 从真实但脱敏的历史 Incident/查询流量持续扩充已实现的双评分 qrels，加入第三方仲裁、超过两名标注人的一致性和分层抽样；将现有保留任务扩展到备份/导出副本和面向单条数据的受控删除，再以 NDCG/Recall 验证真实 Embedding 与 cross-encoder rerank 是否稳定优于 BM25/RRF，决定是否引入 ANN/OpenSearch/Milvus。
