@@ -14,6 +14,8 @@ import org.trigger.opspilot.investigation.AgentRunQueryService;
 import org.trigger.opspilot.investigation.InvestigationService;
 import org.trigger.opspilot.postmortem.FollowUpEscalationService;
 import org.trigger.opspilot.postmortem.PostmortemService;
+import org.trigger.opspilot.problem.ProblemService;
+import org.trigger.opspilot.problem.ProblemStatus;
 import org.trigger.opspilot.runbook.RunbookRetrievalFeedbackService;
 import org.trigger.opspilot.runbook.RunbookService;
 
@@ -68,6 +70,9 @@ class MySqlCompatibilityIntegrationTest {
     @Autowired
     private FollowUpEscalationService followUpEscalationService;
 
+    @Autowired
+    private ProblemService problemService;
+
     @Test
     void shouldApplyAllMigrationsAndRunIdempotentInvestigationOnMySql() throws SQLException {
         try (var connection = dataSource.getConnection()) {
@@ -75,7 +80,7 @@ class MySqlCompatibilityIntegrationTest {
         }
         assertThat(jdbcClient.sql("""
                         SELECT COUNT(*) FROM flyway_schema_history
-                        WHERE version = '14' AND success = 1
+                        WHERE version = '15' AND success = 1
                         """).query(Integer.class).single()).isEqualTo(1);
         assertThat(jdbcClient.sql("SELECT title FROM incident WHERE id = 1")
                 .query(String.class).single()).isEqualTo("统一结算接口持续超时");
@@ -101,6 +106,10 @@ class MySqlCompatibilityIntegrationTest {
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM postmortem_follow_up")
                 .query(Integer.class).single()).isZero();
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM postmortem_follow_up_escalation")
+                .query(Integer.class).single()).isZero();
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM problem_record")
+                .query(Integer.class).single()).isZero();
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM problem_incident_link")
                 .query(Integer.class).single()).isZero();
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM runbook_retrieval_eval_case WHERE source_type = 'SEED'")
                 .query(Integer.class).single()).isEqualTo(13);
@@ -201,5 +210,57 @@ class MySqlCompatibilityIntegrationTest {
                 .isEqualTo("RESOLVED");
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM audit_log WHERE target_type LIKE '%POSTMORTEM%'")
                 .query(Integer.class).single()).isEqualTo(8);
+
+        String recurrenceFingerprint = "c".repeat(64);
+        LocalDateTime now = LocalDateTime.now();
+        jdbcClient.sql("""
+                        INSERT INTO incident(
+                          id, incident_code, title, severity, status, service_resource_id,
+                          acknowledged_at, resolved_at, created_at, updated_at)
+                        VALUES
+                          (301, 'INC-MYSQL-PROBLEM-301', '结算连接池首次耗尽', 'P1', 'RESOLVED', 1,
+                           :firstAck, :firstResolved, :firstCreated, :firstResolved),
+                          (302, 'INC-MYSQL-PROBLEM-302', '结算连接池再次耗尽', 'P1', 'RESOLVED', 1,
+                           :secondAck, :secondResolved, :secondCreated, :secondResolved)
+                        """).param("firstCreated", now.minusDays(7))
+                .param("firstAck", now.minusDays(7).plusMinutes(3))
+                .param("firstResolved", now.minusDays(7).plusMinutes(40))
+                .param("secondCreated", now.minusDays(2))
+                .param("secondAck", now.minusDays(2).plusMinutes(4))
+                .param("secondResolved", now.minusDays(2).plusMinutes(35)).update();
+        jdbcClient.sql("""
+                        INSERT INTO alert_event(
+                          source, external_event_id, fingerprint, service_resource_id,
+                          severity, status, title, description, labels_json,
+                          first_occurred_at, last_occurred_at, occurrence_count, incident_id)
+                        VALUES
+                          ('prometheus', 'mysql-problem-301', :fingerprint, 1, 'P1', 'RESOLVED',
+                           '连接池耗尽', '首次', '{}', :firstAt, :firstAt, 8, 301),
+                          ('prometheus', 'mysql-problem-302', :fingerprint, 1, 'P1', 'RESOLVED',
+                           '连接池耗尽', '再次', '{}', :secondAt, :secondAt, 5, 302)
+                        """).param("fingerprint", recurrenceFingerprint)
+                .param("firstAt", now.minusDays(7)).param("secondAt", now.minusDays(2)).update();
+        assertThat(problemService.recurrenceCandidates(
+                LocalDate.now().minusDays(10), LocalDate.now(), 1L, 1, 20).total()).isEqualTo(1);
+        ProblemService.ProblemCreateResult problemCreated = problemService.create(
+                "1:" + recurrenceFingerprint, LocalDate.now().minusDays(10), LocalDate.now(),
+                1L, "mysql-testcontainers");
+        assertThat(problemCreated.created()).isTrue();
+        assertThat(problemCreated.newlyLinkedIncidents()).isEqualTo(2);
+        ProblemService.ProblemView knownError = problemService.update(
+                problemCreated.problem().id(), 0,
+                new ProblemService.ProblemUpdate(null, ProblemStatus.KNOWN_ERROR, null,
+                        "连接池上限低于峰值并发", "临时扩容并限流", null),
+                1L, "mysql-testcontainers");
+        assertThat(knownError.status()).isEqualTo("KNOWN_ERROR");
+        ProblemService.ProblemView problemResolved = problemService.update(
+                knownError.id(), 1,
+                new ProblemService.ProblemUpdate(null, ProblemStatus.RESOLVED, null,
+                        null, null, "完成容量模型与自适应连接池配置"),
+                1L, "mysql-testcontainers");
+        assertThat(problemResolved.status()).isEqualTo("RESOLVED");
+        assertThat(problemResolved.incidentCount()).isEqualTo(2);
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM problem_incident_link")
+                .query(Integer.class).single()).isEqualTo(2);
     }
 }

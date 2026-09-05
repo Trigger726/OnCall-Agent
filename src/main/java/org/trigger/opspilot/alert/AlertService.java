@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.trigger.opspilot.common.ApiException;
 import org.trigger.opspilot.common.PageResponse;
+import org.trigger.opspilot.problem.ProblemService;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -25,10 +26,13 @@ public class AlertService {
     private static final DateTimeFormatter CODE_TIME = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
     private final JdbcClient jdbcClient;
     private final ObjectMapper objectMapper;
+    private final ProblemService problemService;
 
-    public AlertService(JdbcClient jdbcClient, ObjectMapper objectMapper) {
+    public AlertService(JdbcClient jdbcClient, ObjectMapper objectMapper,
+                        ProblemService problemService) {
         this.jdbcClient = jdbcClient;
         this.objectMapper = objectMapper;
+        this.problemService = problemService;
     }
 
     public PageResponse<AlertView> list(String status, String severity, int page, int size) {
@@ -85,6 +89,9 @@ public class AlertService {
                 jdbcClient.sql("UPDATE alert_event SET incident_id = :incidentId WHERE id = :id")
                         .param("incidentId", incidentId).param("id", alert.id()).update();
             }
+            if (incidentId != null) {
+                problemService.linkMatchingProblem(alert.id(), incidentId);
+            }
             return new IntakeResult("DEDUPLICATED", alert.id(), incidentId, fingerprint,
                     "重复告警已压缩，发生次数已累加");
         }
@@ -117,6 +124,7 @@ public class AlertService {
                             """)
                     .param("incidentId", incidentId).param("content", "关联新告警：" + request.title())
                     .param("evidenceRef", "alert:" + alertId).update();
+            problemService.linkMatchingProblem(alertId, incidentId);
         }
         return new IntakeResult("CREATED", alertId, incidentId, fingerprint, "新告警已接入并完成聚合");
     }
