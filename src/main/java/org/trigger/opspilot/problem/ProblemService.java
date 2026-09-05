@@ -211,7 +211,7 @@ public class ProblemService {
                     .param("title", generatedTitle(context))
                     .param("ownerId", actorId).param("createdBy", actorId).update();
         } catch (DuplicateKeyException exception) {
-            Long concurrentId = findByRecurrence(recurrenceKey);
+            Long concurrentId = findByRecurrenceForUpdate(recurrenceKey);
             if (concurrentId == null) throw exception;
             int linked = linkMatchingIncidents(concurrentId, signature, window, actorId);
             return new ProblemCreateResult(false, linked, get(concurrentId));
@@ -455,6 +455,14 @@ public class ProblemService {
     private Long findByRecurrence(String recurrenceKey) {
         return jdbcClient.sql("SELECT id FROM problem_record WHERE recurrence_key = :key")
                 .param("key", recurrenceKey).query(Long.class).optional().orElse(null);
+    }
+
+    private Long findByRecurrenceForUpdate(String recurrenceKey) {
+        return jdbcClient.sql("""
+                        SELECT id FROM problem_record
+                        WHERE recurrence_key = :key FOR UPDATE
+                        """).param("key", recurrenceKey)
+                .query(Long.class).optional().orElse(null);
     }
 
     private static ProblemView view(ProblemRow row, List<IncidentRef> incidents) {

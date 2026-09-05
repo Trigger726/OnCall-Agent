@@ -19,10 +19,11 @@
 | V1.7 | 02：事故响应指标与防复发行动项运营 | 通过，H2/MySQL、幂等升级、响应式分析页、JAR 与远端四段式 CI 已验收 | [V1.7-checkpoint-02.md](V1.7-checkpoint-02.md) |
 | V1.7 | 03：可解释重复事故与 Problem Management | 通过，本地验收与远端四段式 CI 已闭环 | [V1.7-checkpoint-03.md](V1.7-checkpoint-03.md) |
 | V1.7 | 04：长标题边界与证据保留 | 通过，41 项本地回归、JAR 与远端四段式 CI 已闭环 | [V1.7-checkpoint-04.md](V1.7-checkpoint-04.md) |
+| V1.7 | 05：MySQL 快照可见性与并发提升 | 本地 H2/JAR 通过，真实 MySQL 与远端四段式 CI 待本次提交确认 | [V1.7-checkpoint-05.md](V1.7-checkpoint-05.md) |
 
 ## 状态约定
 
-最新补强：[V1.7-checkpoint-04.md](V1.7-checkpoint-04.md) 记录长标题失败的复现与修复，以及 MySQL 并发覆盖仍待补足的具体范围。
+最新补强：[V1.7-checkpoint-05.md](V1.7-checkpoint-05.md) 将上一检查点识别的 MySQL 并发证据缺口落实为确定性双事务门禁。
 
 - `通过`：该检查点的功能、测试、运行和文档证据均已闭环。
 - `部分通过`：实现和部分验证已经完成，但仍有明确待验项。

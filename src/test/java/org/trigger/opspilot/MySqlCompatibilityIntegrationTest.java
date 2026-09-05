@@ -1,6 +1,9 @@
 package org.trigger.opspilot;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,6 +12,9 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.trigger.opspilot.investigation.AgentRunEventService;
 import org.trigger.opspilot.investigation.AgentRunQueryService;
 import org.trigger.opspilot.investigation.InvestigationService;
@@ -26,11 +32,18 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @EnabledIfSystemProperty(named = "opspilot.mysql.it.enabled", matches = "true")
 @Testcontainers
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(properties = {
         "spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver",
         "spring.h2.console.enabled=false",
@@ -73,7 +86,76 @@ class MySqlCompatibilityIntegrationTest {
     @Autowired
     private ProblemService problemService;
 
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+
     @Test
+    @Order(2)
+    void shouldPromoteOneProblemAcrossTwoRepeatableReadTransactions() throws Exception {
+        String fingerprint = "d".repeat(64);
+        String recurrenceKey = "3:" + fingerprint;
+        seedConcurrentProblemCandidate(fingerprint);
+        CountDownLatch snapshotsReady = new CountDownLatch(2);
+        CountDownLatch createStart = new CountDownLatch(1);
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        TransactionTemplate transaction = new TransactionTemplate(transactionManager);
+        transaction.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+        try {
+            Callable<ProblemService.ProblemCreateResult> operation = () -> {
+                ProblemService.ProblemCreateResult result = transaction.execute(status -> {
+                    long existing = jdbcClient.sql("""
+                                    SELECT COUNT(*) FROM problem_record
+                                    WHERE recurrence_key = :key
+                                    """).param("key", recurrenceKey).query(Long.class).single();
+                    assertThat(existing).isZero();
+                    snapshotsReady.countDown();
+                    try {
+                        if (!createStart.await(10, TimeUnit.SECONDS)) {
+                            throw new IllegalStateException("Concurrent create barrier timed out");
+                        }
+                    } catch (InterruptedException exception) {
+                        Thread.currentThread().interrupt();
+                        throw new IllegalStateException("Concurrent create interrupted", exception);
+                    }
+                    return problemService.create(recurrenceKey,
+                            LocalDate.of(2026, 8, 1), LocalDate.of(2026, 9, 30),
+                            3L, "mysql-concurrency-test");
+                });
+                if (result == null) throw new IllegalStateException("Problem create returned null");
+                return result;
+            };
+            Future<ProblemService.ProblemCreateResult> first = executor.submit(operation);
+            Future<ProblemService.ProblemCreateResult> second = executor.submit(operation);
+            assertThat(snapshotsReady.await(10, TimeUnit.SECONDS)).isTrue();
+            createStart.countDown();
+            List<ProblemService.ProblemCreateResult> results = List.of(
+                    first.get(30, TimeUnit.SECONDS), second.get(30, TimeUnit.SECONDS));
+
+            assertThat(results).extracting(ProblemService.ProblemCreateResult::created)
+                    .containsExactlyInAnyOrder(true, false);
+            assertThat(results).extracting(ProblemService.ProblemCreateResult::newlyLinkedIncidents)
+                    .containsExactlyInAnyOrder(2, 0);
+            long problemId = results.get(0).problem().id();
+            assertThat(results.get(1).problem().id()).isEqualTo(problemId);
+            assertThat(jdbcClient.sql("""
+                            SELECT COUNT(*) FROM problem_record WHERE recurrence_key = :key
+                            """).param("key", recurrenceKey).query(Long.class).single()).isEqualTo(1);
+            assertThat(jdbcClient.sql("""
+                            SELECT COUNT(*) FROM problem_incident_link WHERE problem_id = :problemId
+                            """).param("problemId", problemId).query(Long.class).single()).isEqualTo(2);
+            assertThat(jdbcClient.sql("""
+                            SELECT COUNT(*) FROM incident_timeline
+                            WHERE event_type = 'PROBLEM_LINKED' AND evidence_ref = :evidenceRef
+                            """).param("evidenceRef", "problem:" + problemId)
+                    .query(Long.class).single()).isEqualTo(2);
+        } finally {
+            createStart.countDown();
+            executor.shutdownNow();
+        }
+    }
+
+    @Test
+    @Order(1)
     void shouldApplyAllMigrationsAndRunIdempotentInvestigationOnMySql() throws SQLException {
         try (var connection = dataSource.getConnection()) {
             assertThat(connection.getMetaData().getDatabaseProductName()).isEqualTo("MySQL");
@@ -273,5 +355,31 @@ class MySqlCompatibilityIntegrationTest {
         assertThat(problemResolved.incidentCount()).isEqualTo(2);
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM problem_incident_link")
                 .query(Integer.class).single()).isEqualTo(2);
+    }
+
+    private void seedConcurrentProblemCandidate(String fingerprint) {
+        jdbcClient.sql("""
+                        INSERT INTO incident(
+                          id, incident_code, title, severity, status, service_resource_id,
+                          created_at, updated_at)
+                        VALUES
+                          (401, 'INC-MYSQL-CONCURRENT-401', 'MySQL 并发证据一', 'P2', 'OPEN', 3,
+                           '2026-08-20 10:00:00', '2026-08-20 10:00:00'),
+                          (402, 'INC-MYSQL-CONCURRENT-402', 'MySQL 并发证据二', 'P2', 'OPEN', 3,
+                           '2026-08-25 10:00:00', '2026-08-25 10:00:00')
+                        """).update();
+        jdbcClient.sql("""
+                        INSERT INTO alert_event(
+                          source, external_event_id, fingerprint, service_resource_id,
+                          severity, status, title, description, labels_json,
+                          first_occurred_at, last_occurred_at, occurrence_count, incident_id)
+                        VALUES
+                          ('prometheus', 'mysql-concurrent-401', :fingerprint, 3, 'P2', 'FIRING',
+                           'MySQL concurrent signal', 'first', '{}',
+                           '2026-08-20 10:00:00', '2026-08-20 10:00:00', 1, 401),
+                          ('prometheus', 'mysql-concurrent-402', :fingerprint, 3, 'P2', 'FIRING',
+                           'MySQL concurrent signal', 'second', '{}',
+                           '2026-08-25 10:00:00', '2026-08-25 10:00:00', 1, 402)
+                        """).param("fingerprint", fingerprint).update();
     }
 }
