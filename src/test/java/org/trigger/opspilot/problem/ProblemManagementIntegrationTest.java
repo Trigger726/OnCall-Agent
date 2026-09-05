@@ -66,6 +66,32 @@ class ProblemManagementIntegrationTest {
     }
 
     @Test
+    void shouldPromoteMaximumLengthEvidenceWithoutLosingOriginalTitles() throws Exception {
+        seedRecurringIncidents();
+        String serviceName = "服".repeat(128);
+        String signalTitle = "警".repeat(240);
+        String longFingerprint = fingerprint("prometheus", 3, "P2", signalTitle);
+        jdbcClient.sql("UPDATE cmdb_resource SET name = :name WHERE id = 3")
+                .param("name", serviceName).update();
+        jdbcClient.sql("UPDATE alert_event SET title = :title, fingerprint = :longFingerprint "
+                        + "WHERE fingerprint = :originalFingerprint")
+                .param("title", signalTitle).param("longFingerprint", longFingerprint)
+                .param("originalFingerprint", FINGERPRINT).update();
+        String manager = login("lina");
+        JsonNode created = data(post("/api/v1/problems")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(Map.of(
+                        "recurrenceKey", "3:" + longFingerprint, "from", FROM, "to", TO))), manager);
+        assertThat(created.path("created").asBoolean()).isTrue();
+        assertThat(created.path("problem").path("title").asText())
+                .hasSize(240).startsWith(serviceName + " 重复故障：").endsWith("…");
+        assertThat(created.path("newlyLinkedIncidents").asInt()).isEqualTo(2);
+        assertThat(jdbcClient.sql("SELECT title FROM alert_event WHERE fingerprint = :fingerprint")
+                .param("fingerprint", longFingerprint).query(String.class).list())
+                .containsExactly(signalTitle, signalTitle);
+    }
+
+    @Test
     void shouldTurnExactCrossIncidentRecurrenceIntoAuditedProblemLifecycle() throws Exception {
         seedRecurringIncidents();
         String manager = login("lina");

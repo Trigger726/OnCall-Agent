@@ -297,7 +297,7 @@ cd .. && ./mvnw test
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
 - MySQL 8.4 Testcontainers：Flyway V1-V15、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项完成，以及 Problem 创建和状态闭环。
 
-默认后端套件发现 40 项测试：39 项执行通过，1 项 Docker-MySQL 条件测试默认跳过。另行启用条件测试后，MySQL 8.4 已从空库执行 Flyway V1–V15，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭，以及 Problem 创建和状态流转。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、容器构建与健康启动拆成四个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+默认后端套件发现 41 项测试：40 项执行通过，1 项 Docker-MySQL 条件测试默认跳过；新增合法长标题登记与原始证据保留回归。另行启用条件测试后，MySQL 8.4 已从空库执行 Flyway V1–V15，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭，以及 Problem 创建和状态流转。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、容器构建与健康启动拆成四个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 

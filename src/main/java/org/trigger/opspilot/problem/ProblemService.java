@@ -208,7 +208,7 @@ public class ProblemService {
                               :title, '', '', '', :ownerId, :createdBy)
                             """).param("code", code).param("recurrenceKey", recurrenceKey)
                     .param("serviceId", signature.serviceId()).param("fingerprint", signature.fingerprint())
-                    .param("title", context.serviceName() + " 重复故障：" + context.signalTitle())
+                    .param("title", generatedTitle(context))
                     .param("ownerId", actorId).param("createdBy", actorId).update();
         } catch (DuplicateKeyException exception) {
             Long concurrentId = findByRecurrence(recurrenceKey);
@@ -515,6 +515,13 @@ public class ProblemService {
 
     private static String recurrenceKey(long serviceId, String fingerprint) {
         return serviceId + ":" + fingerprint;
+    }
+
+    private static String generatedTitle(CandidateContext context) {
+        String title = context.serviceName() + " 重复故障：" + context.signalTitle();
+        if (title.length() <= 240) return title;
+        int end = Character.isHighSurrogate(title.charAt(238)) ? 238 : 239;
+        return title.substring(0, end) + "…";
     }
 
     private static String choose(String requested, String current, int maxLength) {

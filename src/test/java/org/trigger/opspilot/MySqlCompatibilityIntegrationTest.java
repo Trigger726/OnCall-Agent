@@ -240,12 +240,23 @@ class MySqlCompatibilityIntegrationTest {
                            '连接池耗尽', '再次', '{}', :secondAt, :secondAt, 5, 302)
                         """).param("fingerprint", recurrenceFingerprint)
                 .param("firstAt", now.minusDays(7)).param("secondAt", now.minusDays(2)).update();
+        String maximumServiceName = "服".repeat(128);
+        String maximumAlertTitle = "警".repeat(240);
+        jdbcClient.sql("UPDATE cmdb_resource SET name = :name WHERE id = 1")
+                .param("name", maximumServiceName).update();
+        jdbcClient.sql("UPDATE alert_event SET title = :title WHERE fingerprint = :fingerprint")
+                .param("title", maximumAlertTitle).param("fingerprint", recurrenceFingerprint).update();
         assertThat(problemService.recurrenceCandidates(
                 LocalDate.now().minusDays(10), LocalDate.now(), 1L, 1, 20).total()).isEqualTo(1);
         ProblemService.ProblemCreateResult problemCreated = problemService.create(
                 "1:" + recurrenceFingerprint, LocalDate.now().minusDays(10), LocalDate.now(),
                 1L, "mysql-testcontainers");
         assertThat(problemCreated.created()).isTrue();
+        assertThat(problemCreated.problem().title())
+                .hasSize(240).startsWith(maximumServiceName + " 重复故障：").endsWith("…");
+        assertThat(jdbcClient.sql("SELECT title FROM alert_event WHERE fingerprint = :fingerprint")
+                .param("fingerprint", recurrenceFingerprint).query(String.class).list())
+                .containsExactly(maximumAlertTitle, maximumAlertTitle);
         assertThat(problemCreated.newlyLinkedIncidents()).isEqualTo(2);
         ProblemService.ProblemView knownError = problemService.update(
                 problemCreated.problem().id(), 0,
