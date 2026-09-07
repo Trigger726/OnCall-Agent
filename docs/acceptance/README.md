@@ -23,6 +23,8 @@
 
 ## 状态约定
 
+最新事件一致性补强：[V1.7-checkpoint-07.md](V1.7-checkpoint-07.md)：提交后推送、回滚不推送，定向集成测试通过，远端全量待验。
+
 最新执行器补强：[V1.7-checkpoint-06.md](V1.7-checkpoint-06.md)：排队取消后立即回收容量，定向 3 项回归与远端四段式门禁通过。
 
 最新补强：[V1.7-checkpoint-05.md](V1.7-checkpoint-05.md) 将上一检查点识别的 MySQL 并发证据缺口落实为确定性双事务门禁。

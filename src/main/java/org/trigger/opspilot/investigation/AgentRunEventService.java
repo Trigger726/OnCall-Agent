@@ -8,6 +8,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.trigger.opspilot.common.ApiException;
 
 import java.time.LocalDateTime;
@@ -60,14 +62,22 @@ public class AgentRunEventService {
                     .param("payload", payloadJson).param("createdAt", createdAt)
                     .update(keyHolder, "id");
             Number key = keyHolder.getKey();
-            return key == null ? null : new EventView(key.longValue(), runId, sequence, eventType,
+            EventView saved = key == null ? null : new EventView(key.longValue(), runId, sequence, eventType,
                     phase, toolName, status, payloadJson, createdAt);
+            if (saved != null) {
+                TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        sink.publish(saved);
+                    }
+                });
+            }
+            return saved;
         });
         if (event == null) {
             throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "AGENT_EVENT_CREATE_FAILED", "无法保存 Agent 运行事件");
         }
-        sink.publish(event);
         return event;
     }
 
