@@ -60,6 +60,7 @@ class AgentExecutionManagerTest {
         CountDownLatch activeRelease = new CountDownLatch(1);
         CountDownLatch queuedStarted = new CountDownLatch(1);
         CountDownLatch rejectedStarted = new CountDownLatch(1);
+        CountDownLatch replacementStarted = new CountDownLatch(1);
 
         try {
             manager.submit(201, LocalDateTime.now().plusSeconds(30), () -> {
@@ -81,12 +82,17 @@ class AgentExecutionManagerTest {
             assertThat(manager.isActive(203)).isFalse();
             assertThat(rejectedStarted.getCount()).isEqualTo(1);
             assertThat(manager.cancel(202)).isTrue();
+            manager.submit(204, LocalDateTime.now().plusSeconds(30),
+                    replacementStarted::countDown, () -> { });
+            assertThat(replacementStarted.getCount()).isEqualTo(1);
             activeRelease.countDown();
+            assertThat(replacementStarted.await(2, TimeUnit.SECONDS)).isTrue();
             assertThat(queuedStarted.await(300, TimeUnit.MILLISECONDS)).isFalse();
         } finally {
             activeRelease.countDown();
             manager.cancel(201);
             manager.cancel(202);
+            manager.cancel(204);
             manager.shutdownDeadlineExecutor();
             executor.shutdown();
         }

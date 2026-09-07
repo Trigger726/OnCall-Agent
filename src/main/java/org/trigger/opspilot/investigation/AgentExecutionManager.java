@@ -57,6 +57,10 @@ public class AgentExecutionManager {
 
         try {
             executor.execute(managed.future);
+            // Cancellation can happen before execute has placed the task in the queue.
+            if (managed.future.isCancelled()) {
+                executor.getThreadPoolExecutor().remove(managed.future);
+            }
         } catch (RuntimeException exception) {
             remove(runId, managed);
             managed.future.cancel(false);
@@ -68,7 +72,9 @@ public class AgentExecutionManager {
         ManagedTask managed = tasks.remove(runId);
         if (managed == null) return false;
         if (managed.deadline != null) managed.deadline.cancel(false);
-        return managed.future.cancel(true);
+        boolean cancelled = managed.future.cancel(true);
+        executor.getThreadPoolExecutor().remove(managed.future);
+        return cancelled;
     }
 
     public boolean isActive(long runId) {
