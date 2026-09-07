@@ -89,7 +89,7 @@ OPEN -> ACKNOWLEDGED -> INVESTIGATING -> MITIGATED -> RESOLVED -> CLOSED
 
 复发识别使用高精度、低召回的确定性基线：在最多 366 日的 Incident 创建窗口内，只有相同归属服务、相同 `alert_event.fingerprint` 且关联至少两个不同 Incident 的信号才形成候选。分母固定为 `COUNT(DISTINCT incident_id)`；同一事故中 `occurrence_count=100` 仍是一个事故证据，告警发生总量只用于说明噪声和影响规模。候选同时返回匹配依据、不同日期数、首次/最近事故、未关闭事故数和下钻明细，不返回没有训练/标注依据的相似度概率。
 
-管理角色可将候选提升为 `problem_record`。`recurrence_key=serviceId:fingerprint` 的唯一约束与事务内冲突复用共同保证重复请求和并发点击只产生一个 Problem；冲突失败者使用 `SELECT ... FOR UPDATE` 当前读回收赢家记录，避免 MySQL REPEATABLE READ 的旧快照让普通回读继续看不到刚提交行。`problem_incident_link(problem_id, incident_id)` 的唯一约束保证历史证据与时间线幂等。创建时固化当前窗口的所有匹配 Incident，以后 Alert Intake 在完成告警聚合后按服务与指纹查找已登记 Problem，并自动补充新 Incident 关联。
+管理角色可将候选提升为 `problem_record`。`recurrence_key=serviceId:fingerprint` 的唯一约束与事务内冲突复用共同保证重复请求和并发点击只产生一个 Problem；冲突失败者会暂停已经持有旧快照的事务，并在 `REQUIRES_NEW` 新事务中完成赢家回收、缺失关联同步和最终视图读取。真实 MySQL 闸门证明只把主键回读改成 `SELECT ... FOR UPDATE` 仍不够，因为同一事务后续普通读取仍会使用既有 REPEATABLE READ 快照。`problem_incident_link(problem_id, incident_id)` 的唯一约束保证历史证据与时间线幂等。创建时固化当前窗口的所有匹配 Incident，以后 Alert Intake 在完成告警聚合后按服务与指纹查找已登记 Problem，并自动补充新 Incident 关联。
 
 Problem 状态为 `OPEN / KNOWN_ERROR / RESOLVED`：已知错误必须同时具备已确认根因与可执行规避方案，解决必须具备长期解决说明，更新使用 `expectedVersion` 乐观锁。已解决后出现新匹配 Incident 时，系统保留 `RESOLVED` 并计算 `recurredAfterResolution=true`，要求负责人显式判断是否重开，避免后台任务静默改写治理结论。该模型参考 ITIL Problem/known error 的职责划分，但当前不声称具备 PagerDuty 式机器学习相似度、跨服务因果聚类或外部 Jira 同步。
 

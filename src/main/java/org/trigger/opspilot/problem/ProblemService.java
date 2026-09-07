@@ -4,7 +4,10 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.trigger.opspilot.audit.AuditService;
 import org.trigger.opspilot.common.ApiException;
 import org.trigger.opspilot.common.PageResponse;
@@ -25,10 +28,15 @@ public class ProblemService {
 
     private final JdbcClient jdbcClient;
     private final AuditService auditService;
+    private final TransactionTemplate concurrencyRecovery;
 
-    public ProblemService(JdbcClient jdbcClient, AuditService auditService) {
+    public ProblemService(JdbcClient jdbcClient, AuditService auditService,
+                          PlatformTransactionManager transactionManager) {
         this.jdbcClient = jdbcClient;
         this.auditService = auditService;
+        this.concurrencyRecovery = new TransactionTemplate(transactionManager);
+        this.concurrencyRecovery.setPropagationBehavior(
+                TransactionDefinition.PROPAGATION_REQUIRES_NEW);
     }
 
     public PageResponse<RecurrenceCandidate> recurrenceCandidates(
@@ -211,10 +219,14 @@ public class ProblemService {
                     .param("title", generatedTitle(context))
                     .param("ownerId", actorId).param("createdBy", actorId).update();
         } catch (DuplicateKeyException exception) {
-            Long concurrentId = findByRecurrenceForUpdate(recurrenceKey);
-            if (concurrentId == null) throw exception;
-            int linked = linkMatchingIncidents(concurrentId, signature, window, actorId);
-            return new ProblemCreateResult(false, linked, get(concurrentId));
+            ProblemCreateResult recovered = concurrencyRecovery.execute(status -> {
+                Long concurrentId = findByRecurrence(recurrenceKey);
+                if (concurrentId == null) throw exception;
+                int linked = linkMatchingIncidents(concurrentId, signature, window, actorId);
+                return new ProblemCreateResult(false, linked, get(concurrentId));
+            });
+            if (recovered == null) throw exception;
+            return recovered;
         }
         long problemId = jdbcClient.sql("SELECT id FROM problem_record WHERE recurrence_key = :key")
                 .param("key", recurrenceKey).query(Long.class).single();
@@ -455,14 +467,6 @@ public class ProblemService {
     private Long findByRecurrence(String recurrenceKey) {
         return jdbcClient.sql("SELECT id FROM problem_record WHERE recurrence_key = :key")
                 .param("key", recurrenceKey).query(Long.class).optional().orElse(null);
-    }
-
-    private Long findByRecurrenceForUpdate(String recurrenceKey) {
-        return jdbcClient.sql("""
-                        SELECT id FROM problem_record
-                        WHERE recurrence_key = :key FOR UPDATE
-                        """).param("key", recurrenceKey)
-                .query(Long.class).optional().orElse(null);
     }
 
     private static ProblemView view(ProblemRow row, List<IncidentRef> incidents) {
