@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -25,14 +26,17 @@ public class AgentRunEventService {
     private final ObjectMapper objectMapper;
     private final AgentRunQueryService runQueryService;
     private final TransactionTemplate transactionTemplate;
+    private final boolean outboxEnabled;
 
     public AgentRunEventService(JdbcClient jdbcClient, ObjectMapper objectMapper,
                                 AgentRunQueryService runQueryService,
-                                TransactionTemplate transactionTemplate) {
+                                TransactionTemplate transactionTemplate,
+                                @Value("${opspilot.agent.events.outbox-enabled:false}") boolean outboxEnabled) {
         this.jdbcClient = jdbcClient;
         this.objectMapper = objectMapper;
         this.runQueryService = runQueryService;
         this.transactionTemplate = transactionTemplate;
+        this.outboxEnabled = outboxEnabled;
     }
 
     public EventView record(long runId, String eventType,
@@ -68,6 +72,10 @@ public class AgentRunEventService {
             EventView saved = key == null ? null : new EventView(key.longValue(), runId, sequence, eventType,
                     phase, toolName, status, payloadJson, createdAt);
             if (saved != null) {
+                if (outboxEnabled) {
+                    jdbcClient.sql("INSERT INTO agent_event_outbox(event_id) VALUES (:eventId)")
+                            .param("eventId", saved.id()).update();
+                }
                 TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {

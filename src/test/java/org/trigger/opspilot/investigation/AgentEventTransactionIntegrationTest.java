@@ -16,12 +16,36 @@ import static org.assertj.core.api.Assertions.assertThat;
         "spring.datasource.url=jdbc:h2:mem:opspilot-event-transaction;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1",
         "spring.datasource.username=sa", "spring.datasource.password=",
         "spring.datasource.driver-class-name=org.h2.Driver",
-        "spring.ai.dashscope.api-key=disabled", "opspilot.ai.enabled=false"
+        "spring.ai.dashscope.api-key=disabled", "opspilot.ai.enabled=false",
+        "opspilot.agent.events.outbox-enabled=true"
 })
 class AgentEventTransactionIntegrationTest {
     @Autowired private InvestigationService investigations;
     @Autowired private AgentRunEventService events;
     @Autowired private TransactionTemplate transactions;
+    @Autowired private org.springframework.jdbc.core.simple.JdbcClient jdbc;
+    @Autowired private AgentEventOutbox outbox;
+
+    @Test
+    void shouldReclaimExpiredLeaseAndFenceOldOwner() {
+        long runId = prepareRun();
+        var now = java.time.LocalDateTime.now().plusDays(1);
+        var first = outbox.claim(100, now, Duration.ofSeconds(10)).stream()
+                .filter(c -> events.list(runId, 0).stream().anyMatch(e -> e.id() == c.eventId()))
+                .findFirst().orElseThrow();
+        var later = now.plusSeconds(10);
+        var replacement = outbox.claim(100, later, Duration.ofSeconds(10)).stream()
+                .filter(c -> c.eventId() == first.eventId()).findFirst().orElseThrow();
+        assertThat(outbox.delivered(first, later)).isFalse();
+        assertThat(outbox.retry(first, later, Duration.ofSeconds(5))).isFalse();
+        assertThat(outbox.retry(replacement, later, Duration.ofSeconds(5))).isTrue();
+        assertThat(outbox.claim(100, later.plusSeconds(4), Duration.ofSeconds(10)))
+                .extracting(AgentEventOutbox.Claim::eventId).doesNotContain(first.eventId());
+        var retried = outbox.claim(100, later.plusSeconds(5), Duration.ofSeconds(10)).stream()
+                .filter(c -> c.eventId() == first.eventId()).findFirst().orElseThrow();
+        assertThat(outbox.delivered(retried, later.plusSeconds(6))).isTrue();
+        assertThat(outbox.delivered(retried, later.plusSeconds(6))).isFalse();
+    }
 
     @Test
     void shouldPublishOnlyAfterOuterCommitAndReplayTheSameEvent() {
@@ -33,6 +57,7 @@ class AgentEventTransactionIntegrationTest {
             return event;
         });
         assertThat(recorded).isNotNull();
+        assertThat(outboxCount(recorded.id())).isEqualTo(1);
         assertThat(delivered).containsExactly(recorded);
         assertThat(events.list(runId, recorded.id() - 1))
                 .extracting(AgentRunEventService.EventView::id).containsExactly(recorded.id());
@@ -50,6 +75,7 @@ class AgentEventTransactionIntegrationTest {
         });
         assertThat(delivered).isEmpty();
         assertThat(events.list(runId, 0)).isEqualTo(before);
+        assertThat(outboxCount(rolledBack.id())).isZero();
         var committed = record(runId, delivered::add);
         assertThat(rolledBack).isNotNull();
         assertThat(committed.sequence()).isEqualTo(rolledBack.sequence());
@@ -60,6 +86,11 @@ class AgentEventTransactionIntegrationTest {
         return investigations.prepare(1, "EVENT_TX_TEST",
                 new InvestigationService.RunActor(1L, "127.0.0.1"),
                 UUID.randomUUID().toString(), Duration.ofSeconds(30)).runId();
+    }
+
+    private long outboxCount(long eventId) {
+        return jdbc.sql("SELECT COUNT(*) FROM agent_event_outbox WHERE event_id = :id")
+                .param("id", eventId).query(Long.class).single();
     }
 
     @Test

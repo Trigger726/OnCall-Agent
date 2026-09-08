@@ -48,9 +48,41 @@ import static org.assertj.core.api.Assertions.assertThat;
         "spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver",
         "spring.h2.console.enabled=false",
         "spring.ai.dashscope.api-key=disabled",
-        "opspilot.ai.enabled=false"
+        "opspilot.ai.enabled=false",
+        "opspilot.agent.events.outbox-enabled=true"
 })
 class MySqlCompatibilityIntegrationTest {
+    @Autowired private org.trigger.opspilot.investigation.AgentEventOutbox outbox;
+
+    @Test
+    @Order(3)
+    void shouldClaimOutboxOnceAcrossConcurrentRelays() throws Exception {
+        var start = new CountDownLatch(1);
+        var executor = Executors.newFixedThreadPool(2);
+        var now = LocalDateTime.now().plusDays(1);
+        try {
+            Callable<List<org.trigger.opspilot.investigation.AgentEventOutbox.Claim>> claim = () -> {
+                if (!start.await(5, TimeUnit.SECONDS)) throw new IllegalStateException("claim barrier timed out");
+                return outbox.claim(100, now, Duration.ofSeconds(30));
+            };
+            var first = executor.submit(claim);
+            var second = executor.submit(claim);
+            start.countDown();
+            var combined = new java.util.ArrayList<>(first.get(10, TimeUnit.SECONDS));
+            combined.addAll(second.get(10, TimeUnit.SECONDS));
+            assertThat(combined).isNotEmpty();
+            assertThat(combined).extracting(org.trigger.opspilot.investigation.AgentEventOutbox.Claim::eventId)
+                    .doesNotHaveDuplicates();
+            var old = combined.get(0);
+            var reclaimed = outbox.claim(100, now.plusSeconds(30), Duration.ofSeconds(30)).stream()
+                    .filter(c -> c.eventId() == old.eventId()).findFirst().orElseThrow();
+            assertThat(outbox.delivered(old, now.plusSeconds(31))).isFalse();
+            assertThat(outbox.delivered(reclaimed, now.plusSeconds(31))).isTrue();
+        } finally {
+            start.countDown();
+            executor.shutdownNow();
+        }
+    }
     @Container
     @ServiceConnection
     static final MySQLContainer<?> MYSQL = new MySQLContainer<>("mysql:8.4")
@@ -162,7 +194,7 @@ class MySqlCompatibilityIntegrationTest {
         }
         assertThat(jdbcClient.sql("""
                         SELECT COUNT(*) FROM flyway_schema_history
-                        WHERE version = '15' AND success = 1
+                        WHERE version = '16' AND success = 1
                         """).query(Integer.class).single()).isEqualTo(1);
         assertThat(jdbcClient.sql("SELECT title FROM incident WHERE id = 1")
                 .query(String.class).single()).isEqualTo("统一结算接口持续超时");
@@ -246,6 +278,12 @@ class MySqlCompatibilityIntegrationTest {
         assertThat(run.steps().stream().filter(step -> "runbook_retrieval".equals(step.toolName()))
                 .findFirst().orElseThrow().inputJson()).contains("BM25_LOCAL_V1", "runbook:legacy-runbook-");
         List<AgentRunEventService.EventView> events = eventService.list(prepared.runId(), 0);
+        assertThat(jdbcClient.sql("""
+                        SELECT COUNT(*) FROM agent_event_outbox o
+                        JOIN agent_investigation_event e ON e.id = o.event_id
+                        WHERE e.run_id = :runId AND o.status = 'PENDING' AND o.attempts = 0
+                        """).param("runId", prepared.runId()).query(Long.class).single())
+                .isEqualTo(events.size());
         assertThat(events).hasSize(18);
         assertThat(events.get(0).eventType()).isEqualTo("RUN_QUEUED");
         assertThat(events.get(events.size() - 1).eventType()).isEqualTo("RUN_COMPLETED");
