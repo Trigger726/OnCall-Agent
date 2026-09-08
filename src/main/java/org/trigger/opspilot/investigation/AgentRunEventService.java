@@ -2,6 +2,8 @@ package org.trigger.opspilot.investigation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 @Service
 public class AgentRunEventService {
+    private static final Logger log = LoggerFactory.getLogger(AgentRunEventService.class);
     private final JdbcClient jdbcClient;
     private final ObjectMapper objectMapper;
     private final AgentRunQueryService runQueryService;
@@ -68,7 +71,13 @@ public class AgentRunEventService {
                 TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
                     @Override
                     public void afterCommit() {
-                        sink.publish(saved);
+                        try {
+                            sink.publish(saved);
+                        } catch (RuntimeException exception) {
+                            // Delivery is best effort; the committed event remains replayable.
+                            log.warn("Live delivery failed for Agent run {} event {} ({})",
+                                    saved.runId(), saved.id(), exception.getClass().getSimpleName());
+                        }
                     }
                 });
             }

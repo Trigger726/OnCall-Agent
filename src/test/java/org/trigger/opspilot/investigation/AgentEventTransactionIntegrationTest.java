@@ -62,8 +62,43 @@ class AgentEventTransactionIntegrationTest {
                 UUID.randomUUID().toString(), Duration.ofSeconds(30)).runId();
     }
 
+    @Test
+    void shouldKeepCommittedEventsAndNotifyLaterSubscribersWhenOneSinkFails() {
+        long runId = prepareRun();
+        var delivered = new ArrayList<AgentRunEventService.EventView>();
+        var committed = transactions.execute(status -> {
+            var first = record(runId, event -> { throw new IllegalStateException("sink unavailable"); });
+            var second = record(runId, delivered::add);
+            return java.util.List.of(first, second);
+        });
+        assertThat(committed).hasSize(2);
+        assertThat(delivered).containsExactly(committed.get(1));
+        assertThat(events.list(runId, committed.get(0).id() - 1))
+                .extracting(AgentRunEventService.EventView::id)
+                .containsExactly(committed.get(0).id(), committed.get(1).id());
+    }
+
     private AgentRunEventService.EventView record(long runId, AgentRunEventService.EventSink sink) {
         return events.record(runId, "STEP_STARTED", "EXECUTE", "test", "RUNNING",
                 Map.of("message", "transaction boundary"), sink);
+    }
+
+    @Test
+    void shouldFinishInvestigationWhenEveryLiveDeliveryFails() {
+        var actor = new InvestigationService.RunActor(1L, "127.0.0.1");
+        var prepared = investigations.prepare(1, "SINK_FAILURE_TEST", actor,
+                UUID.randomUUID().toString(), Duration.ofSeconds(30));
+        var attempts = new java.util.concurrent.atomic.AtomicInteger();
+        var result = investigations.execute(prepared, actor, event -> {
+            attempts.incrementAndGet();
+            throw new IllegalStateException("sink unavailable");
+        });
+        assertThat(result.status()).isEqualTo("COMPLETED");
+        assertThat(result.reportId()).isNotNull();
+        var replay = events.list(prepared.runId(), 0);
+        assertThat(attempts.get()).isEqualTo(replay.size() - 1); // RUN_QUEUED used NOOP.
+        assertThat(replay).extracting(AgentRunEventService.EventView::eventType)
+                .doesNotContain("RUN_FAILED", "STEP_FAILED");
+        assertThat(replay.get(replay.size() - 1).eventType()).isEqualTo("RUN_COMPLETED");
     }
 }
