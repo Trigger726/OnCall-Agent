@@ -18,6 +18,7 @@ public class AgentEventOutbox {
     }
 
     public List<Claim> claim(int limit, LocalDateTime now, Duration lease) {
+        now = now.truncatedTo(java.time.temporal.ChronoUnit.MICROS);
         if (limit < 1 || limit > 100 || lease.isNegative() || lease.isZero()) {
             throw new IllegalArgumentException("Invalid outbox batch or lease");
         }
@@ -45,6 +46,7 @@ public class AgentEventOutbox {
     }
 
     public boolean delivered(Claim claim, LocalDateTime now) {
+        now = now.truncatedTo(java.time.temporal.ChronoUnit.MICROS);
         return jdbc.sql("""
                         UPDATE agent_event_outbox
                         SET status = 'DELIVERED', delivered_at = :now, lease_token = NULL, lease_until = NULL
@@ -55,6 +57,7 @@ public class AgentEventOutbox {
     }
 
     public boolean retry(Claim claim, LocalDateTime now, Duration delay) {
+        now = now.truncatedTo(java.time.temporal.ChronoUnit.MICROS);
         if (delay.isNegative() || delay.isZero()) throw new IllegalArgumentException("Invalid retry delay");
         return jdbc.sql("""
                         UPDATE agent_event_outbox
