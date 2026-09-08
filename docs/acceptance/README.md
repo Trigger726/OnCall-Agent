@@ -23,7 +23,7 @@
 
 ## 状态约定
 
-最新实现：[V1.7-checkpoint-09.md](V1.7-checkpoint-09.md)：V16 同事务 outbox 与租约领取，验证中，Redis relay 尚未接入。
+最新实现：[V1.7-checkpoint-09.md](V1.7-checkpoint-09.md)：V16/V17 同事务 outbox 与租约领取，H2/MySQL 与四段式 CI 通过，Redis relay 尚未接入。
 
 下一阶段设计审计：[ADR-001](../ADR-001-distributed-agent-events.md) 记录原版、本地 SSE 与跨实例目标的差异及故障验收矩阵。仅设计完成，outbox、Redis 广播、GET 实时订阅和前端自动恢复尚未实现，不计为功能验收通过。
 
