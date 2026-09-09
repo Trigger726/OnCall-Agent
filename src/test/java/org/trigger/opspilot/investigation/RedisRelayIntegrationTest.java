@@ -26,7 +26,9 @@ import static org.assertj.core.api.Assertions.assertThat;
         "spring.datasource.driver-class-name=org.h2.Driver",
         "opspilot.ai.enabled=false", "spring.ai.dashscope.api-key=disabled",
         "opspilot.agent.events.outbox-enabled=true",
-        "opspilot.agent.events.relay-initial-delay=3600000"
+        "opspilot.agent.events.relay-initial-delay=3600000",
+        "opspilot.agent.events.retention-initial-delay=3600000",
+        "opspilot.agent.events.stream-max-length=1"
 })
 class RedisRelayIntegrationTest {
     @Container static final GenericContainer<?> REDIS = new GenericContainer<>("redis:7.4-alpine")
@@ -39,6 +41,7 @@ class RedisRelayIntegrationTest {
     }
 
     @Autowired AgentOutboxRelay relay;
+    @Autowired AgentOutboxRetention retention;
     @Autowired InvestigationService investigations;
     @Autowired AgentRunEventService events;
     @Autowired StringRedisTemplate redis;
@@ -77,6 +80,16 @@ class RedisRelayIntegrationTest {
         assertThat(replay).hasSize(2);
         assertThat(replay.get(0).getId()).isNotEqualTo(replay.get(1).getId());
         assertThat(replay.get(0).getValue()).isEqualTo(replay.get(1).getValue());
+        jdbc.sql("UPDATE agent_event_outbox SET delivered_at = :at WHERE event_id = :id")
+                .param("at", java.time.LocalDateTime.now().minusDays(8)).param("id", eventId).update();
+        retention.clean();
+        assertThat(redis.opsForStream().size(key)).isEqualTo(1);
+        assertThat(jdbc.sql("SELECT COUNT(*) FROM agent_event_outbox WHERE event_id = :id")
+                .param("id", eventId).query(Long.class).single()).isZero();
+        assertThat(events.list(prepared.runId(), 0)).extracting(AgentRunEventService.EventView::id)
+                .contains(eventId);
+        retention.clean();
+        assertThat(redis.opsForStream().size(key)).isEqualTo(1);
         assertThat(AgentOutboxRelay.retryDelay(1)).isEqualTo(Duration.ofSeconds(1));
         assertThat(AgentOutboxRelay.retryDelay(100)).isEqualTo(Duration.ofSeconds(60));
     }

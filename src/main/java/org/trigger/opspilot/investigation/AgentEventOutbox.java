@@ -72,4 +72,21 @@ public class AgentEventOutbox {
     }
 
     public record Claim(long eventId, String token) { }
+
+    public int purgeDelivered(LocalDateTime before, int limit) {
+        if (limit < 1 || limit > 1000) throw new IllegalArgumentException("Invalid cleanup batch");
+        var ids = jdbc.sql("""
+                        SELECT event_id FROM agent_event_outbox
+                        WHERE status = 'DELIVERED' AND delivered_at < :before
+                        ORDER BY delivered_at, event_id LIMIT :limit
+                        """).param("before", before).param("limit", limit).query(Long.class).list();
+        int removed = 0;
+        for (long id : ids) {
+            removed += jdbc.sql("""
+                            DELETE FROM agent_event_outbox WHERE event_id = :id
+                            AND status = 'DELIVERED' AND delivered_at < :before
+                            """).param("id", id).param("before", before).update();
+        }
+        return removed;
+    }
 }

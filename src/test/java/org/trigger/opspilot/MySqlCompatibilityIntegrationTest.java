@@ -195,7 +195,7 @@ class MySqlCompatibilityIntegrationTest {
         }
         assertThat(jdbcClient.sql("""
                         SELECT COUNT(*) FROM flyway_schema_history
-                        WHERE version = '17' AND success = 1
+                        WHERE version = '18' AND success = 1
                         """).query(Integer.class).single()).isEqualTo(1);
         assertThat(jdbcClient.sql("SELECT title FROM incident WHERE id = 1")
                 .query(String.class).single()).isEqualTo("统一结算接口持续超时");

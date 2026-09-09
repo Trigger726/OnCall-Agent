@@ -28,6 +28,28 @@ class AgentEventTransactionIntegrationTest {
     @Autowired private AgentEventOutbox outbox;
 
     @Test
+    void shouldPurgeOnlyExpiredDeliveredRowsInBoundedBatches() {
+        long runId = prepareRun();
+        var old = record(runId, AgentRunEventService.EventSink.NOOP);
+        var recent = record(runId, AgentRunEventService.EventSink.NOOP);
+        var claimed = record(runId, AgentRunEventService.EventSink.NOOP);
+        var cutoff = java.time.LocalDateTime.now().minusDays(7);
+        jdbc.sql("UPDATE agent_event_outbox SET status = 'DELIVERED', delivered_at = :at WHERE event_id = :id")
+                .param("at", cutoff.minusDays(1)).param("id", old.id()).update();
+        jdbc.sql("UPDATE agent_event_outbox SET status = 'DELIVERED', delivered_at = :at WHERE event_id = :id")
+                .param("at", cutoff.plusDays(1)).param("id", recent.id()).update();
+        jdbc.sql("UPDATE agent_event_outbox SET status = 'CLAIMED', delivered_at = :at WHERE event_id = :id")
+                .param("at", cutoff.minusDays(1)).param("id", claimed.id()).update();
+        assertThat(outbox.purgeDelivered(cutoff, 1)).isEqualTo(1);
+        assertThat(outbox.purgeDelivered(cutoff, 1)).isZero();
+        assertThat(outboxCount(old.id())).isZero();
+        assertThat(outboxCount(recent.id())).isEqualTo(1);
+        assertThat(outboxCount(claimed.id())).isEqualTo(1);
+        assertThat(outboxCount(events.list(runId, 0).get(0).id())).isEqualTo(1);
+        assertThat(events.list(runId, 0)).extracting(AgentRunEventService.EventView::id).contains(old.id());
+    }
+
+    @Test
     void shouldRejectOutboxOperationsInsideCallerTransaction() {
         long runId = prepareRun();
         var now = java.time.LocalDateTime.now().plusDays(1);
