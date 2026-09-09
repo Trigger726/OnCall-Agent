@@ -23,7 +23,7 @@
 
 ## 状态约定
 
-最新发送端实现：[V1.7-checkpoint-10.md](V1.7-checkpoint-10.md)：Redis Streams relay、失败退避与独立 CI 已加入，真实 Redis 待验；跨实例接收端尚未实现。
+最新发送端实现：[V1.7-checkpoint-10.md](V1.7-checkpoint-10.md)：Redis Streams relay、失败退避和真实 Redis 验证通过，五项 CI 全绿；跨实例接收端尚未实现。
 
 最新实现：[V1.7-checkpoint-09.md](V1.7-checkpoint-09.md)：V16/V17 同事务 outbox 与租约领取，H2/MySQL 与四段式 CI 通过，Redis relay 尚未接入。
 
