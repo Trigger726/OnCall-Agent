@@ -67,7 +67,7 @@ jobs:
 
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, backend-h2, mysql-integration]
+    needs: [frontend, backend-h2, mysql-integration, redis-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -88,3 +88,17 @@ jobs:
           done
           docker logs opspilot-ci
           exit 1
+
+  redis-integration:
+    name: Redis Streams relay integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - run: chmod +x mvnw
+      - run: ./mvnw -B -Dopspilot.redis.it.enabled=true -Dtest=RedisRelayIntegrationTest test

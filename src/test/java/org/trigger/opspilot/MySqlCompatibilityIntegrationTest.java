@@ -49,7 +49,8 @@ import static org.assertj.core.api.Assertions.assertThat;
         "spring.h2.console.enabled=false",
         "spring.ai.dashscope.api-key=disabled",
         "opspilot.ai.enabled=false",
-        "opspilot.agent.events.outbox-enabled=true"
+        "opspilot.agent.events.outbox-enabled=true",
+        "opspilot.agent.events.relay-initial-delay=3600000"
 })
 class MySqlCompatibilityIntegrationTest {
     @Autowired private org.trigger.opspilot.investigation.AgentEventOutbox outbox;

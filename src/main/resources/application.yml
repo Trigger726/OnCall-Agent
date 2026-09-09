@@ -9,6 +9,10 @@ server:
       force: true
 
 spring:
+  data:
+    redis:
+      connect-timeout: 2s
+      timeout: 2s
   application:
     name: opspilot
   servlet:
@@ -36,6 +40,9 @@ spring:
           model: ${RUNBOOK_EMBEDDING_MODEL:text-embedding-v4}
 
 management:
+  health:
+    redis:
+      enabled: ${AGENT_OUTBOX_ENABLED:false}
   endpoints:
     web:
       exposure:
@@ -46,6 +53,9 @@ management:
 
 opspilot:
   agent:
+    events:
+      outbox-enabled: ${AGENT_OUTBOX_ENABLED:false}
+      redis-stream: ${AGENT_EVENT_REDIS_STREAM:opspilot:agent-events}
     execution-timeout: ${AGENT_EXECUTION_TIMEOUT:60s}
     max-execution-timeout: ${AGENT_MAX_EXECUTION_TIMEOUT:5m}
     executor:
