@@ -2,6 +2,8 @@ package org.trigger.opspilot.investigation;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional(propagation = Propagation.NEVER)
 public class AgentEventOutbox {
     private final JdbcClient jdbc;
 

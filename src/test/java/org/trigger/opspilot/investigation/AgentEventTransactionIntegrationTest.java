@@ -27,6 +27,25 @@ class AgentEventTransactionIntegrationTest {
     @Autowired private AgentEventOutbox outbox;
 
     @Test
+    void shouldRejectOutboxOperationsInsideCallerTransaction() {
+        long runId = prepareRun();
+        var now = java.time.LocalDateTime.now().plusDays(1);
+        long eventId = events.list(runId, 0).get(0).id();
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> transactions.execute(status ->
+                outbox.claim(100, now, Duration.ofSeconds(30))))
+                .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
+        var claim = outbox.claim(100, now, Duration.ofSeconds(30)).stream()
+                .filter(c -> c.eventId() == eventId).findFirst().orElseThrow();
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> transactions.execute(status ->
+                outbox.delivered(claim, now)))
+                .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> transactions.execute(status ->
+                outbox.retry(claim, now, Duration.ofSeconds(5))))
+                .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
+        assertThat(outbox.delivered(claim, now)).isTrue();
+    }
+
+    @Test
     void shouldReclaimExpiredLeaseAndFenceOldOwner() {
         long runId = prepareRun();
         var now = java.time.LocalDateTime.now().plusDays(1);
