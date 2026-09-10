@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
         "opspilot.agent.events.outbox-enabled=true",
         "opspilot.agent.events.relay-initial-delay=3600000",
         "opspilot.agent.events.retention-initial-delay=3600000",
+        "opspilot.agent.events.receiver-initial-delay=3600000",
         "opspilot.agent.events.stream-max-length=1"
 })
 class RedisRelayIntegrationTest {
@@ -92,6 +93,43 @@ class RedisRelayIntegrationTest {
         assertThat(redis.opsForStream().size(key)).isEqualTo(1);
         assertThat(AgentOutboxRelay.retryDelay(1)).isEqualTo(Duration.ofSeconds(1));
         assertThat(AgentOutboxRelay.retryDelay(100)).isEqualTo(Duration.ofSeconds(60));
+    }
+
+    @Test
+    void shouldBroadcastWithIndependentCursorsAndRetryListenerFailure() {
+        String key = "receiver-test:" + UUID.randomUUID();
+        var first = new java.util.ArrayList<Object>();
+        var second = new java.util.ArrayList<Object>();
+        var fail = new java.util.concurrent.atomic.AtomicBoolean(true);
+        var a = new AgentEventReceiver(redis, first::add, key);
+        var b = new AgentEventReceiver(redis, event -> {
+            if (fail.getAndSet(false)) throw new IllegalStateException("temporary listener failure");
+            second.add(event);
+        }, key);
+        redis.opsForStream().add(key, java.util.Map.of("schemaVersion", "unsupported"));
+        var fields = java.util.Map.of("schemaVersion", "1", "runId", "1", "eventId", "2");
+        redis.opsForStream().add(key, fields);
+        a.poll();
+        b.poll();
+        assertThat(first).containsExactly(new AgentEventReceiver.Notification(1, 2));
+        assertThat(second).isEmpty();
+        b.poll();
+        assertThat(second).isEqualTo(first);
+        a.poll();
+        b.poll();
+        assertThat(first).hasSize(1);
+        assertThat(second).hasSize(1);
+        // Redis identities may differ for the same business event; downstream DB replay dedupes.
+        redis.opsForStream().add(key, fields);
+        a.poll();
+        b.poll();
+        assertThat(first).hasSize(2);
+        assertThat(second).isEqualTo(first);
+        // A restarted receiver replays retained hints instead of using a shared group offset.
+        var restarted = new java.util.ArrayList<Object>();
+        new AgentEventReceiver(redis, restarted::add, key).poll();
+        assertThat(restarted).isEqualTo(first);
+        redis.delete(key);
     }
 
     private void makeDue(long id) {

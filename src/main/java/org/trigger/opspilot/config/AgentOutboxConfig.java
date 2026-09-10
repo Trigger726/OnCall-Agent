@@ -9,6 +9,14 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 @ConditionalOnProperty(name = "opspilot.agent.events.outbox-enabled", havingValue = "true")
 public class AgentOutboxConfig {
     @Bean
+    public ThreadPoolTaskScheduler agentReceiverScheduler() {
+        var scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setPoolSize(1);
+        scheduler.setThreadNamePrefix("opspilot-receiver-");
+        return scheduler;
+    }
+
+    @Bean
     public ThreadPoolTaskScheduler agentOutboxScheduler() {
         var scheduler = new ThreadPoolTaskScheduler();
         scheduler.setPoolSize(1);

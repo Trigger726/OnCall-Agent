@@ -18,7 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
         "spring.datasource.driver-class-name=org.h2.Driver",
         "spring.ai.dashscope.api-key=disabled", "opspilot.ai.enabled=false",
         "opspilot.agent.events.outbox-enabled=true",
-        "opspilot.agent.events.relay-initial-delay=3600000"
+        "opspilot.agent.events.relay-initial-delay=3600000",
+        "opspilot.agent.events.receiver-initial-delay=3600000"
 })
 class AgentEventTransactionIntegrationTest {
     @Autowired private InvestigationService investigations;

@@ -23,13 +23,15 @@
 
 ## 状态约定
 
-最新保留期实现：[V1.7-checkpoint-11.md](V1.7-checkpoint-11.md)：有限批次清理已投递 outbox、Redis 通知裁剪并保留原始回放，验证中。
+最新接收端实现：[V1.7-checkpoint-12.md](V1.7-checkpoint-12.md)：实例独立 XREAD 游标与失败重试，验证中；尚未接入 SSE 订阅。
+
+最新保留期实现：[V1.7-checkpoint-11.md](V1.7-checkpoint-11.md)：有限批次清理已投递 outbox、Redis 通知裁剪并保留原始回放，五项 CI 已通过。
 
 最新发送端实现：[V1.7-checkpoint-10.md](V1.7-checkpoint-10.md)：Redis Streams relay、失败退避和真实 Redis 验证通过，五项 CI 全绿；跨实例接收端尚未实现。
 
 最新实现：[V1.7-checkpoint-09.md](V1.7-checkpoint-09.md)：V16/V17 同事务 outbox 与租约领取，H2/MySQL 与四段式 CI 通过，Redis relay 尚未接入。
 
-下一阶段设计审计：[ADR-001](../ADR-001-distributed-agent-events.md) 记录原版、本地 SSE 与跨实例目标的差异及故障验收矩阵。仅设计完成，outbox、Redis 广播、GET 实时订阅和前端自动恢复尚未实现，不计为功能验收通过。
+下一阶段设计审计：[ADR-001](../ADR-001-distributed-agent-events.md) 记录原版、本地 SSE 与跨实例目标的差异及故障验收矩阵。outbox 与 Redis 发送/保留期已有证据；GET 实时订阅和前端自动恢复尚未实现，不能将局部检查点等同于完整分布式验收。
 
 最新故障隔离补强：[V1.7-checkpoint-08.md](V1.7-checkpoint-08.md)：推送异常不影响已提交事件与完整调查，4 项集成测试及远端四段式 CI 通过。
 
