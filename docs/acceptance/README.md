@@ -23,6 +23,8 @@
 
 ## 状态约定
 
+最新订阅实现：[V1.7-checkpoint-13.md](V1.7-checkpoint-13.md)：GET SSE、有界本地订阅与数据库补读，验证中；前端自动恢复及双 Web 实例尚未验收。
+
 最新接收端实现：[V1.7-checkpoint-12.md](V1.7-checkpoint-12.md)：实例独立 XREAD 游标与失败重试，真实 Redis 和五项 CI 通过；尚未接入 SSE 订阅。
 
 最新保留期实现：[V1.7-checkpoint-11.md](V1.7-checkpoint-11.md)：有限批次清理已投递 outbox、Redis 通知裁剪并保留原始回放，五项 CI 已通过。

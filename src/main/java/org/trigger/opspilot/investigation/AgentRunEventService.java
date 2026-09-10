@@ -100,14 +100,32 @@ public class AgentRunEventService {
 
     public List<EventView> list(long runId, long afterEventId) {
         runQueryService.get(runId);
+        return page(runId, afterEventId, Integer.MAX_VALUE);
+    }
+
+    public EventView validateCursor(long runId, long afterEventId) {
+        runQueryService.get(runId);
+        if (afterEventId == 0) return null;
+        if (afterEventId < 0) throw new ApiException(HttpStatus.BAD_REQUEST,
+                "AGENT_CURSOR_INVALID", "事件游标必须为非负整数");
+        var cursor = page(runId, afterEventId - 1, 1);
+        if (cursor.isEmpty() || cursor.get(0).id() != afterEventId) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "AGENT_CURSOR_INVALID", "游标不属于当前调查运行");
+        }
+        return cursor.get(0);
+    }
+
+    List<EventView> page(long runId, long afterEventId, int limit) {
         return jdbcClient.sql("""
                         SELECT id, run_id, sequence_no, event_type, phase, tool_name,
                                status, payload_json, created_at
                         FROM agent_investigation_event
                         WHERE run_id = :runId AND id > :afterEventId
                         ORDER BY id
+                        LIMIT :limit
                         """)
                 .param("runId", runId).param("afterEventId", Math.max(0, afterEventId))
+                .param("limit", limit)
                 .query((rs, rowNum) -> new EventView(
                         rs.getLong("id"), rs.getLong("run_id"), rs.getInt("sequence_no"),
                         rs.getString("event_type"), rs.getString("phase"), rs.getString("tool_name"),
