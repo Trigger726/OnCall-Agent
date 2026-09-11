@@ -220,6 +220,7 @@ AGENT_QUEUE_CAPACITY=50
 | POST | `/api/v1/incidents/{id}/investigations/stream` | 接收幂等键与可选超时预算，返回持久化 SSE 事件 |
 | GET | `/api/v1/incidents/{id}/agent-runs` | 查询工具级调查轨迹 |
 | GET | `/api/v1/agent-runs/{runId}/events?after={eventId}` | 按事件游标回放调查过程 |
+| GET | `/api/v1/agent-runs/{runId}/events/stream?after={eventId}` | 有界 SSE 续订，Redis 唤醒及数据库补读；支持 Last-Event-ID |
 | POST | `/api/v1/agent-runs/{runId}/cancel` | 显式取消排队中或运行中的调查 |
 | GET | `/api/v1/incidents/{id}/remediation-proposals` | 查询 Incident 的受控处置提案 |
 | POST | `/api/v1/remediation-proposals/{id}/reviews` | 独立批准或拒绝高风险提案 |
