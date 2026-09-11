@@ -27,7 +27,7 @@ jobs:
           cache-dependency-path: web/package-lock.json
       - name: Install and build
         working-directory: web
-        run: npm ci && npm run build
+        run: npm ci && npm test && npm run build
 
   backend-h2:
     name: Backend tests and JAR (H2)

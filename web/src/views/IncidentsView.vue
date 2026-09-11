@@ -95,6 +95,10 @@ async function loadList(preferredId?: number) {
 }
 
 async function selectIncident(id: number) {
+  if (selected.value?.incident.id !== id) {
+    agentAbortController?.abort()
+    liveAgentEvents.value = []
+  }
   const [detail, remediationProposals, postmortem] = await Promise.all([
     api<Omit<IncidentDetail, 'remediationProposals' | 'postmortem'>>(`/incidents/${id}`),
     api<RemediationProposal[]>(`/incidents/${id}/remediation-proposals`),
@@ -261,7 +265,8 @@ async function investigate() {
   actionLoading.value = true
   agentStreaming.value = true
   liveAgentEvents.value = []
-  agentAbortController = new AbortController()
+  const controller = new AbortController()
+  agentAbortController = controller
   try {
     await streamAgentInvestigation(incidentId, 'INCIDENT_WORKSPACE', event => {
       liveAgentEvents.value.push(event)
@@ -277,7 +282,7 @@ async function investigate() {
       if (event.eventType === 'RUN_REJECTED') toast.value = 'Agent 执行队列已饱和，请稍后重试'
       if (['RUN_COMPLETED', 'RUN_FAILED', 'RUN_CANCELLED', 'RUN_TIMED_OUT', 'RUN_REJECTED']
         .includes(event.eventType)) activeAgentRunId.value = null
-    }, agentAbortController.signal)
+    }, controller.signal)
   } catch (caught) {
     if (!(caught instanceof DOMException && caught.name === 'AbortError')) {
       streamError = caught instanceof Error ? caught.message : 'Agent 调查失败'
@@ -286,7 +291,7 @@ async function investigate() {
     actionLoading.value = false
     agentStreaming.value = false
     agentAbortController = null
-    if (selected.value?.incident.id === incidentId) {
+    if (!controller.signal.aborted && selected.value?.incident.id === incidentId) {
       try {
         await selectIncident(incidentId)
         const persistedRun = streamedRunId

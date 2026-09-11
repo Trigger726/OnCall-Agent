@@ -262,7 +262,7 @@ Swagger UI: [http://localhost:9900/swagger-ui/index.html](http://localhost:9900/
 ## 测试
 
 ```bash
-cd web && npm run build
+cd web && npm test && npm run build
 cd .. && ./mvnw test
 
 # 需要本机 Docker；在真实 MySQL 8.4 上执行 V1-V15 迁移和关键业务链路

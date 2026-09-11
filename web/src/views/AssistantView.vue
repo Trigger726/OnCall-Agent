@@ -94,7 +94,8 @@ async function runAgentInvestigation() {
   let streamError: string | null = null
   agentRunning.value = true
   agentEvents.value = []
-  agentAbortController = new AbortController()
+  const controller = new AbortController()
+  agentAbortController = controller
   error.value = ''
   try {
     await streamAgentInvestigation(incidentId, 'ONCALL_ASSISTANT', event => {
@@ -103,7 +104,7 @@ async function runAgentInvestigation() {
       if (event.eventType === 'RUN_QUEUED') streamedAgentRunId.value = event.runId
       if (['RUN_COMPLETED', 'RUN_FAILED', 'RUN_CANCELLED', 'RUN_TIMED_OUT', 'RUN_REJECTED']
         .includes(event.eventType)) streamedAgentRunId.value = null
-    }, agentAbortController.signal)
+    }, controller.signal)
   } catch (caught) {
     if (!(caught instanceof DOMException && caught.name === 'AbortError')) {
       streamError = caught instanceof Error ? caught.message : 'Agent 调查启动失败'
@@ -111,7 +112,7 @@ async function runAgentInvestigation() {
   } finally {
     agentRunning.value = false
     agentAbortController = null
-    if (active.value?.session.id === sessionId) {
+    if (!controller.signal.aborted && active.value?.session.id === sessionId) {
       try {
         active.value = await api<SessionDetail>(`/assistant/sessions/${sessionId}`)
         const persistedRun = active.value.context?.latestAgentRun
@@ -153,6 +154,9 @@ function agentEventLabel(event: AgentRunEvent) {
 }
 
 async function createSession(incidentId?: number) {
+  agentAbortController?.abort()
+  agentEvents.value = []
+  streamedAgentRunId.value = null
   const detail = await api<SessionDetail>('/assistant/sessions', {
     method: 'POST', body: JSON.stringify({ incidentId: incidentId ?? null }),
   })
@@ -164,6 +168,11 @@ async function createSession(incidentId?: number) {
 
 async function selectSession(id: number) {
   if (sending.value) return
+  if (active.value?.session.id !== id) {
+    agentAbortController?.abort()
+    agentEvents.value = []
+    streamedAgentRunId.value = null
+  }
   active.value = await api<SessionDetail>(`/assistant/sessions/${id}`)
   mobileSessionsOpen.value = false
   await scrollToBottom()
