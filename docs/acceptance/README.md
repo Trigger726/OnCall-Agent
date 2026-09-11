@@ -23,6 +23,8 @@
 
 ## 状态约定
 
+最新双实例门禁：[V1.7-checkpoint-15.md](V1.7-checkpoint-15.md)：两个独立 JVM 共享真实 MySQL/Redis，通过 HTTP 验证广播与游标续订，待远端实测。
+
 最新前端恢复：[V1.7-checkpoint-14.md](V1.7-checkpoint-14.md)：自动 GET 续订、去重、退出中止与新旧真实页面对照，本地及远端五项 CI 通过。
 
 最新订阅实现：[V1.7-checkpoint-13.md](V1.7-checkpoint-13.md)：GET SSE、有界本地订阅与数据库补读，63 项默认回归和五项 CI 通过；前端自动恢复及双 Web 实例尚未验收。

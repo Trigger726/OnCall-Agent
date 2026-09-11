@@ -67,7 +67,7 @@ jobs:
 
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, backend-h2, mysql-integration, redis-integration]
+    needs: [frontend, backend-h2, mysql-integration, redis-integration, distributed-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -102,3 +102,24 @@ jobs:
           cache: maven
       - run: chmod +x mvnw
       - run: ./mvnw -B -Dopspilot.redis.it.enabled=true -Dtest=RedisRelayIntegrationTest test
+
+  distributed-integration:
+    name: Two JVM Agent SSE integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - run: chmod +x mvnw
+      - run: ./mvnw -B -Dopspilot.distributed.it.enabled=true -Dtest=DistributedAgentEventsIntegrationTest test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: distributed-agent-evidence
+          path: |
+            target/distributed-it/
+            target/surefire-reports/
