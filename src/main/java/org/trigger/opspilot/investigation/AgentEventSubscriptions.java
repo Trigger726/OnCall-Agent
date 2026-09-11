@@ -67,6 +67,7 @@ public class AgentEventSubscriptions {
     }
 
     @Scheduled(fixedDelayString = "${opspilot.agent.events.catchup-delay:5000}",
+            initialDelayString = "${opspilot.agent.events.catchup-initial-delay:0}",
             scheduler = "agentSubscriptionScheduler")
     public void catchUp() {
         // Also covers absent/lost/trimmed Redis notifications and default standalone mode.

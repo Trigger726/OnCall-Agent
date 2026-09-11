@@ -107,7 +107,7 @@ class DistributedAgentEventsIntegrationTest {
         try (ServerSocket socket = new ServerSocket(0)) { port = socket.getLocalPort(); }
         String executable = Path.of(System.getProperty("java.home"), "bin",
                 System.getProperty("os.name").startsWith("Windows") ? "java.exe" : "java").toString();
-        var command = new ArrayList<>(List.of(executable, "-Xmx384m", "-cp",
+        var command = new ArrayList<>(List.of(executable, "-Xmx384m", "-Dspring.devtools.restart.enabled=false", "-cp",
                 System.getProperty("surefire.test.class.path", System.getProperty("java.class.path")),
                 DistributedAgentNode.class.getName(), "--server.port=" + port,
                 "--spring.datasource.url=" + MYSQL.getJdbcUrl(),
@@ -122,6 +122,7 @@ class DistributedAgentEventsIntegrationTest {
                 "--opspilot.agent.events.relay-delay=100",
                 "--opspilot.agent.events.receiver-delay=100",
                 "--opspilot.agent.events.catchup-delay=3600000",
+                "--opspilot.agent.events.catchup-initial-delay=3600000",
                 "--opspilot.test.gated-tool=" + gated,
                 "--opspilot.test.gate-directory=" + evidence));
         Node node = new Node(port, new ProcessBuilder(command).redirectErrorStream(true)
