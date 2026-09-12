@@ -48,10 +48,21 @@ class DistributedAgentEventsIntegrationTest {
     @Test
     @Timeout(value = 4, unit = TimeUnit.MINUTES)
     void shouldBroadcastCommittedEventsAcrossTwoJvmsAndResumeOnTheOtherNode() throws Exception {
+        runScenario(false);
+    }
+
+    @Test
+    @Timeout(value = 4, unit = TimeUnit.MINUTES)
+    void shouldCompleteDuringRedisOutageAndDrainOutboxAfterRecovery() throws Exception {
+        runScenario(true);
+    }
+
+    private void runScenario(boolean redisOutage) throws Exception {
         Path evidence = Path.of("target", "distributed-it", UUID.randomUUID().toString()).toAbsolutePath();
         Files.createDirectories(evidence);
         ExecutorService readers = Executors.newFixedThreadPool(2);
-        try (Node a = startNode(evidence, "A", true); Node b = startNode(evidence, "B", false)) {
+        try (Node a = startNode(evidence, "A", true, redisOutage);
+             Node b = startNode(evidence, "B", false, redisOutage)) {
             assertThat(a.process.pid()).isNotEqualTo(b.process.pid());
             String token = login(a.port);
             var trigger = request(a.port, "/api/v1/incidents/1/investigations/stream?source=DISTRIBUTED_IT&timeoutMs=120000", token)
@@ -67,26 +78,44 @@ class DistributedAgentEventsIntegrationTest {
                  Stream second = subscribe(b.port, runId, 0, token, readers)) {
                 assertThat(first.gated.await(10, TimeUnit.SECONDS)).isTrue();
                 assertThat(second.gated.await(10, TimeUnit.SECONDS)).isTrue();
-                Files.writeString(evidence.resolve("release"), "continue");
-                List<Long> firstIds = first.events.get(30, TimeUnit.SECONDS);
-                List<Long> secondIds = second.events.get(30, TimeUnit.SECONDS);
-                JsonNode replay = getJson(b.port, "/api/v1/agent-runs/" + runId + "/events?after=0", token).path("data");
-                List<Long> databaseIds = new ArrayList<>();
-                replay.forEach(event -> databaseIds.add(event.path("id").asLong()));
-                assertThat(replay.get(replay.size() - 1).path("eventType").asText()).isEqualTo("RUN_COMPLETED");
-                assertThat(firstIds).containsExactlyElementsOf(databaseIds).doesNotHaveDuplicates();
-                assertThat(secondIds).containsExactlyElementsOf(databaseIds).doesNotHaveDuplicates();
-                assertThat(databaseIds.size()).isGreaterThan(18); // Includes the gated read-only tool.
-                long after = databaseIds.get(3);
-                try (Stream resumed = subscribe(b.port, runId, after, token, readers)) {
-                    assertThat(resumed.events.get(10, TimeUnit.SECONDS))
-                            .containsExactlyElementsOf(databaseIds.subList(4, databaseIds.size()));
+                try (RedisPause pause = redisOutage ? pauseRedis(evidence) : null) {
+                    Files.writeString(evidence.resolve("release"), "continue");
+                    List<Long> firstIds = first.events.get(30, TimeUnit.SECONDS);
+                    List<Long> secondIds = second.events.get(30, TimeUnit.SECONDS);
+                    JsonNode replay = getJson(b.port, "/api/v1/agent-runs/" + runId + "/events?after=0", token).path("data");
+                    List<Long> databaseIds = new ArrayList<>();
+                    replay.forEach(event -> databaseIds.add(event.path("id").asLong()));
+                    assertThat(replay.get(replay.size() - 1).path("eventType").asText()).isEqualTo("RUN_COMPLETED");
+                    assertThat(firstIds).containsExactlyElementsOf(databaseIds).doesNotHaveDuplicates();
+                    assertThat(secondIds).containsExactlyElementsOf(databaseIds).doesNotHaveDuplicates();
+                    assertThat(databaseIds.size()).isGreaterThan(18); // Includes the gated read-only tool.
+                    int pendingDuringPause = 0;
+                    if (redisOutage) {
+                        assertThat(REDIS.getDockerClient().inspectContainerCmd(REDIS.getContainerId()).exec()
+                                .getState().getPaused()).isTrue();
+                        pendingDuringPause = pendingOutbox(runId);
+                        assertThat(pendingDuringPause).isPositive();
+                        pause.close();
+                    }
+                    await(() -> pendingOutbox(runId) == 0, Duration.ofSeconds(45), "automatic outbox delivery after recovery");
+                    List<Long> publishedIds = redisEventIds(runId);
+                    assertThat(publishedIds).containsAll(databaseIds);
+                    long after = databaseIds.get(3);
+                    try (Stream resumed = subscribe(b.port, runId, after, token, readers)) {
+                        assertThat(resumed.events.get(10, TimeUnit.SECONDS))
+                                .containsExactlyElementsOf(databaseIds.subList(4, databaseIds.size()));
+                    }
+                    var result = new java.util.LinkedHashMap<String, Object>(java.util.Map.of(
+                                    "runId", runId, "nodeAPid", a.process.pid(), "nodeBPid", b.process.pid(),
+                                    "nodeAPort", a.port, "nodeBPort", b.port, "databaseEventIds", databaseIds,
+                                    "nodeAEventIds", firstIds, "nodeBEventIds", secondIds,
+                                    "reconnectAfter", after, "periodicCatchupDisabled", !redisOutage));
+                    result.put("redisPausedDuringCompletion", redisOutage);
+                    result.put("pendingOutboxDuringPause", pendingDuringPause);
+                    result.put("pendingOutboxAfterRecovery", pendingOutbox(runId));
+                    result.put("redisPublishedEventIds", publishedIds);
+                    Files.writeString(evidence.resolve("result.json"), JSON.writerWithDefaultPrettyPrinter().writeValueAsString(result));
                 }
-                Files.writeString(evidence.resolve("result.json"), JSON.writerWithDefaultPrettyPrinter().writeValueAsString(
-                        java.util.Map.of("runId", runId, "nodeAPid", a.process.pid(), "nodeBPid", b.process.pid(),
-                                "nodeAPort", a.port, "nodeBPort", b.port, "databaseEventIds", databaseIds,
-                                "nodeAEventIds", firstIds, "nodeBEventIds", secondIds,
-                                "reconnectAfter", after, "periodicCatchupDisabled", true)));
             }
         } catch (Throwable failure) {
             for (String node : List.of("A", "B")) {
@@ -102,7 +131,7 @@ class DistributedAgentEventsIntegrationTest {
         }
     }
 
-    private static Node startNode(Path evidence, String name, boolean gated) throws Exception {
+    private static Node startNode(Path evidence, String name, boolean gated, boolean recovery) throws Exception {
         int port;
         try (ServerSocket socket = new ServerSocket(0)) { port = socket.getLocalPort(); }
         String executable = Path.of(System.getProperty("java.home"), "bin",
@@ -121,8 +150,8 @@ class DistributedAgentEventsIntegrationTest {
                 "--opspilot.agent.events.outbox-enabled=true",
                 "--opspilot.agent.events.relay-delay=100",
                 "--opspilot.agent.events.receiver-delay=100",
-                "--opspilot.agent.events.catchup-delay=3600000",
-                "--opspilot.agent.events.catchup-initial-delay=3600000",
+                "--opspilot.agent.events.catchup-delay=" + (recovery ? 500 : 3600000),
+                "--opspilot.agent.events.catchup-initial-delay=" + (recovery ? 500 : 3600000),
                 "--opspilot.test.gated-tool=" + gated,
                 "--opspilot.test.gate-directory=" + evidence));
         Node node = new Node(port, new ProcessBuilder(command).redirectErrorStream(true)
@@ -139,6 +168,67 @@ class DistributedAgentEventsIntegrationTest {
         } catch (Throwable failure) {
             node.close();
             throw failure;
+        }
+    }
+
+    private static RedisPause pauseRedis(Path evidence) throws Exception {
+        long failuresA = receiverFailureCount(evidence.resolve("A.log"));
+        long failuresB = receiverFailureCount(evidence.resolve("B.log"));
+        REDIS.getDockerClient().pauseContainerCmd(REDIS.getContainerId()).exec();
+        RedisPause pause = new RedisPause();
+        try {
+            assertThat(REDIS.getDockerClient().inspectContainerCmd(REDIS.getContainerId()).exec()
+                    .getState().getPaused()).isTrue();
+            // Wait for both real receiver commands to fail before producing terminal events.
+            // This excludes already-read pre-pause notifications from driving the assertion.
+            await(() -> receiverFailureCount(evidence.resolve("A.log")) > failuresA
+                            && receiverFailureCount(evidence.resolve("B.log")) > failuresB,
+                    Duration.ofSeconds(15), "both Redis receivers observe the outage");
+            return pause;
+        } catch (Throwable failure) {
+            pause.close();
+            throw failure;
+        }
+    }
+
+    private static long receiverFailureCount(Path log) {
+        try { return Files.readString(log).lines().filter(line -> line.contains("Agent notification receive failed")).count(); }
+        catch (java.io.IOException exception) { throw new IllegalStateException(exception); }
+    }
+
+    private static int pendingOutbox(long runId) {
+        try (var connection = java.sql.DriverManager.getConnection(MYSQL.getJdbcUrl(), MYSQL.getUsername(), MYSQL.getPassword());
+             var statement = connection.prepareStatement("""
+                     SELECT COUNT(*) FROM agent_event_outbox o
+                     JOIN agent_investigation_event e ON e.id = o.event_id
+                     WHERE e.run_id = ? AND o.status <> 'DELIVERED'
+                     """)) {
+            statement.setLong(1, runId);
+            try (var result = statement.executeQuery()) { result.next(); return result.getInt(1); }
+        } catch (java.sql.SQLException exception) { throw new IllegalStateException(exception); }
+    }
+
+    private static List<Long> redisEventIds(long runId) {
+        var factory = new org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory(
+                REDIS.getHost(), REDIS.getMappedPort(6379));
+        factory.afterPropertiesSet();
+        try {
+            var redis = new org.springframework.data.redis.core.StringRedisTemplate(factory);
+            var records = redis.opsForStream().read(
+                    org.springframework.data.redis.connection.stream.StreamOffset.fromStart("opspilot:agent-events"));
+            assertThat(records).isNotNull();
+            return records.stream().filter(record -> Long.toString(runId).equals(record.getValue().get("runId")))
+                    .map(record -> Long.parseLong(record.getValue().get("eventId").toString())).toList();
+        } finally { factory.destroy(); }
+    }
+
+    private static final class RedisPause implements AutoCloseable {
+        private boolean paused = true;
+        public void close() {
+            if (paused) {
+                REDIS.getDockerClient().unpauseContainerCmd(REDIS.getContainerId()).exec();
+                paused = false;
+            }
         }
     }
 
