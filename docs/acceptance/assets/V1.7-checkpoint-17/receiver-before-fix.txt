@@ -1,0 +1,9 @@
+Command: .\mvnw.cmd -B -Dtest=AgentEventReceiverTest test
+Baseline production receiver: 1157e4f (new tests added before production edits)
+Observed local result, 2026-09-12T09:43:30+08:00:
+Tests run: 8, Failures: 6, Errors: 0, Skipped: 0
+The five regressed/reused-tail cases and the missing-stream case all lacked:
+Notification[runId=1, eventId=2]
+Actual notifications only contained Notification[runId=1, eventId=1].
+BUILD FAILURE, Total time: 12.724 s
+This is a summary of the observed unit-test failure, not a real-Redis result.

@@ -132,6 +132,86 @@ class RedisRelayIntegrationTest {
         redis.delete(key);
     }
 
+    @Test
+    void shouldRecoverRegressedReusedAndMissingStreamWithoutRestartingReceiver() throws Exception {
+        String key = "receiver-recreation-test:" + UUID.randomUUID();
+        var received = new java.util.ArrayList<AgentEventReceiver.Notification>();
+        var receiver = new AgentEventReceiver(redis, event -> received.add((AgentEventReceiver.Notification) event), key);
+        try {
+            addNotification(key, "100-10", 1);
+            receiver.poll();
+            redis.delete(key);
+            addNotification(key, "100-9", 2); // Sequence regresses; no missing-key poll in between.
+            receiver.poll();
+            receiver.poll();
+            assertThat(received).extracting(AgentEventReceiver.Notification::eventId).containsExactly(1L, 2L);
+            redis.delete(key);
+            addNotification(key, "100-9", 3); // Same transport ID, different business identity.
+            receiver.poll();
+            receiver.poll();
+            assertThat(received).extracting(AgentEventReceiver.Notification::eventId).containsExactly(1L, 2L, 3L);
+            redis.delete(key);
+            receiver.poll(); // Observe the missing key before recreating it.
+            addNotification(key, "1-0", 4);
+            receiver.poll();
+            receiver.poll(); // Idle on an unchanged tail must not replay it again.
+            assertThat(received).extracting(AgentEventReceiver.Notification::eventId).containsExactly(1L, 2L, 3L, 4L);
+            receiverEvidence("recreation", java.util.Map.of(
+                    "transportIds", java.util.List.of("100-10", "100-9", "100-9", "1-0"),
+                    "receivedEventIds", received.stream().map(AgentEventReceiver.Notification::eventId).toList(),
+                    "receiverRestarted", false, "databaseFallbackUsed", false));
+        } finally { redis.delete(key); }
+    }
+
+    @Test
+    void shouldBoundRecoveryReadsAndAvoidReplayingAnUnchangedTrimmedTail() throws Exception {
+        String key = "receiver-bounded-recovery-test:" + UUID.randomUUID();
+        var received = new java.util.ArrayList<AgentEventReceiver.Notification>();
+        var receiver = new AgentEventReceiver(redis, event -> received.add((AgentEventReceiver.Notification) event), key);
+        var batchSizes = new java.util.ArrayList<Integer>();
+        try {
+            addNotification(key, "1000-0", 500);
+            receiver.poll();
+            redis.delete(key);
+            for (int index = 1; index <= 205; index++) addNotification(key, index + "-0", index);
+            receiver.poll(); // Rewind only; no replay within this detection poll.
+            assertThat(received).hasSize(1);
+            for (int expected : java.util.List.of(100, 100, 5)) {
+                int before = received.size();
+                receiver.poll();
+                batchSizes.add(received.size() - before);
+                assertThat(received.size() - before).isEqualTo(expected);
+            }
+            assertThat(received.subList(1, received.size())).extracting(AgentEventReceiver.Notification::eventId)
+                    .containsExactlyElementsOf(java.util.stream.LongStream.rangeClosed(1, 205).boxed().toList());
+            assertThat(redis.opsForStream().trim(key, 1)).isEqualTo(204L);
+            receiver.poll();
+            receiver.poll();
+            assertThat(received).hasSize(206);
+            addNotification(key, "206-0", 206);
+            receiver.poll();
+            assertThat(received).hasSize(207);
+            assertThat(received.get(206).eventId()).isEqualTo(206);
+            receiverEvidence("bounded-recovery", java.util.Map.of(
+                    "recoveryBatchSizes", batchSizes, "receivedCountAfterTrimIdlePolls", 206,
+                    "receivedEventIds", received.stream().map(AgentEventReceiver.Notification::eventId).toList(),
+                    "receiverRestarted", false, "databaseFallbackUsed", false));
+        } finally { redis.delete(key); }
+    }
+
+    private void addNotification(String key, String id, long eventId) {
+        redis.opsForStream().add(org.springframework.data.redis.connection.stream.MapRecord.create(key,
+                java.util.Map.of("schemaVersion", "1", "runId", "7", "eventId", Long.toString(eventId)))
+                .withId(org.springframework.data.redis.connection.stream.RecordId.of(id)));
+    }
+
+    private static void receiverEvidence(String scenario, java.util.Map<String, Object> result) throws Exception {
+        var directory = java.nio.file.Path.of("target", "redis-it");
+        java.nio.file.Files.createDirectories(directory);
+        java.nio.file.Files.writeString(directory.resolve(scenario + ".json"),
+                new com.fasterxml.jackson.databind.ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(result));
+    }
+
     private void makeDue(long id) {
         jdbc.sql("UPDATE agent_event_outbox SET status = 'PENDING', next_attempt_at = CURRENT_TIMESTAMP WHERE event_id = :id")
                 .param("id", id).update();

@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Range;
+import org.springframework.data.redis.connection.Limit;
 import org.springframework.data.redis.connection.stream.ReadOffset;
 import org.springframework.data.redis.connection.stream.StreamOffset;
 import org.springframework.data.redis.connection.stream.StreamReadOptions;
@@ -23,6 +25,7 @@ public class AgentEventReceiver {
     private final ApplicationEventPublisher publisher;
     private final String stream;
     private String cursor = "0-0";
+    private Map<Object, Object> cursorFields = Map.of();
 
     public AgentEventReceiver(StringRedisTemplate redis, ApplicationEventPublisher publisher,
                               @Value("${opspilot.agent.events.redis-stream:opspilot:agent-events}") String stream) {
@@ -38,7 +41,10 @@ public class AgentEventReceiver {
         try {
             var records = redis.opsForStream().read(StreamReadOptions.empty().count(100),
                     StreamOffset.create(stream, ReadOffset.from(cursor)));
-            if (records == null) return;
+            if (records == null || records.isEmpty()) {
+                checkStreamReplacement();
+                return;
+            }
             for (var record : records) {
                 Notification notification = parse(record.getValue());
                 if (notification == null) {
@@ -49,10 +55,39 @@ public class AgentEventReceiver {
                     publisher.publishEvent(notification);
                 }
                 cursor = record.getId().getValue();
+                cursorFields = Map.copyOf(record.getValue());
             }
         } catch (RuntimeException exception) {
             log.warn("Agent notification receive failed ({})", exception.getClass().getSimpleName());
         }
+    }
+
+    private void checkStreamReplacement() {
+        if ("0-0".equals(cursor)) return;
+        // Bounded idle-only inspection. Redis IDs are transport offsets, not durable event IDs.
+        var tail = redis.opsForStream().reverseRange(stream, Range.unbounded(), Limit.limit().count(1));
+        if (tail == null) return; // No usable response is not evidence of a missing stream.
+        boolean replaced = tail.isEmpty();
+        if (!replaced) {
+            var last = tail.get(0);
+            int order = compareIds(last.getId().getValue(), cursor);
+            replaced = order < 0 || (order == 0 && !cursorFields.equals(last.getValue()));
+        }
+        if (replaced) {
+            log.warn("Agent notification stream changed; resetting transport cursor {}", cursor);
+            cursor = "0-0";
+            cursorFields = Map.of();
+            // Next scheduled poll replays at most 100 retained hints. Database catch-up remains
+            // necessary for lost/trimmed hints and recreations which already passed our old ID.
+        }
+    }
+
+    private static int compareIds(String left, String right) {
+        String[] a = left.split("-", 2);
+        String[] b = right.split("-", 2);
+        int milliseconds = Long.compareUnsigned(Long.parseUnsignedLong(a[0]), Long.parseUnsignedLong(b[0]));
+        return milliseconds != 0 ? milliseconds
+                : Long.compareUnsigned(Long.parseUnsignedLong(a[1]), Long.parseUnsignedLong(b[1]));
     }
 
     private static Notification parse(Map<Object, Object> fields) {
