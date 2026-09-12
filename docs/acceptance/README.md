@@ -23,7 +23,7 @@
 
 ## 状态约定
 
-最新故障验证：[V1.7-checkpoint-16.md](V1.7-checkpoint-16.md)：Redis 暂停期间双实例数据库补读、恢复后 outbox 自动补投，待真实 CI 验证。
+最新故障验证：[V1.7-checkpoint-16.md](V1.7-checkpoint-16.md)：真实 Redis 暂停期间双实例各完整收到 20 条事件，恢复后 outbox 从 18 条自动排空；正常/故障双用例及六项 CI 通过，原始结果已归档。
 
 最新双实例门禁：[V1.7-checkpoint-15.md](V1.7-checkpoint-15.md)：两个独立 JVM 共享真实 MySQL/Redis，通过 HTTP 验证广播与游标续订，六项 CI 通过；保留初版及排除首次补读干扰后的结果。
 
