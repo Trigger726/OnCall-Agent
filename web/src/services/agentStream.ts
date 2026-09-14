@@ -49,8 +49,30 @@ export async function streamAgentInvestigation(
   onEvent: (event: AgentRunEvent) => void,
   signal?: AbortSignal,
 ): Promise<void> {
-  const requestKey = idempotencyKey(incidentId)
-  let runId: number | null = null
+  return consumeAgentEvents({ incidentId, source }, onEvent, signal)
+}
+
+/** Attach to a server-discovered run. A fresh UI replays from zero; never starts a new run. */
+export async function subscribeAgentInvestigation(
+  runId: number,
+  onEvent: (event: AgentRunEvent) => void,
+  signal?: AbortSignal,
+): Promise<void> {
+  if (!Number.isSafeInteger(runId) || runId <= 0) {
+    throw new RequestError('Agent 调查编号无效', 'AGENT_RUN_INVALID', 400)
+  }
+  return consumeAgentEvents({ runId }, onEvent, signal)
+}
+
+async function consumeAgentEvents(
+  target: { incidentId: number; source: string } | { runId: number },
+  onEvent: (event: AgentRunEvent) => void,
+  signal?: AbortSignal,
+): Promise<void> {
+  signal?.throwIfAborted()
+  const start = 'incidentId' in target ? target : null
+  const requestKey = start ? idempotencyKey(start.incidentId) : null
+  let runId: number | null = 'runId' in target ? target.runId : null
   let cursor = 0
   let terminal = false
   let failures = 0
@@ -61,11 +83,12 @@ export async function streamAgentInvestigation(
     try {
       const token = localStorage.getItem('opspilot_token')
       const response = await fetch(runId === null
-        ? `/api/v1/incidents/${incidentId}/investigations/stream?${new URLSearchParams({ source })}`
+        ? `/api/v1/incidents/${start!.incidentId}/investigations/stream?${new URLSearchParams({ source: start!.source })}`
         : `/api/v1/agent-runs/${runId}/events/stream?after=${cursor}`, {
         method: runId === null ? 'POST' : 'GET', signal,
         headers: {
-          ...(runId === null ? { 'Idempotency-Key': requestKey.value } : {}),
+          Accept: 'text/event-stream',
+          ...(runId === null ? { 'Idempotency-Key': requestKey!.value } : {}),
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
       })
@@ -114,7 +137,7 @@ export async function streamAgentInvestigation(
         cursor = payload.id // Advance only after the UI has accepted this event.
         if (terminalEvents.has(payload.eventType)) {
           terminal = true
-          sessionStorage.removeItem(requestKey.storageKey)
+          if (requestKey) sessionStorage.removeItem(requestKey.storageKey)
         }
         if (payload.eventType === 'RUN_REJECTED') {
           throw new RequestError('Agent 执行队列已饱和，请稍后重试', 'AGENT_QUEUE_SATURATED', 503)

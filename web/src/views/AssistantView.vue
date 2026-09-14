@@ -8,7 +8,7 @@ import {
 import ChatMessage from '@/components/ChatMessage.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
 import { api, formatTime, RequestError, type PageResponse } from '@/services/api'
-import { clearAgentInvestigationIdempotency, streamAgentInvestigation } from '@/services/agentStream'
+import { clearAgentInvestigationIdempotency, streamAgentInvestigation, subscribeAgentInvestigation } from '@/services/agentStream'
 import type { AgentRun, AgentRunEvent } from '@/types/investigation'
 
 interface SessionSummary {
@@ -45,6 +45,8 @@ const mobileSessionsOpen = ref(false)
 const messageViewport = ref<HTMLElement | null>(null)
 let abortController: AbortController | null = null
 let agentAbortController: AbortController | null = null
+let selectionVersion = 0
+let disposed = false
 
 const suggestions = computed(() => active.value?.context
   ? ['总结当前证据', '最可能的根因是什么？', '展示 Agent 调查过程', '下一步应该怎么验证？']
@@ -63,6 +65,7 @@ async function load() {
       api<SessionSummary[]>('/assistant/sessions'),
       api<PageResponse<IncidentSummary>>('/incidents?size=100'),
     ])
+    if (disposed) return
     sessions.value = sessionRows
     incidents.value = incidentPage.items
     const incidentId = Number(route.query.incident)
@@ -70,7 +73,8 @@ async function load() {
       const existing = sessionRows.find(item => item.incidentId === incidentId)
       if (existing) await selectSession(existing.id)
       else await createSession(incidentId)
-      await router.replace({ query: {} })
+    } else if (sessionRows.some(item => item.id === Number(route.query.session))) {
+      await selectSession(Number(route.query.session))
     } else if (sessionRows[0]) await selectSession(sessionRows[0].id)
     else await createSession()
   } catch (caught) {
@@ -87,10 +91,14 @@ async function refreshSessions() {
 }
 
 async function runAgentInvestigation() {
+  await followAgentRun(activeAgentRunId.value ?? undefined)
+}
+
+async function followAgentRun(existingRunId?: number) {
   if (!active.value?.context || agentRunning.value) return
   const incidentId = active.value.context.id
   const sessionId = active.value.session.id
-  let runId: number | null = null
+  let runId: number | null = existingRunId ?? null
   let streamError: string | null = null
   agentRunning.value = true
   agentEvents.value = []
@@ -98,37 +106,50 @@ async function runAgentInvestigation() {
   agentAbortController = controller
   error.value = ''
   try {
-    await streamAgentInvestigation(incidentId, 'ONCALL_ASSISTANT', event => {
+    const onEvent = (event: AgentRunEvent) => {
+      if (controller.signal.aborted || agentAbortController !== controller) return
       agentEvents.value.push(event)
       runId ??= event.runId
       if (event.eventType === 'RUN_QUEUED') streamedAgentRunId.value = event.runId
       if (['RUN_COMPLETED', 'RUN_FAILED', 'RUN_CANCELLED', 'RUN_TIMED_OUT', 'RUN_REJECTED']
         .includes(event.eventType)) streamedAgentRunId.value = null
-    }, controller.signal)
+    }
+    if (existingRunId) await subscribeAgentInvestigation(existingRunId, onEvent, controller.signal)
+    else await streamAgentInvestigation(incidentId, 'ONCALL_ASSISTANT', onEvent, controller.signal)
   } catch (caught) {
     if (!(caught instanceof DOMException && caught.name === 'AbortError')) {
       streamError = caught instanceof Error ? caught.message : 'Agent 调查启动失败'
     }
   } finally {
-    agentRunning.value = false
-    agentAbortController = null
-    if (!controller.signal.aborted && active.value?.session.id === sessionId) {
-      try {
-        active.value = await api<SessionDetail>(`/assistant/sessions/${sessionId}`)
-        const persistedRun = active.value.context?.latestAgentRun
-        if (persistedRun && persistedRun.id === runId
-          && ['COMPLETED', 'PARTIAL', 'FAILED', 'CANCELLED', 'TIMED_OUT', 'QUEUE_REJECTED'].includes(persistedRun.status)) {
-          clearAgentInvestigationIdempotency(incidentId)
-          streamedAgentRunId.value = null
-          error.value = persistedRun.status === 'FAILED' ? (streamError ?? 'Agent 调查失败') : ''
-        } else if (streamError) {
-          error.value = streamError
+    if (agentAbortController !== controller) return
+    try {
+      if (!controller.signal.aborted && active.value?.session.id === sessionId) {
+        try {
+          const version = selectionVersion
+          const detail = await api<SessionDetail>(`/assistant/sessions/${sessionId}`)
+          if (version !== selectionVersion || active.value?.session.id !== sessionId) return
+          active.value = detail
+          const persistedRun = active.value.context?.latestAgentRun
+          if (persistedRun && persistedRun.id === runId
+            && ['COMPLETED', 'PARTIAL', 'FAILED', 'CANCELLED', 'TIMED_OUT', 'QUEUE_REJECTED'].includes(persistedRun.status)) {
+            clearAgentInvestigationIdempotency(incidentId)
+            streamedAgentRunId.value = null
+            error.value = persistedRun.status === 'FAILED' ? (streamError ?? 'Agent 调查失败') : ''
+          } else if (streamError) {
+            error.value = streamError
+          }
+        } catch (caught) {
+          if (agentAbortController !== controller) return
+          error.value = streamError ?? (caught instanceof Error ? caught.message : 'Agent 调查状态刷新失败')
         }
-      } catch (caught) {
-        error.value = streamError ?? (caught instanceof Error ? caught.message : 'Agent 调查状态刷新失败')
+      } else if (streamError) {
+        error.value = streamError
       }
-    } else if (streamError) {
-      error.value = streamError
+    } finally {
+      if (agentAbortController === controller) {
+        agentRunning.value = false
+        agentAbortController = null
+      }
     }
   }
 }
@@ -154,28 +175,47 @@ function agentEventLabel(event: AgentRunEvent) {
 }
 
 async function createSession(incidentId?: number) {
-  agentAbortController?.abort()
-  agentEvents.value = []
-  streamedAgentRunId.value = null
+  if (disposed) return
+  const version = ++selectionVersion
+  stopAgentSubscription()
   const detail = await api<SessionDetail>('/assistant/sessions', {
     method: 'POST', body: JSON.stringify({ incidentId: incidentId ?? null }),
   })
+  if (version !== selectionVersion) return
   active.value = detail
+  rememberSessionAndResume()
   await refreshSessions()
   mobileSessionsOpen.value = false
   await scrollToBottom()
 }
 
 async function selectSession(id: number) {
+  if (disposed) return
   if (sending.value) return
+  const version = ++selectionVersion
   if (active.value?.session.id !== id) {
-    agentAbortController?.abort()
-    agentEvents.value = []
-    streamedAgentRunId.value = null
+    stopAgentSubscription()
   }
-  active.value = await api<SessionDetail>(`/assistant/sessions/${id}`)
+  const detail = await api<SessionDetail>(`/assistant/sessions/${id}`)
+  if (version !== selectionVersion) return
+  active.value = detail
+  rememberSessionAndResume()
   mobileSessionsOpen.value = false
   await scrollToBottom()
+}
+
+function stopAgentSubscription() {
+  agentAbortController?.abort()
+  agentAbortController = null
+  agentRunning.value = false
+  agentEvents.value = []
+  streamedAgentRunId.value = null
+}
+
+function rememberSessionAndResume() {
+  if (!active.value) return
+  void router.replace({ query: { session: String(active.value.session.id) } })
+  if (activeAgentRunId.value && !agentAbortController) void followAgentRun(activeAgentRunId.value)
 }
 
 async function sendMessage(content = draft.value) {
@@ -251,6 +291,8 @@ async function clearConversation() {
 async function deleteConversation() {
   if (!active.value || !window.confirm('确定删除当前会话吗？')) return
   await api(`/assistant/sessions/${active.value.session.id}`, { method: 'DELETE' })
+  selectionVersion++
+  stopAgentSubscription()
   active.value = null
   sessions.value = await api<SessionSummary[]>('/assistant/sessions')
   if (sessions.value[0]) await selectSession(sessions.value[0].id)
@@ -291,8 +333,10 @@ async function scrollToBottom() {
 
 onMounted(load)
 onBeforeUnmount(() => {
+  disposed = true
+  selectionVersion++
   abortController?.abort()
-  agentAbortController?.abort()
+  stopAgentSubscription()
 })
 </script>
 

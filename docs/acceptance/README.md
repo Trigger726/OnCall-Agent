@@ -23,6 +23,8 @@
 
 ## 状态约定
 
+最新页面恢复：[V1.7-checkpoint-18.md](V1.7-checkpoint-18.md)：Incident／OnCall 助手刷新后自动 GET 挂接活动调查、保留会话 URL、旧订阅清理；13 项前端测试通过，浏览器最终复验和 CI 证据待归档。
+
 最新接收器修复：[V1.7-checkpoint-17.md](V1.7-checkpoint-17.md)：Stream 重建后回退/复用 ID 的传输游标恢复；修复前后对照、真实 Redis 100/100/5 有界恢复、双 JVM 回归及六项 CI 通过，证据已归档。
 
 最新故障验证：[V1.7-checkpoint-16.md](V1.7-checkpoint-16.md)：真实 Redis 暂停期间双实例各完整收到 20 条事件，恢复后 outbox 从 18 条自动排空；正常/故障双用例及六项 CI 通过，原始结果已归档。

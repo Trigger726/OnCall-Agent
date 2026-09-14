@@ -8,7 +8,7 @@ const built = await build({
   bundle: true, write: false, platform: 'node', format: 'esm',
   alias: { '@': fileURLToPath(new URL('../src', import.meta.url)) },
 })
-const { streamAgentInvestigation: stream } = await import(
+const { streamAgentInvestigation: stream, subscribeAgentInvestigation: subscribe } = await import(
   `data:text/javascript;base64,${Buffer.from(built.outputFiles[0].text).toString('base64')}`)
 
 const storage = () => {
@@ -43,6 +43,7 @@ test('truncated POST resumes GET, ignores duplicates and rotates key only on ter
   assert.deepEqual(seen, [1, 2])
   assert.equal(calls[1].url, '/api/v1/agent-runs/42/events/stream?after=1')
   assert.equal(calls[1].init.method, 'GET')
+  assert.ok(calls.every(c => c.init.headers.Accept === 'text/event-stream'))
   assert.equal(sessionStorage.getItem(key), null)
 })
 
@@ -129,4 +130,48 @@ test('foreign events and handler errors never advance cursor or retry', async ()
   fetcher.mock.restore()
   mock.method(globalThis, 'fetch', async () => response(frame(event(1))))
   await assert.rejects(stream(1, 'TEST', () => { throw new Error('handler failure') }), { code: 'AGENT_EVENT_HANDLER_FAILED' })
+})
+
+test('fresh-page subscription is GET-only, replays history and does not touch POST keys', async () => {
+  sessionStorage.setItem(key, 'unrelated-pending-request')
+  const calls = []
+  mock.method(globalThis, 'fetch', async (url, init) => {
+    calls.push({ url, init })
+    return calls.length === 1 ? response(frame(event(1)))
+      : response(frame(event(1)) + frame(event(2, 'RUN_COMPLETED')))
+  })
+  const seen = []
+  await subscribe(42, e => seen.push(e.id))
+  assert.deepEqual(seen, [1, 2])
+  assert.deepEqual(calls.map(c => c.url), [
+    '/api/v1/agent-runs/42/events/stream?after=0', '/api/v1/agent-runs/42/events/stream?after=1',
+  ])
+  assert.ok(calls.every(c => c.init.method === 'GET' && !('Idempotency-Key' in c.init.headers)))
+  assert.ok(calls.every(c => c.init.headers.Accept === 'text/event-stream'))
+  assert.equal(sessionStorage.getItem(key), 'unrelated-pending-request')
+})
+
+test('subscription rejects invalid IDs and foreign events without any start request', async () => {
+  const fetcher = mock.method(globalThis, 'fetch', async () => response(frame(event(1, 'RUN_STARTED', 9))))
+  for (const id of [0, -1, NaN, 1.2, Number.MAX_SAFE_INTEGER + 1]) {
+    await assert.rejects(subscribe(id, () => {}), { code: 'AGENT_RUN_INVALID' })
+  }
+  assert.equal(fetcher.mock.callCount(), 0)
+  await assert.rejects(subscribe(42, () => assert.fail('foreign event')), { code: 'AGENT_EVENT_INVALID' })
+  assert.equal(fetcher.mock.calls[0].arguments[1].method, 'GET')
+})
+
+test('failed auto-attachment has bounded retries and never becomes a POST', async () => {
+  const fetcher = mock.method(globalThis, 'fetch', async () => { throw new TypeError('offline') })
+  await assert.rejects(subscribe(42, () => {}), { code: 'AGENT_RECONNECT_EXHAUSTED' })
+  assert.equal(fetcher.mock.callCount(), 6)
+  assert.ok(fetcher.mock.calls.every(c => c.arguments[1].method === 'GET'))
+  assert.equal(sessionStorage.getItem(key), null)
+})
+
+test('already aborted subscription neither fetches nor touches browser storage', async () => {
+  const fetcher = mock.method(globalThis, 'fetch', async () => assert.fail('no request expected'))
+  await assert.rejects(subscribe(42, () => {}, AbortSignal.abort()), { name: 'AbortError' })
+  assert.equal(fetcher.mock.callCount(), 0)
+  assert.equal(sessionStorage.getItem(key), null)
 })

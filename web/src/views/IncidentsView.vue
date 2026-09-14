@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Bot, Check, CheckCircle2, ChevronDown, ChevronRight, CircleCheck, CircleStop, ClipboardCheck, Clock3, Database, FileText, ListChecks, LoaderCircle, MessageSquarePlus, MessageSquareText, Plus, Radio, RefreshCw, Save, Send, ShieldAlert, UserRound, Workflow, XCircle } from 'lucide-vue-next'
 import StatusBadge from '@/components/StatusBadge.vue'
 import { api, formatTime, type PageResponse } from '@/services/api'
-import { clearAgentInvestigationIdempotency, streamAgentInvestigation } from '@/services/agentStream'
+import { clearAgentInvestigationIdempotency, streamAgentInvestigation, subscribeAgentInvestigation } from '@/services/agentStream'
 import { auth } from '@/stores/auth'
 import type { AgentRun, AgentRunEvent, AgentStep, RemediationProposal } from '@/types/investigation'
 
@@ -61,6 +61,8 @@ const postmortemReviewComment = ref('')
 const postmortemDraft = ref({ summary: '', customerImpact: '', rootCause: '', contributingFactors: '', lessonsLearned: '' })
 const followUpDraft = ref({ title: '', description: '', priority: 'HIGH', ownerId: '', dueDate: futureDate(7) })
 let agentAbortController: AbortController | null = null
+let selectionVersion = 0
+let disposed = false
 
 const transitionMap: Record<string, { value: string; label: string }[]> = {
   OPEN: [{ value: 'ACKNOWLEDGED', label: '确认接手' }],
@@ -84,6 +86,7 @@ async function loadList(preferredId?: number) {
   if (severityFilter.value) query.set('severity', severityFilter.value)
   try {
     const page = await api<PageResponse<IncidentSummary>>(`/incidents?${query}`)
+    if (disposed) return
     incidents.value = page.items
     const routeId = Number(route.query.selected)
     const target = preferredId ?? (Number.isFinite(routeId) && routeId > 0 ? routeId : page.items[0]?.id)
@@ -94,9 +97,14 @@ async function loadList(preferredId?: number) {
   }
 }
 
-async function selectIncident(id: number) {
+async function selectIncident(id: number, resume = true) {
+  if (disposed) return
+  const version = ++selectionVersion
   if (selected.value?.incident.id !== id) {
     agentAbortController?.abort()
+    agentAbortController = null
+    agentStreaming.value = false
+    actionLoading.value = false
     liveAgentEvents.value = []
   }
   const [detail, remediationProposals, postmortem] = await Promise.all([
@@ -104,11 +112,13 @@ async function selectIncident(id: number) {
     api<RemediationProposal[]>(`/incidents/${id}/remediation-proposals`),
     api<Postmortem | null>(`/incidents/${id}/postmortem`),
   ])
+  if (version !== selectionVersion) return
   selected.value = { ...detail, remediationProposals, postmortem }
   syncPostmortemDraft(postmortem)
   activeAgentRunId.value = detail.agentRuns.find(run => run.status === 'QUEUED' || run.status === 'RUNNING')?.id ?? null
   expandedRunId.value = detail.agentRuns[0]?.id ?? null
   if (Number(route.query.selected) !== id) void router.replace({ query: { ...route.query, selected: String(id) } })
+  if (resume && activeAgentRunId.value && !agentAbortController) void followAgentRun(activeAgentRunId.value)
 }
 
 function futureDate(days: number) {
@@ -258,9 +268,13 @@ async function transition(targetStatus: string, label: string) {
 }
 
 async function investigate() {
+  await followAgentRun(activeAgentRunId.value ?? undefined)
+}
+
+async function followAgentRun(existingRunId?: number) {
   if (!selected.value || agentStreaming.value) return
   const incidentId = selected.value.incident.id
-  let streamedRunId: number | null = null
+  let streamedRunId: number | null = existingRunId ?? null
   let streamError: string | null = null
   actionLoading.value = true
   agentStreaming.value = true
@@ -268,7 +282,8 @@ async function investigate() {
   const controller = new AbortController()
   agentAbortController = controller
   try {
-    await streamAgentInvestigation(incidentId, 'INCIDENT_WORKSPACE', event => {
+    const onEvent = (event: AgentRunEvent) => {
+      if (controller.signal.aborted || agentAbortController !== controller) return
       liveAgentEvents.value.push(event)
       streamedRunId ??= event.runId
       if (event.eventType === 'RUN_QUEUED') {
@@ -282,36 +297,48 @@ async function investigate() {
       if (event.eventType === 'RUN_REJECTED') toast.value = 'Agent 执行队列已饱和，请稍后重试'
       if (['RUN_COMPLETED', 'RUN_FAILED', 'RUN_CANCELLED', 'RUN_TIMED_OUT', 'RUN_REJECTED']
         .includes(event.eventType)) activeAgentRunId.value = null
-    }, controller.signal)
+    }
+    if (existingRunId) {
+      toast.value = `正在恢复 Agent 调查 #${existingRunId} 的实时轨迹`
+      await subscribeAgentInvestigation(existingRunId, onEvent, controller.signal)
+    } else await streamAgentInvestigation(incidentId, 'INCIDENT_WORKSPACE', onEvent, controller.signal)
   } catch (caught) {
     if (!(caught instanceof DOMException && caught.name === 'AbortError')) {
       streamError = caught instanceof Error ? caught.message : 'Agent 调查失败'
     }
   } finally {
-    actionLoading.value = false
-    agentStreaming.value = false
-    agentAbortController = null
-    if (!controller.signal.aborted && selected.value?.incident.id === incidentId) {
-      try {
-        await selectIncident(incidentId)
-        const persistedRun = streamedRunId
-          ? selected.value?.agentRuns.find(run => run.id === streamedRunId)
-          : null
-        if (persistedRun && ['COMPLETED', 'PARTIAL', 'FAILED', 'CANCELLED', 'TIMED_OUT', 'QUEUE_REJECTED']
-          .includes(persistedRun.status)) clearAgentInvestigationIdempotency(incidentId)
-        if (persistedRun?.status === 'COMPLETED') toast.value = `Agent 调查 #${persistedRun.id} 已完成`
-        else if (persistedRun?.status === 'PARTIAL') toast.value = `Agent 调查 #${persistedRun.id} 部分完成`
-        else if (persistedRun?.status === 'FAILED') toast.value = `Agent 调查 #${persistedRun.id} 失败`
-        else if (persistedRun?.status === 'CANCELLED') toast.value = `Agent 调查 #${persistedRun.id} 已取消`
-        else if (persistedRun?.status === 'TIMED_OUT') toast.value = `Agent 调查 #${persistedRun.id} 已超时终止`
-        else if (persistedRun?.status === 'QUEUE_REJECTED') toast.value = 'Agent 执行队列已饱和，请稍后重试'
-        else if (streamError) toast.value = streamError
-      } catch (caught) {
-        if (streamError) toast.value = streamError
-        else toast.value = caught instanceof Error ? caught.message : 'Agent 调查状态刷新失败'
+    if (agentAbortController !== controller) return
+    try {
+      if (!controller.signal.aborted && selected.value?.incident.id === incidentId) {
+        try {
+          await selectIncident(incidentId, false)
+          if (controller.signal.aborted || selected.value?.incident.id !== incidentId) return
+          const persistedRun = streamedRunId
+            ? selected.value?.agentRuns.find(run => run.id === streamedRunId)
+            : null
+          if (persistedRun && ['COMPLETED', 'PARTIAL', 'FAILED', 'CANCELLED', 'TIMED_OUT', 'QUEUE_REJECTED']
+            .includes(persistedRun.status)) clearAgentInvestigationIdempotency(incidentId)
+          if (persistedRun?.status === 'COMPLETED') toast.value = `Agent 调查 #${persistedRun.id} 已完成`
+          else if (persistedRun?.status === 'PARTIAL') toast.value = `Agent 调查 #${persistedRun.id} 部分完成`
+          else if (persistedRun?.status === 'FAILED') toast.value = `Agent 调查 #${persistedRun.id} 失败`
+          else if (persistedRun?.status === 'CANCELLED') toast.value = `Agent 调查 #${persistedRun.id} 已取消`
+          else if (persistedRun?.status === 'TIMED_OUT') toast.value = `Agent 调查 #${persistedRun.id} 已超时终止`
+          else if (persistedRun?.status === 'QUEUE_REJECTED') toast.value = 'Agent 执行队列已饱和，请稍后重试'
+          else if (streamError) toast.value = streamError
+        } catch (caught) {
+          if (agentAbortController !== controller) return
+          if (streamError) toast.value = streamError
+          else toast.value = caught instanceof Error ? caught.message : 'Agent 调查状态刷新失败'
+        }
+      } else if (streamError) {
+        toast.value = streamError
       }
-    } else if (streamError) {
-      toast.value = streamError
+    } finally {
+      if (agentAbortController === controller) {
+        actionLoading.value = false
+        agentStreaming.value = false
+        agentAbortController = null
+      }
     }
   }
 }
@@ -405,7 +432,12 @@ onMounted(async () => {
   users.value = await api<UserOption[]>('/reference/users')
   await loadList()
 })
-onBeforeUnmount(() => agentAbortController?.abort())
+onBeforeUnmount(() => {
+  disposed = true
+  selectionVersion++
+  agentAbortController?.abort()
+  agentAbortController = null
+})
 </script>
 
 <template>

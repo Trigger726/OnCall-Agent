@@ -1,0 +1,78 @@
+{
+  "baseline": "2731aae",
+  "environment": "localhost H2 + gated read-only tool, AI off",
+  "results": [
+    {
+      "surface": "incident",
+      "version": "old",
+      "runId": 29,
+      "requests": [],
+      "errors": [],
+      "url": "http://localhost:5174/incidents?selected=1",
+      "title": "OpsPilot 智能运维平台",
+      "liveAfterReload": false
+    },
+    {
+      "surface": "assistant",
+      "version": "old",
+      "runId": 30,
+      "requests": [],
+      "errors": [],
+      "url": "http://localhost:5174/assistant",
+      "title": "OpsPilot 智能运维平台",
+      "liveAfterReload": false
+    },
+    {
+      "surface": "incident",
+      "version": "new",
+      "runId": 31,
+      "requests": [
+        {
+          "method": "POST",
+          "url": "http://localhost:5173/api/v1/incidents/1/investigations/stream?source=INCIDENT_WORKSPACE"
+        },
+        {
+          "method": "GET",
+          "url": "http://localhost:5173/api/v1/agent-runs/31/events/stream?after=0"
+        },
+        {
+          "method": "GET",
+          "url": "http://localhost:5173/api/v1/agent-runs/31/events/stream?after=0"
+        }
+      ],
+      "errors": [],
+      "url": "http://localhost:5173/incidents?selected=1",
+      "title": "OpsPilot 智能运维平台",
+      "eventCount": 20,
+      "terminal": "RUN_COMPLETED",
+      "overflow": false,
+      "contextSwitchRecovery": true
+    },
+    {
+      "surface": "assistant",
+      "version": "new",
+      "runId": 32,
+      "requests": [
+        {
+          "method": "POST",
+          "url": "http://localhost:5173/api/v1/incidents/1/investigations/stream?source=ONCALL_ASSISTANT"
+        },
+        {
+          "method": "GET",
+          "url": "http://localhost:5173/api/v1/agent-runs/32/events/stream?after=0"
+        },
+        {
+          "method": "GET",
+          "url": "http://localhost:5173/api/v1/agent-runs/32/events/stream?after=0"
+        }
+      ],
+      "errors": [],
+      "url": "http://localhost:5173/assistant?session=1",
+      "title": "OpsPilot 智能运维平台",
+      "eventCount": 20,
+      "terminal": "RUN_COMPLETED",
+      "overflow": false,
+      "contextSwitchRecovery": true
+    }
+  ]
+}
