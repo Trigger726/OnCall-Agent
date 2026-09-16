@@ -36,12 +36,14 @@ const active = ref<SessionDetail | null>(null)
 const loading = ref(true)
 const sending = ref(false)
 const agentRunning = ref(false)
+const agentControlLoading = ref(false)
 const draft = ref('')
 const error = ref('')
 const copiedId = ref<number | null>(null)
 const agentEvents = ref<AgentRunEvent[]>([])
 const streamedAgentRunId = ref<number | null>(null)
 const mobileSessionsOpen = ref(false)
+const mobileContextOpen = ref(false)
 const messageViewport = ref<HTMLElement | null>(null)
 let abortController: AbortController | null = null
 let agentAbortController: AbortController | null = null
@@ -155,16 +157,22 @@ async function followAgentRun(existingRunId?: number) {
 }
 
 async function cancelAgentInvestigation() {
-  if (!activeAgentRunId.value) return
+  if (!activeAgentRunId.value || agentControlLoading.value) return
   const runId = activeAgentRunId.value
+  agentControlLoading.value = true
   try {
     await api<AgentRun>(`/agent-runs/${runId}/cancel`, {
       method: 'POST', body: JSON.stringify({ reason: 'OnCall 助手显式取消' }),
     })
+    // The original POST stream runs on the interrupted execution thread and may
+    // close before its terminal frame is flushed. Reattach to durable events so
+    // the UI always observes the persisted cancellation for this exact run.
+    stopAgentSubscription()
+    await followAgentRun(runId)
     error.value = ''
   } catch (caught) {
     error.value = caught instanceof Error ? caught.message : '取消调查失败'
-  }
+  } finally { agentControlLoading.value = false }
 }
 
 function agentEventLabel(event: AgentRunEvent) {
@@ -183,6 +191,7 @@ async function createSession(incidentId?: number) {
   })
   if (version !== selectionVersion) return
   active.value = detail
+  mobileContextOpen.value = false
   rememberSessionAndResume()
   await refreshSessions()
   mobileSessionsOpen.value = false
@@ -199,6 +208,7 @@ async function selectSession(id: number) {
   const detail = await api<SessionDetail>(`/assistant/sessions/${id}`)
   if (version !== selectionVersion) return
   active.value = detail
+  mobileContextOpen.value = false
   rememberSessionAndResume()
   mobileSessionsOpen.value = false
   await scrollToBottom()
@@ -356,12 +366,14 @@ onBeforeUnmount(() => {
         <footer><span class="assistant-mode-dot" /><div><strong>{{ active?.context ? 'INCIDENT CONTEXT' : 'GENERAL CONTEXT' }}</strong><span>证据约束模式</span></div></footer>
       </aside>
       <div v-if="mobileSessionsOpen" class="assistant-mobile-scrim" @click="mobileSessionsOpen = false" />
+      <div v-if="mobileContextOpen" class="assistant-context-scrim" @click="mobileContextOpen = false" />
 
       <section class="assistant-conversation">
         <header class="assistant-chat-head">
-          <button class="icon-button assistant-mobile-sessions" title="打开会话列表" @click="mobileSessionsOpen = true"><PanelLeft :size="18" /></button>
+          <button class="icon-button assistant-mobile-sessions" title="打开会话列表" aria-label="打开会话列表" :aria-expanded="mobileSessionsOpen" @click="mobileContextOpen = false; mobileSessionsOpen = true"><PanelLeft :size="18" /></button>
           <div><strong>{{ active?.session.title ?? 'OnCall 助手' }}</strong><span v-if="active?.context">{{ active.context.incidentCode }} · {{ active.context.resourceName }}</span><span v-else>通用运维协作</span></div>
           <div class="assistant-chat-actions">
+            <button class="icon-button assistant-mobile-context" title="打开调查上下文" aria-label="打开调查上下文" :aria-expanded="mobileContextOpen" aria-controls="assistant-context-panel" @click="mobileSessionsOpen = false; mobileContextOpen = true"><Workflow :size="17" /></button>
             <button class="icon-button" title="导出 Markdown" @click="exportConversation"><Download :size="17" /></button>
             <button class="icon-button" title="清空消息" @click="clearConversation"><Trash2 :size="17" /></button>
             <button class="icon-button" title="删除会话" @click="deleteConversation"><X :size="17" /></button>
@@ -406,13 +418,13 @@ onBeforeUnmount(() => {
         </div>
       </section>
 
-      <aside class="assistant-context-rail">
+      <aside id="assistant-context-panel" class="assistant-context-rail" :class="{ 'mobile-open': mobileContextOpen }">
         <template v-if="active?.context">
-          <header><span>INCIDENT CONTEXT</span><StatusBadge :value="active.context.status" /></header>
+          <header><span>INCIDENT CONTEXT</span><div class="assistant-context-actions"><StatusBadge :value="active.context.status" /><button class="icon-button assistant-context-close" title="关闭调查上下文" aria-label="关闭调查上下文" @click="mobileContextOpen = false"><X :size="17" /></button></div></header>
           <div class="assistant-context-title"><StatusBadge :value="active.context.severity" /><strong>{{ active.context.title }}</strong><span>{{ active.context.incidentCode }}</span></div>
           <dl><div><dt>影响服务</dt><dd>{{ active.context.resourceName }}</dd></div><div><dt>关联告警</dt><dd>{{ active.context.alerts.length }} 条</dd></div><div><dt>近期变更</dt><dd>{{ active.context.changes.length }} 项</dd></div></dl>
           <section class="assistant-agent-section">
-            <div class="assistant-section-head"><h3>Agent 调查</h3><button class="assistant-agent-run" :disabled="agentRunning && !activeAgentRunId" :title="activeAgentRunId ? '取消当前 Agent 调查' : '运行只读 Agent 调查'" @click="activeAgentRunId ? cancelAgentInvestigation() : runAgentInvestigation()"><CircleStop v-if="activeAgentRunId" :size="12" /><Play v-else :size="12" />{{ activeAgentRunId ? '取消' : (agentRunning ? '连接中' : '运行') }}</button></div>
+            <div class="assistant-section-head"><h3>Agent 调查</h3><button class="assistant-agent-run" :disabled="agentControlLoading || (agentRunning && !activeAgentRunId)" :title="activeAgentRunId ? '取消当前 Agent 调查' : '运行只读 Agent 调查'" @click="activeAgentRunId ? cancelAgentInvestigation() : runAgentInvestigation()"><CircleStop v-if="activeAgentRunId" :size="12" /><Play v-else :size="12" />{{ agentControlLoading ? '取消中' : (activeAgentRunId ? '取消' : (agentRunning ? '连接中' : '运行')) }}</button></div>
             <div v-if="agentRunning && agentEvents.length" class="assistant-agent-trace live">
               <header><span><Workflow :size="13" />LIVE RUN #{{ agentEvents[0].runId }}</span><em class="running">STREAMING</em></header>
               <div v-for="event in agentEvents.slice(-6)" :key="event.id" :class="event.status?.toLowerCase()"><i /><span>{{ event.phase ?? 'RUN' }}</span><strong>{{ agentEventLabel(event) }}</strong><small>#{{ event.sequence }}</small></div>
@@ -430,7 +442,7 @@ onBeforeUnmount(() => {
           <RouterLink :to="`/incidents?selected=${active.context.id}`" class="assistant-incident-link">返回 Incident 工作台 <ChevronRight :size="15" /></RouterLink>
         </template>
         <template v-else>
-          <header><span>SELECT CONTEXT</span></header>
+          <header><span>SELECT CONTEXT</span><button class="icon-button assistant-context-close" title="关闭调查上下文" aria-label="关闭调查上下文" @click="mobileContextOpen = false"><X :size="17" /></button></header>
           <div class="assistant-context-empty"><Menu :size="20" /><strong>绑定 Incident</strong><p>新建一个带完整故障上下文的协作会话。</p></div>
           <div class="assistant-incident-picker"><button v-for="incident in incidents.slice(0, 6)" :key="incident.id" @click="createSession(incident.id)"><StatusBadge :value="incident.severity" /><div><strong>{{ incident.title }}</strong><span>{{ incident.incidentCode }} · {{ incident.resourceName }}</span></div><ChevronRight :size="15" /></button></div>
         </template>

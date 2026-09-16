@@ -23,6 +23,8 @@
 
 ## 状态约定
 
+最新移动端闭环：[V1.7-checkpoint-19.md](V1.7-checkpoint-19.md)：OnCall 助手在手机/平板提供 Incident 与 Agent 调查抽屉；严格回归同时修复取消后原 POST SSE 未呈现终态的问题，两个页面改为对同一 run GET 回放。13 项前端测试、构建和真实 Edge 新旧对照通过，远端六项 CI 待复核。
+
 最新页面恢复：[V1.7-checkpoint-18.md](V1.7-checkpoint-18.md)：Incident／OnCall 助手刷新后自动 GET 挂接活动调查、保留会话 URL、旧订阅清理；13 项前端测试、真实浏览器新旧对照及六项 CI 通过，证据已归档。
 
 最新接收器修复：[V1.7-checkpoint-17.md](V1.7-checkpoint-17.md)：Stream 重建后回退/复用 ID 的传输游标恢复；修复前后对照、真实 Redis 100/100/5 有界恢复、双 JVM 回归及六项 CI 通过，证据已归档。

@@ -352,6 +352,15 @@ async function cancelAgentInvestigation() {
       method: 'POST', body: JSON.stringify({ reason: 'Incident 工作台显式取消' }),
     })
     toast.value = `已请求取消 Agent 调查 #${runId}`
+    // Cancellation interrupts the execution thread that owns the original POST
+    // SSE response. Switch to the durable run subscription to replay the exact
+    // terminal event even when that response closes before flushing it.
+    agentAbortController?.abort()
+    agentAbortController = null
+    agentStreaming.value = false
+    actionLoading.value = false
+    liveAgentEvents.value = []
+    await followAgentRun(runId)
   } catch (caught) {
     toast.value = caught instanceof Error ? caught.message : '取消调查失败'
   } finally { agentControlLoading.value = false }
