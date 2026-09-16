@@ -1,6 +1,6 @@
 # ADR-001：Agent 跨实例事件分发与恢复
 
-日期：2026-09-08。状态：设计决策，尚未实现/验收。适用基线：`e600cec`。
+日期：2026-09-08，2026-09-16 更新。状态：事件分发主链路已实现；执行实例崩溃后的 deadline 终态结算已实现、待真实双 JVM CI 完成验收；任务迁移仍不在范围内。原始适用基线：`e600cec`。
 
 ## 当前证据
 
@@ -48,6 +48,6 @@
 
 ## 实现次序与完成口径
 
-下一步先实现同事务 outbox、领取/租约/重试以及真实 MySQL 并发测试；随后接入真实 Redis Testcontainers 与两个独立订阅实例；最后连接 GET SSE、前端游标恢复、双实例浏览器演示和独立 CI 门禁。只写 ADR、表结构或模拟 broker 通过都不能标记分布式交付完成。
+同事务 outbox、领取/租约/重试、Redis Streams 发送/接收、数据库补读、GET SSE、前端游标恢复和双 JVM HTTP 验收已分阶段实现。只写 ADR、表结构或模拟 broker 通过都不能标记分布式交付完成；仍需逐项保留真实 MySQL/Redis/多进程证据。
 
-事件分发不等于执行任务可迁移：AgentExecutionManager 的任务和 deadline 仍在本地。运行实例崩溃后的任务恢复/终态结算是独立缺口，必须另行验证，不能因为 B 能回放 A 的事件就声称 run 会在 B 自动继续。
+事件分发不等于执行任务可迁移：`AgentExecutionManager` 的任务和看门狗仍在本地。checkpoint-20 新增的协调器只在持久化 `deadline_at` 过期后，以行锁将孤儿 run 结算为 `TIMED_OUT / CANCELLED`，并写终态事件、时间线和审计。B 不会继续 A 未完成的工具链，也不承诺 exactly-once 执行。

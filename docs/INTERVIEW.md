@@ -168,7 +168,11 @@ Agent 调查事件是执行过程中逐步产生的真实事件，先写 `agent_
 
 ### 事件已经落库，为什么还需要消息队列？
 
-单实例下数据库事件 ID 足以保证顺序、回放和审计。多实例时，请求可能由 A 节点执行而重连落到 B 节点，需要 Redis Streams、Kafka 或数据库轮询来广播新事件。当前没有把单机实现夸大成分布式事件总线，并把多实例协调列为后续演进项。
+数据库事件 ID 负责顺序、回放和审计，但不会立即唤醒持有 SSE 的其他实例。因此事件与 outbox 同事务落库，Redis Streams 只传 `runId/eventId` 通知，每个实例独立读取；通知重复、乱序或丢失时，订阅端仍以数据库游标补读。这是 at-least-once 通知加幂等消费，不声称 exactly-once。
+
+### 执行 Agent 的 JVM 被杀后，其他实例会续跑吗？
+
+不会自动续跑。事件分发与任务迁移是两个问题：B 可以回放 A 已提交的事件，但没有 A 内存中的工具调用栈。OpsPilot 把绝对 deadline 持久化，存活实例扫描逾期活动 run，在行锁内重检并只结算一次 `TIMED_OUT / CANCELLED`，同时写终态事件、时间线和审计。六个工具都是只读，所以当前选择“明确失败并人工重试”，而不是在无执行租约/fencing token 时冒险重放。
 
 ### 高风险处置为什么禁止发起人自批？
 
@@ -187,7 +191,7 @@ Agent 结论和发起操作可能共享同一个人的判断，独立审批可�
 - AI 模式需要外部 DashScope Key，默认演示采用规则引擎。
 - 已提供 Prometheus 与 Loki HTTP 适配器，但默认演示关闭外部依赖；当前通过协议级本地 HTTP 契约测试验证，尚未与真实生产集群联调和压测。
 - Agent 步骤已经使用持久化实时 SSE 和游标回放；对话仍是完整回答落库后的协议分块，尚未做到模型 Provider 原生 token 流。
-- Agent 事件流当前按单实例设计，多实例广播和跨节点任务协调尚未接 Redis Streams 或 Kafka；显式取消只管理当前实例持有的任务。
+- Agent 事件已通过 outbox + Redis Streams + 数据库补读支持跨实例广播，崩溃孤儿 run 可在持久化 deadline 后收敛到终态；但工具链仍不会跨节点续跑，也没有执行租约/fencing token 或 exactly-once 保证。
 - 处置审批已完成治理闭环，但尚未接 Argo CD、Ansible、Kubernetes 等生产执行器。
 - Postmortem 已覆盖证据快照、独立发布、行动项责任闭环、跨 Incident 待办、逾期事实和 MTTA/MTTM/MTTR；Problem 已覆盖精确指纹复发，但尚未接真实外部提醒/回执、跨 Incident 语义相似/依赖共因聚类、Runbook 命中率趋势和服务 SLO 目标线。
 - 已有 MySQL Testcontainers 与四段式 CI 配置；本地是否能运行真实 MySQL 仍取决于 Docker 引擎，托管 runner 结果需以远端 Actions 实际运行记录为准；系统级压力测试也尚未加入。

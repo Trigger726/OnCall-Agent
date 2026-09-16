@@ -16,6 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.trigger.opspilot.investigation.AgentRunEventService;
+import org.trigger.opspilot.investigation.AgentRunRecoveryService;
 import org.trigger.opspilot.investigation.AgentRunQueryService;
 import org.trigger.opspilot.investigation.InvestigationService;
 import org.trigger.opspilot.postmortem.FollowUpEscalationService;
@@ -51,7 +52,8 @@ import static org.assertj.core.api.Assertions.assertThat;
         "opspilot.ai.enabled=false",
         "opspilot.agent.events.outbox-enabled=true",
         "opspilot.agent.events.relay-initial-delay=3600000",
-        "opspilot.agent.events.receiver-initial-delay=3600000"
+        "opspilot.agent.events.receiver-initial-delay=3600000",
+        "opspilot.agent.recovery.enabled=false"
 })
 class MySqlCompatibilityIntegrationTest {
     @Autowired private org.trigger.opspilot.investigation.AgentEventOutbox outbox;
@@ -104,6 +106,9 @@ class MySqlCompatibilityIntegrationTest {
 
     @Autowired
     private AgentRunEventService eventService;
+
+    @Autowired
+    private AgentRunRecoveryService recoveryService;
 
     @Autowired
     private RunbookService runbookService;
@@ -186,6 +191,50 @@ class MySqlCompatibilityIntegrationTest {
             createStart.countDown();
             executor.shutdownNow();
         }
+    }
+
+    @Test
+    @Order(4)
+    void shouldSettleExpiredRunOnceAcrossConcurrentMySqlReconcilers() throws Exception {
+        InvestigationService.RunActor actor = new InvestigationService.RunActor(1L, "127.0.0.1");
+        InvestigationService.PreparedRun prepared = investigationService.prepare(
+                1, "MYSQL_RECOVERY_TEST", actor, "mysql-recovery-" + UUID.randomUUID(),
+                Duration.ofSeconds(30));
+        LocalDateTime recoveryAt = LocalDateTime.now();
+        jdbcClient.sql("UPDATE agent_investigation_run SET deadline_at = :deadline WHERE id = :runId")
+                .param("deadline", recoveryAt.minusSeconds(1)).param("runId", prepared.runId()).update();
+
+        CountDownLatch start = new CountDownLatch(1);
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        List<Long> settled = new java.util.ArrayList<>();
+        try {
+            Callable<AgentRunRecoveryService.RecoveryResult> reconcile = () -> {
+                if (!start.await(5, TimeUnit.SECONDS)) {
+                    throw new IllegalStateException("Recovery reconcile barrier timed out");
+                }
+                return recoveryService.reconcileExpired(recoveryAt);
+            };
+            Future<AgentRunRecoveryService.RecoveryResult> first = executor.submit(reconcile);
+            Future<AgentRunRecoveryService.RecoveryResult> second = executor.submit(reconcile);
+            start.countDown();
+            settled.addAll(first.get(10, TimeUnit.SECONDS).settledRunIds());
+            settled.addAll(second.get(10, TimeUnit.SECONDS).settledRunIds());
+        } finally {
+            start.countDown();
+            executor.shutdownNow();
+        }
+        assertThat(settled).containsExactly(prepared.runId());
+        assertThat(recoveryService.reconcileExpired(recoveryAt.plusSeconds(1)).settled()).isZero();
+        AgentRunQueryService.AgentRunView run = investigationService.listRuns(1).stream()
+                .filter(item -> item.id().equals(prepared.runId())).findFirst().orElseThrow();
+        assertThat(run.status()).isEqualTo("TIMED_OUT");
+        assertThat(eventService.list(prepared.runId(), 0))
+                .filteredOn(event -> "RUN_TIMED_OUT".equals(event.eventType())).hasSize(1);
+        assertThat(jdbcClient.sql("""
+                        SELECT COUNT(*) FROM agent_event_outbox o
+                        JOIN agent_investigation_event e ON e.id = o.event_id
+                        WHERE e.run_id = :runId AND e.event_type = 'RUN_TIMED_OUT'
+                        """).param("runId", prepared.runId()).query(Integer.class).single()).isEqualTo(1);
     }
 
     @Test

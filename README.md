@@ -12,7 +12,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 - 值班升级：服务排班、当前值班人、分级升级策略和通知留痕。
 - 可解释 Agent 调查：以 `PLAN -> EXECUTE -> REPLAN -> FINISH` 编排告警、CMDB、指标、变更、日志和 Runbook 六个只读工具；每步持久化输入、查询范围、数据源、证据、失败原因和耗时。
 - 可恢复调查事件流：运行事件先落库再通过 SSE 实时发送，事件 ID 同时作为断线回放游标；客户端退出不取消后台调查，结果仍会完整进入时间线和审计。
-- Agent 运行控制：同一 Incident 使用幂等键抑制重复 run；任务先进入有界队列，可显式取消并受截止时间预算约束；取消、超时和队列拒绝都形成可回放的持久化终态。
+- Agent 运行控制：同一 Incident 使用幂等键抑制重复 run；任务先进入有界队列，可显式取消并受持久化截止时间预算约束；取消、超时和队列拒绝都形成可回放的持久化终态，执行 JVM 崩溃后由存活实例幂等结算逾期孤儿 run。
 - Runbook 知识库：Markdown/PDF 入库、内容哈希幂等、不可变版本、角色 ACL 和标题分块；本地 BM25 与可选 DashScope 向量召回通过 RRF 融合，返回 `runbook:{stableKey}:v{version}#chunk-{index}` 稳定引用。向量未启用、覆盖不足或 Provider 失败时显式降级 BM25；真实检索快照在入库前脱敏并按可配置保留期自动擦除，提交人与复核人分别给出 0–3 级评分，复核前隐藏原始等级，并以线性加权 Cohen's kappa 量化一致性；批准后的分级 qrels 在原快照清理后仍可按唯一查询计算 Recall@3、MRR、NDCG@3 和引用命中率。
 - 可观测数据适配：统一 Metrics/Logs Provider SPI；默认使用可复现的本地证据库，可选调用 Prometheus 与 Loki HTTP API，外部失败后自动重试、熔断并降级到本地证据。
 - 证据报告：规则引擎离线生成假设、置信度和建议，可选 DashScope 生成受约束摘要；单工具失败时保留其他证据并降级为部分完成。
@@ -191,9 +191,12 @@ AGENT_MAX_EXECUTION_TIMEOUT=5m
 AGENT_CORE_POOL_SIZE=2
 AGENT_MAX_POOL_SIZE=4
 AGENT_QUEUE_CAPACITY=50
+AGENT_RECOVERY_ENABLED=true
+AGENT_RECOVERY_DELAY=5000
+AGENT_RECOVERY_BATCH_SIZE=100
 ```
 
-运行先持久化为 `QUEUED`，随后进入 `RUNNING`。终态包括 `COMPLETED / PARTIAL / FAILED / CANCELLED / TIMED_OUT / QUEUE_REJECTED`。外部调用若不能立即响应线程中断，仍受 Provider 连接/读取超时约束，并在下一个安全执行边界完成取消或超时落库。
+运行先持久化为 `QUEUED`，随后进入 `RUNNING`。终态包括 `COMPLETED / PARTIAL / FAILED / CANCELLED / TIMED_OUT / QUEUE_REJECTED`。外部调用若不能立即响应线程中断，仍受 Provider 连接/读取超时约束，并在下一个安全执行边界完成取消或超时落库。实例退出留下的活动 run 会在 `deadline_at` 后由存活实例以行锁结算，并写终态事件、Incident 时间线和审计。当前不自动重放已中断工具，不声称跨节点续跑或 exactly-once 执行。
 
 ## Runbook 知识库与检索评测
 
@@ -298,7 +301,7 @@ cd .. && ./mvnw test
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
 - MySQL 8.4 Testcontainers：Flyway V1-V15、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项完成，以及 Problem 创建、状态闭环和 REPEATABLE READ 双事务并发提升。
 
-默认后端套件发现 75 项测试：66 项执行通过，9 项 Docker（MySQL/Redis/双 JVM） 条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升和 outbox 事务/租约。另行启用条件测试后，MySQL 8.4 从空库执行 Flyway V1–V18，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭、Problem 生命周期，以及两个 REPEATABLE READ 事务在旧快照下同时提升同一候选，以及 outbox 双领取者竞争与精确租约到期重领。该并发用例曾在首次远端运行中暴露冲突恢复仍沿用旧快照，改为新事务完整恢复后已在第二轮真实 MySQL 门禁通过。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、Redis Streams relay、双 JVM SSE、容器构建与健康启动拆成六个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+默认后端套件发现 78 项测试：67 项执行通过，11 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约，以及逾期 run 结算与晚返回隔离。另行启用条件测试后，MySQL 8.4 从空库执行 Flyway V1–V18，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭、Problem 生命周期、并发孤儿 run 结算，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、Redis Streams relay、双 JVM SSE、容器构建与健康启动拆成六个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 

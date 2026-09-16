@@ -57,6 +57,86 @@ class DistributedAgentEventsIntegrationTest {
         runScenario(true);
     }
 
+    @Test
+    @Timeout(value = 4, unit = TimeUnit.MINUTES)
+    void shouldSettleExpiredRunAfterExecutingJvmCrashes() throws Exception {
+        Path evidence = Path.of("target", "distributed-it", UUID.randomUUID().toString()).toAbsolutePath();
+        Files.createDirectories(evidence);
+        ExecutorService readers = Executors.newSingleThreadExecutor();
+        try (Node a = startNode(evidence, "A", true, true);
+             Node b = startNode(evidence, "B", false, true)) {
+            String token = login(a.port);
+            String idempotencyKey = UUID.randomUUID().toString();
+            var trigger = request(a.port,
+                    "/api/v1/incidents/1/investigations/stream?source=CRASH_RECOVERY_IT&timeoutMs=4000", token)
+                    .header("Idempotency-Key", idempotencyKey)
+                    .POST(HttpRequest.BodyPublishers.noBody()).build();
+            var started = HTTP.send(trigger, HttpResponse.BodyHandlers.ofInputStream());
+            assertThat(started.statusCode()).isEqualTo(200);
+            long runId = Long.parseLong(started.headers().firstValue("X-OpsPilot-Run-Id").orElseThrow());
+            started.body().close();
+            await(() -> Files.exists(evidence.resolve("entered")), Duration.ofSeconds(15),
+                    "executing node enters gated tool");
+
+            try (Stream observer = subscribe(b.port, runId, 0, token, readers)) {
+                assertThat(observer.gated.await(10, TimeUnit.SECONDS)).isTrue();
+                long crashedPid = a.process.pid();
+                a.kill();
+                assertThat(a.process.isAlive()).isFalse();
+
+                List<Long> observedIds = observer.events.get(30, TimeUnit.SECONDS);
+                JsonNode replay = getJson(b.port, "/api/v1/agent-runs/" + runId + "/events?after=0", token)
+                        .path("data");
+                List<Long> databaseIds = new ArrayList<>();
+                int terminalEvents = 0;
+                JsonNode terminal = null;
+                for (JsonNode event : replay) {
+                    databaseIds.add(event.path("id").asLong());
+                    if ("RUN_TIMED_OUT".equals(event.path("eventType").asText())) {
+                        terminalEvents++;
+                        terminal = event;
+                    }
+                }
+                assertThat(observedIds).containsExactlyElementsOf(databaseIds).doesNotHaveDuplicates();
+                assertThat(terminalEvents).isEqualTo(1);
+                assertThat(terminal).isNotNull();
+                assertThat(JSON.readTree(terminal.path("payloadJson").asText()).path("recovered").asBoolean())
+                        .isTrue();
+
+                JsonNode run = findRun(b.port, runId, token);
+                assertThat(run.path("status").asText()).isEqualTo("TIMED_OUT");
+                assertThat(run.path("terminationKind").asText()).isEqualTo("TIMEOUT");
+                assertThat(run.path("terminationReason").asText()).contains("恢复协调器");
+                await(() -> pendingOutbox(runId) == 0, Duration.ofSeconds(20),
+                        "recovered terminal event reaches Redis");
+
+                var result = new java.util.LinkedHashMap<String, Object>();
+                result.put("runId", runId);
+                result.put("crashedNodePid", crashedPid);
+                result.put("recoveryNodePid", b.process.pid());
+                result.put("recoveryNodePort", b.port);
+                result.put("terminalStatus", run.path("status").asText());
+                result.put("terminalEventCount", terminalEvents);
+                result.put("databaseEventIds", databaseIds);
+                result.put("observerEventIds", observedIds);
+                result.put("pendingOutboxAfterRecovery", pendingOutbox(runId));
+                Files.writeString(evidence.resolve("crash-recovery-result.json"),
+                        JSON.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+            }
+        } catch (Throwable failure) {
+            for (String node : List.of("A", "B")) {
+                Path log = evidence.resolve(node + ".log");
+                if (Files.exists(log)) {
+                    String contents = Files.readString(log);
+                    System.err.println(node + " log tail:\n" + contents.substring(Math.max(0, contents.length() - 16000)));
+                }
+            }
+            throw failure;
+        } finally {
+            readers.shutdownNow();
+        }
+    }
+
     private void runScenario(boolean redisOutage) throws Exception {
         Path evidence = Path.of("target", "distributed-it", UUID.randomUUID().toString()).toAbsolutePath();
         Files.createDirectories(evidence);
@@ -150,6 +230,8 @@ class DistributedAgentEventsIntegrationTest {
                 "--opspilot.agent.events.outbox-enabled=true",
                 "--opspilot.agent.events.relay-delay=100",
                 "--opspilot.agent.events.receiver-delay=100",
+                "--opspilot.agent.recovery.delay=100",
+                "--opspilot.agent.recovery.initial-delay=100",
                 "--opspilot.agent.events.catchup-delay=" + (recovery ? 500 : 3600000),
                 "--opspilot.agent.events.catchup-initial-delay=" + (recovery ? 500 : 3600000),
                 "--opspilot.test.gated-tool=" + gated,
@@ -248,6 +330,14 @@ class DistributedAgentEventsIntegrationTest {
         return JSON.readTree(response.body());
     }
 
+    private static JsonNode findRun(int port, long runId, String token) throws Exception {
+        JsonNode runs = getJson(port, "/api/v1/incidents/1/agent-runs", token).path("data");
+        for (JsonNode run : runs) {
+            if (run.path("id").asLong() == runId) return run;
+        }
+        throw new AssertionError("Run " + runId + " not found");
+    }
+
     private static HttpRequest.Builder request(int port, String path, String token) {
         var builder = HttpRequest.newBuilder(URI.create("http://localhost:" + port + path)).timeout(Duration.ofSeconds(30));
         if (token != null) builder.header("Authorization", "Bearer " + token);
@@ -270,6 +360,13 @@ class DistributedAgentEventsIntegrationTest {
     }
 
     private record Node(int port, Process process) implements AutoCloseable {
+        void kill() throws Exception {
+            process.destroyForcibly();
+            if (!process.waitFor(5, TimeUnit.SECONDS)) {
+                throw new IllegalStateException("Node " + process.pid() + " did not terminate");
+            }
+        }
+
         public void close() throws Exception {
             process.destroy();
             if (!process.waitFor(5, TimeUnit.SECONDS)) {

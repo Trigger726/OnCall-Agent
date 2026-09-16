@@ -29,7 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.datasource.password=",
         "spring.datasource.driver-class-name=org.h2.Driver",
         "spring.ai.dashscope.api-key=disabled",
-        "opspilot.ai.enabled=false"
+        "opspilot.ai.enabled=false",
+        "opspilot.agent.recovery.enabled=false"
 })
 @AutoConfigureMockMvc
 class OpsPilotApiIntegrationTest {

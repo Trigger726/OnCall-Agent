@@ -153,6 +153,7 @@ public class InvestigationService {
                 try {
                     InvestigationTool.ToolResult result = tool.execute(
                             detail, new InvestigationTool.ToolContext(actor.userId()));
+                    checkControl(runId);
                     evidence.addAll(result.evidence());
                     LocalDateTime completedAt = LocalDateTime.now();
                     Map<String, Object> tracedInput = new LinkedHashMap<>();
@@ -275,11 +276,12 @@ public class InvestigationService {
         } catch (RunTerminatedException exception) {
             TerminationSignal termination = exception.termination();
             LocalDateTime completedAt = LocalDateTime.now();
-            terminateRun(runId, termination, runStartedAt, completedAt);
-            recordEvent(runId, "CANCELLED".equals(termination.status())
-                            ? "RUN_CANCELLED" : "RUN_TIMED_OUT",
-                    "FINISH", null, termination.status(),
-                    Map.of("reason", termination.reason()), eventSink);
+            if (terminateRun(runId, termination, runStartedAt, completedAt)) {
+                recordEvent(runId, "CANCELLED".equals(termination.status())
+                                ? "RUN_CANCELLED" : "RUN_TIMED_OUT",
+                        "FINISH", null, termination.status(),
+                        Map.of("reason", termination.reason()), eventSink);
+            }
             AgentRunQueryService.AgentRunView run = agentRunQueryService.get(runId);
             return new InvestigationResult(runId, null, termination.status(), "AGENT_TOOLCHAIN",
                     termination.reason(), termination.reason(), null, null,
@@ -463,10 +465,10 @@ public class InvestigationService {
                 .param("durationMs", elapsedMillis(startedAt, failedAt)).param("runId", runId).update();
     }
 
-    private void terminateRun(long runId, TerminationSignal termination,
-                              LocalDateTime startedAt, LocalDateTime completedAt) {
+    private boolean terminateRun(long runId, TerminationSignal termination,
+                                 LocalDateTime startedAt, LocalDateTime completedAt) {
         String kind = "CANCELLED".equals(termination.status()) ? "CANCEL" : "TIMEOUT";
-        jdbcClient.sql("""
+        return jdbcClient.sql("""
                         UPDATE agent_investigation_run
                         SET status = :status, conclusion = :reason, completed_at = :completedAt,
                             duration_ms = :durationMs,
@@ -478,7 +480,7 @@ public class InvestigationService {
                 .param("status", termination.status()).param("reason", termination.reason())
                 .param("completedAt", completedAt)
                 .param("durationMs", elapsedMillis(startedAt, completedAt))
-                .param("kind", kind).param("runId", runId).update();
+                .param("kind", kind).param("runId", runId).update() == 1;
     }
 
     private void addTimelineAndAudit(long incidentId, long runId, long reportId, String status,
