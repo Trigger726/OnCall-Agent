@@ -77,7 +77,7 @@
 
 ## 进行中：V1.7 分布式事件与复盘指标
 
-- 检查点 19：OnCall 助手在 390px/820px 增加 Incident 与 Agent 调查抽屉，桌面保留内联栏；严格浏览器回归发现取消后的原 POST SSE 可能停在 STREAMING，Incident/助手均改为中止旧连接并对同一 run GET 回放终态。13 项前端测试、生产构建和 Edge 新旧对照通过，远端六项 CI 待复核。
+- 检查点 19：OnCall 助手在 390px/820px 增加 Incident 与 Agent 调查抽屉，桌面保留内联栏；严格浏览器回归发现取消后的原 POST SSE 可能停在 STREAMING，Incident/助手均改为中止旧连接并对同一 run GET 回放终态。13 项前端测试、生产构建、Edge 新旧对照及远端六项 CI 通过，证据已归档。
 
 - 检查点 18：Incident 与 OnCall 助手从服务端发现活动 run，刷新后 GET-only 重建轨迹并保留会话 URL；13 项前端测试、真实浏览器新旧对照与六项 CI 通过，证据已归档。移动端 Agent 面板和双实例浏览器切换仍待完善。
 
