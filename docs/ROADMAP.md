@@ -77,7 +77,7 @@
 
 ## 进行中：V1.7 分布式事件与复盘指标
 
-- 检查点 18：Incident 与 OnCall 助手从服务端发现活动 run，刷新后 GET-only 重建轨迹并保留会话 URL；13 项前端测试通过，浏览器最终对照与 CI 待归档。移动端 Agent 面板和双实例浏览器切换仍待完善。
+- 检查点 18：Incident 与 OnCall 助手从服务端发现活动 run，刷新后 GET-only 重建轨迹并保留会话 URL；13 项前端测试、真实浏览器新旧对照与六项 CI 通过，证据已归档。移动端 Agent 面板和双实例浏览器切换仍待完善。
 
 - 检查点 17：修复 Redis Stream 重建后回退/复用 ID 导致接收器持续空读，空读尾检查与每轮 100 条有界恢复；8 项单元测试、4 项真实 Redis、2 项双 JVM 回归及六项 CI 通过，原始结果已归档，数据库兜底保持启用。
 
@@ -94,7 +94,7 @@
 - 检查点 11：已投递 outbox 有限批次清理、Redis 通知定期裁剪、原始事件回放保留；真实 Redis、MySQL V18 与五项 CI 通过。
 - 检查点 10：Redis Streams 发送端已实现独立调度、XADD 标识通知、租约确认和指数退避；真实 Redis 与五项 CI 通过。
 - 检查点 09：V16/V17 已实现可选同事务 outbox、条件领取、租约到期重领与 token 保护，H2/MySQL 与四段式 CI 通过；Redis relay、自动退避、跨实例订阅与前端恢复仍待实现。
-- 跨实例实现决策见 [ADR-001](ADR-001-distributed-agent-events.md)：同事务 outbox + 独立 XREAD 广播 + 数据库补读 + 前端游标恢复。双 JVM HTTP SSE 正常链路及 Redis pause 故障已验收；完整故障矩阵与浏览器刷新后自动挂接仍未验收。
+- 跨实例实现决策见 [ADR-001](ADR-001-distributed-agent-events.md)：同事务 outbox + 独立 XREAD 广播 + 数据库补读 + 前端游标恢复。双 JVM HTTP SSE 正常链路、Redis pause 故障、Incident/OnCall 助手单实例浏览器刷新挂接已验收；完整故障矩阵与双实例浏览器演示仍未验收。
 - 接入 OpenTelemetry trace，串联告警接入、Agent run、工具步骤和外部 provider。
 - 检查点 01 已完成：已恢复/已关闭 Incident 可从当时的时间线、告警、调查报告和变更引用生成脱敏、不可漂移的无责复盘草稿；重复创建幂等。
 - 检查点 01 已完成：五类正文完备校验、至少一个有负责人/期限的防复发行动项、提交人禁止自审、退回修改、独立发布和发布后正文冻结；复盘与行动项均使用乐观锁并进入时间线和审计。
