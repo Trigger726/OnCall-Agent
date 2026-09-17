@@ -77,7 +77,7 @@
 
 ## 进行中：V1.7 分布式事件与复盘指标
 
-- 检查点 21：接入 Micrometer Tracing + OpenTelemetry/OTLP，用四类受控业务 span 串联告警接入、异步 Agent run、工具步骤和 Metrics/Logs Provider；线程切换继承 HTTP 父 span，无父上下文安全退化。本地 7 项定向用例与真实 OTel SDK exporter 层级验证已通过；全量回归、远端 CI 和真实 Collector UI 证据按验收报告的最新状态为准。
+- 检查点 21：接入 Micrometer Tracing + OpenTelemetry/OTLP，用四类受控业务 span 串联告警接入、异步 Agent run、工具步骤和 Metrics/Logs Provider；线程切换继承 HTTP 父 span，无父上下文安全退化。本地 7 项定向、85 项后端全量、13 项前端与真实 OTel SDK exporter 层级验证已通过；远端真实 MySQL、Redis、双 JVM SSE、容器在六项 CI 中全部通过。真实 Collector UI 仍待补齐。
 
 - 检查点 20：新增持久化 deadline 恢复协调器，存活实例对崩溃后留在 `QUEUED / RUNNING` 的 run 以行锁幂等结算，写入终态事件、时间线和审计；编排器阻止晚返回工具覆盖已恢复终态。H2/本地 JAR、真实 MySQL 双协调者、MySQL/Redis 双 JVM 强制退出及远端六项 CI 均通过，原始结果已归档；不声称自动续跑或 exactly-once 执行。
 

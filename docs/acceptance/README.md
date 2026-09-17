@@ -20,11 +20,11 @@
 | V1.7 | 03：可解释重复事故与 Problem Management | 通过，本地验收与远端四段式 CI 已闭环 | [V1.7-checkpoint-03.md](V1.7-checkpoint-03.md) |
 | V1.7 | 04：长标题边界与证据保留 | 通过，41 项本地回归、JAR 与远端四段式 CI 已闭环 | [V1.7-checkpoint-04.md](V1.7-checkpoint-04.md) |
 | V1.7 | 05：MySQL 快照可见性与并发提升 | 通过，失败证据、H2/JAR、真实 MySQL 双事务、前端与容器门禁闭环 | [V1.7-checkpoint-05.md](V1.7-checkpoint-05.md) |
-| V1.7 | 21：OpenTelemetry 异步调查链路 | 本地 85 项回归、前端与 JAR 通过，远端 CI 待回填 | [V1.7-checkpoint-21.md](V1.7-checkpoint-21.md) |
+| V1.7 | 21：OpenTelemetry 异步调查链路 | 通过，本地 85 项回归、前端/JAR 与远端六项 CI 已闭环 | [V1.7-checkpoint-21.md](V1.7-checkpoint-21.md) |
 
 ## 状态约定
 
-最新 Trace 实现：[V1.7-checkpoint-21.md](V1.7-checkpoint-21.md)：告警接入、异步 Agent run、六个工具与 Metrics/Logs Provider 形成可导出的 OpenTelemetry 父子链路；7 项定向自动化、85 项全量后端、13 项前端及真实 OTel SDK exporter 契约已通过，真实 Collector/UI 与远端 CI 状态不预先宣称。
+最新 Trace 实现：[V1.7-checkpoint-21.md](V1.7-checkpoint-21.md)：告警接入、异步 Agent run、六个工具与 Metrics/Logs Provider 形成可导出的 OpenTelemetry 父子链路；7 项定向自动化、85 项全量后端、13 项前端、真实 OTel SDK exporter 契约及远端六项 CI 已通过。真实 Collector/UI 仍不预先宣称。
 
 最新崩溃收敛：[V1.7-checkpoint-20.md](V1.7-checkpoint-20.md)：执行 JVM 退出后，存活实例按持久化 deadline 和行锁将孤儿 run 幂等结算为可回放终态。本地 78 项默认回归与 JAR、真实 MySQL 双协调者、MySQL/Redis 双 JVM 强制退出及远端六项 CI 均通过，原始结果已归档。
 
