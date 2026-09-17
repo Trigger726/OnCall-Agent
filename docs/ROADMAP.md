@@ -77,7 +77,7 @@
 
 ## 进行中：V1.7 分布式事件与复盘指标
 
-- 检查点 20：新增持久化 deadline 恢复协调器，存活实例对崩溃后留在 `QUEUED / RUNNING` 的 run 以行锁幂等结算，写入终态事件、时间线和审计；编排器阻止晚返回工具覆盖已恢复终态。H2 与本地 JAR 通过，真实 MySQL 双协调者与 MySQL/Redis 双 JVM 强制退出已进入 CI；不声称自动续跑或 exactly-once 执行。
+- 检查点 20：新增持久化 deadline 恢复协调器，存活实例对崩溃后留在 `QUEUED / RUNNING` 的 run 以行锁幂等结算，写入终态事件、时间线和审计；编排器阻止晚返回工具覆盖已恢复终态。H2/本地 JAR、真实 MySQL 双协调者、MySQL/Redis 双 JVM 强制退出及远端六项 CI 均通过，原始结果已归档；不声称自动续跑或 exactly-once 执行。
 
 - 检查点 19：OnCall 助手在 390px/820px 增加 Incident 与 Agent 调查抽屉，桌面保留内联栏；严格浏览器回归发现取消后的原 POST SSE 可能停在 STREAMING，Incident/助手均改为中止旧连接并对同一 run GET 回放终态。13 项前端测试、生产构建、Edge 新旧对照及远端六项 CI 通过，证据已归档。
 
