@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.trigger.opspilot.common.ApiResponse;
 import org.trigger.opspilot.common.PageResponse;
+import org.trigger.opspilot.observability.tracing.OpsPilotTracing;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -19,9 +20,11 @@ import java.util.Map;
 @RequestMapping("/api/v1/alerts")
 public class AlertController {
     private final AlertService service;
+    private final OpsPilotTracing tracing;
 
-    public AlertController(AlertService service) {
+    public AlertController(AlertService service, OpsPilotTracing tracing) {
         this.service = service;
+        this.tracing = tracing;
     }
 
     @GetMapping
@@ -35,9 +38,10 @@ public class AlertController {
 
     @PostMapping("/intake")
     public ApiResponse<AlertService.IntakeResult> intake(@Valid @RequestBody IntakeRequest request) {
-        return ApiResponse.ok(service.intake(new AlertService.IntakeRequest(
+        AlertService.IntakeRequest command = new AlertService.IntakeRequest(
                 request.source(), request.externalEventId(), request.resourceCode(), request.severity(),
-                request.status(), request.title(), request.description(), request.labels(), request.occurredAt())));
+                request.status(), request.title(), request.description(), request.labels(), request.occurredAt());
+        return ApiResponse.ok(tracing.traceAlertIntake(command, () -> service.intake(command)));
     }
 
     public record IntakeRequest(

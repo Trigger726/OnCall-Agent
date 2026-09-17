@@ -1,6 +1,8 @@
 package org.trigger.opspilot.observability.logs;
 
 import org.junit.jupiter.api.Test;
+import io.micrometer.tracing.Tracer;
+import org.trigger.opspilot.observability.tracing.OpsPilotTracing;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +17,8 @@ class LogsProviderRouterTest {
         });
         LogsProvider local = provider("local-logs", 10, query -> new LogsProvider.LogsResult(
                 "local-logs", "local-query", "db:logs", List.of(), 0, List.of()));
-        LogsProviderRouter router = new LogsProviderRouter(List.of(local, external));
+        LogsProviderRouter router = new LogsProviderRouter(
+                List.of(local, external), OpsPilotTracing.using(Tracer.NOOP));
         LocalDateTime now = LocalDateTime.of(2026, 8, 31, 18, 0);
 
         LogsProvider.LogsResult result = router.query(new LogsProvider.LogsQuery(

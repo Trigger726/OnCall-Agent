@@ -3,6 +3,8 @@ package org.trigger.opspilot.investigation;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.task.TaskRejectedException;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import io.micrometer.tracing.Tracer;
+import org.trigger.opspilot.observability.tracing.OpsPilotTracing;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.CountDownLatch;
@@ -19,7 +21,8 @@ class AgentExecutionManagerTest {
         executor.setMaxPoolSize(1);
         executor.setQueueCapacity(0);
         executor.initialize();
-        AgentExecutionManager manager = new AgentExecutionManager(executor);
+        AgentExecutionManager manager = new AgentExecutionManager(
+                executor, OpsPilotTracing.using(Tracer.NOOP));
         CountDownLatch started = new CountDownLatch(1);
         CountDownLatch interrupted = new CountDownLatch(1);
 
@@ -55,7 +58,8 @@ class AgentExecutionManagerTest {
         executor.setMaxPoolSize(1);
         executor.setQueueCapacity(1);
         executor.initialize();
-        AgentExecutionManager manager = new AgentExecutionManager(executor);
+        AgentExecutionManager manager = new AgentExecutionManager(
+                executor, OpsPilotTracing.using(Tracer.NOOP));
         CountDownLatch activeStarted = new CountDownLatch(1);
         CountDownLatch activeRelease = new CountDownLatch(1);
         CountDownLatch queuedStarted = new CountDownLatch(1);

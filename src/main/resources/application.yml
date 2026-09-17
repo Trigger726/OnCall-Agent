@@ -40,6 +40,13 @@ spring:
           model: ${RUNBOOK_EMBEDDING_MODEL:text-embedding-v4}
 
 management:
+  tracing:
+    enabled: ${OTEL_TRACING_ENABLED:false}
+    sampling:
+      probability: ${OTEL_TRACING_SAMPLING_PROBABILITY:1.0}
+  otlp:
+    tracing:
+      endpoint: ${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:http://localhost:4318/v1/traces}
   health:
     redis:
       enabled: ${AGENT_OUTBOX_ENABLED:false}

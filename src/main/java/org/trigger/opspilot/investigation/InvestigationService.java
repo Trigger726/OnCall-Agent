@@ -18,6 +18,7 @@ import org.trigger.opspilot.common.ApiException;
 import org.trigger.opspilot.incident.IncidentService;
 import org.trigger.opspilot.investigation.tool.InvestigationTool;
 import org.trigger.opspilot.investigation.tool.InvestigationTool.ToolEvidence;
+import org.trigger.opspilot.observability.tracing.OpsPilotTracing;
 import org.trigger.opspilot.remediation.RemediationProposalService;
 
 import java.math.BigDecimal;
@@ -45,6 +46,7 @@ public class InvestigationService {
     private final AgentRunEventService agentRunEventService;
     private final RemediationProposalService remediationProposalService;
     private final TransactionTemplate transactionTemplate;
+    private final OpsPilotTracing tracing;
     private final List<InvestigationTool> tools;
     private final Duration defaultExecutionTimeout;
     private final Duration maxExecutionTimeout;
@@ -56,6 +58,7 @@ public class InvestigationService {
                                 AgentRunEventService agentRunEventService,
                                 RemediationProposalService remediationProposalService,
                                 TransactionTemplate transactionTemplate,
+                                OpsPilotTracing tracing,
                                 List<InvestigationTool> tools,
                                 @Value("${opspilot.agent.execution-timeout:60s}") Duration defaultExecutionTimeout,
                                 @Value("${opspilot.agent.max-execution-timeout:5m}") Duration maxExecutionTimeout) {
@@ -68,6 +71,7 @@ public class InvestigationService {
         this.agentRunEventService = agentRunEventService;
         this.remediationProposalService = remediationProposalService;
         this.transactionTemplate = transactionTemplate;
+        this.tracing = tracing;
         this.tools = tools.stream().sorted(Comparator.comparingInt(InvestigationTool::order)).toList();
         this.defaultExecutionTimeout = defaultExecutionTimeout;
         this.maxExecutionTimeout = maxExecutionTimeout;
@@ -113,6 +117,11 @@ public class InvestigationService {
 
     public InvestigationResult execute(PreparedRun prepared, RunActor actor,
                                        AgentRunEventService.EventSink eventSink) {
+        return tracing.traceAgentRun(prepared, () -> executeTraced(prepared, actor, eventSink));
+    }
+
+    private InvestigationResult executeTraced(PreparedRun prepared, RunActor actor,
+                                               AgentRunEventService.EventSink eventSink) {
         long incidentId = prepared.incidentId();
         String triggerSource = prepared.triggerSource();
         IncidentService.IncidentDetail detail = incidentService.get(incidentId);
@@ -151,8 +160,8 @@ public class InvestigationService {
                 recordEvent(runId, "STEP_STARTED", "EXECUTE", tool.name(), "RUNNING",
                         Map.of("stepSequence", stepSequence, "title", tool.title()), eventSink);
                 try {
-                    InvestigationTool.ToolResult result = tool.execute(
-                            detail, new InvestigationTool.ToolContext(actor.userId()));
+                    InvestigationTool.ToolResult result = tracing.traceAgentTool(runId, incidentId, tool,
+                            () -> tool.execute(detail, new InvestigationTool.ToolContext(actor.userId())));
                     checkControl(runId);
                     evidence.addAll(result.evidence());
                     LocalDateTime completedAt = LocalDateTime.now();

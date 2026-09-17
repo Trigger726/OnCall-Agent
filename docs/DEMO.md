@@ -142,6 +142,8 @@ checkpoint 04 边界加演：将服务名和告警标题分别设到 128 字、2
 
 checkpoint 05 工程加演：展示真实 MySQL 双事务测试。旧方案在唯一键冲突后执行普通回读，REPEATABLE READ 旧快照看不到赢家记录；第一版仅把主键查询改成加锁当前读，真实 CI 又揭示后续普通查询仍沿用旧快照；最终版用 `REQUIRES_NEW` 新事务覆盖完整冲突恢复。测试先让两个事务都确认候选未登记，再同时放行，最终应得到一创一复用、同一 Problem 主键、两条 Incident 关联和两条时间线。这个加演用于讲数据库隔离级别、失败驱动修复与幂等设计，不替代上面的产品页面演示。
 
+checkpoint 21 Trace 加演：在受控环境启用 OTLP，展示一条告警接入 span 与一条 `HTTP -> agent.run -> agent.tool -> provider.query` 链路。展开 attribute 时只应看到 Alert/Incident/run/report ID、来源、工具/Provider 和状态；不应看到告警标题、描述、labels、PromQL/LogQL、Token 或 IP。如果没有可用 Collector，只展示自动化导出契约和父子 ID 断言，不用手工伪造截图；历史页面 Demo 继续保留。
+
 ## 8:50 - 9:20 值班与升级
 
 打开“值班与升级”：

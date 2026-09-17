@@ -255,6 +255,7 @@ cmdb_resource 1---n escalation_policy 1---n escalation_step
 - `/actuator/health`：存活与依赖健康。
 - `/actuator/prometheus`：JVM、HTTP、连接池等指标。
 - `/api/v1/observability/providers`：Provider 启用状态、优先级和熔断状态。
+- Micrometer Tracing 以 OpenTelemetry bridge 串联 HTTP 请求、告警接入、异步 Agent run、工具步骤和 Provider 调用；启用时通过 OTLP/HTTP 导出。
 - API 错误统一返回 `success/data/error/timestamp`。
 - 参数错误返回 400，认证失败 401，权限不足 403，状态/版本冲突 409。
 - AI 不可用不影响告警、Incident 和审计主链路。
@@ -264,6 +265,10 @@ cmdb_resource 1---n escalation_policy 1---n escalation_step
 - Prometheus/Loki 失败由超时、重试、跨请求熔断和本地 Provider 降级保护；日志进入证据链前脱敏。
 - 高风险提案只能独立审批，使用 RBAC、自批禁止和乐观锁保护；审批不会自动触发生产变更。
 - 逾期扫描使用唯一事实、行锁和幂等时间线/审计；内部升级不冒充外部通知送达。
+
+Trace 只记录受控业务字段：Alert/Incident/run/report ID、来源、严重级别、触发方式、工具/Provider 名称、结果状态与证据数。其中业务 ID 本身仍是高基数 attribute，仅用于 trace 检索，不转成 metrics label。告警标题/描述、labels、PromQL/LogQL、Token、Authorization 和 IP 不进入 span attribute。`AgentExecutionManager` 在提交前捕获当前 HTTP span，工作线程在其 scope 内创建 run span，因此原请求 span 先结束也不会断链；无父 span 时 run 自然成为新根。
+
+默认 `OTEL_TRACING_ENABLED=false`，保持零外部依赖演示；部署时显式配置 Collector endpoint 和采样率。当前自动化已验证真实 OpenTelemetry SDK exporter 收到正确 trace/span/parent ID 与标签，但尚未将真实 Collector 存储、查询 UI、采样和保留策略纳入集成门禁。实现依据 [Spring Boot 3.2 Tracing](https://docs.spring.io/spring-boot/docs/3.2.x/reference/html/actuator.html#actuator.micrometer-tracing) 和 [Micrometer Tracing API](https://docs.micrometer.io/tracing/reference/api.html)，导出配置遵循 [OpenTelemetry Java SDK exporter](https://opentelemetry.io/docs/languages/java/exporters/)。
 
 ## 10. 交付与回归门禁
 

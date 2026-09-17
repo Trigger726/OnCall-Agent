@@ -15,6 +15,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 - Agent 运行控制：同一 Incident 使用幂等键抑制重复 run；任务先进入有界队列，可显式取消并受持久化截止时间预算约束；取消、超时和队列拒绝都形成可回放的持久化终态，执行 JVM 崩溃后由存活实例幂等结算逾期孤儿 run。
 - Runbook 知识库：Markdown/PDF 入库、内容哈希幂等、不可变版本、角色 ACL 和标题分块；本地 BM25 与可选 DashScope 向量召回通过 RRF 融合，返回 `runbook:{stableKey}:v{version}#chunk-{index}` 稳定引用。向量未启用、覆盖不足或 Provider 失败时显式降级 BM25；真实检索快照在入库前脱敏并按可配置保留期自动擦除，提交人与复核人分别给出 0–3 级评分，复核前隐藏原始等级，并以线性加权 Cohen's kappa 量化一致性；批准后的分级 qrels 在原快照清理后仍可按唯一查询计算 Recall@3、MRR、NDCG@3 和引用命中率。
 - 可观测数据适配：统一 Metrics/Logs Provider SPI；默认使用可复现的本地证据库，可选调用 Prometheus 与 Loki HTTP API，外部失败后自动重试、熔断并降级到本地证据。
+- 端到端调查 Trace：基于 Micrometer Tracing + OpenTelemetry，从告警接入串联异步 Agent run、工具步骤和指标/日志 Provider；仅写入业务 ID、状态和类型标签，不将告警正文、查询表达式或凭证放入 span。
 - 证据报告：规则引擎离线生成假设、置信度和建议，可选 DashScope 生成受约束摘要；单工具失败时保留其他证据并降级为部分完成。
 - OnCall 助手：持久化多轮会话、SSE 流式输出、Incident 上下文绑定、证据引用、会话清空/删除和 Markdown 导出。
 - 受控处置：高置信度变更关联可生成回滚草案；管理员或运维经理独立审批，禁止申请人自批，并用乐观锁防止并发覆盖。审批只解除治理门禁，不自动修改生产环境。
@@ -32,7 +33,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 | AI | Spring AI Alibaba / DashScope，可选启用 |
 | 数据 | H2 本地零配置，MySQL 8.4 生产化部署 |
 | 前端 | Vue 3, TypeScript, Vite, Vue Router, Lucide |
-| 可观测性 | Spring Boot Actuator, Micrometer, Prometheus, Loki |
+| 可观测性 | Spring Boot Actuator, Micrometer, OpenTelemetry/OTLP, Prometheus, Loki |
 | 工程化 | Maven Wrapper, Docker multi-stage build, Docker Compose, JUnit 5, MockMvc, Testcontainers, GitHub Actions |
 
 ## 架构
@@ -180,6 +181,18 @@ LOKI_BEARER_TOKEN=your-token
 ```
 
 Loki Provider 使用 `query_range` 查询故障时间窗，支持租户头和 Bearer Token，解析 stream labels 与常见 JSON 日志字段，并在形成证据前脱敏。Loki 超时、协议异常或熔断时会切换本地日志 Provider；实际 Provider 和 warning 均写入步骤轨迹。外部凭证只通过环境变量注入，不进入状态接口或调查报告。
+
+## OpenTelemetry Trace
+
+本地演示默认关闭 Trace 导出，不因 Collector 缺失产生网络噪声。部署环境可启用 OTLP/HTTP：
+
+```bash
+OTEL_TRACING_ENABLED=true
+OTEL_TRACING_SAMPLING_PROBABILITY=0.1
+OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4318/v1/traces
+```
+
+业务 span 固定为 `opspilot.alert.intake`、`opspilot.agent.run`、`opspilot.agent.tool`、`opspilot.provider.query`。Spring Boot 自动创建的 HTTP span 是根链路；调查进入有界线程池前捕获当前 span，因此客户端请求结束后才开始的工作线程仍保留同一 traceId。生产采样率需按流量与成本调整，`1.0` 只适合受控验收。
 
 ## Agent 运行控制
 

@@ -4,6 +4,7 @@ import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
+import org.trigger.opspilot.observability.tracing.OpsPilotTracing;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -18,12 +19,15 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class AgentExecutionManager {
     private final ThreadPoolTaskExecutor executor;
+    private final OpsPilotTracing tracing;
     private final ScheduledExecutorService deadlineExecutor;
     private final ConcurrentMap<Long, ManagedTask> tasks = new ConcurrentHashMap<>();
 
     public AgentExecutionManager(
-            @Qualifier("agentTaskExecutor") ThreadPoolTaskExecutor executor) {
+            @Qualifier("agentTaskExecutor") ThreadPoolTaskExecutor executor,
+            OpsPilotTracing tracing) {
         this.executor = executor;
+        this.tracing = tracing;
         this.deadlineExecutor = Executors.newSingleThreadScheduledExecutor(runnable -> {
             Thread thread = new Thread(runnable, "opspilot-agent-deadline");
             thread.setDaemon(true);
@@ -33,9 +37,10 @@ public class AgentExecutionManager {
 
     public void submit(long runId, LocalDateTime deadlineAt, Runnable runnable, Runnable onDeadline) {
         ManagedTask managed = new ManagedTask();
+        Runnable tracedRunnable = tracing.capture(runnable);
         managed.future = new FutureTask<>(() -> {
             try {
-                runnable.run();
+                tracedRunnable.run();
             } finally {
                 remove(runId, managed);
             }
