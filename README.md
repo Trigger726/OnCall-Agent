@@ -15,7 +15,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 - Agent 运行控制：同一 Incident 使用幂等键抑制重复 run；任务先进入有界队列，可显式取消并受持久化截止时间预算约束；取消、超时和队列拒绝都形成可回放的持久化终态，执行 JVM 崩溃后由存活实例幂等结算逾期孤儿 run。
 - Runbook 知识库：Markdown/PDF 入库、内容哈希幂等、不可变版本、角色 ACL 和标题分块；本地 BM25 与可选 DashScope 向量召回通过 RRF 融合，返回 `runbook:{stableKey}:v{version}#chunk-{index}` 稳定引用。向量未启用、覆盖不足或 Provider 失败时显式降级 BM25；真实检索快照在入库前脱敏并按可配置保留期自动擦除，提交人与复核人分别给出 0–3 级评分，复核前隐藏原始等级，并以线性加权 Cohen's kappa 量化一致性；批准后的分级 qrels 在原快照清理后仍可按唯一查询计算 Recall@3、MRR、NDCG@3 和引用命中率。
 - 可观测数据适配：统一 Metrics/Logs Provider SPI；默认使用可复现的本地证据库，可选调用 Prometheus 与 Loki HTTP API，外部失败后自动重试、熔断并降级到本地证据。
-- 端到端调查 Trace：基于 Micrometer Tracing + OpenTelemetry，从告警接入串联异步 Agent run、工具步骤和指标/日志 Provider；仅写入业务 ID、状态和类型标签，不将告警正文、查询表达式或凭证放入 span。
+- 端到端调查 Trace：基于 Micrometer Tracing + OpenTelemetry，从告警接入串联异步 Agent run、工具步骤和指标/日志 Provider；Prometheus/Loki 出站请求使用 Spring Boot 管理的 `RestClient.Builder` 自动创建 HTTP client span 并注入 W3C `traceparent`；仅写入业务 ID、状态和类型标签，不将告警正文、查询表达式或凭证放入 span。
 - 证据报告：规则引擎离线生成假设、置信度和建议，可选 DashScope 生成受约束摘要；单工具失败时保留其他证据并降级为部分完成。
 - OnCall 助手：持久化多轮会话、SSE 流式输出、Incident 上下文绑定、证据引用、会话清空/删除和 Markdown 导出。
 - 受控处置：高置信度变更关联可生成回滚草案；管理员或运维经理独立审批，禁止申请人自批，并用乐观锁防止并发覆盖。审批只解除治理门禁，不自动修改生产环境。
@@ -206,7 +206,7 @@ OTEL_TRACING_SAMPLING_PROBABILITY=0.1
 OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4318/v1/traces
 ```
 
-业务 span 固定为 `opspilot.alert.intake`、`opspilot.agent.run`、`opspilot.agent.tool`、`opspilot.provider.query`。Spring Boot 自动创建的 HTTP span 是根链路；调查进入有界线程池前捕获当前 span，因此客户端请求结束后才开始的工作线程仍保留同一 traceId。生产采样率需按流量与成本调整，`1.0` 只适合受控验收。
+业务 span 固定为 `opspilot.alert.intake`、`opspilot.agent.run`、`opspilot.agent.tool`、`opspilot.provider.query`。Spring Boot 自动创建的入站 HTTP span 是根链路；调查进入有界线程池前捕获当前 span，因此客户端请求结束后才开始的工作线程仍保留同一 traceId。Prometheus/Loki Provider 注入 Boot 预配置的 `RestClient.Builder`，出站请求会在 `opspilot.provider.query` 下生成 HTTP client span，并以 W3C `traceparent` 把同一 traceId 传播给下游。生产采样率需按流量与成本调整，`1.0` 只适合受控验收。
 
 仓库的独立 Trace 门禁会启动 OpsPilot、Collector、Tempo 和 Grafana，提交真实告警并执行六工具调查，再用 TraceQL 按 run ID 找回链路，通过 Grafana 数据源代理读取同一 trace，断言 `1 run -> 6 tool -> 2 provider` 的父子关系，并确认哨兵告警正文未进入导出数据。同一门禁还会停止 Tempo 后再执行一次调查：业务必须仍完成且应用健康，Collector 必须记录真实导出失败，Tempo 在 60 秒重试窗口内恢复后必须能读回同一 run 的完整 trace：
 
@@ -214,7 +214,7 @@ OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4318/v1/traces
 bash scripts/verify-tracing-pipeline.sh
 ```
 
-脚本使用隔离的 Compose project/volume 并在退出时清理，不会删除日常 `docker compose up` 使用的 MySQL 数据卷。当前证据只覆盖 Tempo 短暂停机且 Collector 进程存活的场景；内存队列不支持 Collector 重启后的零丢失承诺。
+脚本使用隔离的 Compose project/volume 并在退出时清理，不会删除日常 `docker compose up` 使用的 MySQL 数据卷。独立集成测试还用两个真实本机 HTTP 端点验证 Prometheus/Loki 收到的 W3C `traceparent` 与导出的 HTTP client span 一一对应，层级为 `root -> opspilot.provider.query -> HTTP client`。当前证据只覆盖出站协议传播以及 Tempo 短暂停机且 Collector 进程存活的场景；尚未验证真实下游服务继续创建 server span，内存队列也不支持 Collector 重启后的零丢失承诺。
 
 ## Agent 运行控制
 

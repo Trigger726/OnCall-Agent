@@ -177,7 +177,7 @@ Agent 调查事件是执行过程中逐步产生的真实事件，先写 `agent_
 
 ### Agent 进入异步线程池后，Trace 为什么不会断？
 
-HTTP 线程在把任务交给有界执行器前捕获当前 Micrometer `Span`，worker 在该 span scope 内创建 `opspilot.agent.run`，然后工具和 Provider 逐层成为子 span。OpenTelemetry span 结束后其 context 仍可作为后续父上下文，所以 HTTP 响应先返回也能保持 traceId。SDK 测试专门在根 span 结束后才启动 worker 并断言四层 ID；独立容器门禁再把真实调查经 Collector 写入 Tempo，用 TraceQL 按 run ID 找回并经 Grafana 数据源代理读回。故障场景中 Tempo 在调查期间被停止，调查仍完成且应用健康，Collector 观察到连接拒绝并在 Tempo 重启后完成导出。无当前 span 时不强行 scope `null`，run 作为新根。跨服务 W3C 传播、生产采样和 Collector 重启后持久队列仍需独立验收。
+HTTP 线程在把任务交给有界执行器前捕获当前 Micrometer `Span`，worker 在该 span scope 内创建 `opspilot.agent.run`，然后工具和 Provider 逐层成为子 span。OpenTelemetry span 结束后其 context 仍可作为后续父上下文，所以 HTTP 响应先返回也能保持 traceId。SDK 测试专门在根 span 结束后才启动 worker 并断言四层 ID；独立容器门禁再把真实调查经 Collector 写入 Tempo，用 TraceQL 按 run ID 找回并经 Grafana 数据源代理读回。故障场景中 Tempo 在调查期间被停止，调查仍完成且应用健康，Collector 观察到连接拒绝并在 Tempo 重启后完成导出。Prometheus/Loki 不能直接调用 `RestClient.builder()`，否则绕过 Boot 的观测定制器；现在注入自动配置 builder，协议测试证明两个下游收到同一 traceId 的 W3C `traceparent`，header spanId 正好对应导出的 HTTP client span，层级是 `provider.query -> client`。无当前 span 时不强行 scope `null`，run 作为新根。真实下游 server span、生产采样和 Collector 重启后持久队列仍需独立验收。
 
 ### 高风险处置为什么禁止发起人自批？
 
@@ -195,7 +195,7 @@ Agent 结论和发起操作可能共享同一个人的判断，独立审批可�
 - Runbook 已具备可选 Embedding、持久化向量、RRF、盲化双评分、线性加权 κ、分级 NDCG，以及主库快照写前脱敏与定时保留期擦除，但默认未启用真实 Provider；13 条仍是种子集，隔离 QA 的双评分也不是历史生产标注，未证明真实 Embedding 或 cross-encoder rerank 优于 BM25。当前一致性只支持两名标注人且没有第三方仲裁；快照治理尚未覆盖备份/导出副本、按租户差异化策略和用户级删除请求，当前向量查询为内存全量余弦，不适合大语料；PDF 只支持可提取文本，不做 OCR。
 - AI 模式需要外部 DashScope Key，默认演示采用规则引擎。
 - 已提供 Prometheus 与 Loki HTTP 适配器，但默认演示关闭外部依赖；当前通过协议级本地 HTTP 契约测试验证，尚未与真实生产集群联调和压测。
-- OpenTelemetry 业务 span、异步上下文和真实 SDK exporter 契约已验证；可选 Compose 已包含 Collector、Tempo 和 Grafana，正常读回与 Tempo 短暂停机恢复的真实通过状态以 checkpoint-23 为准。仍未验证跨服务 W3C 传播、生产采样成本、对象存储保留和 Collector 重启后持久队列。
+- OpenTelemetry 业务 span、异步上下文和真实 SDK exporter 契约已验证；可选 Compose 已包含 Collector、Tempo 和 Grafana，正常读回与 Tempo 短暂停机恢复的真实通过状态以 checkpoint-23 为准；checkpoint-24 已验证向 Prometheus/Loki 的 W3C 出站传播和 client span 层级。仍未验证真实下游 server span/跨服务 Tempo 拼接、生产采样成本、对象存储保留和 Collector 重启后持久队列。
 - Agent 步骤已经使用持久化实时 SSE 和游标回放；对话仍是完整回答落库后的协议分块，尚未做到模型 Provider 原生 token 流。
 - Agent 事件已通过 outbox + Redis Streams + 数据库补读支持跨实例广播，崩溃孤儿 run 可在持久化 deadline 后收敛到终态；但工具链仍不会跨节点续跑，也没有执行租约/fencing token 或 exactly-once 保证。
 - 处置审批已完成治理闭环，但尚未接 Argo CD、Ansible、Kubernetes 等生产执行器。

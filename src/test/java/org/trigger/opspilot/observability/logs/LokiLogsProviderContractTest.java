@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.client.RestClient;
 import org.trigger.opspilot.observability.LogRedactor;
 import org.trigger.opspilot.observability.ObservabilityProperties;
 import org.trigger.opspilot.observability.ProviderGuard;
@@ -39,7 +40,7 @@ class LokiLogsProviderContractTest {
         try {
             ObservabilityProperties properties = properties(server.getAddress().getPort());
             LokiLogsProvider provider = new LokiLogsProvider(properties, new ProviderGuard(properties),
-                    new ObjectMapper(), new LogRedactor());
+                    new ObjectMapper(), new LogRedactor(), RestClient.builder());
             LocalDateTime start = LocalDateTime.of(2026, 8, 19, 8, 32);
             LocalDateTime end = LocalDateTime.of(2026, 8, 19, 9, 46);
 

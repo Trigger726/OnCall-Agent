@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.client.RestClient;
 import org.trigger.opspilot.observability.ObservabilityProperties;
 import org.trigger.opspilot.observability.ProviderGuard;
 
@@ -37,7 +38,7 @@ class PrometheusMetricsProviderContractTest {
         try {
             ObservabilityProperties properties = properties(server.getAddress().getPort());
             PrometheusMetricsProvider provider = new PrometheusMetricsProvider(
-                    properties, new ProviderGuard(properties), new ObjectMapper());
+                    properties, new ProviderGuard(properties), new ObjectMapper(), RestClient.builder());
 
             MetricsProvider.MetricsResult result = provider.query(new MetricsProvider.MetricsQuery(
                     1, 1, "APP-SETTLEMENT", "统一结算服务",

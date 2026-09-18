@@ -23,8 +23,11 @@
 | V1.7 | 21：OpenTelemetry 异步调查链路 | 通过，本地 85 项回归、前端/JAR 与远端六项 CI 已闭环 | [V1.7-checkpoint-21.md](V1.7-checkpoint-21.md) |
 | V1.7 | 22：Collector、Tempo 与 Grafana Trace 闭环 | 通过，失败诊断、修复、TraceQL/Grafana 读回与远端七项 CI 闭环 | [V1.7-checkpoint-22.md](V1.7-checkpoint-22.md) |
 | V1.7 | 23：Tempo 短暂故障与 Trace 恢复 | 通过，业务隔离、真实导出失败与有界 Trace 恢复闭环 | [V1.7-checkpoint-23.md](V1.7-checkpoint-23.md) |
+| V1.7 | 24：Provider W3C Trace Context 传播 | 部分通过，本地协议/层级测试、86 项回归与 JAR 已通过，远端七项 CI 待复验 | [V1.7-checkpoint-24.md](V1.7-checkpoint-24.md) |
 
 ## 状态约定
+
+最新 W3C 出站传播：[V1.7-checkpoint-24.md](V1.7-checkpoint-24.md)：Prometheus/Loki 使用 Boot 管理的 `RestClient.Builder`，两个真实本机 HTTP 端点已验证 `traceparent`、client span 和父子层级；真实下游 server span 与跨服务 Tempo 拼接仍待验。
 
 最新 Trace 故障恢复：[V1.7-checkpoint-23.md](V1.7-checkpoint-23.md)：Tempo 停机期间调查仍完成且应用健康，Collector 真实观察到连接拒绝，后端恢复后同一 run 的 `1/6/2` span 与父子层级可查；不声明 Collector 重启后零丢失。
 

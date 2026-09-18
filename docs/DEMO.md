@@ -175,6 +175,18 @@ checkpoint 23 故障恢复加演：执行同一个 `scripts/verify-tracing-pipel
 
 checkpoint 21/22 的 SDK 与正常存储演示继续保留，checkpoint 23 是故障反例与恢复对照，不替换它们。
 
+checkpoint 24 W3C 传播加演：运行 `HttpTracePropagationIntegrationTest`。测试启动两个真实本机 HTTP 端点模拟 Prometheus 与 Loki，在同一个 sampled root 下发起 Provider 查询；先展示修复前两个端点收到的 `traceparent` 都是 `null`，再展示改为注入 Spring Boot 自动配置的 `RestClient.Builder` 后，两个端点分别收到 `00-<root traceId>-<client spanId>-01`。最终断言导出数据中恰有两个 `opspilot.provider.query` 和两个 HTTP client span，每个 client 的 parent 都是对应 Provider span，header 的 spanId 与 client span 一一对应。
+
+| 对比项 | checkpoint 23 及以前 | checkpoint 24 |
+| --- | --- | --- |
+| Provider HTTP 客户端 | 直接 `RestClient.builder()` | 注入 Boot 预配置的 prototype builder |
+| 出站上下文 | Provider span 只在 OpsPilot 进程内 | Prometheus/Loki 请求携带 W3C `traceparent` |
+| 自动化证据 | Tempo 内 `provider.query` 可查 | 两个真实 TCP 端点 + 导出 client span 双向核对 |
+| 层级 | `tool -> provider.query` | `tool -> provider.query -> HTTP client` |
+| 边界 | 单服务 Trace 与存储恢复 | 尚未证明真实下游 server span 或跨服务 Tempo 拼接 |
+
+checkpoint 21/22/23 的 SDK、真实存储与故障恢复演示全部继续保留；本轮只补上出站传播缺口，不把模拟 HTTP 服务表述为生产 Prometheus/Loki 联调。
+
 ## 8:50 - 9:20 值班与升级
 
 打开“值班与升级”：

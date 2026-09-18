@@ -37,7 +37,8 @@ public class LokiLogsProvider implements LogsProvider {
     public LokiLogsProvider(ObservabilityProperties properties,
                             ProviderGuard providerGuard,
                             ObjectMapper objectMapper,
-                            LogRedactor redactor) {
+                            LogRedactor redactor,
+                            RestClient.Builder restClientBuilder) {
         this.properties = properties.getLoki();
         this.providerGuard = providerGuard;
         this.objectMapper = objectMapper;
@@ -45,7 +46,7 @@ public class LokiLogsProvider implements LogsProvider {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout((int) this.properties.getConnectTimeout().toMillis());
         requestFactory.setReadTimeout((int) this.properties.getReadTimeout().toMillis());
-        RestClient.Builder builder = RestClient.builder()
+        RestClient.Builder builder = restClientBuilder
                 .baseUrl(normalizeBaseUrl(this.properties.getBaseUrl()))
                 .requestFactory(requestFactory);
         if (!blank(this.properties.getTenantId())) {

@@ -255,7 +255,7 @@ cmdb_resource 1---n escalation_policy 1---n escalation_step
 - `/actuator/health`：存活与依赖健康。
 - `/actuator/prometheus`：JVM、HTTP、连接池等指标。
 - `/api/v1/observability/providers`：Provider 启用状态、优先级和熔断状态。
-- Micrometer Tracing 以 OpenTelemetry bridge 串联 HTTP 请求、告警接入、异步 Agent run、工具步骤和 Provider 调用；启用时通过 OTLP/HTTP 导出。
+- Micrometer Tracing 以 OpenTelemetry bridge 串联 HTTP 请求、告警接入、异步 Agent run、工具步骤和 Provider 调用；Prometheus/Loki 复用 Spring Boot 管理的 `RestClient.Builder` 创建 HTTP client span 并注入 W3C `traceparent`；启用时通过 OTLP/HTTP 导出。
 - API 错误统一返回 `success/data/error/timestamp`。
 - 参数错误返回 400，认证失败 401，权限不足 403，状态/版本冲突 409。
 - AI 不可用不影响告警、Incident 和审计主链路。
@@ -268,7 +268,7 @@ cmdb_resource 1---n escalation_policy 1---n escalation_step
 
 Trace 只记录受控业务字段：Alert/Incident/run/report ID、来源、严重级别、触发方式、工具/Provider 名称、结果状态与证据数。其中业务 ID 本身仍是高基数 attribute，仅用于 trace 检索，不转成 metrics label。告警标题/描述、labels、PromQL/LogQL、Token、Authorization 和 IP 不进入 span attribute。`AgentExecutionManager` 在提交前捕获当前 HTTP span，工作线程在其 scope 内创建 run span，因此原请求 span 先结束也不会断链；无父 span 时 run 自然成为新根。
 
-默认 `OTEL_TRACING_ENABLED=false`，保持零外部依赖演示；部署时显式配置 Collector endpoint 和采样率。可选 Compose profile 形成 `OpsPilot -> OTLP/HTTP -> OpenTelemetry Collector -> OTLP/gRPC -> Tempo -> Grafana` 链路：Collector 在入口使用 memory limiter 与 batch，在出口启用有界发送队列和指数退避；Tempo 的本地后端仅保留 24 小时，定位为开发/验收环境，不冒充生产对象存储集群。独立门禁会通过真实告警和 Agent 调查生成 TraceQL 可检索链路，再经 Grafana 数据源代理读回同一 trace；它还会停止 Tempo，直接证明调查与应用健康不受下游故障影响，并在后端恢复后读回 Collector 重试成功的完整 trace。最新实际结果以 checkpoint-23 验收报告为准。这仅覆盖 Collector 存活期间的 Tempo 短暂停机；尚未验证跨服务 W3C 传播、Collector 重启后持久队列、对象存储与生产采样成本。实现依据 [Spring Boot 3.2 Tracing](https://docs.spring.io/spring-boot/docs/3.2.x/reference/html/actuator.html#actuator.micrometer-tracing)、[OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) 与 [Tempo HTTP API](https://grafana.com/docs/tempo/latest/api_docs/)。
+默认 `OTEL_TRACING_ENABLED=false`，保持零外部依赖演示；部署时显式配置 Collector endpoint 和采样率。可选 Compose profile 形成 `OpsPilot -> OTLP/HTTP -> OpenTelemetry Collector -> OTLP/gRPC -> Tempo -> Grafana` 链路：Collector 在入口使用 memory limiter 与 batch，在出口启用有界发送队列和指数退避；Tempo 的本地后端仅保留 24 小时，定位为开发/验收环境，不冒充生产对象存储集群。独立门禁会通过真实告警和 Agent 调查生成 TraceQL 可检索链路，再经 Grafana 数据源代理读回同一 trace；它还会停止 Tempo，直接证明调查与应用健康不受下游故障影响，并在后端恢复后读回 Collector 重试成功的完整 trace。checkpoint-24 另以真实 TCP HTTP 端点证明 Prometheus/Loki 出站请求携带同一 traceId 的 W3C `traceparent`，header 中的 spanId 与导出的 HTTP client span 匹配，且 client span 是 `opspilot.provider.query` 的子节点。这仍只是协议级出站传播，不等同于真实 Prometheus/Loki 服务端创建 server span 或在 Tempo 中完成跨服务拼接；Collector 重启后持久队列、对象存储与生产采样成本也尚未验证。实现依据 [Spring Boot 3.2 RestClient](https://docs.spring.io/spring-boot/docs/3.2.3/reference/htmlsingle/#io.rest-client.restclient), [Spring Boot 3.2 Tracing](https://docs.spring.io/spring-boot/docs/3.2.x/reference/html/actuator.html#actuator.micrometer-tracing)、[OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) 与 [Tempo HTTP API](https://grafana.com/docs/tempo/latest/api_docs/)。
 
 ## 10. 交付与回归门禁
 

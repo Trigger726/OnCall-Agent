@@ -29,14 +29,15 @@ public class PrometheusMetricsProvider implements MetricsProvider {
 
     public PrometheusMetricsProvider(ObservabilityProperties properties,
                                      ProviderGuard providerGuard,
-                                     ObjectMapper objectMapper) {
+                                     ObjectMapper objectMapper,
+                                     RestClient.Builder restClientBuilder) {
         this.properties = properties.getPrometheus();
         this.providerGuard = providerGuard;
         this.objectMapper = objectMapper;
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout((int) this.properties.getConnectTimeout().toMillis());
         requestFactory.setReadTimeout((int) this.properties.getReadTimeout().toMillis());
-        this.restClient = RestClient.builder()
+        this.restClient = restClientBuilder
                 .baseUrl(normalizeBaseUrl(this.properties.getBaseUrl()))
                 .requestFactory(requestFactory)
                 .build();
