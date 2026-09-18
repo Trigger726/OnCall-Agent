@@ -105,7 +105,7 @@
 - 检查点 10：Redis Streams 发送端已实现独立调度、XADD 标识通知、租约确认和指数退避；真实 Redis 与五项 CI 通过。
 - 检查点 09：V16/V17 已实现可选同事务 outbox、条件领取、租约到期重领与 token 保护，H2/MySQL 与四段式 CI 通过；Redis relay、自动退避、跨实例订阅与前端恢复仍待实现。
 - 跨实例实现决策见 [ADR-001](ADR-001-distributed-agent-events.md)：同事务 outbox + 独立 XREAD 广播 + 数据库补读 + 前端游标恢复。双 JVM HTTP SSE 正常链路、Redis pause 故障、Incident/OnCall 助手单实例浏览器刷新挂接已验收；执行 JVM 崩溃后的 deadline 终态结算已进入真实双进程 CI，任务自动迁移、完整故障矩阵与双实例浏览器演示仍未验收。
-- 检查点 24：Prometheus/Loki 改用 Spring Boot 自动配置的 `RestClient.Builder`，真实本机 HTTP 端点已验证 W3C `traceparent`、HTTP client span 与 `root -> provider.query -> client` 父子关系；本地 86 项回归与 JAR 已通过，远端七项 CI 待本次提交复验。真实下游 server span、跨服务 Tempo 拼接、生产采样/保留策略和 Collector 重启后持久队列仍待验。
+- 检查点 24：Prometheus/Loki 改用 Spring Boot 自动配置的 `RestClient.Builder`，真实本机 HTTP 端点已验证 W3C `traceparent`、HTTP client span 与 `root -> provider.query -> client` 父子关系；本地 86 项回归、JAR 与远端 Run 54 七项 CI 已通过。真实下游 server span、跨服务 Tempo 拼接、生产采样/保留策略和 Collector 重启后持久队列仍待验。
 - 检查点 01 已完成：已恢复/已关闭 Incident 可从当时的时间线、告警、调查报告和变更引用生成脱敏、不可漂移的无责复盘草稿；重复创建幂等。
 - 检查点 01 已完成：五类正文完备校验、至少一个有负责人/期限的防复发行动项、提交人禁止自审、退回修改、独立发布和发布后正文冻结；复盘与行动项均使用乐观锁并进入时间线和审计。
 - 检查点 01 已完成：H2 端到端、真实 MySQL 8.4 V1–V13、前端生产构建、最新 JAR，以及桌面/390px 移动端真实页面验收通过；历史 Demo 和 V1.6 对照保留。
