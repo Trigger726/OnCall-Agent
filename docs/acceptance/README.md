@@ -22,9 +22,11 @@
 | V1.7 | 05：MySQL 快照可见性与并发提升 | 通过，失败证据、H2/JAR、真实 MySQL 双事务、前端与容器门禁闭环 | [V1.7-checkpoint-05.md](V1.7-checkpoint-05.md) |
 | V1.7 | 21：OpenTelemetry 异步调查链路 | 通过，本地 85 项回归、前端/JAR 与远端六项 CI 已闭环 | [V1.7-checkpoint-21.md](V1.7-checkpoint-21.md) |
 | V1.7 | 22：Collector、Tempo 与 Grafana Trace 闭环 | 通过，失败诊断、修复、TraceQL/Grafana 读回与远端七项 CI 闭环 | [V1.7-checkpoint-22.md](V1.7-checkpoint-22.md) |
-| V1.7 | 23：Tempo 短暂故障与 Trace 恢复 | 实现中，业务隔离、导出失败与有界恢复门禁待验 | [V1.7-checkpoint-23.md](V1.7-checkpoint-23.md) |
+| V1.7 | 23：Tempo 短暂故障与 Trace 恢复 | 通过，业务隔离、真实导出失败与有界 Trace 恢复闭环 | [V1.7-checkpoint-23.md](V1.7-checkpoint-23.md) |
 
 ## 状态约定
+
+最新 Trace 故障恢复：[V1.7-checkpoint-23.md](V1.7-checkpoint-23.md)：Tempo 停机期间调查仍完成且应用健康，Collector 真实观察到连接拒绝，后端恢复后同一 run 的 `1/6/2` span 与父子层级可查；不声明 Collector 重启后零丢失。
 
 最新 Trace 存储与查询：[V1.7-checkpoint-22.md](V1.7-checkpoint-22.md)：可选 Collector/Tempo/Grafana profile 已通过真实 TraceQL/Grafana 读回、父子层级与敏感正文排除门禁；Run 50 远端七项 CI 全绿，失败与修复证据均已保留。
 

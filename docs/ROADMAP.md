@@ -77,7 +77,7 @@
 
 ## 进行中：V1.7 分布式事件与复盘指标
 
-- 检查点 23 进行中：在真实容器门禁中停止 Tempo，验证业务调查与应用健康不受影响，并在 Collector 的 60 秒有界重试窗口内验证 Trace 恢复；当前仅声明短暂下游故障，不扩大为 Collector 重启后零丢失。
+- 检查点 23 已完成：在真实容器门禁中停止 Tempo，验证业务调查与应用健康不受影响，Collector 真实观察到 gRPC `Unavailable/connection refused`，并在 60 秒有界重试窗口内恢复同一 run 的完整 Trace；Run 52 的精简结果已归档。结论仅覆盖短暂下游故障，不扩大为 Collector 重启后零丢失。
 
 - 检查点 22 已完成：可选 OpenTelemetry Collector + Tempo + Grafana Compose profile，以及真实告警、六工具调查、TraceQL 搜索、Grafana 数据源代理读回、父子层级和敏感正文排除门禁；Run 49 暴露的离线 Compose 密钥占位缺陷已修复，Run 50 远端七项 CI 全部通过。
 
@@ -105,7 +105,7 @@
 - 检查点 10：Redis Streams 发送端已实现独立调度、XADD 标识通知、租约确认和指数退避；真实 Redis 与五项 CI 通过。
 - 检查点 09：V16/V17 已实现可选同事务 outbox、条件领取、租约到期重领与 token 保护，H2/MySQL 与四段式 CI 通过；Redis relay、自动退避、跨实例订阅与前端恢复仍待实现。
 - 跨实例实现决策见 [ADR-001](ADR-001-distributed-agent-events.md)：同事务 outbox + 独立 XREAD 广播 + 数据库补读 + 前端游标恢复。双 JVM HTTP SSE 正常链路、Redis pause 故障、Incident/OnCall 助手单实例浏览器刷新挂接已验收；执行 JVM 崩溃后的 deadline 终态结算已进入真实双进程 CI，任务自动迁移、完整故障矩阵与双实例浏览器演示仍未验收。
-- 待补生产采样/保留策略、Collector/Tempo 故障恢复与跨服务 W3C 上下文传播门禁；开发态 Collector/Tempo/Grafana 查询链路按 checkpoint-22 的最新证据为准。
+- 待补生产采样/保留策略、Collector 重启后持久队列、队列容量/满载反馈与跨服务 W3C 上下文传播门禁；开发态 Collector/Tempo/Grafana 正常查询和 Tempo 短暂停机恢复分别以 checkpoint-22/23 的证据为准。
 - 检查点 01 已完成：已恢复/已关闭 Incident 可从当时的时间线、告警、调查报告和变更引用生成脱敏、不可漂移的无责复盘草稿；重复创建幂等。
 - 检查点 01 已完成：五类正文完备校验、至少一个有负责人/期限的防复发行动项、提交人禁止自审、退回修改、独立发布和发布后正文冻结；复盘与行动项均使用乐观锁并进入时间线和审计。
 - 检查点 01 已完成：H2 端到端、真实 MySQL 8.4 V1–V13、前端生产构建、最新 JAR，以及桌面/390px 移动端真实页面验收通过；历史 Demo 和 V1.6 对照保留。

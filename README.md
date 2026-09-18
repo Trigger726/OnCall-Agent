@@ -208,13 +208,13 @@ OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4318/v1/traces
 
 业务 span 固定为 `opspilot.alert.intake`、`opspilot.agent.run`、`opspilot.agent.tool`、`opspilot.provider.query`。Spring Boot 自动创建的 HTTP span 是根链路；调查进入有界线程池前捕获当前 span，因此客户端请求结束后才开始的工作线程仍保留同一 traceId。生产采样率需按流量与成本调整，`1.0` 只适合受控验收。
 
-仓库的独立 Trace 门禁会启动 OpsPilot、Collector、Tempo 和 Grafana，提交真实告警并执行六工具调查，再用 TraceQL 按 run ID 找回链路，通过 Grafana 数据源代理读取同一 trace，断言 `1 run -> 6 tool -> 2 provider` 的父子关系，并确认哨兵告警正文未进入导出数据：
+仓库的独立 Trace 门禁会启动 OpsPilot、Collector、Tempo 和 Grafana，提交真实告警并执行六工具调查，再用 TraceQL 按 run ID 找回链路，通过 Grafana 数据源代理读取同一 trace，断言 `1 run -> 6 tool -> 2 provider` 的父子关系，并确认哨兵告警正文未进入导出数据。同一门禁还会停止 Tempo 后再执行一次调查：业务必须仍完成且应用健康，Collector 必须记录真实导出失败，Tempo 在 60 秒重试窗口内恢复后必须能读回同一 run 的完整 trace：
 
 ```bash
 bash scripts/verify-tracing-pipeline.sh
 ```
 
-脚本使用隔离的 Compose project/volume 并在退出时清理，不会删除日常 `docker compose up` 使用的 MySQL 数据卷。
+脚本使用隔离的 Compose project/volume 并在退出时清理，不会删除日常 `docker compose up` 使用的 MySQL 数据卷。当前证据只覆盖 Tempo 短暂停机且 Collector 进程存活的场景；内存队列不支持 Collector 重启后的零丢失承诺。
 
 ## Agent 运行控制
 

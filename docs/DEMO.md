@@ -163,6 +163,18 @@ docker compose --profile tracing up --build -d
 
 这是一段新增工程加演，不替换 Incident、OnCall 助手、Redis 故障或历史 UI 新旧截图。
 
+checkpoint 23 故障恢复加演：执行同一个 `scripts/verify-tracing-pipeline.sh`，正常 trace 验证后脚本会停止 Tempo，再执行一次真实告警和六工具调查。演示时依次展示 `outage-app-health.json` 的 `UP`、`outage-collector.log` 的 `Exporting failed / connection refused` 和 `outage-result.json` 的恢复结果；不把简单停止/重启命令本身当作恢复证据。
+
+| 对比项 | checkpoint 22 | checkpoint 23 |
+| --- | --- | --- |
+| Tempo | 全程可用 | Agent 调查期间明确停机 |
+| 业务结果 | 正常调查完成 | 停机期间仍 `COMPLETED` 且应用 `UP` |
+| 故障真实性 | 无故障 | Collector 在故障时间窗记录真实连接拒绝 |
+| Trace 结果 | 立即可查 | Tempo 恢复后同一 run 最终可查且层级完整 |
+| 声明边界 | 正常链路 | 仅 Collector 存活的有界后端故障，非持久化零丢失 |
+
+checkpoint 21/22 的 SDK 与正常存储演示继续保留，checkpoint 23 是故障反例与恢复对照，不替换它们。
+
 ## 8:50 - 9:20 值班与升级
 
 打开“值班与升级”：

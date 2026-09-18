@@ -13,7 +13,7 @@
 - 设计可解释 Agent 调查编排，以 `PLAN-EXECUTE-REPLAN-FINISH` 驱动 6 个可插拔只读工具；持久化 Provider、查询范围、状态、证据引用、失败原因与耗时，支持单工具故障隔离和 `PARTIAL` 降级。
 - 实现“事件先落库、再 SSE 推送”的调查流；一次成功调查产生 18 条有序事件，并以数据库事件 ID 支持断线游标回放；使用有界线程池隔离异步任务，客户端断开不丢失后台调查结果。
 - 抽象 Metrics/Logs Provider SPI，实现 Prometheus instant query、Loki range query 与本地证据适配；支持 Loki 多租户/Token、结构化日志解析，并通过超时、重试、跨请求熔断、本地降级和敏感字段脱敏提升外部观测系统异常时的调查可用性。
-- 接入 Micrometer Tracing + OpenTelemetry/OTLP，将 HTTP 告警请求、异步 Agent run、6 个只读工具与 Metrics/Logs Provider 串为同一 trace；提供 Collector、Tempo、Grafana 可选部署，并以真实 TraceQL 查询和 Grafana 代理读回验证父子 ID、`1/6/2` span 数量及敏感正文排除。
+- 接入 Micrometer Tracing + OpenTelemetry/OTLP，将 HTTP 告警请求、异步 Agent run、6 个只读工具与 Metrics/Logs Provider 串为同一 trace；提供 Collector、Tempo、Grafana 可选部署，并以真实 TraceQL 查询和 Grafana 代理读回验证父子 ID、`1/6/2` span 数量及敏感正文排除；故障门禁还会停止 Tempo，证明调查业务隔离并在有界重试内恢复 trace。
 - 构建证据报告链路，自动关联告警、拓扑、指标、日志、故障窗口变更和 Runbook；支持离线规则结论及 DashScope 受约束摘要，模型不可用时自动降级。
 - 实现版本化 Runbook 知识库：Markdown/PDF 入库、内容哈希幂等、不可变版本、角色 ACL 与标题分块；构建模型版本绑定的持久化向量索引，以 RRF 融合 BM25/向量名次，并在索引残缺或 Provider 故障时显式降级。13 条固定种子集按引擎保存 Recall@3、MRR、NDCG@3、引用命中率、失败样例和 unavailable 原因。
 - 构建检索反馈治理闭环：真实查询和结果写库前统一脱敏，快照按可配置保留期批量擦除敏感载荷并记录审计；限制用户只能标注本人看到的文档，复核接口隐藏原始评分和提交人，以第二个 0–3 级评分形成最终 qrel，并计算精确一致率与线性加权 Cohen's kappa；清理后仍保留已复核的结构化评测样本。
@@ -177,7 +177,7 @@ Agent 调查事件是执行过程中逐步产生的真实事件，先写 `agent_
 
 ### Agent 进入异步线程池后，Trace 为什么不会断？
 
-HTTP 线程在把任务交给有界执行器前捕获当前 Micrometer `Span`，worker 在该 span scope 内创建 `opspilot.agent.run`，然后工具和 Provider 逐层成为子 span。OpenTelemetry span 结束后其 context 仍可作为后续父上下文，所以 HTTP 响应先返回也能保持 traceId。SDK 测试专门在根 span 结束后才启动 worker并断言四层 ID；独立容器门禁再把真实调查经 Collector 写入 Tempo，用 TraceQL 按 run ID 找回并经 Grafana 数据源代理读回。无当前 span 时不强行 scope `null`，run 作为新根。跨服务 W3C 传播、生产采样和后端故障恢复仍需独立验收。
+HTTP 线程在把任务交给有界执行器前捕获当前 Micrometer `Span`，worker 在该 span scope 内创建 `opspilot.agent.run`，然后工具和 Provider 逐层成为子 span。OpenTelemetry span 结束后其 context 仍可作为后续父上下文，所以 HTTP 响应先返回也能保持 traceId。SDK 测试专门在根 span 结束后才启动 worker 并断言四层 ID；独立容器门禁再把真实调查经 Collector 写入 Tempo，用 TraceQL 按 run ID 找回并经 Grafana 数据源代理读回。故障场景中 Tempo 在调查期间被停止，调查仍完成且应用健康，Collector 观察到连接拒绝并在 Tempo 重启后完成导出。无当前 span 时不强行 scope `null`，run 作为新根。跨服务 W3C 传播、生产采样和 Collector 重启后持久队列仍需独立验收。
 
 ### 高风险处置为什么禁止发起人自批？
 
@@ -195,7 +195,7 @@ Agent 结论和发起操作可能共享同一个人的判断，独立审批可�
 - Runbook 已具备可选 Embedding、持久化向量、RRF、盲化双评分、线性加权 κ、分级 NDCG，以及主库快照写前脱敏与定时保留期擦除，但默认未启用真实 Provider；13 条仍是种子集，隔离 QA 的双评分也不是历史生产标注，未证明真实 Embedding 或 cross-encoder rerank 优于 BM25。当前一致性只支持两名标注人且没有第三方仲裁；快照治理尚未覆盖备份/导出副本、按租户差异化策略和用户级删除请求，当前向量查询为内存全量余弦，不适合大语料；PDF 只支持可提取文本，不做 OCR。
 - AI 模式需要外部 DashScope Key，默认演示采用规则引擎。
 - 已提供 Prometheus 与 Loki HTTP 适配器，但默认演示关闭外部依赖；当前通过协议级本地 HTTP 契约测试验证，尚未与真实生产集群联调和压测。
-- OpenTelemetry 业务 span、异步上下文和真实 SDK exporter 契约已验证；可选 Compose 已包含 Collector、Tempo 和 Grafana，独立门禁的真实通过状态以 checkpoint-22 为准。仍未验证跨服务 W3C 传播、生产采样成本、对象存储保留和 Collector/Tempo 故障恢复。
+- OpenTelemetry 业务 span、异步上下文和真实 SDK exporter 契约已验证；可选 Compose 已包含 Collector、Tempo 和 Grafana，正常读回与 Tempo 短暂停机恢复的真实通过状态以 checkpoint-23 为准。仍未验证跨服务 W3C 传播、生产采样成本、对象存储保留和 Collector 重启后持久队列。
 - Agent 步骤已经使用持久化实时 SSE 和游标回放；对话仍是完整回答落库后的协议分块，尚未做到模型 Provider 原生 token 流。
 - Agent 事件已通过 outbox + Redis Streams + 数据库补读支持跨实例广播，崩溃孤儿 run 可在持久化 deadline 后收敛到终态；但工具链仍不会跨节点续跑，也没有执行租约/fencing token 或 exactly-once 保证。
 - 处置审批已完成治理闭环，但尚未接 Argo CD、Ansible、Kubernetes 等生产执行器。
