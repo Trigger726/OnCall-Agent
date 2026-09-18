@@ -77,7 +77,7 @@
 
 ## 进行中：V1.7 分布式事件与复盘指标
 
-- 检查点 22：新增可选 OpenTelemetry Collector + Tempo + Grafana Compose profile，并建立真实告警、六工具调查、TraceQL 搜索、Grafana 数据源代理读回、父子层级和敏感正文排除的独立 CI 门禁；本地已通过 Compose/Bash 静态检查，本机无 Docker daemon，真实容器结论等待远端验收报告回填。
+- 检查点 22 已完成：可选 OpenTelemetry Collector + Tempo + Grafana Compose profile，以及真实告警、六工具调查、TraceQL 搜索、Grafana 数据源代理读回、父子层级和敏感正文排除门禁；Run 49 暴露的离线 Compose 密钥占位缺陷已修复，Run 50 远端七项 CI 全部通过。
 
 - 检查点 21：接入 Micrometer Tracing + OpenTelemetry/OTLP，用四类受控业务 span 串联告警接入、异步 Agent run、工具步骤和 Metrics/Logs Provider；线程切换继承 HTTP 父 span，无父上下文安全退化。本地 7 项定向、85 项后端全量、13 项前端与真实 OTel SDK exporter 层级验证已通过；远端真实 MySQL、Redis、双 JVM SSE、容器在六项 CI 中全部通过。真实 Collector UI 仍待补齐。
 
