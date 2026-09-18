@@ -35,6 +35,35 @@ wait_http() {
   return 1
 }
 
+assert_agent_trace() {
+  local trace_file="$1"
+  local spans_file="$2"
+  local sensitive_sentinel="$3"
+
+  jq '[.. | objects | select(has("traceId") and has("spanId") and has("name")) |
+    {traceId, spanId, parentSpanId, name, attributes}]' \
+    "$trace_file" > "$spans_file"
+  jq -e '[.[] | select(.name == "opspilot.agent.run")] | length == 1' "$spans_file" >/dev/null
+  jq -e '[.[] | select(.name == "opspilot.agent.tool")] | length == 6' "$spans_file" >/dev/null
+  jq -e '[.[] | select(.name == "opspilot.provider.query")] | length == 2' "$spans_file" >/dev/null
+  jq -e '
+    ([.[] | select(.name == "opspilot.agent.run")][0].spanId) as $run
+    | $run != null
+      and ([.[] | select(.name == "opspilot.agent.run")][0].parentSpanId | length > 0)
+      and ([.[] | select(.name == "opspilot.agent.tool") | .parentSpanId] | all(. == $run))
+  ' "$spans_file" >/dev/null
+  jq -e '
+    [.[] | select(.name == "opspilot.agent.tool") | .spanId] as $tools
+    | [.[] | select(.name == "opspilot.provider.query") | .parentSpanId]
+    | all(. as $parent | $tools | index($parent) != null)
+  ' "$spans_file" >/dev/null
+
+  if grep --fixed-strings --quiet "$sensitive_sentinel" "$trace_file"; then
+    echo "Sensitive alert payload leaked into exported trace" >&2
+    return 1
+  fi
+}
+
 "${compose[@]}" up --build --detach mysql tempo-init tempo otel-collector grafana opspilot
 wait_http http://localhost:3200/ready "Tempo"
 wait_http http://localhost:13133/ "OpenTelemetry Collector"
@@ -100,29 +129,7 @@ curl --fail --silent --show-error \
   "http://localhost:3000/api/datasources/proxy/uid/tempo/api/traces/${trace_id}" \
   > "$evidence_dir/grafana-trace.json"
 jq -e '.batches | length > 0' "$evidence_dir/grafana-trace.json" >/dev/null
-jq '[.. | objects | select(has("traceId") and has("spanId") and has("name")) |
-  {traceId, spanId, parentSpanId, name, attributes}]' \
-  "$evidence_dir/trace.json" > "$evidence_dir/spans.json"
-
-jq -e '[.[] | select(.name == "opspilot.agent.run")] | length == 1' "$evidence_dir/spans.json" >/dev/null
-jq -e '[.[] | select(.name == "opspilot.agent.tool")] | length == 6' "$evidence_dir/spans.json" >/dev/null
-jq -e '[.[] | select(.name == "opspilot.provider.query")] | length == 2' "$evidence_dir/spans.json" >/dev/null
-jq -e '
-  ([.[] | select(.name == "opspilot.agent.run")][0].spanId) as $run
-  | $run != null
-    and ([.[] | select(.name == "opspilot.agent.run")][0].parentSpanId | length > 0)
-    and ([.[] | select(.name == "opspilot.agent.tool") | .parentSpanId] | all(. == $run))
-' "$evidence_dir/spans.json" >/dev/null
-jq -e '
-  [.[] | select(.name == "opspilot.agent.tool") | .spanId] as $tools
-  | [.[] | select(.name == "opspilot.provider.query") | .parentSpanId]
-  | all(. as $parent | $tools | index($parent) != null)
-' "$evidence_dir/spans.json" >/dev/null
-
-if grep --fixed-strings --quiet "$sentinel" "$evidence_dir/trace.json"; then
-  echo "Sensitive alert payload leaked into exported trace" >&2
-  exit 1
-fi
+assert_agent_trace "$evidence_dir/trace.json" "$evidence_dir/spans.json" "$sentinel"
 
 tool_count="$(jq '[.[] | select(.name == "opspilot.agent.tool")] | length' "$evidence_dir/spans.json")"
 provider_count="$(jq '[.[] | select(.name == "opspilot.provider.query")] | length' "$evidence_dir/spans.json")"
@@ -135,5 +142,91 @@ jq -n \
   '{incidentId:$incidentId, runId:$runId, traceId:$traceId, collector:"otelcol-contrib", backend:"tempo", queryUi:"grafana", status:"COMPLETED", spanCounts:{agentRun:1, agentTool:$toolSpans, providerQuery:$providerSpans}, parentHierarchyVerified:true, sensitivePayloadExcluded:true, grafanaDatasourceVerified:true}' \
   > "$evidence_dir/result.json"
 
+# Prove a bounded downstream outage does not block incident work and that the
+# Collector exports the queued trace after Tempo returns within the retry window.
+"${compose[@]}" stop tempo
+outage_started_at="$(date --utc +%Y-%m-%dT%H:%M:%SZ)"
+outage_nonce="$(date +%s)-$RANDOM"
+outage_sentinel="trace-outage-private-${outage_nonce}"
+outage_alert_payload="$(jq -n \
+  --arg externalEventId "otel-outage-${outage_nonce}" \
+  --arg title "${outage_sentinel}-title" \
+  --arg description "${outage_sentinel}-description" \
+  --arg label "${outage_sentinel}-label" \
+  '{source:"otel-outage-it", externalEventId:$externalEventId, resourceCode:"APP-AUTH", severity:"P3", status:"FIRING", title:$title, description:$description, labels:{private:$label}}')"
+
+curl --fail --silent --show-error \
+  -H 'Content-Type: application/json' \
+  -d "$outage_alert_payload" \
+  http://localhost:9900/api/v1/alerts/intake > "$evidence_dir/outage-alert-response.json"
+outage_incident_id="$(jq -er '.data.incidentId' "$evidence_dir/outage-alert-response.json")"
+
+curl --fail --silent --show-error \
+  -X POST \
+  -H "Authorization: Bearer $token" \
+  "http://localhost:9900/api/v1/incidents/${outage_incident_id}/investigations?source=OTEL_TEMPO_OUTAGE_IT" \
+  > "$evidence_dir/outage-investigation-response.json"
+outage_run_id="$(jq -er '.data.runId' "$evidence_dir/outage-investigation-response.json")"
+jq -e '.data.status == "COMPLETED"' "$evidence_dir/outage-investigation-response.json" >/dev/null
+curl --fail --silent --show-error \
+  http://localhost:9900/actuator/health > "$evidence_dir/outage-app-health.json"
+jq -e '.status == "UP"' "$evidence_dir/outage-app-health.json" >/dev/null
+
+collector_failure_observed=false
+for _ in {1..10}; do
+  "${compose[@]}" logs --since "$outage_started_at" --no-color otel-collector \
+    > "$evidence_dir/outage-collector.log" 2>&1
+  if grep --extended-regexp --ignore-case --quiet \
+      'Exporting failed|connection refused|Unavailable' "$evidence_dir/outage-collector.log"; then
+    collector_failure_observed=true
+    break
+  fi
+  sleep 1
+done
+if [[ "$collector_failure_observed" != true ]]; then
+  echo "Collector did not observe an export failure while Tempo was stopped" >&2
+  exit 1
+fi
+
+"${compose[@]}" start tempo
+wait_http http://localhost:3200/ready "Tempo after injected outage"
+
+outage_trace_query="{ resource.service.name = \"opspilot\" && span:name = \"opspilot.agent.run\" && span.\"opspilot.agent.run.id\" = \"${outage_run_id}\" }"
+outage_trace_id=""
+for _ in {1..45}; do
+  if curl --fail --silent --show-error --get \
+      --data-urlencode "q=$outage_trace_query" \
+      http://localhost:3200/api/search > "$evidence_dir/outage-tempo-search.json"; then
+    outage_trace_id="$(jq -r '.traces[0].traceID // empty' "$evidence_dir/outage-tempo-search.json")"
+    if [[ -n "$outage_trace_id" ]]; then
+      break
+    fi
+  fi
+  sleep 2
+done
+if [[ -z "$outage_trace_id" ]]; then
+  echo "Tempo did not return the trace created during its outage" >&2
+  exit 1
+fi
+
+curl --fail --silent --show-error \
+  "http://localhost:3200/api/traces/${outage_trace_id}" > "$evidence_dir/outage-trace.json"
+assert_agent_trace \
+  "$evidence_dir/outage-trace.json" \
+  "$evidence_dir/outage-spans.json" \
+  "$outage_sentinel"
+
+outage_tool_count="$(jq '[.[] | select(.name == "opspilot.agent.tool")] | length' "$evidence_dir/outage-spans.json")"
+outage_provider_count="$(jq '[.[] | select(.name == "opspilot.provider.query")] | length' "$evidence_dir/outage-spans.json")"
+jq -n \
+  --argjson incidentId "$outage_incident_id" \
+  --argjson runId "$outage_run_id" \
+  --arg traceId "$outage_trace_id" \
+  --argjson toolSpans "$outage_tool_count" \
+  --argjson providerSpans "$outage_provider_count" \
+  '{incidentId:$incidentId, runId:$runId, traceId:$traceId, injectedFailure:"tempo-stopped", investigationStatus:"COMPLETED", applicationHealthDuringOutage:"UP", collectorFailureObserved:true, traceRecoveredAfterTempoRestart:true, spanCounts:{agentRun:1, agentTool:$toolSpans, providerQuery:$providerSpans}, parentHierarchyVerified:true, sensitivePayloadExcluded:true}' \
+  > "$evidence_dir/outage-result.json"
+
 collect_logs
 cat "$evidence_dir/result.json"
+cat "$evidence_dir/outage-result.json"

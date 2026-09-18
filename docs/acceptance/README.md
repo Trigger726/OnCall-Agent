@@ -22,6 +22,7 @@
 | V1.7 | 05：MySQL 快照可见性与并发提升 | 通过，失败证据、H2/JAR、真实 MySQL 双事务、前端与容器门禁闭环 | [V1.7-checkpoint-05.md](V1.7-checkpoint-05.md) |
 | V1.7 | 21：OpenTelemetry 异步调查链路 | 通过，本地 85 项回归、前端/JAR 与远端六项 CI 已闭环 | [V1.7-checkpoint-21.md](V1.7-checkpoint-21.md) |
 | V1.7 | 22：Collector、Tempo 与 Grafana Trace 闭环 | 通过，失败诊断、修复、TraceQL/Grafana 读回与远端七项 CI 闭环 | [V1.7-checkpoint-22.md](V1.7-checkpoint-22.md) |
+| V1.7 | 23：Tempo 短暂故障与 Trace 恢复 | 实现中，业务隔离、导出失败与有界恢复门禁待验 | [V1.7-checkpoint-23.md](V1.7-checkpoint-23.md) |
 
 ## 状态约定
 

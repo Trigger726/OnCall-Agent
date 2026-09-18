@@ -137,7 +137,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v5
-      - name: Verify exported Agent trace in Tempo
+      - name: Verify normal and outage-recovery Agent traces in Tempo
         run: bash scripts/verify-tracing-pipeline.sh
       - uses: actions/upload-artifact@v4
         if: always()
