@@ -67,7 +67,7 @@ jobs:
 
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, backend-h2, mysql-integration, redis-integration, distributed-integration]
+    needs: [frontend, backend-h2, mysql-integration, redis-integration, distributed-integration, tracing-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -130,3 +130,17 @@ jobs:
           path: |
             target/distributed-it/
             target/surefire-reports/
+
+  tracing-integration:
+    name: OpenTelemetry Collector and Tempo integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - name: Verify exported Agent trace in Tempo
+        run: bash scripts/verify-tracing-pipeline.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tracing-pipeline-evidence
+          path: target/tracing-it/

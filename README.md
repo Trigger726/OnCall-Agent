@@ -129,6 +129,20 @@ docker compose up --build -d
 - Prometheus: [http://localhost:9090](http://localhost:9090)
 - MySQL 仅在 Compose 内网开放。
 
+需要演示真实 Trace 存储和查询时启用可选 `tracing` profile：
+
+```bash
+OTEL_TRACING_ENABLED=true \
+OTEL_TRACING_SAMPLING_PROBABILITY=1.0 \
+docker compose --profile tracing up --build -d
+```
+
+- Grafana Trace 查询：[http://localhost:3000](http://localhost:3000)
+- Tempo API：[http://localhost:3200](http://localhost:3200)
+- OpenTelemetry Collector 健康检查：[http://localhost:13133](http://localhost:13133)
+
+该 profile 使用固定版本的 OpenTelemetry Collector、Tempo 与 Grafana，Grafana 已预置 Tempo 数据源；`1.0` 采样率只用于受控演示，普通 `docker compose up` 仍保持 Trace 关闭和零额外依赖。
+
 生产部署前必须替换 `JWT_SECRET`、数据库口令和演示账号密码；不要将 `.env` 或真实 `DASHSCOPE_API_KEY` 提交到仓库。
 
 ## AI 模式
@@ -193,6 +207,14 @@ OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4318/v1/traces
 ```
 
 业务 span 固定为 `opspilot.alert.intake`、`opspilot.agent.run`、`opspilot.agent.tool`、`opspilot.provider.query`。Spring Boot 自动创建的 HTTP span 是根链路；调查进入有界线程池前捕获当前 span，因此客户端请求结束后才开始的工作线程仍保留同一 traceId。生产采样率需按流量与成本调整，`1.0` 只适合受控验收。
+
+仓库的独立 Trace 门禁会启动 OpsPilot、Collector、Tempo 和 Grafana，提交真实告警并执行六工具调查，再用 TraceQL 按 run ID 找回链路，通过 Grafana 数据源代理读取同一 trace，断言 `1 run -> 6 tool -> 2 provider` 的父子关系，并确认哨兵告警正文未进入导出数据：
+
+```bash
+bash scripts/verify-tracing-pipeline.sh
+```
+
+脚本使用隔离的 Compose project/volume 并在退出时清理，不会删除日常 `docker compose up` 使用的 MySQL 数据卷。
 
 ## Agent 运行控制
 

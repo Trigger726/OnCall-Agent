@@ -77,6 +77,8 @@
 
 ## 进行中：V1.7 分布式事件与复盘指标
 
+- 检查点 22：新增可选 OpenTelemetry Collector + Tempo + Grafana Compose profile，并建立真实告警、六工具调查、TraceQL 搜索、Grafana 数据源代理读回、父子层级和敏感正文排除的独立 CI 门禁；本地已通过 Compose/Bash 静态检查，本机无 Docker daemon，真实容器结论等待远端验收报告回填。
+
 - 检查点 21：接入 Micrometer Tracing + OpenTelemetry/OTLP，用四类受控业务 span 串联告警接入、异步 Agent run、工具步骤和 Metrics/Logs Provider；线程切换继承 HTTP 父 span，无父上下文安全退化。本地 7 项定向、85 项后端全量、13 项前端与真实 OTel SDK exporter 层级验证已通过；远端真实 MySQL、Redis、双 JVM SSE、容器在六项 CI 中全部通过。真实 Collector UI 仍待补齐。
 
 - 检查点 20：新增持久化 deadline 恢复协调器，存活实例对崩溃后留在 `QUEUED / RUNNING` 的 run 以行锁幂等结算，写入终态事件、时间线和审计；编排器阻止晚返回工具覆盖已恢复终态。H2/本地 JAR、真实 MySQL 双协调者、MySQL/Redis 双 JVM 强制退出及远端六项 CI 均通过，原始结果已归档；不声称自动续跑或 exactly-once 执行。
@@ -101,7 +103,7 @@
 - 检查点 10：Redis Streams 发送端已实现独立调度、XADD 标识通知、租约确认和指数退避；真实 Redis 与五项 CI 通过。
 - 检查点 09：V16/V17 已实现可选同事务 outbox、条件领取、租约到期重领与 token 保护，H2/MySQL 与四段式 CI 通过；Redis relay、自动退避、跨实例订阅与前端恢复仍待实现。
 - 跨实例实现决策见 [ADR-001](ADR-001-distributed-agent-events.md)：同事务 outbox + 独立 XREAD 广播 + 数据库补读 + 前端游标恢复。双 JVM HTTP SSE 正常链路、Redis pause 故障、Incident/OnCall 助手单实例浏览器刷新挂接已验收；执行 JVM 崩溃后的 deadline 终态结算已进入真实双进程 CI，任务自动迁移、完整故障矩阵与双实例浏览器演示仍未验收。
-- 待补真实 OpenTelemetry Collector/查询 UI 集成、采样/保留策略与跨服务 W3C 上下文传播门禁。
+- 待补生产采样/保留策略、Collector/Tempo 故障恢复与跨服务 W3C 上下文传播门禁；开发态 Collector/Tempo/Grafana 查询链路按 checkpoint-22 的最新证据为准。
 - 检查点 01 已完成：已恢复/已关闭 Incident 可从当时的时间线、告警、调查报告和变更引用生成脱敏、不可漂移的无责复盘草稿；重复创建幂等。
 - 检查点 01 已完成：五类正文完备校验、至少一个有负责人/期限的防复发行动项、提交人禁止自审、退回修改、独立发布和发布后正文冻结；复盘与行动项均使用乐观锁并进入时间线和审计。
 - 检查点 01 已完成：H2 端到端、真实 MySQL 8.4 V1–V13、前端生产构建、最新 JAR，以及桌面/390px 移动端真实页面验收通过；历史 Demo 和 V1.6 对照保留。

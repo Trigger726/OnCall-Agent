@@ -268,12 +268,12 @@ cmdb_resource 1---n escalation_policy 1---n escalation_step
 
 Trace 只记录受控业务字段：Alert/Incident/run/report ID、来源、严重级别、触发方式、工具/Provider 名称、结果状态与证据数。其中业务 ID 本身仍是高基数 attribute，仅用于 trace 检索，不转成 metrics label。告警标题/描述、labels、PromQL/LogQL、Token、Authorization 和 IP 不进入 span attribute。`AgentExecutionManager` 在提交前捕获当前 HTTP span，工作线程在其 scope 内创建 run span，因此原请求 span 先结束也不会断链；无父 span 时 run 自然成为新根。
 
-默认 `OTEL_TRACING_ENABLED=false`，保持零外部依赖演示；部署时显式配置 Collector endpoint 和采样率。当前自动化已验证真实 OpenTelemetry SDK exporter 收到正确 trace/span/parent ID 与标签，但尚未将真实 Collector 存储、查询 UI、采样和保留策略纳入集成门禁。实现依据 [Spring Boot 3.2 Tracing](https://docs.spring.io/spring-boot/docs/3.2.x/reference/html/actuator.html#actuator.micrometer-tracing) 和 [Micrometer Tracing API](https://docs.micrometer.io/tracing/reference/api.html)，导出配置遵循 [OpenTelemetry Java SDK exporter](https://opentelemetry.io/docs/languages/java/exporters/)。
+默认 `OTEL_TRACING_ENABLED=false`，保持零外部依赖演示；部署时显式配置 Collector endpoint 和采样率。可选 Compose profile 形成 `OpsPilot -> OTLP/HTTP -> OpenTelemetry Collector -> OTLP/gRPC -> Tempo -> Grafana` 链路：Collector 在入口使用 memory limiter 与 batch，在出口启用有界发送队列和指数退避；Tempo 的本地后端仅保留 24 小时，定位为开发/验收环境，不冒充生产对象存储集群。独立门禁会通过真实告警和 Agent 调查生成 TraceQL 可检索链路，再经 Grafana 数据源代理读回同一 trace；最新实际结果以 checkpoint-22 验收报告为准。尚未验证跨服务 W3C 传播、Collector/Tempo 故障恢复和生产采样成本。实现依据 [Spring Boot 3.2 Tracing](https://docs.spring.io/spring-boot/docs/3.2.x/reference/html/actuator.html#actuator.micrometer-tracing)、[OpenTelemetry Collector](https://opentelemetry.io/docs/collector/) 与 [Tempo HTTP API](https://grafana.com/docs/tempo/latest/api_docs/)。
 
 ## 10. 交付与回归门禁
 
 - 默认 Maven 套件以 H2 覆盖领域规则、HTTP API、事件回放、运行控制、审批和外部 Provider 契约；MySQL Testcontainers 用系统属性显式启用，避免开发机没有 Docker 时误报失败。
-- GitHub Actions 独立执行前端生产构建、H2 测试与 JAR、MySQL 8.4 集成测试，只有三者通过后才构建容器镜像。
+- GitHub Actions 独立执行前端生产构建、H2 测试与 JAR、MySQL 8.4、Redis、双 JVM SSE，以及 Collector/Tempo/Grafana Trace 端到端集成；全部前置门禁通过后才构建最终容器镜像。
 - 镜像门禁不止检查 `docker build`：还以非 root `opspilot` 用户启动容器，并轮询 `/actuator/health`。镜像预建可写 `/app/data`，保证默认 H2 数据文件能在最小权限下创建。
 - SSE emitter 断开测试确认网络连接消失只停止发送，不把异常传播到后台调查；有界执行器测试用一个工作线程和一个队列槽位稳定复现排队、取消和第三个请求拒绝。
 

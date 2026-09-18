@@ -144,6 +144,25 @@ checkpoint 05 工程加演：展示真实 MySQL 双事务测试。旧方案在�
 
 checkpoint 21 Trace 加演：在受控环境启用 OTLP，展示一条告警接入 span 与一条 `HTTP -> agent.run -> agent.tool -> provider.query` 链路。展开 attribute 时只应看到 Alert/Incident/run/report ID、来源、工具/Provider 和状态；不应看到告警标题、描述、labels、PromQL/LogQL、Token 或 IP。如果没有可用 Collector，只展示自动化导出契约和父子 ID 断言，不用手工伪造截图；历史页面 Demo 继续保留。
 
+checkpoint 22 Collector/Tempo 加演：保留上面的 SDK 契约演示，再执行：
+
+```bash
+OTEL_TRACING_ENABLED=true OTEL_TRACING_SAMPLING_PROBABILITY=1.0 \
+docker compose --profile tracing up --build -d
+```
+
+打开 Grafana `http://localhost:3000`，进入 Explore 并选择已预置的 Tempo 数据源，使用 `{ resource.service.name = "opspilot" && span:name = "opspilot.agent.run" }` 查询。展开一次调查，应看到 1 个 run、6 个 tool、2 个 provider span，并可按 `opspilot.agent.run.id` 对应回 Incident 页面。CI 中的 `scripts/verify-tracing-pipeline.sh` 会用动态 run ID 做相同查询，经 Grafana 数据源代理读回，并检查隐私哨兵不在 trace JSON 中。
+
+| 对比项 | checkpoint 21 | checkpoint 22 |
+| --- | --- | --- |
+| 导出证据 | 进程内真实 OTel SDK exporter | 应用经 Collector 导出到真实 Tempo |
+| 查询方式 | 测试代码读取捕获列表 | TraceQL 搜索 + Grafana Tempo 数据源 |
+| 层级断言 | SDK 层断言父子 ID | 存储后读回再断言 `1/6/2` 和 parent ID |
+| 隐私检查 | 内存 span attribute 排除 payload | 对 Tempo 返回的完整 trace JSON 搜索动态哨兵 |
+| 仍未覆盖 | Collector/UI | 跨服务传播、生产采样/对象存储、故障恢复 |
+
+这是一段新增工程加演，不替换 Incident、OnCall 助手、Redis 故障或历史 UI 新旧截图。
+
 ## 8:50 - 9:20 值班与升级
 
 打开“值班与升级”：
