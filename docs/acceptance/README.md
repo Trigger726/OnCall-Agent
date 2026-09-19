@@ -28,6 +28,8 @@
 
 ## 状态约定
 
+最新服务级运营分析：[V1.7-checkpoint-26.md](V1.7-checkpoint-26.md)：同一窗口按 CMDB 归属服务拆分事故数、未关闭数和有效响应里程碑分母；不将其冒充可用性 SLO。本地 87 项后端、13 项前端测试及构建通过，远端 CI 待复核。
+
 最新跨 JVM 门禁：[V1.7-checkpoint-25.md](V1.7-checkpoint-25.md)：仅验收 profile 启动独立 instrumented Provider fixture，正常与 Tempo 短暂停机恢复后的两条 `CLIENT -> SERVER` 分支、严格父子 ID 与隐私门禁均通过；Run 58 七项 CI 全绿。
 
 最新 W3C 出站传播：[V1.7-checkpoint-24.md](V1.7-checkpoint-24.md)：Prometheus/Loki 使用 Boot 管理的 `RestClient.Builder`，两个真实本机 HTTP 端点已验证 `traceparent`、client span 和父子层级，Run 54 七项 CI 全绿；真实下游 server span 与跨服务 Tempo 拼接仍待验。

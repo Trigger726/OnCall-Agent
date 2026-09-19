@@ -108,6 +108,42 @@ class IncidentAnalyticsIntegrationTest {
                 .andExpect(jsonPath("$.error.code").value("ANALYTICS_INVALID_SEVERITY"));
     }
 
+    @Test
+    void shouldSplitMetricsByOwningServiceWithoutInventingMissingMilestones() throws Exception {
+        jdbcClient.sql("""
+                        INSERT INTO incident(
+                          id, incident_code, title, severity, status, service_resource_id,
+                          acknowledged_at, resolved_at, created_at, updated_at)
+                        VALUES
+                          (201, 'INC-SERVICE-201', '结算已恢复', 'P1', 'RESOLVED', 1,
+                           '2026-07-10 10:05:00', '2026-07-10 10:30:00',
+                           '2026-07-10 10:00:00', '2026-07-10 10:30:00'),
+                          (202, 'INC-SERVICE-202', '结算仍开放', 'P1', 'INVESTIGATING', 1,
+                           NULL, NULL, '2026-07-11 11:00:00', '2026-07-11 11:00:00'),
+                          (203, 'INC-SERVICE-203', '认证已恢复', 'P2', 'CLOSED', 3,
+                           '2026-07-12 12:10:00', '2026-07-12 12:20:00',
+                           '2026-07-12 12:00:00', '2026-07-12 12:20:00')
+                        """).update();
+        String token = login("lina");
+
+        mockMvc.perform(get("/api/v1/analytics/incidents")
+                        .header("Authorization", bearer(token))
+                        .param("from", "2026-07-01").param("to", "2026-07-31"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.incidentCount").value(3))
+                .andExpect(jsonPath("$.data.services.length()").value(2))
+                .andExpect(jsonPath("$.data.services[0].serviceCode").value("APP-SETTLEMENT"))
+                .andExpect(jsonPath("$.data.services[0].incidentCount").value(2))
+                .andExpect(jsonPath("$.data.services[0].openCount").value(1))
+                .andExpect(jsonPath("$.data.services[0].mtta.sampleCount").value(1))
+                .andExpect(jsonPath("$.data.services[0].mtta.averageMinutes").value(5.0))
+                .andExpect(jsonPath("$.data.services[0].mttr.sampleCount").value(1))
+                .andExpect(jsonPath("$.data.services[0].mttr.averageMinutes").value(30.0))
+                .andExpect(jsonPath("$.data.services[1].serviceCode").value("APP-AUTH"))
+                .andExpect(jsonPath("$.data.services[1].openCount").value(0))
+                .andExpect(jsonPath("$.data.services[1].mtta.averageMinutes").value(10.0));
+    }
+
     private String login(String username) throws Exception {
         String response = mockMvc.perform(post("/api/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)

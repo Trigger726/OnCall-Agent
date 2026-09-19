@@ -13,7 +13,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class IncidentAnalyticsService {
@@ -36,7 +38,8 @@ public class IncidentAnalyticsService {
         LocalDateTime endExclusive = effectiveTo.plusDays(1).atStartOfDay();
         List<IncidentMilestone> incidents = jdbcClient.sql("""
                         SELECT incident.id, incident.incident_code, incident.title, incident.severity,
-                               resource.name AS resource_name, incident.created_at,
+                               incident.status, resource.id AS resource_id,
+                               resource.resource_code, resource.name AS resource_name, incident.created_at,
                                incident.acknowledged_at, incident.resolved_at,
                                (SELECT MIN(timeline.created_at)
                                 FROM incident_timeline timeline
@@ -53,7 +56,9 @@ public class IncidentAnalyticsService {
                 .param("severity", normalizedSeverity)
                 .query((rs, rowNum) -> new IncidentMilestone(
                         rs.getLong("id"), rs.getString("incident_code"), rs.getString("title"),
-                        rs.getString("severity"), rs.getString("resource_name"),
+                        rs.getString("severity"), rs.getString("status"),
+                        rs.getLong("resource_id"), rs.getString("resource_code"),
+                        rs.getString("resource_name"),
                         rs.getObject("created_at", LocalDateTime.class),
                         rs.getObject("acknowledged_at", LocalDateTime.class),
                         rs.getObject("mitigated_at", LocalDateTime.class),
@@ -76,12 +81,28 @@ public class IncidentAnalyticsService {
                 .sorted(Comparator.comparingDouble(SlowIncident::resolutionMinutes).reversed()
                         .thenComparing(SlowIncident::incidentCode))
                 .limit(8).toList();
+        Map<Long, List<IncidentMilestone>> byService = incidents.stream()
+                .collect(Collectors.groupingBy(IncidentMilestone::resourceId));
+        List<ServiceSummary> services = byService.values().stream()
+                .map(items -> {
+                    IncidentMilestone first = items.get(0);
+                    return new ServiceSummary(first.resourceId(), first.resourceCode(), first.resourceName(),
+                            items.size(), items.stream().filter(item -> !"RESOLVED".equals(item.status())
+                                    && !"CLOSED".equals(item.status())).count(),
+                            metric(durations(items, Milestone.ACKNOWLEDGED)),
+                            metric(durations(items, Milestone.MITIGATED)),
+                            metric(durations(items, Milestone.RESOLVED)));
+                })
+                .sorted(Comparator.comparingLong(ServiceSummary::incidentCount).reversed()
+                        .thenComparing(ServiceSummary::serviceCode))
+                .toList();
 
         return new IncidentAnalyticsView(
                 new WindowView(effectiveFrom, effectiveTo,
                         normalizedSeverity.isBlank() ? null : normalizedSeverity),
                 incidents.size(), metric(mtta), metric(mttm), metric(mttr),
-                severityDistribution, slowestResolved, followUpSummary(LocalDate.now(BUSINESS_ZONE)));
+                severityDistribution, slowestResolved, services,
+                followUpSummary(LocalDate.now(BUSINESS_ZONE)));
     }
 
     private void validateWindow(LocalDate from, LocalDate to, String severity) {
@@ -158,6 +179,7 @@ public class IncidentAnalyticsService {
     }
 
     private record IncidentMilestone(long id, String incidentCode, String title, String severity,
+                                     String status, long resourceId, String resourceCode,
                                      String resourceName, LocalDateTime createdAt,
                                      LocalDateTime acknowledgedAt, LocalDateTime mitigatedAt,
                                      LocalDateTime resolvedAt) {
@@ -167,6 +189,7 @@ public class IncidentAnalyticsService {
                                         DurationMetric mtta, DurationMetric mttm, DurationMetric mttr,
                                         List<SeverityCount> severityDistribution,
                                         List<SlowIncident> slowestResolved,
+                                        List<ServiceSummary> services,
                                         FollowUpSummary followUps) {
     }
 
@@ -182,6 +205,11 @@ public class IncidentAnalyticsService {
     public record SlowIncident(long id, String incidentCode, String title, String severity,
                                String resourceName, LocalDateTime createdAt,
                                LocalDateTime resolvedAt, double resolutionMinutes) {
+    }
+
+    public record ServiceSummary(long serviceResourceId, String serviceCode, String serviceName,
+                                 int incidentCount, long openCount, DurationMetric mtta,
+                                 DurationMetric mttm, DurationMetric mttr) {
     }
 
     public record FollowUpSummary(long total, long open, long done, long overdue,

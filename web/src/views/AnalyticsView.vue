@@ -31,6 +31,16 @@ interface AnalyticsOverview {
     resolvedAt: string
     resolutionMinutes: number
   }[]
+  services: {
+    serviceResourceId: number
+    serviceCode: string
+    serviceName: string
+    incidentCount: number
+    openCount: number
+    mtta: DurationMetric
+    mttm: DurationMetric
+    mttr: DurationMetric
+  }[]
   followUps: {
     total: number
     open: number
@@ -254,6 +264,27 @@ onMounted(load)
           <p v-if="!overview?.severityDistribution.length">当前窗口没有 Incident。</p>
         </div>
       </aside>
+    </section>
+
+    <section class="content-panel analytics-service-panel">
+      <div class="panel-heading"><div><h2>按服务拆分</h2><span>与上方同一创建时间窗口及等级筛选；平均分钟数仅使用有效里程碑</span></div></div>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead><tr><th>服务</th><th>Incident</th><th>未关闭</th><th>MTTA 平均 / 样本</th><th>MTTM 平均 / 样本</th><th>MTTR 平均 / 样本</th></tr></thead>
+          <tbody>
+            <tr v-for="item in overview?.services" :key="item.serviceResourceId">
+              <td class="primary-cell"><strong>{{ item.serviceName }}</strong><span>{{ item.serviceCode }}</span></td>
+              <td>{{ item.incidentCount }}</td>
+              <td>{{ item.openCount }}</td>
+              <td>{{ metric(item.mtta.averageMinutes) }} min · n={{ item.mtta.sampleCount }}</td>
+              <td>{{ metric(item.mttm.averageMinutes) }} min · n={{ item.mttm.sampleCount }}</td>
+              <td>{{ metric(item.mttr.averageMinutes) }} min · n={{ item.mttr.sampleCount }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div v-if="!overview?.services.length" class="analytics-empty">当前窗口没有可归属的 Incident。</div>
+      </div>
+      <footer class="follow-up-boundary">这是事故响应里程碑统计，不是服务可用性 SLO；没有完整请求或时间分母时不计算错误预算。</footer>
     </section>
 
     <section class="content-panel follow-up-operations">
