@@ -107,7 +107,8 @@ class DistributedAgentEventsIntegrationTest {
                 assertThat(run.path("status").asText()).isEqualTo("TIMED_OUT");
                 assertThat(run.path("terminationKind").asText()).isEqualTo("TIMEOUT");
                 assertThat(run.path("terminationReason").asText()).contains("恢复协调器");
-                await(() -> pendingOutbox(runId) == 0, Duration.ofSeconds(20),
+                // A may crash after claiming an event; B cannot reclaim it before the 30-second lease expires.
+                await(() -> pendingOutbox(runId) == 0, Duration.ofSeconds(50),
                         "recovered terminal event reaches Redis");
 
                 var result = new java.util.LinkedHashMap<String, Object>();
