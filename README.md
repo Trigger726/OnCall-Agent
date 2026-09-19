@@ -214,7 +214,7 @@ OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4318/v1/traces
 bash scripts/verify-tracing-pipeline.sh
 ```
 
-脚本使用隔离的 Compose project/volume 并在退出时清理，不会删除日常 `docker compose up` 使用的 MySQL 数据卷；fixture 只在 `tracing-test` profile 启动，普通 `tracing` 演示不加载它。checkpoint-24 的独立集成测试仍保留，用两个本机 HTTP 端点验证 W3C `traceparent` 与导出的 client span 一一对应。新门禁的跨服务结果以 checkpoint-25 远端验收为准：fixture 是独立 JVM，而非真实生产 Prometheus/Loki 联调；内存队列仍不支持 Collector 重启后的零丢失承诺。
+脚本使用隔离的 Compose project/volume 并在退出时清理，不会删除日常 `docker compose up` 使用的 MySQL 数据卷；fixture 只在 `tracing-test` profile 启动，普通 `tracing` 演示不加载它。checkpoint-24 的独立集成测试仍保留，用两个本机 HTTP 端点验证 W3C `traceparent` 与导出的 client span 一一对应。checkpoint-25 的远端 Run 58 已验证两个独立 JVM 在正常与 Tempo 短暂停机恢复后都形成 `provider.query -> CLIENT -> SERVER`，各有两条配对分支；fixture 不是生产 Prometheus/Loki 集群，内存队列也不支持 Collector 重启后的零丢失承诺。
 
 ## Agent 运行控制
 

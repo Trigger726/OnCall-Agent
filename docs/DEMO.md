@@ -189,7 +189,7 @@ checkpoint 21/22/23 的 SDK、真实存储与故障恢复演示全部继续保�
 
 checkpoint 25 跨 JVM 加演：保留 checkpoint 24 的红/绿 header 对照，运行同一 `scripts/verify-tracing-pipeline.sh`。脚本会额外启动只在 `tracing-test` profile 存在的独立 Provider fixture，OpsPilot 的真实六工具调查通过 HTTP 调用它的 Prometheus/Loki 兼容端点。打开 Tempo 同一 run trace，应看到 `opspilot.provider.query -> OpsPilot HTTP CLIENT -> trace-provider-fixture HTTP SERVER` 两条分支；展示 `cross-service-spans.json` 中两个服务各自的 `service.name`、共享 traceId、CLIENT spanId 与 SERVER parentSpanId 逐一相等，再展示 Tempo 停机恢复后的 `outage-cross-service-spans.json`。不要只展示两个服务都“有 trace”，必须核对父子 ID。
 
-| 对比项 | checkpoint 24 | checkpoint 25 目标 |
+| 对比项 | checkpoint 24 | checkpoint 25 已验收 |
 | --- | --- | --- |
 | 接收端 | 单进程测试里的本机 HTTP 端点 | 独立 JVM、独立容器、自动 SERVER span |
 | 证据位置 | 进程内 exporter + 捕获的 `traceparent` | 两个服务导出到同一 Tempo trace |
