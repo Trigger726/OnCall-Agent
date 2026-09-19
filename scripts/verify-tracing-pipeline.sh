@@ -87,7 +87,9 @@ assert_cross_service_trace() {
     | ($providers | length) == 2
       and ($clients | length) == 2
       and ($servers | length) == 2
+      and ([$clients[].parentSpanId] | sort) == ([$providers[].spanId] | sort)
       and ([$servers[].parentSpanId] | sort) == ([$clients[].spanId] | sort)
+      and ([$servers[].name] | sort) == (["http get /api/v1/query", "http get /loki/api/v1/query_range"] | sort)
       and ([$providers[].traceId, $clients[].traceId, $servers[].traceId] | unique | length) == 1
   ' "$spans_file" >/dev/null
 }
