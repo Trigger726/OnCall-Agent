@@ -1,0 +1,14 @@
+server:
+  port: 9910
+
+spring:
+  application:
+    name: trace-provider-fixture
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    tracing:
+      endpoint: ${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:http://otel-collector:4318/v1/traces}

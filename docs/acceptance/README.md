@@ -24,8 +24,11 @@
 | V1.7 | 22：Collector、Tempo 与 Grafana Trace 闭环 | 通过，失败诊断、修复、TraceQL/Grafana 读回与远端七项 CI 闭环 | [V1.7-checkpoint-22.md](V1.7-checkpoint-22.md) |
 | V1.7 | 23：Tempo 短暂故障与 Trace 恢复 | 通过，业务隔离、真实导出失败与有界 Trace 恢复闭环 | [V1.7-checkpoint-23.md](V1.7-checkpoint-23.md) |
 | V1.7 | 24：Provider W3C Trace Context 传播 | 通过，本地协议/层级测试、86 项回归、JAR 与远端 Run 54 七项 CI 已闭环 | [V1.7-checkpoint-24.md](V1.7-checkpoint-24.md) |
+| V1.7 | 25：跨 JVM CLIENT/SERVER Trace 拼接 | 部分通过，独立 fixture 本地启动/协议响应与静态配置已验，远端容器/Tempo 门禁待复验 | [V1.7-checkpoint-25.md](V1.7-checkpoint-25.md) |
 
 ## 状态约定
+
+最新跨 JVM 门禁：[V1.7-checkpoint-25.md](V1.7-checkpoint-25.md)：仅验收 profile 启动独立 instrumented Provider fixture，准备验证正常与 Tempo 短暂停机恢复后的 `CLIENT -> SERVER` 严格父子 ID；远端结果待确认，不能提前宣称通过。
 
 最新 W3C 出站传播：[V1.7-checkpoint-24.md](V1.7-checkpoint-24.md)：Prometheus/Loki 使用 Boot 管理的 `RestClient.Builder`，两个真实本机 HTTP 端点已验证 `traceparent`、client span 和父子层级，Run 54 七项 CI 全绿；真实下游 server span 与跨服务 Tempo 拼接仍待验。
 

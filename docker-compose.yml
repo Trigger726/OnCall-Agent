@@ -33,6 +33,10 @@ services:
       OTEL_TRACING_ENABLED: ${OTEL_TRACING_ENABLED:-false}
       OTEL_TRACING_SAMPLING_PROBABILITY: ${OTEL_TRACING_SAMPLING_PROBABILITY:-1.0}
       OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: ${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:-http://otel-collector:4318/v1/traces}
+      PROMETHEUS_ENABLED: ${PROMETHEUS_ENABLED:-false}
+      PROMETHEUS_BASE_URL: ${PROMETHEUS_BASE_URL:-http://prometheus:9090}
+      LOKI_ENABLED: ${LOKI_ENABLED:-false}
+      LOKI_BASE_URL: ${LOKI_BASE_URL:-http://loki:3100}
     depends_on:
       mysql:
         condition: service_healthy
@@ -92,6 +96,18 @@ services:
       - ./deploy/grafana-datasources.yml:/etc/grafana/provisioning/datasources/opspilot.yml:ro
     depends_on:
       - tempo
+
+  trace-provider-fixture:
+    build:
+      context: .
+      dockerfile: integration/trace-provider-fixture/Dockerfile
+    profiles: ["tracing-test"]
+    ports:
+      - "9910:9910"
+    environment:
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://otel-collector:4318/v1/traces
+    depends_on:
+      - otel-collector
 
 volumes:
   mysql-data:

@@ -187,6 +187,18 @@ checkpoint 24 W3C 传播加演：运行 `HttpTracePropagationIntegrationTest`。
 
 checkpoint 21/22/23 的 SDK、真实存储与故障恢复演示全部继续保留；本轮只补上出站传播缺口，不把模拟 HTTP 服务表述为生产 Prometheus/Loki 联调。
 
+checkpoint 25 跨 JVM 加演：保留 checkpoint 24 的红/绿 header 对照，运行同一 `scripts/verify-tracing-pipeline.sh`。脚本会额外启动只在 `tracing-test` profile 存在的独立 Provider fixture，OpsPilot 的真实六工具调查通过 HTTP 调用它的 Prometheus/Loki 兼容端点。打开 Tempo 同一 run trace，应看到 `opspilot.provider.query -> OpsPilot HTTP CLIENT -> trace-provider-fixture HTTP SERVER` 两条分支；展示 `cross-service-spans.json` 中两个服务各自的 `service.name`、共享 traceId、CLIENT spanId 与 SERVER parentSpanId 逐一相等，再展示 Tempo 停机恢复后的 `outage-cross-service-spans.json`。不要只展示两个服务都“有 trace”，必须核对父子 ID。
+
+| 对比项 | checkpoint 24 | checkpoint 25 目标 |
+| --- | --- | --- |
+| 接收端 | 单进程测试里的本机 HTTP 端点 | 独立 JVM、独立容器、自动 SERVER span |
+| 证据位置 | 进程内 exporter + 捕获的 `traceparent` | 两个服务导出到同一 Tempo trace |
+| 层级 | `provider.query -> CLIENT` | `provider.query -> CLIENT -> SERVER`，严格 parent ID |
+| 故障场景 | 无跨服务恢复断言 | Tempo 短暂停机后读回完整跨服务链路 |
+| 边界 | 不代表真实下游 | 仍是协议 fixture，不代表生产 Prometheus/Loki 联调 |
+
+本段是 checkpoint 21～24 之后的新增工程演示，原始 OnCall、Incident/OnCall 页面、Redis 和历史 Trace 演示继续保留。
+
 ## 8:50 - 9:20 值班与升级
 
 打开“值班与升级”：

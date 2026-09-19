@@ -208,13 +208,13 @@ OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4318/v1/traces
 
 业务 span 固定为 `opspilot.alert.intake`、`opspilot.agent.run`、`opspilot.agent.tool`、`opspilot.provider.query`。Spring Boot 自动创建的入站 HTTP span 是根链路；调查进入有界线程池前捕获当前 span，因此客户端请求结束后才开始的工作线程仍保留同一 traceId。Prometheus/Loki Provider 注入 Boot 预配置的 `RestClient.Builder`，出站请求会在 `opspilot.provider.query` 下生成 HTTP client span，并以 W3C `traceparent` 把同一 traceId 传播给下游。生产采样率需按流量与成本调整，`1.0` 只适合受控验收。
 
-仓库的独立 Trace 门禁会启动 OpsPilot、Collector、Tempo 和 Grafana，提交真实告警并执行六工具调查，再用 TraceQL 按 run ID 找回链路，通过 Grafana 数据源代理读取同一 trace，断言 `1 run -> 6 tool -> 2 provider` 的父子关系，并确认哨兵告警正文未进入导出数据。同一门禁还会停止 Tempo 后再执行一次调查：业务必须仍完成且应用健康，Collector 必须记录真实导出失败，Tempo 在 60 秒重试窗口内恢复后必须能读回同一 run 的完整 trace：
+仓库的独立 Trace 门禁会启动 OpsPilot、Collector、Tempo、Grafana 和一个仅用于验收的独立 Provider fixture。OpsPilot 对该服务发出 Prometheus/Loki 兼容查询，提交真实告警并执行六工具调查；TraceQL 按 run ID 找回链路，Grafana 数据源代理读取同一 trace。门禁除断言 `1 run -> 6 tool -> 2 provider` 外，还要求两个 OpsPilot HTTP client span 与 fixture 的两个 server span 在 Tempo 中共享 traceId，且 server parentSpanId 与 client spanId 逐一相等，并确认哨兵告警正文未进入导出数据。同一门禁还会停止 Tempo 后再执行一次调查：业务必须仍完成且应用健康，Collector 必须记录真实导出失败，Tempo 在 60 秒重试窗口内恢复后必须读回同一 run 的完整跨服务 trace：
 
 ```bash
 bash scripts/verify-tracing-pipeline.sh
 ```
 
-脚本使用隔离的 Compose project/volume 并在退出时清理，不会删除日常 `docker compose up` 使用的 MySQL 数据卷。独立集成测试还用两个真实本机 HTTP 端点验证 Prometheus/Loki 收到的 W3C `traceparent` 与导出的 HTTP client span 一一对应，层级为 `root -> opspilot.provider.query -> HTTP client`。当前证据只覆盖出站协议传播以及 Tempo 短暂停机且 Collector 进程存活的场景；尚未验证真实下游服务继续创建 server span，内存队列也不支持 Collector 重启后的零丢失承诺。
+脚本使用隔离的 Compose project/volume 并在退出时清理，不会删除日常 `docker compose up` 使用的 MySQL 数据卷；fixture 只在 `tracing-test` profile 启动，普通 `tracing` 演示不加载它。checkpoint-24 的独立集成测试仍保留，用两个本机 HTTP 端点验证 W3C `traceparent` 与导出的 client span 一一对应。新门禁的跨服务结果以 checkpoint-25 远端验收为准：fixture 是独立 JVM，而非真实生产 Prometheus/Loki 联调；内存队列仍不支持 Collector 重启后的零丢失承诺。
 
 ## Agent 运行控制
 

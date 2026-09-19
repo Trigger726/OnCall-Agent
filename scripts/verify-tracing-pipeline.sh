@@ -9,8 +9,12 @@ export COMPOSE_PROJECT_NAME="opspilot-tracing-it-${GITHUB_RUN_ID:-local-$$}"
 export OTEL_TRACING_ENABLED=true
 export OTEL_TRACING_SAMPLING_PROBABILITY=1.0
 export OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel-collector:4318/v1/traces
+export PROMETHEUS_ENABLED=true
+export PROMETHEUS_BASE_URL=http://trace-provider-fixture:9910
+export LOKI_ENABLED=true
+export LOKI_BASE_URL=http://trace-provider-fixture:9910
 
-compose=(docker compose --profile tracing)
+compose=(docker compose --profile tracing --profile tracing-test)
 
 collect_logs() {
   "${compose[@]}" logs --no-color > "$evidence_dir/compose.log" 2>&1 || true
@@ -64,10 +68,35 @@ assert_agent_trace() {
   fi
 }
 
-"${compose[@]}" up --build --detach mysql tempo-init tempo otel-collector grafana opspilot
+assert_cross_service_trace() {
+  local trace_file="$1"
+  local spans_file="$2"
+
+  jq '[.batches[] as $batch
+    | ($batch.resource.attributes
+       | map(select(.key == "service.name") | .value.stringValue)
+       | first // "unknown") as $service
+    | $batch.scopeSpans[].spans[]
+    | {service:$service, traceId, spanId, parentSpanId, name, kind}]' \
+    "$trace_file" > "$spans_file"
+  jq -e '
+    [.[] | select(.service == "opspilot" and .name == "opspilot.provider.query")] as $providers
+    | [.[] | select(.service == "opspilot" and .kind == "SPAN_KIND_CLIENT")
+       | select(.parentSpanId as $parent | $providers | any(.spanId == $parent))] as $clients
+    | [.[] | select(.service == "trace-provider-fixture" and .kind == "SPAN_KIND_SERVER")] as $servers
+    | ($providers | length) == 2
+      and ($clients | length) == 2
+      and ($servers | length) == 2
+      and ([$servers[].parentSpanId] | sort) == ([$clients[].spanId] | sort)
+      and ([$providers[].traceId, $clients[].traceId, $servers[].traceId] | unique | length) == 1
+  ' "$spans_file" >/dev/null
+}
+
+"${compose[@]}" up --build --detach mysql tempo-init tempo otel-collector grafana trace-provider-fixture opspilot
 wait_http http://localhost:3200/ready "Tempo"
 wait_http http://localhost:13133/ "OpenTelemetry Collector"
 wait_http http://localhost:3000/api/health "Grafana"
+wait_http http://localhost:9910/actuator/health "instrumented provider fixture"
 wait_http http://localhost:9900/actuator/health "OpsPilot"
 
 curl --fail --silent --show-error \
@@ -123,23 +152,39 @@ if [[ -z "$trace_id" ]]; then
   exit 1
 fi
 
-curl --fail --silent --show-error \
-  "http://localhost:3200/api/traces/${trace_id}" > "$evidence_dir/trace.json"
+cross_service_verified=false
+for _ in {1..45}; do
+  if curl --fail --silent --show-error \
+      "http://localhost:3200/api/traces/${trace_id}" > "$evidence_dir/trace.json" \
+      && assert_agent_trace "$evidence_dir/trace.json" "$evidence_dir/spans.json" "$sentinel" \
+      && assert_cross_service_trace "$evidence_dir/trace.json" "$evidence_dir/cross-service-spans.json"; then
+    cross_service_verified=true
+    break
+  fi
+  sleep 2
+done
+if [[ "$cross_service_verified" != true ]]; then
+  echo "Tempo did not join OpsPilot CLIENT spans to fixture SERVER spans" >&2
+  exit 1
+fi
 curl --fail --silent --show-error \
   "http://localhost:3000/api/datasources/proxy/uid/tempo/api/traces/${trace_id}" \
   > "$evidence_dir/grafana-trace.json"
 jq -e '.batches | length > 0' "$evidence_dir/grafana-trace.json" >/dev/null
-assert_agent_trace "$evidence_dir/trace.json" "$evidence_dir/spans.json" "$sentinel"
 
 tool_count="$(jq '[.[] | select(.name == "opspilot.agent.tool")] | length' "$evidence_dir/spans.json")"
 provider_count="$(jq '[.[] | select(.name == "opspilot.provider.query")] | length' "$evidence_dir/spans.json")"
+client_count="$(jq '[.[] | select(.service == "opspilot" and .kind == "SPAN_KIND_CLIENT")] | length' "$evidence_dir/cross-service-spans.json")"
+server_count="$(jq '[.[] | select(.service == "trace-provider-fixture" and .kind == "SPAN_KIND_SERVER")] | length' "$evidence_dir/cross-service-spans.json")"
 jq -n \
   --argjson incidentId "$incident_id" \
   --argjson runId "$run_id" \
   --arg traceId "$trace_id" \
   --argjson toolSpans "$tool_count" \
   --argjson providerSpans "$provider_count" \
-  '{incidentId:$incidentId, runId:$runId, traceId:$traceId, collector:"otelcol-contrib", backend:"tempo", queryUi:"grafana", status:"COMPLETED", spanCounts:{agentRun:1, agentTool:$toolSpans, providerQuery:$providerSpans}, parentHierarchyVerified:true, sensitivePayloadExcluded:true, grafanaDatasourceVerified:true}' \
+  --argjson clientSpans "$client_count" \
+  --argjson serverSpans "$server_count" \
+  '{incidentId:$incidentId, runId:$runId, traceId:$traceId, collector:"otelcol-contrib", backend:"tempo", queryUi:"grafana", status:"COMPLETED", spanCounts:{agentRun:1, agentTool:$toolSpans, providerQuery:$providerSpans, client:$clientSpans, server:$serverSpans}, parentHierarchyVerified:true, crossServiceParentHierarchyVerified:true, sensitivePayloadExcluded:true, grafanaDatasourceVerified:true}' \
   > "$evidence_dir/result.json"
 
 # Prove a bounded downstream outage does not block incident work and that the
@@ -209,22 +254,35 @@ if [[ -z "$outage_trace_id" ]]; then
   exit 1
 fi
 
-curl --fail --silent --show-error \
-  "http://localhost:3200/api/traces/${outage_trace_id}" > "$evidence_dir/outage-trace.json"
-assert_agent_trace \
-  "$evidence_dir/outage-trace.json" \
-  "$evidence_dir/outage-spans.json" \
-  "$outage_sentinel"
+outage_cross_service_verified=false
+for _ in {1..45}; do
+  if curl --fail --silent --show-error \
+      "http://localhost:3200/api/traces/${outage_trace_id}" > "$evidence_dir/outage-trace.json" \
+      && assert_agent_trace "$evidence_dir/outage-trace.json" "$evidence_dir/outage-spans.json" "$outage_sentinel" \
+      && assert_cross_service_trace "$evidence_dir/outage-trace.json" "$evidence_dir/outage-cross-service-spans.json"; then
+    outage_cross_service_verified=true
+    break
+  fi
+  sleep 2
+done
+if [[ "$outage_cross_service_verified" != true ]]; then
+  echo "Tempo did not recover the joined cross-service trace after its outage" >&2
+  exit 1
+fi
 
 outage_tool_count="$(jq '[.[] | select(.name == "opspilot.agent.tool")] | length' "$evidence_dir/outage-spans.json")"
 outage_provider_count="$(jq '[.[] | select(.name == "opspilot.provider.query")] | length' "$evidence_dir/outage-spans.json")"
+outage_client_count="$(jq '[.[] | select(.service == "opspilot" and .kind == "SPAN_KIND_CLIENT")] | length' "$evidence_dir/outage-cross-service-spans.json")"
+outage_server_count="$(jq '[.[] | select(.service == "trace-provider-fixture" and .kind == "SPAN_KIND_SERVER")] | length' "$evidence_dir/outage-cross-service-spans.json")"
 jq -n \
   --argjson incidentId "$outage_incident_id" \
   --argjson runId "$outage_run_id" \
   --arg traceId "$outage_trace_id" \
   --argjson toolSpans "$outage_tool_count" \
   --argjson providerSpans "$outage_provider_count" \
-  '{incidentId:$incidentId, runId:$runId, traceId:$traceId, injectedFailure:"tempo-stopped", investigationStatus:"COMPLETED", applicationHealthDuringOutage:"UP", collectorFailureObserved:true, traceRecoveredAfterTempoRestart:true, spanCounts:{agentRun:1, agentTool:$toolSpans, providerQuery:$providerSpans}, parentHierarchyVerified:true, sensitivePayloadExcluded:true}' \
+  --argjson clientSpans "$outage_client_count" \
+  --argjson serverSpans "$outage_server_count" \
+  '{incidentId:$incidentId, runId:$runId, traceId:$traceId, injectedFailure:"tempo-stopped", investigationStatus:"COMPLETED", applicationHealthDuringOutage:"UP", collectorFailureObserved:true, traceRecoveredAfterTempoRestart:true, spanCounts:{agentRun:1, agentTool:$toolSpans, providerQuery:$providerSpans, client:$clientSpans, server:$serverSpans}, parentHierarchyVerified:true, crossServiceParentHierarchyVerified:true, sensitivePayloadExcluded:true}' \
   > "$evidence_dir/outage-result.json"
 
 collect_logs
