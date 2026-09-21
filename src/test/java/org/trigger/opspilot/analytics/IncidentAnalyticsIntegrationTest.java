@@ -144,6 +144,21 @@ class IncidentAnalyticsIntegrationTest {
                 .andExpect(jsonPath("$.data.services[1].mtta.averageMinutes").value(10.0));
     }
 
+    @Test
+    void shouldExposeConfiguredSloWithoutInventingMeasurementsWhenPrometheusIsDisabled() throws Exception {
+        String token = login("lina");
+
+        mockMvc.perform(get("/api/v1/slo/objectives").header("Authorization", bearer(token)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.prometheusEnabled").value(false))
+                .andExpect(jsonPath("$.data.objectives.length()").value(2))
+                .andExpect(jsonPath("$.data.objectives[0].measurement.status")
+                        .value("PROVIDER_DISABLED"))
+                .andExpect(jsonPath("$.data.objectives[0].measurement.sliPercent").isEmpty())
+                .andExpect(jsonPath("$.data.objectives[0].measurement.message")
+                        .value("Prometheus 未启用；未使用本地演示数据替代"));
+    }
+
     private String login(String username) throws Exception {
         String response = mockMvc.perform(post("/api/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)

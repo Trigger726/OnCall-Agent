@@ -199,7 +199,7 @@ Agent 结论和发起操作可能共享同一个人的判断，独立审批可�
 - Agent 步骤已经使用持久化实时 SSE 和游标回放；对话仍是完整回答落库后的协议分块，尚未做到模型 Provider 原生 token 流。
 - Agent 事件已通过 outbox + Redis Streams + 数据库补读支持跨实例广播，崩溃孤儿 run 可在持久化 deadline 后收敛到终态；但工具链仍不会跨节点续跑，也没有执行租约/fencing token 或 exactly-once 保证。
 - 处置审批已完成治理闭环，但尚未接 Argo CD、Ansible、Kubernetes 等生产执行器。
-- Postmortem 已覆盖证据快照、独立发布、行动项责任闭环、跨 Incident 待办、逾期事实和 MTTA/MTTM/MTTR；Problem 已覆盖精确指纹复发，但尚未接真实外部提醒/回执、跨 Incident 语义相似/依赖共因聚类、Runbook 命中率趋势和服务 SLO 目标线。
+- Postmortem 已覆盖证据快照、独立发布、行动项责任闭环、跨 Incident 待办、逾期事实和 MTTA/MTTM/MTTR；Problem 已覆盖精确指纹复发；服务 SLO 已按 Prometheus 好事件/总事件计算错误预算，并对无效分母拒算。尚未接真实外部提醒/回执、跨 Incident 语义相似/依赖共因聚类、Runbook 命中率趋势，也未用生产 recording rules 与长期真实流量验证 SLO 策略。
 - 已有 MySQL Testcontainers 与四段式 CI 配置；本地是否能运行真实 MySQL 仍取决于 Docker 引擎，托管 runner 结果需以远端 Actions 实际运行记录为准；系统级压力测试也尚未加入。
 
 主动说清边界比虚构“企业级海量并发”更专业。

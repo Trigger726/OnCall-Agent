@@ -25,8 +25,12 @@
 | V1.7 | 23：Tempo 短暂故障与 Trace 恢复 | 通过，业务隔离、真实导出失败与有界 Trace 恢复闭环 | [V1.7-checkpoint-23.md](V1.7-checkpoint-23.md) |
 | V1.7 | 24：Provider W3C Trace Context 传播 | 通过，本地协议/层级测试、86 项回归、JAR 与远端 Run 54 七项 CI 已闭环 | [V1.7-checkpoint-24.md](V1.7-checkpoint-24.md) |
 | V1.7 | 25：跨 JVM CLIENT/SERVER Trace 拼接 | 通过，正常/故障恢复两轮严格父子关系、崩溃 outbox 租约修正与 Run 58 七项 CI 闭环 | [V1.7-checkpoint-25.md](V1.7-checkpoint-25.md) |
+| V1.7 | 26：服务级 Incident 响应分析 | 通过，独立分母、响应式页面与 Run 60 七项 CI 闭环 | [V1.7-checkpoint-26.md](V1.7-checkpoint-26.md) |
+| V1.7 | 27：真实 SLI 分母与服务错误预算 | 部分通过，本地全量/前端/真实页面通过，MySQL 与远端门禁待验 | [V1.7-checkpoint-27.md](V1.7-checkpoint-27.md) |
 
 ## 状态约定
+
+最新 SLO 分母闭环：[V1.7-checkpoint-27.md](V1.7-checkpoint-27.md)：服务目标和滚动窗口持久化，使用 Prometheus 好事件/总事件计算 SLI 与错误预算，对关闭、失败、零分母、多序列和矛盾数据显式拒算。默认后端 94 项发现/83 项执行通过，前端 13 项与真实桌面/移动页通过；MySQL 与远端七项门禁待复核。
 
 最新服务级运营分析：[V1.7-checkpoint-26.md](V1.7-checkpoint-26.md)：同一窗口按 CMDB 归属服务拆分事故数、未关闭数和有效响应里程碑分母；不将其冒充可用性 SLO。本地 87 项后端、13 项前端测试及构建通过，[Run 60](https://github.com/Trigger726/OnCall-Agent/actions/runs/35419000535) 七项远端 CI 全绿。
 

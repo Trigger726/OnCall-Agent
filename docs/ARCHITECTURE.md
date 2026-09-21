@@ -137,6 +137,8 @@ Problem 状态为 `OPEN / KNOWN_ERROR / RESOLVED`：已知错误必须同时具�
 
 外部调用配置连接/读取超时，使用 Spring Retry 做单次请求内重试，并由 `ProviderGuard` 在多次请求间维护 `CLOSED / OPEN / HALF_OPEN` 状态。Agent 步骤保存 Provider、查询表达式、时间窗、外部引用和 warning，避免只保存一段不可溯源的自然语言。Loki 支持 `X-Scope-OrgID` 与 Bearer Token，按纳秒时间戳、返回上限和倒序查询日志 stream；常见 JSON 日志中的 message、level、logger、traceId 会转换为结构化证据。日志在进入证据链前屏蔽密码、Token、Authorization、邮箱和完整 IPv4；原始敏感值不写入调查报告。
 
+服务 SLO 不经过 Metrics Router 的本地降级链：它必须从 Prometheus 分别取得好事件和总事件，且两条查询都只能归约为一个数值。Flyway V19 保存目标、滚动窗口和 PromQL 模板；评估器据此计算 `SLI = good / total` 与 `error budget = total × (1 - target)`。Provider 关闭/失败、空结果、零分母、多序列或 `good > total` 时拒绝计算，避免将可复现 Demo 指标误称为生产 SLI。目标修改使用角色权限、乐观锁和审计；Prometheus recording rules 与生产 SLI 采集仍由部署方维护。
+
 适配器协议以 [Prometheus HTTP API](https://prometheus.io/docs/prometheus/latest/querying/api/) 和 [Grafana Loki HTTP API](https://grafana.com/docs/loki/latest/reference/loki-http-api/) 为准，并通过本机临时 HTTP 服务验证请求参数、请求头、响应格式和降级契约。
 
 ### Runbook 知识库与检索门禁
@@ -285,5 +287,5 @@ Trace 只记录受控业务字段：Alert/Incident/run/report ID、来源、严�
 4. 增加系统级并发压测、真实 socket 断流恢复，以及外部 Provider 组合故障注入。
 5. 为多实例事件广播和任务协调接入消息组件。
 6. 将对话 SSE 从完整回答分块升级为模型 Provider 原生 token 流。
-7. 在已完成 MTTA/MTTM/MTTR、行动项逾期治理和精确指纹复发之上加入服务 SLA/SLO 目标线、Runbook 命中率趋势和跨 Incident 语义相似/依赖共因聚类。
+7. 在已完成 MTTA/MTTM/MTTR、行动项逾期治理、精确指纹复发和 Prometheus 事件型服务 SLO 之上，补 Runbook 命中率趋势、跨 Incident 语义相似/依赖共因聚类，并以真实生产 recording rules、长期窗口和错误预算策略验证 SLO。
 8. 从真实但脱敏的历史 Incident/查询流量持续扩充已实现的双评分 qrels，加入第三方仲裁、超过两名标注人的一致性和分层抽样；将现有保留任务扩展到备份/导出副本和面向单条数据的受控删除，再以 NDCG/Recall 验证真实 Embedding 与 cross-encoder rerank 是否稳定优于 BM25/RRF，决定是否引入 ANN/OpenSearch/Milvus。

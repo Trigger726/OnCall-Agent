@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import {
   AlertTriangle, BarChart3, CheckCircle2, Clock3, RefreshCw,
-  RotateCw, ShieldAlert, TimerReset, UsersRound,
+  RotateCw, ShieldAlert, TimerReset, UsersRound, X,
 } from 'lucide-vue-next'
 import StatusBadge from '@/components/StatusBadge.vue'
 import { api, formatTime, type PageResponse } from '@/services/api'
@@ -72,6 +72,37 @@ interface FollowUp {
   version: number
 }
 
+interface SloObjective {
+  id: number
+  serviceCode: string
+  serviceName: string
+  name: string
+  targetPercent: number
+  windowDays: number
+  goodEventsQueryTemplate: string
+  totalEventsQueryTemplate: string
+  version: number
+  measurement: {
+    status: string
+    goodEvents: number | null
+    totalEvents: number | null
+    badEvents: number | null
+    sliPercent: number | null
+    errorBudgetEvents: number | null
+    remainingEvents: number | null
+    consumedPercent: number | null
+    evaluatedAt: string
+    externalRef: string | null
+    message: string | null
+  }
+}
+
+interface SloOverview {
+  evaluatedAt: string
+  prometheusEnabled: boolean
+  objectives: SloObjective[]
+}
+
 function localDate(date: Date): string {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -91,14 +122,20 @@ const followUpStatus = ref('')
 const overdueOnly = ref(false)
 const overview = ref<AnalyticsOverview | null>(null)
 const followUps = ref<FollowUp[]>([])
+const sloOverview = ref<SloOverview | null>(null)
 const followUpTotal = ref(0)
 const loading = ref(false)
 const scanning = ref(false)
 const completingId = ref<number | null>(null)
+const savingSloId = ref<number | null>(null)
+const editingSlo = ref<SloObjective | null>(null)
+const sloTargetInput = ref(0)
+const sloWindowInput = ref(30)
 const error = ref('')
 const notice = ref('')
 
 const canScan = computed(() => ['ADMIN', 'OPS_MANAGER'].includes(auth.state.user?.roleCode ?? ''))
+const canManageSlo = computed(() => ['ADMIN', 'OPS_MANAGER'].includes(auth.state.user?.roleCode ?? ''))
 const maxSeverityCount = computed(() => Math.max(1, ...(overview.value?.severityDistribution.map(item => item.count) ?? [1])))
 
 function query(path: string, params: Record<string, string>): string {
@@ -122,18 +159,78 @@ async function load() {
       overdue: String(overdueOnly.value),
       size: '50',
     })
-    const [analytics, actionPage] = await Promise.all([
+    const [analytics, actionPage, slos] = await Promise.all([
       api<AnalyticsOverview>(analyticsPath),
       api<PageResponse<FollowUp>>(followUpPath),
+      api<SloOverview>('/slo/objectives'),
     ])
     overview.value = analytics
     followUps.value = actionPage.items
     followUpTotal.value = actionPage.total
+    sloOverview.value = slos
   } catch (caught) {
     error.value = caught instanceof Error ? caught.message : '运营数据加载失败'
   } finally {
     loading.value = false
   }
+}
+
+function openSloEdit(item: SloObjective) {
+  editingSlo.value = item
+  sloTargetInput.value = item.targetPercent
+  sloWindowInput.value = item.windowDays
+}
+
+async function saveSlo() {
+  const item = editingSlo.value
+  if (!item) return
+  const targetPercent = Number(sloTargetInput.value)
+  const windowDays = Number(sloWindowInput.value)
+  if (!Number.isFinite(targetPercent) || targetPercent <= 0 || targetPercent >= 100
+      || !Number.isInteger(windowDays) || windowDays < 1 || windowDays > 90) {
+    error.value = 'SLO 目标或滚动窗口格式不合法'
+    return
+  }
+  savingSloId.value = item.id
+  error.value = ''
+  notice.value = ''
+  try {
+    await api(`/slo/objectives/${item.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        expectedVersion: item.version,
+        name: item.name,
+        targetPercent,
+        windowDays,
+        goodEventsQueryTemplate: item.goodEventsQueryTemplate,
+        totalEventsQueryTemplate: item.totalEventsQueryTemplate,
+      }),
+    })
+    await load()
+    editingSlo.value = null
+    notice.value = `${item.serviceName} 的 SLO 已更新，并使用新窗口重新评估。`
+  } catch (caught) {
+    error.value = caught instanceof Error ? caught.message : 'SLO 更新失败'
+  } finally {
+    savingSloId.value = null
+  }
+}
+
+function sloStatus(value: string): string {
+  return ({
+    MET: '达标', BREACHED: '超预算', NO_DATA: '无数据', INVALID_DATA: '数据异常',
+    PROVIDER_DISABLED: '未启用', PROVIDER_ERROR: '查询失败',
+  } as Record<string, string>)[value] ?? value
+}
+
+function sloClass(value: string): string {
+  return value === 'MET' ? 'status-success'
+    : value === 'BREACHED' || value === 'INVALID_DATA' ? 'status-danger'
+      : value === 'NO_DATA' || value === 'PROVIDER_DISABLED' ? 'status-neutral' : 'status-warning'
+}
+
+function number(value: number | null, suffix = ''): string {
+  return value == null ? '-' : `${value}${suffix}`
 }
 
 async function runEscalations() {
@@ -287,6 +384,33 @@ onMounted(load)
       <footer class="follow-up-boundary">这是事故响应里程碑统计，不是服务可用性 SLO；没有完整请求或时间分母时不计算错误预算。</footer>
     </section>
 
+    <section class="content-panel analytics-slo-panel">
+      <div class="panel-heading">
+        <div><h2>服务 SLO 与错误预算</h2><span>Prometheus 好事件 / 总事件 · 明确滚动窗口 · 不使用 Incident 指标代算</span></div>
+        <span class="status-badge" :class="sloOverview?.prometheusEnabled ? 'status-success' : 'status-neutral'">
+          Prometheus {{ sloOverview?.prometheusEnabled ? '已启用' : '未启用' }}
+        </span>
+      </div>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead><tr><th>服务 / SLI</th><th>目标与窗口</th><th>当前 SLI</th><th>好事件 / 总事件</th><th>错误预算剩余</th><th>状态</th><th>操作</th></tr></thead>
+          <tbody>
+            <tr v-for="item in sloOverview?.objectives" :key="item.id">
+              <td class="primary-cell"><strong>{{ item.serviceName }}</strong><span>{{ item.serviceCode }} · {{ item.name }}</span></td>
+              <td><strong>{{ item.targetPercent }}%</strong><br /><span class="muted">{{ item.windowDays }} 天滚动</span></td>
+              <td><strong>{{ number(item.measurement.sliPercent, '%') }}</strong></td>
+              <td>{{ number(item.measurement.goodEvents) }} / {{ number(item.measurement.totalEvents) }}</td>
+              <td><strong>{{ number(item.measurement.remainingEvents) }}</strong><br /><span class="muted">已消耗 {{ number(item.measurement.consumedPercent, '%') }}</span></td>
+              <td><span class="status-badge" :class="sloClass(item.measurement.status)">{{ sloStatus(item.measurement.status) }}</span><small v-if="item.measurement.message" class="slo-message">{{ item.measurement.message }}</small></td>
+              <td><button v-if="canManageSlo" class="table-action" :disabled="savingSloId === item.id" @click="openSloEdit(item)">{{ savingSloId === item.id ? '保存中' : '调整目标' }}</button><span v-else class="muted">只读</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div v-if="!sloOverview?.objectives.length" class="analytics-empty">尚未配置服务 SLO。</div>
+      </div>
+      <footer class="follow-up-boundary">错误预算 = 总事件 × (100% − 目标)；当 Prometheus 无有效正分母、返回多序列或好事件大于总事件时，不计算结果。</footer>
+    </section>
+
     <section class="content-panel follow-up-operations">
       <div class="panel-heading follow-up-heading">
         <div><h2>防复发行动项</h2><span>全局责任、期限与应用内逾期事实</span></div>
@@ -327,5 +451,20 @@ onMounted(load)
       </div>
       <footer class="follow-up-boundary"><ShieldAlert :size="14" />逾期扫描只形成 OpsPilot 内部升级事实与审计记录，不代表外部邮件或即时消息已经送达。</footer>
     </section>
+
+    <div v-if="editingSlo" class="dialog-backdrop" @click.self="editingSlo = null">
+      <form class="dialog-panel slo-edit-dialog" role="dialog" aria-modal="true" aria-labelledby="slo-edit-title" @submit.prevent="saveSlo">
+        <header>
+          <div><h2 id="slo-edit-title">调整服务 SLO</h2><span>{{ editingSlo.serviceName }} · {{ editingSlo.serviceCode }} · v{{ editingSlo.version }}</span></div>
+          <button type="button" class="icon-button" title="关闭" @click="editingSlo = null"><X :size="18" /></button>
+        </header>
+        <div class="form-grid">
+          <label><span>目标百分比</span><input v-model.number="sloTargetInput" type="number" min="0.001" max="99.999" step="0.001" required /></label>
+          <label><span>滚动窗口（天）</span><input v-model.number="sloWindowInput" type="number" min="1" max="90" step="1" required /></label>
+        </div>
+        <p class="slo-edit-boundary">本操作只调整目标和窗口；好事件/总事件 PromQL 保持不变，并由服务端检查窗口占位符、角色权限和版本冲突。</p>
+        <footer><button type="button" class="secondary-button" @click="editingSlo = null">取消</button><button class="primary-button" :disabled="savingSloId === editingSlo.id">{{ savingSloId === editingSlo.id ? '保存中' : '保存并重新评估' }}</button></footer>
+      </form>
+    </div>
   </div>
 </template>
