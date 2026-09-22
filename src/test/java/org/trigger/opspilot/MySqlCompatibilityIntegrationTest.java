@@ -245,7 +245,7 @@ class MySqlCompatibilityIntegrationTest {
         }
         assertThat(jdbcClient.sql("""
                         SELECT COUNT(*) FROM flyway_schema_history
-                        WHERE version = '19' AND success = 1
+                        WHERE version = '20' AND success = 1
                         """).query(Integer.class).single()).isEqualTo(1);
         assertThat(jdbcClient.sql("SELECT title FROM incident WHERE id = 1")
                 .query(String.class).single()).isEqualTo("统一结算接口持续超时");
@@ -278,6 +278,8 @@ class MySqlCompatibilityIntegrationTest {
                 .query(Integer.class).single()).isZero();
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM service_slo_objective WHERE enabled = TRUE")
                 .query(Integer.class).single()).isEqualTo(2);
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM alert_ingest_rejection")
+                .query(Integer.class).single()).isZero();
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM runbook_retrieval_eval_case WHERE source_type = 'SEED'")
                 .query(Integer.class).single()).isEqualTo(13);
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM runbook_retrieval_eval_case " +

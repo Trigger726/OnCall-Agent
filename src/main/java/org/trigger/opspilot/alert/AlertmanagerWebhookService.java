@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.trigger.opspilot.audit.AuditService;
 import org.trigger.opspilot.common.ApiException;
+import org.trigger.opspilot.common.PageResponse;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -24,10 +26,15 @@ public class AlertmanagerWebhookService {
     private static final String AUTHORIZATION_PREFIX = "OpsPilot ";
     private final AlertmanagerWebhookProperties properties;
     private final AlertService alertService;
+    private final AlertmanagerRejectionService rejectionService;
+    private final AuditService auditService;
 
-    public AlertmanagerWebhookService(AlertmanagerWebhookProperties properties, AlertService alertService) {
+    public AlertmanagerWebhookService(AlertmanagerWebhookProperties properties, AlertService alertService,
+                                      AlertmanagerRejectionService rejectionService, AuditService auditService) {
         this.properties = properties;
         this.alertService = alertService;
+        this.rejectionService = rejectionService;
+        this.auditService = auditService;
     }
 
     public DeliveryResult receive(String authorization, Webhook webhook) {
@@ -51,20 +58,54 @@ public class AlertmanagerWebhookService {
             Alert alert = alerts.get(index);
             try {
                 AlertService.IntakeResult result = intake(toCommand(alert, webhook));
+                rejectionService.resolveMatching(alert, result);
                 items.add(new ItemResult(index, result.action(), result.alertId(), result.incidentId(),
-                        externalId(alert), null, result.message()));
+                        externalId(alert), null, null, result.message()));
                 accepted++;
                 if ("REPLAYED".equals(result.action())) replayed++;
                 if ("UPDATED".equals(result.action())) updated++;
             } catch (ApiException exception) {
                 rejected++;
+                long rejectionId = rejectionService.record(webhook, alert, exception);
                 log.warn("Alertmanager webhook item rejected: index={}, code={}", index, exception.code());
                 items.add(new ItemResult(index, "REJECTED", null, null, safeExternalId(alert),
-                        exception.code(), exception.getMessage()));
+                        rejectionId, exception.code(), exception.getMessage()));
             }
         }
         return new DeliveryResult(webhook.receiver(), webhook.groupKey(), alerts.size(), accepted,
                 replayed, updated, rejected, items);
+    }
+
+    public PageResponse<AlertmanagerRejectionService.RejectionView> rejections(String status, int page, int size) {
+        return rejectionService.list(status, page, size);
+    }
+
+    public ReplayResult replay(long rejectionId, Long actorId) {
+        AlertmanagerRejectionService.ReplayClaim claim = rejectionService.claim(rejectionId);
+        if (claim.alreadySucceeded()) {
+            return new ReplayResult("ALREADY_SUCCEEDED", rejectionId, claim.resolvedAlertId(),
+                    claim.resolvedIncidentId(), "该拒绝项此前已成功重放，本次未重复执行");
+        }
+        try {
+            AlertmanagerRejectionService.StoredPayload stored = claim.payload();
+            AlertService.IntakeResult result = intake(toCommand(stored.alert(), stored.webhook()));
+            rejectionService.complete(rejectionId, claim.token(), result, actorId);
+            auditService.record("ALERTMANAGER_REJECTION_REPLAYED", "ALERT_INGEST_REJECTION", rejectionId,
+                    "action=" + result.action() + ", alertId=" + result.alertId()
+                            + ", incidentId=" + result.incidentId());
+            return new ReplayResult(result.action(), rejectionId, result.alertId(), result.incidentId(),
+                    "拒绝项已重放：" + result.message());
+        } catch (ApiException exception) {
+            rejectionService.release(rejectionId, claim.token(), exception.code(), exception.getMessage());
+            auditService.record("ALERTMANAGER_REJECTION_REPLAY_FAILED", "ALERT_INGEST_REJECTION", rejectionId,
+                    "errorCode=" + exception.code());
+            throw exception;
+        } catch (RuntimeException exception) {
+            rejectionService.release(rejectionId, claim.token(), "REPLAY_INTERNAL_ERROR", "重放暂时失败，请稍后重试");
+            auditService.record("ALERTMANAGER_REJECTION_REPLAY_FAILED", "ALERT_INGEST_REJECTION", rejectionId,
+                    "errorCode=REPLAY_INTERNAL_ERROR");
+            throw exception;
+        }
     }
 
     private AlertService.IntakeResult intake(AlertService.IntakeRequest command) {
@@ -207,10 +248,13 @@ public class AlertmanagerWebhookService {
     }
 
     public record ItemResult(int index, String action, Long alertId, Long incidentId,
-                             String externalEventId, String errorCode, String message) {
+                             String externalEventId, Long rejectionId, String errorCode, String message) {
     }
 
     public record DeliveryResult(String receiver, String groupKey, int received, int accepted,
                                  int replayed, int updated, int rejected, List<ItemResult> items) {
+    }
+
+    public record ReplayResult(String action, long rejectionId, Long alertId, Long incidentId, String message) {
     }
 }

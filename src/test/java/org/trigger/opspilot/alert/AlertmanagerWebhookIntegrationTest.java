@@ -10,7 +10,14 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,6 +39,7 @@ class AlertmanagerWebhookIntegrationTest {
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
     @Autowired private JdbcClient jdbcClient;
+    @Autowired private AlertmanagerRejectionService rejectionService;
 
     @Test
     void shouldRequireDedicatedWebhookCredentialAndBoundBatchSize() throws Exception {
@@ -133,6 +141,127 @@ class AlertmanagerWebhookIntegrationTest {
         assertThat(resolvedTimelineCount).isEqualTo(1);
     }
 
+    @Test
+    void shouldPersistDeduplicateAndRedactRejectedDeliveryWithReadOnlyAuditAccess() throws Exception {
+        String rejected = """
+                {
+                  "version": "4",
+                  "groupKey": "rejection-group",
+                  "receiver": "opspilot",
+                  "alerts": [{
+                    "status": "firing",
+                    "labels": {
+                      "alertname": "RejectedSensitiveAlert",
+                      "resource_code": "APP-REJECT-MISSING",
+                      "severity": "warning",
+                      "api_token": "plain-secret-value"
+                    },
+                    "annotations": {"description": "authorization=Bearer sensitive-token"},
+                    "startsAt": "2026-09-23T06:00:00Z",
+                    "endsAt": "2026-09-23T07:00:00Z",
+                    "fingerprint": "am-rejection-ledger"
+                  }]
+                }
+                """;
+
+        long firstId = rejectionId(postRejectedWebhook(rejected));
+        AlertmanagerRejectionService.ReplayClaim claim = rejectionService.claim(firstId);
+        String updatedEndsAt = rejected.replace("2026-09-23T07:00:00Z", "2026-09-23T07:05:00Z");
+        long secondId = rejectionId(postRejectedWebhook(updatedEndsAt));
+        assertThat(secondId).isEqualTo(firstId);
+        assertThatThrownBy(() -> rejectionService.claim(firstId))
+                .isInstanceOfSatisfying(org.trigger.opspilot.common.ApiException.class,
+                        error -> assertThat(error.code()).isEqualTo("ALERTMANAGER_REPLAY_IN_PROGRESS"));
+        rejectionService.release(firstId, claim.token(), "TEST_RELEASE", "test lease released");
+
+        String payload = jdbcClient.sql("SELECT payload_json FROM alert_ingest_rejection WHERE id = :id")
+                .param("id", firstId).query(String.class).single();
+        assertThat(payload).doesNotContain("plain-secret-value", "sensitive-token", "2026-09-23T07:05:00Z")
+                .contains("***", "2026-09-23T07:00:00Z");
+
+        String auditor = login("auditor");
+        String listing = mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(
+                                "/api/v1/integrations/alertmanager/rejections")
+                        .header("Authorization", "Bearer " + auditor).param("status", "OPEN"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        assertThat(listing).doesNotContain("plain-secret-value", "sensitive-token", "payloadJson");
+        JsonNode listed = objectMapper.readTree(listing).path("data").path("items");
+        JsonNode item = null;
+        for (JsonNode candidate : listed) {
+            if (candidate.path("id").asLong() == firstId) item = candidate;
+        }
+        assertThat(item).isNotNull();
+        assertThat(item.path("deliveryCount").asInt()).isEqualTo(2);
+        assertThat(item.path("redactedFields").asInt()).isEqualTo(2);
+        mockMvc.perform(post("/api/v1/integrations/alertmanager/rejections/{id}/replay", firstId)
+                        .header("Authorization", "Bearer " + auditor))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.error.code").value("ACCESS_DENIED"));
+    }
+
+    @Test
+    void shouldReplayOnceAfterCmdbFixAcrossConcurrentRequests() throws Exception {
+        String rejected = webhook(alert("firing", "am-replay-ledger", "APP-LATE-REPLAY", "warning",
+                "LateResourceAlert", "2026-09-23T08:00:00Z", "2026-09-23T09:00:00Z"));
+        long rejectionId = rejectionId(postRejectedWebhook(rejected));
+
+        jdbcClient.sql("""
+                        INSERT INTO cmdb_resource(resource_code, resource_type, name, environment, status,
+                          owner_user_id, description, attributes_json)
+                        VALUES ('APP-LATE-REPLAY', 'APPLICATION', '延迟登记服务', 'PRODUCTION', 'RUNNING',
+                          2, '用于验证拒绝项重放', '{}')
+                        """).update();
+        String manager = login("lina");
+        var start = new CountDownLatch(1);
+        var executor = Executors.newFixedThreadPool(2);
+        try {
+            var calls = List.of(1, 2).stream().map(ignored -> executor.submit(() -> {
+                assertThat(start.await(5, TimeUnit.SECONDS)).isTrue();
+                var response = mockMvc.perform(post(
+                                "/api/v1/integrations/alertmanager/rejections/{id}/replay", rejectionId)
+                                .header("Authorization", "Bearer " + manager))
+                        .andReturn().getResponse();
+                return new HttpResult(response.getStatus(), response.getContentAsString());
+            })).toList();
+            start.countDown();
+            List<HttpResult> responses = calls.stream().map(future -> {
+                try {
+                    return future.get(10, TimeUnit.SECONDS);
+                } catch (Exception exception) {
+                    throw new AssertionError(exception);
+                }
+            }).toList();
+            assertThat(responses).allMatch(response -> response.status() == 200 || response.status() == 409);
+            assertThat(responses).anyMatch(response -> response.status() == 200
+                    && response.body().contains("CREATED"));
+        } finally {
+            start.countDown();
+            executor.shutdownNow();
+        }
+
+        mockMvc.perform(post("/api/v1/integrations/alertmanager/rejections/{id}/replay", rejectionId)
+                        .header("Authorization", "Bearer " + manager))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.action").value("ALREADY_SUCCEEDED"));
+        assertThat(countAlert("am-replay-ledger:1790150400000")).isEqualTo(1);
+        LedgerRow ledger = jdbcClient.sql("""
+                        SELECT status, delivery_count, replay_count, resolved_alert_id, resolved_incident_id
+                        FROM alert_ingest_rejection WHERE id = :id
+                        """).param("id", rejectionId)
+                .query((rs, rowNum) -> new LedgerRow(rs.getString("status"), rs.getInt("delivery_count"),
+                        rs.getInt("replay_count"), rs.getLong("resolved_alert_id"),
+                        rs.getLong("resolved_incident_id"))).single();
+        assertThat(ledger.status()).isEqualTo("SUCCEEDED");
+        assertThat(ledger.deliveryCount()).isEqualTo(1);
+        assertThat(ledger.replayCount()).isEqualTo(1);
+        assertThat(ledger.alertId()).isPositive();
+        assertThat(ledger.incidentId()).isPositive();
+        assertThat(jdbcClient.sql("""
+                        SELECT COUNT(*) FROM audit_log
+                        WHERE action = 'ALERTMANAGER_REJECTION_REPLAYED' AND target_id = :targetId
+                        """).param("targetId", Long.toString(rejectionId)).query(Integer.class).single()).isEqualTo(1);
+    }
+
     private String postWebhook(String payload, String action) throws Exception {
         return mockMvc.perform(post(ENDPOINT).header("Authorization", AUTHORIZATION)
                         .contentType(MediaType.APPLICATION_JSON).content(payload))
@@ -140,6 +269,30 @@ class AlertmanagerWebhookIntegrationTest {
                 .andExpect(jsonPath("$.data.accepted").value(1))
                 .andExpect(jsonPath("$.data.items[0].action").value(action))
                 .andReturn().getResponse().getContentAsString();
+    }
+
+    private String postRejectedWebhook(String payload) throws Exception {
+        return mockMvc.perform(post(ENDPOINT).header("Authorization", AUTHORIZATION)
+                        .contentType(MediaType.APPLICATION_JSON).content(payload))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.accepted").value(0))
+                .andExpect(jsonPath("$.data.rejected").value(1))
+                .andExpect(jsonPath("$.data.items[0].action").value("REJECTED"))
+                .andExpect(jsonPath("$.data.items[0].rejectionId").isNumber())
+                .andReturn().getResponse().getContentAsString();
+    }
+
+    private long rejectionId(String response) throws Exception {
+        return objectMapper.readTree(response).path("data").path("items").get(0).path("rejectionId").asLong();
+    }
+
+    private String login(String username) throws Exception {
+        String response = mockMvc.perform(post("/api/v1/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Map.of(
+                                "username", username, "password", "OpsPilot@2026"))))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        return objectMapper.readTree(response).path("data").path("accessToken").asText();
     }
 
     private JsonNode queryAlert(String externalEventId) throws Exception {
@@ -197,5 +350,11 @@ class AlertmanagerWebhookIntegrationTest {
 
     private record MapRow(String status, int occurrenceCount, int version,
                           java.time.LocalDateTime lastOccurredAt) {
+    }
+
+    private record LedgerRow(String status, int deliveryCount, int replayCount, long alertId, long incidentId) {
+    }
+
+    private record HttpResult(int status, String body) {
     }
 }
