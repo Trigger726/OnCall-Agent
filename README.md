@@ -21,7 +21,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 - 受控处置：高置信度变更关联可生成回滚草案；管理员或运维经理独立审批，禁止申请人自批，并用乐观锁防止并发覆盖。审批只解除治理门禁，不自动修改生产环境。
 - 无责事故复盘：只有已恢复/已关闭 Incident 才能从当时的时间线、告警、调查报告和变更引用生成脱敏快照；五类复盘内容必须补全，并绑定有负责人和期限的防复发行动项后才能提交。提交人不能自审，发布后正文冻结，行动项仍可由负责人闭环，全部过程进入时间线和审计。
 - 事故运营分析：按创建窗口与严重等级计算 MTTA/MTTM/MTTR 的均值、中位数和独立样本数，排除缺失与负时长；按 CMDB 归属服务拆分事故量、未关闭数和有效里程碑分母，并提供慢事故下钻。跨 Incident 管理行动项、逾期天数和持久化升级事实，重复扫描幂等、完成后关闭且不冒充外部通知送达；这些响应指标不冒充可用性 SLO。
-- 服务 SLO：按 CMDB 服务持久化目标、滚动窗口和版本化 PromQL 模板，从 Prometheus 分别读取好事件与总事件，计算 SLI、允许坏事件数和剩余/消耗错误预算；关闭、失败、零分母、多序列或矛盾数据均显式拒算，不用 Incident 指标或本地样例补数。管理角色可带乐观锁调整目标并进入审计。
+- 服务 SLO：按 CMDB 服务持久化目标、滚动窗口和版本化 PromQL 模板，从 Prometheus 分别读取好事件与总事件，计算 SLI、剩余/消耗错误预算，并用 1h/5m、6h/30m、3d/6h 三档长短窗口区分急速 PAGE、持续 PAGE 和工单信号。关闭、失败、零分母、多序列或矛盾数据均显式拒算，不用 Incident 指标或本地样例补数。管理角色可带乐观锁调整目标并进入审计。
 - 重复事故与 Problem 治理：按“归属服务 + 精确告警指纹”识别跨 Incident 复发，明确区分独立事故数和单次事故内的告警 occurrence；管理角色可将候选提升为唯一 Problem，维护 `OPEN / KNOWN_ERROR / RESOLVED`、根因、规避方案和长期解决说明。新同指纹 Incident 自动幂等关联，已解决后复发只显示事实、不静默重开。
 - 安全审计：JWT、BCrypt、角色权限、关键操作审计、Prometheus 指标和健康检查。
 - 运维控制台：Vue 3 + TypeScript，高密度桌面工作台及移动端响应式视图。
@@ -270,7 +270,7 @@ AGENT_RECOVERY_BATCH_SIZE=100
 | POST/PATCH | `/api/v1/postmortems/{id}/follow-ups`、`/api/v1/postmortem-follow-ups/{id}` | 创建或更新带负责人、期限和版本的防复发行动项 |
 | POST | `/api/v1/postmortem-follow-ups/{id}/complete` | 负责人或管理角色完成行动项并写入证据链 |
 | GET | `/api/v1/analytics/incidents` | 按日期/严重等级读取 MTTA、MTTM、MTTR、样本数、服务级拆分、分布、慢事故和当前行动项摘要 |
-| GET | `/api/v1/slo/objectives` | 从 Prometheus 好事件/总事件读取服务 SLI、目标、窗口和错误预算；外部不可用时显式返回状态 |
+| GET | `/api/v1/slo/objectives` | 读取服务 SLI、错误预算和三档多窗口燃烧率；外部不可用时显式返回状态 |
 | PATCH | `/api/v1/slo/objectives/{id}` | 管理角色以乐观锁修改目标、滚动窗口和 PromQL 模板并写审计 |
 | GET | `/api/v1/postmortem-follow-ups` | 按本人/全部、状态与逾期筛选跨 Incident 行动项 |
 | POST | `/api/v1/postmortem-follow-ups/escalations/run` | 管理员/运维经理按业务日期幂等生成逾期升级事实 |
@@ -339,7 +339,7 @@ cd .. && ./mvnw test
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
 - MySQL 8.4 Testcontainers：Flyway V1-V15、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项完成，以及 Problem 创建、状态闭环和 REPEATABLE READ 双事务并发提升。
 
-默认后端套件发现 94 项测试：83 项执行通过，11 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离，以及 SLO 分母与错误预算边界。另行启用条件测试后，MySQL 8.4 从空库执行 Flyway V1–V19，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、容器构建与健康启动拆成七个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+默认后端套件发现 98 项测试：87 项执行通过，11 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离，以及 SLO 分母、错误预算和多窗口燃烧率边界。另行启用条件测试后，MySQL 8.4 从空库执行 Flyway V1–V19，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、容器构建与健康启动拆成七个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 

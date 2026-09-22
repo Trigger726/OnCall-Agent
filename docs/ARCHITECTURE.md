@@ -137,7 +137,7 @@ Problem 状态为 `OPEN / KNOWN_ERROR / RESOLVED`：已知错误必须同时具�
 
 外部调用配置连接/读取超时，使用 Spring Retry 做单次请求内重试，并由 `ProviderGuard` 在多次请求间维护 `CLOSED / OPEN / HALF_OPEN` 状态。Agent 步骤保存 Provider、查询表达式、时间窗、外部引用和 warning，避免只保存一段不可溯源的自然语言。Loki 支持 `X-Scope-OrgID` 与 Bearer Token，按纳秒时间戳、返回上限和倒序查询日志 stream；常见 JSON 日志中的 message、level、logger、traceId 会转换为结构化证据。日志在进入证据链前屏蔽密码、Token、Authorization、邮箱和完整 IPv4；原始敏感值不写入调查报告。
 
-服务 SLO 不经过 Metrics Router 的本地降级链：它必须从 Prometheus 分别取得好事件和总事件，且两条查询都只能归约为一个数值。Flyway V19 保存目标、滚动窗口和 PromQL 模板；评估器据此计算 `SLI = good / total` 与 `error budget = total × (1 - target)`。Provider 关闭/失败、空结果、零分母、多序列或 `good > total` 时拒绝计算，避免将可复现 Demo 指标误称为生产 SLI。目标修改使用角色权限、乐观锁和审计；Prometheus recording rules 与生产 SLI 采集仍由部署方维护。
+服务 SLO 不经过 Metrics Router 的本地降级链：它必须从 Prometheus 分别取得好事件和总事件，且两条查询都只能归约为一个数值。Flyway V19 保存目标、滚动窗口和 PromQL 模板；评估器据此计算 `SLI = good / total`、`error budget = total × (1 - target)` 与 `burn rate = error rate / (1 - target)`。燃烧率对 `5m / 30m / 1h / 6h / 3d` 五个唯一窗口取样，三档策略只有在长/短两窗口同时超过 `14.4x / 6x / 1x` 时才分级为 PAGE 或工单。Provider 关闭/失败、空结果、零分母、多序列或 `good > total` 时拒绝计算，避免将可复现 Demo 指标误称为生产 SLI。目标修改使用角色权限、乐观锁和审计；当前窗口查询按需直接执行，Prometheus recording rules、低流量样本策略与 Alertmanager 通知仍由后续检查点完成。
 
 适配器协议以 [Prometheus HTTP API](https://prometheus.io/docs/prometheus/latest/querying/api/) 和 [Grafana Loki HTTP API](https://grafana.com/docs/loki/latest/reference/loki-http-api/) 为准，并通过本机临时 HTTP 服务验证请求参数、请求头、响应格式和降级契约。
 

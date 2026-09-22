@@ -21,10 +21,13 @@ import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -48,6 +51,7 @@ class ServiceSloIntegrationTest {
     private static final HttpServer PROMETHEUS = startPrometheus();
     private static final AtomicReference<String> GOOD_EVENTS = new AtomicReference<>("9950");
     private static final AtomicReference<String> TOTAL_EVENTS = new AtomicReference<>("10000");
+    private static final List<String> QUERY_EXPRESSIONS = new CopyOnWriteArrayList<>();
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
@@ -67,6 +71,7 @@ class ServiceSloIntegrationTest {
     void resetPrometheusValues() {
         GOOD_EVENTS.set("9950");
         TOTAL_EVENTS.set("10000");
+        QUERY_EXPRESSIONS.clear();
     }
 
     @Test
@@ -86,7 +91,17 @@ class ServiceSloIntegrationTest {
                 .andExpect(jsonPath("$.data.objectives[0].measurement.sliPercent").value(99.5))
                 .andExpect(jsonPath("$.data.objectives[0].measurement.errorBudgetEvents").value(10.0))
                 .andExpect(jsonPath("$.data.objectives[0].measurement.remainingEvents").value(-40.0))
-                .andExpect(jsonPath("$.data.objectives[0].measurement.consumedPercent").value(500.0));
+                .andExpect(jsonPath("$.data.objectives[0].measurement.consumedPercent").value(500.0))
+                .andExpect(jsonPath("$.data.objectives[0].burnRate.status").value("TICKET"))
+                .andExpect(jsonPath("$.data.objectives[0].burnRate.lanes.length()").value(3))
+                .andExpect(jsonPath("$.data.objectives[0].burnRate.lanes[0].longWindow").value("1h"))
+                .andExpect(jsonPath("$.data.objectives[0].burnRate.lanes[0].longBurnRate").value(5.0))
+                .andExpect(jsonPath("$.data.objectives[0].burnRate.lanes[2].status").value("FIRING"));
+
+        String authGoodSixHours = "sum(increase(opspilot_http_requests_good_total"
+                + "{service_code=\"APP-AUTH\"}[6h]))";
+        assertThat(QUERY_EXPRESSIONS).hasSize(24).contains(authGoodSixHours);
+        assertThat(QUERY_EXPRESSIONS.stream().filter(authGoodSixHours::equals).count()).isEqualTo(1);
     }
 
     @Test
@@ -180,6 +195,7 @@ class ServiceSloIntegrationTest {
 
     private static void respond(HttpExchange exchange) throws IOException {
         String query = parameters(exchange).getOrDefault("query", "");
+        QUERY_EXPRESSIONS.add(query);
         String value = query.contains("good") ? GOOD_EVENTS.get() : TOTAL_EVENTS.get();
         byte[] body = ("{\"status\":\"success\",\"data\":{\"resultType\":\"scalar\","
                 + "\"result\":[1789952400,\"" + value + "\"]}}")

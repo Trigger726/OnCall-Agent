@@ -95,6 +95,25 @@ interface SloObjective {
     externalRef: string | null
     message: string | null
   }
+  burnRate: {
+    status: string
+    severity: string
+    message: string
+    lanes: Array<{
+      id: string
+      severity: string
+      longWindow: string
+      shortWindow: string
+      threshold: number
+      budgetConsumedPercent: number
+      status: string
+      longBurnRate: number | null
+      shortBurnRate: number | null
+      longTotalEvents: number | null
+      shortTotalEvents: number | null
+      message: string | null
+    }>
+  }
 }
 
 interface SloOverview {
@@ -227,6 +246,24 @@ function sloClass(value: string): string {
   return value === 'MET' ? 'status-success'
     : value === 'BREACHED' || value === 'INVALID_DATA' ? 'status-danger'
       : value === 'NO_DATA' || value === 'PROVIDER_DISABLED' ? 'status-neutral' : 'status-warning'
+}
+
+function burnStatus(value: string): string {
+  return ({
+    PAGE_FAST: '急速燃烧', PAGE_SLOW: '持续燃烧', TICKET: '工单关注', HEALTHY: '稳定',
+    NO_DATA: '分母不足', INVALID_DATA: '数据异常', PROVIDER_DISABLED: '未启用',
+    PROVIDER_ERROR: '查询失败',
+  } as Record<string, string>)[value] ?? value
+}
+
+function burnClass(value: string): string {
+  return value === 'HEALTHY' ? 'status-success'
+    : value === 'PAGE_FAST' ? 'status-danger'
+      : value === 'PAGE_SLOW' || value === 'TICKET' ? 'status-warning' : 'status-neutral'
+}
+
+function burnLane(value: string): string {
+  return ({ FAST_PAGE: '急速 PAGE', SLOW_PAGE: '持续 PAGE', TICKET: '工单' } as Record<string, string>)[value] ?? value
 }
 
 function number(value: number | null, suffix = ''): string {
@@ -393,7 +430,7 @@ onMounted(load)
       </div>
       <div class="table-scroll">
         <table class="data-table">
-          <thead><tr><th>服务 / SLI</th><th>目标与窗口</th><th>当前 SLI</th><th>好事件 / 总事件</th><th>错误预算剩余</th><th>状态</th><th>操作</th></tr></thead>
+          <thead><tr><th>服务 / SLI</th><th>目标与窗口</th><th>当前 SLI</th><th>好事件 / 总事件</th><th>错误预算剩余</th><th>多窗口燃烧率</th><th>状态</th><th>操作</th></tr></thead>
           <tbody>
             <tr v-for="item in sloOverview?.objectives" :key="item.id">
               <td class="primary-cell"><strong>{{ item.serviceName }}</strong><span>{{ item.serviceCode }} · {{ item.name }}</span></td>
@@ -401,6 +438,15 @@ onMounted(load)
               <td><strong>{{ number(item.measurement.sliPercent, '%') }}</strong></td>
               <td>{{ number(item.measurement.goodEvents) }} / {{ number(item.measurement.totalEvents) }}</td>
               <td><strong>{{ number(item.measurement.remainingEvents) }}</strong><br /><span class="muted">已消耗 {{ number(item.measurement.consumedPercent, '%') }}</span></td>
+              <td class="burn-rate-cell">
+                <span class="status-badge" :class="burnClass(item.burnRate.status)">{{ burnStatus(item.burnRate.status) }}</span>
+                <div v-if="item.burnRate.lanes.length" class="burn-rate-list">
+                  <span v-for="lane in item.burnRate.lanes" :key="lane.id" :class="{ firing: lane.status === 'FIRING' }">
+                    {{ burnLane(lane.id) }} {{ lane.longWindow }}/{{ lane.shortWindow }}：{{ number(lane.longBurnRate, 'x') }} / {{ number(lane.shortBurnRate, 'x') }}
+                  </span>
+                </div>
+                <small v-else class="slo-message">{{ item.burnRate.message }}</small>
+              </td>
               <td><span class="status-badge" :class="sloClass(item.measurement.status)">{{ sloStatus(item.measurement.status) }}</span><small v-if="item.measurement.message" class="slo-message">{{ item.measurement.message }}</small></td>
               <td><button v-if="canManageSlo" class="table-action" :disabled="savingSloId === item.id" @click="openSloEdit(item)">{{ savingSloId === item.id ? '保存中' : '调整目标' }}</button><span v-else class="muted">只读</span></td>
             </tr>
@@ -408,7 +454,7 @@ onMounted(load)
         </table>
         <div v-if="!sloOverview?.objectives.length" class="analytics-empty">尚未配置服务 SLO。</div>
       </div>
-      <footer class="follow-up-boundary">错误预算 = 总事件 × (100% − 目标)；当 Prometheus 无有效正分母、返回多序列或好事件大于总事件时，不计算结果。</footer>
+      <footer class="follow-up-boundary">燃烧率按长/短窗口同时超阈值判定：1h/5m · 14.4x，6h/30m · 6x，3d/6h · 1x。低流量服务需另行制定样本政策，不在此自动压制告警。</footer>
     </section>
 
     <section class="content-panel follow-up-operations">

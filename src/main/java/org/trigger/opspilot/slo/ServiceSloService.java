@@ -9,7 +9,9 @@ import org.trigger.opspilot.common.ApiException;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.OptionalDouble;
 
 @Service
@@ -84,11 +86,15 @@ public class ServiceSloService {
     }
 
     private ObjectiveView evaluate(ObjectiveRow row, Instant at) {
-        ObjectiveView base = row.toView();
+        ObjectiveView measured = row.toView().withMeasurement(evaluateMeasurement(row, at));
+        return measured.withBurnRate(evaluateBurnRate(row, at));
+    }
+
+    private Measurement evaluateMeasurement(ObjectiveRow row, Instant at) {
         if (!prometheus.available()) {
-            return base.withMeasurement(new Measurement("PROVIDER_DISABLED", null, null, null,
+            return new Measurement("PROVIDER_DISABLED", null, null, null,
                     null, null, null, null, null, at, null,
-                    "Prometheus 未启用；未使用本地演示数据替代"));
+                    "Prometheus 未启用；未使用本地演示数据替代");
         }
         String goodQuery = render(row.goodQuery(), row.serviceCode(), row.windowDays());
         String totalQuery = render(row.totalQuery(), row.serviceCode(), row.windowDays());
@@ -96,31 +102,64 @@ public class ServiceSloService {
             OptionalDouble goodResult = prometheus.query(goodQuery, at);
             OptionalDouble totalResult = prometheus.query(totalQuery, at);
             if (goodResult.isEmpty() || totalResult.isEmpty() || totalResult.getAsDouble() <= 0) {
-                return base.withMeasurement(new Measurement("NO_DATA", null, null, null,
+                return new Measurement("NO_DATA", null, null, null,
                         null, null, null, null, null, at, prometheus.externalRef(),
-                        "查询没有返回有效的正分母"));
+                        "查询没有返回有效的正分母");
             }
             double good = goodResult.getAsDouble();
             double total = totalResult.getAsDouble();
             if (good < 0 || good > total) {
-                return base.withMeasurement(new Measurement("INVALID_DATA", round(good), round(total), null,
+                return new Measurement("INVALID_DATA", round(good), round(total), null,
                         null, null, null, null, null, at, prometheus.externalRef(),
-                        "好事件必须处于 0 到总事件之间"));
+                        "好事件必须处于 0 到总事件之间");
             }
             double bad = total - good;
             double sli = good * 100 / total;
             double allowedBad = total * (100 - row.targetPercent()) / 100;
             double remaining = allowedBad - bad;
             double consumedPercent = bad * 100 / allowedBad;
-            return base.withMeasurement(new Measurement(
+            return new Measurement(
                     sli >= row.targetPercent() ? "MET" : "BREACHED",
                     round(good), round(total), round(bad), round(sli), round(allowedBad),
                     round(bad), round(remaining), round(consumedPercent), at,
-                    prometheus.externalRef(), null));
+                    prometheus.externalRef(), null);
         } catch (RuntimeException exception) {
-            return base.withMeasurement(new Measurement("PROVIDER_ERROR", null, null, null,
+            return new Measurement("PROVIDER_ERROR", null, null, null,
                     null, null, null, null, null, at, prometheus.externalRef(),
-                    "Prometheus 查询失败（" + exception.getClass().getSimpleName() + "）"));
+                    "Prometheus 查询失败（" + exception.getClass().getSimpleName() + "）");
+        }
+    }
+
+    private SloBurnRateCalculator.Assessment evaluateBurnRate(ObjectiveRow row, Instant at) {
+        if (!prometheus.available()) {
+            return SloBurnRateCalculator.unavailable("PROVIDER_DISABLED",
+                    "Prometheus 未启用；不生成虚假燃烧率");
+        }
+        Map<String, SloBurnRateCalculator.WindowSample> samples = new LinkedHashMap<>();
+        for (String window : SloBurnRateCalculator.requiredWindows()) {
+            samples.put(window, queryWindow(row, window, at));
+        }
+        return SloBurnRateCalculator.assess(row.targetPercent(), samples);
+    }
+
+    private SloBurnRateCalculator.WindowSample queryWindow(ObjectiveRow row, String window, Instant at) {
+        try {
+            OptionalDouble goodResult = prometheus.query(render(row.goodQuery(), row.serviceCode(), window), at);
+            OptionalDouble totalResult = prometheus.query(render(row.totalQuery(), row.serviceCode(), window), at);
+            if (goodResult.isEmpty() || totalResult.isEmpty() || totalResult.getAsDouble() <= 0) {
+                return new SloBurnRateCalculator.WindowSample("NO_DATA", null, null,
+                        window + " 窗口没有有效正分母");
+            }
+            double good = goodResult.getAsDouble();
+            double total = totalResult.getAsDouble();
+            if (good < 0 || good > total) {
+                return new SloBurnRateCalculator.WindowSample("INVALID_DATA", round(good), round(total),
+                        window + " 窗口的好事件不在 0 到总事件之间");
+            }
+            return new SloBurnRateCalculator.WindowSample("VALID", round(good), round(total), null);
+        } catch (RuntimeException exception) {
+            return new SloBurnRateCalculator.WindowSample("PROVIDER_ERROR", null, null,
+                    window + " 窗口查询失败（" + exception.getClass().getSimpleName() + "）");
         }
     }
 
@@ -141,7 +180,7 @@ public class ServiceSloService {
                         rs.getDouble("target_percent"), rs.getInt("window_days"),
                         rs.getString("good_events_query_template"),
                         rs.getString("total_events_query_template"), rs.getInt("version"),
-                        rs.getObject("updated_at", LocalDateTime.class), null)).optional()
+                        rs.getObject("updated_at", LocalDateTime.class), null, null)).optional()
                 .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "SLO_NOT_FOUND", "SLO 目标不存在"));
     }
 
@@ -151,8 +190,12 @@ public class ServiceSloService {
     }
 
     static String render(String template, String serviceCode, int windowDays) {
+        return render(template, serviceCode, windowDays + "d");
+    }
+
+    static String render(String template, String serviceCode, String window) {
         String safeService = serviceCode.replace("\\", "\\\\").replace("\"", "\\\"");
-        return template.replace("{{service}}", safeService).replace("{{window}}", windowDays + "d");
+        return template.replace("{{service}}", safeService).replace("{{window}}", window);
     }
 
     private static String validateQuery(String value, String field) {
@@ -182,7 +225,7 @@ public class ServiceSloService {
                                 String totalQuery, int version, LocalDateTime updatedAt) {
         ObjectiveView toView() {
             return new ObjectiveView(id, serviceResourceId, serviceCode, serviceName, name, targetPercent,
-                    windowDays, goodQuery, totalQuery, version, updatedAt, null);
+                    windowDays, goodQuery, totalQuery, version, updatedAt, null, null);
         }
     }
 
@@ -192,10 +235,18 @@ public class ServiceSloService {
     public record ObjectiveView(long id, long serviceResourceId, String serviceCode, String serviceName,
                                 String name, double targetPercent, int windowDays,
                                 String goodEventsQueryTemplate, String totalEventsQueryTemplate,
-                                int version, LocalDateTime updatedAt, Measurement measurement) {
+                                int version, LocalDateTime updatedAt, Measurement measurement,
+                                SloBurnRateCalculator.Assessment burnRate) {
         ObjectiveView withMeasurement(Measurement value) {
             return new ObjectiveView(id, serviceResourceId, serviceCode, serviceName, name, targetPercent,
-                    windowDays, goodEventsQueryTemplate, totalEventsQueryTemplate, version, updatedAt, value);
+                    windowDays, goodEventsQueryTemplate, totalEventsQueryTemplate, version, updatedAt,
+                    value, burnRate);
+        }
+
+        ObjectiveView withBurnRate(SloBurnRateCalculator.Assessment value) {
+            return new ObjectiveView(id, serviceResourceId, serviceCode, serviceName, name, targetPercent,
+                    windowDays, goodEventsQueryTemplate, totalEventsQueryTemplate, version, updatedAt,
+                    measurement, value);
         }
     }
 

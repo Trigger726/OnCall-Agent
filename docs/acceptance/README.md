@@ -27,8 +27,11 @@
 | V1.7 | 25：跨 JVM CLIENT/SERVER Trace 拼接 | 通过，正常/故障恢复两轮严格父子关系、崩溃 outbox 租约修正与 Run 58 七项 CI 闭环 | [V1.7-checkpoint-25.md](V1.7-checkpoint-25.md) |
 | V1.7 | 26：服务级 Incident 响应分析 | 通过，独立分母、响应式页面与 Run 60 七项 CI 闭环 | [V1.7-checkpoint-26.md](V1.7-checkpoint-26.md) |
 | V1.7 | 27：真实 SLI 分母与服务错误预算 | 通过，本地全量、桌面/移动页、MySQL 8.4 与 Run 35613655790 七项 CI 闭环 | [V1.7-checkpoint-27.md](V1.7-checkpoint-27.md) |
+| V1.7 | 28：多窗口错误预算燃烧率 | 本地通过，98 项后端发现/87 项执行、前端 13 项、JAR 与启用/关闭实页通过；远端待验 | [V1.7-checkpoint-28.md](V1.7-checkpoint-28.md) |
 
 ## 状态约定
+
+最新燃烧率闭环：[V1.7-checkpoint-28.md](V1.7-checkpoint-28.md)：以 Google SRE 三档长/短窗口 AND 策略区分急速 PAGE、持续 PAGE、工单和稳定状态；异常分母拒算。默认后端 98 项发现/87 项执行、前端 13 项、生产构建、JAR，以及启用/关闭两种真实页面状态均通过，远端七项门禁待验。
 
 最新 SLO 分母闭环：[V1.7-checkpoint-27.md](V1.7-checkpoint-27.md)：服务目标和滚动窗口持久化，使用 Prometheus 好事件/总事件计算 SLI 与错误预算，对关闭、失败、零分母、多序列和矛盾数据显式拒算。默认后端 94 项发现/83 项执行通过，前端 13 项与真实桌面/移动页通过；[Run 35613655790](https://github.com/Trigger726/OnCall-Agent/actions/runs/35613655790) 的 MySQL 8.4 与七项门禁全绿。
 

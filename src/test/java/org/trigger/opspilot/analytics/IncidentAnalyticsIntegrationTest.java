@@ -156,7 +156,9 @@ class IncidentAnalyticsIntegrationTest {
                         .value("PROVIDER_DISABLED"))
                 .andExpect(jsonPath("$.data.objectives[0].measurement.sliPercent").isEmpty())
                 .andExpect(jsonPath("$.data.objectives[0].measurement.message")
-                        .value("Prometheus 未启用；未使用本地演示数据替代"));
+                        .value("Prometheus 未启用；未使用本地演示数据替代"))
+                .andExpect(jsonPath("$.data.objectives[0].burnRate.status").value("PROVIDER_DISABLED"))
+                .andExpect(jsonPath("$.data.objectives[0].burnRate.lanes.length()").value(0));
     }
 
     private String login(String username) throws Exception {
