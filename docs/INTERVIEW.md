@@ -191,7 +191,7 @@ Agent 结论和发起操作可能共享同一个人的判断，独立审批可�
 
 - 当前通知通道是站内记录，未接真实企业微信/短信回执。
 - 告警接入是同步 REST，尚未用 Kafka 承担突发流量。
-- Alertmanager 已有标准 v4 入站 webhook：独立密钥、批量上限、逐项永久错误隔离，以及 `fingerprint + startsAt` 生命周期幂等；相同状态重试零写入，resolved 更新同一告警并留时间线。它仍是同步 receiver，尚无持久化拒绝台账/死信重放、真实大批量压测，也不代表 SLO 已向 Alertmanager 出站通知或获得渠道回执。
+- Alertmanager 已有标准 v4 入站 webhook：独立密钥、批量上限、逐项永久错误隔离，以及 `fingerprint + startsAt` 生命周期幂等；相同状态重试零写入，resolved 更新同一告警并留时间线。永久坏项使用 `fingerprint + startsAt + status` 的脱敏持久台账，管理/值班角色可用短租约重放，AUDITOR 只读；原告警外部 ID 是第二层幂等保障。它仍是同步 receiver，尚无自动退避/保留期、真实大批量压测，也不代表 SLO 已向 Alertmanager 出站通知或获得渠道回执。
 - 数据权限做到角色级，尚未细化到部门和资源范围。
 - Runbook 已具备可选 Embedding、持久化向量、RRF、盲化双评分、线性加权 κ、分级 NDCG，以及主库快照写前脱敏与定时保留期擦除，但默认未启用真实 Provider；13 条仍是种子集，隔离 QA 的双评分也不是历史生产标注，未证明真实 Embedding 或 cross-encoder rerank 优于 BM25。当前一致性只支持两名标注人且没有第三方仲裁；快照治理尚未覆盖备份/导出副本、按租户差异化策略和用户级删除请求，当前向量查询为内存全量余弦，不适合大语料；PDF 只支持可提取文本，不做 OCR。
 - AI 模式需要外部 DashScope Key，默认演示采用规则引擎。

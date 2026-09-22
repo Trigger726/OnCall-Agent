@@ -122,7 +122,8 @@
 - 检查点 27 已完成：Flyway V19 持久化服务 SLO 目标、滚动窗口和版本化 PromQL；使用 Prometheus 好事件/总事件计算 SLI 与错误预算，异常/缺失分母拒算，目标修改带权限、乐观锁和审计。本地全量、前端、真实页面与 [Run 35613655790](https://github.com/Trigger726/OnCall-Agent/actions/runs/35613655790) 的 MySQL 8.4/七项门禁已闭环。
 - 检查点 28 已完成：按 Google SRE 三档默认参数计算长/短窗口燃烧率，只在两窗口同时超阈值时分级为急速 PAGE、持续 PAGE 或工单；异常分母仍拒算。默认后端 98 项发现/87 项执行、前端 13 项、生产构建、JAR、启用/关闭两种真实页面状态，以及 Run 35741029914 七项远端门禁均通过。
 - 检查点 29 已完成：新增默认关闭、专用密钥保护的 Alertmanager v4 批量 webhook；fingerprint + startsAt 形成生命周期幂等键，同状态重放零写入，firing/resolved 更新同一告警并留恢复时间线，永久坏项批内隔离。默认后端 102 项发现/91 项执行、前端 13 项、JAR、真实 HTTP/实页，以及 [Run 35756244777](https://github.com/Trigger726/OnCall-Agent/actions/runs/35756244777) 七项远端门禁均通过。
-- 待完成：Runbook 命中率趋势、跨 Incident 语义相似/依赖共因聚类、真实外部提醒与回执；Alertmanager 入站的真实容器联调、持久化拒绝台账/死信重放，以及 SLO 出站通知、生产 recording rules/长期数据和低流量样本策略；Trace 的真实生产 Prometheus/Loki 联调、Collector 重启持久化与生产容量验证。
+- 检查点 30 进行中：Flyway V20 持久化脱敏 Alertmanager 拒绝快照；动态 firing `endsAt` 依稳定键归并，重复投递不抢占租约；管理/值班角色可短租约重放，AUDITOR 只读，成功/失败可审计。本地 104 项后端、13 项前端、JAR、真实 HTTP 和响应式实页已通过，远端七项 CI 待复验。
+- 待完成：Runbook 命中率趋势、跨 Incident 语义相似/依赖共因聚类、真实外部提醒与回执；Alertmanager 入站的真实容器联调、拒绝快照保留期/自动退避重放，以及 SLO 出站通知、生产 recording rules/长期数据和低流量样本策略；Trace 的真实生产 Prometheus/Loki 联调、Collector 重启持久化与生产容量验证。
 - 检查点 08 已完成：隔离提交后实时推送的运行时异常，验证同事务后续回调与所有推送失败时完整调查仍可完成、回放；4 项集成测试及远端四段式 CI 通过。
 - 检查点 07 已完成：事件推送移至实际事务 afterCommit，新增外层提交/回滚和游标回放测试；定向回归与远端四段式 CI 通过，默认后端 44 项、2 项条件跳过。分布式可靠投递仍待实现。
 - 检查点 06 已完成：修复取消排队调查后残留 Future 占用有界队列，补充保持 worker 阻塞时接纳替代任务的失败/成功对照；定向 3 项回归和远端四段式门禁通过。

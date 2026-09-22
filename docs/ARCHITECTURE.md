@@ -143,7 +143,9 @@ Problem 状态为 `OPEN / KNOWN_ERROR / RESOLVED`：已知错误必须同时具�
 
 Alertmanager 通过专用 webhook 进入 `AlertmanagerWebhookService -> AlertService -> alert_event / incident / timeline`。适配器遵循[官方通知结构](https://github.com/prometheus/alertmanager/blob/main/docs/notifications.md)，但只接受能明确映射资源和严重度的 alert；不会用默认服务或默认优先级掩盖配置错误。端点默认关闭，启用后用独立共享密钥认证并限制批大小。
 
-生命周期 ID 为 `fingerprint:startsAtEpochMillis`。数据库已有的 `source + external_event_id` 唯一约束提供最终幂等保证：同状态重试返回 `REPLAYED` 且零写入；状态变化返回 `UPDATED`，不增加 occurrence，并写一次 Incident 状态时间线。没有外部 ID 的原有 intake 继续按 30 分钟 firing 指纹累计 occurrence，两类语义明确分离。批内可预期业务错误作为逐项拒绝返回，未知运行时/数据库故障不被吞掉，使 Alertmanager 可以重试整批。当前是入站 receiver，不包含 SLO 判定出站发送、通知送达回执或持久化死信台账。
+生命周期 ID 为 `fingerprint:startsAtEpochMillis`。数据库已有的 `source + external_event_id` 唯一约束提供最终幂等保证：同状态重试返回 `REPLAYED` 且零写入；状态变化返回 `UPDATED`，不增加 occurrence，并写一次 Incident 状态时间线。没有外部 ID 的原有 intake 继续按 30 分钟 firing 指纹累计 occurrence，两类语义明确分离。批内可预期业务错误作为逐项拒绝返回，未知运行时/数据库故障不被吞掉，使 Alertmanager 可以重试整批。
+
+V20 将永久业务拒绝写入 `alert_ingest_rejection`。对完整 alert 使用 `fingerprint + startsAt + status` 的 SHA-256 键，故 firing 的动态 `endsAt` 不会制造多条拒绝；不完整 alert 才回退到规范化 JSON 哈希。存储的是经 `LogRedactor` 处理的稳定快照，列表不返回 payload。手工重放使用 30 秒 token 租约，令牌一致时才能完成/释放；再通过 `source + external_event_id` 幂等键防止“告警已创建但台账回写失败”导致重复。查看包含 AUDITOR，重放只对 ADMIN/OPS_MANAGER/ON_CALL 开放，成功/失败写审计。当前仍是入站 receiver，不包含 SLO 出站发送、送达回执、自动退避重放或拒绝快照保留期。
 
 适配器协议以 [Prometheus HTTP API](https://prometheus.io/docs/prometheus/latest/querying/api/) 和 [Grafana Loki HTTP API](https://grafana.com/docs/loki/latest/reference/loki-http-api/) 为准，并通过本机临时 HTTP 服务验证请求参数、请求头、响应格式和降级契约。
 
@@ -256,7 +258,7 @@ cmdb_resource 1---n oncall_schedule 1---n oncall_shift
 cmdb_resource 1---n escalation_policy 1---n escalation_step
 ```
 
-数据库变更由 Flyway 管理。H2 使用 MySQL 兼容模式保证本地零配置体验，Compose 提供 MySQL 部署路径；Testcontainers 已在真实 MySQL 8.4 上从空库执行 V1–V15，并验证关键索引、中文数据、Runbook 召回、调查主链路、复盘发布、逾期扫描幂等、行动项关闭和 Problem 生命周期。`flyway-mysql` 作为正式运行依赖加载 MySQL 方言支持；最新直接证据以验收报告为准。
+数据库变更由 Flyway 管理。H2 使用 MySQL 兼容模式保证本地零配置体验，Compose 提供 MySQL 部署路径；Testcontainers 条件套件从真实 MySQL 8.4 空库执行 V1–V20，并验证关键索引、中文数据、Runbook 召回、调查主链路、复盘发布、逾期扫描幂等、行动项关闭、Problem/SLO 生命周期和 Alertmanager 拒绝台账表。`flyway-mysql` 作为正式运行依赖加载 MySQL 方言支持；最新直接证据以验收报告为准。
 
 ## 9. 可观测性和失败策略
 

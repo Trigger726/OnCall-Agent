@@ -124,6 +124,8 @@ checkpoint 28 燃烧率加演：在 checkpoint-27 同一张 SLO 表中查看“�
 
 checkpoint 29 Alertmanager 加演：启动时配置 `ALERTMANAGER_WEBHOOK_SECRET`，用同一份 Alertmanager v4 payload 先后投递 firing、重复 firing 和 resolved。响应动作应依次为 `CREATED / REPLAYED / UPDATED`；再打开告警中心，显示 `alertmanager`、映射后的 P1、已恢复和 `×1`，证明重试与恢复都没有虚增 occurrence。切换状态筛选为 RESOLVED 后进入关联 Incident，时间线应只有一条“外部告警已恢复”。随后增加一条不存在的资源与有效 alert 同批投递，展示一条接受、一条 `REJECTED`，说明坏配置不会阻断好告警。历史私有 `/alerts/intake` Demo 保留，用于对比“内部单事件指纹压缩”和“外部生命周期幂等”的不同口径。
 
+checkpoint 30 拒绝闭环加演：先向不存在的 `resource_code` 投递两次同一 firing，第二次仅改变 `endsAt`；两次响应应指向同一 rejection ID，告警页“待处理”中的投递数为 2、显示脱敏字段数且不显示 payload。修正上游资源标签后再投递，该项进入“已重放”并关联 Incident。再留一条未修复坏项，用 `lina` 展示受控“重放”按钮；切换 `auditor` 只能查看不能重放。这个 Demo 增补 checkpoint-29，不覆盖原 webhook 生命周期和历史私有 intake 对比。
+
 ### V1.7 加演：可解释重复事故与 Problem Management（90 秒）
 
 打开“问题治理”，先指向顶部口径说明：候选只使用“同一归属服务 + 完全相同告警指纹”，并且必须跨至少两个不同 Incident。候选表将“独立 Incident 证据”和“告警 occurrence 总量”分列显示，解释同一事故内重复 100 次仍只算一次复发证据；页面不展示没有训练数据支撑的相似度百分比。

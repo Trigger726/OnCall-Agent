@@ -29,10 +29,13 @@
 | V1.7 | 27：真实 SLI 分母与服务错误预算 | 通过，本地全量、桌面/移动页、MySQL 8.4 与 Run 35613655790 七项 CI 闭环 | [V1.7-checkpoint-27.md](V1.7-checkpoint-27.md) |
 | V1.7 | 28：多窗口错误预算燃烧率 | 通过，98 项后端发现/87 项执行、前端 13 项、JAR、启用/关闭实页与远端七项门禁通过 | [V1.7-checkpoint-28.md](V1.7-checkpoint-28.md) |
 | V1.7 | 29：Alertmanager 标准接入与生命周期幂等 | 通过，本地 102 项后端、前端/JAR、真实 HTTP/实页与远端七项门禁闭环 | [V1.7-checkpoint-29.md](V1.7-checkpoint-29.md) |
+| V1.7 | 30：Alertmanager 拒绝台账与受控重放 | 部分通过，本地 104 项后端、前端/JAR、真实 HTTP/响应式实页已闭环，远端七项 CI 待复验 | [V1.7-checkpoint-30.md](V1.7-checkpoint-30.md) |
 
 ## 状态约定
 
-最新告警接入闭环：[V1.7-checkpoint-29.md](V1.7-checkpoint-29.md)：接收 Alertmanager v4 批量 webhook，用 fingerprint + startsAt 形成生命周期幂等键，同状态重试零写入、恢复更新同一告警，并隔离永久坏项。默认后端 102 项发现/91 项执行、前端 13 项、生产构建、JAR、真实页面，以及 [Run 35756244777](https://github.com/Trigger726/OnCall-Agent/actions/runs/35756244777) 七项远端门禁均通过。
+最新拒绝处置闭环：[V1.7-checkpoint-30.md](V1.7-checkpoint-30.md)：将 Alertmanager 永久坏项脱敏持久化，以稳定拒绝键归并重复投递，用短租约、原告警幂等和角色权限完成受控重放。本地后端 104 项发现/93 项执行、前端 13 项、生产构建、JAR、真实 HTTP 与桌面/390px 实页已通过；远端七项门禁待本轮推送后复验。
+
+上一告警接入闭环：[V1.7-checkpoint-29.md](V1.7-checkpoint-29.md)：接收 Alertmanager v4 批量 webhook，用 fingerprint + startsAt 形成生命周期幂等键，同状态重试零写入、恢复更新同一告警，并隔离永久坏项。默认后端 102 项发现/91 项执行、前端 13 项、生产构建、JAR、真实页面，以及 [Run 35756244777](https://github.com/Trigger726/OnCall-Agent/actions/runs/35756244777) 七项远端门禁均通过。
 
 最新燃烧率闭环：[V1.7-checkpoint-28.md](V1.7-checkpoint-28.md)：以 Google SRE 三档长/短窗口 AND 策略区分急速 PAGE、持续 PAGE、工单和稳定状态；异常分母拒算。默认后端 98 项发现/87 项执行、前端 13 项、生产构建、JAR、启用/关闭两种真实页面状态，以及 [Run 35741029914](https://github.com/Trigger726/OnCall-Agent/actions/runs/35741029914) 七项远端门禁均通过。
 
