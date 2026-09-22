@@ -191,6 +191,7 @@ Agent 结论和发起操作可能共享同一个人的判断，独立审批可�
 
 - 当前通知通道是站内记录，未接真实企业微信/短信回执。
 - 告警接入是同步 REST，尚未用 Kafka 承担突发流量。
+- Alertmanager 已有标准 v4 入站 webhook：独立密钥、批量上限、逐项永久错误隔离，以及 `fingerprint + startsAt` 生命周期幂等；相同状态重试零写入，resolved 更新同一告警并留时间线。它仍是同步 receiver，尚无持久化拒绝台账/死信重放、真实大批量压测，也不代表 SLO 已向 Alertmanager 出站通知或获得渠道回执。
 - 数据权限做到角色级，尚未细化到部门和资源范围。
 - Runbook 已具备可选 Embedding、持久化向量、RRF、盲化双评分、线性加权 κ、分级 NDCG，以及主库快照写前脱敏与定时保留期擦除，但默认未启用真实 Provider；13 条仍是种子集，隔离 QA 的双评分也不是历史生产标注，未证明真实 Embedding 或 cross-encoder rerank 优于 BM25。当前一致性只支持两名标注人且没有第三方仲裁；快照治理尚未覆盖备份/导出副本、按租户差异化策略和用户级删除请求，当前向量查询为内存全量余弦，不适合大语料；PDF 只支持可提取文本，不做 OCR。
 - AI 模式需要外部 DashScope Key，默认演示采用规则引擎。
@@ -199,7 +200,7 @@ Agent 结论和发起操作可能共享同一个人的判断，独立审批可�
 - Agent 步骤已经使用持久化实时 SSE 和游标回放；对话仍是完整回答落库后的协议分块，尚未做到模型 Provider 原生 token 流。
 - Agent 事件已通过 outbox + Redis Streams + 数据库补读支持跨实例广播，崩溃孤儿 run 可在持久化 deadline 后收敛到终态；但工具链仍不会跨节点续跑，也没有执行租约/fencing token 或 exactly-once 保证。
 - 处置审批已完成治理闭环，但尚未接 Argo CD、Ansible、Kubernetes 等生产执行器。
-- Postmortem 已覆盖证据快照、独立发布、行动项责任闭环、跨 Incident 待办、逾期事实和 MTTA/MTTM/MTTR；Problem 已覆盖精确指纹复发；服务 SLO 已按 Prometheus 好事件/总事件计算错误预算，并用三档长/短窗口燃烧率区分 PAGE 与工单信号，无效分母继续拒算。尚未接真实外部提醒/回执、跨 Incident 语义相似/依赖共因聚类、Runbook 命中率趋势，也未部署生产 recording rules、低流量样本策略与 Alertmanager 通知。
+- Postmortem 已覆盖证据快照、独立发布、行动项责任闭环、跨 Incident 待办、逾期事实和 MTTA/MTTM/MTTR；Problem 已覆盖精确指纹复发；服务 SLO 已按 Prometheus 好事件/总事件计算错误预算，并用三档长/短窗口燃烧率区分 PAGE 与工单信号；Alertmanager 入站生命周期已经闭环。尚未接真实外部提醒/回执、跨 Incident 语义相似/依赖共因聚类、Runbook 命中率趋势，也未部署生产 recording rules、低流量样本策略与 Alertmanager 出站通知。
 - 已有 MySQL Testcontainers 与四段式 CI 配置；本地是否能运行真实 MySQL 仍取决于 Docker 引擎，托管 runner 结果需以远端 Actions 实际运行记录为准；系统级压力测试也尚未加入。
 
 主动说清边界比虚构“企业级海量并发”更专业。

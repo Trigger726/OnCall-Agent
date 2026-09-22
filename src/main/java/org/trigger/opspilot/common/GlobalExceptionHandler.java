@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,6 +31,12 @@ public class GlobalExceptionHandler {
                     .orElse("请求参数不合法")
                 : exception.getMessage();
         return ResponseEntity.badRequest().body(ApiResponse.failure("VALIDATION_ERROR", message));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    ResponseEntity<ApiResponse<Void>> handleUnreadableBody(HttpMessageNotReadableException exception) {
+        return ResponseEntity.badRequest()
+                .body(ApiResponse.failure("INVALID_JSON", "请求体不是合法 JSON"));
     }
 
     @ExceptionHandler(AuthenticationException.class)

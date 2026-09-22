@@ -201,7 +201,7 @@ class ProblemManagementIntegrationTest {
         mockMvc.perform(post("/api/v1/alerts/intake")
                         .contentType(MediaType.APPLICATION_JSON).content(intake))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.action").value("DEDUPLICATED"));
+                .andExpect(jsonPath("$.data.action").value("REPLAYED"));
 
         JsonNode recurred = data(get("/api/v1/problems/{id}", problemId), manager);
         assertThat(recurred.path("status").asText()).isEqualTo("RESOLVED");

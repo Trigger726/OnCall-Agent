@@ -76,6 +76,10 @@ opspilot:
       batch-size: ${AGENT_RECOVERY_BATCH_SIZE:100}
   ai:
     enabled: ${AI_ENABLED:false}
+  alertmanager:
+    webhook:
+      secret: ${ALERTMANAGER_WEBHOOK_SECRET:disabled}
+      max-alerts: ${ALERTMANAGER_WEBHOOK_MAX_ALERTS:100}
   runbook:
     semantic:
       enabled: ${RUNBOOK_SEMANTIC_ENABLED:false}

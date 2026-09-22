@@ -122,6 +122,8 @@ checkpoint 27 SLO 加演：继续向下查看“服务 SLO 与错误预算”。
 
 checkpoint 28 燃烧率加演：在 checkpoint-27 同一张 SLO 表中查看“多窗口燃烧率”。先展示 1h 已超 14.4x、但 5m 已恢复的场景，结果不 PAGE；再让 1h/5m 同时超阈值，页面变为“急速燃烧”。随后分别演示 6h/30m 的持续 PAGE 和 3d/6h 的工单级别，说明长窗口控制重大性、短窗口确认当前仍在燃烧。最后关闭 Prometheus，三档窗口值必须全部消失而不使用 Demo 数据；checkpoint-27 的累计 SLI、目标修改和异常分母 Demo 仍保留。
 
+checkpoint 29 Alertmanager 加演：启动时配置 `ALERTMANAGER_WEBHOOK_SECRET`，用同一份 Alertmanager v4 payload 先后投递 firing、重复 firing 和 resolved。响应动作应依次为 `CREATED / REPLAYED / UPDATED`；再打开告警中心，显示 `alertmanager`、映射后的 P1、已恢复和 `×1`，证明重试与恢复都没有虚增 occurrence。切换状态筛选为 RESOLVED 后进入关联 Incident，时间线应只有一条“外部告警已恢复”。随后增加一条不存在的资源与有效 alert 同批投递，展示一条接受、一条 `REJECTED`，说明坏配置不会阻断好告警。历史私有 `/alerts/intake` Demo 保留，用于对比“内部单事件指纹压缩”和“外部生命周期幂等”的不同口径。
+
 ### V1.7 加演：可解释重复事故与 Problem Management（90 秒）
 
 打开“问题治理”，先指向顶部口径说明：候选只使用“同一归属服务 + 完全相同告警指纹”，并且必须跨至少两个不同 Incident。候选表将“独立 Incident 证据”和“告警 occurrence 总量”分列显示，解释同一事故内重复 100 次仍只算一次复发证据；页面不展示没有训练数据支撑的相似度百分比。

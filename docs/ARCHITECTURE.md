@@ -139,6 +139,12 @@ Problem 状态为 `OPEN / KNOWN_ERROR / RESOLVED`：已知错误必须同时具�
 
 服务 SLO 不经过 Metrics Router 的本地降级链：它必须从 Prometheus 分别取得好事件和总事件，且两条查询都只能归约为一个数值。Flyway V19 保存目标、滚动窗口和 PromQL 模板；评估器据此计算 `SLI = good / total`、`error budget = total × (1 - target)` 与 `burn rate = error rate / (1 - target)`。燃烧率对 `5m / 30m / 1h / 6h / 3d` 五个唯一窗口取样，三档策略只有在长/短两窗口同时超过 `14.4x / 6x / 1x` 时才分级为 PAGE 或工单。Provider 关闭/失败、空结果、零分母、多序列或 `good > total` 时拒绝计算，避免将可复现 Demo 指标误称为生产 SLI。目标修改使用角色权限、乐观锁和审计；当前窗口查询按需直接执行，Prometheus recording rules、低流量样本策略与 Alertmanager 通知仍由后续检查点完成。
 
+### Alertmanager 入站边界与幂等模型
+
+Alertmanager 通过专用 webhook 进入 `AlertmanagerWebhookService -> AlertService -> alert_event / incident / timeline`。适配器遵循[官方通知结构](https://github.com/prometheus/alertmanager/blob/main/docs/notifications.md)，但只接受能明确映射资源和严重度的 alert；不会用默认服务或默认优先级掩盖配置错误。端点默认关闭，启用后用独立共享密钥认证并限制批大小。
+
+生命周期 ID 为 `fingerprint:startsAtEpochMillis`。数据库已有的 `source + external_event_id` 唯一约束提供最终幂等保证：同状态重试返回 `REPLAYED` 且零写入；状态变化返回 `UPDATED`，不增加 occurrence，并写一次 Incident 状态时间线。没有外部 ID 的原有 intake 继续按 30 分钟 firing 指纹累计 occurrence，两类语义明确分离。批内可预期业务错误作为逐项拒绝返回，未知运行时/数据库故障不被吞掉，使 Alertmanager 可以重试整批。当前是入站 receiver，不包含 SLO 判定出站发送、通知送达回执或持久化死信台账。
+
 适配器协议以 [Prometheus HTTP API](https://prometheus.io/docs/prometheus/latest/querying/api/) 和 [Grafana Loki HTTP API](https://grafana.com/docs/loki/latest/reference/loki-http-api/) 为准，并通过本机临时 HTTP 服务验证请求参数、请求头、响应格式和降级契约。
 
 ### Runbook 知识库与检索门禁
@@ -287,5 +293,5 @@ Trace 只记录受控业务字段：Alert/Incident/run/report ID、来源、严�
 4. 增加系统级并发压测、真实 socket 断流恢复，以及外部 Provider 组合故障注入。
 5. 为多实例事件广播和任务协调接入消息组件。
 6. 将对话 SSE 从完整回答分块升级为模型 Provider 原生 token 流。
-7. 在已完成 MTTA/MTTM/MTTR、行动项逾期治理、精确指纹复发和 Prometheus 事件型服务 SLO 之上，补 Runbook 命中率趋势、跨 Incident 语义相似/依赖共因聚类，并以真实生产 recording rules、长期窗口和错误预算策略验证 SLO。
+7. 在已完成 MTTA/MTTM/MTTR、行动项逾期治理、精确指纹复发、Prometheus 事件型服务 SLO 和 Alertmanager 入站生命周期之上，补 Runbook 命中率趋势、跨 Incident 语义相似/依赖共因聚类，并以真实生产 recording rules、长期窗口、出站通知和送达回执验证 SLO。
 8. 从真实但脱敏的历史 Incident/查询流量持续扩充已实现的双评分 qrels，加入第三方仲裁、超过两名标注人的一致性和分层抽样；将现有保留任务扩展到备份/导出副本和面向单条数据的受控删除，再以 NDCG/Recall 验证真实 Embedding 与 cross-encoder rerank 是否稳定优于 BM25/RRF，决定是否引入 ANN/OpenSearch/Milvus。

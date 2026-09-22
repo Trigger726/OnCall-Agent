@@ -60,6 +60,8 @@ public class AlertService {
     @Transactional
     public IntakeResult intake(IntakeRequest request) {
         LocalDateTime occurredAt = request.occurredAt() == null ? LocalDateTime.now() : request.occurredAt();
+        String status = normalizedStatus(request.status());
+        String externalEventId = blankToNull(request.externalEventId());
         ResourceRef resource = jdbcClient.sql("""
                         SELECT id, name, resource_type FROM cmdb_resource WHERE resource_code = :code
                         """)
@@ -70,30 +72,41 @@ public class AlertService {
                 .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "RESOURCE_NOT_FOUND",
                         "resourceCode 未匹配到 CMDB 资源"));
         String fingerprint = fingerprint(request.source(), resource.id(), request.severity(), request.title());
-        Optional<ExistingAlert> existing = findExisting(request.source(), request.externalEventId(), fingerprint, occurredAt);
+        Optional<ExistingAlert> existing = findExisting(request.source(), externalEventId, fingerprint, occurredAt);
         if (existing.isPresent()) {
             ExistingAlert alert = existing.get();
+            if (externalEventId != null && status.equals(alert.status())) {
+                return new IntakeResult("REPLAYED", alert.id(), alert.incidentId(), fingerprint,
+                        "相同外部事件已处理，本次重放未修改告警");
+            }
             jdbcClient.sql("""
-                            UPDATE alert_event SET occurrence_count = occurrence_count + 1,
+                            UPDATE alert_event SET occurrence_count = occurrence_count + :occurrenceIncrement,
                                 last_occurred_at = :occurredAt, status = :status,
                                 description = :description, labels_json = :labels,
                                 version = version + 1, updated_at = CURRENT_TIMESTAMP
                             WHERE id = :id
                             """)
-                    .param("occurredAt", occurredAt).param("status", normalizedStatus(request.status()))
+                    .param("occurrenceIncrement", externalEventId == null ? 1 : 0)
+                    .param("occurredAt", occurredAt).param("status", status)
                     .param("description", request.description()).param("labels", json(request.labels()))
                     .param("id", alert.id()).update();
             Long incidentId = alert.incidentId();
-            if (incidentId == null && "FIRING".equals(normalizedStatus(request.status()))) {
+            if (incidentId == null && "FIRING".equals(status)) {
                 incidentId = attachToIncident(resource, request.severity(), request.title());
                 jdbcClient.sql("UPDATE alert_event SET incident_id = :incidentId WHERE id = :id")
                         .param("incidentId", incidentId).param("id", alert.id()).update();
             }
             if (incidentId != null) {
                 problemService.linkMatchingProblem(alert.id(), incidentId);
+                if (externalEventId != null) {
+                    appendAlertStateTimeline(incidentId, alert.id(), status, request.title());
+                }
             }
-            return new IntakeResult("DEDUPLICATED", alert.id(), incidentId, fingerprint,
-                    "重复告警已压缩，发生次数已累加");
+            return externalEventId == null
+                    ? new IntakeResult("DEDUPLICATED", alert.id(), incidentId, fingerprint,
+                            "重复告警已压缩，发生次数已累加")
+                    : new IntakeResult("UPDATED", alert.id(), incidentId, fingerprint,
+                            "外部告警状态已更新，发生次数保持不变");
         }
 
         jdbcClient.sql("""
@@ -102,9 +115,9 @@ public class AlertService {
                         VALUES (:source, :externalId, :fingerprint, :resourceId, :severity, :status,
                           :title, :description, :labels, :occurredAt, :occurredAt)
                         """)
-                .param("source", request.source()).param("externalId", blankToNull(request.externalEventId()))
+                .param("source", request.source()).param("externalId", externalEventId)
                 .param("fingerprint", fingerprint).param("resourceId", resource.id())
-                .param("severity", request.severity().toUpperCase()).param("status", normalizedStatus(request.status()))
+                .param("severity", request.severity().toUpperCase()).param("status", status)
                 .param("title", request.title()).param("description", request.description())
                 .param("labels", json(request.labels())).param("occurredAt", occurredAt).update();
         long alertId = jdbcClient.sql("""
@@ -114,7 +127,7 @@ public class AlertService {
                 .param("source", request.source()).param("fingerprint", fingerprint)
                 .query(Long.class).single();
         Long incidentId = null;
-        if ("FIRING".equals(normalizedStatus(request.status()))) {
+        if ("FIRING".equals(status)) {
             incidentId = attachToIncident(resource, request.severity(), request.title());
             jdbcClient.sql("UPDATE alert_event SET incident_id = :incidentId WHERE id = :id")
                     .param("incidentId", incidentId).param("id", alertId).update();
@@ -129,18 +142,31 @@ public class AlertService {
         return new IntakeResult("CREATED", alertId, incidentId, fingerprint, "新告警已接入并完成聚合");
     }
 
+    private void appendAlertStateTimeline(long incidentId, long alertId, String status, String title) {
+        String eventType = "RESOLVED".equals(status) ? "ALERT_RESOLVED" : "ALERT_FIRING";
+        String content = "RESOLVED".equals(status)
+                ? "外部告警已恢复：" + title
+                : "外部告警再次触发：" + title;
+        jdbcClient.sql("""
+                        INSERT INTO incident_timeline(incident_id, event_type, content, evidence_ref)
+                        VALUES (:incidentId, :eventType, :content, :evidenceRef)
+                        """)
+                .param("incidentId", incidentId).param("eventType", eventType)
+                .param("content", content).param("evidenceRef", "alert:" + alertId).update();
+    }
+
     private Optional<ExistingAlert> findExisting(String source, String externalId, String fingerprint,
                                                   LocalDateTime occurredAt) {
         if (externalId != null && !externalId.isBlank()) {
             return jdbcClient.sql("""
-                            SELECT id, incident_id FROM alert_event
+                            SELECT id, incident_id, status FROM alert_event
                             WHERE source = :source AND external_event_id = :externalId
                             """)
                     .param("source", source).param("externalId", externalId)
                     .query(AlertService::mapExisting).optional();
         }
         return jdbcClient.sql("""
-                        SELECT id, incident_id FROM alert_event
+                        SELECT id, incident_id, status FROM alert_event
                         WHERE fingerprint = :fingerprint AND status = 'FIRING' AND last_occurred_at >= :windowStart
                         ORDER BY last_occurred_at DESC LIMIT 1
                         """)
@@ -247,7 +273,7 @@ public class AlertService {
 
     private static ExistingAlert mapExisting(java.sql.ResultSet rs, int rowNum) throws java.sql.SQLException {
         long incident = rs.getLong("incident_id");
-        return new ExistingAlert(rs.getLong("id"), rs.wasNull() ? null : incident);
+        return new ExistingAlert(rs.getLong("id"), rs.wasNull() ? null : incident, rs.getString("status"));
     }
 
     private static AlertView mapAlert(java.sql.ResultSet rs, int rowNum) throws java.sql.SQLException {
@@ -261,7 +287,7 @@ public class AlertService {
                 rs.wasNull() ? null : incidentId, rs.getString("incident_code"));
     }
 
-    private record ExistingAlert(Long id, Long incidentId) {
+    private record ExistingAlert(Long id, Long incidentId, String status) {
     }
 
     private record ResourceRef(Long id, String name, String type) {

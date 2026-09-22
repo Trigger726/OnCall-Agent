@@ -6,7 +6,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-- 告警治理：外部事件 ID 去重、SHA-256 指纹压缩、30 分钟窗口聚合、原始告警与 Incident 分层。
+- 告警治理：外部事件 ID 幂等、SHA-256 指纹压缩、30 分钟窗口聚合、原始告警与 Incident 分层；原生接收 Alertmanager v4 批量 webhook，同状态重试零写入、firing/resolved 共用生命周期，并隔离批内永久坏项。
 - Incident 工作台：`OPEN -> ACKNOWLEDGED -> INVESTIGATING -> MITIGATED -> RESOLVED -> CLOSED` 状态机、乐观锁、分派、备注和时间线。
 - CMDB：应用、API、数据库和中间件台账，依赖/调用关系拓扑，事故与近期变更关联。
 - 值班升级：服务排班、当前值班人、分级升级策略和通知留痕。
@@ -217,6 +217,17 @@ bash scripts/verify-tracing-pipeline.sh
 
 脚本使用隔离的 Compose project/volume 并在退出时清理，不会删除日常 `docker compose up` 使用的 MySQL 数据卷；fixture 只在 `tracing-test` profile 启动，普通 `tracing` 演示不加载它。checkpoint-24 的独立集成测试仍保留，用两个本机 HTTP 端点验证 W3C `traceparent` 与导出的 client span 一一对应。checkpoint-25 的远端 Run 58 已验证两个独立 JVM 在正常与 Tempo 短暂停机恢复后都形成 `provider.query -> CLIENT -> SERVER`，各有两条配对分支；fixture 不是生产 Prometheus/Loki 集群，内存队列也不支持 Collector 重启后的零丢失承诺。
 
+## Alertmanager webhook
+
+接入端点默认关闭。生产或联调环境必须显式设置共享密钥，并在 Alertmanager webhook receiver 中发送 `Authorization: OpsPilot <secret>`：
+
+```bash
+ALERTMANAGER_WEBHOOK_SECRET=replace-with-a-long-random-secret
+ALERTMANAGER_WEBHOOK_MAX_ALERTS=100
+```
+
+每条 alert 需要 `labels.alertname`、`labels.resource_code`（或 `service_code`）、可映射的 `labels.severity`、`status`、`startsAt` 和 `fingerprint`；resolved 还需要 `endsAt`。同一 fingerprint 和 startsAt 的重试返回原结果，不增加次数；状态变化更新同一条告警。HTTP 200 可能同时包含接受与拒绝项，调用方和日志告警应关注 `rejected` 及逐项 `errorCode`。这是 Alertmanager 入站 receiver，不是 SLO 出站通知配置。
+
 ## Agent 运行控制
 
 流式调查请求支持 `Idempotency-Key` 和可选 `timeoutMs`。同一 Incident 使用相同键重试时返回原 run，不重复生成报告或处置提案；运行达到终态后前端清理该键，下一次人工运行会创建新 run。
@@ -253,6 +264,7 @@ AGENT_RECOVERY_BATCH_SIZE=100
 | POST | `/api/v1/auth/login` | 登录并签发 JWT |
 | GET | `/api/v1/dashboard` | 运行指标总览 |
 | POST | `/api/v1/alerts/intake` | 接入告警并执行去重/聚合 |
+| POST | `/api/v1/integrations/alertmanager/webhook` | 接收专用密钥保护的 Alertmanager v4 批量 webhook，返回逐项接入结果 |
 | GET | `/api/v1/incidents/{id}` | Incident、告警、时间线与报告 |
 | POST | `/api/v1/incidents/{id}/transitions` | 受状态机与乐观锁保护的流转 |
 | POST | `/api/v1/incidents/{id}/investigations` | 运行可追踪 Agent 调查并生成报告 |
@@ -317,6 +329,7 @@ cd .. && ./mvnw test
 - 登录、JWT 与审计角色 403。
 - 乐观锁版本冲突。
 - 指纹告警的首次创建与重复压缩。
+- Alertmanager webhook 的独立鉴权、批量上限、非法 JSON、严重度映射、部分失败隔离、重试幂等和 firing/resolved 生命周期。
 - 总览、CMDB 拓扑和 Incident 详情接口。
 - OnCall 会话持久化、Incident 上下文、SSE 完成事件、证据引用和跨用户隔离。
 - Agent 调查运行落库、9 步执行轨迹、六类数据源、Incident/OnCall 同源回读和运行证据引用。
@@ -339,7 +352,7 @@ cd .. && ./mvnw test
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
 - MySQL 8.4 Testcontainers：Flyway V1-V15、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项完成，以及 Problem 创建、状态闭环和 REPEATABLE READ 双事务并发提升。
 
-默认后端套件发现 98 项测试：87 项执行通过，11 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离，以及 SLO 分母、错误预算和多窗口燃烧率边界。另行启用条件测试后，MySQL 8.4 从空库执行 Flyway V1–V19，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、容器构建与健康启动拆成七个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+默认后端套件发现 102 项测试：91 项执行通过，11 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离、Alertmanager 批量接入与生命周期幂等，以及 SLO 分母、错误预算和多窗口燃烧率边界。另行启用条件测试后，MySQL 8.4 从空库执行 Flyway V1–V19，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、容器构建与健康启动拆成七个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 
