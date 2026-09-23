@@ -1,0 +1,25 @@
+services:
+  opspilot:
+    ports:
+      - "127.0.0.1:9911:9911"
+    environment:
+      FOLLOW_UP_NOTIFICATION_ENABLED: "true"
+      FOLLOW_UP_NOTIFICATION_URL: http://127.0.0.1:9911/follow-ups
+      FOLLOW_UP_NOTIFICATION_TOKEN: ${FOLLOW_UP_NOTIFICATION_TOKEN:?set a test-only token}
+      FOLLOW_UP_NOTIFICATION_RETRY_BASE_DELAY: 1s
+      FOLLOW_UP_NOTIFICATION_RETRY_MAX_DELAY: 2s
+      FOLLOW_UP_NOTIFICATION_DISPATCH_DELAY: 1000
+      FOLLOW_UP_NOTIFICATION_DISPATCH_INITIAL_DELAY: 1000
+
+  follow-up-notification-receiver:
+    image: node:22-alpine
+    profiles: ["follow-up-notification-test"]
+    network_mode: service:opspilot
+    command: ["node", "/app/receiver.mjs"]
+    environment:
+      FOLLOW_UP_NOTIFICATION_TOKEN: ${FOLLOW_UP_NOTIFICATION_TOKEN:?set a test-only token}
+    volumes:
+      - ./integration/follow-up-notification/receiver.mjs:/app/receiver.mjs:ro
+    depends_on:
+      opspilot:
+        condition: service_started

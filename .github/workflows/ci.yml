@@ -107,9 +107,23 @@ jobs:
           name: service-metrics-alerting-evidence
           path: target/service-metrics-it/
 
+  follow-up-notification-integration:
+    name: Follow-up notification delivery integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - name: Verify separate receiver, transient retry and scan idempotency
+        run: bash scripts/verify-follow-up-notification-pipeline.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: follow-up-notification-evidence
+          path: target/follow-up-notification-it/
+
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, backend-h2, mysql-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, redis-integration, distributed-integration, tracing-integration]
+    needs: [frontend, backend-h2, mysql-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
