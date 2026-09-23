@@ -32,11 +32,11 @@
 | V1.7 | 30：Alertmanager 拒绝台账与受控重放 | 通过，本地 104 项后端、前端/JAR、真实 HTTP/响应式实页与远端七项 CI 已闭环 | [V1.7-checkpoint-30.md](V1.7-checkpoint-30.md) |
 | V1.7 | 31：拒绝项自动重放与载荷保留期 | 通过，本地与远端七项 CI 已闭环 | [V1.7-checkpoint-31.md](V1.7-checkpoint-31.md) |
 | V1.7 | 32：真实 Alertmanager 入站链路 | 通过，真实容器联调与远端八项 CI 已闭环 | [V1.7-checkpoint-32.md](V1.7-checkpoint-32.md) |
-| V1.7 | 33：Prometheus 规则到 Incident 的真实链路 | 进行中，隔离规则联调门禁待远端实测 | [V1.7-checkpoint-33.md](V1.7-checkpoint-33.md) |
+| V1.7 | 33：Prometheus 规则到 Incident 的真实链路 | 通过，远端九项 CI 与隔离规则联调已闭环 | [V1.7-checkpoint-33.md](V1.7-checkpoint-33.md) |
 
 ## 状态约定
 
-最新规则链路验收：[V1.7-checkpoint-33.md](V1.7-checkpoint-33.md)：Prometheus 抓取可控测试指标、规则 firing/恢复、经 Alertmanager 到同一 OpsPilot Alert 的联调已加入第九项 CI，真实容器结果待验。
+最新规则链路验收：[V1.7-checkpoint-33.md](V1.7-checkpoint-33.md)：Prometheus 抓取可控测试指标、规则 firing/恢复、经 Alertmanager 到同一 OpsPilot Alert 的联调已由 [Run 35854884221](https://github.com/Trigger726/OnCall-Agent/actions/runs/35854884221) 实测通过；九项远端门禁全绿。生产指标源接入仍待验。
 
 最新真实接入验收：[V1.7-checkpoint-32.md](V1.7-checkpoint-32.md)：固定版本 Alertmanager 的 webhook receiver、运行时专用密钥和 API v2 注入脚本已通过 [Run 35853706878](https://github.com/Trigger726/OnCall-Agent/actions/runs/35853706878) 的真实容器联调；八项远端门禁全绿。
 
