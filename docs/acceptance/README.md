@@ -30,11 +30,11 @@
 | V1.7 | 28：多窗口错误预算燃烧率 | 通过，98 项后端发现/87 项执行、前端 13 项、JAR、启用/关闭实页与远端七项门禁通过 | [V1.7-checkpoint-28.md](V1.7-checkpoint-28.md) |
 | V1.7 | 29：Alertmanager 标准接入与生命周期幂等 | 通过，本地 102 项后端、前端/JAR、真实 HTTP/实页与远端七项门禁闭环 | [V1.7-checkpoint-29.md](V1.7-checkpoint-29.md) |
 | V1.7 | 30：Alertmanager 拒绝台账与受控重放 | 通过，本地 104 项后端、前端/JAR、真实 HTTP/响应式实页与远端七项 CI 已闭环 | [V1.7-checkpoint-30.md](V1.7-checkpoint-30.md) |
-| V1.7 | 31：拒绝项自动重放与载荷保留期 | 本地通过，MySQL 8.4 与远端 CI 待验 | [V1.7-checkpoint-31.md](V1.7-checkpoint-31.md) |
+| V1.7 | 31：拒绝项自动重放与载荷保留期 | 通过，本地与远端七项 CI 已闭环 | [V1.7-checkpoint-31.md](V1.7-checkpoint-31.md) |
 
 ## 状态约定
 
-最新拒绝项生命周期：[V1.7-checkpoint-31.md](V1.7-checkpoint-31.md)：默认关闭的 CMDB 缺失自动重放、有限指数退避抖动、到期载荷清理和原投递恢复。默认后端 111 项发现/99 项执行、前端 13 项、JAR、真实 HTTP 与桌面/390px 页面已通过；MySQL 8.4 与远端 CI 待验。
+最新拒绝项生命周期：[V1.7-checkpoint-31.md](V1.7-checkpoint-31.md)：默认关闭的 CMDB 缺失自动重放、有限指数退避抖动、到期载荷清理和原投递恢复。默认后端 111 项发现/99 项执行、前端 13 项、JAR、真实 HTTP 与桌面/390px 页面已通过；[Run 35852483053](https://github.com/Trigger726/OnCall-Agent/actions/runs/35852483053) 的 MySQL 8.4 与七项远端门禁全绿。
 
 最新拒绝处置闭环：[V1.7-checkpoint-30.md](V1.7-checkpoint-30.md)：将 Alertmanager 永久坏项脱敏持久化，以稳定拒绝键归并重复投递，用短租约、原告警幂等和角色权限完成受控重放。本地后端 104 项发现/93 项执行、前端 13 项、生产构建、JAR、真实 HTTP 与桌面/390px 实页已通过；[Run 35762227045](https://github.com/Trigger726/OnCall-Agent/actions/runs/35762227045) 的 MySQL 8.4 与七项远端门禁全绿。
 
