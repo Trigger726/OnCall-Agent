@@ -336,6 +336,7 @@ cd .. && ./mvnw test
 - 乐观锁版本冲突。
 - 指纹告警的首次创建与重复压缩。
 - Alertmanager webhook 的独立鉴权、批量上限、非法 JSON、严重度映射、部分失败隔离、重试幂等和 firing/resolved 生命周期；拒绝快照脱敏、动态 `endsAt` 去重、重复投递租约保护、只读审计与 CMDB 修复后并发重放。
+- 真实 Alertmanager 0.34.1 容器通过专用鉴权投递 firing、resolved 与混合好坏项；MySQL 结果、单条恢复时间线、拒绝快照脱敏均由 [Run 35853706878](https://github.com/Trigger726/OnCall-Agent/actions/runs/35853706878) 的独立门禁验证。
 - 总览、CMDB 拓扑和 Incident 详情接口。
 - OnCall 会话持久化、Incident 上下文、SSE 完成事件、证据引用和跨用户隔离。
 - Agent 调查运行落库、9 步执行轨迹、六类数据源、Incident/OnCall 同源回读和运行证据引用。
@@ -358,7 +359,7 @@ cd .. && ./mvnw test
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
 - MySQL 8.4 Testcontainers：Flyway V1-V21、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项完成，以及 Problem 创建、状态闭环、SLO 目标和 Alertmanager 拒绝台账生命周期。
 
-默认后端套件发现 111 项测试：99 项执行通过，12 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离、Alertmanager 生命周期幂等、拒绝台账受控重放及其自动退避/载荷保留期，以及 SLO 分母、错误预算和多窗口燃烧率边界。另行启用条件测试后，MySQL 8.4 从空库执行 Flyway V1–V21，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标、Alertmanager 拒绝台账迁移及生命周期，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、容器构建与健康启动拆成七个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+默认后端套件发现 111 项测试：99 项执行通过，12 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离、Alertmanager 生命周期幂等、拒绝台账受控重放及其自动退避/载荷保留期，以及 SLO 分母、错误预算和多窗口燃烧率边界。另行启用条件测试后，MySQL 8.4 从空库执行 Flyway V1–V21，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标、Alertmanager 拒绝台账迁移及生命周期，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、真实 Alertmanager webhook、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、容器构建与健康启动拆成八个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 
