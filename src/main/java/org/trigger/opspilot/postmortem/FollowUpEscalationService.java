@@ -8,6 +8,7 @@ import org.trigger.opspilot.audit.AuditService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Service
@@ -16,10 +17,13 @@ public class FollowUpEscalationService {
 
     private final JdbcClient jdbcClient;
     private final AuditService auditService;
+    private final FollowUpNotificationProperties notificationProperties;
 
-    public FollowUpEscalationService(JdbcClient jdbcClient, AuditService auditService) {
+    public FollowUpEscalationService(JdbcClient jdbcClient, AuditService auditService,
+                                     FollowUpNotificationProperties notificationProperties) {
         this.jdbcClient = jdbcClient;
         this.auditService = auditService;
+        this.notificationProperties = notificationProperties;
     }
 
     public LocalDate businessToday() {
@@ -49,6 +53,24 @@ public class FollowUpEscalationService {
                             VALUES (:followUpId, :dueDate, :asOf, :actorId)
                             """).param("followUpId", followUpId).param("dueDate", context.dueDate())
                     .param("asOf", asOf).param("actorId", actorId).update();
+            if (notificationProperties.enabled()) {
+                jdbcClient.sql("""
+                                INSERT INTO postmortem_follow_up_notification(
+                                  escalation_id, next_attempt_at, title_snapshot,
+                                  owner_name_snapshot, incident_code_snapshot)
+                                SELECT escalation.id, :nextAttemptAt, follow_up.title,
+                                       owner.display_name, incident.incident_code
+                                FROM postmortem_follow_up_escalation escalation
+                                JOIN postmortem_follow_up follow_up
+                                  ON follow_up.id = escalation.follow_up_id
+                                JOIN sys_user owner ON owner.id = follow_up.owner_id
+                                JOIN incident_postmortem postmortem
+                                  ON postmortem.id = follow_up.postmortem_id
+                                JOIN incident ON incident.id = postmortem.incident_id
+                                WHERE follow_up.id = :followUpId
+                                """).param("followUpId", followUpId)
+                        .param("nextAttemptAt", LocalDateTime.now(ZoneOffset.UTC)).update();
+            }
             addTimeline(context.incidentId(), "FOLLOW_UP_ESCALATED", actorId,
                     "防复发行动项逾期升级：" + context.title() + "；负责人 " + context.ownerName()
                             + "；截止 " + context.dueDate(), "postmortem-follow-up:" + followUpId);

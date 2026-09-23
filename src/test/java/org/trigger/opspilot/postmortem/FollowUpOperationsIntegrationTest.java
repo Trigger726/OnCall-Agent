@@ -79,6 +79,8 @@ class FollowUpOperationsIntegrationTest {
         assertThat(repeatedScan.path("existingEscalations").asInt()).isEqualTo(1);
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM postmortem_follow_up_escalation")
                 .query(Long.class).single()).isEqualTo(1L);
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM postmortem_follow_up_notification")
+                .query(Long.class).single()).isZero();
         assertThat(jdbcClient.sql("""
                         SELECT COUNT(*) FROM incident_timeline
                         WHERE event_type = 'FOLLOW_UP_ESCALATED'
@@ -96,7 +98,8 @@ class FollowUpOperationsIntegrationTest {
                 .andExpect(jsonPath("$.data.items[0].id").value(301))
                 .andExpect(jsonPath("$.data.items[0].overdue").value(true))
                 .andExpect(jsonPath("$.data.items[0].daysOverdue").value(2))
-                .andExpect(jsonPath("$.data.items[0].escalationStatus").value("OPEN"));
+                .andExpect(jsonPath("$.data.items[0].escalationStatus").value("OPEN"))
+                .andExpect(jsonPath("$.data.items[0].notificationStatus").isEmpty());
         mockMvc.perform(get("/api/v1/postmortem-follow-ups")
                         .header("Authorization", bearer(manager))
                         .param("scope", "MINE").param("asOf", asOf.toString()))

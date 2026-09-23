@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,11 +24,14 @@ import java.time.LocalDate;
 public class FollowUpOperationsController {
     private final FollowUpOperationsService operationsService;
     private final FollowUpEscalationService escalationService;
+    private final FollowUpNotificationDelivery notificationDelivery;
 
     public FollowUpOperationsController(FollowUpOperationsService operationsService,
-                                        FollowUpEscalationService escalationService) {
+                                        FollowUpEscalationService escalationService,
+                                        FollowUpNotificationDelivery notificationDelivery) {
         this.operationsService = operationsService;
         this.escalationService = escalationService;
+        this.notificationDelivery = notificationDelivery;
     }
 
     @GetMapping
@@ -51,5 +55,14 @@ public class FollowUpOperationsController {
             @RequestParam(required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @PastOrPresent LocalDate asOf) {
         return ApiResponse.ok(escalationService.scan(asOf, user.id(), request.getRemoteAddr()));
+    }
+
+    @PostMapping("/{id}/notification/retry")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
+    public ApiResponse<Void> retryNotification(
+            @PathVariable long id, @AuthenticationPrincipal UserPrincipal user,
+            HttpServletRequest request) {
+        notificationDelivery.retryFailed(id, user.id(), request.getRemoteAddr());
+        return ApiResponse.ok(null);
     }
 }

@@ -60,13 +60,20 @@ public class FollowUpOperationsService {
                                follow_up.completed_at, follow_up.version,
                                escalation.status AS escalation_status,
                                escalation.detected_as_of, escalation.first_detected_at,
-                               escalation.resolved_at
+                               escalation.resolved_at,
+                               notification.status AS notification_status,
+                               notification.attempts AS notification_attempts,
+                               notification.last_http_status AS notification_http_status,
+                               notification.last_error_code AS notification_error_code,
+                               notification.delivered_at AS notification_delivered_at
                         FROM postmortem_follow_up follow_up
                         JOIN incident_postmortem postmortem ON postmortem.id = follow_up.postmortem_id
                         JOIN incident ON incident.id = postmortem.incident_id
                         JOIN sys_user owner ON owner.id = follow_up.owner_id
                         LEFT JOIN postmortem_follow_up_escalation escalation
                           ON escalation.follow_up_id = follow_up.id
+                        LEFT JOIN postmortem_follow_up_notification notification
+                          ON notification.escalation_id = escalation.id
                         """ + where + """
                         ORDER BY CASE
                                    WHEN follow_up.status = 'OPEN' AND follow_up.due_date < :asOf THEN 1
@@ -94,6 +101,11 @@ public class FollowUpOperationsService {
                             rs.getObject("detected_as_of", LocalDate.class),
                             rs.getObject("first_detected_at", LocalDateTime.class),
                             rs.getObject("resolved_at", LocalDateTime.class),
+                            rs.getString("notification_status"),
+                            rs.getObject("notification_attempts", Integer.class),
+                            rs.getObject("notification_http_status", Integer.class),
+                            rs.getString("notification_error_code"),
+                            rs.getObject("notification_delivered_at", LocalDateTime.class),
                             rs.getObject("completed_at", LocalDateTime.class), rs.getInt("version"));
                 }).list();
         return new PageResponse<>(items, total, safePage, safeSize);
@@ -106,6 +118,9 @@ public class FollowUpOperationsService {
             LocalDate dueDate, boolean overdue, long daysOverdue,
             String escalationStatus, LocalDate detectedAsOf,
             LocalDateTime firstDetectedAt, LocalDateTime escalationResolvedAt,
+            String notificationStatus, Integer notificationAttempts,
+            Integer notificationHttpStatus, String notificationErrorCode,
+            LocalDateTime notificationDeliveredAt,
             LocalDateTime completedAt, int version) {
     }
 }

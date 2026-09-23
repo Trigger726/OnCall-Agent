@@ -110,6 +110,17 @@ opspilot:
     follow-up:
       escalation-cron: "${FOLLOW_UP_ESCALATION_CRON:0 5 9 * * *}"
       timezone: ${FOLLOW_UP_TIMEZONE:Asia/Shanghai}
+      notification:
+        enabled: ${FOLLOW_UP_NOTIFICATION_ENABLED:false}
+        url: ${FOLLOW_UP_NOTIFICATION_URL:}
+        token: ${FOLLOW_UP_NOTIFICATION_TOKEN:}
+        connect-timeout: ${FOLLOW_UP_NOTIFICATION_CONNECT_TIMEOUT:2s}
+        read-timeout: ${FOLLOW_UP_NOTIFICATION_READ_TIMEOUT:4s}
+        retry-base-delay: ${FOLLOW_UP_NOTIFICATION_RETRY_BASE_DELAY:1m}
+        retry-max-delay: ${FOLLOW_UP_NOTIFICATION_RETRY_MAX_DELAY:1h}
+        lease: ${FOLLOW_UP_NOTIFICATION_LEASE:30s}
+        max-attempts: ${FOLLOW_UP_NOTIFICATION_MAX_ATTEMPTS:5}
+        batch-size: ${FOLLOW_UP_NOTIFICATION_BATCH_SIZE:20}
   observability:
     reliability:
       max-attempts: ${OBSERVABILITY_MAX_ATTEMPTS:2}

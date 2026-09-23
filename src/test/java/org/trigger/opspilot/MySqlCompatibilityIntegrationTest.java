@@ -59,7 +59,11 @@ import static org.assertj.core.api.Assertions.assertThat;
         "opspilot.agent.events.outbox-enabled=true",
         "opspilot.agent.events.relay-initial-delay=3600000",
         "opspilot.agent.events.receiver-initial-delay=3600000",
-        "opspilot.agent.recovery.enabled=false"
+        "opspilot.agent.recovery.enabled=false",
+        "opspilot.postmortem.follow-up.notification.enabled=true",
+        "opspilot.postmortem.follow-up.notification.url=http://127.0.0.1:1/follow-ups",
+        "opspilot.postmortem.follow-up.notification.token=mysql-test-token",
+        "FOLLOW_UP_NOTIFICATION_DISPATCH_INITIAL_DELAY=3600000"
 })
 class MySqlCompatibilityIntegrationTest {
     @Autowired private org.trigger.opspilot.investigation.AgentEventOutbox outbox;
@@ -389,6 +393,14 @@ class MySqlCompatibilityIntegrationTest {
                 LocalDate.now(), 1L, "mysql-testcontainers");
         assertThat(firstScan.createdEscalations()).isEqualTo(1);
         assertThat(repeatedScan.createdEscalations()).isZero();
+        assertThat(jdbcClient.sql("""
+                        SELECT COUNT(*) FROM postmortem_follow_up_notification notification
+                        JOIN postmortem_follow_up_escalation escalation
+                          ON escalation.id = notification.escalation_id
+                        WHERE escalation.follow_up_id = :id
+                          AND notification.status = 'PENDING'
+                          AND notification.title_snapshot = '补齐旧客户端兼容回归'
+                        """).param("id", followUpId).query(Long.class).single()).isEqualTo(1L);
         PostmortemService.PostmortemView completed = postmortemService.completeFollowUp(
                 followUpId, 0, 2, "ON_CALL");
         assertThat(completed.followUps().get(0).status()).isEqualTo("DONE");

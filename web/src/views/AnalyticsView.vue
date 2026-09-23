@@ -68,6 +68,11 @@ interface FollowUp {
   daysOverdue: number
   escalationStatus: string | null
   firstDetectedAt: string | null
+  notificationStatus: string | null
+  notificationAttempts: number | null
+  notificationHttpStatus: number | null
+  notificationErrorCode: string | null
+  notificationDeliveredAt: string | null
   completedAt: string | null
   version: number
 }
@@ -146,6 +151,7 @@ const followUpTotal = ref(0)
 const loading = ref(false)
 const scanning = ref(false)
 const completingId = ref<number | null>(null)
+const retryingNotificationId = ref<number | null>(null)
 const savingSloId = ref<number | null>(null)
 const editingSlo = ref<SloObjective | null>(null)
 const sloTargetInput = ref(0)
@@ -312,6 +318,27 @@ async function complete(item: FollowUp) {
   }
 }
 
+function notificationLabel(value: string | null): string {
+  return ({ PENDING: '待投递', CLAIMED: '投递中', DELIVERED: '端点已收',
+    FAILED: '投递失败', SKIPPED: '已取消' } as Record<string, string>)[value ?? ''] ?? '未入队'
+}
+
+async function retryNotification(item: FollowUp) {
+  if (!window.confirm(`确认重试“${item.title}”的外部逾期提醒？`)) return
+  retryingNotificationId.value = item.id
+  error.value = ''
+  notice.value = ''
+  try {
+    await api(`/postmortem-follow-ups/${item.id}/notification/retry`, { method: 'POST' })
+    await load()
+    notice.value = '外部提醒已重新入队；端点接收结果稍后更新。'
+  } catch (caught) {
+    error.value = caught instanceof Error ? caught.message : '提醒重试失败'
+  } finally {
+    retryingNotificationId.value = null
+  }
+}
+
 function metric(value: number | null): string {
   return value == null ? '-' : String(value)
 }
@@ -459,7 +486,7 @@ onMounted(load)
 
     <section class="content-panel follow-up-operations">
       <div class="panel-heading follow-up-heading">
-        <div><h2>防复发行动项</h2><span>全局责任、期限与应用内逾期事实</span></div>
+        <div><h2>防复发行动项</h2><span>全局责任、期限与外部投递回执</span></div>
         <div class="follow-up-summary" aria-label="行动项摘要">
           <span>总数 <strong>{{ overview?.followUps.total ?? 0 }}</strong></span>
           <span>开放 <strong>{{ overview?.followUps.open ?? 0 }}</strong></span>
@@ -480,7 +507,7 @@ onMounted(load)
       </div>
       <div class="table-scroll">
         <table class="data-table follow-up-table">
-          <thead><tr><th>优先级</th><th>行动项 / Incident</th><th>负责人</th><th>截止日期</th><th>升级事实</th><th>状态</th><th>操作</th></tr></thead>
+          <thead><tr><th>优先级</th><th>行动项 / Incident</th><th>负责人</th><th>截止日期</th><th>升级事实</th><th>外部提醒</th><th>状态</th><th>操作</th></tr></thead>
           <tbody>
             <tr v-for="item in followUps" :key="item.id">
               <td><span class="status-badge" :class="priorityClass(item.priority)">{{ priorityLabel(item.priority) }}</span></td>
@@ -488,6 +515,7 @@ onMounted(load)
               <td><span class="follow-up-owner"><UsersRound :size="14" />{{ item.ownerName }}</span></td>
               <td><div class="follow-up-due" :class="{ overdue: item.overdue }"><strong>{{ item.dueDate }}</strong><span v-if="item.overdue">逾期 {{ item.daysOverdue }} 天</span><span v-else>未逾期</span></div></td>
               <td><div class="follow-up-escalation"><span class="status-badge" :class="item.escalationStatus === 'OPEN' ? 'status-danger' : item.escalationStatus === 'RESOLVED' ? 'status-success' : 'status-neutral'">{{ item.escalationStatus === 'OPEN' ? '已升级' : item.escalationStatus === 'RESOLVED' ? '已关闭' : '未升级' }}</span><small v-if="item.firstDetectedAt">{{ formatTime(item.firstDetectedAt, true) }}</small></div></td>
+              <td><div class="follow-up-escalation"><span class="status-badge" :class="item.notificationStatus === 'DELIVERED' ? 'status-success' : item.notificationStatus === 'FAILED' ? 'status-danger' : item.notificationStatus === 'PENDING' || item.notificationStatus === 'CLAIMED' ? 'status-warning' : 'status-neutral'">{{ notificationLabel(item.notificationStatus) }}</span><small v-if="item.notificationAttempts">{{ item.notificationAttempts }} 次尝试<span v-if="item.notificationHttpStatus"> · HTTP {{ item.notificationHttpStatus }}</span></small><button v-if="canScan && item.status === 'OPEN' && item.notificationStatus === 'FAILED'" class="table-action" :disabled="retryingNotificationId === item.id" @click="retryNotification(item)">{{ retryingNotificationId === item.id ? '入队中' : '重试' }}</button></div></td>
               <td><span class="status-badge" :class="item.status === 'DONE' ? 'status-success' : 'status-info'">{{ item.status === 'DONE' ? '已完成' : '开放' }}</span></td>
               <td><button v-if="canComplete(item)" class="table-action" :disabled="completingId === item.id" @click="complete(item)">{{ completingId === item.id ? '提交中' : '完成' }}</button><span v-else class="muted">-</span></td>
             </tr>
@@ -495,7 +523,7 @@ onMounted(load)
         </table>
         <div v-if="!followUps.length" class="analytics-empty">没有符合当前筛选条件的行动项。</div>
       </div>
-      <footer class="follow-up-boundary"><ShieldAlert :size="14" />逾期扫描只形成 OpsPilot 内部升级事实与审计记录，不代表外部邮件或即时消息已经送达。</footer>
+      <footer class="follow-up-boundary"><ShieldAlert :size="14" />“端点已收”仅代表配置的 webhook 返回 2xx，不代表负责人已读；未入队表示未启用通知或历史升级事实。</footer>
     </section>
 
     <div v-if="editingSlo" class="dialog-backdrop" @click.self="editingSlo = null">

@@ -236,6 +236,12 @@ ALERTMANAGER_REJECTION_PAYLOAD_RETENTION=P3D
 
 真实服务指标联调运行 `bash scripts/verify-service-metrics-alerting-pipeline.sh`：Prometheus 抓取 OpsPilot 自身 `/actuator/prometheus`，短窗口 HTTP 401 计数规则先触发后自然恢复，再验证 Alertmanager 更新同一 Alert。此隔离规则用于可复现验收，不代表生产阈值已调优；生产环境应限制指标端点访问。
 
+## 逾期行动项外部提醒
+
+默认仅保留应用内逾期升级事实。设置 `FOLLOW_UP_NOTIFICATION_ENABLED=true`、`FOLLOW_UP_NOTIFICATION_URL=https://...` 和 `FOLLOW_UP_NOTIFICATION_TOKEN` 后，新产生的逾期升级会在同一数据库事务内入队，后台以 `Authorization: Bearer` 和稳定的 `Idempotency-Key: follow-up-escalation:{id}` POST JSON 到配置的接收端。生产 URL 必须为 HTTPS；本机联调允许 `localhost/127.0.0.1` HTTP。已存在的历史升级不会因后来开启通知而追溯投递。
+
+接收端收到入队时冻结的 `eventType`、`escalationId`、`followUpId`、`incidentCode`、行动项标题、负责人和截止日。2xx 记录为“端点已收”；503/429/网络故障有限退避，3xx 和其余 4xx 直接标记失败；仅管理员/运维经理能重试仍开放的失败通知。接收端应按幂等键去重：响应丢失时可能再次发送。页面上的回执不代表负责人已读，token 不写入数据库或诊断日志。交付配置与失败明细见 [checkpoint-35 验收记录](docs/acceptance/V1.7-checkpoint-35.md)。
+
 ## Agent 运行控制
 
 流式调查请求支持 `Idempotency-Key` 和可选 `timeoutMs`。同一 Incident 使用相同键重试时返回原 run，不重复生成报告或处置提案；运行达到终态后前端清理该键，下一次人工运行会创建新 run。
@@ -296,6 +302,7 @@ AGENT_RECOVERY_BATCH_SIZE=100
 | PATCH | `/api/v1/slo/objectives/{id}` | 管理角色以乐观锁修改目标、滚动窗口和 PromQL 模板并写审计 |
 | GET | `/api/v1/postmortem-follow-ups` | 按本人/全部、状态与逾期筛选跨 Incident 行动项 |
 | POST | `/api/v1/postmortem-follow-ups/escalations/run` | 管理员/运维经理按业务日期幂等生成逾期升级事实 |
+| POST | `/api/v1/postmortem-follow-ups/{id}/notification/retry` | 管理员/运维经理重试仍开放的失败外部提醒并写审计 |
 | GET | `/api/v1/problems/recurrence-candidates` | 按窗口查询精确指纹复发候选、独立事故分母、信号总量和治理状态 |
 | GET/POST | `/api/v1/problems` | 查询 Problem 台账，或由管理角色幂等登记候选并固化 Incident 关联 |
 | GET/PATCH | `/api/v1/problems/{id}` | 读取或以乐观锁更新 Problem、已知错误和解决结论 |
@@ -361,9 +368,9 @@ cd .. && ./mvnw test
 - MTTA/MTTM/MTTR 均值、中位数、独立分母、日期/严重等级筛选、缺失/负时长排除、慢事故下钻和 SPA 深链。
 - 跨 Incident 行动项筛选、截止当天边界、逾期天数、扫描角色限制、唯一升级事实、重复扫描幂等和完成后关闭。
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
-- MySQL 8.4 Testcontainers：Flyway V1-V21、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项完成，以及 Problem 创建、状态闭环、SLO 目标和 Alertmanager 拒绝台账生命周期。
+- MySQL 8.4 Testcontainers：Flyway V1-V22、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项完成，以及 Problem 创建、状态闭环、SLO 目标和 Alertmanager 拒绝台账生命周期。
 
-默认后端套件发现 111 项测试：99 项执行通过，12 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离、Alertmanager 生命周期幂等、拒绝台账受控重放及其自动退避/载荷保留期，以及 SLO 分母、错误预算和多窗口燃烧率边界。另行启用条件测试后，MySQL 8.4 从空库执行 Flyway V1–V21，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标、Alertmanager 拒绝台账迁移及生命周期，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、真实 Alertmanager webhook、Prometheus 规则到 Alertmanager、OpsPilot 服务 HTTP 指标规则、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、容器构建与健康启动拆成十个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+默认后端套件发现 112 项测试：100 项执行通过，12 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离、Alertmanager 生命周期幂等、拒绝台账受控重放及其自动退避/载荷保留期，以及逾期提醒的租约/回执/重试、SLO 分母、错误预算和多窗口燃烧率边界。另行启用条件测试后，MySQL 8.4 从空库执行 Flyway V1–V21，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标、Alertmanager 拒绝台账迁移及生命周期，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、真实 Alertmanager webhook、Prometheus 规则到 Alertmanager、OpsPilot 服务 HTTP 指标规则、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、容器构建与健康启动拆成十个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 
