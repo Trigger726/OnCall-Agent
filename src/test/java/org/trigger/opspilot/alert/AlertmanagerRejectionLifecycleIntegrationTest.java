@@ -127,6 +127,16 @@ class AlertmanagerRejectionLifecycleIntegrationTest {
         assertDelayWithin(rejectionService.retryDelay(10).toMillis(), 4_000, 8_000);
     }
 
+    @Test
+    void shouldKeepOriginalErrorAlignedWithImmutableReplayPayload() {
+        String fingerprint = "am-auto-31-error-change";
+        long id = reject(fingerprint, "APP-AUTO-31-ERROR-CHANGE");
+        assertThat(reject(fingerprint, "APP-AUTO-31-ERROR-CHANGE", "page")).isEqualTo(id);
+        assertThat(string(id, "error_code")).isEqualTo("RESOURCE_NOT_FOUND");
+        assertThat(string(id, "payload_json")).contains("warning").doesNotContain("page");
+        assertThat(dateTime(id, "next_auto_replay_at")).isNotNull();
+    }
+
     private static void assertDelayWithin(long millis, long minimum, long maximum) {
         assertThat(millis).isBetween(minimum, maximum);
     }
@@ -158,8 +168,12 @@ class AlertmanagerRejectionLifecycleIntegrationTest {
     }
 
     private long reject(String fingerprint, String resourceCode) {
+        return reject(fingerprint, resourceCode, "warning");
+    }
+
+    private long reject(String fingerprint, String resourceCode, String severity) {
         var alert = new AlertmanagerWebhookService.Alert("firing",
-                Map.of("alertname", "LifecycleAlert", "resource_code", resourceCode, "severity", "warning"),
+                Map.of("alertname", "LifecycleAlert", "resource_code", resourceCode, "severity", severity),
                 Map.of("summary", "Lifecycle test"), OffsetDateTime.parse("2026-09-23T01:00:00Z"),
                 OffsetDateTime.parse("2026-09-23T02:00:00Z"), null, fingerprint);
         var webhook = new AlertmanagerWebhookService.Webhook("4", "lifecycle-group", "firing", "opspilot",

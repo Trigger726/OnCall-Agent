@@ -123,7 +123,7 @@
 - 检查点 28 已完成：按 Google SRE 三档默认参数计算长/短窗口燃烧率，只在两窗口同时超阈值时分级为急速 PAGE、持续 PAGE 或工单；异常分母仍拒算。默认后端 98 项发现/87 项执行、前端 13 项、生产构建、JAR、启用/关闭两种真实页面状态，以及 Run 35741029914 七项远端门禁均通过。
 - 检查点 29 已完成：新增默认关闭、专用密钥保护的 Alertmanager v4 批量 webhook；fingerprint + startsAt 形成生命周期幂等键，同状态重放零写入，firing/resolved 更新同一告警并留恢复时间线，永久坏项批内隔离。默认后端 102 项发现/91 项执行、前端 13 项、JAR、真实 HTTP/实页，以及 [Run 35756244777](https://github.com/Trigger726/OnCall-Agent/actions/runs/35756244777) 七项远端门禁均通过。
 - 检查点 30 已完成：Flyway V20 持久化脱敏 Alertmanager 拒绝快照；动态 firing `endsAt` 依稳定键归并，重复投递不抢占租约；管理/值班角色可短租约重放，AUDITOR 只读，成功/失败可审计。本地 104 项后端、13 项前端、JAR、真实 HTTP 和响应式实页已通过，[Run 35762227045](https://github.com/Trigger726/OnCall-Agent/actions/runs/35762227045) 的 MySQL 8.4 与七项远端门禁全绿。
-- 检查点 31 进行中：默认关闭的 `RESOURCE_NOT_FOUND` 自动重放，数据库条件租约、批次/次数上限、指数退避抖动；到期拒绝快照清理且保留非敏感事实。本地 110 项后端发现/98 项执行、前端 13 项、JAR、真实 HTTP 和响应式页面已通过，MySQL 与远端 CI 待验。详见 [验收记录](acceptance/V1.7-checkpoint-31.md)。
+- 检查点 31 进行中：默认关闭的 `RESOURCE_NOT_FOUND` 自动重放，数据库条件租约、批次/次数上限、指数退避抖动；到期拒绝快照清理且保留非敏感事实。本地 111 项后端发现/99 项执行、前端 13 项、JAR、真实 HTTP 和响应式页面已通过，MySQL 与远端 CI 待验。详见 [验收记录](acceptance/V1.7-checkpoint-31.md)。
 - 待完成：Runbook 命中率趋势、跨 Incident 语义相似/依赖共因聚类、真实外部提醒与回执；Alertmanager 入站的真实容器联调、拒绝快照保留期/自动退避重放，以及 SLO 出站通知、生产 recording rules/长期数据和低流量样本策略；Trace 的真实生产 Prometheus/Loki 联调、Collector 重启持久化与生产容量验证。
 - 检查点 08 已完成：隔离提交后实时推送的运行时异常，验证同事务后续回调与所有推送失败时完整调查仍可完成、回放；4 项集成测试及远端四段式 CI 通过。
 - 检查点 07 已完成：事件推送移至实际事务 afterCommit，新增外层提交/回滚和游标回放测试；定向回归与远端四段式 CI 通过，默认后端 44 项、2 项条件跳过。分布式可靠投递仍待实现。

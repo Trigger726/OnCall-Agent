@@ -34,7 +34,7 @@
 
 ## 状态约定
 
-最新拒绝项生命周期：[V1.7-checkpoint-31.md](V1.7-checkpoint-31.md)：默认关闭的 CMDB 缺失自动重放、有限指数退避抖动、到期载荷清理和原投递恢复。默认后端 110 项发现/98 项执行、前端 13 项、JAR、真实 HTTP 与桌面/390px 页面已通过；MySQL 8.4 与远端 CI 待验。
+最新拒绝项生命周期：[V1.7-checkpoint-31.md](V1.7-checkpoint-31.md)：默认关闭的 CMDB 缺失自动重放、有限指数退避抖动、到期载荷清理和原投递恢复。默认后端 111 项发现/99 项执行、前端 13 项、JAR、真实 HTTP 与桌面/390px 页面已通过；MySQL 8.4 与远端 CI 待验。
 
 最新拒绝处置闭环：[V1.7-checkpoint-30.md](V1.7-checkpoint-30.md)：将 Alertmanager 永久坏项脱敏持久化，以稳定拒绝键归并重复投递，用短租约、原告警幂等和角色权限完成受控重放。本地后端 104 项发现/93 项执行、前端 13 项、生产构建、JAR、真实 HTTP 与桌面/390px 实页已通过；[Run 35762227045](https://github.com/Trigger726/OnCall-Agent/actions/runs/35762227045) 的 MySQL 8.4 与七项远端门禁全绿。
 

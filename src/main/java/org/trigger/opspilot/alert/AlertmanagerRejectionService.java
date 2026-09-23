@@ -90,7 +90,8 @@ public class AlertmanagerRejectionService {
         return jdbcClient.sql("""
                         UPDATE alert_ingest_rejection
                         SET delivery_count = delivery_count + 1,
-                            error_code = :errorCode, error_message = :errorMessage,
+                            error_code = CASE WHEN payload_status = 'PURGED' THEN :errorCode ELSE error_code END,
+                            error_message = CASE WHEN payload_status = 'PURGED' THEN :errorMessage ELSE error_message END,
                             payload_json = CASE WHEN payload_status = 'PURGED' THEN :payload ELSE payload_json END,
                             external_event_id = CASE WHEN payload_status = 'PURGED' THEN :externalEventId ELSE external_event_id END,
                             receiver = CASE WHEN payload_status = 'PURGED' THEN :receiver ELSE receiver END,
