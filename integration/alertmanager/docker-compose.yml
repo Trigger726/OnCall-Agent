@@ -1,0 +1,17 @@
+services:
+  opspilot:
+    environment:
+      ALERTMANAGER_WEBHOOK_SECRET: ${ALERTMANAGER_WEBHOOK_SECRET:?Run scripts/verify-alertmanager-pipeline.sh}
+
+  alertmanager:
+    image: prom/alertmanager:v0.34.1
+    profiles: ["alertmanager-test"]
+    command: ["--config.file=/etc/alertmanager/alertmanager.yml"]
+    ports:
+      - "127.0.0.1:9093:9093"
+    volumes:
+      - ./integration/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ${ALERTMANAGER_TEST_SECRET_FILE:?Run scripts/verify-alertmanager-pipeline.sh}:/etc/alertmanager/opspilot-webhook-secret:ro
+    depends_on:
+      opspilot:
+        condition: service_started

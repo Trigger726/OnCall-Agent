@@ -1,0 +1,21 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: opspilot
+  group_by: [alertname]
+  group_wait: 1s
+  group_interval: 5s
+  repeat_interval: 1h
+
+receivers:
+  - name: opspilot
+    webhook_configs:
+      - url: http://opspilot:9900/api/v1/integrations/alertmanager/webhook
+        send_resolved: true
+        max_alerts: 100
+        timeout: 3s
+        http_config:
+          authorization:
+            type: OpsPilot
+            credentials_file: /etc/alertmanager/opspilot-webhook-secret

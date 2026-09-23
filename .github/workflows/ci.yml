@@ -65,9 +65,23 @@ jobs:
           -Dtest=MySqlCompatibilityIntegrationTest
           test
 
+  alertmanager-integration:
+    name: Alertmanager webhook integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - name: Verify real Alertmanager delivery and resolution
+        run: bash scripts/verify-alertmanager-pipeline.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: alertmanager-pipeline-evidence
+          path: target/alertmanager-it/
+
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, backend-h2, mysql-integration, redis-integration, distributed-integration, tracing-integration]
+    needs: [frontend, backend-h2, mysql-integration, alertmanager-integration, redis-integration, distributed-integration, tracing-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

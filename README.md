@@ -230,6 +230,8 @@ ALERTMANAGER_REJECTION_PAYLOAD_RETENTION=P3D
 
 每条 alert 需要 `labels.alertname`、`labels.resource_code`（或 `service_code`）、可映射的 `labels.severity`、`status`、`startsAt` 和 `fingerprint`；resolved 还需要 `endsAt`。同一 fingerprint 和 startsAt 的重试返回原结果，不增加次数；状态变化更新同一条告警。HTTP 200 可能同时包含接受与拒绝项，拒绝项会脱敏后持久化；先修复上游规则或 CMDB，再由 ADMIN/OPS_MANAGER/ON_CALL 在告警页受控重放，AUDITOR 仅可查看。`RESOURCE_NOT_FOUND` 可显式开启自动重放，默认关闭；自动尝试有租约、批次/次数上限及退避抖动，耗尽后仍可手动重放。拒绝快照默认三天后按批清理，已清理项需重新投递原始告警；生产应按本地保留政策调整。这是 Alertmanager 入站 receiver，不是 SLO 出站通知配置。
 
+真实 receiver 联调可在具有 Docker、`bash`、`jq` 和 `openssl` 的环境运行 `bash scripts/verify-alertmanager-pipeline.sh`。脚本使用独立 Compose project/volume 和运行时生成的测试密钥，向 Alertmanager API v2 注入 firing、resolved 和混合好坏项，再核对 OpsPilot 的 Alert、恢复时间线、拒绝台账及脱敏结果；不会修改日常 Compose 数据卷。这验证 Alertmanager → OpsPilot，不代表生产 Prometheus 规则链路。
+
 ## Agent 运行控制
 
 流式调查请求支持 `Idempotency-Key` 和可选 `timeoutMs`。同一 Incident 使用相同键重试时返回原 run，不重复生成报告或处置提案；运行达到终态后前端清理该键，下一次人工运行会创建新 run。
