@@ -126,6 +126,7 @@
 - 检查点 31 已完成：默认关闭的 `RESOURCE_NOT_FOUND` 自动重放，数据库条件租约、批次/次数上限、指数退避抖动；到期拒绝快照清理且保留非敏感事实。本地 111 项后端发现/99 项执行、前端 13 项、JAR、真实 HTTP 和响应式页面已通过，[Run 35852483053](https://github.com/Trigger726/OnCall-Agent/actions/runs/35852483053) 的 MySQL 8.4 与七项门禁全绿。详见 [验收记录](acceptance/V1.7-checkpoint-31.md)。
 - 检查点 32 已完成：真实 Alertmanager 0.34.1 以专用鉴权向 OpsPilot 投递 firing、resolved 和混合好坏项；隔离 Compose、无密钥诊断证据与 [Run 35853706878](https://github.com/Trigger726/OnCall-Agent/actions/runs/35853706878) 的八项远端门禁全绿。详见 [验收记录](acceptance/V1.7-checkpoint-32.md)。
 - 检查点 33 已完成：Prometheus 真实抓取隔离测试指标并评估规则，将 firing/恢复经 Alertmanager 写入同一 OpsPilot Alert；[Run 35854884221](https://github.com/Trigger726/OnCall-Agent/actions/runs/35854884221) 的九项远端门禁全绿，含规则联调和容器健康烟测。详见 [验收记录](acceptance/V1.7-checkpoint-33.md)。
+- 检查点 34 进行中：改用 OpsPilot 自身 `/actuator/prometheus` 的真实 HTTP 请求计数器，验证短窗口未授权访问规则从指标到同一告警恢复的闭环；第十项远端门禁待验。详见 [验收记录](acceptance/V1.7-checkpoint-34.md)。
 - 待完成：Runbook 命中率趋势、跨 Incident 语义相似/依赖共因聚类、真实外部提醒与回执；生产业务 exporter/服务指标与 Prometheus 规则联调，以及 SLO 出站通知、生产 recording rules/长期数据和低流量样本策略；Trace 的真实生产 Prometheus/Loki 联调、Collector 重启持久化与生产容量验证。
 - 检查点 08 已完成：隔离提交后实时推送的运行时异常，验证同事务后续回调与所有推送失败时完整调查仍可完成、回放；4 项集成测试及远端四段式 CI 通过。
 - 检查点 07 已完成：事件推送移至实际事务 afterCommit，新增外层提交/回滚和游标回放测试；定向回归与远端四段式 CI 通过，默认后端 44 项、2 项条件跳过。分布式可靠投递仍待实现。

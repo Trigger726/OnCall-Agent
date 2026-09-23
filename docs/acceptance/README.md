@@ -33,8 +33,11 @@
 | V1.7 | 31：拒绝项自动重放与载荷保留期 | 通过，本地与远端七项 CI 已闭环 | [V1.7-checkpoint-31.md](V1.7-checkpoint-31.md) |
 | V1.7 | 32：真实 Alertmanager 入站链路 | 通过，真实容器联调与远端八项 CI 已闭环 | [V1.7-checkpoint-32.md](V1.7-checkpoint-32.md) |
 | V1.7 | 33：Prometheus 规则到 Incident 的真实链路 | 通过，远端九项 CI 与隔离规则联调已闭环 | [V1.7-checkpoint-33.md](V1.7-checkpoint-33.md) |
+| V1.7 | 34：OpsPilot 自身服务指标到 Incident | 进行中，真实 HTTP 指标规则待远端容器实测 | [V1.7-checkpoint-34.md](V1.7-checkpoint-34.md) |
 
 ## 状态约定
+
+最新服务指标验收：[V1.7-checkpoint-34.md](V1.7-checkpoint-34.md)：OpsPilot HTTP 401 计数器的 Prometheus 抓取、规则触发/恢复与 Alertmanager 生命周期已加入独立门禁，真实容器结果待验。
 
 最新规则链路验收：[V1.7-checkpoint-33.md](V1.7-checkpoint-33.md)：Prometheus 抓取可控测试指标、规则 firing/恢复、经 Alertmanager 到同一 OpsPilot Alert 的联调已由 [Run 35854884221](https://github.com/Trigger726/OnCall-Agent/actions/runs/35854884221) 实测通过；九项远端门禁全绿。生产指标源接入仍待验。
 

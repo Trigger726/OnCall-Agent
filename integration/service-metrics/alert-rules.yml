@@ -1,0 +1,11 @@
+groups:
+  - name: opspilot-service-metrics-integration
+    rules:
+      - alert: OpsPilotUnauthorizedBurst
+        expr: sum(increase(http_server_requests_seconds_count{job="opspilot",status="401"}[30s])) >= 4
+        for: 2s
+        labels:
+          severity: warning
+          resource_code: APP-PORTAL
+        annotations:
+          summary: Controlled burst of unauthorized OpsPilot HTTP requests

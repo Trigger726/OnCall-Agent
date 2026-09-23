@@ -93,9 +93,23 @@ jobs:
           name: prometheus-alerting-evidence
           path: target/prometheus-alerting-it/
 
+  service-metrics-alerting-integration:
+    name: OpsPilot service metric to Incident integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - name: Verify HTTP metric rule and resolution through Alertmanager
+        run: bash scripts/verify-service-metrics-alerting-pipeline.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: service-metrics-alerting-evidence
+          path: target/service-metrics-it/
+
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, backend-h2, mysql-integration, alertmanager-integration, prometheus-alerting-integration, redis-integration, distributed-integration, tracing-integration]
+    needs: [frontend, backend-h2, mysql-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, redis-integration, distributed-integration, tracing-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

@@ -1,0 +1,14 @@
+services:
+  prometheus-service-test:
+    image: prom/prometheus:v3.4.2
+    profiles: ["service-metrics-test"]
+    ports:
+      - "127.0.0.1:9092:9090"
+    volumes:
+      - ./integration/service-metrics/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./integration/service-metrics/alert-rules.yml:/etc/prometheus/alert-rules.yml:ro
+    depends_on:
+      alertmanager:
+        condition: service_started
+      opspilot:
+        condition: service_started
