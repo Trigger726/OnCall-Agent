@@ -79,9 +79,23 @@ jobs:
           name: alertmanager-pipeline-evidence
           path: target/alertmanager-it/
 
+  prometheus-alerting-integration:
+    name: Prometheus rule to Alertmanager integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - name: Verify rule evaluation and resolution through Alertmanager
+        run: bash scripts/verify-prometheus-alerting-pipeline.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: prometheus-alerting-evidence
+          path: target/prometheus-alerting-it/
+
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, backend-h2, mysql-integration, alertmanager-integration, redis-integration, distributed-integration, tracing-integration]
+    needs: [frontend, backend-h2, mysql-integration, alertmanager-integration, prometheus-alerting-integration, redis-integration, distributed-integration, tracing-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

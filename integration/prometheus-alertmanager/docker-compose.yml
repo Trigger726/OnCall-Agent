@@ -1,0 +1,20 @@
+services:
+  prometheus-rule-test:
+    image: prom/prometheus:v3.4.2
+    profiles: ["prometheus-rule-test"]
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - ./integration/prometheus-alertmanager/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./integration/prometheus-alertmanager/alert-rules.yml:/etc/prometheus/alert-rules.yml:ro
+    depends_on:
+      alertmanager:
+        condition: service_started
+      pushgateway:
+        condition: service_started
+
+  pushgateway:
+    image: prom/pushgateway:v1.11.3
+    profiles: ["prometheus-rule-test"]
+    ports:
+      - "127.0.0.1:9091:9091"

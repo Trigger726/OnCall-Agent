@@ -1,0 +1,11 @@
+groups:
+  - name: opspilot-rule-integration
+    rules:
+      - alert: OpsPilotRulePipeline
+        expr: opspilot_rule_smoke == 1
+        for: 2s
+        labels:
+          severity: warning
+          resource_code: APP-PORTAL
+        annotations:
+          summary: Controlled Prometheus rule-to-Alertmanager test
