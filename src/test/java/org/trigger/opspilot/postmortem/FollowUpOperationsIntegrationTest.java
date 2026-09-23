@@ -133,6 +133,80 @@ class FollowUpOperationsIntegrationTest {
                 .andExpect(jsonPath("$.data.total").value(0));
     }
 
+    @Test
+    void shouldKeepOwnerAcknowledgementSeparateFromDeliveryAndCompletion() throws Exception {
+        jdbcClient.sql("""
+                        INSERT INTO incident_postmortem(
+                          id, incident_id, status, summary, customer_impact, root_cause,
+                          contributing_factors, lessons_learned, timeline_snapshot_json,
+                          evidence_refs_json, created_by, published_at)
+                        VALUES (401, 2, 'PUBLISHED', '摘要', '影响', '根因', '因素', '经验',
+                                '[]', '[]', 3, CURRENT_TIMESTAMP)
+                        """).update();
+        jdbcClient.sql("""
+                        INSERT INTO postmortem_follow_up(
+                          id, postmortem_id, title, description, priority, status,
+                          owner_id, due_date, created_by)
+                        VALUES (501, 401, '确认接手测试', '验证负责人身份', 'HIGH', 'OPEN',
+                                2, :dueDate, 3)
+                        """).param("dueDate", LocalDate.now().plusDays(1)).update();
+        String owner = login("zhangwei");
+        String manager = login("lina");
+        String auditor = login("auditor");
+
+        mockMvc.perform(post("/api/v1/postmortem-follow-ups/501/acknowledge")
+                        .header("Authorization", bearer(auditor)))
+                .andExpect(status().isForbidden());
+        mockMvc.perform(post("/api/v1/postmortem-follow-ups/501/acknowledge")
+                        .header("Authorization", bearer(manager)))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.error.code").value("POSTMORTEM_FOLLOW_UP_NOT_OWNER"));
+        JsonNode acknowledged = data(post("/api/v1/postmortem-follow-ups/501/acknowledge"), owner);
+        assertThat(acknowledged.path("followUps").get(0).path("acknowledgedByName").asText())
+                .isEqualTo("张伟");
+        assertThat(acknowledged.path("followUps").get(0).path("acknowledgedAt").isNull()).isFalse();
+        assertThat(acknowledged.path("followUps").get(0).path("status").asText()).isEqualTo("OPEN");
+        assertThat(acknowledged.path("followUps").get(0).path("version").asInt()).isEqualTo(1);
+        data(post("/api/v1/postmortem-follow-ups/501/acknowledge"), owner);
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM incident_timeline WHERE event_type = 'FOLLOW_UP_ACKNOWLEDGED'")
+                .query(Long.class).single()).isEqualTo(1L);
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM audit_log WHERE action = 'POSTMORTEM_FOLLOW_UP_ACKNOWLEDGED'")
+                .query(Long.class).single()).isEqualTo(1L);
+        mockMvc.perform(get("/api/v1/postmortem-follow-ups")
+                        .header("Authorization", bearer(owner)).param("scope", "MINE"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.items[0].acknowledgedAt").isNotEmpty())
+                .andExpect(jsonPath("$.data.items[0].notificationStatus").isEmpty());
+
+        data(post("/api/v1/postmortem-follow-ups/501/complete")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(Map.of("expectedVersion", 1))), owner);
+        mockMvc.perform(post("/api/v1/postmortem-follow-ups/501/acknowledge")
+                        .header("Authorization", bearer(owner)))
+                .andExpect(status().isOk());
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM audit_log WHERE action = 'POSTMORTEM_FOLLOW_UP_ACKNOWLEDGED'")
+                .query(Long.class).single()).isEqualTo(1L);
+
+        jdbcClient.sql("""
+                        INSERT INTO postmortem_follow_up(
+                          id, postmortem_id, title, description, priority, status,
+                          owner_id, due_date, created_by)
+                        VALUES (502, 401, '未确认测试', '验证状态门禁', 'HIGH', 'OPEN',
+                                2, :dueDate, 3)
+                        """).param("dueDate", LocalDate.now().plusDays(1)).update();
+        jdbcClient.sql("UPDATE incident_postmortem SET status = 'DRAFT' WHERE id = 401").update();
+        mockMvc.perform(post("/api/v1/postmortem-follow-ups/502/acknowledge")
+                        .header("Authorization", bearer(owner)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.error.code").value("POSTMORTEM_NOT_PUBLISHED"));
+        jdbcClient.sql("UPDATE incident_postmortem SET status = 'PUBLISHED' WHERE id = 401").update();
+        jdbcClient.sql("UPDATE postmortem_follow_up SET status = 'DONE' WHERE id = 502").update();
+        mockMvc.perform(post("/api/v1/postmortem-follow-ups/502/acknowledge")
+                        .header("Authorization", bearer(owner)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.error.code").value("POSTMORTEM_FOLLOW_UP_COMPLETED"));
+    }
+
     private JsonNode data(org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder request,
                           String token) throws Exception {
         String response = mockMvc.perform(request.header("Authorization", bearer(token)))

@@ -287,6 +287,46 @@ public class PostmortemService {
         return get(current.id());
     }
 
+    @Transactional
+    public PostmortemView acknowledgeFollowUp(long followUpId, long actorId, String sourceIp) {
+        AcknowledgementContext followUp = jdbcClient.sql("""
+                        SELECT postmortem_id, owner_id, status, title, acknowledged_by
+                        FROM postmortem_follow_up WHERE id = :id FOR UPDATE
+                        """).param("id", followUpId)
+                .query((rs, rowNum) -> new AcknowledgementContext(
+                        rs.getLong("postmortem_id"), rs.getLong("owner_id"),
+                        rs.getString("status"), rs.getString("title"),
+                        rs.getObject("acknowledged_by", Long.class)))
+                .optional().orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND,
+                        "POSTMORTEM_FOLLOW_UP_NOT_FOUND", "复盘行动项不存在"));
+        if (followUp.ownerId() != actorId) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "POSTMORTEM_FOLLOW_UP_NOT_OWNER",
+                    "只有当前负责人可以确认接手行动项");
+        }
+        PostmortemView postmortem = get(followUp.postmortemId());
+        if (!"PUBLISHED".equals(postmortem.status())) {
+            throw new ApiException(HttpStatus.CONFLICT, "POSTMORTEM_NOT_PUBLISHED",
+                    "复盘发布后才能确认接手行动项");
+        }
+        if (followUp.acknowledgedBy() != null) return postmortem;
+        if (!"OPEN".equals(followUp.status())) {
+            throw new ApiException(HttpStatus.CONFLICT, "POSTMORTEM_FOLLOW_UP_COMPLETED",
+                    "已完成的行动项不能补记确认接手");
+        }
+        jdbcClient.sql("""
+                        UPDATE postmortem_follow_up
+                        SET acknowledged_by = :actorId, acknowledged_at = CURRENT_TIMESTAMP,
+                            version = version + 1, updated_at = CURRENT_TIMESTAMP
+                        WHERE id = :id
+                        """).param("actorId", actorId).param("id", followUpId).update();
+        addTimeline(postmortem.incidentId(), "FOLLOW_UP_ACKNOWLEDGED", actorId,
+                "负责人确认接手复盘行动项：" + normalize(followUp.title(), 160),
+                "postmortem-follow-up:" + followUpId);
+        auditService.recordAs(actorId, sourceIp, "POSTMORTEM_FOLLOW_UP_ACKNOWLEDGED",
+                "POSTMORTEM_FOLLOW_UP", followUpId, "负责人确认接手，行动项仍开放");
+        return get(followUp.postmortemId());
+    }
+
     public PostmortemView get(long postmortemId) {
         return jdbcClient.sql(baseSelect() + " WHERE postmortem.id = :id")
                 .param("id", postmortemId).query(PostmortemService::mapRow).optional()
@@ -526,11 +566,14 @@ public class PostmortemService {
                        follow_up.due_date, follow_up.created_by,
                        creator.display_name AS created_by_name, follow_up.completed_by,
                        completer.display_name AS completed_by_name, follow_up.completed_at,
+                       follow_up.acknowledged_by, acknowledger.display_name AS acknowledged_by_name,
+                       follow_up.acknowledged_at,
                        follow_up.version, follow_up.created_at, follow_up.updated_at
                 FROM postmortem_follow_up follow_up
                 JOIN sys_user owner ON owner.id = follow_up.owner_id
                 JOIN sys_user creator ON creator.id = follow_up.created_by
                 LEFT JOIN sys_user completer ON completer.id = follow_up.completed_by
+                LEFT JOIN sys_user acknowledger ON acknowledger.id = follow_up.acknowledged_by
                 """;
     }
 
@@ -558,6 +601,8 @@ public class PostmortemService {
                 rs.getObject("due_date", LocalDate.class), rs.getLong("created_by"),
                 rs.getString("created_by_name"), rs.getObject("completed_by", Long.class),
                 rs.getString("completed_by_name"), rs.getObject("completed_at", LocalDateTime.class),
+                rs.getObject("acknowledged_by", Long.class), rs.getString("acknowledged_by_name"),
+                rs.getObject("acknowledged_at", LocalDateTime.class),
                 rs.getInt("version"), rs.getObject("created_at", LocalDateTime.class),
                 rs.getObject("updated_at", LocalDateTime.class));
     }
@@ -596,7 +641,13 @@ public class PostmortemService {
                                String priority, String status, long ownerId, String ownerName,
                                LocalDate dueDate, long createdById, String createdByName,
                                Long completedById, String completedByName, LocalDateTime completedAt,
+                               Long acknowledgedById, String acknowledgedByName,
+                               LocalDateTime acknowledgedAt,
                                int version, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    }
+
+    private record AcknowledgementContext(long postmortemId, long ownerId, String status,
+                                          String title, Long acknowledgedBy) {
     }
 
     private record IncidentContext(long id, String incidentCode, String title, String description,

@@ -31,7 +31,6 @@ import org.trigger.opspilot.runbook.RunbookRetrievalFeedbackService;
 import org.trigger.opspilot.runbook.RunbookService;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -250,7 +249,7 @@ class MySqlCompatibilityIntegrationTest {
 
     @Test
     @Order(1)
-    void shouldApplyAllMigrationsAndRunIdempotentInvestigationOnMySql() throws SQLException {
+    void shouldApplyAllMigrationsAndRunIdempotentInvestigationOnMySql() throws Exception {
         try (var connection = dataSource.getConnection()) {
             assertThat(connection.getMetaData().getDatabaseProductName()).isEqualTo("MySQL");
         }
@@ -401,15 +400,41 @@ class MySqlCompatibilityIntegrationTest {
                           AND notification.status = 'PENDING'
                           AND notification.title_snapshot = '补齐旧客户端兼容回归'
                         """).param("id", followUpId).query(Long.class).single()).isEqualTo(1L);
+        CountDownLatch acknowledgeStart = new CountDownLatch(1);
+        ExecutorService acknowledgeExecutor = Executors.newFixedThreadPool(2);
+        try {
+            Callable<PostmortemService.PostmortemView> acknowledge = () -> {
+                if (!acknowledgeStart.await(5, TimeUnit.SECONDS)) {
+                    throw new IllegalStateException("acknowledgement barrier timed out");
+                }
+                return postmortemService.acknowledgeFollowUp(
+                        followUpId, 2, "mysql-testcontainers");
+            };
+            Future<PostmortemService.PostmortemView> first = acknowledgeExecutor.submit(acknowledge);
+            Future<PostmortemService.PostmortemView> second = acknowledgeExecutor.submit(acknowledge);
+            acknowledgeStart.countDown();
+            assertThat(first.get(10, TimeUnit.SECONDS).followUps().get(0).acknowledgedByName())
+                    .isEqualTo("张伟");
+            assertThat(second.get(10, TimeUnit.SECONDS).followUps().get(0).acknowledgedByName())
+                    .isEqualTo("张伟");
+        } finally {
+            acknowledgeStart.countDown();
+            acknowledgeExecutor.shutdownNow();
+        }
+        assertThat(postmortemService.get(draft.id()).followUps().get(0).status()).isEqualTo("OPEN");
+        assertThat(jdbcClient.sql("""
+                        SELECT COUNT(*) FROM audit_log
+                        WHERE action = 'POSTMORTEM_FOLLOW_UP_ACKNOWLEDGED' AND target_id = :id
+                        """).param("id", followUpId).query(Long.class).single()).isEqualTo(1L);
         PostmortemService.PostmortemView completed = postmortemService.completeFollowUp(
-                followUpId, 0, 2, "ON_CALL");
+                followUpId, 1, 2, "ON_CALL");
         assertThat(completed.followUps().get(0).status()).isEqualTo("DONE");
         assertThat(jdbcClient.sql("""
                         SELECT status FROM postmortem_follow_up_escalation WHERE follow_up_id = :id
                         """).param("id", followUpId).query(String.class).single())
                 .isEqualTo("RESOLVED");
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM audit_log WHERE target_type LIKE '%POSTMORTEM%'")
-                .query(Integer.class).single()).isEqualTo(8);
+                .query(Integer.class).single()).isEqualTo(9);
 
         String recurrenceFingerprint = "c".repeat(64);
         LocalDateTime now = LocalDateTime.now();

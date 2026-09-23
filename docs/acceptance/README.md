@@ -36,10 +36,13 @@
 | V1.7 | 34：OpsPilot 自身服务指标到 Incident | 通过，真实 HTTP 指标规则与远端十项 CI 已闭环 | [V1.7-checkpoint-34.md](V1.7-checkpoint-34.md) |
 | V1.7 | 35：逾期行动项外部提醒与投递回执 | 部分通过，本地契约与远端十项 CI 闭环；第三方渠道/浏览器待验 | [V1.7-checkpoint-35.md](V1.7-checkpoint-35.md) |
 | V1.7 | 36：独立进程通知接收与重试联调 | 通过，真实容器联调与远端十一项 CI 闭环 | [V1.7-checkpoint-36.md](V1.7-checkpoint-36.md) |
+| V1.7 | 37：负责人确认接手与投递回执分离 | 部分通过，H2/API/构建已验；MySQL 并发与实页待验 | [V1.7-checkpoint-37.md](V1.7-checkpoint-37.md) |
 
 ## 状态约定
 
-最新独立进程联调：[V1.7-checkpoint-36.md](V1.7-checkpoint-36.md)：单独 Node 接收容器、503→204 故障重试与重复扫描去重已由 [Run 35859792690](https://github.com/Trigger726/OnCall-Agent/actions/runs/35859792690) 真实容器实跑验证，十一项 CI 全绿。第三方渠道与页面浏览器验收仍待完成。
+最新负责人确认：[V1.7-checkpoint-37.md](V1.7-checkpoint-37.md)：将负责人本人确认与 webhook 2xx、行动项完成分离，增加 V23、权限/审计/幂等及双页面入口；本地 H2/API/前端构建通过，MySQL 并发和浏览器实测待验。
+
+前一轮独立进程联调：[V1.7-checkpoint-36.md](V1.7-checkpoint-36.md)：单独 Node 接收容器、503→204 故障重试与重复扫描去重已由 [Run 35859792690](https://github.com/Trigger726/OnCall-Agent/actions/runs/35859792690) 真实容器实跑验证，十一项 CI 全绿。
 
 前一轮逾期提醒验收：[V1.7-checkpoint-35.md](V1.7-checkpoint-35.md)：默认关闭的通知 outbox、租约投递、端点 2xx 回执、重试与运营状态已完成本地全量回归；[Run 35858641814](https://github.com/Trigger726/OnCall-Agent/actions/runs/35858641814) 十项远端门禁全绿，含 MySQL 8.4 V22 入队快照断言。
 

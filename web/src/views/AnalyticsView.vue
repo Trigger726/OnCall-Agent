@@ -73,6 +73,7 @@ interface FollowUp {
   notificationHttpStatus: number | null
   notificationErrorCode: string | null
   notificationDeliveredAt: string | null
+  acknowledgedAt: string | null
   completedAt: string | null
   version: number
 }
@@ -151,6 +152,7 @@ const followUpTotal = ref(0)
 const loading = ref(false)
 const scanning = ref(false)
 const completingId = ref<number | null>(null)
+const acknowledgingId = ref<number | null>(null)
 const retryingNotificationId = ref<number | null>(null)
 const savingSloId = ref<number | null>(null)
 const editingSlo = ref<SloObjective | null>(null)
@@ -297,6 +299,26 @@ async function runEscalations() {
 function canComplete(item: FollowUp): boolean {
   const role = auth.state.user?.roleCode ?? ''
   return item.status === 'OPEN' && (item.ownerId === auth.state.user?.id || ['ADMIN', 'OPS_MANAGER'].includes(role))
+}
+
+function canAcknowledge(item: FollowUp): boolean {
+  return item.status === 'OPEN' && !item.acknowledgedAt
+    && item.ownerId === auth.state.user?.id
+}
+
+async function acknowledge(item: FollowUp) {
+  acknowledgingId.value = item.id
+  error.value = ''
+  notice.value = ''
+  try {
+    await api(`/postmortem-follow-ups/${item.id}/acknowledge`, { method: 'POST' })
+    await load()
+    notice.value = '已确认接手；行动项仍开放，完成后请单独标记。'
+  } catch (caught) {
+    error.value = caught instanceof Error ? caught.message : '确认接手失败'
+  } finally {
+    acknowledgingId.value = null
+  }
 }
 
 async function complete(item: FollowUp) {
@@ -486,7 +508,7 @@ onMounted(load)
 
     <section class="content-panel follow-up-operations">
       <div class="panel-heading follow-up-heading">
-        <div><h2>防复发行动项</h2><span>全局责任、期限与外部投递回执</span></div>
+        <div><h2>防复发行动项</h2><span>全局责任、期限、外部投递与负责人确认</span></div>
         <div class="follow-up-summary" aria-label="行动项摘要">
           <span>总数 <strong>{{ overview?.followUps.total ?? 0 }}</strong></span>
           <span>开放 <strong>{{ overview?.followUps.open ?? 0 }}</strong></span>
@@ -507,7 +529,7 @@ onMounted(load)
       </div>
       <div class="table-scroll">
         <table class="data-table follow-up-table">
-          <thead><tr><th>优先级</th><th>行动项 / Incident</th><th>负责人</th><th>截止日期</th><th>升级事实</th><th>外部提醒</th><th>状态</th><th>操作</th></tr></thead>
+          <thead><tr><th>优先级</th><th>行动项 / Incident</th><th>负责人</th><th>截止日期</th><th>升级事实</th><th>外部提醒</th><th>负责人确认</th><th>状态</th><th>操作</th></tr></thead>
           <tbody>
             <tr v-for="item in followUps" :key="item.id">
               <td><span class="status-badge" :class="priorityClass(item.priority)">{{ priorityLabel(item.priority) }}</span></td>
@@ -516,14 +538,15 @@ onMounted(load)
               <td><div class="follow-up-due" :class="{ overdue: item.overdue }"><strong>{{ item.dueDate }}</strong><span v-if="item.overdue">逾期 {{ item.daysOverdue }} 天</span><span v-else>未逾期</span></div></td>
               <td><div class="follow-up-escalation"><span class="status-badge" :class="item.escalationStatus === 'OPEN' ? 'status-danger' : item.escalationStatus === 'RESOLVED' ? 'status-success' : 'status-neutral'">{{ item.escalationStatus === 'OPEN' ? '已升级' : item.escalationStatus === 'RESOLVED' ? '已关闭' : '未升级' }}</span><small v-if="item.firstDetectedAt">{{ formatTime(item.firstDetectedAt, true) }}</small></div></td>
               <td><div class="follow-up-escalation"><span class="status-badge" :class="item.notificationStatus === 'DELIVERED' ? 'status-success' : item.notificationStatus === 'FAILED' ? 'status-danger' : item.notificationStatus === 'PENDING' || item.notificationStatus === 'CLAIMED' ? 'status-warning' : 'status-neutral'">{{ notificationLabel(item.notificationStatus) }}</span><small v-if="item.notificationAttempts">{{ item.notificationAttempts }} 次尝试<span v-if="item.notificationHttpStatus"> · HTTP {{ item.notificationHttpStatus }}</span></small><button v-if="canScan && item.status === 'OPEN' && item.notificationStatus === 'FAILED'" class="table-action" :disabled="retryingNotificationId === item.id" @click="retryNotification(item)">{{ retryingNotificationId === item.id ? '入队中' : '重试' }}</button></div></td>
+              <td><div class="follow-up-escalation"><span class="status-badge" :class="item.acknowledgedAt ? 'status-success' : 'status-warning'">{{ item.acknowledgedAt ? '已确认接手' : '未确认' }}</span><small v-if="item.acknowledgedAt">{{ formatTime(item.acknowledgedAt, true) }}</small></div></td>
               <td><span class="status-badge" :class="item.status === 'DONE' ? 'status-success' : 'status-info'">{{ item.status === 'DONE' ? '已完成' : '开放' }}</span></td>
-              <td><button v-if="canComplete(item)" class="table-action" :disabled="completingId === item.id" @click="complete(item)">{{ completingId === item.id ? '提交中' : '完成' }}</button><span v-else class="muted">-</span></td>
+              <td><button v-if="canAcknowledge(item)" class="table-action" :disabled="acknowledgingId === item.id" @click="acknowledge(item)">{{ acknowledgingId === item.id ? '确认中' : '确认接手' }}</button><button v-if="canComplete(item)" class="table-action" :disabled="completingId === item.id" @click="complete(item)">{{ completingId === item.id ? '提交中' : '完成' }}</button><span v-if="!canAcknowledge(item) && !canComplete(item)" class="muted">-</span></td>
             </tr>
           </tbody>
         </table>
         <div v-if="!followUps.length" class="analytics-empty">没有符合当前筛选条件的行动项。</div>
       </div>
-      <footer class="follow-up-boundary"><ShieldAlert :size="14" />“端点已收”仅代表配置的 webhook 返回 2xx，不代表负责人已读；未入队表示未启用通知或历史升级事实。</footer>
+      <footer class="follow-up-boundary"><ShieldAlert :size="14" />“端点已收”仅代表 webhook 返回 2xx；“已确认接手”须当前负责人登录操作，仍不代表行动项完成。未入队表示未启用通知或历史升级事实。</footer>
     </section>
 
     <div v-if="editingSlo" class="dialog-backdrop" @click.self="editingSlo = null">

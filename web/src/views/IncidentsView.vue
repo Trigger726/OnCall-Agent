@@ -28,7 +28,8 @@ interface IncidentDetail {
 interface UserOption { id: number; displayName: string; roleCode: string; department: string }
 interface FollowUp {
   id: number; postmortemId: number; title: string; description: string; priority: string; status: string
-  ownerId: number; ownerName: string; dueDate: string; completedByName: string | null; completedAt: string | null; version: number
+  ownerId: number; ownerName: string; dueDate: string; completedByName: string | null; completedAt: string | null
+  acknowledgedByName: string | null; acknowledgedAt: string | null; version: number
 }
 interface Postmortem {
   id: number; incidentId: number; incidentCode: string; incidentTitle: string; severity: string; status: string
@@ -240,6 +241,18 @@ async function completePostmortemFollowUp(followUp: FollowUp) {
   finally { postmortemLoading.value = false }
 }
 
+async function acknowledgePostmortemFollowUp(followUp: FollowUp) {
+  postmortemLoading.value = true
+  try {
+    const updated = await api<Postmortem>(`/postmortem-follow-ups/${followUp.id}/acknowledge`, {
+      method: 'POST',
+    })
+    applyPostmortem(updated)
+    toast.value = '已确认接手；行动项仍需单独完成'
+  } catch (caught) { toast.value = caught instanceof Error ? caught.message : '确认接手失败' }
+  finally { postmortemLoading.value = false }
+}
+
 function postmortemStatusLabel(status: string) {
   return ({ DRAFT: '草稿', IN_REVIEW: '待独立复核', PUBLISHED: '已发布' } as Record<string, string>)[status] ?? status
 }
@@ -247,6 +260,12 @@ function postmortemStatusLabel(status: string) {
 function canCompleteFollowUp(followUp: FollowUp) {
   const role = auth.state.user?.roleCode
   return followUp.status === 'OPEN' && (followUp.ownerId === auth.state.user?.id || role === 'ADMIN' || role === 'OPS_MANAGER')
+}
+
+function canAcknowledgeFollowUp(followUp: FollowUp) {
+  return selected.value?.postmortem?.status === 'PUBLISHED'
+    && followUp.status === 'OPEN' && !followUp.acknowledgedAt
+    && followUp.ownerId === auth.state.user?.id
 }
 
 async function transition(targetStatus: string, label: string) {
@@ -571,7 +590,7 @@ onBeforeUnmount(() => {
                 <article v-for="followUp in selected.postmortem.followUps" :key="followUp.id" :class="followUp.status.toLowerCase()">
                   <header><span>{{ followUp.priority }}</span><em>{{ followUp.status === 'DONE' ? '已完成' : '进行中' }}</em></header>
                   <strong>{{ followUp.title }}</strong><p>{{ followUp.description }}</p>
-                  <footer><span>{{ followUp.ownerName }} · 截止 {{ followUp.dueDate }}</span><button v-if="canCompleteFollowUp(followUp)" :disabled="postmortemLoading" @click="completePostmortemFollowUp(followUp)"><CheckCircle2 :size="13" />完成</button><small v-else-if="followUp.completedByName">{{ followUp.completedByName }} 完成</small></footer>
+                  <footer><span>{{ followUp.ownerName }} · 截止 {{ followUp.dueDate }}<small v-if="selected.postmortem.status === 'PUBLISHED'"> · {{ followUp.acknowledgedAt ? `已确认接手 ${formatTime(followUp.acknowledgedAt, true)}` : '负责人未确认' }}</small></span><div class="follow-up-actions"><button v-if="canAcknowledgeFollowUp(followUp)" :disabled="postmortemLoading" @click="acknowledgePostmortemFollowUp(followUp)"><Check :size="13" />确认接手</button><button v-if="canCompleteFollowUp(followUp)" :disabled="postmortemLoading" @click="completePostmortemFollowUp(followUp)"><CheckCircle2 :size="13" />完成</button><small v-else-if="followUp.completedByName">{{ followUp.completedByName }} 完成</small></div></footer>
                 </article>
                 <div v-if="!selected.postmortem.followUps.length" class="follow-up-empty">尚未创建行动项，不能提交复核</div>
               </div>

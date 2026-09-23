@@ -58,6 +58,7 @@ public class FollowUpOperationsService {
                                follow_up.priority, follow_up.status, follow_up.owner_id,
                                owner.display_name AS owner_name, follow_up.due_date,
                                follow_up.completed_at, follow_up.version,
+                               follow_up.acknowledged_at,
                                escalation.status AS escalation_status,
                                escalation.detected_as_of, escalation.first_detected_at,
                                escalation.resolved_at,
@@ -106,7 +107,9 @@ public class FollowUpOperationsService {
                             rs.getObject("notification_http_status", Integer.class),
                             rs.getString("notification_error_code"),
                             rs.getObject("notification_delivered_at", LocalDateTime.class),
-                            rs.getObject("completed_at", LocalDateTime.class), rs.getInt("version"));
+                            rs.getObject("completed_at", LocalDateTime.class),
+                            rs.getObject("acknowledged_at", LocalDateTime.class),
+                            rs.getInt("version"));
                 }).list();
         return new PageResponse<>(items, total, safePage, safeSize);
     }
@@ -121,6 +124,6 @@ public class FollowUpOperationsService {
             String notificationStatus, Integer notificationAttempts,
             Integer notificationHttpStatus, String notificationErrorCode,
             LocalDateTime notificationDeliveredAt,
-            LocalDateTime completedAt, int version) {
+            LocalDateTime completedAt, LocalDateTime acknowledgedAt, int version) {
     }
 }

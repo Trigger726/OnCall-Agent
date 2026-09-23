@@ -1,6 +1,7 @@
 package org.trigger.opspilot.postmortem;
 
 import jakarta.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -91,6 +92,15 @@ public class PostmortemController {
             @Valid @RequestBody VersionRequest request) {
         return ApiResponse.ok(service.completeFollowUp(followUpId, request.expectedVersion(),
                 user.id(), user.roleCode()));
+    }
+
+    @PostMapping("/postmortem-follow-ups/{followUpId}/acknowledge")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER','ON_CALL')")
+    public ApiResponse<PostmortemService.PostmortemView> acknowledgeFollowUp(
+            @PathVariable long followUpId, @AuthenticationPrincipal UserPrincipal user,
+            HttpServletRequest request) {
+        return ApiResponse.ok(service.acknowledgeFollowUp(
+                followUpId, user.id(), request.getRemoteAddr()));
     }
 
     public record UpdateRequest(@Min(0) int expectedVersion,

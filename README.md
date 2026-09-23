@@ -242,6 +242,8 @@ ALERTMANAGER_REJECTION_PAYLOAD_RETENTION=P3D
 
 接收端收到入队时冻结的 `eventType`、`escalationId`、`followUpId`、`incidentCode`、行动项标题、负责人和截止日。2xx 记录为“端点已收”；503/429/网络故障有限退避，3xx 和其余 4xx 直接标记失败；仅管理员/运维经理能重试仍开放的失败通知。接收端应按幂等键去重：响应丢失时可能再次发送。页面上的回执不代表负责人已读，token 不写入数据库或诊断日志。交付配置与失败明细见 [checkpoint-35 验收记录](docs/acceptance/V1.7-checkpoint-35.md)。
 
+已发布复盘的开放行动项由当前负责人在运营页或 Incident 详情点击“确认接手”，系统单独保存确认人与时间，并写时间线/审计。此动作不依赖通知开关，不会把行动项标记完成或关闭逾期升级；完成仍需单独提交。重复确认幂等，其他用户（包括管理员）不能代替负责人确认。见 [checkpoint-37 验收记录](docs/acceptance/V1.7-checkpoint-37.md)。
+
 在有 Docker、`bash`、`jq`、`openssl` 的环境运行 `bash scripts/verify-follow-up-notification-pipeline.sh`，可用隔离 MySQL、OpsPilot 和单独 Node 接收容器验证 503→204 自动重试与重复扫描去重。接收容器共享 OpsPilot 网络命名空间以使用本机 HTTP 限定；这是独立进程联调，不代表跨宿主机 HTTPS 或第三方消息平台实接。见 [checkpoint-36 验收记录](docs/acceptance/V1.7-checkpoint-36.md)。
 
 ## Agent 运行控制
