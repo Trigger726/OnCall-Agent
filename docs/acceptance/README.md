@@ -35,11 +35,11 @@
 | V1.7 | 33：Prometheus 规则到 Incident 的真实链路 | 通过，远端九项 CI 与隔离规则联调已闭环 | [V1.7-checkpoint-33.md](V1.7-checkpoint-33.md) |
 | V1.7 | 34：OpsPilot 自身服务指标到 Incident | 通过，真实 HTTP 指标规则与远端十项 CI 已闭环 | [V1.7-checkpoint-34.md](V1.7-checkpoint-34.md) |
 | V1.7 | 35：逾期行动项外部提醒与投递回执 | 部分通过，本地契约与远端十项 CI 闭环；第三方渠道/浏览器待验 | [V1.7-checkpoint-35.md](V1.7-checkpoint-35.md) |
-| V1.7 | 36：独立进程通知接收与重试联调 | 待远端容器验收，本地静态检查通过 | [V1.7-checkpoint-36.md](V1.7-checkpoint-36.md) |
+| V1.7 | 36：独立进程通知接收与重试联调 | 通过，真实容器联调与远端十一项 CI 闭环 | [V1.7-checkpoint-36.md](V1.7-checkpoint-36.md) |
 
 ## 状态约定
 
-最新独立进程联调：[V1.7-checkpoint-36.md](V1.7-checkpoint-36.md)：新增单独 Node 接收容器、503→204 故障重试与重复扫描去重的 Compose 门禁；本机仅完成静态检查，等待远端 CI 实跑。第三方渠道与页面浏览器验收仍待完成。
+最新独立进程联调：[V1.7-checkpoint-36.md](V1.7-checkpoint-36.md)：单独 Node 接收容器、503→204 故障重试与重复扫描去重已由 [Run 35859792690](https://github.com/Trigger726/OnCall-Agent/actions/runs/35859792690) 真实容器实跑验证，十一项 CI 全绿。第三方渠道与页面浏览器验收仍待完成。
 
 前一轮逾期提醒验收：[V1.7-checkpoint-35.md](V1.7-checkpoint-35.md)：默认关闭的通知 outbox、租约投递、端点 2xx 回执、重试与运营状态已完成本地全量回归；[Run 35858641814](https://github.com/Trigger726/OnCall-Agent/actions/runs/35858641814) 十项远端门禁全绿，含 MySQL 8.4 V22 入队快照断言。
 
