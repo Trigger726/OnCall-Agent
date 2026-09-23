@@ -224,9 +224,11 @@ bash scripts/verify-tracing-pipeline.sh
 ```bash
 ALERTMANAGER_WEBHOOK_SECRET=replace-with-a-long-random-secret
 ALERTMANAGER_WEBHOOK_MAX_ALERTS=100
+ALERTMANAGER_AUTO_REPLAY_ENABLED=false
+ALERTMANAGER_REJECTION_PAYLOAD_RETENTION=P3D
 ```
 
-每条 alert 需要 `labels.alertname`、`labels.resource_code`（或 `service_code`）、可映射的 `labels.severity`、`status`、`startsAt` 和 `fingerprint`；resolved 还需要 `endsAt`。同一 fingerprint 和 startsAt 的重试返回原结果，不增加次数；状态变化更新同一条告警。HTTP 200 可能同时包含接受与拒绝项，拒绝项会脱敏后持久化；先修复上游规则或 CMDB，再由 ADMIN/OPS_MANAGER/ON_CALL 在告警页受控重放，AUDITOR 仅可查看。这是 Alertmanager 入站 receiver，不是 SLO 出站通知配置。
+每条 alert 需要 `labels.alertname`、`labels.resource_code`（或 `service_code`）、可映射的 `labels.severity`、`status`、`startsAt` 和 `fingerprint`；resolved 还需要 `endsAt`。同一 fingerprint 和 startsAt 的重试返回原结果，不增加次数；状态变化更新同一条告警。HTTP 200 可能同时包含接受与拒绝项，拒绝项会脱敏后持久化；先修复上游规则或 CMDB，再由 ADMIN/OPS_MANAGER/ON_CALL 在告警页受控重放，AUDITOR 仅可查看。`RESOURCE_NOT_FOUND` 可显式开启自动重放，默认关闭；自动尝试有租约、批次/次数上限及退避抖动，耗尽后仍可手动重放。拒绝快照默认三天后按批清理，已清理项需重新投递原始告警；生产应按本地保留政策调整。这是 Alertmanager 入站 receiver，不是 SLO 出站通知配置。
 
 ## Agent 运行控制
 
@@ -352,9 +354,9 @@ cd .. && ./mvnw test
 - MTTA/MTTM/MTTR 均值、中位数、独立分母、日期/严重等级筛选、缺失/负时长排除、慢事故下钻和 SPA 深链。
 - 跨 Incident 行动项筛选、截止当天边界、逾期天数、扫描角色限制、唯一升级事实、重复扫描幂等和完成后关闭。
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
-- MySQL 8.4 Testcontainers：Flyway V1-V20、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项完成，以及 Problem 创建、状态闭环、SLO 目标和 Alertmanager 拒绝台账表。
+- MySQL 8.4 Testcontainers：Flyway V1-V21、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项完成，以及 Problem 创建、状态闭环、SLO 目标和 Alertmanager 拒绝台账生命周期。
 
-默认后端套件发现 104 项测试：93 项执行通过，11 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离、Alertmanager 生命周期幂等与拒绝台账受控重放，以及 SLO 分母、错误预算和多窗口燃烧率边界。另行启用条件测试后，MySQL 8.4 从空库执行 Flyway V1–V20，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标、Alertmanager 拒绝台账迁移，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、容器构建与健康启动拆成七个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+默认后端套件发现 110 项测试：98 项执行通过，12 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离、Alertmanager 生命周期幂等、拒绝台账受控重放及其自动退避/载荷保留期，以及 SLO 分母、错误预算和多窗口燃烧率边界。另行启用条件测试后，MySQL 8.4 从空库执行 Flyway V1–V21，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、逾期扫描幂等、行动项关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标、Alertmanager 拒绝台账迁移及生命周期，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、容器构建与健康启动拆成七个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 

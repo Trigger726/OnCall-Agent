@@ -80,6 +80,18 @@ opspilot:
     webhook:
       secret: ${ALERTMANAGER_WEBHOOK_SECRET:disabled}
       max-alerts: ${ALERTMANAGER_WEBHOOK_MAX_ALERTS:100}
+    rejections:
+      auto-replay-enabled: ${ALERTMANAGER_AUTO_REPLAY_ENABLED:false}
+      auto-replay-delay: ${ALERTMANAGER_AUTO_REPLAY_DELAY:5000}
+      auto-replay-initial-delay: ${ALERTMANAGER_AUTO_REPLAY_INITIAL_DELAY:30000}
+      replay-lease: ${ALERTMANAGER_REPLAY_LEASE:30s}
+      retry-base-delay: ${ALERTMANAGER_RETRY_BASE_DELAY:1m}
+      retry-max-delay: ${ALERTMANAGER_RETRY_MAX_DELAY:1h}
+      max-auto-replay-attempts: ${ALERTMANAGER_MAX_AUTO_REPLAY_ATTEMPTS:5}
+      auto-replay-batch-size: ${ALERTMANAGER_AUTO_REPLAY_BATCH_SIZE:20}
+      payload-retention: ${ALERTMANAGER_REJECTION_PAYLOAD_RETENTION:P3D}
+      cleanup-batch-size: ${ALERTMANAGER_REJECTION_CLEANUP_BATCH_SIZE:500}
+      cleanup-cron: "${ALERTMANAGER_REJECTION_CLEANUP_CRON:0 35 3 * * *}"
   runbook:
     semantic:
       enabled: ${RUNBOOK_SEMANTIC_ENABLED:false}

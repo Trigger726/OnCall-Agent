@@ -18,6 +18,9 @@ interface RejectionItem {
   replayLeaseUntil: string | null; lastReplayErrorCode: string | null; lastReplayErrorMessage: string | null
   resolvedAlertId: number | null; resolvedIncidentId: number | null
   firstReceivedAt: string; lastReceivedAt: string; lastReplayedAt: string | null; resolvedAt: string | null
+  payloadStatus: 'ACTIVE' | 'PURGED'; autoReplayCount: number; nextAutoReplayAt: string | null
+  autoReplayExhaustedAt: string | null; purgedAt: string | null
+  autoReplayEnabled: boolean
 }
 
 const alerts = ref<AlertItem[]>([])
@@ -119,7 +122,7 @@ onMounted(load)
     </section>
 
     <div class="page-toolbar rejection-toolbar">
-      <div><strong>Alertmanager 拒绝台账</strong><span>永久坏项脱敏留存，修复上游规则或 CMDB 后可受控重放</span></div>
+      <div><strong>Alertmanager 拒绝台账</strong><span>脱敏快照按保留期清理；补录 CMDB 后可自动或手动重放</span></div>
       <div class="toolbar-group">
         <select v-model="rejectionStatus" aria-label="拒绝项状态">
           <option value="OPEN">待处理</option><option value="SUCCEEDED">已重放</option><option value="">全部状态</option>
@@ -136,13 +139,13 @@ onMounted(load)
           <thead><tr><th>状态</th><th>告警</th><th>拒绝原因</th><th>投递 / 重放</th><th>最近接收</th><th>结果</th><th>操作</th></tr></thead>
           <tbody>
             <tr v-for="item in rejections" :key="item.id">
-              <td><span class="status-badge" :class="item.status === 'SUCCEEDED' ? 'status-success' : 'status-danger'">{{ item.status === 'SUCCEEDED' ? '已重放' : '待处理' }}</span></td>
-              <td><div class="primary-cell"><span>#{{ item.id }} · {{ item.resourceCode ?? '资源未识别' }}</span><strong>{{ item.alertName ?? '告警字段不完整' }}</strong><small>{{ item.severity ?? '-' }} · {{ item.alertStatus ?? '-' }} · {{ item.receiver ?? '-' }}</small></div></td>
-              <td><div class="rejection-error"><code>{{ item.errorCode }}</code><span>{{ item.errorMessage }}</span><small v-if="item.redactedFields">已脱敏 {{ item.redactedFields }} 个字段</small><small v-if="item.lastReplayErrorCode">上次重放：{{ item.lastReplayErrorCode }}</small></div></td>
-              <td><strong>{{ item.deliveryCount }}</strong> / {{ item.replayCount }}</td>
+              <td><span class="status-badge" :class="item.status === 'SUCCEEDED' ? 'status-success' : item.payloadStatus === 'PURGED' ? 'status-neutral' : 'status-danger'">{{ item.status === 'SUCCEEDED' ? '已重放' : item.payloadStatus === 'PURGED' ? '待重新投递' : '待处理' }}</span></td>
+              <td><div class="primary-cell"><span>#{{ item.id }} · {{ item.resourceCode ?? (item.payloadStatus === 'PURGED' ? '载荷已清理' : '资源未识别') }}</span><strong>{{ item.alertName ?? (item.payloadStatus === 'PURGED' ? '原告警信息已清理' : '告警字段不完整') }}</strong><small v-if="item.payloadStatus === 'ACTIVE'">{{ item.severity ?? '-' }} · {{ item.alertStatus ?? '-' }} · {{ item.receiver ?? '-' }}</small></div></td>
+              <td><div class="rejection-error"><code>{{ item.errorCode }}</code><span>{{ item.errorMessage }}</span><small v-if="item.payloadStatus === 'ACTIVE' && item.redactedFields">已脱敏 {{ item.redactedFields }} 个字段</small><small v-if="item.lastReplayErrorCode">上次重放：{{ item.lastReplayErrorCode }}</small><small v-if="item.autoReplayEnabled && item.nextAutoReplayAt">下次自动重放：{{ formatTime(item.nextAutoReplayAt, true) }}</small><small v-else-if="item.autoReplayExhaustedAt">自动重放已耗尽，可修复后手动重放</small><small v-else-if="!item.autoReplayEnabled && item.status === 'OPEN' && item.payloadStatus === 'ACTIVE' && item.errorCode === 'RESOURCE_NOT_FOUND'">自动重放未启用</small></div></td>
+              <td><strong>{{ item.deliveryCount }}</strong> / {{ item.replayCount }}<small v-if="item.autoReplayCount" class="rejection-count-note">其中自动 {{ item.autoReplayCount }} 次</small></td>
               <td>{{ formatTime(item.lastReceivedAt, true) }}</td>
               <td><RouterLink v-if="item.resolvedIncidentId" :to="`/incidents?selected=${item.resolvedIncidentId}`">Incident #{{ item.resolvedIncidentId }}</RouterLink><span v-else>-</span></td>
-              <td><button v-if="item.status === 'OPEN' && canReplay" class="secondary-button compact-button" :disabled="replayingId === item.id" @click="replay(item)"><RotateCcw :size="14" :class="{ spin: replayingId === item.id }" />{{ replayingId === item.id ? '重放中' : '重放' }}</button><span v-else>-</span></td>
+              <td><button v-if="item.status === 'OPEN' && item.payloadStatus === 'ACTIVE' && canReplay" class="secondary-button compact-button" :disabled="replayingId === item.id" @click="replay(item)"><RotateCcw :size="14" :class="{ spin: replayingId === item.id }" />{{ replayingId === item.id ? '重放中' : '重放' }}</button><span v-else-if="item.status === 'OPEN' && item.payloadStatus === 'PURGED'">需重新投递</span><span v-else>-</span></td>
             </tr>
           </tbody>
         </table>
@@ -175,6 +178,7 @@ onMounted(load)
 .rejection-error code { color: var(--danger); font-size: 12px; }
 .rejection-error span { color: var(--text-secondary); line-height: 1.45; }
 .rejection-error small { color: var(--text-muted); }
+.rejection-count-note { display: block; margin-top: 4px; color: var(--text-muted); white-space: nowrap; }
 .compact-button { min-width: 74px; justify-content: center; }
 @media (max-width: 720px) {
   .rejection-toolbar { align-items: flex-start; }

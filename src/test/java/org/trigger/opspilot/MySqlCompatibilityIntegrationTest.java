@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.http.HttpStatus;
+import org.trigger.opspilot.alert.AlertmanagerRejectionService;
+import org.trigger.opspilot.alert.AlertmanagerWebhookService;
+import org.trigger.opspilot.common.ApiException;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -31,7 +35,9 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
@@ -57,6 +63,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 })
 class MySqlCompatibilityIntegrationTest {
     @Autowired private org.trigger.opspilot.investigation.AgentEventOutbox outbox;
+    @Autowired private AlertmanagerRejectionService rejectionService;
 
     @Test
     @Order(3)
@@ -245,7 +252,7 @@ class MySqlCompatibilityIntegrationTest {
         }
         assertThat(jdbcClient.sql("""
                         SELECT COUNT(*) FROM flyway_schema_history
-                        WHERE version = '20' AND success = 1
+                        WHERE version = '21' AND success = 1
                         """).query(Integer.class).single()).isEqualTo(1);
         assertThat(jdbcClient.sql("SELECT title FROM incident WHERE id = 1")
                 .query(String.class).single()).isEqualTo("统一结算接口持续超时");
@@ -280,6 +287,12 @@ class MySqlCompatibilityIntegrationTest {
                 .query(Integer.class).single()).isEqualTo(2);
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM alert_ingest_rejection")
                 .query(Integer.class).single()).isZero();
+        assertThat(jdbcClient.sql("""
+                        SELECT COUNT(*) FROM information_schema.columns
+                        WHERE table_schema = DATABASE() AND table_name = 'alert_ingest_rejection'
+                          AND column_name IN ('payload_status', 'auto_replay_count',
+                            'next_auto_replay_at', 'auto_replay_exhausted_at', 'purged_at')
+                        """).query(Integer.class).single()).isEqualTo(5);
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM runbook_retrieval_eval_case WHERE source_type = 'SEED'")
                 .query(Integer.class).single()).isEqualTo(13);
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM runbook_retrieval_eval_case " +
@@ -448,6 +461,38 @@ class MySqlCompatibilityIntegrationTest {
         assertThat(problemResolved.incidentCount()).isEqualTo(2);
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM problem_incident_link")
                 .query(Integer.class).single()).isEqualTo(2);
+    }
+
+    @Test
+    @Order(5)
+    void shouldPreserveAutomaticReplayBudgetAndPurgePayloadOnMySql() {
+        var alert = new AlertmanagerWebhookService.Alert("firing",
+                Map.of("alertname", "MySqlRejected", "resource_code", "APP-MYSQL-REJECT-MISSING",
+                        "severity", "warning"), Map.of(),
+                OffsetDateTime.parse("2026-09-23T01:00:00Z"), null, null, "mysql-rejection-lifecycle");
+        var webhook = new AlertmanagerWebhookService.Webhook("4", "mysql-rejection-group", "firing",
+                "opspilot", Map.of(), Map.of(), Map.of(), null, List.of(alert));
+        var failure = new ApiException(HttpStatus.BAD_REQUEST, "RESOURCE_NOT_FOUND", "CMDB 资源不存在");
+        long id = rejectionService.record(webhook, alert, failure);
+        assertThat(rejectionService.claimAutomatic(id, LocalDateTime.now().plusMinutes(2))).isPresent();
+        var claim = rejectionService.claimAutomatic(id, LocalDateTime.now().plusMinutes(2));
+        assertThat(claim).isEmpty();
+        String token = jdbcClient.sql("SELECT replay_token FROM alert_ingest_rejection WHERE id = :id")
+                .param("id", id).query(String.class).single();
+        rejectionService.releaseAutomatic(id, token, "RESOURCE_NOT_FOUND", "CMDB 资源不存在",
+                LocalDateTime.now().plusMinutes(2));
+        assertThat(rejectionService.record(webhook, alert, failure)).isEqualTo(id);
+        assertThat(jdbcClient.sql("SELECT auto_replay_count FROM alert_ingest_rejection WHERE id = :id")
+                .param("id", id).query(Integer.class).single()).isEqualTo(1);
+
+        assertThat(rejectionService.purgeExpired(LocalDateTime.now().plusDays(4))).isPositive();
+        assertThat(jdbcClient.sql("SELECT payload_json FROM alert_ingest_rejection WHERE id = :id")
+                .param("id", id).query(String.class).single()).isEqualTo("[PURGED]");
+        assertThat(rejectionService.record(webhook, alert, failure)).isEqualTo(id);
+        assertThat(jdbcClient.sql("SELECT payload_status FROM alert_ingest_rejection WHERE id = :id")
+                .param("id", id).query(String.class).single()).isEqualTo("ACTIVE");
+        assertThat(jdbcClient.sql("SELECT auto_replay_count FROM alert_ingest_rejection WHERE id = :id")
+                .param("id", id).query(Integer.class).single()).isZero();
     }
 
     private void seedConcurrentProblemCandidate(String fingerprint) {

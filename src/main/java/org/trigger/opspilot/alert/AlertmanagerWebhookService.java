@@ -108,6 +108,31 @@ public class AlertmanagerWebhookService {
         }
     }
 
+    public void replayAutomatically(long rejectionId, LocalDateTime now) {
+        var optionalClaim = rejectionService.claimAutomatic(rejectionId, now);
+        if (optionalClaim.isEmpty()) return;
+        AlertmanagerRejectionService.ReplayClaim claim = optionalClaim.get();
+        try {
+            AlertmanagerRejectionService.StoredPayload stored = claim.payload();
+            AlertService.IntakeResult result = intake(toCommand(stored.alert(), stored.webhook()));
+            rejectionService.complete(rejectionId, claim.token(), result, null);
+            auditService.recordAs(null, "scheduler", "ALERTMANAGER_REJECTION_AUTO_REPLAYED",
+                    "ALERT_INGEST_REJECTION", rejectionId,
+                    "action=" + result.action() + ", alertId=" + result.alertId());
+        } catch (ApiException exception) {
+            rejectionService.releaseAutomatic(rejectionId, claim.token(), exception.code(),
+                    exception.getMessage(), LocalDateTime.now());
+            auditService.recordAs(null, "scheduler", "ALERTMANAGER_REJECTION_AUTO_REPLAY_FAILED",
+                    "ALERT_INGEST_REJECTION", rejectionId, "errorCode=" + exception.code());
+        } catch (RuntimeException exception) {
+            rejectionService.releaseAutomatic(rejectionId, claim.token(), "REPLAY_INTERNAL_ERROR",
+                    "自动重放暂时失败", LocalDateTime.now());
+            auditService.recordAs(null, "scheduler", "ALERTMANAGER_REJECTION_AUTO_REPLAY_FAILED",
+                    "ALERT_INGEST_REJECTION", rejectionId, "errorCode=REPLAY_INTERNAL_ERROR");
+            log.warn("Alertmanager automatic replay failed: rejectionId={}", rejectionId, exception);
+        }
+    }
+
     private AlertService.IntakeResult intake(AlertService.IntakeRequest command) {
         try {
             return alertService.intake(command);
