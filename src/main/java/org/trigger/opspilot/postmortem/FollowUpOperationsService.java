@@ -16,6 +16,7 @@ import java.util.Set;
 public class FollowUpOperationsService {
     private static final Set<String> STATUSES = Set.of("OPEN", "DONE");
     private static final Set<String> SCOPES = Set.of("ALL", "MINE");
+    private static final Set<String> ACKNOWLEDGMENTS = Set.of("ALL", "ACKNOWLEDGED", "UNACKNOWLEDGED");
 
     private final JdbcClient jdbcClient;
     private final FollowUpEscalationService escalationService;
@@ -27,10 +28,11 @@ public class FollowUpOperationsService {
     }
 
     public PageResponse<FollowUpOperationsView> list(long userId, String scope, String status,
-                                                     boolean overdue, LocalDate requestedAsOf,
+                                                     String acknowledgment, boolean overdue, LocalDate requestedAsOf,
                                                      int page, int size) {
         String normalizedScope = scope == null ? "ALL" : scope.trim().toUpperCase();
         String normalizedStatus = status == null ? "" : status.trim().toUpperCase();
+        String normalizedAcknowledgment = acknowledgment == null ? "ALL" : acknowledgment.trim().toUpperCase();
         if (!SCOPES.contains(normalizedScope)) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "FOLLOW_UP_INVALID_SCOPE",
                     "行动项范围仅支持 ALL 或 MINE");
@@ -39,17 +41,29 @@ public class FollowUpOperationsService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "FOLLOW_UP_INVALID_STATUS",
                     "行动项状态仅支持 OPEN 或 DONE");
         }
+        if (!ACKNOWLEDGMENTS.contains(normalizedAcknowledgment)) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "FOLLOW_UP_INVALID_ACKNOWLEDGMENT",
+                    "负责人确认筛选仅支持 ALL、ACKNOWLEDGED 或 UNACKNOWLEDGED");
+        }
         LocalDate asOf = requestedAsOf == null ? escalationService.businessToday() : requestedAsOf;
         int safePage = Math.max(1, page);
         int safeSize = Math.max(1, Math.min(100, size));
         String where = """
-                WHERE (:mine = 0 OR follow_up.owner_id = :userId)
+                WHERE postmortem.status = 'PUBLISHED'
+                  AND (:mine = 0 OR follow_up.owner_id = :userId)
                   AND (:status = '' OR follow_up.status = :status)
+                  AND (:acknowledgment = 'ALL'
+                       OR (:acknowledgment = 'ACKNOWLEDGED' AND follow_up.acknowledged_at IS NOT NULL)
+                       OR (:acknowledgment = 'UNACKNOWLEDGED' AND follow_up.acknowledged_at IS NULL))
                   AND (:overdue = 0 OR (follow_up.status = 'OPEN' AND follow_up.due_date < :asOf))
                 """;
-        long total = jdbcClient.sql("SELECT COUNT(*) FROM postmortem_follow_up follow_up " + where)
+        long total = jdbcClient.sql("""
+                        SELECT COUNT(*) FROM postmortem_follow_up follow_up
+                        JOIN incident_postmortem postmortem ON postmortem.id = follow_up.postmortem_id
+                        """ + where)
                 .param("mine", "MINE".equals(normalizedScope) ? 1 : 0).param("userId", userId)
-                .param("status", normalizedStatus).param("overdue", overdue ? 1 : 0)
+                .param("status", normalizedStatus).param("acknowledgment", normalizedAcknowledgment)
+                .param("overdue", overdue ? 1 : 0)
                 .param("asOf", asOf).query(Long.class).single();
         List<FollowUpOperationsView> items = jdbcClient.sql("""
                         SELECT follow_up.id, follow_up.postmortem_id, postmortem.incident_id,
@@ -83,7 +97,8 @@ public class FollowUpOperationsService {
                         LIMIT :limit OFFSET :offset
                         """)
                 .param("mine", "MINE".equals(normalizedScope) ? 1 : 0).param("userId", userId)
-                .param("status", normalizedStatus).param("overdue", overdue ? 1 : 0)
+                .param("status", normalizedStatus).param("acknowledgment", normalizedAcknowledgment)
+                .param("overdue", overdue ? 1 : 0)
                 .param("asOf", asOf).param("limit", safeSize)
                 .param("offset", (safePage - 1) * safeSize)
                 .query((rs, rowNum) -> {

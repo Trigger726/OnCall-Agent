@@ -92,7 +92,8 @@ class FollowUpOperationsIntegrationTest {
 
         mockMvc.perform(get("/api/v1/postmortem-follow-ups")
                         .header("Authorization", bearer(manager))
-                        .param("overdue", "true").param("asOf", asOf.toString()))
+                        .param("overdue", "true").param("acknowledgment", "UNACKNOWLEDGED")
+                        .param("asOf", asOf.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.total").value(1))
                 .andExpect(jsonPath("$.data.items[0].id").value(301))
@@ -102,7 +103,8 @@ class FollowUpOperationsIntegrationTest {
                 .andExpect(jsonPath("$.data.items[0].notificationStatus").isEmpty());
         mockMvc.perform(get("/api/v1/postmortem-follow-ups")
                         .header("Authorization", bearer(manager))
-                        .param("scope", "MINE").param("asOf", asOf.toString()))
+                        .param("scope", "MINE").param("acknowledgment", "UNACKNOWLEDGED")
+                        .param("asOf", asOf.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.total").value(1))
                 .andExpect(jsonPath("$.data.items[0].id").value(302))
@@ -154,6 +156,22 @@ class FollowUpOperationsIntegrationTest {
         String manager = login("lina");
         String auditor = login("auditor");
 
+        mockMvc.perform(get("/api/v1/analytics/incidents")
+                        .header("Authorization", bearer(manager)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.followUps.openUnacknowledged").value(1));
+        mockMvc.perform(get("/api/v1/postmortem-follow-ups")
+                        .header("Authorization", bearer(manager))
+                        .param("status", "OPEN").param("acknowledgment", "UNACKNOWLEDGED"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.total").value(1))
+                .andExpect(jsonPath("$.data.items[0].id").value(501));
+        mockMvc.perform(get("/api/v1/postmortem-follow-ups")
+                        .header("Authorization", bearer(manager))
+                        .param("acknowledgment", "UNKNOWN"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error.code").value("FOLLOW_UP_INVALID_ACKNOWLEDGMENT"));
+
         mockMvc.perform(post("/api/v1/postmortem-follow-ups/501/acknowledge")
                         .header("Authorization", bearer(auditor)))
                 .andExpect(status().isForbidden());
@@ -172,6 +190,21 @@ class FollowUpOperationsIntegrationTest {
                 .query(Long.class).single()).isEqualTo(1L);
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM audit_log WHERE action = 'POSTMORTEM_FOLLOW_UP_ACKNOWLEDGED'")
                 .query(Long.class).single()).isEqualTo(1L);
+        mockMvc.perform(get("/api/v1/analytics/incidents")
+                        .header("Authorization", bearer(manager)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.followUps.openUnacknowledged").value(0));
+        mockMvc.perform(get("/api/v1/postmortem-follow-ups")
+                        .header("Authorization", bearer(manager))
+                        .param("status", "OPEN").param("acknowledgment", "UNACKNOWLEDGED"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.total").value(0));
+        mockMvc.perform(get("/api/v1/postmortem-follow-ups")
+                        .header("Authorization", bearer(manager))
+                        .param("status", "OPEN").param("acknowledgment", "ACKNOWLEDGED"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.total").value(1))
+                .andExpect(jsonPath("$.data.items[0].id").value(501));
         mockMvc.perform(get("/api/v1/postmortem-follow-ups")
                         .header("Authorization", bearer(owner)).param("scope", "MINE"))
                 .andExpect(status().isOk())
@@ -195,11 +228,30 @@ class FollowUpOperationsIntegrationTest {
                                 2, :dueDate, 3)
                         """).param("dueDate", LocalDate.now().plusDays(1)).update();
         jdbcClient.sql("UPDATE incident_postmortem SET status = 'DRAFT' WHERE id = 401").update();
+        mockMvc.perform(get("/api/v1/analytics/incidents")
+                        .header("Authorization", bearer(manager)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.followUps.openUnacknowledged").value(0));
+        mockMvc.perform(get("/api/v1/postmortem-follow-ups")
+                        .header("Authorization", bearer(manager))
+                        .param("status", "OPEN").param("acknowledgment", "UNACKNOWLEDGED"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.total").value(0));
         mockMvc.perform(post("/api/v1/postmortem-follow-ups/502/acknowledge")
                         .header("Authorization", bearer(owner)))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.error.code").value("POSTMORTEM_NOT_PUBLISHED"));
         jdbcClient.sql("UPDATE incident_postmortem SET status = 'PUBLISHED' WHERE id = 401").update();
+        mockMvc.perform(get("/api/v1/analytics/incidents")
+                        .header("Authorization", bearer(manager)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.followUps.openUnacknowledged").value(1));
+        mockMvc.perform(get("/api/v1/postmortem-follow-ups")
+                        .header("Authorization", bearer(manager))
+                        .param("status", "OPEN").param("acknowledgment", "UNACKNOWLEDGED"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.total").value(1))
+                .andExpect(jsonPath("$.data.items[0].id").value(502));
         jdbcClient.sql("UPDATE postmortem_follow_up SET status = 'DONE' WHERE id = 502").update();
         mockMvc.perform(post("/api/v1/postmortem-follow-ups/502/acknowledge")
                         .header("Authorization", bearer(owner)))

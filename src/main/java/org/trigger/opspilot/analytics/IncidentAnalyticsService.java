@@ -123,15 +123,19 @@ public class IncidentAnalyticsService {
     private FollowUpSummary followUpSummary(LocalDate asOf) {
         return jdbcClient.sql("""
                         SELECT COUNT(*) AS total,
-                               COALESCE(SUM(CASE WHEN status = 'OPEN' THEN 1 ELSE 0 END), 0) AS open_count,
-                               COALESCE(SUM(CASE WHEN status = 'DONE' THEN 1 ELSE 0 END), 0) AS done_count,
-                               COALESCE(SUM(CASE WHEN status = 'OPEN' AND due_date < :asOf THEN 1 ELSE 0 END), 0) AS overdue_count
-                        FROM postmortem_follow_up
+                               COALESCE(SUM(CASE WHEN follow_up.status = 'OPEN' THEN 1 ELSE 0 END), 0) AS open_count,
+                               COALESCE(SUM(CASE WHEN follow_up.status = 'OPEN' AND follow_up.acknowledged_at IS NULL THEN 1 ELSE 0 END), 0) AS open_unacknowledged_count,
+                               COALESCE(SUM(CASE WHEN follow_up.status = 'DONE' THEN 1 ELSE 0 END), 0) AS done_count,
+                               COALESCE(SUM(CASE WHEN follow_up.status = 'OPEN' AND follow_up.due_date < :asOf THEN 1 ELSE 0 END), 0) AS overdue_count
+                        FROM postmortem_follow_up follow_up
+                        JOIN incident_postmortem postmortem ON postmortem.id = follow_up.postmortem_id
+                        WHERE postmortem.status = 'PUBLISHED'
                         """).param("asOf", asOf)
                 .query((rs, rowNum) -> {
                     long total = rs.getLong("total");
                     long done = rs.getLong("done_count");
-                    return new FollowUpSummary(total, rs.getLong("open_count"), done,
+                    return new FollowUpSummary(total, rs.getLong("open_count"),
+                            rs.getLong("open_unacknowledged_count"), done,
                             rs.getLong("overdue_count"), total == 0 ? 0 : round(done * 100.0 / total), asOf);
                 }).single();
     }
@@ -212,7 +216,8 @@ public class IncidentAnalyticsService {
                                  DurationMetric mttm, DurationMetric mttr) {
     }
 
-    public record FollowUpSummary(long total, long open, long done, long overdue,
+    public record FollowUpSummary(long total, long open, long openUnacknowledged,
+                                  long done, long overdue,
                                   double completionRatePercent, LocalDate asOf) {
     }
 }

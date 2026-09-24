@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -69,7 +70,8 @@ public class FollowUpEscalationService {
                                 JOIN incident ON incident.id = postmortem.incident_id
                                 WHERE follow_up.id = :followUpId
                                 """).param("followUpId", followUpId)
-                        .param("nextAttemptAt", LocalDateTime.now(ZoneOffset.UTC)).update();
+                        .param("nextAttemptAt", LocalDateTime.now(ZoneOffset.UTC)
+                                .truncatedTo(ChronoUnit.MICROS)).update();
             }
             addTimeline(context.incidentId(), "FOLLOW_UP_ESCALATED", actorId,
                     "防复发行动项逾期升级：" + context.title() + "；负责人 " + context.ownerName()

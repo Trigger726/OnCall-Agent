@@ -102,7 +102,7 @@ class FollowUpNotificationIntegrationTest {
         assertThat(delivery.dispatchDue()).isEqualTo(1);
         assertThat(state(901)).isEqualTo("DELIVERED:2:204");
         assertThat(delivery.dispatchDue()).isZero();
-        assertThat(operations.list(3, "ALL", "", false, asOf, 1, 20).items())
+        assertThat(operations.list(3, "ALL", "", "ALL", false, asOf, 1, 20).items())
                 .filteredOn(item -> item.id() == 901)
                 .singleElement()
                 .satisfies(item -> {

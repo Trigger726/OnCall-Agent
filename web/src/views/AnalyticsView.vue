@@ -44,6 +44,7 @@ interface AnalyticsOverview {
   followUps: {
     total: number
     open: number
+    openUnacknowledged: number
     done: number
     overdue: number
     completionRatePercent: number
@@ -144,6 +145,7 @@ const to = ref(localDate(today))
 const severity = ref('')
 const scope = ref('ALL')
 const followUpStatus = ref('')
+const acknowledgment = ref('ALL')
 const overdueOnly = ref(false)
 const overview = ref<AnalyticsOverview | null>(null)
 const followUps = ref<FollowUp[]>([])
@@ -183,6 +185,7 @@ async function load() {
     const followUpPath = query('/postmortem-follow-ups', {
       scope: scope.value,
       ...(followUpStatus.value ? { status: followUpStatus.value } : {}),
+      acknowledgment: acknowledgment.value,
       overdue: String(overdueOnly.value),
       size: '50',
     })
@@ -512,6 +515,7 @@ onMounted(load)
         <div class="follow-up-summary" aria-label="行动项摘要">
           <span>总数 <strong>{{ overview?.followUps.total ?? 0 }}</strong></span>
           <span>开放 <strong>{{ overview?.followUps.open ?? 0 }}</strong></span>
+          <span>待接手 <strong>{{ overview?.followUps.openUnacknowledged ?? 0 }}</strong></span>
           <span class="danger">逾期 <strong>{{ overview?.followUps.overdue ?? 0 }}</strong></span>
           <span>完成率 <strong>{{ overview?.followUps.completionRatePercent ?? 0 }}%</strong></span>
         </div>
@@ -520,6 +524,7 @@ onMounted(load)
         <div>
           <select v-model="scope" aria-label="行动项范围" @change="load"><option value="ALL">全部行动项</option><option value="MINE">只看我的</option></select>
           <select v-model="followUpStatus" aria-label="行动项状态" @change="load"><option value="">全部状态</option><option value="OPEN">开放</option><option value="DONE">已完成</option></select>
+          <select v-model="acknowledgment" aria-label="负责人确认筛选" @change="load"><option value="ALL">全部确认状态</option><option value="UNACKNOWLEDGED">负责人未确认</option><option value="ACKNOWLEDGED">负责人已确认</option></select>
           <label><input v-model="overdueOnly" type="checkbox" @change="load" />只看逾期</label>
           <span>当前结果 {{ followUpTotal }} 项</span>
         </div>

@@ -39,12 +39,13 @@ public class FollowUpOperationsController {
             @AuthenticationPrincipal UserPrincipal user,
             @RequestParam(defaultValue = "ALL") String scope,
             @RequestParam(required = false) String status,
+            @RequestParam(defaultValue = "ALL") String acknowledgment,
             @RequestParam(defaultValue = "false") boolean overdue,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate asOf,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size) {
         return ApiResponse.ok(operationsService.list(
-                user.id(), scope, status, overdue, asOf, page, size));
+                user.id(), scope, status, acknowledgment, overdue, asOf, page, size));
     }
 
     @PostMapping("/escalations/run")
