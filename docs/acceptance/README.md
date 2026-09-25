@@ -39,11 +39,11 @@
 | V1.7 | 37：负责人确认接手与投递回执分离 | 通过（限本检查点），MySQL/HTTP/十一项 CI 与桌面/移动实页已验 | [V1.7-checkpoint-37.md](V1.7-checkpoint-37.md) |
 | V1.7 | 38：待接手运营筛选与通知时间精度 | 通过（限本检查点），本地实页与远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-38.md](V1.7-checkpoint-38.md) |
 | V1.7 | 39：草稿行动项的发布门禁 | 通过（限本检查点），本地 H2/JAR、远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-39.md](V1.7-checkpoint-39.md) |
-| V1.7 | 40：固定集检索评测历史与口径隔离 | 部分通过，本地 H2/JAR/实页已验，MySQL/CI 待验 | [V1.7-checkpoint-40.md](V1.7-checkpoint-40.md) |
+| V1.7 | 40：固定集检索评测历史与口径隔离 | 通过（限本检查点），本地实页与远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-40.md](V1.7-checkpoint-40.md) |
 
 ## 状态约定
 
-最新检索质量历史：[V1.7-checkpoint-40.md](V1.7-checkpoint-40.md)：固定评测集的最近运行可回读，按数据集版本和实际引擎隔离比较；本地 118 项后端发现/104 项执行、13 项前端、JAR 及桌面/390px 实页已通过，MySQL/CI 待验。
+最新检索质量历史：[V1.7-checkpoint-40.md](V1.7-checkpoint-40.md)：固定评测集的最近运行可回读，按数据集版本和实际引擎隔离比较；本地 118 项后端发现/104 项执行、13 项前端、JAR 及桌面/390px 实页已通过，[Run 36147248400](https://github.com/Trigger726/OnCall-Agent/actions/runs/36147248400) 的 MySQL 8.4 与十一项 CI 全绿。
 
 前一轮发布门禁：[V1.7-checkpoint-39.md](V1.7-checkpoint-39.md)：草稿行动项不得被逾期扫描升级、完成或外发；历史草稿通知在派发/重试处二次拦截。本地 116 项后端发现/103 项执行、JAR 已通过，[Run 36077680324](https://github.com/Trigger726/OnCall-Agent/actions/runs/36077680324) 的 MySQL 8.4 与十一项 CI 全绿。
 
