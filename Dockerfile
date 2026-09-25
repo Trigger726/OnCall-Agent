@@ -22,5 +22,5 @@ RUN addgroup -S opspilot \
     && chown -R opspilot:opspilot /app
 COPY --from=backend /workspace/target/opspilot-0.1.0-SNAPSHOT.jar app.jar
 USER opspilot
-EXPOSE 9900
+EXPOSE 9900 9920
 ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-jar", "/app/app.jar"]

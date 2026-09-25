@@ -135,9 +135,9 @@ jobs:
           cleanup() { docker rm -f opspilot-ci >/dev/null 2>&1 || true; }
           trap cleanup EXIT
           docker build --tag opspilot:ci .
-          docker run --detach --name opspilot-ci --publish 9912:9900 opspilot:ci
+          docker run --detach --name opspilot-ci --publish 9912:9900 --publish 127.0.0.1:9920:9920 --env MANAGEMENT_ADDRESS=0.0.0.0 opspilot:ci
           for attempt in {1..30}; do
-            if curl --fail --silent http://localhost:9912/actuator/health | grep --quiet '"status":"UP"'; then
+            if curl --fail --silent http://localhost:9920/actuator/health | grep --quiet '"status":"UP"'; then
               exit 0
             fi
             sleep 2

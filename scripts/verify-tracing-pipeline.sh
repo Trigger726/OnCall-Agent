@@ -99,7 +99,7 @@ wait_http http://localhost:3200/ready "Tempo"
 wait_http http://localhost:13133/ "OpenTelemetry Collector"
 wait_http http://localhost:3000/api/health "Grafana"
 wait_http http://localhost:9910/actuator/health "instrumented provider fixture"
-wait_http http://localhost:9900/actuator/health "OpsPilot"
+wait_http http://localhost:9920/actuator/health "OpsPilot"
 
 curl --fail --silent --show-error \
   http://localhost:3000/api/datasources/uid/tempo/health \
@@ -216,7 +216,7 @@ curl --fail --silent --show-error \
 outage_run_id="$(jq -er '.data.runId' "$evidence_dir/outage-investigation-response.json")"
 jq -e '.data.status == "COMPLETED"' "$evidence_dir/outage-investigation-response.json" >/dev/null
 curl --fail --silent --show-error \
-  http://localhost:9900/actuator/health > "$evidence_dir/outage-app-health.json"
+  http://localhost:9920/actuator/health > "$evidence_dir/outage-app-health.json"
 jq -e '.status == "UP"' "$evidence_dir/outage-app-health.json" >/dev/null
 
 collector_failure_observed=false

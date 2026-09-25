@@ -262,8 +262,7 @@ cmdb_resource 1---n escalation_policy 1---n escalation_step
 
 ## 9. 可观测性和失败策略
 
-- `/actuator/health`：存活与依赖健康。
-- `/actuator/prometheus`：JVM、HTTP、连接池等指标。
+- 独立管理监听 `127.0.0.1:9920`（JAR 默认）提供 `/actuator/health` 和 `/actuator/prometheus`：存活/依赖健康及 JVM、HTTP、连接池指标；业务端口 `9900` 不映射这些端点。Compose 为内部 Prometheus 抓取改为容器内 `0.0.0.0:9920`，宿主机仅回环映射 `9920`，内网仍须网络隔离。
 - `/api/v1/observability/providers`：Provider 启用状态、优先级和熔断状态。
 - Micrometer Tracing 以 OpenTelemetry bridge 串联 HTTP 请求、告警接入、异步 Agent run、工具步骤和 Provider 调用；Prometheus/Loki 复用 Spring Boot 管理的 `RestClient.Builder` 创建 HTTP client span 并注入 W3C `traceparent`；启用时通过 OTLP/HTTP 导出。
 - API 错误统一返回 `success/data/error/timestamp`。

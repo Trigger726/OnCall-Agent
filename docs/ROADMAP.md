@@ -133,7 +133,8 @@
 - 检查点 38 通过（限本检查点）：运营页新增已发布行动项的开放未确认数及独立确认筛选，可与范围/状态/逾期组合；草稿不进入运营待办。全量回归发现通知入队时间微秒舍入会令即时派发偶发查不到任务，已统一精度。本地 113 项后端发现/101 项执行、13 项前端、JAR、桌面/390px 实页通过，[Run 36075906425](https://github.com/Trigger726/OnCall-Agent/actions/runs/36075906425) 的 MySQL 8.4 直接断言及十一项 CI 全绿。详见 [验收记录](acceptance/V1.7-checkpoint-38.md)。
 - 检查点 39 通过（限本检查点）：补齐“发布后才形成正式行动项”的服务端门禁，草稿不被逾期升级、完成或外部通知；历史草稿 outbox 在派发/重试处阻断，发布后可受控重试。本地 H2 116 项发现/103 项执行及 JAR 已通过，[Run 36077680324](https://github.com/Trigger726/OnCall-Agent/actions/runs/36077680324) 的真实 MySQL 8.4 与十一项 CI 全绿。详见 [验收记录](acceptance/V1.7-checkpoint-39.md)。
 - 检查点 40 通过（限本检查点）：从已持久化的固定集评测运行展示版本/引擎隔离的历史质量，不把稀疏线上复核误当生产命中率。本地 H2 118 项发现/104 项执行、前端 13 项、JAR 与桌面/390px 实页已通过，[Run 36147248400](https://github.com/Trigger726/OnCall-Agent/actions/runs/36147248400) 的 MySQL 8.4 与十一项 CI 全绿。详见 [验收记录](acceptance/V1.7-checkpoint-40.md)。
-- 待完成：Runbook 命中率趋势、跨 Incident 语义相似/依赖共因聚类、第三方消息平台实接与人工已读/接单回执；生产业务 exporter/服务指标与 Prometheus 规则联调、OpsPilot 指标端点访问隔离，以及 SLO 出站通知、生产 recording rules/长期数据和低流量样本策略；Trace 的真实生产 Prometheus/Loki 联调、Collector 重启持久化与生产容量验证。
+- 检查点 41 本地通过：Actuator 从业务监听剥离，JAR 默认回环管理端口、Compose 宿主机回环映射和内部 Prometheus 抓取配置已更新；本地 H2 119 项发现/105 项执行、前端 13 项及 JAR 真实双端口通过，远端容器门禁待验。详见 [验收记录](acceptance/V1.7-checkpoint-41.md)。
+- 待完成：Runbook 命中率趋势、跨 Incident 语义相似/依赖共因聚类、第三方消息平台实接与人工已读/接单回执；生产业务 exporter/服务指标与 Prometheus 规则联调、管理端口生产网络/鉴权边界，以及 SLO 出站通知、生产 recording rules/长期数据和低流量样本策略；Trace 的真实生产 Prometheus/Loki 联调、Collector 重启持久化与生产容量验证。
 - 检查点 08 已完成：隔离提交后实时推送的运行时异常，验证同事务后续回调与所有推送失败时完整调查仍可完成、回放；4 项集成测试及远端四段式 CI 通过。
 - 检查点 07 已完成：事件推送移至实际事务 afterCommit，新增外层提交/回滚和游标回放测试；定向回归与远端四段式 CI 通过，默认后端 44 项、2 项条件跳过。分布式可靠投递仍待实现。
 - 检查点 06 已完成：修复取消排队调查后残留 Future 占用有界队列，补充保持 worker 阻塞时接纳替代任务的失败/成功对照；定向 3 项回归和远端四段式门禁通过。

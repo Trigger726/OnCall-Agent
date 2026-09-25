@@ -20,7 +20,10 @@ services:
     build: .
     ports:
       - "9900:9900"
+      - "127.0.0.1:9920:9920"
     environment:
+      MANAGEMENT_PORT: "9920"
+      MANAGEMENT_ADDRESS: 0.0.0.0
       DB_URL: jdbc:mysql://mysql:3306/opspilot?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
       DB_USERNAME: opspilot
       DB_PASSWORD: opspilot-local
@@ -47,7 +50,7 @@ services:
   prometheus:
     image: prom/prometheus:v3.4.2
     ports:
-      - "9090:9090"
+      - "127.0.0.1:9090:9090"
     volumes:
       - ./deploy/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     depends_on:

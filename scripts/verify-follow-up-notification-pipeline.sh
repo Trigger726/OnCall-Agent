@@ -31,7 +31,7 @@ mysql_value() {
 }
 
 "${compose[@]}" up --build --detach mysql opspilot follow-up-notification-receiver
-wait_http http://localhost:9900/actuator/health "OpsPilot"
+wait_http http://localhost:9920/actuator/health "OpsPilot"
 wait_http http://127.0.0.1:9911/health "separate notification receiver"
 
 mysql_value "INSERT INTO incident_postmortem(id, incident_id, status, summary, customer_impact, root_cause, contributing_factors, lessons_learned, timeline_snapshot_json, evidence_refs_json, created_by, published_at) VALUES (801, 2, 'PUBLISHED', 'CI summary', 'CI impact', 'CI cause', 'CI factors', 'CI lessons', '[]', '[]', 3, CURRENT_TIMESTAMP); INSERT INTO postmortem_follow_up(id, postmortem_id, title, description, priority, status, owner_id, due_date, created_by) VALUES (901, 801, 'CI delivery follow-up', 'Test separate receiver', 'HIGH', 'OPEN', 2, DATE_SUB(CURDATE(), INTERVAL 2 DAY), 3);" >/dev/null

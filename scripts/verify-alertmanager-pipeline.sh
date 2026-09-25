@@ -56,7 +56,7 @@ post_alerts() {
 }
 
 "${compose[@]}" up --build --detach mysql opspilot alertmanager
-wait_http http://localhost:9900/actuator/health "OpsPilot"
+wait_http http://localhost:9920/actuator/health "OpsPilot"
 wait_http http://localhost:9093/-/ready "Alertmanager"
 
 unauthorized_status="$(curl --silent --show-error -o "$evidence_dir/unauthorized.json" \

@@ -99,7 +99,7 @@ unauthorized_request() {
 }
 
 "${compose[@]}" up --build --detach mysql opspilot alertmanager prometheus-service-test
-wait_http http://localhost:9900/actuator/health "OpsPilot"
+wait_http http://localhost:9920/actuator/health "OpsPilot"
 wait_http http://localhost:9093/-/ready "Alertmanager"
 wait_http "$prometheus_url/-/ready" "Prometheus service metrics test"
 

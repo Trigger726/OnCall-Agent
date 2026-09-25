@@ -129,7 +129,10 @@ docker compose up --build -d
 
 - OpsPilot: [http://localhost:9900](http://localhost:9900)
 - Prometheus: [http://localhost:9090](http://localhost:9090)
+- 管理端口：`http://127.0.0.1:9920/actuator/health` 与 `/actuator/prometheus`；业务端口 `9900` 不再提供指标。
 - MySQL 仅在 Compose 内网开放。
+
+直接运行 JAR 时，管理端口默认绑定 `127.0.0.1:9920`，可用 `MANAGEMENT_PORT` 和 `MANAGEMENT_ADDRESS` 调整。Compose 为让同网络 Prometheus 抓取，将容器内管理监听地址设为 `0.0.0.0`，但只把宿主机的 `127.0.0.1:9920` 映射出去；Prometheus 的宿主机 `9090` 也只绑定回环地址。远程部署仍须以防火墙或私有网络限制容器网络和管理端口，不能把此演示配置当作生产认证方案。
 
 需要演示真实 Trace 存储和查询时启用可选 `tracing` profile：
 
@@ -235,7 +238,7 @@ ALERTMANAGER_REJECTION_PAYLOAD_RETENTION=P3D
 
 规则到 Incident 的联调运行 `bash scripts/verify-prometheus-alerting-pipeline.sh`：隔离的 Pushgateway 测试指标由 Prometheus 抓取，规则先 firing 再恢复，经 Alertmanager 更新 OpsPilot 同一 Alert。脚本保留 Prometheus 状态、MySQL 摘要和容器日志；Pushgateway 仅是此测试夹具，不是通用生产采集方案。
 
-真实服务指标联调运行 `bash scripts/verify-service-metrics-alerting-pipeline.sh`：Prometheus 抓取 OpsPilot 自身 `/actuator/prometheus`，短窗口 HTTP 401 计数规则先触发后自然恢复，再验证 Alertmanager 更新同一 Alert。此隔离规则用于可复现验收，不代表生产阈值已调优；生产环境应限制指标端点访问。
+真实服务指标联调运行 `bash scripts/verify-service-metrics-alerting-pipeline.sh`：Prometheus 从内部 `opspilot:9920/actuator/prometheus` 抓取 OpsPilot 自身指标，短窗口 HTTP 401 计数规则先触发后自然恢复，再验证 Alertmanager 更新同一 Alert。此隔离规则用于可复现验收，不代表生产阈值已调优。
 
 ## 逾期行动项外部提醒
 
@@ -378,7 +381,7 @@ cd .. && ./mvnw test
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
 - MySQL 8.4 Testcontainers：Flyway V1-V23、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项确认与完成，以及 Problem 创建、状态闭环、SLO 目标和 Alertmanager 拒绝台账生命周期。
 
-默认后端套件发现 118 项测试：104 项执行通过，14 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离、Alertmanager 生命周期幂等、拒绝台账受控重放及其自动退避/载荷保留期，以及逾期提醒的租约/回执/重试、负责人确认、草稿发布门禁、固定集评测历史、SLO 分母、错误预算和多窗口燃烧率边界。最新 [Run 36147248400](https://github.com/Trigger726/OnCall-Agent/actions/runs/36147248400) 的 MySQL 8.4 门禁从空库执行 Flyway V1–V23，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索与固定集历史回读、完整调查链路、复盘发布、草稿行动项隔离、逾期扫描幂等、行动项确认/筛选与关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标、Alertmanager 拒绝台账迁移及生命周期，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、真实 Alertmanager webhook、Prometheus 规则到 Alertmanager、OpsPilot 服务 HTTP 指标规则、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、独立通知接收容器联调、容器构建与健康启动拆成十一个门禁，最新运行全绿。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+默认后端套件发现 119 项测试：105 项执行通过，14 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离、Alertmanager 生命周期幂等、拒绝台账受控重放及其自动退避/载荷保留期，以及逾期提醒的租约/回执/重试、负责人确认、草稿发布门禁、固定集评测历史、Actuator 端口隔离、SLO 分母、错误预算和多窗口燃烧率边界。上一轮 [Run 36147248400](https://github.com/Trigger726/OnCall-Agent/actions/runs/36147248400) 的 MySQL 8.4 门禁从空库执行 Flyway V1–V23，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索与固定集历史回读、完整调查链路、复盘发布、草稿行动项隔离、逾期扫描幂等、行动项确认/筛选与关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标、Alertmanager 拒绝台账迁移及生命周期，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、真实 Alertmanager webhook、Prometheus 规则到 Alertmanager、OpsPilot 服务 HTTP 指标规则、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、独立通知接收容器联调、容器构建与健康启动拆成十一个门禁；当前检查点的远端运行待验。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 

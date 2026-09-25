@@ -214,12 +214,19 @@ class DistributedAgentEventsIntegrationTest {
 
     private static Node startNode(Path evidence, String name, boolean gated, boolean recovery) throws Exception {
         int port;
-        try (ServerSocket socket = new ServerSocket(0)) { port = socket.getLocalPort(); }
+        int managementPort;
+        try (ServerSocket httpSocket = new ServerSocket(0);
+             ServerSocket managementSocket = new ServerSocket(0)) {
+            port = httpSocket.getLocalPort();
+            managementPort = managementSocket.getLocalPort();
+        }
         String executable = Path.of(System.getProperty("java.home"), "bin",
                 System.getProperty("os.name").startsWith("Windows") ? "java.exe" : "java").toString();
         var command = new ArrayList<>(List.of(executable, "-Xmx384m", "-Dspring.devtools.restart.enabled=false", "-cp",
                 System.getProperty("surefire.test.class.path", System.getProperty("java.class.path")),
                 DistributedAgentNode.class.getName(), "--server.port=" + port,
+                "--management.server.port=" + managementPort,
+                "--management.server.address=127.0.0.1",
                 "--spring.datasource.url=" + MYSQL.getJdbcUrl(),
                 "--spring.datasource.username=" + MYSQL.getUsername(),
                 "--spring.datasource.password=" + MYSQL.getPassword(),
@@ -243,7 +250,7 @@ class DistributedAgentEventsIntegrationTest {
             await(() -> {
                 if (!node.process.isAlive()) throw new IllegalStateException("Node " + name + " exited");
                 try {
-                    return HTTP.send(request(port, "/actuator/health", null).timeout(Duration.ofSeconds(2)).GET().build(),
+                    return HTTP.send(request(managementPort, "/actuator/health", null).timeout(Duration.ofSeconds(2)).GET().build(),
                             HttpResponse.BodyHandlers.discarding()).statusCode() == 200;
                 } catch (Exception exception) { return false; }
             }, Duration.ofSeconds(60), "Node " + name + " ready");

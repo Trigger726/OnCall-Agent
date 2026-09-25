@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -52,7 +53,9 @@ public class SecurityConfig {
                                 "ACCESS_DENIED", "当前角色无权执行该操作")))
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.ASYNC, DispatcherType.ERROR).permitAll()
-                        .requestMatchers("/api/v1/auth/login", "/actuator/health", "/actuator/prometheus", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**",
+                        .requestMatchers(new AntPathRequestMatcher("/actuator/health"),
+                                new AntPathRequestMatcher("/actuator/prometheus")).permitAll()
+                        .requestMatchers("/api/v1/auth/login", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**",
                                 "/", "/index.html", "/favicon.svg", "/assets/**", "/login", "/incidents", "/assistant", "/alerts", "/cmdb", "/on-call", "/runbooks", "/audit", "/analytics", "/problems").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/alerts/intake").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/integrations/alertmanager/webhook").permitAll()

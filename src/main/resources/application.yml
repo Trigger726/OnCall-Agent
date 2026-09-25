@@ -40,6 +40,9 @@ spring:
           model: ${RUNBOOK_EMBEDDING_MODEL:text-embedding-v4}
 
 management:
+  server:
+    port: ${MANAGEMENT_PORT:9920}
+    address: ${MANAGEMENT_ADDRESS:127.0.0.1}
   tracing:
     enabled: ${OTEL_TRACING_ENABLED:false}
     sampling:

@@ -78,7 +78,7 @@ push_metric() {
 }
 
 "${compose[@]}" up --build --detach mysql opspilot alertmanager pushgateway prometheus-rule-test
-wait_http http://localhost:9900/actuator/health "OpsPilot"
+wait_http http://localhost:9920/actuator/health "OpsPilot"
 wait_http http://localhost:9093/-/ready "Alertmanager"
 wait_http http://localhost:9091/metrics "Pushgateway test fixture"
 wait_http http://localhost:9090/-/ready "Prometheus"
