@@ -118,8 +118,13 @@ public class FollowUpNotificationDelivery {
                             last_http_status = NULL, last_error_code = NULL,
                             lease_token = NULL, lease_until = NULL, updated_at = CURRENT_TIMESTAMP
                         WHERE status = 'FAILED' AND escalation_id IN (
-                          SELECT id FROM postmortem_follow_up_escalation
-                          WHERE follow_up_id = :followUpId AND status = 'OPEN')
+                          SELECT escalation.id FROM postmortem_follow_up_escalation escalation
+                          JOIN postmortem_follow_up follow_up
+                            ON follow_up.id = escalation.follow_up_id
+                          JOIN incident_postmortem postmortem
+                            ON postmortem.id = follow_up.postmortem_id
+                          WHERE follow_up.id = :followUpId AND follow_up.status = 'OPEN'
+                            AND escalation.status = 'OPEN' AND postmortem.status = 'PUBLISHED')
                         """).param("now", utcNow()).param("followUpId", followUpId).update();
         if (updated == 0) {
             throw new ApiException(HttpStatus.CONFLICT, "FOLLOW_UP_NOTIFICATION_NOT_RETRYABLE",
@@ -134,22 +139,37 @@ public class FollowUpNotificationDelivery {
                         SELECT delivery.attempts, escalation.id AS escalation_id,
                                escalation.status AS escalation_status,
                                escalation.due_date_snapshot, escalation.follow_up_id,
+                               follow_up.status AS follow_up_status,
+                               postmortem.status AS postmortem_status,
                                delivery.title_snapshot, delivery.owner_name_snapshot,
                                delivery.incident_code_snapshot
                         FROM postmortem_follow_up_notification delivery
                         JOIN postmortem_follow_up_escalation escalation
                           ON escalation.id = delivery.escalation_id
+                        JOIN postmortem_follow_up follow_up
+                          ON follow_up.id = escalation.follow_up_id
+                        JOIN incident_postmortem postmortem
+                          ON postmortem.id = follow_up.postmortem_id
                         WHERE delivery.id = :id
                         """).param("id", claim.id())
                 .query((rs, rowNum) -> new Notification(
                         rs.getInt("attempts"), rs.getLong("escalation_id"),
                         rs.getString("escalation_status"),
                         rs.getObject("due_date_snapshot", LocalDate.class),
+                        rs.getString("follow_up_status"), rs.getString("postmortem_status"),
                         rs.getLong("follow_up_id"), rs.getString("title_snapshot"),
                         rs.getString("owner_name_snapshot"),
                         rs.getString("incident_code_snapshot"))).single();
         if (!"OPEN".equals(notification.escalationStatus())) {
             finish(claim, "SKIPPED", null, "ESCALATION_RESOLVED");
+            return;
+        }
+        if (!"OPEN".equals(notification.followUpStatus())) {
+            finish(claim, "SKIPPED", null, "FOLLOW_UP_COMPLETED");
+            return;
+        }
+        if (!"PUBLISHED".equals(notification.postmortemStatus())) {
+            finish(claim, "FAILED", null, "POSTMORTEM_NOT_PUBLISHED");
             return;
         }
         Integer httpStatus = null;
@@ -226,6 +246,7 @@ public class FollowUpNotificationDelivery {
     private record Claim(long id, String token) { }
 
     private record Notification(int attempts, long escalationId, String escalationStatus,
-                                LocalDate dueDate, long followUpId, String title,
+                                LocalDate dueDate, String followUpStatus, String postmortemStatus,
+                                long followUpId, String title,
                                 String ownerName, String incidentCode) { }
 }

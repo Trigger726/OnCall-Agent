@@ -35,9 +35,11 @@ public class FollowUpEscalationService {
     public EscalationScanResult scan(LocalDate requestedAsOf, Long actorId, String sourceIp) {
         LocalDate asOf = requestedAsOf == null ? businessToday() : requestedAsOf;
         List<Long> candidates = jdbcClient.sql("""
-                        SELECT id FROM postmortem_follow_up
-                        WHERE status = 'OPEN' AND due_date < :asOf
-                        ORDER BY due_date, id
+                        SELECT follow_up.id FROM postmortem_follow_up follow_up
+                        JOIN incident_postmortem postmortem ON postmortem.id = follow_up.postmortem_id
+                        WHERE postmortem.status = 'PUBLISHED'
+                          AND follow_up.status = 'OPEN' AND follow_up.due_date < :asOf
+                        ORDER BY follow_up.due_date, follow_up.id
                         """).param("asOf", asOf).query(Long.class).list();
         int created = 0;
         for (Long followUpId : candidates) {

@@ -267,6 +267,11 @@ public class PostmortemService {
             throw new ApiException(HttpStatus.FORBIDDEN, "POSTMORTEM_FOLLOW_UP_NOT_OWNER",
                     "只有负责人、管理员或运维经理可以完成行动项");
         }
+        PostmortemView current = get(followUp.postmortemId());
+        if (!"PUBLISHED".equals(current.status())) {
+            throw new ApiException(HttpStatus.CONFLICT, "POSTMORTEM_NOT_PUBLISHED",
+                    "复盘发布后才能完成行动项");
+        }
         int updated = jdbcClient.sql("""
                         UPDATE postmortem_follow_up
                         SET status = 'DONE', completed_by = :actorId, completed_at = CURRENT_TIMESTAMP,
@@ -278,7 +283,6 @@ public class PostmortemService {
             throw new ApiException(HttpStatus.CONFLICT, "POSTMORTEM_FOLLOW_UP_VERSION_CONFLICT",
                     "行动项已被修改或完成，请刷新后重试");
         }
-        PostmortemView current = get(followUp.postmortemId());
         addTimeline(current.incidentId(), "FOLLOW_UP_COMPLETED", actorId,
                 "完成复盘行动项：" + followUp.title(), "postmortem-follow-up:" + followUpId);
         auditService.record("POSTMORTEM_FOLLOW_UP_COMPLETED", "POSTMORTEM_FOLLOW_UP", followUpId,

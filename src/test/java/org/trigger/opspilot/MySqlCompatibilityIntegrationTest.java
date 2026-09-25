@@ -24,6 +24,7 @@ import org.trigger.opspilot.investigation.AgentRunRecoveryService;
 import org.trigger.opspilot.investigation.AgentRunQueryService;
 import org.trigger.opspilot.investigation.InvestigationService;
 import org.trigger.opspilot.postmortem.FollowUpEscalationService;
+import org.trigger.opspilot.postmortem.FollowUpNotificationDelivery;
 import org.trigger.opspilot.postmortem.FollowUpOperationsService;
 import org.trigger.opspilot.postmortem.PostmortemService;
 import org.trigger.opspilot.problem.ProblemService;
@@ -47,6 +48,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @EnabledIfSystemProperty(named = "opspilot.mysql.it.enabled", matches = "true")
 @Testcontainers
@@ -132,6 +134,9 @@ class MySqlCompatibilityIntegrationTest {
 
     @Autowired
     private FollowUpEscalationService followUpEscalationService;
+
+    @Autowired
+    private FollowUpNotificationDelivery followUpNotificationDelivery;
 
     @Autowired
     private FollowUpOperationsService followUpOperationsService;
@@ -550,6 +555,69 @@ class MySqlCompatibilityIntegrationTest {
                 .param("id", id).query(String.class).single()).isEqualTo("ACTIVE");
         assertThat(jdbcClient.sql("SELECT auto_replay_count FROM alert_ingest_rejection WHERE id = :id")
                 .param("id", id).query(Integer.class).single()).isZero();
+    }
+
+    @Test
+    @Order(6)
+    void shouldKeepDraftFollowUpsOutOfMySqlEscalationAndNotification() {
+        LocalDate asOf = LocalDate.now();
+        jdbcClient.sql("""
+                        INSERT INTO incident(
+                          id, incident_code, title, severity, status, service_resource_id,
+                          resolved_at, created_at, updated_at)
+                        VALUES (991, 'INC-MYSQL-DRAFT-991', '待发布复盘', 'P2', 'RESOLVED', 1,
+                                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+                        """).update();
+        jdbcClient.sql("""
+                        INSERT INTO incident_postmortem(
+                          id, incident_id, status, summary, customer_impact, root_cause,
+                          contributing_factors, lessons_learned, timeline_snapshot_json,
+                          evidence_refs_json, created_by)
+                        VALUES (991, 991, 'DRAFT', '摘要', '影响', '根因', '因素', '经验', '[]', '[]', 3)
+                        """).update();
+        jdbcClient.sql("""
+                        INSERT INTO postmortem_follow_up(
+                          id, postmortem_id, title, description, priority, status,
+                          owner_id, due_date, created_by)
+                        VALUES (991, 991, '历史草稿通知', '不得外发', 'HIGH', 'OPEN', 2, :dueDate, 3),
+                               (992, 991, '新草稿行动项', '等待发布', 'HIGH', 'OPEN', 2, :dueDate, 3)
+                        """).param("dueDate", asOf.minusDays(1)).update();
+        jdbcClient.sql("""
+                        INSERT INTO postmortem_follow_up_escalation(
+                          follow_up_id, due_date_snapshot, detected_as_of, created_by)
+                        VALUES (991, :dueDate, :asOf, 3)
+                        """).param("dueDate", asOf.minusDays(1)).param("asOf", asOf).update();
+        jdbcClient.sql("""
+                        INSERT INTO postmortem_follow_up_notification(
+                          escalation_id, status, next_attempt_at, title_snapshot,
+                          owner_name_snapshot, incident_code_snapshot)
+                        SELECT id, 'FAILED', CURRENT_TIMESTAMP, '历史草稿通知', '张伟', 'INC-MYSQL-DRAFT-991'
+                        FROM postmortem_follow_up_escalation WHERE follow_up_id = 991
+                        """).update();
+
+        assertThat(followUpEscalationService.scan(asOf, 1L, "mysql-testcontainers")
+                .createdEscalations()).isZero();
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM postmortem_follow_up_escalation WHERE follow_up_id = 992")
+                .query(Long.class).single()).isZero();
+        assertThatThrownBy(() -> postmortemService.completeFollowUp(992, 0, 2, "ON_CALL"))
+                .isInstanceOfSatisfying(ApiException.class,
+                        exception -> assertThat(exception.code()).isEqualTo("POSTMORTEM_NOT_PUBLISHED"));
+        assertThatThrownBy(() -> followUpNotificationDelivery.retryFailed(991, 3, "mysql-testcontainers"))
+                .isInstanceOfSatisfying(ApiException.class,
+                        exception -> assertThat(exception.code()).isEqualTo("FOLLOW_UP_NOTIFICATION_NOT_RETRYABLE"));
+
+        jdbcClient.sql("UPDATE incident_postmortem SET status = 'PUBLISHED' WHERE id = 991").update();
+        assertThat(followUpEscalationService.scan(asOf, 1L, "mysql-testcontainers")
+                .createdEscalations()).isEqualTo(1);
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM postmortem_follow_up_escalation WHERE follow_up_id = 992")
+                .query(Long.class).single()).isEqualTo(1);
+        followUpNotificationDelivery.retryFailed(991, 3, "mysql-testcontainers");
+        assertThat(jdbcClient.sql("""
+                        SELECT notification.status FROM postmortem_follow_up_notification notification
+                        JOIN postmortem_follow_up_escalation escalation
+                          ON escalation.id = notification.escalation_id
+                        WHERE escalation.follow_up_id = 991
+                        """).query(String.class).single()).isEqualTo("PENDING");
     }
 
     private void seedConcurrentProblemCandidate(String fingerprint) {

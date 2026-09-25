@@ -3,7 +3,10 @@ package org.trigger.opspilot.postmortem;
 import com.sun.net.httpserver.HttpServer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +21,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -51,6 +56,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "FOLLOW_UP_NOTIFICATION_DISPATCH_INITIAL_DELAY=600000"
 })
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class FollowUpNotificationIntegrationTest {
     private static final HttpServer receiver = startReceiver();
     private static final AtomicInteger responseStatus = new AtomicInteger(204);
@@ -78,6 +84,7 @@ class FollowUpNotificationIntegrationTest {
     }
 
     @Test
+    @Order(1)
     void deliversOnceWithStableKeyRetriesTransientFailureAndSkipsResolvedEscalation() throws Exception {
         LocalDate asOf = escalations.businessToday();
         seedPostmortem();
@@ -204,6 +211,59 @@ class FollowUpNotificationIntegrationTest {
                           ON escalation.id = notification.escalation_id
                         WHERE escalation.follow_up_id = 908
                         """).query(Long.class).single()).isZero();
+    }
+
+    @Test
+    @Order(2)
+    void shouldNeverSendHistoricalDraftNotificationAndAllowRetryAfterPublication() {
+        LocalDate asOf = escalations.businessToday();
+        jdbc.sql("""
+                        INSERT INTO incident_postmortem(
+                          id, incident_id, status, summary, customer_impact, root_cause,
+                          contributing_factors, lessons_learned, timeline_snapshot_json,
+                          evidence_refs_json, created_by)
+                        VALUES (802, 1, 'DRAFT', '摘要', '影响', '根因', '因素', '经验',
+                                '[]', '[]', 3)
+                        """).update();
+        jdbc.sql("""
+                        INSERT INTO postmortem_follow_up(
+                          id, postmortem_id, title, description, priority, status,
+                          owner_id, due_date, created_by)
+                        VALUES (909, 802, '草稿敏感标题', '不得外发', 'HIGH', 'OPEN',
+                                2, :dueDate, 3)
+                        """).param("dueDate", asOf.minusDays(1)).update();
+        jdbc.sql("""
+                        INSERT INTO postmortem_follow_up_escalation(
+                          follow_up_id, due_date_snapshot, detected_as_of, created_by)
+                        VALUES (909, :dueDate, :asOf, 3)
+                        """).param("dueDate", asOf.minusDays(1)).param("asOf", asOf).update();
+        jdbc.sql("""
+                        INSERT INTO postmortem_follow_up_notification(
+                          escalation_id, next_attempt_at, title_snapshot,
+                          owner_name_snapshot, incident_code_snapshot)
+                        VALUES (:escalationId, :nextAttemptAt, '草稿敏感标题', '张伟', 'INC-DRAFT')
+                        """).param("escalationId", escalationId(909))
+                .param("nextAttemptAt", LocalDateTime.now(ZoneOffset.UTC).minusSeconds(1)).update();
+        responseStatus.set(204);
+        int sentBefore = bodies.size();
+
+        assertThat(delivery.dispatchDue()).isEqualTo(1);
+        assertThat(state(909)).isEqualTo("FAILED:1:0");
+        assertThat(jdbc.sql("""
+                        SELECT notification.last_error_code
+                        FROM postmortem_follow_up_notification notification
+                        WHERE notification.escalation_id = :escalationId
+                        """).param("escalationId", escalationId(909)).query(String.class).single())
+                .isEqualTo("POSTMORTEM_NOT_PUBLISHED");
+        assertThat(bodies).hasSize(sentBefore);
+        assertThatThrownBy(() -> delivery.retryFailed(909, 3, "test"))
+                .hasMessageContaining("只有仍逾期且通知失败的行动项可重试");
+
+        jdbc.sql("UPDATE incident_postmortem SET status = 'PUBLISHED' WHERE id = 802").update();
+        delivery.retryFailed(909, 3, "test");
+        assertThat(delivery.dispatchDue()).isEqualTo(1);
+        assertThat(state(909)).isEqualTo("DELIVERED:1:204");
+        assertThat(bodies).hasSize(sentBefore + 1);
     }
 
     private void seedPostmortem() {

@@ -259,6 +259,54 @@ class FollowUpOperationsIntegrationTest {
                 .andExpect(jsonPath("$.error.code").value("POSTMORTEM_FOLLOW_UP_COMPLETED"));
     }
 
+    @Test
+    void shouldNotEscalateOrCompleteDraftActionUntilPostmortemIsPublished() throws Exception {
+        LocalDate asOf = LocalDate.now();
+        jdbcClient.sql("""
+                        INSERT INTO incident_postmortem(
+                          id, incident_id, status, summary, customer_impact, root_cause,
+                          contributing_factors, lessons_learned, timeline_snapshot_json,
+                          evidence_refs_json, created_by)
+                        VALUES (601, 2, 'DRAFT', '摘要', '影响', '根因', '因素', '经验',
+                                '[]', '[]', 3)
+                        """).update();
+        jdbcClient.sql("""
+                        INSERT INTO postmortem_follow_up(
+                          id, postmortem_id, title, description, priority, status,
+                          owner_id, due_date, created_by)
+                        VALUES (602, 601, '草稿不得外发', '待独立发布', 'HIGH', 'OPEN',
+                                2, :dueDate, 3)
+                        """).param("dueDate", asOf.minusDays(1)).update();
+        String manager = login("lina");
+        String owner = login("zhangwei");
+
+        mockMvc.perform(post("/api/v1/postmortem-follow-ups/602/complete")
+                        .header("Authorization", bearer(owner))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Map.of("expectedVersion", 0))))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.error.code").value("POSTMORTEM_NOT_PUBLISHED"));
+        JsonNode draftScan = data(post("/api/v1/postmortem-follow-ups/escalations/run")
+                .param("asOf", asOf.toString()), manager);
+        assertThat(draftScan.path("createdEscalations").asInt()).isZero();
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM postmortem_follow_up_escalation WHERE follow_up_id = 602")
+                .query(Long.class).single()).isZero();
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM postmortem_follow_up_notification")
+                .query(Long.class).single()).isZero();
+
+        jdbcClient.sql("UPDATE incident_postmortem SET status = 'PUBLISHED' WHERE id = 601").update();
+        JsonNode publishedScan = data(post("/api/v1/postmortem-follow-ups/escalations/run")
+                .param("asOf", asOf.toString()), manager);
+        assertThat(publishedScan.path("createdEscalations").asInt()).isEqualTo(1);
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM postmortem_follow_up_escalation WHERE follow_up_id = 602")
+                .query(Long.class).single()).isEqualTo(1L);
+        data(post("/api/v1/postmortem-follow-ups/602/complete")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(Map.of("expectedVersion", 0))), owner);
+        assertThat(jdbcClient.sql("SELECT status FROM postmortem_follow_up WHERE id = 602")
+                .query(String.class).single()).isEqualTo("DONE");
+    }
+
     private JsonNode data(org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder request,
                           String token) throws Exception {
         String response = mockMvc.perform(request.header("Authorization", bearer(token)))

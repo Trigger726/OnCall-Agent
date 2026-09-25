@@ -38,10 +38,13 @@
 | V1.7 | 36：独立进程通知接收与重试联调 | 通过，真实容器联调与远端十一项 CI 闭环 | [V1.7-checkpoint-36.md](V1.7-checkpoint-36.md) |
 | V1.7 | 37：负责人确认接手与投递回执分离 | 通过（限本检查点），MySQL/HTTP/十一项 CI 与桌面/移动实页已验 | [V1.7-checkpoint-37.md](V1.7-checkpoint-37.md) |
 | V1.7 | 38：待接手运营筛选与通知时间精度 | 通过（限本检查点），本地实页与远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-38.md](V1.7-checkpoint-38.md) |
+| V1.7 | 39：草稿行动项的发布门禁 | 部分通过，本地 H2/JAR 已验，真实 MySQL 与远端 CI 待验 | [V1.7-checkpoint-39.md](V1.7-checkpoint-39.md) |
 
 ## 状态约定
 
-最新待接手运营：[V1.7-checkpoint-38.md](V1.7-checkpoint-38.md)：已发布行动项的开放未确认计数、确认状态筛选及通知入队/派发微秒精度修复；本地 113 项后端发现/101 项执行、13 项前端、JAR 和桌面/390px 实页通过。[Run 36075906425](https://github.com/Trigger726/OnCall-Agent/actions/runs/36075906425) 的 MySQL 8.4 直接断言及十一项 CI 全绿。
+最新发布门禁：[V1.7-checkpoint-39.md](V1.7-checkpoint-39.md)：草稿行动项不得被逾期扫描升级、完成或外发；历史草稿通知在派发/重试处二次拦截。当前本地 116 项后端发现/103 项执行、JAR 已通过，真实 MySQL 和远端 CI 待验。
+
+前一轮待接手运营：[V1.7-checkpoint-38.md](V1.7-checkpoint-38.md)：已发布行动项的开放未确认计数、确认状态筛选及通知入队/派发微秒精度修复；本地 113 项后端发现/101 项执行、13 项前端、JAR 和桌面/390px 实页通过。[Run 36075906425](https://github.com/Trigger726/OnCall-Agent/actions/runs/36075906425) 的 MySQL 8.4 直接断言及十一项 CI 全绿。
 
 前一轮负责人确认：[V1.7-checkpoint-37.md](V1.7-checkpoint-37.md)：将负责人本人确认与 webhook 2xx、行动项完成分离，增加 V23、权限/审计/幂等及双页面入口；[Run 35861441244](https://github.com/Trigger726/OnCall-Agent/actions/runs/35861441244) 十一项 CI 全绿，本地打包 JAR 的真实 HTTP/重启回归通过。2026-09-25 补验 Codex 内置浏览器中的运营分析、Incident 详情及 390px 移动布局：确认后仍开放、可单独完成，刷新保留状态；跨浏览器与真实第三方投递不在本检查点结论内。
 
