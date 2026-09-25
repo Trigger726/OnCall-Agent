@@ -69,6 +69,12 @@ OPEN -> ACKNOWLEDGED -> INVESTIGATING -> MITIGATED -> RESOLVED -> CLOSED
 - `RESOLVED -> INVESTIGATING` 支持故障复发。
 - 更新条件包含 `id AND version`。受影响行数为 0 时返回 `409 INCIDENT_VERSION_CONFLICT`，防止两名值班人员互相覆盖。
 
+### 值班升级执行
+
+Flyway V24 将策略与严重度关联，并通过 `incident_escalation_event(incident_id, step_id)` 唯一约束固化每次到期步骤。新告警创建 Incident 的事务内执行零分钟步骤，定时任务每分钟扫描最多 100 个仍为 `OPEN` 且有未执行到期步骤的候选；管理员/运维经理可即时扫描。执行前 `FOR UPDATE` 锁定 Incident，再检查状态和事件，以跨实例并发时不重复写站内路由、时间线与审计。`ACKNOWLEDGED` 后停止，不把 `INVESTIGATING` 或已恢复事故误判为未确认。
+
+ON_CALL 只在策略引用的同一服务班次中选活跃用户，重叠时按覆盖标记、开始时间、ID 决定唯一接收人；USER/ROLE 也只取活跃账号。无目标时固化 `NO_TARGET` 且不插入通知日志；有目标时写 `ROUTED` 与 `notification_log` 的 `IN_APP/RECORDED`，仅表示站内路由事实，未证明外部送达或本人已读。迟到扫描会补执行所有已到期步骤，避免重启后静默遗漏；若需外部消息、确认回执、排班管理或高吞吐调度，仍需独立建设。此流程参考 [Grafana IRM 的接入、分组与逐级升级](https://grafana.com/docs/grafana-cloud/observe-and-act/respond-to-incidents/introduction/routing-and-escalation/)，但没有实现其外部通知能力。
+
 ### 无责复盘与防复发行动
 
 复盘不是调查阶段的即时总结。只有 `RESOLVED/CLOSED` Incident 才能创建，创建事务会先读取当时已有的时间线、告警、最近调查报告和相关变更，经过 `LogRedactor` 后保存 JSON 快照，再写 `POSTMORTEM_CREATED` 事件。因此后续新增时间线不会悄悄改变复盘依据，重复创建也只返回同一份草稿。
@@ -256,9 +262,10 @@ runbook_relevance_judgment 0..1---1 runbook_retrieval_eval_case
 runbook_retrieval_eval_case set ---> runbook_retrieval_eval_run(dataset snapshot)
 cmdb_resource 1---n oncall_schedule 1---n oncall_shift
 cmdb_resource 1---n escalation_policy 1---n escalation_step
+incident 1---n incident_escalation_event n---1 escalation_step
 ```
 
-数据库变更由 Flyway 管理。H2 使用 MySQL 兼容模式保证本地零配置体验，Compose 提供 MySQL 部署路径；Testcontainers 条件套件从真实 MySQL 8.4 空库执行 V1–V20，并验证关键索引、中文数据、Runbook 召回、调查主链路、复盘发布、逾期扫描幂等、行动项关闭、Problem/SLO 生命周期和 Alertmanager 拒绝台账表。`flyway-mysql` 作为正式运行依赖加载 MySQL 方言支持；最新直接证据以验收报告为准。
+数据库变更由 Flyway 管理。H2 使用 MySQL 兼容模式保证本地零配置体验，Compose 提供 MySQL 部署路径；Testcontainers 条件套件从真实 MySQL 8.4 空库执行迁移，并验证关键索引、中文数据、Runbook 召回、调查主链路、复盘/行动项、Problem/SLO、Alertmanager 与值班升级台账。`flyway-mysql` 作为正式运行依赖加载 MySQL 方言支持；最新迁移版本与直接证据以验收报告为准。
 
 ## 9. 可观测性和失败策略
 

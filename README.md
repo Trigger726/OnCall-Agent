@@ -9,7 +9,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 - 告警治理：外部事件 ID 幂等、SHA-256 指纹压缩、30 分钟窗口聚合、原始告警与 Incident 分层；原生接收 Alertmanager v4 批量 webhook，同状态重试零写入、firing/resolved 共用生命周期，批内永久坏项进入脱敏台账并支持角色受控重放。
 - Incident 工作台：`OPEN -> ACKNOWLEDGED -> INVESTIGATING -> MITIGATED -> RESOLVED -> CLOSED` 状态机、乐观锁、分派、备注和时间线。
 - CMDB：应用、API、数据库和中间件台账，依赖/调用关系拓扑，事故与近期变更关联。
-- 值班升级：服务排班、当前值班人、分级升级策略和通知留痕。
+- 值班升级：服务排班、当前值班人和 P1 未确认 Incident 的 0/10/20 分钟分级路由；首次步骤在告警创建事务内执行，后续步骤按分钟扫描，确认后停止。缺班明确记录 `NO_TARGET`；`ROUTED` 仅表示站内记录，不冒充外部送达。
 - 可解释 Agent 调查：以 `PLAN -> EXECUTE -> REPLAN -> FINISH` 编排告警、CMDB、指标、变更、日志和 Runbook 六个只读工具；每步持久化输入、查询范围、数据源、证据、失败原因和耗时。
 - 可恢复调查事件流：运行事件先落库再通过 SSE 实时发送，事件 ID 同时作为断线回放游标；客户端退出不取消后台调查，结果仍会完整进入时间线和审计。
 - Agent 运行控制：同一 Incident 使用幂等键抑制重复 run；任务先进入有界队列，可显式取消并受持久化截止时间预算约束；取消、超时和队列拒绝都形成可回放的持久化终态，执行 JVM 崩溃后由存活实例幂等结算逾期孤儿 run。
@@ -240,6 +240,12 @@ ALERTMANAGER_REJECTION_PAYLOAD_RETENTION=P3D
 
 真实服务指标联调运行 `bash scripts/verify-service-metrics-alerting-pipeline.sh`：Prometheus 从内部 `opspilot:9920/actuator/prometheus` 抓取 OpsPilot 自身指标，短窗口 HTTP 401 计数规则先触发后自然恢复，再验证 Alertmanager 更新同一 Alert。此隔离规则用于可复现验收，不代表生产阈值已调优。
 
+## 未确认 Incident 的值班升级
+
+新 P1 Incident 创建时立即执行策略的零分钟步骤；之后默认每分钟扫描仍为 `OPEN` 的事故，在 10/20 分钟到期时路由活跃值班人、指定用户或角色。每个 Incident/步骤最多一条持久化执行记录，并进入时间线、审计及站内通知日志。重叠班次优先临时覆盖；没有生效班次或活跃账号时记 `NO_TARGET`，不写虚假的通知。管理角色可手动触发扫描，值班页保留原有班次与策略展示，并增加最近 50 步执行记录。`ACKNOWLEDGED` 后不再升级；迟到扫描会补处理已到期且未执行的步骤。默认定时执行，可设置 `OPSPILOT_ONCALL_ESCALATION_ENABLED=false` 关闭。
+
+当前种子班次属于 2026-08 的历史示例，已过期；演示页面会如实显示“无生效班次”。真实部署需维护有效排班。本功能只记录站内路由，不提供值班班次编辑器、短信/电话投递或人工已读回执；详情见 [checkpoint-42](docs/acceptance/V1.7-checkpoint-42.md)。
+
 ## 逾期行动项外部提醒
 
 默认仅保留应用内逾期升级事实。设置 `FOLLOW_UP_NOTIFICATION_ENABLED=true`、`FOLLOW_UP_NOTIFICATION_URL=https://...` 和 `FOLLOW_UP_NOTIFICATION_TOKEN` 后，新产生的逾期升级会在同一数据库事务内入队，后台以 `Authorization: Bearer` 和稳定的 `Idempotency-Key: follow-up-escalation:{id}` POST JSON 到配置的接收端。生产 URL 必须为 HTTPS；本机联调允许 `localhost/127.0.0.1` HTTP。已存在的历史升级不会因后来开启通知而追溯投递。
@@ -337,6 +343,8 @@ Runbook 页面保留原版/BM25/Hybrid 当前对照，并列出最近 12 次持�
 | GET | `/api/v1/assistant/sessions/{id}/export` | 导出 Markdown 对话记录 |
 | GET | `/api/v1/cmdb/topology` | 服务依赖拓扑 |
 | GET | `/api/v1/on-call/current` | 当前值班人 |
+| GET | `/api/v1/on-call/escalations` | 最近 50 步站内升级记录 |
+| POST | `/api/v1/on-call/escalations/scan` | 管理员/运维经理立即扫描到期未确认 Incident |
 | GET | `/api/v1/audit-logs` | 操作审计 |
 
 Swagger UI: [http://localhost:9900/swagger-ui/index.html](http://localhost:9900/swagger-ui/index.html)
@@ -379,9 +387,9 @@ cd .. && ./mvnw test
 - MTTA/MTTM/MTTR 均值、中位数、独立分母、日期/严重等级筛选、缺失/负时长排除、慢事故下钻和 SPA 深链。
 - 跨 Incident 行动项筛选、截止当天边界、逾期天数、扫描角色限制、唯一升级事实、重复扫描幂等和完成后关闭。
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
-- MySQL 8.4 Testcontainers：Flyway V1-V23、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项确认与完成，以及 Problem 创建、状态闭环、SLO 目标和 Alertmanager 拒绝台账生命周期。
+- MySQL 8.4 Testcontainers：Flyway V1-V24、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项确认与完成，以及 Problem、SLO、Alertmanager 和值班升级双扫描并发（V24 待远端运行）。
 
-默认后端套件发现 119 项测试：105 项执行通过，14 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离、Alertmanager 生命周期幂等、拒绝台账受控重放及其自动退避/载荷保留期，以及逾期提醒的租约/回执/重试、负责人确认、草稿发布门禁、固定集评测历史、Actuator 端口隔离、SLO 分母、错误预算和多窗口燃烧率边界。最新 [Run 36150079204](https://github.com/Trigger726/OnCall-Agent/actions/runs/36150079204) 的 MySQL 8.4 门禁从空库执行 Flyway V1–V23，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索与固定集历史回读、完整调查链路、复盘发布、草稿行动项隔离、逾期扫描幂等、行动项确认/筛选与关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标、Alertmanager 拒绝台账迁移及生命周期，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、真实 Alertmanager webhook、Prometheus 规则到 Alertmanager、OpsPilot 服务 HTTP 指标规则、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、独立通知接收容器联调、容器构建与健康启动拆成十一个门禁，最新运行全绿。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+当前默认后端套件发现 125 项测试：110 项执行通过，15 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖告警生命周期、Agent 有界执行与恢复、Runbook 固定集评测、复盘行动项、SLO、Actuator 隔离，以及新增的值班升级即时路由、缺班/确认分支和并发幂等。前端 13 项测试及生产构建、真实 JAR/API、桌面与 390px 页面均已通过。上一轮 [Run 36150079204](https://github.com/Trigger726/OnCall-Agent/actions/runs/36150079204) 的 MySQL 8.4 与十一项 CI 全绿；本轮 Flyway V24 和真实 MySQL 并发尚待远端验证。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 分离前端、H2/JAR、MySQL Testcontainers、Alertmanager/Prometheus 规则、Redis/双 JVM、Trace/Tempo、通知容器和镜像启动等十一项门禁。详细分阶段证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 

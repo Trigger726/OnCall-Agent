@@ -23,6 +23,8 @@ import org.trigger.opspilot.investigation.AgentRunEventService;
 import org.trigger.opspilot.investigation.AgentRunRecoveryService;
 import org.trigger.opspilot.investigation.AgentRunQueryService;
 import org.trigger.opspilot.investigation.InvestigationService;
+import org.trigger.opspilot.oncall.IncidentEscalationService;
+import org.trigger.opspilot.oncall.OnCallService;
 import org.trigger.opspilot.postmortem.FollowUpEscalationService;
 import org.trigger.opspilot.postmortem.FollowUpNotificationDelivery;
 import org.trigger.opspilot.postmortem.FollowUpOperationsService;
@@ -140,6 +142,12 @@ class MySqlCompatibilityIntegrationTest {
 
     @Autowired
     private FollowUpOperationsService followUpOperationsService;
+
+    @Autowired
+    private IncidentEscalationService incidentEscalationService;
+
+    @Autowired
+    private OnCallService onCallService;
 
     @Autowired
     private ProblemService problemService;
@@ -266,6 +274,12 @@ class MySqlCompatibilityIntegrationTest {
                         SELECT COUNT(*) FROM flyway_schema_history
                         WHERE version = '21' AND success = 1
                         """).query(Integer.class).single()).isEqualTo(1);
+        assertThat(jdbcClient.sql("""
+                        SELECT COUNT(*) FROM flyway_schema_history
+                        WHERE version = '24' AND success = 1
+                        """).query(Integer.class).single()).isEqualTo(1);
+        assertThat(jdbcClient.sql("SELECT severity FROM escalation_policy WHERE id = 1")
+                .query(String.class).single()).isEqualTo("P1");
         assertThat(jdbcClient.sql("SELECT title FROM incident WHERE id = 1")
                 .query(String.class).single()).isEqualTo("统一结算接口持续超时");
         assertThat(jdbcClient.sql("""
@@ -632,6 +646,57 @@ class MySqlCompatibilityIntegrationTest {
         assertThat(runbookService.evaluationHistory(2))
                 .extracting(RunbookService.EvaluationHistoryView::id)
                 .containsExactly(second.id(), first.id());
+    }
+
+    @Test
+    @Order(8)
+    void shouldRouteOneUnacknowledgedIncidentStepAcrossConcurrentMySqlScans() throws Exception {
+        LocalDateTime createdAt = LocalDateTime.now(java.time.ZoneId.of("Asia/Shanghai"))
+                .minusMinutes(1).truncatedTo(java.time.temporal.ChronoUnit.SECONDS);
+        String code = "INC-MYSQL-ESC-" + UUID.randomUUID();
+        jdbcClient.sql("""
+                        INSERT INTO incident(incident_code, title, severity, status, service_resource_id,
+                                             created_at, updated_at)
+                        VALUES (:code, 'MySQL 值班升级验收', 'P1', 'OPEN', 1, :at, :at)
+                        """).param("code", code).param("at", createdAt).update();
+        long incidentId = jdbcClient.sql("SELECT id FROM incident WHERE incident_code = :code")
+                .param("code", code).query(Long.class).single();
+        jdbcClient.sql("""
+                        INSERT INTO oncall_shift(schedule_id, user_id, starts_at, ends_at)
+                        VALUES (1, 2, :start, :end)
+                        """).param("start", createdAt.minusMinutes(1))
+                .param("end", createdAt.plusMinutes(30)).update();
+        assertThat(onCallService.current().stream().filter(shift -> shift.scheduleId() == 1).toList())
+                .singleElement().extracting(OnCallService.OnCallView::userName)
+                .isEqualTo("张伟");
+        CountDownLatch start = new CountDownLatch(1);
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        try {
+            Callable<IncidentEscalationService.ScanResult> scan = () -> {
+                if (!start.await(5, TimeUnit.SECONDS)) throw new IllegalStateException("scan barrier timed out");
+                return incidentEscalationService.scan(createdAt, null, "mysql-testcontainers");
+            };
+            Future<?> first = executor.submit(scan);
+            Future<?> second = executor.submit(scan);
+            start.countDown();
+            first.get(20, TimeUnit.SECONDS);
+            second.get(20, TimeUnit.SECONDS);
+        } finally {
+            start.countDown();
+            executor.shutdownNow();
+        }
+        assertThat(jdbcClient.sql("""
+                        SELECT COUNT(*) FROM incident_escalation_event
+                        WHERE incident_id = :id AND status = 'ROUTED'
+                        """).param("id", incidentId).query(Long.class).single()).isEqualTo(1);
+        assertThat(jdbcClient.sql("""
+                        SELECT recipient FROM incident_escalation_event WHERE incident_id = :id
+                        """).param("id", incidentId).query(String.class).single()).isEqualTo("zhangwei");
+        jdbcClient.sql("UPDATE incident SET status = 'ACKNOWLEDGED' WHERE id = :id")
+                .param("id", incidentId).update();
+        incidentEscalationService.scan(createdAt.plusMinutes(20), null, "mysql-testcontainers");
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM incident_escalation_event WHERE incident_id = :id")
+                .param("id", incidentId).query(Long.class).single()).isEqualTo(1);
     }
 
     private void seedConcurrentProblemCandidate(String fingerprint) {

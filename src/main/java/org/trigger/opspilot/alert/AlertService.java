@@ -8,12 +8,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.trigger.opspilot.common.ApiException;
 import org.trigger.opspilot.common.PageResponse;
+import org.trigger.opspilot.oncall.IncidentEscalationService;
 import org.trigger.opspilot.problem.ProblemService;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
 import java.util.HexFormat;
 import java.util.List;
@@ -24,15 +27,18 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 public class AlertService {
     private static final DateTimeFormatter CODE_TIME = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
+    private static final ZoneId BUSINESS_ZONE = ZoneId.of("Asia/Shanghai");
     private final JdbcClient jdbcClient;
     private final ObjectMapper objectMapper;
     private final ProblemService problemService;
+    private final IncidentEscalationService escalationService;
 
     public AlertService(JdbcClient jdbcClient, ObjectMapper objectMapper,
-                        ProblemService problemService) {
+                        ProblemService problemService, IncidentEscalationService escalationService) {
         this.jdbcClient = jdbcClient;
         this.objectMapper = objectMapper;
         this.problemService = problemService;
+        this.escalationService = escalationService;
     }
 
     public PageResponse<AlertView> list(String status, String severity, int page, int size) {
@@ -184,24 +190,28 @@ public class AlertService {
                         ORDER BY created_at DESC LIMIT 1
                         """)
                 .param("serviceId", serviceId).param("severity", severity.toUpperCase())
-                .param("windowStart", LocalDateTime.now().minusHours(2))
+                .param("windowStart", LocalDateTime.now(BUSINESS_ZONE).minusHours(2))
                 .query(Long.class).optional();
         if (existing.isPresent()) {
             jdbcClient.sql("UPDATE incident SET updated_at = CURRENT_TIMESTAMP, version = version + 1 WHERE id = :id")
                     .param("id", existing.get()).update();
             return existing.get();
         }
-        String code = "INC-" + LocalDateTime.now().format(CODE_TIME) + "-"
+        LocalDateTime createdAt = LocalDateTime.now(BUSINESS_ZONE).truncatedTo(ChronoUnit.SECONDS);
+        String code = "INC-" + createdAt.format(CODE_TIME) + "-"
                 + ThreadLocalRandom.current().nextInt(100, 1000);
         String serviceName = jdbcClient.sql("SELECT name FROM cmdb_resource WHERE id = :id")
                 .param("id", serviceId).query(String.class).single();
         jdbcClient.sql("""
-                        INSERT INTO incident(incident_code, title, description, severity, status, service_resource_id)
-                        VALUES (:code, :title, :description, :severity, 'OPEN', :serviceId)
+                        INSERT INTO incident(incident_code, title, description, severity, status,
+                                             service_resource_id, created_at, updated_at)
+                        VALUES (:code, :title, :description, :severity, 'OPEN', :serviceId,
+                                :createdAt, :createdAt)
                         """)
                 .param("code", code).param("title", serviceName + "：" + alertTitle)
                 .param("description", "由告警聚合规则自动创建，等待值班人员确认。")
-                .param("severity", severity.toUpperCase()).param("serviceId", serviceId).update();
+                .param("severity", severity.toUpperCase()).param("serviceId", serviceId)
+                .param("createdAt", createdAt).update();
         long incidentId = jdbcClient.sql("SELECT id FROM incident WHERE incident_code = :code")
                 .param("code", code).query(Long.class).single();
         jdbcClient.sql("""
@@ -209,7 +219,7 @@ public class AlertService {
                         VALUES (:incidentId, 'CREATED', 'OPEN', '系统根据告警聚合规则自动创建 Incident。')
                         """)
                 .param("incidentId", incidentId).update();
-        notifyCurrentOnCall(incidentId, serviceId, code);
+        escalationService.routeNewIncident(incidentId);
         return incidentId;
     }
 
@@ -224,24 +234,6 @@ public class AlertService {
                         ORDER BY src.id LIMIT 1
                         """)
                 .param("resourceId", resourceId).query(Long.class).optional().orElse(resourceId);
-    }
-
-    private void notifyCurrentOnCall(long incidentId, long serviceId, String code) {
-        jdbcClient.sql("""
-                        SELECT u.username FROM oncall_shift shift
-                        JOIN oncall_schedule schedule ON schedule.id = shift.schedule_id
-                        JOIN sys_user u ON u.id = shift.user_id
-                        WHERE schedule.service_resource_id = :serviceId AND schedule.active = TRUE
-                          AND CURRENT_TIMESTAMP BETWEEN shift.starts_at AND shift.ends_at
-                        ORDER BY shift.override_flag DESC, shift.starts_at DESC LIMIT 1
-                        """)
-                .param("serviceId", serviceId).query(String.class).optional()
-                .ifPresent(username -> jdbcClient.sql("""
-                                INSERT INTO notification_log(incident_id, channel, recipient, status, message)
-                                VALUES (:incidentId, 'IN_APP', :recipient, 'SENT', :message)
-                                """)
-                        .param("incidentId", incidentId).param("recipient", username)
-                        .param("message", code + " 已创建，请及时确认").update());
     }
 
     private String json(Map<String, String> labels) {
