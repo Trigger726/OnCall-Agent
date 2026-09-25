@@ -142,6 +142,12 @@ public class RunbookController {
         return ApiResponse.ok(service.latestEvaluation());
     }
 
+    @GetMapping("/evaluations/history")
+    public ApiResponse<List<RunbookService.EvaluationHistoryView>> evaluationHistory(
+            @RequestParam(defaultValue = "12") @Min(1) @Max(50) int limit) {
+        return ApiResponse.ok(service.evaluationHistory(limit));
+    }
+
     @GetMapping("/semantic-index")
     public ApiResponse<RunbookSemanticIndexService.IndexStatus> semanticIndex() {
         return ApiResponse.ok(semanticIndexService.status());

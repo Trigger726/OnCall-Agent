@@ -119,6 +119,54 @@ class RunbookKnowledgeIntegrationTest {
     }
 
     @Test
+    void shouldKeepEvaluationHistoryVersionedAndBounded() throws Exception {
+        String adminToken = login("admin", "OpsPilot@2026");
+        String onCallToken = login("zhangwei", "OpsPilot@2026");
+        mockMvc.perform(get("/api/v1/runbooks/evaluations/history")
+                        .header("Authorization", bearer(onCallToken)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(0));
+
+        JsonNode first = objectMapper.readTree(mockMvc.perform(post("/api/v1/runbooks/evaluations")
+                        .header("Authorization", bearer(adminToken)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString()).path("data");
+        JsonNode second = objectMapper.readTree(mockMvc.perform(post("/api/v1/runbooks/evaluations")
+                        .header("Authorization", bearer(adminToken)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString()).path("data");
+        assertThat(second.path("datasetVersion").asText()).isEqualTo(first.path("datasetVersion").asText());
+        jdbcClient.sql("""
+                        UPDATE runbook_retrieval_eval_run
+                        SET judgment_count = NULL, ndcg_at_3 = NULL WHERE id = :id
+                        """).param("id", first.path("id").asLong()).update();
+
+        jdbcClient.sql("""
+                        INSERT INTO runbook_retrieval_eval_case(
+                          case_key, query_text, expected_stable_key, relevance_grade)
+                        VALUES ('history-extra', 'Redis 连接池 active pending 慢命令',
+                                'legacy-runbook-2', 2)
+                        """).update();
+        JsonNode third = objectMapper.readTree(mockMvc.perform(post("/api/v1/runbooks/evaluations")
+                        .header("Authorization", bearer(adminToken)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString()).path("data");
+        assertThat(third.path("datasetVersion").asText()).isNotEqualTo(second.path("datasetVersion").asText());
+
+        mockMvc.perform(get("/api/v1/runbooks/evaluations/history")
+                        .header("Authorization", bearer(onCallToken)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(3))
+                .andExpect(jsonPath("$.data[0].id").value(third.path("id").asLong()))
+                .andExpect(jsonPath("$.data[0].datasetVersion").value(third.path("datasetVersion").asText()))
+                .andExpect(jsonPath("$.data[1].datasetVersion").value(second.path("datasetVersion").asText()))
+                .andExpect(jsonPath("$.data[2].judgmentCount").value(13))
+                .andExpect(jsonPath("$.data[2].ndcgAt3").isEmpty());
+        mockMvc.perform(get("/api/v1/runbooks/evaluations/history")
+                        .header("Authorization", bearer(onCallToken))
+                        .param("limit", "1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(1));
+    }
+
+    @Test
     void shouldCreateImmutableMarkdownVersionsAndEnforceDocumentAcl() throws Exception {
         String adminToken = login("admin", "OpsPilot@2026");
         String onCallToken = login("zhangwei", "OpsPilot@2026");

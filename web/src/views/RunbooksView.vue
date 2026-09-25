@@ -152,6 +152,19 @@ interface Evaluation {
   createdAt: string
 }
 
+interface EvaluationHistory {
+  id: number
+  engine: string
+  datasetVersion: string
+  caseCount: number
+  judgmentCount: number
+  recallAt3: number
+  mrr: number
+  ndcgAt3: number | null
+  citationHitRate: number
+  createdAt: string
+}
+
 interface ImportResult { document: RunbookDocument; reused: boolean }
 
 const documents = ref<RunbookDocument[]>([])
@@ -159,6 +172,7 @@ const query = ref('Redis 连接池 pending 慢命令')
 const searchMode = ref<'AUTO' | 'BM25' | 'HYBRID'>('AUTO')
 const searchResponse = ref<SearchResponse | null>(null)
 const evaluation = ref<Evaluation | null>(null)
+const evaluationHistory = ref<EvaluationHistory[]>([])
 const semanticIndex = ref<SemanticIndex | null>(null)
 const pendingJudgments = ref<PendingJudgment[]>([])
 const agreement = ref<Agreement | null>(null)
@@ -191,11 +205,17 @@ const failedCases = computed(() => {
 const baselineMetric = computed(() => evaluation.value?.metrics.find((item) => item.engine === 'LEGACY_CONTAINS_V1'))
 const bm25Metric = computed(() => evaluation.value?.metrics.find((item) => item.engine === 'BM25_LOCAL_V1'))
 const hybridMetric = computed(() => evaluation.value?.metrics.find((item) => item.engine === 'HYBRID_RRF_V1'))
+const historyDelta = computed(() => {
+  const [latest, previous] = evaluationHistory.value
+  if (!latest || !previous || latest.datasetVersion !== previous.datasetVersion || latest.engine !== previous.engine) return null
+  return ((latest.recallAt3 - previous.recallAt3) * 100).toFixed(1)
+})
 
 onMounted(async () => {
   await loadDocuments()
   await loadSemanticIndex()
   await loadLatestEvaluation()
+  await loadEvaluationHistory()
   if (canManage.value) await Promise.all([loadPendingJudgments(), loadAgreement(), loadRetentionStatus()])
   await search()
 })
@@ -210,6 +230,10 @@ async function loadLatestEvaluation() {
   } catch (caught) {
     if (!(caught instanceof RequestError) || caught.status !== 404) throw caught
   }
+}
+
+async function loadEvaluationHistory() {
+  evaluationHistory.value = await api<EvaluationHistory[]>('/runbooks/evaluations/history')
 }
 
 async function loadSemanticIndex() {
@@ -321,6 +345,11 @@ async function runEvaluation() {
   try {
     evaluation.value = await api<Evaluation>('/runbooks/evaluations', { method: 'POST' })
     notice.value = `评测 #${evaluation.value.id} 已保存，数据集版本 ${evaluation.value.datasetVersion}`
+    try {
+      await loadEvaluationHistory()
+    } catch (caught) {
+      error.value = caught instanceof Error ? `评测已保存，但历史刷新失败：${caught.message}` : '评测已保存，但历史刷新失败'
+    }
   } catch (caught) {
     error.value = caught instanceof Error ? caught.message : '评测失败'
   } finally {
@@ -396,6 +425,10 @@ function metric(value: number | null | undefined) {
   return `${Math.round(Number(value) * 100)}%`
 }
 
+function preciseMetric(value: number | null | undefined) {
+  return value == null ? 'N/A' : `${(Number(value) * 100).toFixed(1)}%`
+}
+
 function kappa(value: number | null | undefined) {
   return value == null ? 'N/A' : Number(value).toFixed(2)
 }
@@ -425,6 +458,20 @@ function retentionLabel(value: string) {
     </section>
 
     <p v-if="evaluation" class="evaluation-note">固定集 {{ evaluation.caseCount }} 个查询 · {{ evaluation.judgmentCount }} 个 qrels · 版本 {{ evaluation.datasetVersion }} · {{ evaluation.evaluationNote }} · 选择引擎 {{ evaluation.engine }} · NDCG@3 {{ metric(evaluation.ndcgAt3) }} · 失败 {{ failedCases }}</p>
+
+    <section class="content-panel evaluation-history" aria-label="Runbook 固定集评测历史">
+      <header class="panel-heading"><div><h2>固定集评测历史</h2><span>最近 12 次离线运行；只在数据集版本与实际引擎都相同时比较，不代表生产查询命中率</span></div><span v-if="historyDelta !== null" class="keyword-tag">Recall@3 较上次 {{ Number(historyDelta) >= 0 ? '+' : '' }}{{ historyDelta }} 个百分点</span></header>
+      <div v-if="evaluationHistory.length" class="evaluation-history-scroll">
+        <table>
+          <thead><tr><th>运行</th><th>时间</th><th>实际引擎</th><th>数据集版本</th><th>查询 / qrels</th><th>Recall@3</th><th>MRR</th><th>NDCG@3</th><th>引用命中</th><th>口径</th></tr></thead>
+          <tbody><tr v-for="item in evaluationHistory" :key="item.id">
+            <td>#{{ item.id }}</td><td>{{ formatTime(item.createdAt, true) }}</td><td>{{ item.engine }}</td><td><code>{{ item.datasetVersion }}</code></td><td>{{ item.caseCount }} / {{ item.judgmentCount }}</td><td>{{ preciseMetric(item.recallAt3) }}</td><td>{{ preciseMetric(item.mrr) }}</td><td>{{ preciseMetric(item.ndcgAt3) }}</td><td>{{ preciseMetric(item.citationHitRate) }}</td>
+            <td>{{ item.datasetVersion !== evaluationHistory[0]?.datasetVersion ? '不同数据集' : item.engine !== evaluationHistory[0]?.engine ? '不同引擎' : '同口径' }}</td>
+          </tr></tbody>
+        </table>
+      </div>
+      <p v-else class="evaluation-history-empty">尚无评测运行；管理角色运行固定集评测后才会形成历史，不用演示值补齐。</p>
+    </section>
 
     <div v-if="error" class="inline-error">{{ error }}</div>
     <div v-if="notice" class="success-banner">{{ notice }}</div>
@@ -534,6 +581,13 @@ function retentionLabel(value: string) {
 .runbook-comparison span, .runbook-comparison small { color: var(--text-muted); font-size: 10px; }
 .runbook-comparison strong { font-size: 16px; }
 .evaluation-note { margin: -7px 2px 0; color: var(--text-muted); font-size: 9px; }
+.evaluation-history { overflow: hidden; }
+.evaluation-history-scroll { overflow-x: auto; }
+.evaluation-history table { width: 100%; min-width: 900px; border-collapse: collapse; font-size: 10px; }
+.evaluation-history th, .evaluation-history td { padding: 10px 12px; border-top: 1px solid var(--line); text-align: left; white-space: nowrap; }
+.evaluation-history th { color: var(--text-muted); font-weight: 600; }
+.evaluation-history code { font-size: 9px; }
+.evaluation-history-empty { padding: 0 16px 14px; color: var(--text-muted); font-size: 11px; }
 .runbook-search { min-height: 54px; padding: 8px 10px 8px 15px; display: flex; align-items: center; gap: 10px; }
 .runbook-search > svg { color: var(--accent); }
 .runbook-search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; font-size: 12px; }

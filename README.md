@@ -272,6 +272,8 @@ AGENT_RECOVERY_BATCH_SIZE=100
 
 固定集已从 3 条扩充到 13 条种子改写查询，覆盖 Redis、接口延迟、认证、Kafka、MySQL 和 Kubernetes。当前默认离线演示中，`LEGACY_CONTAINS_V1` Recall@3/MRR/NDCG@3 为 0，`BM25_LOCAL_V1` Recall@3 为 1、MRR 为 0.961538、NDCG@3 为 0.971610、首位稳定引用命中率为 0.923077。Hybrid 只在真实索引完整并成功跑完全部查询时计分；无 Key 的默认演示会显示 unavailable。受控 `EmbeddingModel` 测试替身只验证索引、融合和降级契约，不冒充真实模型质量结论。
 
+Runbook 页面保留原版/BM25/Hybrid 当前对照，并列出最近 12 次持久化固定集评测：运行时间、实际引擎、数据集版本、查询/qrel 分母及四项质量指标。只有数据集版本与引擎都相同的相邻运行才显示 Recall@3 变化；历史缺失指标保持 `N/A`。这不是从少量选择性人工反馈推算的生产命中率。
+
 控制台和 Agent 的真实检索会保存查询、角色、请求/实际引擎、向量状态、耗时与返回结果快照；离线评测调用不记入查询日志，避免评测流量污染真实样本。查询本人只能评价快照中实际返回的文档，管理员或运维经理不能复核自己的判断，并以版本号阻止并发覆盖。待办只向复核人展示查询和当时的标题、摘要、引用，不暴露提交人身份、原始等级或评论；复核人独立给出 0–3 级，复核等级作为最终 qrel 等级，达到 2 才生成 `HUMAN_JUDGMENT` case。系统统计精确一致率、相差不超过一级的比例和线性加权 Cohen's kappa；拒绝样本及没有第二评分的历史记录不混入统计。评测时再把相同查询的多个相关文档聚合成 qrels，同一 query-document 的多个最终等级取平均，避免重复计权。当前闭环证明数据治理流程，不代表已经积累了生产规模标注。
 
 查询文本和结果快照在写入数据库前统一屏蔽密码、Token、Authorization、邮箱和完整 IPv4，评分评论与复核备注也经过同一清洗。默认保留 30 天，每日定时按批处理到期记录；清理会把查询正文、哈希、结果 JSON 和查询人擦成不可逆墓碑，将尚未完成的复核自动拒绝并写入审计。已经晋级的 qrel 复制了脱敏查询、稳定文档键和最终等级，因此快照清理不会破坏后续评测。可通过 `RUNBOOK_RETRIEVAL_RETENTION`、`RUNBOOK_RETRIEVAL_CLEANUP_BATCH_SIZE` 和 `RUNBOOK_RETRIEVAL_CLEANUP_CRON` 调整策略。
@@ -308,6 +310,7 @@ AGENT_RECOVERY_BATCH_SIZE=100
 | GET | `/api/v1/postmortem-follow-ups` | 按本人/全部、完成状态、负责人确认状态与逾期筛选跨 Incident 行动项 |
 | POST | `/api/v1/postmortem-follow-ups/escalations/run` | 管理员/运维经理按业务日期幂等生成逾期升级事实 |
 | POST | `/api/v1/postmortem-follow-ups/{id}/notification/retry` | 管理员/运维经理重试仍开放的失败外部提醒并写审计 |
+| GET | `/api/v1/runbooks/evaluations/history?limit=12` | 倒序读取有界固定集评测历史，保留数据集版本和实际引擎口径 |
 | GET | `/api/v1/problems/recurrence-candidates` | 按窗口查询精确指纹复发候选、独立事故分母、信号总量和治理状态 |
 | GET/POST | `/api/v1/problems` | 查询 Problem 台账，或由管理角色幂等登记候选并固化 Incident 关联 |
 | GET/PATCH | `/api/v1/problems/{id}` | 读取或以乐观锁更新 Problem、已知错误和解决结论 |
@@ -375,7 +378,7 @@ cd .. && ./mvnw test
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
 - MySQL 8.4 Testcontainers：Flyway V1-V23、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项确认与完成，以及 Problem 创建、状态闭环、SLO 目标和 Alertmanager 拒绝台账生命周期。
 
-默认后端套件发现 116 项测试：103 项执行通过，13 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离、Alertmanager 生命周期幂等、拒绝台账受控重放及其自动退避/载荷保留期，以及逾期提醒的租约/回执/重试、负责人确认、草稿发布门禁、SLO 分母、错误预算和多窗口燃烧率边界。最新 [Run 36077680324](https://github.com/Trigger726/OnCall-Agent/actions/runs/36077680324) 的 MySQL 8.4 门禁从空库执行 Flyway V1–V23，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、草稿行动项隔离、逾期扫描幂等、行动项确认/筛选与关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标、Alertmanager 拒绝台账迁移及生命周期，以及 outbox 双领取者竞争与精确租约到期重领。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、真实 Alertmanager webhook、Prometheus 规则到 Alertmanager、OpsPilot 服务 HTTP 指标规则、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、独立通知接收容器联调、容器构建与健康启动拆成十一个门禁，最新运行全绿。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+默认后端套件发现 118 项测试：104 项执行通过，14 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖合法长标题登记、原始证据保留、H2 并发提升、outbox 事务/租约、逾期 run 结算与晚返回隔离、Alertmanager 生命周期幂等、拒绝台账受控重放及其自动退避/载荷保留期，以及逾期提醒的租约/回执/重试、负责人确认、草稿发布门禁、固定集评测历史、SLO 分母、错误预算和多窗口燃烧率边界。上一轮 [Run 36077680324](https://github.com/Trigger726/OnCall-Agent/actions/runs/36077680324) 的 MySQL 8.4 门禁从空库执行 Flyway V1–V23，并验证到期快照清理与重复执行幂等、中文数据、Runbook 检索、完整调查链路、复盘发布、草稿行动项隔离、逾期扫描幂等、行动项确认/筛选与关闭、Problem 生命周期、并发孤儿 run 结算、SLO 种子目标、Alertmanager 拒绝台账迁移及生命周期，以及 outbox 双领取者竞争与精确租约到期重领。本轮新增的 MySQL 固定集历史断言待远端执行。双 JVM 条件套件另外覆盖正常跨实例广播、Redis 暂停恢复和执行 JVM 强制退出后的 deadline 终态收敛。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 将前端构建、H2 后端测试与 JAR、MySQL Testcontainers、真实 Alertmanager webhook、Prometheus 规则到 Alertmanager、OpsPilot 服务 HTTP 指标规则、Redis Streams relay、双 JVM SSE、OpenTelemetry/Tempo 集成、独立通知接收容器联调、容器构建与健康启动拆成十一个门禁。阶段性运行与界面证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 

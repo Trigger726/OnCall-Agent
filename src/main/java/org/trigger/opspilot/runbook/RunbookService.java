@@ -352,6 +352,23 @@ public class RunbookService {
         return latestEvaluationById(id);
     }
 
+    public List<EvaluationHistoryView> evaluationHistory(int limit) {
+        return jdbcClient.sql("""
+                        SELECT id, engine, dataset_version, case_count,
+                               COALESCE(judgment_count, case_count) AS judgment_count,
+                               recall_at_3, mrr, ndcg_at_3, citation_hit_rate, created_at
+                        FROM runbook_retrieval_eval_run
+                        ORDER BY id DESC LIMIT :limit
+                        """).param("limit", limit)
+                .query((rs, rowNum) -> new EvaluationHistoryView(
+                        rs.getLong("id"), rs.getString("engine"), rs.getString("dataset_version"),
+                        rs.getInt("case_count"), rs.getInt("judgment_count"),
+                        rs.getBigDecimal("recall_at_3"), rs.getBigDecimal("mrr"),
+                        rs.getBigDecimal("ndcg_at_3"), rs.getBigDecimal("citation_hit_rate"),
+                        rs.getObject("created_at", LocalDateTime.class)))
+                .list();
+    }
+
     private ImportResult importContent(ImportCommand raw, String sourceType, Long actorId) {
         String stableKey = normalizeStableKey(raw.stableKey());
         String resourceType = normalizeCode(raw.resourceType(), "resourceType", 32);
@@ -780,6 +797,12 @@ public class RunbookService {
                                  String failuresJson, List<EngineMetric> metrics,
                                  RunbookSemanticIndexService.IndexStatus semanticIndex,
                                  String evaluationNote, Long createdBy, LocalDateTime createdAt) {
+    }
+
+    public record EvaluationHistoryView(long id, String engine, String datasetVersion,
+                                        int caseCount, int judgmentCount, BigDecimal recallAt3,
+                                        BigDecimal mrr, BigDecimal ndcgAt3,
+                                        BigDecimal citationHitRate, LocalDateTime createdAt) {
     }
 
     private static final class MetricAccumulator {

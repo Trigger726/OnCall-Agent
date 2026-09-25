@@ -620,6 +620,20 @@ class MySqlCompatibilityIntegrationTest {
                         """).query(String.class).single()).isEqualTo("PENDING");
     }
 
+    @Test
+    @Order(7)
+    void shouldReadBoundedEvaluationHistoryOnMySql() {
+        RunbookService.EvaluationView first = runbookService.evaluate(1L);
+        RunbookService.EvaluationView second = runbookService.evaluate(1L);
+        assertThat(second.datasetVersion()).isEqualTo(first.datasetVersion());
+        assertThat(runbookService.evaluationHistory(1))
+                .extracting(RunbookService.EvaluationHistoryView::id)
+                .containsExactly(second.id());
+        assertThat(runbookService.evaluationHistory(2))
+                .extracting(RunbookService.EvaluationHistoryView::id)
+                .containsExactly(second.id(), first.id());
+    }
+
     private void seedConcurrentProblemCandidate(String fingerprint) {
         jdbcClient.sql("""
                         INSERT INTO incident(
