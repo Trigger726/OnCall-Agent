@@ -24,6 +24,7 @@ import org.trigger.opspilot.investigation.AgentRunRecoveryService;
 import org.trigger.opspilot.investigation.AgentRunQueryService;
 import org.trigger.opspilot.investigation.InvestigationService;
 import org.trigger.opspilot.postmortem.FollowUpEscalationService;
+import org.trigger.opspilot.postmortem.FollowUpOperationsService;
 import org.trigger.opspilot.postmortem.PostmortemService;
 import org.trigger.opspilot.problem.ProblemService;
 import org.trigger.opspilot.problem.ProblemStatus;
@@ -131,6 +132,9 @@ class MySqlCompatibilityIntegrationTest {
 
     @Autowired
     private FollowUpEscalationService followUpEscalationService;
+
+    @Autowired
+    private FollowUpOperationsService followUpOperationsService;
 
     @Autowired
     private ProblemService problemService;
@@ -377,6 +381,10 @@ class MySqlCompatibilityIntegrationTest {
                         PostmortemService.Priority.HIGH, 2, LocalDate.now().plusDays(7)));
         assertThat(withFollowUp.version()).isEqualTo(2);
         long followUpId = withFollowUp.followUps().get(0).id();
+        assertThat(followUpOperationsService.list(2, "ALL", "OPEN", "UNACKNOWLEDGED",
+                false, LocalDate.now(), 1, 100).items())
+                .extracting(FollowUpOperationsService.FollowUpOperationsView::id)
+                .doesNotContain(followUpId);
         PostmortemService.PostmortemView submitted = postmortemService.submit(draft.id(), 2, 3);
         assertThat(submitted.status()).isEqualTo("IN_REVIEW");
         PostmortemService.PostmortemView published = postmortemService.review(
@@ -384,6 +392,10 @@ class MySqlCompatibilityIntegrationTest {
                 "证据和行动项完整，同意发布");
         assertThat(published.status()).isEqualTo("PUBLISHED");
         assertThat(published.version()).isEqualTo(4);
+        assertThat(followUpOperationsService.list(2, "ALL", "OPEN", "UNACKNOWLEDGED",
+                false, LocalDate.now(), 1, 100).items())
+                .extracting(FollowUpOperationsService.FollowUpOperationsView::id)
+                .contains(followUpId);
         jdbcClient.sql("UPDATE postmortem_follow_up SET due_date = :dueDate WHERE id = :id")
                 .param("dueDate", LocalDate.now().minusDays(1)).param("id", followUpId).update();
         FollowUpEscalationService.EscalationScanResult firstScan = followUpEscalationService.scan(
@@ -422,6 +434,14 @@ class MySqlCompatibilityIntegrationTest {
             acknowledgeExecutor.shutdownNow();
         }
         assertThat(postmortemService.get(draft.id()).followUps().get(0).status()).isEqualTo("OPEN");
+        assertThat(followUpOperationsService.list(2, "ALL", "OPEN", "UNACKNOWLEDGED",
+                false, LocalDate.now(), 1, 100).items())
+                .extracting(FollowUpOperationsService.FollowUpOperationsView::id)
+                .doesNotContain(followUpId);
+        assertThat(followUpOperationsService.list(2, "ALL", "OPEN", "ACKNOWLEDGED",
+                false, LocalDate.now(), 1, 100).items())
+                .extracting(FollowUpOperationsService.FollowUpOperationsView::id)
+                .contains(followUpId);
         assertThat(jdbcClient.sql("""
                         SELECT COUNT(*) FROM audit_log
                         WHERE action = 'POSTMORTEM_FOLLOW_UP_ACKNOWLEDGED' AND target_id = :id
