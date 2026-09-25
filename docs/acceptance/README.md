@@ -40,11 +40,11 @@
 | V1.7 | 38：待接手运营筛选与通知时间精度 | 通过（限本检查点），本地实页与远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-38.md](V1.7-checkpoint-38.md) |
 | V1.7 | 39：草稿行动项的发布门禁 | 通过（限本检查点），本地 H2/JAR、远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-39.md](V1.7-checkpoint-39.md) |
 | V1.7 | 40：固定集检索评测历史与口径隔离 | 通过（限本检查点），本地实页与远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-40.md](V1.7-checkpoint-40.md) |
-| V1.7 | 41：Actuator 管理监听隔离 | 本地通过；H2/JAR 双端口已验，远端容器待验 | [V1.7-checkpoint-41.md](V1.7-checkpoint-41.md) |
+| V1.7 | 41：Actuator 管理监听隔离 | 通过（限本检查点），本地 JAR 双端口与远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-41.md](V1.7-checkpoint-41.md) |
 
 ## 状态约定
 
-最新指标隔离：[V1.7-checkpoint-41.md](V1.7-checkpoint-41.md)：业务端口不再映射 Actuator，独立管理监听默认绑定回环；本地 119 项后端发现/105 项执行、前端 13 项和真实 JAR 双端口通过。远端容器 Prometheus 抓取仍待验证。
+最新指标隔离：[V1.7-checkpoint-41.md](V1.7-checkpoint-41.md)：业务端口不再映射 Actuator，独立管理监听默认绑定回环；本地 119 项后端发现/105 项执行、前端 13 项和真实 JAR 双端口通过。[Run 36150079204](https://github.com/Trigger726/OnCall-Agent/actions/runs/36150079204) 的 MySQL 8.4、服务指标抓取到 Incident 与十一项 CI 全绿。
 
 最新检索质量历史：[V1.7-checkpoint-40.md](V1.7-checkpoint-40.md)：固定评测集的最近运行可回读，按数据集版本和实际引擎隔离比较；本地 118 项后端发现/104 项执行、13 项前端、JAR 及桌面/390px 实页已通过，[Run 36147248400](https://github.com/Trigger726/OnCall-Agent/actions/runs/36147248400) 的 MySQL 8.4 与十一项 CI 全绿。
 
