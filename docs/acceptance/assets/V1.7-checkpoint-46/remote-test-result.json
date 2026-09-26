@@ -1,0 +1,70 @@
+{
+  "checkpoint": "V1.7-checkpoint-46",
+  "runId": 36268078605,
+  "url": "https://github.com/Trigger726/OnCall-Agent/actions/runs/36268078605",
+  "commit": "d2541c76c766d1336a0443fcc1d8e2fff3cba55b",
+  "source": "Decoded logs fetched from GitHub job APIs; not reused CP45 output",
+  "frontend": {
+    "jobId": 108476536405,
+    "tests": 21,
+    "passed": 21,
+    "failures": 0,
+    "productionBuild": "PASS",
+    "summaryLines": [
+      "2026-09-26T20:01:56.1327403Z # tests 21",
+      "2026-09-26T20:01:56.1328263Z # pass 21",
+      "2026-09-26T20:01:56.1328569Z # fail 0",
+      "2026-09-26T20:01:56.2348735Z > vue-tsc -b && vite build",
+      "2026-09-26T20:02:03.7365798Z ✓ built in 2.67s"
+    ]
+  },
+  "backend": {
+    "jobId": 108476536416,
+    "utc": {
+      "discovered": 169,
+      "executed": 135,
+      "skipped": 34,
+      "failures": 0,
+      "errors": 0
+    },
+    "asiaShanghai": {
+      "discovered": 169,
+      "executed": 135,
+      "skipped": 34,
+      "failures": 0,
+      "errors": 0
+    },
+    "summaryLines": [
+      "2026-09-26T20:03:05.6782279Z [WARNING] Tests run: 169, Failures: 0, Errors: 0, Skipped: 34",
+      "2026-09-26T20:03:09.6789359Z [INFO] BUILD SUCCESS",
+      "2026-09-26T20:04:08.9993671Z [WARNING] Tests run: 169, Failures: 0, Errors: 0, Skipped: 34",
+      "2026-09-26T20:04:09.0028051Z [INFO] BUILD SUCCESS"
+    ]
+  },
+  "mysql": {
+    "jobId": 108476536170,
+    "image": "mysql:8.4",
+    "flywayLatest": 26,
+    "tests": 27,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "summaryLines": [
+      "2026-09-26T20:02:33.8180693Z 2026-09-26T20:02:33.799Z  INFO 2407 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 26 migrations to schema `opspilot_snapshot_test`, now at version v26 (execution time 00:02.246s)",
+      "2026-09-26T20:02:40.1278502Z [INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 33.68 s -- in org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest",
+      "2026-09-26T20:02:51.0634033Z 2026-09-26T20:02:51.059Z  INFO 2407 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 26 migrations to schema `opspilot_rotation_test`, now at version v26 (execution time 00:02.366s)",
+      "2026-09-26T20:02:57.6412190Z [INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 17.54 s -- in org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest",
+      "2026-09-26T20:03:08.1063489Z 2026-09-26T20:03:08.027Z  INFO 2407 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 26 migrations to schema `opspilot_test`, now at version v26 (execution time 00:02.372s)",
+      "2026-09-26T20:03:09.4915215Z [INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.88 s -- in org.trigger.opspilot.MySqlCompatibilityIntegrationTest",
+      "2026-09-26T20:03:32.3309799Z [INFO] Tests run: 27, Failures: 0, Errors: 0, Skipped: 0",
+      "2026-09-26T20:03:32.3337415Z [INFO] BUILD SUCCESS"
+    ],
+    "artifact": {
+      "id": 10913779149,
+      "name": "mysql-compatibility-evidence",
+      "digest": "sha256:09e2c29818757b82d42bba3e94ef8db3d56a6a26a78c08ba8adf7d96ba786601",
+      "headSha": "d2541c76c766d1336a0443fcc1d8e2fff3cba55b"
+    }
+  },
+  "browserCi": "NOT_RUN: portable UI scripts were verified locally; CI frontend includes Node tests/build, not a real browser"
+}

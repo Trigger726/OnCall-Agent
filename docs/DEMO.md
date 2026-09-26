@@ -224,7 +224,7 @@ checkpoint 43 加演：在隔离 Demo 的“班次维护”创建张伟的普通
 
 新旧对照及真实桌面/390px 截图见 [checkpoint 42](acceptance/V1.7-checkpoint-42.md) 与 [checkpoint 43](acceptance/V1.7-checkpoint-43.md)。旧视图可从 `ab98907`/`52b344f` 查看，原始 OnCall 保留在本地 `archive/oncall-original-2026-08-19`；不要在有未提交改动的工作区切换或恢复旧文件。
 
-checkpoint 45 后端加演：管理账号通过 `/api/v1/on-call/rotations` 创建锚点、有序成员与班长规则；用 `/rotations/{id}/slots` 对照 `BLOCKED / MEMBER_UNAVAILABLE / GENERATED`。释放手工占用后等待后台自动补齐，验证新 P1 路由；取消生成班后暂停/恢复续排，该时段应保留取消事实而不是复活。真实独立 JAR/HTTP 结果与旧班次逐字段保护见 [checkpoint 45](acceptance/V1.7-checkpoint-45.md)。这是 API/后台演示，轮转表单与台账页面、跨时区、外部送达和人工接单回执仍待建设，不能把旧界面截图当成新增轮转 UI 验收。
+checkpoint 45 后端加演：管理账号通过 `/api/v1/on-call/rotations` 创建锚点、有序成员与班长规则；用 `/rotations/{id}/slots` 对照 `BLOCKED / MEMBER_UNAVAILABLE / GENERATED`。释放手工占用后等待后台自动补齐，验证新 P1 路由；取消生成班后暂停/恢复续排，该时段应保留取消事实而不是复活。真实独立 JAR/HTTP 结果与旧班次逐字段保护见 [checkpoint 45](acceptance/V1.7-checkpoint-45.md)。这一阶段只验 API/后台，不能把旧界面截图当成新增轮转 UI 验收；页面在下面的 checkpoint 46 独立补验。
 
 checkpoint 46 页面加演：在“轮转与自动续排”新增规则，添加两名成员并用上下移说明顺序；先用手工普通班占用首时段，观察“普通班次冲突”，不是自动改写。填写原因暂停/恢复，并展示另一会话抢先恢复导致旧版本 409 后确认被锁住；关闭确认、刷新核对再操作。从单班维护释放占用后等待后台补齐，点击“刷新轮转”核对顶部负责人与新 P1；取消生成班后再“立即续排”，台账仍是“已取消 · 不再生成”。小窗口查询更适合讲解；一小时规则可展示 200 条截断提醒。新桌面/390px 截图及隔离验收脚本见 [checkpoint 46](acceptance/V1.7-checkpoint-46.md)。跨时区/DST、日历、换班和外部送达仍未实现，成员资格/扫描故障的呈现夹具须明确标注而非冒充真实业务操作。
 

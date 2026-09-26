@@ -396,7 +396,7 @@ cd .. && ./mvnw test
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
 - MySQL 8.4 Testcontainers：Flyway V1-V26、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项确认与完成，以及 Problem、SLO、Alertmanager、值班升级双扫描、排班冲突/取消与轮转并发/故障隔离，已在真实 MySQL 远端门禁通过。
 
-当前默认后端套件发现 169 项测试：135 项在 UTC/上海时区分别执行通过，34 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过。checkpoint 46 前端新增 8 项轮转契约/状态测试，共 21/21，通过生产构建与最新 JAR 的桌面/390px 实际创建、暂停、旧版本 409、后台补班、新 P1 路由、取消不复活和历史保护。可复跑的浏览器脚本保留在 `scripts/verify-oncall-rotation-{ui,boundaries}.cjs`，仅允许自己拥有的隔离 Demo；真实浏览器尚未接入 CI，远端本轮门禁待补证。旧界面截图与原始 OnCall 分支继续保留，新旧对照见 [checkpoint 46](docs/acceptance/V1.7-checkpoint-46.md)。
+当前默认后端套件发现 169 项测试：135 项在 UTC/上海时区分别执行通过，34 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过。checkpoint 46 前端新增 8 项轮转契约/状态测试，共 21/21，通过生产构建与最新 JAR 的桌面/390px 实际创建、暂停、旧版本 409、后台补班、新 P1 路由、取消不复活和历史保护。代码 `d2541c7` 的 [Run 36268078605](https://github.com/Trigger726/OnCall-Agent/actions/runs/36268078605) 十一项 CI 全绿（4 分 1 秒），直接日志确认真实 MySQL V26/27 项执行/零跳过、远端双时区回归和前端 21 项/生产构建。可复跑的浏览器脚本保留在 `scripts/verify-oncall-rotation-{ui,boundaries}.cjs`，仅允许自己拥有的隔离 Demo；真实浏览器尚未接入 CI。旧界面截图与原始 OnCall 分支继续保留，新旧对照见 [checkpoint 46](docs/acceptance/V1.7-checkpoint-46.md)。
 
 checkpoint 45 新增 10 项轮转共享场景与 1 项真实定时任务测试；代码 `2fc082e` 的 [Run 36266295563](https://github.com/Trigger726/OnCall-Agent/actions/runs/36266295563) 十一项 CI 全部成功（4 分 8 秒），解码日志确认 V26 在真实 MySQL 8.4 上迁移成功，轮转 10 项 + 路由快照 8 项 + 兼容性 9 项共 27 项执行、零跳过；远端双时区回归与前端生产构建也通过。
 
