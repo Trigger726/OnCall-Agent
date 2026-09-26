@@ -41,11 +41,11 @@
 | V1.7 | 39：草稿行动项的发布门禁 | 通过（限本检查点），本地 H2/JAR、远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-39.md](V1.7-checkpoint-39.md) |
 | V1.7 | 40：固定集检索评测历史与口径隔离 | 通过（限本检查点），本地实页与远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-40.md](V1.7-checkpoint-40.md) |
 | V1.7 | 41：Actuator 管理监听隔离 | 通过（限本检查点），本地 JAR 双端口与远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-41.md](V1.7-checkpoint-41.md) |
-| V1.7 | 42：未确认 Incident 值班升级执行 | 双时区全量/JAR 通过；修复后远端待续验 | [V1.7-checkpoint-42.md](V1.7-checkpoint-42.md) |
+| V1.7 | 42：未确认 Incident 值班升级执行 | 通过（限本检查点），双时区/JAR HTTP 与十一项 CI 已验 | [V1.7-checkpoint-42.md](V1.7-checkpoint-42.md) |
 
 ## 状态约定
 
-最新值班升级：[V1.7-checkpoint-42.md](V1.7-checkpoint-42.md)：P1 未确认事故按 ON_CALL/USER/ROLE 到期执行，站内路由与无目标分开记账；上一轮前端、JAR/API 和桌面/390px 页面通过，远端 MySQL 并发通过。远端 H2 的 UTC 时钟混用已复现并修复，本地双时区各 125 项发现/110 项执行、0 失败及 JAR 打包通过，修复后的远端门禁待续验。
+最新值班升级：[V1.7-checkpoint-42.md](V1.7-checkpoint-42.md)：P1 未确认事故按 ON_CALL/USER/ROLE 到期执行，站内路由与无目标分开记账；前端与桌面/390px 页面通过。UTC 时钟混用已复现并修复，本地双时区各 125 项发现/110 项执行、0 失败，最新 JAR UTC HTTP 与 [Run 36260824938](https://github.com/Trigger726/OnCall-Agent/actions/runs/36260824938) 的 MySQL 8.4/十一项 CI 全部通过；截图与 CI/HTTP 精简结果已归档。
 
 最新指标隔离：[V1.7-checkpoint-41.md](V1.7-checkpoint-41.md)：业务端口不再映射 Actuator，独立管理监听默认绑定回环；本地 119 项后端发现/105 项执行、前端 13 项和真实 JAR 双端口通过。[Run 36150079204](https://github.com/Trigger726/OnCall-Agent/actions/runs/36150079204) 的 MySQL 8.4、服务指标抓取到 Incident 与十一项 CI 全绿。
 

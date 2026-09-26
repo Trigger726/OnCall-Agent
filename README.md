@@ -389,7 +389,7 @@ cd .. && ./mvnw test
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
 - MySQL 8.4 Testcontainers：Flyway V1-V24、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项确认与完成，以及 Problem、SLO、Alertmanager 和值班升级双扫描并发（首轮远端已通过）。
 
-当前默认后端套件发现 125 项测试：110 项执行通过，15 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖告警生命周期、Agent 有界执行与恢复、Runbook 固定集评测、复盘行动项、SLO、Actuator 隔离，以及新增的值班升级即时路由、缺班/确认分支和并发幂等。前端 13 项测试及生产构建、真实 JAR/API、桌面与 390px 页面均已通过。首轮 [Run 36155510886](https://github.com/Trigger726/OnCall-Agent/actions/runs/36155510886) 已通过 V24 和真实 MySQL 并发，但 UTC H2 失败令容器门禁跳过；数据库时钟修复后的本地 UTC 全量与打包通过，远端仍待续验。CI 的 H2 门禁增加 UTC 与上海时区回归。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁。GitHub Actions 分离前端、H2/JAR、MySQL Testcontainers、Alertmanager/Prometheus 规则、Redis/双 JVM、Trace/Tempo、通知容器和镜像启动等十一项门禁。详细分阶段证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+当前默认后端套件发现 125 项测试：110 项执行通过，15 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；覆盖告警生命周期、Agent 有界执行与恢复、Runbook 固定集评测、复盘行动项、SLO、Actuator 隔离，以及新增的值班升级即时路由、缺班/确认分支和并发幂等。前端 13 项测试及生产构建、真实 JAR/API、桌面与 390px 页面均已通过。首轮 UTC H2 时钟混用失败已复现并修复；本地 UTC/上海时区各全量通过，最新 JAR 的 UTC HTTP 首步/确认/MTTA 复验通过，[Run 36260824938](https://github.com/Trigger726/OnCall-Agent/actions/runs/36260824938) 的 V24、真实 MySQL 并发与十一项 CI 全绿。CI 的 H2 门禁同时覆盖 UTC 打包与上海时区回归，截图与 CI/HTTP 精简证据已归档。Flyway 9.22.3 会提示其官方测试上限为 MySQL 8.0，后续应升级依赖并继续保留真实数据库门禁；`upload-artifact@v4` 的 Node.js 20 废弃提醒也仍需处理。GitHub Actions 分离前端、H2/JAR、MySQL Testcontainers、Alertmanager/Prometheus 规则、Redis/双 JVM、Trace/Tempo、通知容器和镜像启动等十一项门禁。详细分阶段证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 
