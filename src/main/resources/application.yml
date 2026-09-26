@@ -62,6 +62,11 @@ management:
       show-details: when_authorized
 
 opspilot:
+  oncall:
+    rotation:
+      enabled: ${ONCALL_ROTATION_ENABLED:true}
+      scan-delay: ${ONCALL_ROTATION_SCAN_DELAY:60000}
+      initial-delay: ${ONCALL_ROTATION_INITIAL_DELAY:60000}
   agent:
     events:
       outbox-enabled: ${AGENT_OUTBOX_ENABLED:false}

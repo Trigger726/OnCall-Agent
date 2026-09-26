@@ -1,0 +1,16 @@
+{
+  "date": "2026-09-27 Asia/Shanghai",
+  "newH2ScenarioCount": 10,
+  "realScheduledJobTestCount": 1,
+  "targetedRelatedTestCount": 30,
+  "runs": [
+    {"command": ".\\mvnw.cmd -Duser.timezone=UTC package -q", "exitCode": 0, "discovered": 169, "executed": 135, "skipped": 34, "failures": 0, "errors": 0},
+    {"command": ".\\mvnw.cmd -Duser.timezone=Asia/Shanghai test -q", "exitCode": 0, "discovered": 169, "executed": 135, "skipped": 34, "failures": 0, "errors": 0},
+    {"command": "npm test", "directory": "web", "exitCode": 0, "tests": 13, "failures": 0}
+  ],
+  "faultInjection": "Second generated shift throws rotation-failure-sentinel; that rotation has zero persisted new shifts/slots/audits, other rotations continue",
+  "expectedWarning": "One injected generation failure is intentional, not an unexplained error",
+  "docker": "Local daemon unavailable; 34 Docker conditional tests skipped, not passed",
+  "remainingGateAtLocalValidation": "V26 real MySQL and remote CI",
+  "remainingProductWork": "Rotation management UI, desktop/mobile browser comparison, timezone/DST and swaps"
+}

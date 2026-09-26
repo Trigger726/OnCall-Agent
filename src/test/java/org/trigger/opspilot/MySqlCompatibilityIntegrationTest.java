@@ -277,7 +277,7 @@ class MySqlCompatibilityIntegrationTest {
                         """).query(Integer.class).single()).isEqualTo(1);
         assertThat(jdbcClient.sql("""
                         SELECT COUNT(*) FROM flyway_schema_history
-                        WHERE version = '25' AND success = 1
+                        WHERE version = '26' AND success = 1
                         """).query(Integer.class).single()).isEqualTo(1);
         assertThat(jdbcClient.sql("SELECT severity FROM escalation_policy WHERE id = 1")
                 .query(String.class).single()).isEqualTo("P1");

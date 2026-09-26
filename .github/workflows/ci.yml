@@ -64,7 +64,7 @@ jobs:
         run: >-
           ./mvnw -B
           -Dopspilot.mysql.it.enabled=true
-          -Dtest=MySqlCompatibilityIntegrationTest,MySqlOnCallRoutingSnapshotIntegrationTest
+          -Dtest=MySqlCompatibilityIntegrationTest,MySqlOnCallRoutingSnapshotIntegrationTest,MySqlOnCallRotationIntegrationTest
           test
       - uses: actions/upload-artifact@v4
         if: always()
