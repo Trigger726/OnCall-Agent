@@ -390,9 +390,9 @@ cd .. && ./mvnw test
 - MTTA/MTTM/MTTR 均值、中位数、独立分母、日期/严重等级筛选、缺失/负时长排除、慢事故下钻和 SPA 深链。
 - 跨 Incident 行动项筛选、截止当天边界、逾期天数、扫描角色限制、唯一升级事实、重复扫描幂等和完成后关闭。
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
-- MySQL 8.4 Testcontainers：Flyway V1-V25、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项确认与完成，以及 Problem、SLO、Alertmanager、值班升级双扫描和排班冲突/取消（V25 本轮待远端实测，V24 已通过）。
+- MySQL 8.4 Testcontainers：Flyway V1-V25、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项确认与完成，以及 Problem、SLO、Alertmanager、值班升级双扫描和排班冲突/取消，已在真实 MySQL 远端门禁通过。
 
-当前默认后端套件发现 132 项测试：116 项在 UTC/上海时区分别执行通过，16 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；新增六项班次维护测试覆盖权限、审计、覆盖恢复路由、软取消版本、半开边界、非法输入、并发重叠和截断提示。前端 13 项测试、生产构建、最新 UTC JAR 四种真实路由、桌面与 390px 页面均通过；两条历史排班操作前后逐字段一致，截图与结果已归档。V25 的真实 MySQL 并发与本轮远端门禁待续验；上一轮 [Run 36260824938](https://github.com/Trigger726/OnCall-Agent/actions/runs/36260824938) 的 V24 与十一项 CI 全绿。CI 的 H2 门禁同时覆盖 UTC 打包与上海时区回归。Flyway 9.22.3 的 MySQL 支持上限提醒及 `upload-artifact@v4` 的 Node.js 20 废弃提醒仍需处理。GitHub Actions 分离前端、H2/JAR、MySQL、Alertmanager/Prometheus 规则、Redis/双 JVM、Trace/Tempo、通知容器和镜像启动等十一项门禁。详细分阶段证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
+当前默认后端套件发现 132 项测试：116 项在 UTC/上海时区分别执行通过，16 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过；新增六项班次维护测试覆盖权限、审计、覆盖恢复路由、软取消版本、半开边界、非法输入、并发重叠和截断提示。前端 13 项测试、生产构建、最新 UTC JAR 四种真实路由、桌面与 390px 页面均通过；两条历史排班操作前后逐字段一致，截图与结果已归档。代码提交 `f36ed94` 的 [Run 36262966874](https://github.com/Trigger726/OnCall-Agent/actions/runs/36262966874) 已验证 V25 的真实 MySQL 并发，十一项 CI 全部成功（4 分 19 秒）；上一轮 V24 的 [Run 36260824938](https://github.com/Trigger726/OnCall-Agent/actions/runs/36260824938) 证据继续保留。CI 的 H2 门禁同时覆盖 UTC 打包与上海时区回归。Flyway 9.22.3 的 MySQL 支持上限提醒及 `upload-artifact@v4` 的 Node.js 20 废弃提醒仍需处理。GitHub Actions 分离前端、H2/JAR、MySQL、Alertmanager/Prometheus 规则、Redis/双 JVM、Trace/Tempo、通知容器和镜像启动等十一项门禁。详细分阶段证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
 ## 目录
 
