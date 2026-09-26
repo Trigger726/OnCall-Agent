@@ -44,11 +44,11 @@
 | V1.7 | 42：未确认 Incident 值班升级执行 | 通过（限本检查点），双时区/JAR HTTP 与十一项 CI 已验 | [V1.7-checkpoint-42.md](V1.7-checkpoint-42.md) |
 | V1.7 | 43：有效班次维护与可审计取消 | 通过，双时区/HTTP/桌面手机及真实 MySQL/十一项 CI 已验 | [V1.7-checkpoint-43.md](V1.7-checkpoint-43.md) |
 | V1.7 | 44：升级路由已提交状态可见性 | 通过，双时区/真实 MySQL 八场景与十一项 CI 已验 | [V1.7-checkpoint-44.md](V1.7-checkpoint-44.md) |
-| V1.7 | 45：轮转规则与自动续排后端 | 部分通过，双时区/真实后台 HTTP 已验；MySQL、UI 待验 | [V1.7-checkpoint-45.md](V1.7-checkpoint-45.md) |
+| V1.7 | 45：轮转规则与自动续排后端 | 部分通过，双时区/真实后台 HTTP/MySQL/十一门禁已验；UI 待验 | [V1.7-checkpoint-45.md](V1.7-checkpoint-45.md) |
 
 ## 状态约定
 
-最新轮转后端：[V1.7-checkpoint-45.md](V1.7-checkpoint-45.md)：有序规则、14 天幂等物化、冲突/资格台账、取消不复活、版本化暂停/恢复与真实自动续排；本地双时区各 169 项发现/135 项执行，前端 13 项及最新 UTC JAR 的 HTTP/后台/P1 路由通过。V26 真实 MySQL、远端门禁和轮转管理页面仍待验，旧 Demo 不变。
+最新轮转后端：[V1.7-checkpoint-45.md](V1.7-checkpoint-45.md)：有序规则、14 天幂等物化、冲突/资格台账、取消不复活、版本化暂停/恢复与真实自动续排；双时区各 169 项发现/135 项执行，前端 13 项及最新 UTC JAR 的 HTTP/后台/P1 路由通过。代码 `2fc082e` 的 [Run 36266295563](https://github.com/Trigger726/OnCall-Agent/actions/runs/36266295563) 十一项全绿（4 分 8 秒），解码日志直接确认真实 MySQL V26/27 项执行/0 跳过。轮转管理页面与浏览器对照仍待验，旧 Demo 不变。
 
 最新事务可见性：[V1.7-checkpoint-44.md](V1.7-checkpoint-44.md)：真实接入/扫描入口显式 READ_COMMITTED，旧快照误路由有失败证据；共享八项提交闸门与回滚场景已过 H2 与真实 MySQL，双时区各发现 148 项、执行 124 项、24 项 Docker 条件跳过，前端 13 项通过。[Run 36264417669](https://github.com/Trigger726/OnCall-Agent/actions/runs/36264417669) 十一项 CI 全绿，MySQL 日志确认 17 项执行/零跳过；页面和历史 Demo 不变。
 

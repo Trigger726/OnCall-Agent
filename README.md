@@ -394,9 +394,9 @@ cd .. && ./mvnw test
 - MTTA/MTTM/MTTR 均值、中位数、独立分母、日期/严重等级筛选、缺失/负时长排除、慢事故下钻和 SPA 深链。
 - 跨 Incident 行动项筛选、截止当天边界、逾期天数、扫描角色限制、唯一升级事实、重复扫描幂等和完成后关闭。
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
-- MySQL 8.4 Testcontainers：Flyway V1-V25、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项确认与完成，以及 Problem、SLO、Alertmanager、值班升级双扫描和排班冲突/取消，已在真实 MySQL 远端门禁通过。
+- MySQL 8.4 Testcontainers：Flyway V1-V26、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项确认与完成，以及 Problem、SLO、Alertmanager、值班升级双扫描、排班冲突/取消与轮转并发/故障隔离，已在真实 MySQL 远端门禁通过。
 
-当前默认后端套件发现 169 项测试：135 项在 UTC/上海时区分别执行通过，34 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过。checkpoint 45 新增 10 项轮转共享场景与 1 项真实定时任务测试，前端 13 项再次通过；独立内存数据库上的真实 JAR/HTTP 已验证后台补班、新 P1 路由、角色限制、暂停/恢复、取消不复活和历史保护。V26 的真实 MySQL 与远端 CI 待补证，轮转管理页面也仍待完成；本轮不改 UI，旧桌面/390px 证据继续保留。
+当前默认后端套件发现 169 项测试：135 项在 UTC/上海时区分别执行通过，34 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过。checkpoint 45 新增 10 项轮转共享场景与 1 项真实定时任务测试，前端 13 项再次通过；独立内存数据库上的真实 JAR/HTTP 已验证后台补班、新 P1 路由、角色限制、暂停/恢复、取消不复活和历史保护。代码 `2fc082e` 的 [Run 36266295563](https://github.com/Trigger726/OnCall-Agent/actions/runs/36266295563) 十一项 CI 全部成功（4 分 8 秒），解码日志确认 V26 在真实 MySQL 8.4 上迁移成功，轮转 10 项 + 路由快照 8 项 + 兼容性 9 项共 27 项执行、零跳过；远端双时区回归与前端生产构建也通过。轮转管理页面仍待完成；本轮不改 UI，旧桌面/390px 证据继续保留。
 
 checkpoint 44 以实际接入/扫描入口复现已提交取消仍命中旧快照，显式 READ_COMMITTED 修复；八项共享场景覆盖取消/新覆盖/计划与策略停用/账号及角色变化，以及告警、Incident、升级、通知、时间线、审计原子回滚。代码 `c85603d` 的 [Run 36264417669](https://github.com/Trigger726/OnCall-Agent/actions/runs/36264417669) 十一项 CI 全部成功（4 分 7 秒），直接日志确认 MySQL 新套件 8 项加兼容套件 9 项全部执行、零跳过；上一轮代码 `f36ed94` 的 [Run 36262966874](https://github.com/Trigger726/OnCall-Agent/actions/runs/36262966874) 已验证 V25 班次并发与十一项 CI（4 分 19 秒），V24 的 [Run 36260824938](https://github.com/Trigger726/OnCall-Agent/actions/runs/36260824938) 也继续保留。CI 的 H2 门禁同时覆盖 UTC 打包与上海时区回归，MySQL 门禁执行兼容性、路由快照与轮转三套测试并上传 Surefire 报告。Flyway 9.22.3 的 MySQL 支持上限提醒及 `upload-artifact@v4` 的 Node.js 20 废弃提醒仍需处理。GitHub Actions 分离前端、H2/JAR、MySQL、Alertmanager/Prometheus 规则、Redis/双 JVM、Trace/Tempo、通知容器和镜像启动等十一项门禁。详细分阶段证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 
