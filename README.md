@@ -6,6 +6,8 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
+checkpoint 48 新增日历覆盖预览：已持久化班次按实际路由优先级分段，逐日查看有效覆盖/缺班、被遮盖与无资格班次，取消后自动重算；不是未生成轮转的预测，也不是历史账号资格快照。前端 29 项与本地桌面/390px 通过，远端 MySQL/CI 待补证，详见 [验收报告](docs/acceptance/V1.7-checkpoint-48.md)。
+
 - 告警治理：外部事件 ID 幂等、SHA-256 指纹压缩、30 分钟窗口聚合、原始告警与 Incident 分层；原生接收 Alertmanager v4 批量 webhook，同状态重试零写入、firing/resolved 共用生命周期，批内永久坏项进入脱敏台账并支持角色受控重放。
 - Incident 工作台：`OPEN -> ACKNOWLEDGED -> INVESTIGATING -> MITIGATED -> RESOLVED -> CLOSED` 状态机、乐观锁、分派、备注和时间线。
 - CMDB：应用、API、数据库和中间件台账，依赖/调用关系拓扑，事故与近期变更关联。

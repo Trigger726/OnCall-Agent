@@ -28,12 +28,14 @@ public class OnCallController {
     private final OnCallService service;
     private final IncidentEscalationService escalationService;
     private final OnCallRosterService rosterService;
+    private final OnCallCoverageService coverageService;
 
     public OnCallController(OnCallService service, IncidentEscalationService escalationService,
-                            OnCallRosterService rosterService) {
+                            OnCallRosterService rosterService, OnCallCoverageService coverageService) {
         this.service = service;
         this.escalationService = escalationService;
         this.rosterService = rosterService;
+        this.coverageService = coverageService;
     }
 
     @GetMapping("/current")
@@ -52,6 +54,14 @@ public class OnCallController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) {
         return ApiResponse.ok(rosterService.roster(scheduleId, from, to));
+    }
+
+    @GetMapping("/coverage")
+    public ApiResponse<OnCallCoverageService.CoverageView> coverage(
+            @RequestParam long scheduleId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) {
+        return ApiResponse.ok(coverageService.coverage(scheduleId, from, to));
     }
 
     @PostMapping("/shifts")
