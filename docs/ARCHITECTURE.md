@@ -73,6 +73,8 @@ OPEN -> ACKNOWLEDGED -> INVESTIGATING -> MITIGATED -> RESOLVED -> CLOSED
 
 Flyway V24 将策略与严重度关联，并通过 `incident_escalation_event(incident_id, step_id)` 唯一约束固化每次到期步骤。新告警创建 Incident 的事务内执行零分钟步骤，定时任务每分钟扫描最多 100 个仍为 `OPEN` 且有未执行到期步骤的候选；管理员/运维经理可即时扫描。执行前 `FOR UPDATE` 锁定 Incident，再检查状态和事件，以跨实例并发时不重复写站内路由、时间线与审计。`ACKNOWLEDGED` 后停止，不把 `INVESTIGATING` 或已恢复事故误判为未确认。
 
+事故创建、两小时聚合窗口、当前班次和默认升级扫描统一使用数据库会话的 `CURRENT_TIMESTAMP`，与确认/恢复里程碑保持同一时钟，避免 UTC 环境下混入硬编码上海应用时间导致八小时偏差。现有时间字段没有逐条保存时区；排班输入须与数据库会话时区一致，此修复不等于多时区排班支持。
+
 ON_CALL 只在策略引用的同一服务班次中选活跃用户，重叠时按覆盖标记、开始时间、ID 决定唯一接收人；USER/ROLE 也只取活跃账号。无目标时固化 `NO_TARGET` 且不插入通知日志；有目标时写 `ROUTED` 与 `notification_log` 的 `IN_APP/RECORDED`，仅表示站内路由事实，未证明外部送达或本人已读。迟到扫描会补执行所有已到期步骤，避免重启后静默遗漏；若需外部消息、确认回执、排班管理或高吞吐调度，仍需独立建设。此流程参考 [Grafana IRM 的接入、分组与逐级升级](https://grafana.com/docs/grafana-cloud/observe-and-act/respond-to-incidents/introduction/routing-and-escalation/)，但没有实现其外部通知能力。
 
 ### 无责复盘与防复发行动

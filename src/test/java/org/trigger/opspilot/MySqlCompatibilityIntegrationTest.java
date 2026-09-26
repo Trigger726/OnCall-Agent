@@ -651,7 +651,8 @@ class MySqlCompatibilityIntegrationTest {
     @Test
     @Order(8)
     void shouldRouteOneUnacknowledgedIncidentStepAcrossConcurrentMySqlScans() throws Exception {
-        LocalDateTime createdAt = LocalDateTime.now(java.time.ZoneId.of("Asia/Shanghai"))
+        LocalDateTime createdAt = jdbcClient.sql("SELECT CURRENT_TIMESTAMP")
+                .query((rs, rowNum) -> rs.getObject(1, LocalDateTime.class)).single()
                 .minusMinutes(1).truncatedTo(java.time.temporal.ChronoUnit.SECONDS);
         String code = "INC-MYSQL-ESC-" + UUID.randomUUID();
         jdbcClient.sql("""

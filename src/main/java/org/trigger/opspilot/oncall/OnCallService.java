@@ -4,12 +4,10 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 @Service
 public class OnCallService {
-    private static final ZoneId BUSINESS_ZONE = ZoneId.of("Asia/Shanghai");
     private final JdbcClient jdbcClient;
 
     public OnCallService(JdbcClient jdbcClient) {
@@ -17,7 +15,6 @@ public class OnCallService {
     }
 
     public List<OnCallView> current() {
-        LocalDateTime now = LocalDateTime.now(BUSINESS_ZONE);
         return jdbcClient.sql("""
                         SELECT schedule.id AS schedule_id, schedule.name AS schedule_name, r.id AS resource_id,
                                r.name AS resource_name, u.id AS user_id, u.display_name, u.department,
@@ -28,12 +25,12 @@ public class OnCallService {
                           SELECT candidate.id FROM oncall_shift candidate
                           JOIN sys_user candidate_user ON candidate_user.id = candidate.user_id
                           WHERE candidate.schedule_id = schedule.id AND candidate_user.status = 'ACTIVE'
-                            AND candidate.starts_at <= :now
-                            AND candidate.ends_at > :now
+                            AND candidate.starts_at <= CURRENT_TIMESTAMP
+                            AND candidate.ends_at > CURRENT_TIMESTAMP
                           ORDER BY candidate.override_flag DESC, candidate.starts_at DESC, candidate.id DESC LIMIT 1)
                         LEFT JOIN sys_user u ON u.id = shift.user_id
                         WHERE schedule.active = TRUE ORDER BY schedule.id
-                        """).param("now", now)
+                        """)
                 .query((rs, rowNum) -> new OnCallView(
                         rs.getLong("schedule_id"), rs.getString("schedule_name"), rs.getLong("resource_id"),
                         rs.getString("resource_name"), nullableLong(rs, "user_id"), rs.getString("display_name"),

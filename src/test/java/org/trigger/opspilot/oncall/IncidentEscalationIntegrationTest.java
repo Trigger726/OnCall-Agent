@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.trigger.opspilot.alert.AlertService;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.UUID;
@@ -35,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 })
 @AutoConfigureMockMvc
 class IncidentEscalationIntegrationTest {
-    private static final ZoneId BUSINESS_ZONE = ZoneId.of("Asia/Shanghai");
     @Autowired private JdbcClient jdbcClient;
     @Autowired private IncidentEscalationService service;
     @Autowired private OnCallService onCallService;
@@ -45,7 +43,7 @@ class IncidentEscalationIntegrationTest {
 
     @Test
     void shouldRouteOverrideThenStopAfterAcknowledgement() {
-        LocalDateTime createdAt = LocalDateTime.now(BUSINESS_ZONE)
+        LocalDateTime createdAt = databaseNow()
                 .minusMinutes(1).truncatedTo(ChronoUnit.SECONDS);
         long incidentId = incident(createdAt);
         jdbcClient.sql("""
@@ -76,7 +74,7 @@ class IncidentEscalationIntegrationTest {
 
     @Test
     void shouldRecordMissingShiftWithoutClaimingDeliveryAndThenRouteLaterSteps() {
-        LocalDateTime createdAt = LocalDateTime.now(BUSINESS_ZONE)
+        LocalDateTime createdAt = databaseNow()
                 .plusDays(2).truncatedTo(ChronoUnit.SECONDS);
         long incidentId = incident(createdAt);
         var first = service.scan(createdAt, null, "test");
@@ -100,7 +98,7 @@ class IncidentEscalationIntegrationTest {
 
     @Test
     void shouldExecuteEachStepOnceAcrossConcurrentScans() throws Exception {
-        LocalDateTime createdAt = LocalDateTime.now(BUSINESS_ZONE)
+        LocalDateTime createdAt = databaseNow()
                 .minusMinutes(1).truncatedTo(ChronoUnit.SECONDS);
         long incidentId = incident(createdAt);
         CountDownLatch start = new CountDownLatch(1);
@@ -128,8 +126,8 @@ class IncidentEscalationIntegrationTest {
     }
 
     @Test
-    void shouldRouteFirstStepAsPartOfNewAlertTransaction() {
-        LocalDateTime now = LocalDateTime.now(BUSINESS_ZONE).truncatedTo(ChronoUnit.SECONDS);
+    void shouldRouteFirstStepAsPartOfNewAlertTransaction() throws Exception {
+        LocalDateTime now = databaseNow().truncatedTo(ChronoUnit.SECONDS);
         jdbcClient.sql("""
                         INSERT INTO oncall_shift(schedule_id, user_id, starts_at, ends_at)
                         VALUES (1, 2, :start, :end)
@@ -146,8 +144,22 @@ class IncidentEscalationIntegrationTest {
                         SELECT COUNT(*) FROM incident_timeline
                         WHERE incident_id = :id AND event_type = 'ESCALATION_ROUTED'
                         """).param("id", incidentId).query(Long.class).single()).isEqualTo(1);
-        jdbcClient.sql("UPDATE incident SET status = 'ACKNOWLEDGED' WHERE id = :id")
-                .param("id", incidentId).update();
+        LocalDateTime createdAt = jdbcClient.sql("SELECT created_at FROM incident WHERE id = :id")
+                .param("id", incidentId)
+                .query((rs, rowNum) -> rs.getObject(1, LocalDateTime.class)).single();
+        assertThat(createdAt).isBetween(now.minusSeconds(1), databaseNow().plusSeconds(1));
+        mockMvc.perform(post("/api/v1/incidents/{id}/transitions", incidentId)
+                        .header("Authorization", bearer(login("admin")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Map.of(
+                                "targetStatus", "ACKNOWLEDGED", "version", 0, "note", "数据库时钟回归验收"))))
+                .andExpect(status().isOk());
+        LocalDateTime acknowledgedAt = jdbcClient.sql("SELECT acknowledged_at FROM incident WHERE id = :id")
+                .param("id", incidentId)
+                .query((rs, rowNum) -> rs.getObject(1, LocalDateTime.class)).single();
+        assertThat(acknowledgedAt).isAfterOrEqualTo(createdAt);
+        service.scan(createdAt.plusMinutes(20), null, "test");
+        assertThat(eventCount(incidentId)).isEqualTo(1);
     }
 
     @Test
@@ -162,6 +174,11 @@ class IncidentEscalationIntegrationTest {
         mockMvc.perform(post("/api/v1/on-call/escalations/scan")
                         .header("Authorization", bearer(admin)))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.data.routedSteps").isNumber());
+    }
+
+    private LocalDateTime databaseNow() {
+        return jdbcClient.sql("SELECT CURRENT_TIMESTAMP")
+                .query((rs, rowNum) -> rs.getObject(1, LocalDateTime.class)).single();
     }
 
     private long incident(LocalDateTime createdAt) {

@@ -15,8 +15,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
 import java.util.HexFormat;
 import java.util.List;
@@ -27,7 +25,6 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 public class AlertService {
     private static final DateTimeFormatter CODE_TIME = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
-    private static final ZoneId BUSINESS_ZONE = ZoneId.of("Asia/Shanghai");
     private final JdbcClient jdbcClient;
     private final ObjectMapper objectMapper;
     private final ProblemService problemService;
@@ -186,32 +183,30 @@ public class AlertService {
                         SELECT id FROM incident
                         WHERE service_resource_id = :serviceId AND severity = :severity
                           AND status NOT IN ('RESOLVED','CLOSED')
-                          AND created_at >= :windowStart
+                          AND created_at >= TIMESTAMPADD(HOUR, -2, CURRENT_TIMESTAMP)
                         ORDER BY created_at DESC LIMIT 1
                         """)
                 .param("serviceId", serviceId).param("severity", severity.toUpperCase())
-                .param("windowStart", LocalDateTime.now(BUSINESS_ZONE).minusHours(2))
                 .query(Long.class).optional();
         if (existing.isPresent()) {
             jdbcClient.sql("UPDATE incident SET updated_at = CURRENT_TIMESTAMP, version = version + 1 WHERE id = :id")
                     .param("id", existing.get()).update();
             return existing.get();
         }
-        LocalDateTime createdAt = LocalDateTime.now(BUSINESS_ZONE).truncatedTo(ChronoUnit.SECONDS);
+        LocalDateTime createdAt = jdbcClient.sql("SELECT CURRENT_TIMESTAMP")
+                .query((rs, rowNum) -> rs.getObject(1, LocalDateTime.class)).single();
         String code = "INC-" + createdAt.format(CODE_TIME) + "-"
                 + ThreadLocalRandom.current().nextInt(100, 1000);
         String serviceName = jdbcClient.sql("SELECT name FROM cmdb_resource WHERE id = :id")
                 .param("id", serviceId).query(String.class).single();
         jdbcClient.sql("""
                         INSERT INTO incident(incident_code, title, description, severity, status,
-                                             service_resource_id, created_at, updated_at)
-                        VALUES (:code, :title, :description, :severity, 'OPEN', :serviceId,
-                                :createdAt, :createdAt)
+                                             service_resource_id)
+                        VALUES (:code, :title, :description, :severity, 'OPEN', :serviceId)
                         """)
                 .param("code", code).param("title", serviceName + "：" + alertTitle)
                 .param("description", "由告警聚合规则自动创建，等待值班人员确认。")
-                .param("severity", severity.toUpperCase()).param("serviceId", serviceId)
-                .param("createdAt", createdAt).update();
+                .param("severity", severity.toUpperCase()).param("serviceId", serviceId).update();
         long incidentId = jdbcClient.sql("SELECT id FROM incident WHERE incident_code = :code")
                 .param("code", code).query(Long.class).single();
         jdbcClient.sql("""

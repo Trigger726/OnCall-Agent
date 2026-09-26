@@ -42,8 +42,10 @@ jobs:
           cache: maven
       - name: Enable Maven wrapper
         run: chmod +x mvnw
-      - name: Test and package
-        run: ./mvnw -B package
+      - name: Test and package (UTC)
+        run: ./mvnw -B -Duser.timezone=UTC package
+      - name: Regression tests (Asia/Shanghai)
+        run: ./mvnw -B -Duser.timezone=Asia/Shanghai test
 
   mysql-integration:
     name: MySQL 8.4 integration

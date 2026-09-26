@@ -6,12 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.trigger.opspilot.audit.AuditService;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 @Service
 public class IncidentEscalationService {
-    private static final ZoneId BUSINESS_ZONE = ZoneId.of("Asia/Shanghai");
     private final JdbcClient jdbcClient;
     private final AuditService auditService;
 
@@ -22,7 +20,7 @@ public class IncidentEscalationService {
 
     @Transactional
     public ScanResult scan(LocalDateTime requestedAt, Long actorId, String sourceIp) {
-        LocalDateTime asOf = requestedAt == null ? LocalDateTime.now(BUSINESS_ZONE) : requestedAt;
+        LocalDateTime asOf = requestedAt == null ? databaseNow() : requestedAt;
         List<Long> candidates = jdbcClient.sql("""
                         SELECT DISTINCT incident.id FROM incident
                         JOIN escalation_policy policy ON policy.service_resource_id = incident.service_resource_id
@@ -46,7 +44,12 @@ public class IncidentEscalationService {
 
     @Transactional
     public void routeNewIncident(long incidentId) {
-        executeDueSteps(incidentId, LocalDateTime.now(BUSINESS_ZONE), null, "alert-intake");
+        executeDueSteps(incidentId, databaseNow(), null, "alert-intake");
+    }
+
+    private LocalDateTime databaseNow() {
+        return jdbcClient.sql("SELECT CURRENT_TIMESTAMP")
+                .query((rs, rowNum) -> rs.getObject(1, LocalDateTime.class)).single();
     }
 
     private StepCounts executeDueSteps(long incidentId, LocalDateTime asOf,
