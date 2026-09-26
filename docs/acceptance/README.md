@@ -2,7 +2,7 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
-最新检查点：[V1.7-checkpoint-47.md](V1.7-checkpoint-47.md)：真实浏览器 CI、自有进程隔离与证据上传已实现，本地完整流程、8 项生命周期测试和 21 项前端测试通过；Linux/Chromium 与十二项远端门禁待验。
+最新检查点：[V1.7-checkpoint-47.md](V1.7-checkpoint-47.md)：真实浏览器 CI、自有进程隔离与证据上传已通过；[Run 36269425451](https://github.com/Trigger726/OnCall-Agent/actions/runs/36269425451) 十二项全绿，Linux/Chromium 桌面与390px流程、8 项生命周期测试、21 项前端、双时区回归与真实 MySQL 27 项通过，ZIP/JSON/截图已下载核验。
 
 | 版本 | 检查点 | 状态 | 报告 |
 | --- | --- | --- | --- |
