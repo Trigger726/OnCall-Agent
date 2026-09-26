@@ -2,7 +2,8 @@ const { chromium } = require(process.env.OPSPILOT_PLAYWRIGHT_MODULE || 'playwrig
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const root = process.env.OPSPILOT_BASE_URL || 'http://127.0.0.1:9917';
-const out = fs.mkdtempSync(require('node:path').join(require('node:os').tmpdir(), 'opspilot-rotation-ui-')) + require('node:path').sep;
+const path = require('node:path');
+const out = fs.mkdtempSync(path.join(process.env.OPSPILOT_EVIDENCE_DIR || require('node:os').tmpdir(), 'rotation-ui-')) + path.sep;
 const plusHours = (value, hours) => new Date(new Date(value + 'Z').getTime() + hours * 3600000).toISOString().slice(0,16);
 
 // Mutating acceptance requires a caller-owned fresh, isolated demo database.
@@ -26,6 +27,7 @@ assert.notEqual(new URL(root).port, '9900', 'Do not target the daily demo listen
     await page.goto(root + '/on-call');
     const panel = page.locator('.rotation-panel');
     await panel.getByText('暂无轮转规则', {exact:false}).waitFor();
+    assert.equal(page.url(),root+'/on-call');
     assert.equal(await page.title(),'OpsPilot 智能运维平台');
     assert.equal(await page.locator('vite-error-overlay').count(),0);
     assert.ok((await page.locator('.page-content').innerText()).length > 100);
@@ -178,7 +180,8 @@ assert.notEqual(new URL(root).port, '9900', 'Do not target the daily demo listen
     assert.deepEqual(logs.filter(item=>!/409/.test(item)),[]);
     assert.equal(expected409.length,2);
     assert.ok(expected409.every(item=>item.status===409));
-    const result={browser:'Chrome via bundled Playwright; Browser plugin not available',url:root+'/on-call',viewports:['1440x1000','390x844'],browserTimezone:'Asia/Shanghai',jarTimezone:'UTC',database:'isolated H2 memory',userFileDatabaseModified:false,
+    assert.deepEqual(expected409.map(item=>item.path),['/api/v1/on-call/rotations',`/api/v1/on-call/rotations/${id}/state`]);
+    const result={browser:`Chromium/Chrome ${browser.version()} via Playwright`,browserPath:'Browser plugin not available',url:root+'/on-call',viewports:['1440x1000','390x844'],browserTimezone:'Asia/Shanghai',jarTimezone:'UTC',database:'isolated H2 memory',userFileDatabaseModified:false,
       rotationId:id,members:rotation.members,anchorPreserved:true,createdFromUI:true,manualConflictVisible:true,duplicateCreateRejected:true,pausedPersisted:true,existingShiftsPreservedDuringPause:true,staleVersionRejectedAndBlocked:true,
       realBackgroundFilled:true,noManualScanBeforeBackground:true,currentOwnerAfterRefresh:'张伟',incident:{id:incident.incidentId,recipient:routed.recipient,status:routed.status},cancelledSlotRetained:true,manualScanCreatedZero:true,readonlyVerified:true,
       historicalShiftsPreserved:history.shifts.length,pageIdentity:true,noBlank:true,noOverlay:true,mobileDocumentWidth:390,consoleLogs:logs,pageErrors:errors,expected409,screenshots};

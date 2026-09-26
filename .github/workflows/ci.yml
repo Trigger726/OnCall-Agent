@@ -29,6 +29,44 @@ jobs:
         working-directory: web
         run: npm ci && npm test && npm run build
 
+  browser-integration:
+    name: On-call real browser integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            web/package-lock.json
+            scripts/browser/package-lock.json
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - name: Build fresh frontend and JAR
+        run: |
+          npm ci --prefix web
+          npm run build --prefix web
+          chmod +x mvnw
+          ./mvnw -B -DskipTests package
+      - name: Install pinned browser and verify lifecycle helpers
+        run: |
+          npm ci --prefix scripts/browser
+          node scripts/browser/node_modules/playwright/cli.js install --with-deps chromium
+          npm test --prefix scripts/browser
+      - name: Verify desktop/mobile interaction against owned isolated JAR
+        run: node scripts/verify-oncall-browser-ci.cjs
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: oncall-browser-evidence
+          path: target/oncall-browser-it/
+          retention-days: 30
+
   backend-h2:
     name: Backend tests and JAR (H2)
     runs-on: ubuntu-latest
@@ -130,7 +168,7 @@ jobs:
 
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, backend-h2, mysql-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration]
+    needs: [frontend, browser-integration, backend-h2, mysql-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

@@ -2,7 +2,8 @@ const { chromium } = require(process.env.OPSPILOT_PLAYWRIGHT_MODULE || 'playwrig
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const root=process.env.OPSPILOT_BASE_URL || 'http://127.0.0.1:9917';
-const out=fs.mkdtempSync(require('node:path').join(require('node:os').tmpdir(),'opspilot-rotation-boundaries-'))+require('node:path').sep;
+const path=require('node:path');
+const out=fs.mkdtempSync(path.join(process.env.OPSPILOT_EVIDENCE_DIR || require('node:os').tmpdir(),'rotation-boundaries-'))+path.sep;
 
 // Mutating acceptance requires a caller-owned fresh, isolated demo database.
 assert.equal(process.env.OPSPILOT_ACCEPTANCE_ISOLATED, '1', 'Set OPSPILOT_ACCEPTANCE_ISOLATED=1 only for a fresh isolated demo');
@@ -13,10 +14,17 @@ assert.notEqual(new URL(root).port, '9900', 'Do not target the daily demo listen
   const browser=await chromium.launch({executablePath: process.env.OPSPILOT_CHROME_PATH || undefined,headless:true});
   try {
     const page=await browser.newPage({viewport:{width:1440,height:1000}});
+    const errors=[],logs=[],rejections=[];
+    page.on('pageerror',error=>errors.push(error.message));
+    page.on('console',item=>{if(['error','warning'].includes(item.type()))logs.push(item.text());});
+    page.on('response',response=>{if(response.status()>=400)rejections.push({status:response.status(),path:new URL(response.url()).pathname});});
     await page.goto(root+'/login');
     await page.getByRole('button',{name:'进入控制台',exact:true}).click();
     await page.waitForURL(root+'/');
     await page.goto(root+'/on-call');
+    assert.equal(page.url(),root+'/on-call');
+    assert.equal(await page.title(),'OpsPilot 智能运维平台');
+    assert.equal(await page.locator('vite-error-overlay').count(),0);
     const panel=page.locator('.rotation-panel');
     await page.waitForFunction(()=>document.querySelector('.rotation-panel')?.getAttribute('aria-busy')==='false');
     if(!((await panel.getByLabel('查看轮转规则',{exact:true}).innerText()).includes('CP46 一小时台账截断'))) {
@@ -48,6 +56,7 @@ assert.notEqual(new URL(root).port, '9900', 'Do not target the daily demo listen
     await panel.getByRole('button',{name:'查询轮转台账',exact:true}).click();
     await panel.getByRole('alert').filter({hasText:'窗口须为正数且不超过 31 天'}).waitFor();
     assert.equal(await panel.locator('.rotation-slot').count(),0);
+    await panel.getByLabel('台账窗口结束',{exact:true}).fill(hourEnd);
     await panel.getByRole('button',{name:'刷新轮转',exact:true}).click();
     await panel.getByLabel('筛选轮转计划',{exact:true}).selectOption('1');
     await panel.locator('.rotation-summary-title').filter({hasText:'CP46 双人八小时轮值'}).waitFor();
@@ -76,7 +85,10 @@ assert.notEqual(new URL(root).port, '9900', 'Do not target the daily demo listen
     await page.waitForFunction(()=>document.querySelector('.rotation-panel')?.getAttribute('aria-busy')==='false');
     await page.unrouteAll({behavior:'wait'});
     await page.waitForLoadState('networkidle');
-    const result={realApi:{rotationId:rotation.id,slotsTruncatedAt200:true,narrowWindowOneSlot:true,invalidWindowRejectedAndOldSlotsCleared:true,planSelectionMatched:true},presentationFixturesOnly:{listTruncation:true,generatedMemberUnavailable:true,notGeneratedMemberUnavailable:true,generationFailureWarning:true,partialScanFailureIds:true},note:'Presentation fixtures are not real runtime generation failure or account changes; real backend scenarios remain CP45 shared H2/MySQL tests'};
+    assert.deepEqual(errors,[]);
+    assert.deepEqual(logs.filter(item=>!/400/.test(item)),[]);
+    assert.deepEqual(rejections,[{status:400,path:`/api/v1/on-call/rotations/${rotation.id}/slots`}]);
+    const result={pageIdentity:true,noOverlay:true,pageErrors:errors,consoleLogs:logs,expected400:rejections,realApi:{rotationId:rotation.id,slotsTruncatedAt200:true,narrowWindowOneSlot:true,invalidWindowRejectedAndOldSlotsCleared:true,planSelectionMatched:true},presentationFixturesOnly:{listTruncation:true,generatedMemberUnavailable:true,notGeneratedMemberUnavailable:true,generationFailureWarning:true,partialScanFailureIds:true},note:'Presentation fixtures are not real runtime generation failure or account changes; real backend scenarios remain CP45 shared H2/MySQL tests'};
     fs.writeFileSync(out+'opspilot-cp46-boundary-result.json',JSON.stringify(result,null,2));console.log(JSON.stringify({...result, outputDirectory:out}));
   } finally {await browser.close();}
 })().catch(error=>{console.error(String(error.message).replace(/Bearer\s+[^\s]+/g,'Bearer [REDACTED]'));process.exit(1)});
