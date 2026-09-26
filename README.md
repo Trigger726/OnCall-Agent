@@ -9,7 +9,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 - 告警治理：外部事件 ID 幂等、SHA-256 指纹压缩、30 分钟窗口聚合、原始告警与 Incident 分层；原生接收 Alertmanager v4 批量 webhook，同状态重试零写入、firing/resolved 共用生命周期，批内永久坏项进入脱敏台账并支持角色受控重放。
 - Incident 工作台：`OPEN -> ACKNOWLEDGED -> INVESTIGATING -> MITIGATED -> RESOLVED -> CLOSED` 状态机、乐观锁、分派、备注和时间线。
 - CMDB：应用、API、数据库和中间件台账，依赖/调用关系拓扑，事故与近期变更关联。
-- 值班升级：管理角色可创建普通/临时覆盖班次，计划行锁防同层重叠，带版本/原因软取消并保留历史与审计；当前值班和新事故路由排除取消班次。新增有序成员轮转 API，默认每分钟续排未来 14 天开始的班次，冲突/不可用成员留台账，已取消生成班不复活。P1 未确认 Incident 按 0/10/20 分钟分级路由，首步在告警创建事务内执行，后续分钟扫描，确认后停止。缺班记录 `NO_TARGET`；`ROUTED` 仅是站内事实，非外部送达；轮转页面与跨时区仍待建设。
+- 值班升级：管理角色可创建普通/临时覆盖班次，计划行锁防同层重叠，带版本/原因软取消并保留历史与审计；当前值班和新事故路由排除取消班次。有序成员轮转 API/页面默认每分钟续排未来 14 天开始的班次，冲突/不可用成员留台账，已取消生成班不复活，暂停/恢复受版本与原因约束。P1 未确认 Incident 按 0/10/20 分钟分级路由，首步在告警创建事务内执行，后续分钟扫描，确认后停止。缺班记录 `NO_TARGET`；`ROUTED` 仅是站内事实，非外部送达；跨时区/DST、换班和日历仍待建设。
 - 可解释 Agent 调查：以 `PLAN -> EXECUTE -> REPLAN -> FINISH` 编排告警、CMDB、指标、变更、日志和 Runbook 六个只读工具；每步持久化输入、查询范围、数据源、证据、失败原因和耗时。
 - 可恢复调查事件流：运行事件先落库再通过 SSE 实时发送，事件 ID 同时作为断线回放游标；客户端退出不取消后台调查，结果仍会完整进入时间线和审计。
 - Agent 运行控制：同一 Incident 使用幂等键抑制重复 run；任务先进入有界队列，可显式取消并受持久化截止时间预算约束；取消、超时和队列拒绝都形成可回放的持久化终态，执行 JVM 崩溃后由存活实例幂等结算逾期孤儿 run。
@@ -396,7 +396,9 @@ cd .. && ./mvnw test
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
 - MySQL 8.4 Testcontainers：Flyway V1-V26、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项确认与完成，以及 Problem、SLO、Alertmanager、值班升级双扫描、排班冲突/取消与轮转并发/故障隔离，已在真实 MySQL 远端门禁通过。
 
-当前默认后端套件发现 169 项测试：135 项在 UTC/上海时区分别执行通过，34 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过。checkpoint 45 新增 10 项轮转共享场景与 1 项真实定时任务测试，前端 13 项再次通过；独立内存数据库上的真实 JAR/HTTP 已验证后台补班、新 P1 路由、角色限制、暂停/恢复、取消不复活和历史保护。代码 `2fc082e` 的 [Run 36266295563](https://github.com/Trigger726/OnCall-Agent/actions/runs/36266295563) 十一项 CI 全部成功（4 分 8 秒），解码日志确认 V26 在真实 MySQL 8.4 上迁移成功，轮转 10 项 + 路由快照 8 项 + 兼容性 9 项共 27 项执行、零跳过；远端双时区回归与前端生产构建也通过。轮转管理页面仍待完成；本轮不改 UI，旧桌面/390px 证据继续保留。
+当前默认后端套件发现 169 项测试：135 项在 UTC/上海时区分别执行通过，34 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过。checkpoint 46 前端新增 8 项轮转契约/状态测试，共 21/21，通过生产构建与最新 JAR 的桌面/390px 实际创建、暂停、旧版本 409、后台补班、新 P1 路由、取消不复活和历史保护。可复跑的浏览器脚本保留在 `scripts/verify-oncall-rotation-{ui,boundaries}.cjs`，仅允许自己拥有的隔离 Demo；真实浏览器尚未接入 CI，远端本轮门禁待补证。旧界面截图与原始 OnCall 分支继续保留，新旧对照见 [checkpoint 46](docs/acceptance/V1.7-checkpoint-46.md)。
+
+checkpoint 45 新增 10 项轮转共享场景与 1 项真实定时任务测试；代码 `2fc082e` 的 [Run 36266295563](https://github.com/Trigger726/OnCall-Agent/actions/runs/36266295563) 十一项 CI 全部成功（4 分 8 秒），解码日志确认 V26 在真实 MySQL 8.4 上迁移成功，轮转 10 项 + 路由快照 8 项 + 兼容性 9 项共 27 项执行、零跳过；远端双时区回归与前端生产构建也通过。
 
 checkpoint 44 以实际接入/扫描入口复现已提交取消仍命中旧快照，显式 READ_COMMITTED 修复；八项共享场景覆盖取消/新覆盖/计划与策略停用/账号及角色变化，以及告警、Incident、升级、通知、时间线、审计原子回滚。代码 `c85603d` 的 [Run 36264417669](https://github.com/Trigger726/OnCall-Agent/actions/runs/36264417669) 十一项 CI 全部成功（4 分 7 秒），直接日志确认 MySQL 新套件 8 项加兼容套件 9 项全部执行、零跳过；上一轮代码 `f36ed94` 的 [Run 36262966874](https://github.com/Trigger726/OnCall-Agent/actions/runs/36262966874) 已验证 V25 班次并发与十一项 CI（4 分 19 秒），V24 的 [Run 36260824938](https://github.com/Trigger726/OnCall-Agent/actions/runs/36260824938) 也继续保留。CI 的 H2 门禁同时覆盖 UTC 打包与上海时区回归，MySQL 门禁执行兼容性、路由快照与轮转三套测试并上传 Surefire 报告。Flyway 9.22.3 的 MySQL 支持上限提醒及 `upload-artifact@v4` 的 Node.js 20 废弃提醒仍需处理。GitHub Actions 分离前端、H2/JAR、MySQL、Alertmanager/Prometheus 规则、Redis/双 JVM、Trace/Tempo、通知容器和镜像启动等十一项门禁。详细分阶段证据见 [docs/acceptance/README.md](docs/acceptance/README.md)。
 

@@ -84,6 +84,7 @@ async function cancelShift() {
 }
 
 onMounted(refresh)
+defineExpose({ refresh })
 </script>
 
 <template>

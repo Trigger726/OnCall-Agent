@@ -45,8 +45,11 @@
 | V1.7 | 43：有效班次维护与可审计取消 | 通过，双时区/HTTP/桌面手机及真实 MySQL/十一项 CI 已验 | [V1.7-checkpoint-43.md](V1.7-checkpoint-43.md) |
 | V1.7 | 44：升级路由已提交状态可见性 | 通过，双时区/真实 MySQL 八场景与十一项 CI 已验 | [V1.7-checkpoint-44.md](V1.7-checkpoint-44.md) |
 | V1.7 | 45：轮转规则与自动续排后端 | 部分通过，双时区/真实后台 HTTP/MySQL/十一门禁已验；UI 待验 | [V1.7-checkpoint-45.md](V1.7-checkpoint-45.md) |
+| V1.7 | 46：轮转管理与异常台账页面 | 本地通过，21 项前端/双时区/JAR/桌面手机已验；远端待补证 | [V1.7-checkpoint-46.md](V1.7-checkpoint-46.md) |
 
 ## 状态约定
+
+最新轮转页面：[V1.7-checkpoint-46.md](V1.7-checkpoint-46.md)：有序创建、版本化暂停/恢复、异常/取消/资格台账与互相刷新已接入。前端 21 项、双时区后端、最新 JAR、1440px/390px 真实管理流程及可复跑脚本通过，远端 CI 待补证；列表截断/成员不可用/部分失败的呈现夹具与真实 API 证据分开记录，旧 Demo 不变。
 
 最新轮转后端：[V1.7-checkpoint-45.md](V1.7-checkpoint-45.md)：有序规则、14 天幂等物化、冲突/资格台账、取消不复活、版本化暂停/恢复与真实自动续排；双时区各 169 项发现/135 项执行，前端 13 项及最新 UTC JAR 的 HTTP/后台/P1 路由通过。代码 `2fc082e` 的 [Run 36266295563](https://github.com/Trigger726/OnCall-Agent/actions/runs/36266295563) 十一项全绿（4 分 8 秒），解码日志直接确认真实 MySQL V26/27 项执行/0 跳过。轮转管理页面与浏览器对照仍待验，旧 Demo 不变。
 
