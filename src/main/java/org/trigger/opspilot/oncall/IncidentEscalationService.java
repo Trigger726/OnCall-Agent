@@ -2,6 +2,7 @@ package org.trigger.opspilot.oncall;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.trigger.opspilot.audit.AuditService;
 
@@ -18,7 +19,8 @@ public class IncidentEscalationService {
         this.auditService = auditService;
     }
 
-    @Transactional
+    // Candidate discovery must not freeze the later policy / recipient reads in an older snapshot.
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public ScanResult scan(LocalDateTime requestedAt, Long actorId, String sourceIp) {
         LocalDateTime asOf = requestedAt == null ? databaseNow() : requestedAt;
         List<Long> candidates = jdbcClient.sql("""
@@ -42,7 +44,8 @@ public class IncidentEscalationService {
         return new ScanResult(asOf, candidates.size(), routed, noTarget);
     }
 
-    @Transactional
+    // Joins the intake transaction, whose boundary also explicitly uses READ_COMMITTED.
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void routeNewIncident(long incidentId) {
         executeDueSteps(incidentId, databaseNow(), null, "alert-intake");
     }

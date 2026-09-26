@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-27 Asia/Shanghai",
+  "java": "21.0.2",
+  "database": "H2 2.2.220",
+  "targetedTests": {"total": 19, "failures": 0, "errors": 0},
+  "runs": [
+    {"command": ".\\mvnw.cmd -Duser.timezone=UTC package -q", "exitCode": 0, "discovered": 148, "executed": 124, "skipped": 24, "failures": 0, "errors": 0},
+    {"command": ".\\mvnw.cmd -Duser.timezone=Asia/Shanghai test -q", "exitCode": 0, "discovered": 148, "executed": 124, "skipped": 24, "failures": 0, "errors": 0},
+    {"command": "npm test", "directory": "web", "exitCode": 0, "tests": 13, "failures": 0}
+  ],
+  "newH2Scenarios": ["cancel during actual intake", "cancel during actual scan", "new override during scan", "schedule disabled during scan", "USER disabled during scan", "policy disabled during scan", "ROLE membership changed during scan", "intake rollback removes alert, incident, escalation, notification, timeline and audit"],
+  "poolDefaultIsolationInNewScenarios": "REPEATABLE_READ",
+  "observedServiceTransactionIsolation": "READ_COMMITTED",
+  "barrier": "Reader pauses after ordinary reads; writer service/auto-commit update finishes before reader resumes",
+  "docker": "Local daemon missing; 24 conditional tests skipped, not passed",
+  "browserRun": "Not run in checkpoint 44; no frontend source or static asset changes; checkpoint 43 evidence preserved",
+  "remainingGate": "Real MySQL and remote eleven-job CI"
+}

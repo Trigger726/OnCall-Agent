@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.trigger.opspilot.common.ApiException;
 import org.trigger.opspilot.common.PageResponse;
@@ -60,7 +61,8 @@ public class AlertService {
         return new PageResponse<>(items, total, safePage, safeSize);
     }
 
-    @Transactional
+    // Escalation recipients must observe roster changes committed after the first intake read.
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public IntakeResult intake(IntakeRequest request) {
         LocalDateTime occurredAt = request.occurredAt() == null ? LocalDateTime.now() : request.occurredAt();
         String status = normalizedStatus(request.status());

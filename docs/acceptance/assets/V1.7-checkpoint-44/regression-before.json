@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-27 Asia/Shanghai",
+  "baselineCommit": "f1743f6",
+  "database": "H2 2.2.220 with pool default TRANSACTION_REPEATABLE_READ",
+  "command": ".\\mvnw.cmd -Dtest=OnCallRoutingSnapshotIntegrationTest#shouldObserveCommittedCancellationDuringAlertIntake test -q",
+  "exitCode": 1,
+  "test": "shouldObserveCommittedCancellationDuringAlertIntake",
+  "actualEntryPoint": "AlertService.intake -> IncidentEscalationService.routeNewIncident",
+  "sequence": ["Intake starts and reads a snapshot", "Another transaction commits override cancellation", "Intake resumes and selects escalation recipient"],
+  "expectedRecipient": "snapshot-1c2c18b8-a66d-4412-a422-67cc02192b76",
+  "actualRecipient": "lina",
+  "assertionLocation": "RoutingSnapshotScenarios.java:146 at the time of reproduction",
+  "scope": "Observed local regression; not a claim that the old code was run against real MySQL in this checkpoint",
+  "rejectedApproach": "Adding FOR UPDATE to the recipient join under the old H2 REPEATABLE_READ snapshot caused CannotAcquireLockException / SQLSTATE 40001 instead of successful routing"
+}
