@@ -156,6 +156,7 @@ public class IncidentEscalationService {
                                 JOIN sys_user u ON u.id = shift.user_id
                                 WHERE schedule.id = :scheduleId AND schedule.service_resource_id = :serviceId
                                   AND schedule.active = TRUE AND u.status = 'ACTIVE'
+                                  AND shift.cancelled_at IS NULL
                                   AND shift.starts_at <= :at AND shift.ends_at > :at
                                 ORDER BY shift.override_flag DESC, shift.starts_at DESC, shift.id DESC LIMIT 1
                                 """).param("scheduleId", scheduleId).param("serviceId", serviceId)

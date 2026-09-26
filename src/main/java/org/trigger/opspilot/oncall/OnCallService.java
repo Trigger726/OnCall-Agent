@@ -25,6 +25,7 @@ public class OnCallService {
                           SELECT candidate.id FROM oncall_shift candidate
                           JOIN sys_user candidate_user ON candidate_user.id = candidate.user_id
                           WHERE candidate.schedule_id = schedule.id AND candidate_user.status = 'ACTIVE'
+                            AND candidate.cancelled_at IS NULL
                             AND candidate.starts_at <= CURRENT_TIMESTAMP
                             AND candidate.ends_at > CURRENT_TIMESTAMP
                           ORDER BY candidate.override_flag DESC, candidate.starts_at DESC, candidate.id DESC LIMIT 1)

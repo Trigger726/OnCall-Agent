@@ -25,6 +25,7 @@ import org.trigger.opspilot.investigation.AgentRunQueryService;
 import org.trigger.opspilot.investigation.InvestigationService;
 import org.trigger.opspilot.oncall.IncidentEscalationService;
 import org.trigger.opspilot.oncall.OnCallService;
+import org.trigger.opspilot.oncall.OnCallRosterService;
 import org.trigger.opspilot.postmortem.FollowUpEscalationService;
 import org.trigger.opspilot.postmortem.FollowUpNotificationDelivery;
 import org.trigger.opspilot.postmortem.FollowUpOperationsService;
@@ -276,7 +277,7 @@ class MySqlCompatibilityIntegrationTest {
                         """).query(Integer.class).single()).isEqualTo(1);
         assertThat(jdbcClient.sql("""
                         SELECT COUNT(*) FROM flyway_schema_history
-                        WHERE version = '24' AND success = 1
+                        WHERE version = '25' AND success = 1
                         """).query(Integer.class).single()).isEqualTo(1);
         assertThat(jdbcClient.sql("SELECT severity FROM escalation_policy WHERE id = 1")
                 .query(String.class).single()).isEqualTo("P1");
@@ -698,6 +699,47 @@ class MySqlCompatibilityIntegrationTest {
         incidentEscalationService.scan(createdAt.plusMinutes(20), null, "mysql-testcontainers");
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM incident_escalation_event WHERE incident_id = :id")
                 .param("id", incidentId).query(Long.class).single()).isEqualTo(1);
+    }
+
+    @Autowired private OnCallRosterService rosterService;
+
+    @Test
+    @Order(9)
+    void shouldSerializeRosterWritesAndKeepCancelledHistoryOnMySql() throws Exception {
+        var key = new org.springframework.jdbc.support.GeneratedKeyHolder();
+        jdbcClient.sql("INSERT INTO oncall_schedule(service_resource_id, name) VALUES (3, 'MySQL 班次并发')")
+                .update(key, "id");
+        long scheduleId = key.getKey().longValue();
+        LocalDateTime at = jdbcClient.sql("SELECT CURRENT_TIMESTAMP")
+                .query((rs, row) -> rs.getObject(1, LocalDateTime.class)).single()
+                .plusDays(1).truncatedTo(java.time.temporal.ChronoUnit.SECONDS);
+        var command = new OnCallRosterService.ShiftCommand(scheduleId, 2, at, at.plusHours(8), false, "已协调");
+        CountDownLatch start = new CountDownLatch(1);
+        var executor = Executors.newFixedThreadPool(2);
+        try {
+            Callable<String> create = () -> {
+                if (!start.await(5, TimeUnit.SECONDS)) throw new IllegalStateException("roster barrier timed out");
+                try { rosterService.create(command, 1L, "mysql-testcontainers"); return "CREATED"; }
+                catch (ApiException error) { return error.code(); }
+            };
+            var first = executor.submit(create);
+            var second = executor.submit(create);
+            start.countDown();
+            assertThat(List.of(first.get(20, TimeUnit.SECONDS), second.get(20, TimeUnit.SECONDS)))
+                    .containsExactlyInAnyOrder("CREATED", "ONCALL_SHIFT_OVERLAP");
+        } finally { start.countDown(); executor.shutdownNow(); }
+        var base = rosterService.roster(scheduleId, null, null).shifts().get(0);
+        var cover = rosterService.create(new OnCallRosterService.ShiftCommand(scheduleId, 3,
+                at, at.plusHours(1), true, "临时接班"), 1L, "mysql-testcontainers");
+        rosterService.cancel(cover.id(), 0, "接班撤销", 1L, "mysql-testcontainers");
+        assertThatThrownBy(() -> rosterService.cancel(cover.id(), 0, "旧页面取消", 1L, "mysql-testcontainers"))
+                .isInstanceOf(ApiException.class).extracting("code").isEqualTo("ONCALL_SHIFT_VERSION_CONFLICT");
+        var history = rosterService.roster(scheduleId, null, null).shifts();
+        assertThat(history).hasSize(2);
+        assertThat(history.stream().filter(shift -> shift.id() == base.id()).findFirst().orElseThrow().cancelledAt()).isNull();
+        assertThat(history.stream().filter(shift -> shift.id() == cover.id()).findFirst().orElseThrow().cancelledAt()).isNotNull();
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM audit_log WHERE target_id = :id AND action = 'ONCALL_SHIFT_CANCELLED'")
+                .param("id", Long.toString(cover.id())).query(Long.class).single()).isEqualTo(1);
     }
 
     private void seedConcurrentProblemCandidate(String fingerprint) {

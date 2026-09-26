@@ -42,8 +42,11 @@
 | V1.7 | 40：固定集检索评测历史与口径隔离 | 通过（限本检查点），本地实页与远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-40.md](V1.7-checkpoint-40.md) |
 | V1.7 | 41：Actuator 管理监听隔离 | 通过（限本检查点），本地 JAR 双端口与远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-41.md](V1.7-checkpoint-41.md) |
 | V1.7 | 42：未确认 Incident 值班升级执行 | 通过（限本检查点），双时区/JAR HTTP 与十一项 CI 已验 | [V1.7-checkpoint-42.md](V1.7-checkpoint-42.md) |
+| V1.7 | 43：有效班次维护与可审计取消 | 本地通过，双时区/HTTP/桌面手机已验，MySQL/远端待续验 | [V1.7-checkpoint-43.md](V1.7-checkpoint-43.md) |
 
 ## 状态约定
+
+最新班次维护：[V1.7-checkpoint-43.md](V1.7-checkpoint-43.md)：角色受控的普通/覆盖班次、同层重叠冲突、版本化软取消和历史窗口查询；本地双时区各 132 项发现/116 项执行、前端 13 项、最新 JAR 真实路由及桌面/390px 已验，原历史班次不变。V25/真实 MySQL 与远端门禁仍待补证。
 
 最新值班升级：[V1.7-checkpoint-42.md](V1.7-checkpoint-42.md)：P1 未确认事故按 ON_CALL/USER/ROLE 到期执行，站内路由与无目标分开记账；前端与桌面/390px 页面通过。UTC 时钟混用已复现并修复，本地双时区各 125 项发现/110 项执行、0 失败，最新 JAR UTC HTTP 与 [Run 36260824938](https://github.com/Trigger726/OnCall-Agent/actions/runs/36260824938) 的 MySQL 8.4/十一项 CI 全部通过；截图与 CI/HTTP 精简结果已归档。
 

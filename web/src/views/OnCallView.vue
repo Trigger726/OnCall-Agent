@@ -3,6 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { AlarmClock, ArrowDown, Clock3, PhoneForwarded, Users } from 'lucide-vue-next'
 import { api, formatTime } from '@/services/api'
 import { auth } from '@/stores/auth'
+import OnCallRosterPanel from '@/components/OnCallRosterPanel.vue'
 
 interface Shift { scheduleId: number; scheduleName: string; resourceName: string; userName: string | null; department: string | null; startsAt: string | null; endsAt: string | null; override: boolean }
 interface Policy { policyId: number; policyName: string; severity: string | null; resourceName: string; step: number; delayMinutes: number; targetType: string; targetRef: string }
@@ -56,6 +57,7 @@ onMounted(load)
         <footer><span><Clock3 :size="15" />{{ formatTime(shift.startsAt, true) }}</span><ArrowDown :size="14" /><span>{{ formatTime(shift.endsAt, true) }}</span></footer>
       </article>
     </section>
+    <OnCallRosterPanel @changed="load" />
     <section class="content-panel policy-panel">
       <div class="panel-heading"><div><h2>升级策略</h2><span>P1 Incident 未确认时自动逐级通知</span></div><PhoneForwarded :size="18" /></div>
       <div class="policy-flow" v-for="group in [...new Set(policies.map(item => item.policyId))]" :key="group">
