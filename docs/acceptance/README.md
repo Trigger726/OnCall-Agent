@@ -43,11 +43,11 @@
 | V1.7 | 41：Actuator 管理监听隔离 | 通过（限本检查点），本地 JAR 双端口与远端 MySQL/十一项 CI 已验 | [V1.7-checkpoint-41.md](V1.7-checkpoint-41.md) |
 | V1.7 | 42：未确认 Incident 值班升级执行 | 通过（限本检查点），双时区/JAR HTTP 与十一项 CI 已验 | [V1.7-checkpoint-42.md](V1.7-checkpoint-42.md) |
 | V1.7 | 43：有效班次维护与可审计取消 | 通过，双时区/HTTP/桌面手机及真实 MySQL/十一项 CI 已验 | [V1.7-checkpoint-43.md](V1.7-checkpoint-43.md) |
-| V1.7 | 44：升级路由已提交状态可见性 | 本地通过，双时区/八场景/前端测试已验，MySQL 待验 | [V1.7-checkpoint-44.md](V1.7-checkpoint-44.md) |
+| V1.7 | 44：升级路由已提交状态可见性 | 通过，双时区/真实 MySQL 八场景与十一项 CI 已验 | [V1.7-checkpoint-44.md](V1.7-checkpoint-44.md) |
 
 ## 状态约定
 
-最新事务可见性：[V1.7-checkpoint-44.md](V1.7-checkpoint-44.md)：真实接入/扫描入口显式 READ_COMMITTED，旧快照误路由有失败证据；共享八项提交闸门与回滚场景已过 H2，双时区各发现 148 项、执行 124 项、24 项 Docker 条件跳过，前端 13 项通过。真实 MySQL/远端门禁待补证；页面和历史 Demo 不变。
+最新事务可见性：[V1.7-checkpoint-44.md](V1.7-checkpoint-44.md)：真实接入/扫描入口显式 READ_COMMITTED，旧快照误路由有失败证据；共享八项提交闸门与回滚场景已过 H2 与真实 MySQL，双时区各发现 148 项、执行 124 项、24 项 Docker 条件跳过，前端 13 项通过。[Run 36264417669](https://github.com/Trigger726/OnCall-Agent/actions/runs/36264417669) 十一项 CI 全绿，MySQL 日志确认 17 项执行/零跳过；页面和历史 Demo 不变。
 
 最新班次维护：[V1.7-checkpoint-43.md](V1.7-checkpoint-43.md)：角色受控的普通/覆盖班次、同层重叠冲突、版本化软取消和历史窗口查询；本地双时区各 132 项发现/116 项执行、前端 13 项、最新 JAR 真实路由及桌面/390px 已验，原历史班次不变。[Run 36262966874](https://github.com/Trigger726/OnCall-Agent/actions/runs/36262966874) 的 V25/真实 MySQL 并发与十一项门禁全部通过，CI 状态与浏览器结果已归档。
 
