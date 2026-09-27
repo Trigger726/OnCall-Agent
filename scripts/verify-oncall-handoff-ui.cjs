@@ -121,7 +121,7 @@ const addHours = (value, hours) => new Date(new Date(value + 'Z').getTime() + ho
     assert.equal(await owner.evaluate(()=>sessionStorage.getItem('opspilot_handoff_draft:2')),null);
     assert.equal((await api(adminToken,'/on-call/handoffs?scheduleId='+scheduleId)).requests.filter(r=>r.requestKey===stored.command.requestKey).length,1);
     await queryInbox(admin,'ALL','PENDING');
-    assert.equal(await admin.locator(`.handoff-row[data-handoff-id="${committed.id}"] button`).count(),0);
+    assert.equal(await admin.locator(`.handoff-row[data-handoff-id="${committed.id}"]`).getByRole('button',{name:/^(接受接班|拒绝接班|撤回申请)$/}).count(),0);
     assert.equal(await owner.getByRole('button',{name:'新增班次',exact:true}).count(),0);
     const target = await login('lina');
     const coverage = target.locator('.coverage-panel');
@@ -188,7 +188,7 @@ const addHours = (value, hours) => new Date(new Date(value + 'Z').getTime() + ho
     await target.getByText('筛选后仍超过200条',{exact:false}).waitFor();
     const auditor = await login('auditor'); await queryInbox(auditor,'ALL','PENDING');
     assert.equal(await auditor.locator('.handoff-row').count(),200);
-    assert.equal(await auditor.locator('.handoff-row button').count(),0);
+    assert.equal(await auditor.locator('.handoff-row').getByRole('button',{name:/^(接受接班|拒绝接班|撤回申请)$/}).count(),0);
     assert.equal(await auditor.getByRole('button',{name:'申请接班',exact:true}).count(),0);
     assert.equal(JSON.stringify((await api(adminToken,historyPath)).shifts),history);
     for(const page of pages) { assert.equal(page.url(),root+'/on-call'); assert.equal(await page.title(),'OpsPilot 智能运维平台'); assert.equal(await page.locator('vite-error-overlay').count(),0); }

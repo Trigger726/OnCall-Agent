@@ -6,7 +6,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-checkpoint53后端限定通过：已接受接班新增实际覆盖详情与管理撤销API，独立保存撤销人/理由/原版本/幂等键，原接受事实不改。`055d77a` 的 [Run36330898471](https://github.com/Trigger726/OnCall-Agent/actions/runs/36330898471) 十二CI作业success，真实MySQL62项零跳过/五池干净关闭、双时区各244发现/175执行/69条件跳过、六脚本与工件重放已验。新撤销页面尚未交付，原页面仅回归，见 [阶段报告](docs/acceptance/V1.7-checkpoint-53.md)。
+checkpoint54进行中：覆盖详情、独立管理撤销确认、账号隔离冻结意图恢复/409锁定及日历刷新已接入，前端47项与旧JAR/新实页对照已验，最终复跑和远端待验，见 [阶段报告](docs/acceptance/V1.7-checkpoint-54.md)。后端基线 `055d77a` 的 [Run36330898471](https://github.com/Trigger726/OnCall-Agent/actions/runs/36330898471) 十二CI作业success、真实MySQL62项零跳过/五池干净关闭；不把此旧代码CI当成本轮界面CI。
 
 checkpoint 52 工程修复已验：五套真实MySQL容器由Spring管理并在类结束时显式关闭上下文，补完整日志/五池停机/零跳过门禁。代码 `276b57b` 的 [Run36329512979](https://github.com/Trigger726/OnCall-Agent/actions/runs/36329512979) 十二作业success，真实MySQL52项执行、五池完整关闭、日志拒绝项0、无强制fork退出；12项门禁测试、双时区、39项前端与浏览器五脚本通过，ZIP摘要及失败/成功工件重放已验。51旧错误和52首次严格门禁失败保留，页面/历史Demo不改，见 [工程验收报告](docs/acceptance/V1.7-checkpoint-52.md)。
 
@@ -358,8 +358,8 @@ Runbook 页面保留原版/BM25/Hybrid 当前对照，并列出最近 12 次持�
 | GET | `/api/v1/on-call/roster` | 班次窗口、可用计划/负责人与数据库时间；最多 31 天/200 条 |
 | GET | `/api/v1/on-call/coverage` | 指定计划的有效覆盖/缺班、胜出与遮盖班次；最长31天，超过1000源班次拒算 |
 | GET/POST | `/api/v1/on-call/handoffs` | 以计划、scope=ALL/MINE、status筛选后有界读取；本人以 UUID/源班次版本申请定向接班，页面支持冻结草稿与同键恢复 |
-| GET | `/api/v1/on-call/handoffs/{id}/coverage` | 单次快照读取原接受事实、实际覆盖行与独立管理撤销台账（新详情页面待接入） |
-| POST | `/api/v1/on-call/handoffs/{id}/coverage/revoke` | 当前活跃管理角色以捕获的双版本/UUID/理由撤销未结束覆盖，原接受不改，同事务双审计（新操作页面待接入） |
+| GET | `/api/v1/on-call/handoffs/{id}/coverage` | 单次快照读取原接受事实、实际覆盖行与独立管理撤销台账；接班台账详情入口 |
+| POST | `/api/v1/on-call/handoffs/{id}/coverage/revoke` | 当前活跃管理角色以捕获的双版本/UUID/理由撤销未结束覆盖，原接受不改，同事务双审计；界面原意图手动恢复重试 |
 | POST | `/api/v1/on-call/handoffs/{id}/decisions` | 指定接班人接受/拒绝，申请人撤回；版本化、同事务覆盖与审计 |
 | POST | `/api/v1/on-call/shifts` | 管理角色创建普通/覆盖班次，同层重叠返回 409 |
 | POST | `/api/v1/on-call/shifts/{id}/cancel` | 带版本/原因取消班次，保留历史与审计 |

@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { api, RequestError } from '@/services/api'
 import { auth } from '@/stores/auth'
+import OnCallHandoffCoverage from './OnCallHandoffCoverage.vue'
 import { canRequestHandoff, clearHandoffDraft, decideHandoff, handoffActions, handoffClock, handoffDraftError,
   handoffState, handoffTime, listHandoffs, readHandoffDraft, requestHandoff, saveHandoffDraft,
   type Handoff, type HandoffDecision, type HandoffList, type HandoffSource, type SavedHandoffDraft } from '@/services/onCallHandoffs'
@@ -9,6 +10,7 @@ import { canRequestHandoff, clearHandoffDraft, decideHandoff, handoffActions, ha
 const emit = defineEmits<{ changed: [] }>()
 const requestEditor = ref<HTMLElement | null>(null)
 const decisionEditor = ref<HTMLElement | null>(null)
+const coveragePanel = ref<InstanceType<typeof OnCallHandoffCoverage> | null>(null)
 const busy = ref(false)
 const list = ref<HandoffList | null>(null)
 const options = ref<{ schedules: { id: number; name: string }[]; users: { id: number; displayName: string }[] }>({ schedules: [], users: [] })
@@ -37,6 +39,7 @@ async function refresh() {
     if (actorId !== auth.state.user?.id) throw new Error('登录身份已变化，请重新打开页面')
     options.value = roster
     list.value = rows
+    await coveragePanel.value?.refresh()
   } catch (cause) { error.value = cause instanceof Error ? cause.message : '接班台账加载失败' }
   finally { busy.value = false; if (pendingRefresh) { pendingRefresh = false; await refresh() } }
 }
@@ -135,7 +138,7 @@ defineExpose({ refresh, open })
   <section class="content-panel handoff-panel" :aria-busy="busy">
     <div class="panel-heading"><div><h2>接班请求</h2><span>本人申请、指定接班人同意后生成覆盖；原班次与旧路由保留</span></div><button class="secondary-button" :disabled="busy" @click="refresh">刷新接班台账</button></div>
     <div class="handoff-body">
-      <p class="handoff-note">从“班次维护”中本人的有效普通班次发起。接受正在进行的申请只覆盖剩余时段；已接受不等于此刻生效，覆盖取消须由管理角色在班次维护操作。</p>
+      <p class="handoff-note">从“班次维护”中本人的有效普通班次发起。接受正在进行的申请只覆盖剩余时段；已接受不等于此刻生效，覆盖详情可核对实际取消；管理角色可独立撤销未结束覆盖，原接受事实保留。</p>
       <p v-if="error" class="handoff-error" role="alert">{{ error }}</p><p v-if="message" role="status">{{ message }}</p>
       <button v-if="draftUnreadable && canAct" class="secondary-button" :disabled="busy" @click="discardConfirm = true">核对台账后放弃损坏草稿</button>
       <form class="handoff-filter" @submit.prevent="refresh">
@@ -162,12 +165,14 @@ defineExpose({ refresh, open })
         <p v-if="decision.blocked" role="alert">旧版本已锁定，请刷新并重新选择请求；不会自动替换捕获版本。</p>
         <div class="handoff-actions"><button class="primary-button" :disabled="busy || !list || decision.blocked">{{ decision.submitted ? '重试原决定' : '确认决定' }}</button><button type="button" class="secondary-button" :disabled="busy" @click="decision = null">关闭决定</button></div>
       </form>
+      <OnCallHandoffCoverage ref="coveragePanel" :users="options.users" @changed="emit('changed')" />
       <p v-if="list" class="handoff-note">数据库快照 {{ handoffClock(list.databaseNow) }}；“时段已结束”仍是待处理事实，可拒绝或撤回，不伪造自动过期。</p>
       <p v-if="list?.truncated" role="status">筛选后仍超过200条，仅显示最新200条；请缩小计划/状态范围，不能当作完整台账。</p>
       <div v-if="list?.requests.length" class="handoff-list"><article v-for="row in list.requests" :key="row.id" class="handoff-row" :data-handoff-id="row.id">
         <div class="handoff-row-heading"><strong>#{{ row.id }} · {{ userName(row.requesterId) }} → {{ userName(row.targetUserId) }}</strong><span class="status-badge" :class="row.status === 'PENDING' ? 'status-warning' : 'status-info'">{{ handoffState(row, list.databaseNow) }}</span></div>
         <p>计划 #{{ row.scheduleId }} · 原班次 #{{ row.sourceShiftId }} v{{ row.sourceVersion }} · 请求 v{{ row.version }}</p><time>{{ handoffClock(row.startsAt) }} → {{ handoffClock(row.endsAt) }}</time><p>{{ row.reason }}</p>
-        <p v-if="row.decisionReason">决定：{{ row.decisionReason }} · {{ row.decidedAt ? handoffClock(row.decidedAt) : '' }}</p><p v-if="row.replacementShiftId">覆盖班次 #{{ row.replacementShiftId }}，当前生效/取消情况请核对日历与班次维护。</p>
+        <p v-if="row.decisionReason">决定：{{ row.decisionReason }} · {{ row.decidedAt ? handoffClock(row.decidedAt) : '' }}</p><p v-if="row.replacementShiftId">覆盖班次 #{{ row.replacementShiftId }}；原已接受不变，实际取消请查看覆盖详情与日历。</p>
+        <div class="handoff-actions"><button class="secondary-button" :disabled="busy" @click="coveragePanel?.open(row.id)">查看覆盖详情</button></div>
         <div v-if="actions(row).length" class="handoff-actions"><button v-for="action in actions(row)" :key="action" class="secondary-button" :disabled="busy" @click="chooseDecision(row, action)">{{ actionName(action) }}</button></div>
       </article></div>
       <div v-else-if="list" class="empty-state">当前筛选没有接班请求；与我相关包含本人申请与指向本人的请求。</div>

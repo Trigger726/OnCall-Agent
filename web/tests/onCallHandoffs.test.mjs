@@ -86,3 +86,67 @@ test('401 raises auth expiry once without rotating the idempotency key', async (
   await assert.rejects(handoffs.requestHandoff(data),{status:401,code:'AUTHENTICATION_REQUIRED'})
   assert.equal(expired,1); assert.equal(fetcher.mock.callCount(),1); assert.equal(data.requestKey,command().requestKey)
 })
+
+const coverage = () => ({ databaseNow:'2026-09-27T09:00:00.123456', request:{...row(),status:'ACCEPTED',replacementShiftId:12},
+  replacement:{id:12,userId:3,version:0,startsAt:'2026-09-27T08:00:00',endsAt:'2026-09-27T16:00:00',cancelledAt:null,cancellationReason:null},revocation:null })
+const revocationCommand = () => ({handoffVersion:5,replacementVersion:0,operationKey:command().requestKey,reason:'管理确认撤销'})
+const savedRevocation = () => ({schema:1,actorId:1,handoffId:9,command:revocationCommand(),blocked:false})
+test('coverage display separates accepted consent from scheduled/ended/cancelled coverage facts', () => {
+  assert.equal(handoffs.coverageState(coverage()),'覆盖时段内 · 生效须核对日历')
+  assert.equal(handoffs.coverageState({...coverage(),databaseNow:'2026-09-27T07:00:00'}),'覆盖尚未开始')
+  assert.equal(handoffs.coverageState({...coverage(),databaseNow:'2026-09-27T16:00:00'}),'覆盖时段已结束')
+  assert.equal(handoffs.coverageState({...coverage(),replacement:{...coverage().replacement,cancelledAt:'2026-09-27T09:00:00'}}),'覆盖已取消')
+  assert.equal(handoffs.coverageState({...coverage(),replacement:null}),'未生成覆盖')
+  assert.equal(coverage().request.status,'ACCEPTED')
+})
+test('new revocation requires management and a fresh accepted unended uncancelled replacement', () => {
+  for (const role of ['ADMIN','OPS_MANAGER']) assert.equal(handoffs.canRevokeCoverage(coverage(),role),true)
+  for (const role of ['ON_CALL','AUDITOR',undefined]) assert.equal(handoffs.canRevokeCoverage(coverage(),role),false)
+  for (const change of [{databaseNow:''},{databaseNow:'2026-09-27T16:00:00'},{replacement:null},
+    {request:{...coverage().request,status:'PENDING'}},{replacement:{...coverage().replacement,cancelledAt:'2026-09-27T09:00:00'}},
+    {revocation:{actorId:1}}]) assert.equal(handoffs.canRevokeCoverage({...coverage(),...change},'ADMIN'),false)
+})
+test('revocation payload validates captured versions, canonical key and bounded reason', () => {
+  assert.equal(handoffs.revocationCommandError(revocationCommand()),'')
+  for (const change of [{handoffVersion:-1},{handoffVersion:1.5},{replacementVersion:-1},{operationKey:'BAD'},{reason:' '},{reason:'长'.repeat(501)}])
+    assert.ok(handoffs.revocationCommandError({...revocationCommand(),...change}))
+})
+test('revocation storage restores exact versions/key/reason and persisted conflict lock per actor', () => {
+  const values = new Map(), storage = {setItem:(k,v)=>values.set(k,v),getItem:k=>values.get(k)??null,removeItem:k=>values.delete(k)}
+  const saved = {...savedRevocation(),blocked:true}
+  handoffs.saveRevocationDraft(storage,saved)
+  assert.deepEqual(handoffs.readRevocationDraft(storage,1),saved)
+  assert.equal(handoffs.readRevocationDraft(storage,3),null)
+  assert.doesNotMatch([...values.values()].join(),/test-token|Bearer|accessToken/)
+  handoffs.clearRevocationDraft(storage,3); assert.deepEqual(handoffs.readRevocationDraft(storage,1),saved)
+  handoffs.clearRevocationDraft(storage,1); assert.equal(handoffs.readRevocationDraft(storage,1),null)
+})
+test('corrupt revocation storage is retained and quota failure propagates before any request', () => {
+  for (const change of [{schema:2},{actorId:3},{handoffId:0},{blocked:'no'},{command:{...revocationCommand(),replacementVersion:-1}}]) {
+    const raw = JSON.stringify({...savedRevocation(),...change}), storage = {getItem:()=>raw}
+    assert.throws(()=>handoffs.readRevocationDraft(storage,1),/撤销草稿损坏/); assert.equal(storage.getItem(),raw)
+  }
+  assert.throws(()=>handoffs.saveRevocationDraft({setItem:()=>{throw Error('quota')}},savedRevocation()),/quota/)
+})
+test('coverage read uses the independent snapshot endpoint without mutation', async () => {
+  const fetcher = mock.method(globalThis,'fetch',async (url,init)=>{
+    assert.equal(url,'/api/v1/on-call/handoffs/9/coverage'); assert.equal(init.method,undefined)
+    return Response.json({success:true,data:coverage()})
+  })
+  assert.deepEqual(await handoffs.getHandoffCoverage(9),coverage()); assert.equal(fetcher.mock.callCount(),1)
+})
+test('revocation ambiguous response manually retries exact frozen payload only', async () => {
+  const data = revocationCommand(), bodies = []
+  const fetcher = mock.method(globalThis,'fetch',async (url,init)=>{assert.equal(url,'/api/v1/on-call/handoffs/9/coverage/revoke');bodies.push(init.body);throw TypeError('lost')})
+  await assert.rejects(handoffs.revokeHandoffCoverage(9,data),/lost/); assert.equal(fetcher.mock.callCount(),1)
+  await assert.rejects(handoffs.revokeHandoffCoverage(9,data),/lost/)
+  assert.equal(bodies[0],bodies[1]); assert.deepEqual(data,revocationCommand())
+})
+test('revocation 409 and 403 preserve captured intent without rotating versions or key', async () => {
+  const data = revocationCommand()
+  for (const status of [409,403]) {
+    const fetcher = mock.method(globalThis,'fetch',async ()=>Response.json({success:false,error:{code:'CONFLICT',message:'核对'}},{status}))
+    await assert.rejects(handoffs.revokeHandoffCoverage(9,data),{status}); assert.equal(fetcher.mock.callCount(),1)
+    fetcher.mock.restore(); assert.deepEqual(data,revocationCommand())
+  }
+})

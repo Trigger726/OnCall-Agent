@@ -70,3 +70,47 @@ export const listHandoffs = (scheduleId: string, scope: 'ALL' | 'MINE', status: 
 export const requestHandoff = (command: HandoffCommand) => api<Handoff>('/on-call/handoffs', { method: 'POST', body: JSON.stringify(command) })
 export const decideHandoff = (id: number, command: { version: number; status: HandoffDecision; reason: string }) =>
   api<Handoff>(`/on-call/handoffs/${id}/decisions`, { method: 'POST', body: JSON.stringify(command) })
+
+export interface HandoffCoverage {
+  databaseNow: string; request: Handoff
+  replacement: { id: number; userId: number; version: number; startsAt: string; endsAt: string; cancelledAt: string | null; cancellationReason: string | null } | null
+  revocation: { handoffId: number; actorId: number; operationKey: string; handoffVersion: number; replacementVersion: number; reason: string; revokedAt: string } | null
+}
+export interface RevocationCommand { handoffVersion: number; replacementVersion: number; operationKey: string; reason: string }
+export interface SavedRevocationDraft { schema: 1; actorId: number; handoffId: number; command: RevocationCommand; blocked: boolean }
+const revocationStorageKey = (actorId: number) => `opspilot_handoff_revocation:v1:${actorId}`
+export function coverageState(view: HandoffCoverage) {
+  const shift = view.replacement
+  if (!shift) return '未生成覆盖'
+  if (shift.cancelledAt) return '覆盖已取消'
+  if (view.databaseNow && shift.endsAt <= view.databaseNow) return '覆盖时段已结束'
+  if (view.databaseNow && shift.startsAt > view.databaseNow) return '覆盖尚未开始'
+  return '覆盖时段内 · 生效须核对日历'
+}
+export const canRevokeCoverage = (view: HandoffCoverage, role: string | undefined) =>
+  ['ADMIN','OPS_MANAGER'].includes(role ?? '') && view.request.status === 'ACCEPTED' && Boolean(view.databaseNow)
+    && Boolean(view.replacement && !view.replacement.cancelledAt && view.replacement.endsAt > view.databaseNow) && !view.revocation
+export function revocationCommandError(command: RevocationCommand) {
+  if (!Number.isSafeInteger(command.handoffVersion) || command.handoffVersion < 0
+    || !Number.isSafeInteger(command.replacementVersion) || command.replacementVersion < 0) return '撤销须保留捕获的请求和覆盖版本'
+  if (typeof command.operationKey !== 'string' || !canonicalUuid.test(command.operationKey)) return '撤销键须为规范 UUID'
+  if (typeof command.reason !== 'string' || !command.reason.trim() || command.reason.length > 500) return '撤销说明须为 1–500 字'
+  return ''
+}
+export const saveRevocationDraft = (storage: Pick<Storage,'setItem'>, draft: SavedRevocationDraft) =>
+  storage.setItem(revocationStorageKey(draft.actorId), JSON.stringify(draft))
+export function readRevocationDraft(storage: Pick<Storage,'getItem'>, actorId: number): SavedRevocationDraft | null {
+  const raw = storage.getItem(revocationStorageKey(actorId))
+  if (!raw) return null
+  const draft = JSON.parse(raw) as SavedRevocationDraft
+  if (draft?.schema !== 1 || draft.actorId !== actorId || !Number.isSafeInteger(draft.handoffId) || draft.handoffId < 1
+    || typeof draft.blocked !== 'boolean' || !draft.command || revocationCommandError(draft.command)) {
+    throw new Error('撤销草稿损坏，请先核对覆盖事实再明确放弃草稿')
+  }
+  return draft
+}
+export const clearRevocationDraft = (storage: Pick<Storage,'removeItem'>, actorId: number) => storage.removeItem(revocationStorageKey(actorId))
+export const getHandoffCoverage = (id: number) => api<HandoffCoverage>(`/on-call/handoffs/${id}/coverage`)
+// Only explicit manual retry: the persisted intent is never rebased by a new snapshot.
+export const revokeHandoffCoverage = (id: number, command: RevocationCommand) =>
+  api<HandoffCoverage>(`/on-call/handoffs/${id}/coverage/revoke`, { method:'POST', body:JSON.stringify(command) })
