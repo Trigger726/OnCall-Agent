@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.http.MediaType;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -222,7 +223,7 @@ public class RunbookController {
             @Size(max = 500) String comment) {
     }
 
-    public record PublicationDecisionRequest(@Min(0) int expectedVersion,
+    public record PublicationDecisionRequest(@NotNull @Min(0) Integer expectedVersion,
             @NotBlank String decision, @NotBlank @Size(max = 36) String requestKey,
             @NotBlank @Size(max = 500) String reason) { }
 

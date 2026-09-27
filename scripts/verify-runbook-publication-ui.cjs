@@ -213,6 +213,25 @@ const out = fs.mkdtempSync(path.join(process.env.OPSPILOT_EVIDENCE_DIR || requir
       assert.equal(await review.getByRole('button', { name: '核对后放弃本地意图', exact: true }).count(), 1);
       await discard(); assert.equal(recoveryPosts, 0);
       assert.equal((await request(adminToken, `/runbooks/publications/${fresh.id}`)).document.status, 'PENDING_REVIEW');
+      // Exercise JSON binding through the real owned JAR, not just an in-process controller fixture.
+      for (const decision of ['APPROVE', 'REJECT', 'WITHDRAW']) for (const explicitNull of [false, true]) {
+        const candidate = await request(adminToken, '/runbooks/imports/markdown', {
+          stableKey: key + '-version-' + decision.toLowerCase() + '-' + explicitNull,
+          resourceType: 'APPLICATION', title: '显式审核版本 HTTP 验收', sourceName: 'version.md',
+          markdown: '# 验证\nCaptured review version is required', allowedRoles: ['ADMIN','OPS_MANAGER','ON_CALL'],
+        });
+        const id = candidate.document.id, actorToken = decision === 'WITHDRAW' ? adminToken : managerToken;
+        const command = { decision, requestKey: require('node:crypto').randomUUID(), reason: '已明确核对审核版本' };
+        if (explicitNull) command.expectedVersion = null;
+        await request(actorToken, `/runbooks/publications/${id}/decisions`, command, 400);
+        const untouched = await request(adminToken, `/runbooks/publications/${id}`);
+        assert.equal(untouched.document.status, 'PENDING_REVIEW'); assert.equal(untouched.reviewVersion, 0);
+        assert.equal(untouched.currentPublishedVersion, 0); assert.equal(untouched.decision, null);
+        command.expectedVersion = 0;
+        const accepted = await request(actorToken, `/runbooks/publications/${id}/decisions`, command);
+        assert.equal(accepted.reviewVersion, 1);
+        assert.equal(accepted.document.status, { APPROVE: 'PUBLISHED', REJECT: 'REJECTED', WITHDRAW: 'WITHDRAWN' }[decision]);
+      }
     }
     assert.deepEqual(errors, []);
     assert.ok(failures.every(f => f.status === 404 && (f.path === '/api/v1/runbooks/evaluations/latest' || expectedDetailFailures.has(f.path))
@@ -226,6 +245,7 @@ const out = fs.mkdtempSync(path.join(process.env.OPSPILOT_EVIDENCE_DIR || requir
       expectedMissingEvaluations: failures.filter(f => f.path === '/api/v1/runbooks/evaluations/latest').length,
       expectedDecisionConflicts: [...expectedDecisionConflicts], expectedMissingDetails: [...expectedDetailFailures],
       expectedAbortedDecisionResponses: baseline ? 0 : 1,
+      requiredVersionHttp: baseline ? null : { rejectedMissingOrNull: 6, explicitZeroAccepted: 6, rejectedCandidateUnchanged: true },
       extendedUi: baseline ? null : { markdownWithdraw: true, pdfRejectThenApproveNewVersion: true, baseline409LockSurvivesReload: true,
         quotaFailureNoPost: true, corruptIntentPreservedUntilExplicitDiscard: true, accountIsolation: true,
         missingDetailAllowsExplicitDiscard: true, manualRetryOnly: true },

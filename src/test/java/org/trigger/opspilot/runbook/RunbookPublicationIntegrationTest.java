@@ -100,6 +100,37 @@ class RunbookPublicationIntegrationTest {
         assertThat(response).doesNotContain("private queue body", "markdown", "decision_hash");
     }
 
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.CsvSource({"APPROVE,false", "APPROVE,true", "REJECT,false", "REJECT,true", "WITHDRAW,false", "WITHDRAW,true"})
+    void shouldRequireAnExplicitCapturedHttpReviewVersion(String decision, boolean explicitNull) throws Exception {
+        var draft = runbooks.importMarkdown(PublicationScenarios.command("publication-required-version", "version probe", java.util.List.of("ON_CALL")), 1L).document();
+        String token = login("WITHDRAW".equals(decision) ? "admin" : "lina");
+        String key = PublicationScenarios.key();
+        var body = mapper.createObjectNode().put("decision", decision).put("requestKey", key).put("reason", "明确核对候选版本");
+        if (explicitNull) body.putNull("expectedVersion");
+        mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post("/api/v1/runbooks/publications/" + draft.id() + "/decisions")
+                .header("Authorization", token).contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsBytes(body)))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath("$.error.code").value("VALIDATION_ERROR"));
+        var unchanged = publications.detail(draft.id());
+        assertThat(unchanged.document().status()).isEqualTo("PENDING_REVIEW");
+        assertThat(unchanged.reviewVersion()).isZero();
+        assertThat(unchanged.currentPublishedVersion()).isZero();
+        assertThat(unchanged.decision()).isNull();
+        assertThat(jdbc.sql("SELECT COUNT(*) FROM audit_log WHERE action LIKE 'RUNBOOK_PUBLICATION_%' AND target_id=:id")
+                .param("id", Long.toString(draft.id())).query(Long.class).single()).isZero();
+        // Zero is a valid initial captured version, not a fallback for an absent JSON field.
+        body.put("expectedVersion", 0);
+        mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post("/api/v1/runbooks/publications/" + draft.id() + "/decisions")
+                .header("Authorization", token).contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsBytes(body)))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.status().isOk())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath("$.data.reviewVersion").value(1));
+        assertThat(jdbc.sql("SELECT COUNT(*) FROM audit_log WHERE action LIKE 'RUNBOOK_PUBLICATION_%' AND target_id=:id")
+                .param("id", Long.toString(draft.id())).query(Long.class).single()).isEqualTo(1);
+    }
+
     @Test
     void shouldKeepUnapprovedVersionsOutOfConsoleAgentAndHistory() {
         PublicationScenarios.verifyLifecycle(runbooks, publications, jdbc);
