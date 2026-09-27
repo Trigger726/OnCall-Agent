@@ -6,7 +6,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-checkpoint53进行中：已接受接班新增实际覆盖详情与管理撤销API，独立保存撤销人/理由/原版本/幂等键，原接受事实不改；V28与共享27项场景已补，最终JAR/真实MySQL/远端待验。新撤销页面尚未交付，见 [阶段报告](docs/acceptance/V1.7-checkpoint-53.md)。
+checkpoint53后端限定通过：已接受接班新增实际覆盖详情与管理撤销API，独立保存撤销人/理由/原版本/幂等键，原接受事实不改。`055d77a` 的 [Run36330898471](https://github.com/Trigger726/OnCall-Agent/actions/runs/36330898471) 十二CI作业success，真实MySQL62项零跳过/五池干净关闭、双时区各244发现/175执行/69条件跳过、六脚本与工件重放已验。新撤销页面尚未交付，原页面仅回归，见 [阶段报告](docs/acceptance/V1.7-checkpoint-53.md)。
 
 checkpoint 52 工程修复已验：五套真实MySQL容器由Spring管理并在类结束时显式关闭上下文，补完整日志/五池停机/零跳过门禁。代码 `276b57b` 的 [Run36329512979](https://github.com/Trigger726/OnCall-Agent/actions/runs/36329512979) 十二作业success，真实MySQL52项执行、五池完整关闭、日志拒绝项0、无强制fork退出；12项门禁测试、双时区、39项前端与浏览器五脚本通过，ZIP摘要及失败/成功工件重放已验。51旧错误和52首次严格门禁失败保留，页面/历史Demo不改，见 [工程验收报告](docs/acceptance/V1.7-checkpoint-52.md)。
 

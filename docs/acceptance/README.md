@@ -2,7 +2,7 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
-当前业务阶段：[V1.7-checkpoint-53.md](V1.7-checkpoint-53.md)：已接受接班覆盖详情/独立管理撤销事实、捕获版本/幂等键与事务审计已实现，共享27项UTC已过，最终JAR/真实MySQL/CI待验；新撤销页面和实页Demo仍待交付。
+当前业务阶段：[V1.7-checkpoint-53.md](V1.7-checkpoint-53.md)：已接受接班覆盖详情/独立管理撤销后端限定通过；`055d77a` 的 [Run36330898471](https://github.com/Trigger726/OnCall-Agent/actions/runs/36330898471) 十二作业success，真实MySQL62项零跳过/五池干净关闭、双时区各244发现/175执行/69条件跳过、前端39项与六脚本通过，工件摘要/本地重放已验。原接受事实和历史Demo保留；新撤销页面和实页Demo仍待交付。
 
 最新工程验收：[V1.7-checkpoint-52.md](V1.7-checkpoint-52.md)：真实MySQL生命周期失配已修复；`276b57b` 的 [Run36329512979](https://github.com/Trigger726/OnCall-Agent/actions/runs/36329512979) 十二作业success，52项零跳过、五池逐类关闭、完整日志拒绝项0、无强制fork退出，12项门禁测试/双时区/39项前端/浏览器五脚本通过。工件摘要及首失败/成功本地重放已验，原Demo与失败证据保留，整体目标仍进行中。
 
@@ -64,7 +64,7 @@
 | V1.7 | 50：接班台账筛选与待办完整性 | 部分通过，列表/MySQL/双时区/十二门禁已验，接班UI待交付 | [V1.7-checkpoint-50.md](V1.7-checkpoint-50.md) |
 | V1.7 | 51：定向接班页面与故障重试 | 限定范围通过，十二作业/新旧Demo已验；当时MySQL错误由52修复 | [V1.7-checkpoint-51.md](V1.7-checkpoint-51.md) |
 | V1.7 | 52：真实MySQL生命周期与日志门禁 | 本工程范围通过，十二作业/52项/五池关闭/工件重放已验 | [V1.7-checkpoint-52.md](V1.7-checkpoint-52.md) |
-| V1.7 | 53：已接受接班覆盖撤销后端 | 进行中，服务端/27共享场景已补，远端及新页面待验 | [V1.7-checkpoint-53.md](V1.7-checkpoint-53.md) |
+| V1.7 | 53：已接受接班覆盖撤销后端 | 后端限定通过，十二CI/真实MySQL62/六脚本/工件重放已验；新页面待交付 | [V1.7-checkpoint-53.md](V1.7-checkpoint-53.md) |
 
 ## 状态约定
 
