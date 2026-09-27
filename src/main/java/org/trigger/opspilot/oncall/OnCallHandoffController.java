@@ -6,10 +6,12 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.trigger.opspilot.common.ApiResponse;
+import org.trigger.opspilot.common.ApiException;
 import org.trigger.opspilot.security.UserPrincipal;
 
 import java.time.LocalDateTime;
@@ -21,8 +23,13 @@ public class OnCallHandoffController {
     public OnCallHandoffController(OnCallHandoffService service) { this.service = service; }
 
     @GetMapping
-    public ApiResponse<OnCallHandoffService.ListView> list(@RequestParam(required=false) Long scheduleId) {
-        return ApiResponse.ok(service.list(scheduleId));
+    public ApiResponse<OnCallHandoffService.ListView> list(@RequestParam(required=false) Long scheduleId,
+            @RequestParam(defaultValue="ALL") String scope, @RequestParam(required=false) String status,
+            @AuthenticationPrincipal UserPrincipal user) {
+        if (!scope.equals("ALL") && !scope.equals("MINE")) {
+            throw new ApiException(HttpStatus.BAD_REQUEST,"ONCALL_HANDOFF_INVALID","范围须为 ALL 或 MINE");
+        }
+        return ApiResponse.ok(service.list(scheduleId, scope.equals("MINE") ? user.id() : null, status));
     }
 
     @PostMapping

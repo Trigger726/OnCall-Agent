@@ -1,0 +1,16 @@
+{
+  "productionBaseline": "181755b9be8b1f6d45b8b5a351aefa73ac2f1533",
+  "suite": "OnCallHandoffIntegrationTest",
+  "timezone": "UTC",
+  "tests": 2,
+  "failures": 2,
+  "errors": 0,
+  "skipped": 0,
+  "exitCode": 1,
+  "assertions": [
+    {"test": "shouldFilterParticipantsAndStatusBeforeTheListLimit", "failure": "JSON path $.data.truncated expected false but was true", "fixture": "201 newer unrelated requests created through business services"},
+    {"test": "shouldRejectInvalidListFiltersInsteadOfSilentlyBroadeningTheQuery", "failure": "Status expected 400 but was 200"}
+  ],
+  "rawLog": "target/cp50-before-filters.log (ignored; authentication headers omitted from published evidence)",
+  "handoffUiImplemented": false
+}

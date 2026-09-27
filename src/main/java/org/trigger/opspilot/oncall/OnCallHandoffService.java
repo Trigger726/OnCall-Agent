@@ -28,9 +28,24 @@ public class OnCallHandoffService {
     }
 
     public ListView list(Long scheduleId) {
+        return list(scheduleId, null, null);
+    }
+
+    public ListView list(Long scheduleId, Long participantId, String status) {
+        if (status != null && !List.of("PENDING", "ACCEPTED", "REJECTED", "WITHDRAWN").contains(status)) {
+            throw invalid("状态须为 PENDING、ACCEPTED、REJECTED 或 WITHDRAWN；查询全部时省略状态");
+        }
         var now = now();
-        var rows = jdbc.sql("SELECT * FROM oncall_handoff WHERE (:schedule IS NULL OR schedule_id=:schedule) ORDER BY id DESC LIMIT 201")
-                .param("schedule", scheduleId).query(mapper).list();
+        // Filter in SQL before the bounded result, otherwise newer unrelated requests
+        // can hide an older incoming/outgoing task from the participant's inbox.
+        var rows = jdbc.sql("""
+                SELECT * FROM oncall_handoff
+                WHERE (:schedule IS NULL OR schedule_id=:schedule)
+                  AND (:participant IS NULL OR requester_id=:participant OR target_user_id=:participant)
+                  AND (:status IS NULL OR status=:status)
+                ORDER BY id DESC LIMIT 201
+                """).param("schedule", scheduleId).param("participant", participantId)
+                .param("status", status).query(mapper).list();
         return new ListView(now, rows.stream().limit(200).toList(), rows.size() > 200);
     }
 

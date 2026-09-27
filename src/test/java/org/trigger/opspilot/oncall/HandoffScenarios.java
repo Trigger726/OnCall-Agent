@@ -333,6 +333,54 @@ abstract class HandoffScenarios {
         assertThat(handoffs.list(-1L).requests()).isEmpty();
     }
 
+    @Test
+    void shouldFilterParticipantsAndStatusBeforeTheListLimit() throws Exception {
+        var f = fixture(false);
+        var outgoing = handoffs.request(command(f),2,"test");
+        var withdrawn = handoffs.request(command(f),2,"test");
+        handoffs.decide(withdrawn.id(),decision("WITHDRAWN"),2,"test");
+        var otherSource = roster.create(new OnCallRosterService.ShiftCommand(f.schedule(),3,
+                f.source().endsAt(),f.source().endsAt().plusHours(4),false,"另一负责人的班次"),1L,"test");
+        var incoming = handoffs.request(new OnCallHandoffService.Command(otherSource.id(),0,2,
+                UUID.randomUUID().toString(),otherSource.startsAt(),otherSource.endsAt(),"定向请求"),3,"test");
+        // Real business writes place 201 newer, unrelated requests ahead of this user's work.
+        for (int i=0;i<201;i++) handoffs.request(new OnCallHandoffService.Command(otherSource.id(),0,1,
+                UUID.randomUUID().toString(),otherSource.startsAt(),otherSource.endsAt(),"其他人的待办"),3,"test");
+        String actor = login("zhangwei");
+        mvc.perform(get("/api/v1/on-call/handoffs").header("Authorization",actor)
+                        .param("scheduleId",String.valueOf(f.schedule())).param("scope","MINE").param("status","PENDING")
+                        .param("participantId","3")) // The server must derive MINE from authentication, not caller input.
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.truncated").value(false))
+                .andExpect(jsonPath("$.data.requests.length()").value(2))
+                .andExpect(jsonPath("$.data.requests[0].id").value(incoming.id()))
+                .andExpect(jsonPath("$.data.requests[1].id").value(outgoing.id()));
+        mvc.perform(get("/api/v1/on-call/handoffs").header("Authorization",actor)
+                        .param("scheduleId",String.valueOf(f.schedule())).param("scope","MINE"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.requests.length()").value(3));
+        mvc.perform(get("/api/v1/on-call/handoffs").header("Authorization",actor)
+                        .param("scheduleId",String.valueOf(f.schedule())).param("status","WITHDRAWN"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.requests.length()").value(1))
+                .andExpect(jsonPath("$.data.requests[0].id").value(withdrawn.id()));
+        mvc.perform(get("/api/v1/on-call/handoffs").header("Authorization",actor)
+                        .param("scheduleId",String.valueOf(f.schedule())))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.requests.length()").value(200))
+                .andExpect(jsonPath("$.data.truncated").value(true));
+        mvc.perform(get("/api/v1/on-call/handoffs").header("Authorization",login("auditor"))
+                        .param("scheduleId",String.valueOf(f.schedule())).param("scope","MINE"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.requests.length()").value(0));
+    }
+
+    @Test
+    void shouldRejectInvalidListFiltersInsteadOfSilentlyBroadeningTheQuery() throws Exception {
+        mvc.perform(get("/api/v1/on-call/handoffs").param("scope","MINE")).andExpect(status().isUnauthorized());
+        String actor = login("zhangwei");
+        for (var filter : List.of(Map.entry("scope","OTHERS"),Map.entry("scope","mine"),
+                Map.entry("status","EXPIRED"),Map.entry("status","pending"),Map.entry("status",""))) {
+            mvc.perform(get("/api/v1/on-call/handoffs").header("Authorization",actor).param(filter.getKey(),filter.getValue()))
+                    .andExpect(status().isBadRequest()).andExpect(jsonPath("$.error.code").value("ONCALL_HANDOFF_INVALID"));
+        }
+    }
+
     private Fixture fixture(boolean ongoing) {
         String code = "HANDOFF-"+UUID.randomUUID();
         long resource = insert(jdbc.sql("INSERT INTO cmdb_resource(resource_code,resource_type,name,environment,status) VALUES (:code,'APPLICATION','接班独立服务','TEST','RUNNING')").param("code",code));
