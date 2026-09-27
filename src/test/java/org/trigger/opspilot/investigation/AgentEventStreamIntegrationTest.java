@@ -5,6 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.HeaderWriterFilter;
 
 import java.time.Duration;
 import java.util.Map;
@@ -28,6 +32,23 @@ class AgentEventStreamIntegrationTest {
     @Autowired InvestigationService investigations;
     @Autowired AgentRunEventService events;
     @Autowired AgentEventSubscriptions subscriptions;
+    @Autowired SecurityFilterChain security;
+
+    @Test
+    void shouldWriteSecurityHeadersBeforeSseWorkStartsAndRetainStreamCachePolicy() throws Exception {
+        var filter = security.getFilters().stream().filter(HeaderWriterFilter.class::isInstance)
+                .map(HeaderWriterFilter.class::cast).findFirst().orElseThrow();
+        var request = new MockHttpServletRequest("GET", path(1));
+        var response = new MockHttpServletResponse();
+        filter.doFilter(request, response, (req, res) -> {
+            // A deterministic regression: no async sender may start before these exist.
+            assertThat(response.getHeader("X-Content-Type-Options")).isEqualTo("nosniff");
+            assertThat(response.getHeader("X-Frame-Options")).isEqualTo("SAMEORIGIN");
+            response.setHeader("Cache-Control", "no-cache"); // SSE controller's own policy
+        });
+        assertThat(response.getHeader("Cache-Control")).isEqualTo("no-cache");
+        assertThat(response.getHeader("X-Content-Type-Options")).isEqualTo("nosniff");
+    }
 
     @Test
     void shouldResumeViaHeaderAndCloseWhenTerminalAlreadyConsumed() throws Exception {

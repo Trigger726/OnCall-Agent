@@ -1,0 +1,26 @@
+{
+  "runId": 36324763924,
+  "headSha": "9786516dc0718965db93f2e6ff112b23523223ed",
+  "conclusion": "failure",
+  "gates": { "success": 10, "failure": 1, "skipped": 1 },
+  "failedJob": "Backend tests and JAR (H2)",
+  "failedJobId": 108635269055,
+  "failedStep": "Test and package (UTC)",
+  "h2": { "discovered": 219, "executed": 162, "skipped": 57, "failures": 0, "errors": 1, "handoffExecuted": 15 },
+  "mysql": { "executed": 50, "skipped": 0, "failures": 0, "errors": 0, "handoffExecuted": 15 },
+  "failedTest": "AgentEventStreamIntegrationTest.shouldCatchUpActiveSubscriptionWithoutRedisAndHonorQueryCursor",
+  "failure": "ConcurrentModificationException in MockHttpServletResponse.doAddHeaderValue during HeaderWriterFilter.doHeadersAfter while asynchronous SSE sender commits response",
+  "shanghaiGate": "skipped after UTC failure",
+  "browserArtifact": {
+    "id": 10934030545,
+    "sha256": "44282e0f6085b4c7d2774e66238b0a83c80a74db79ddacc5abef22c23c3c7c57",
+    "downloadHashVerified": true,
+    "scripts": 4,
+    "allExitCodeZero": true,
+    "ownedProcessStopped": true,
+    "unexpectedJarErrors": 0,
+    "handoffUiImplemented": false
+  },
+  "deterministicRegressionBeforeFix": { "tests": 1, "failures": 1, "expectedNosniffBeforeChain": true, "actualHeaderBeforeChain": null },
+  "fix": "Configure eager HeaderWriterFilter through ObjectPostProcessor; retain SAMEORIGIN and controller SSE cache policy. Do not disable security headers or ignore flaky tests."
+}
