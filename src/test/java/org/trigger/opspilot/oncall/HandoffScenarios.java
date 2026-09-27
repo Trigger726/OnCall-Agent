@@ -381,6 +381,194 @@ abstract class HandoffScenarios {
         }
     }
 
+    @Test
+    void shouldRevokeCoverageOnceWithoutRewritingAcceptedConsentOrSource() {
+        var f = fixture(false);
+        var accepted = accepted(f);
+        var before = handoffs.coverage(accepted.id());
+        assertThat(before.request()).isEqualTo(accepted);
+        assertThat(before.revocation()).isNull();
+        assertThat(before.replacement().cancelledAt()).isNull();
+        var command = revocation(accepted);
+        long auditCount = audits();
+        var after = handoffs.revokeCoverage(accepted.id(), command, 1, "test");
+        assertThat(after.request()).isEqualTo(accepted);
+        assertThat(after.replacement().version()).isEqualTo(1);
+        assertThat(after.replacement().cancelledAt()).isNotNull();
+        assertThat(after.revocation().actorId()).isEqualTo(1);
+        assertThat(after.revocation().operationKey()).isEqualTo(command.operationKey());
+        assertThat(after.revocation().reason()).isEqualTo(command.reason());
+        assertThat(handoffs.revokeCoverage(accepted.id(), command, 1, "test").revocation()).isEqualTo(after.revocation());
+        assertThat(handoffs.decide(accepted.id(), decision("ACCEPTED"), 3, "test")).isEqualTo(accepted);
+        assertThat(audits()).isEqualTo(auditCount + 2);
+        assertThat(shifts(f)).isEqualTo(2);
+        assertThat(roster.roster(f.schedule(), f.source().startsAt(), f.source().endsAt()).shifts())
+                .contains(f.source());
+        assertThat(coverage.coverage(f.schedule(), f.source().startsAt(), f.source().endsAt()).segments())
+                .allSatisfy(segment -> assertThat(segment.userId()).isEqualTo(2));
+    }
+
+    @Test
+    void shouldRestrictRevocationToCurrentActiveManagersIncludingOldJwt() throws Exception {
+        var accepted = accepted(fixture(false));
+        String route = "/api/v1/on-call/handoffs/" + accepted.id() + "/coverage/revoke";
+        String payload = json.writeValueAsString(revocation(accepted));
+        mvc.perform(post(route).contentType(MediaType.APPLICATION_JSON).content(payload)).andExpect(status().isUnauthorized());
+        for (String user : List.of("zhangwei", "auditor")) {
+            mvc.perform(post(route).header("Authorization", login(user)).contentType(MediaType.APPLICATION_JSON)
+                    .content(payload)).andExpect(status().isForbidden());
+        }
+        mvc.perform(get("/api/v1/on-call/handoffs/" + accepted.id() + "/coverage")
+                .header("Authorization", login("auditor"))).andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.request.status").value("ACCEPTED"));
+        String manager = login("lina");
+        jdbc.sql("UPDATE sys_user SET role_code='ON_CALL' WHERE id=3").update();
+        try {
+            mvc.perform(post(route).header("Authorization", manager).contentType(MediaType.APPLICATION_JSON)
+                    .content(payload)).andExpect(status().isForbidden());
+        } finally { jdbc.sql("UPDATE sys_user SET role_code='OPS_MANAGER' WHERE id=3").update(); }
+        jdbc.sql("UPDATE sys_user SET status='INACTIVE' WHERE id=3").update();
+        try { fails(() -> handoffs.revokeCoverage(accepted.id(), revocation(accepted), 3, "test"), "ONCALL_HANDOFF_FORBIDDEN"); }
+        finally { jdbc.sql("UPDATE sys_user SET status='ACTIVE' WHERE id=3").update(); }
+        mvc.perform(post(route).header("Authorization", manager).contentType(MediaType.APPLICATION_JSON)
+                .content(payload)).andExpect(status().isOk()).andExpect(jsonPath("$.data.revocation.actorId").value(3));
+    }
+
+    @Test
+    void shouldRejectInvalidRevocationAndStaleVersionsBeforeMutation() {
+        var f = fixture(false);
+        var pending = handoffs.request(command(f), 2, "test");
+        assertThat(handoffs.coverage(pending.id()).replacement()).isNull();
+        fails(() -> handoffs.revokeCoverage(pending.id(), new OnCallHandoffService.RevocationCommand(0, 0, UUID.randomUUID().toString(), "说明"), 1, "test"), "ONCALL_HANDOFF_VERSION_CONFLICT");
+        var accepted = handoffs.decide(pending.id(), decision("ACCEPTED"), 3, "test");
+        var valid = revocation(accepted);
+        for (var invalid : List.of(
+                new OnCallHandoffService.RevocationCommand(1, 0, "invalid", "说明"),
+                new OnCallHandoffService.RevocationCommand(-1, 0, valid.operationKey(), "说明"),
+                new OnCallHandoffService.RevocationCommand(1, 0, valid.operationKey(), " "))) {
+            fails(() -> handoffs.revokeCoverage(accepted.id(), invalid, 1, "test"), "ONCALL_HANDOFF_INVALID");
+        }
+        fails(() -> handoffs.revokeCoverage(accepted.id(), new OnCallHandoffService.RevocationCommand(0, 0, valid.operationKey(), "说明"), 1, "test"), "ONCALL_HANDOFF_VERSION_CONFLICT");
+        fails(() -> handoffs.revokeCoverage(accepted.id(), new OnCallHandoffService.RevocationCommand(1, 1, valid.operationKey(), "说明"), 1, "test"), "ONCALL_SHIFT_VERSION_CONFLICT");
+        assertThat(handoffs.coverage(accepted.id()).replacement().cancelledAt()).isNull();
+    }
+
+    @Test
+    void shouldExposeExternalCancellationWithoutInventingARevocationRecord() {
+        var accepted = accepted(fixture(false));
+        roster.cancel(accepted.replacementShiftId(), 0, "班次维护直接取消", 1L, "test");
+        var actual = handoffs.coverage(accepted.id());
+        assertThat(actual.request()).isEqualTo(accepted);
+        assertThat(actual.replacement().cancellationReason()).isEqualTo("班次维护直接取消");
+        assertThat(actual.revocation()).isNull();
+        fails(() -> handoffs.revokeCoverage(accepted.id(), revocation(accepted), 1, "test"), "ONCALL_SHIFT_VERSION_CONFLICT");
+    }
+
+    @Test
+    void shouldRefuseNewRevocationAfterEndButAcknowledgePreviouslyCommittedCommand() {
+        var accepted = accepted(fixture(false));
+        jdbc.sql("UPDATE oncall_shift SET starts_at=:start,ends_at=:end WHERE id=:id")
+                .param("start", now().minusHours(2)).param("end", now().minusHours(1)).param("id", accepted.replacementShiftId()).update();
+        fails(() -> handoffs.revokeCoverage(accepted.id(), revocation(accepted), 1, "test"), "ONCALL_HANDOFF_EXPIRED");
+        var second = accepted(fixture(false));
+        var command = revocation(second);
+        var saved = handoffs.revokeCoverage(second.id(), command, 1, "test").revocation();
+        jdbc.sql("UPDATE oncall_shift SET starts_at=:start,ends_at=:end WHERE id=:id")
+                .param("start", now().minusHours(2)).param("end", now().minusHours(1)).param("id", second.replacementShiftId()).update();
+        assertThat(handoffs.revokeCoverage(second.id(), command, 1, "test").revocation()).isEqualTo(saved);
+    }
+
+    @Test
+    void shouldRejectReusedRevocationKeyAndDifferentIntentAfterCancellation() {
+        var first = accepted(fixture(false));
+        var second = accepted(fixture(false));
+        var command = revocation(first);
+        handoffs.revokeCoverage(first.id(), command, 1, "test");
+        fails(() -> handoffs.revokeCoverage(second.id(), command, 1, "test"), "ONCALL_HANDOFF_REVOCATION_KEY_REUSED");
+        fails(() -> handoffs.revokeCoverage(first.id(), new OnCallHandoffService.RevocationCommand(1, 0, command.operationKey(), "不同说明"), 1, "test"), "ONCALL_HANDOFF_REVOCATION_KEY_REUSED");
+        fails(() -> handoffs.revokeCoverage(first.id(), revocation(first), 1, "test"), "ONCALL_SHIFT_VERSION_CONFLICT");
+        fails(() -> handoffs.revokeCoverage(first.id(), command, 3, "test"), "ONCALL_SHIFT_VERSION_CONFLICT");
+        assertThat(handoffs.coverage(second.id()).replacement().cancelledAt()).isNull();
+    }
+
+    @Test
+    void shouldRollbackCancellationLedgerAndBothAuditsTogether() {
+        var accepted = accepted(fixture(false));
+        long count = audits();
+        doAnswer(call -> { throw new IllegalStateException("revocation-rollback-sentinel"); })
+                .when(audit).recordAs(eq(1L), eq("test"), eq("ONCALL_HANDOFF_COVERAGE_REVOKED"), eq("ONCALL_HANDOFF"), eq(accepted.id()), anyString());
+        assertThatThrownBy(() -> handoffs.revokeCoverage(accepted.id(), revocation(accepted), 1, "test"))
+                .hasMessage("revocation-rollback-sentinel");
+        var current = handoffs.coverage(accepted.id());
+        assertThat(current.request()).isEqualTo(accepted);
+        assertThat(current.replacement().cancelledAt()).isNull();
+        assertThat(current.replacement().version()).isZero();
+        assertThat(current.revocation()).isNull();
+        assertThat(audits()).isEqualTo(count);
+    }
+
+    @Test
+    void shouldSerializeConcurrentSameKeyRevocationWithOnlyOneChange() throws Exception {
+        var accepted = accepted(fixture(false));
+        var command = revocation(accepted);
+        var start = new CountDownLatch(1);
+        var executor = Executors.newFixedThreadPool(2);
+        long count = audits();
+        try {
+            java.util.concurrent.Callable<OnCallHandoffService.Revocation> action = () -> { await(start); return handoffs.revokeCoverage(accepted.id(), command, 1, "test").revocation(); };
+            var first = executor.submit(action); var second = executor.submit(action); start.countDown();
+            assertThat(first.get(15, TimeUnit.SECONDS)).isEqualTo(second.get(15, TimeUnit.SECONDS));
+            assertThat(handoffs.coverage(accepted.id()).replacement().version()).isEqualTo(1);
+            assertThat(audits()).isEqualTo(count + 2);
+        } finally { start.countDown(); executor.shutdownNow(); }
+    }
+
+    @Test
+    void shouldNotPromiseOriginalCoverageWhenOriginalShiftWasAlsoCancelled() {
+        var f = fixture(false);
+        var accepted = accepted(f);
+        roster.cancel(f.source().id(), 0, "原负责人也不可值班", 1L, "test");
+        jdbc.sql("UPDATE oncall_schedule SET active=FALSE WHERE id=:id").param("id", f.schedule()).update();
+        // Cleanup remains available even on an inactive plan; no claim of restored routing.
+        var result = handoffs.revokeCoverage(accepted.id(), revocation(accepted), 1, "test");
+        assertThat(result.request()).isEqualTo(accepted);
+        assertThat(result.revocation()).isNotNull();
+        assertThat(roster.roster(f.schedule(), f.source().startsAt(), f.source().endsAt()).shifts())
+                .allSatisfy(shift -> assertThat(shift.cancelledAt()).isNotNull());
+    }
+
+    @Test
+    void shouldSerializeDifferentManagerRevocationsWithoutDoubleAudits() throws Exception {
+        var accepted = accepted(fixture(false));
+        var firstCommand = revocation(accepted);
+        var secondCommand = revocation(accepted);
+        var start = new CountDownLatch(1);
+        var executor = Executors.newFixedThreadPool(2);
+        long count = audits();
+        try {
+            var first = executor.submit(() -> { await(start); return revokeOutcome(accepted.id(), firstCommand, 1); });
+            var second = executor.submit(() -> { await(start); return revokeOutcome(accepted.id(), secondCommand, 3); });
+            start.countDown();
+            assertThat(List.of(first.get(15, TimeUnit.SECONDS), second.get(15, TimeUnit.SECONDS)))
+                    .containsExactlyInAnyOrder("REVOKED", "ONCALL_SHIFT_VERSION_CONFLICT");
+            assertThat(handoffs.coverage(accepted.id()).replacement().version()).isEqualTo(1);
+            assertThat(audits()).isEqualTo(count + 2);
+        } finally { start.countDown(); executor.shutdownNow(); }
+    }
+
+    private String revokeOutcome(long id, OnCallHandoffService.RevocationCommand command, long actor) {
+        try { handoffs.revokeCoverage(id, command, actor, "test"); return "REVOKED"; }
+        catch (ApiException error) { return error.code(); }
+    }
+
+    private OnCallHandoffService.View accepted(Fixture f) {
+        var pending = handoffs.request(command(f), 2, "test");
+        return handoffs.decide(pending.id(), decision("ACCEPTED"), 3, "test");
+    }
+    private OnCallHandoffService.RevocationCommand revocation(OnCallHandoffService.View accepted) {
+        return new OnCallHandoffService.RevocationCommand(accepted.version(), 0, UUID.randomUUID().toString(), "管理确认撤销覆盖");
+    }
+
     private Fixture fixture(boolean ongoing) {
         String code = "HANDOFF-"+UUID.randomUUID();
         long resource = insert(jdbc.sql("INSERT INTO cmdb_resource(resource_code,resource_type,name,environment,status) VALUES (:code,'APPLICATION','接班独立服务','TEST','RUNNING')").param("code",code));

@@ -157,6 +157,83 @@ public class OnCallHandoffService {
         if (ambiguous) throw conflict("ONCALL_HANDOFF_OVERLAP", "申请时段已有其他普通或覆盖班次，请先核对排班");
     }
 
+    public CoverageView coverage(long id) {
+        // One statement reads the accepted fact, replacement and separate revocation.
+        // An accepted request alone never implies its replacement still provides coverage.
+        return jdbc.sql("""
+                SELECT h.*, CURRENT_TIMESTAMP(6) AS database_now,
+                  r.handoff_id,r.actor_id,r.operation_key,r.handoff_version,r.replacement_version,
+                  r.reason AS revocation_reason,r.revoked_at,
+                  s.id AS coverage_id, s.user_id AS coverage_user, s.version AS coverage_version,
+                  s.starts_at AS coverage_start, s.ends_at AS coverage_end,
+                  s.cancelled_at AS coverage_cancelled, s.cancellation_reason AS coverage_cancel_reason
+                FROM oncall_handoff h LEFT JOIN oncall_shift s ON s.id=h.replacement_shift_id
+                LEFT JOIN oncall_handoff_revocation r ON r.handoff_id=h.id WHERE h.id=:id
+                """).param("id", id).query((rs, row) -> new CoverageView(
+                        rs.getObject("database_now", LocalDateTime.class), mapper.mapRow(rs, row),
+                        rs.getObject("coverage_id", Long.class) == null ? null : new Replacement(
+                                rs.getLong("coverage_id"), rs.getLong("coverage_user"), rs.getInt("coverage_version"),
+                                rs.getObject("coverage_start", LocalDateTime.class), rs.getObject("coverage_end", LocalDateTime.class),
+                                rs.getObject("coverage_cancelled", LocalDateTime.class), rs.getString("coverage_cancel_reason")),
+                        rs.getObject("revoked_at", LocalDateTime.class) == null ? null : new Revocation(
+                                rs.getLong("handoff_id"), rs.getLong("actor_id"), rs.getString("operation_key"),
+                                rs.getInt("handoff_version"), rs.getInt("replacement_version"), rs.getString("revocation_reason"),
+                                rs.getObject("revoked_at", LocalDateTime.class))))
+                .optional().orElseThrow(() -> missing("接班请求不存在"));
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public CoverageView revokeCoverage(long id, RevocationCommand command, long actorId, String ip) {
+        String reason = text(command.reason());
+        String key;
+        try {
+            key = UUID.fromString(command.operationKey()).toString();
+            if (!key.equals(command.operationKey())) throw new IllegalArgumentException();
+        } catch (IllegalArgumentException | NullPointerException e) { throw invalid("撤销键须为规范 UUID"); }
+        if (command.handoffVersion() < 0 || command.replacementVersion() < 0) throw invalid("请提供有效请求和覆盖版本");
+        var initial = get(id, false);
+        lockSchedule(initial.scheduleId());
+        var row = get(id, true);
+        // Actor lock serializes their operation keys across plans; check current DB role,
+        // not merely a potentially old JWT management role.
+        boolean manager = jdbc.sql("""
+                SELECT id FROM sys_user WHERE id=:id AND status='ACTIVE'
+                  AND role_code IN ('ADMIN','OPS_MANAGER') FOR UPDATE
+                """).param("id", actorId).query(Long.class).optional().isPresent();
+        if (!manager) throw forbidden("仅活跃管理员或运维经理可撤销接班覆盖");
+        var previous = jdbc.sql("SELECT * FROM oncall_handoff_revocation WHERE actor_id=:actor AND operation_key=:key")
+                .param("actor", actorId).param("key", key).query(revocationMapper).optional();
+        if (previous.isPresent()) {
+            var recorded = previous.get();
+            if (recorded.handoffId() != id || recorded.handoffVersion() != command.handoffVersion()
+                    || recorded.replacementVersion() != command.replacementVersion() || !recorded.reason().equals(reason)) {
+                throw conflict("ONCALL_HANDOFF_REVOCATION_KEY_REUSED", "撤销键已用于不同内容");
+            }
+            return coverage(id); // Safe acknowledgement even after the shift has ended.
+        }
+        if (!row.status().equals("ACCEPTED") || row.replacementShiftId() == null || row.version() != command.handoffVersion()) {
+            throw conflict("ONCALL_HANDOFF_VERSION_CONFLICT", "须核对已接受请求及捕获的版本");
+        }
+        var replacement = source(row.replacementShiftId());
+        if (replacement.scheduleId() != row.scheduleId() || replacement.userId() != row.targetUserId() || !replacement.override()) {
+            throw conflict("ONCALL_HANDOFF_SOURCE_CHANGED", "覆盖班次与接班请求不一致");
+        }
+        if (replacement.cancelledAt() != null || replacement.version() != command.replacementVersion()) {
+            throw conflict("ONCALL_SHIFT_VERSION_CONFLICT", "覆盖已变化或已取消，请重新核对");
+        }
+        if (!replacement.endsAt().isAfter(now())) throw conflict("ONCALL_HANDOFF_EXPIRED", "覆盖时段已结束，不能撤销历史责任");
+        roster.cancel(replacement.id(), command.replacementVersion(), reason, actorId, ip);
+        jdbc.sql("""
+                INSERT INTO oncall_handoff_revocation(handoff_id,actor_id,operation_key,handoff_version,
+                  replacement_version,reason,revoked_at) VALUES (:id,:actor,:key,:requestVersion,:shiftVersion,:reason,:at)
+                """).param("id", id).param("actor", actorId).param("key", key)
+                .param("requestVersion", command.handoffVersion()).param("shiftVersion", command.replacementVersion())
+                .param("reason", reason).param("at", now().truncatedTo(ChronoUnit.SECONDS)).update();
+        audit.recordAs(actorId, ip, "ONCALL_HANDOFF_COVERAGE_REVOKED", "ONCALL_HANDOFF", id,
+                "覆盖班次 #" + replacement.id() + "；" + reason);
+        return coverage(id);
+    }
+
     private void lockSchedule(long id) {
         jdbc.sql("SELECT active FROM oncall_schedule WHERE id=:id FOR UPDATE").param("id", id)
                 .query(Boolean.class).optional().orElseThrow(() -> missing("计划不存在"));
@@ -211,6 +288,10 @@ public class OnCallHandoffService {
         if (value == null || value.isBlank() || value.length() > 500) throw invalid("说明须为 1–500 字");
         return value.strip();
     }
+    private static final RowMapper<Revocation> revocationMapper = (rs, row) -> new Revocation(
+            rs.getLong("handoff_id"), rs.getLong("actor_id"), rs.getString("operation_key"),
+            rs.getInt("handoff_version"), rs.getInt("replacement_version"), rs.getString("reason"),
+            rs.getObject("revoked_at", LocalDateTime.class));
     private static ApiException invalid(String message) { return new ApiException(HttpStatus.BAD_REQUEST, "ONCALL_HANDOFF_INVALID", message); }
     private static ApiException forbidden(String message) { return new ApiException(HttpStatus.FORBIDDEN, "ONCALL_HANDOFF_FORBIDDEN", message); }
     private static ApiException missing(String message) { return new ApiException(HttpStatus.NOT_FOUND, "ONCALL_HANDOFF_NOT_FOUND", message); }
@@ -226,4 +307,10 @@ public class OnCallHandoffService {
                        String reason, String status, int version, LocalDateTime createdAt, LocalDateTime decidedAt,
                        Long decidedBy, String decisionReason, Long replacementShiftId) {}
     public record ListView(LocalDateTime databaseNow, List<View> requests, boolean truncated) {}
+    public record RevocationCommand(int handoffVersion, int replacementVersion, String operationKey, String reason) {}
+    public record Replacement(long id, long userId, int version, LocalDateTime startsAt, LocalDateTime endsAt,
+                              LocalDateTime cancelledAt, String cancellationReason) {}
+    public record Revocation(long handoffId, long actorId, String operationKey, int handoffVersion,
+                             int replacementVersion, String reason, LocalDateTime revokedAt) {}
+    public record CoverageView(LocalDateTime databaseNow, View request, Replacement replacement, Revocation revocation) {}
 }

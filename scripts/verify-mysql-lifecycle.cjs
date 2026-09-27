@@ -6,7 +6,7 @@ const expectedSuites = {
   'org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest': 8,
   'org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest': 10,
   'org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest': 8,
-  'org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest': 17,
+  'org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest': 27,
 };
 
 function suiteResult(xml, name, minimum) {

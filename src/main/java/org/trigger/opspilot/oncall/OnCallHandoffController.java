@@ -51,5 +51,19 @@ public class OnCallHandoffController {
     public record Request(@Min(1) long sourceShiftId, @Min(0) int sourceVersion, @Min(1) long targetUserId,
                           @NotBlank @Size(max=36) String requestKey, @NotNull LocalDateTime startsAt,
                           @NotNull LocalDateTime endsAt, @NotBlank @Size(max=500) String reason) {}
+    @GetMapping("/{id}/coverage")
+    public ApiResponse<OnCallHandoffService.CoverageView> coverage(@PathVariable long id) {
+        return ApiResponse.ok(service.coverage(id));
+    }
+
+    @PostMapping("/{id}/coverage/revoke")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
+    public ApiResponse<OnCallHandoffService.CoverageView> revokeCoverage(@PathVariable long id,
+            @Valid @RequestBody Revocation body, @AuthenticationPrincipal UserPrincipal user, HttpServletRequest request) {
+        return ApiResponse.ok(service.revokeCoverage(id, new OnCallHandoffService.RevocationCommand(
+                body.handoffVersion(), body.replacementVersion(), body.operationKey(), body.reason()), user.id(), request.getRemoteAddr()));
+    }
+    public record Revocation(@Min(0) int handoffVersion, @Min(0) int replacementVersion,
+                             @NotBlank @Size(max=36) String operationKey, @NotBlank @Size(max=500) String reason) {}
     public record Decision(@Min(0) int version, @NotBlank String status, @NotBlank @Size(max=500) String reason) {}
 }
