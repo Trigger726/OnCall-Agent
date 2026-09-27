@@ -1,0 +1,23 @@
+{
+  "runId": 36329243656,
+  "jobId": 108647889137,
+  "codeSha": "3a8d5d0b006ea40b52a574ff911eddb52088f57f",
+  "status": "FAILED_STRICT_GATE",
+  "executed": 52,
+  "skipped": 0,
+  "previousScheduledErrorsObserved": 0,
+  "previousForcedForkExitObserved": false,
+  "poolStarts": 5,
+  "poolShutdownLogs": 0,
+  "logExcerpt": [
+    "2026-09-27T15:22:25.7872671Z 2026-09-27T15:22:25.700Z  INFO 2480 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.",
+    "2026-09-27T15:22:45.3287103Z 2026-09-27T15:22:45.278Z  INFO 2480 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.",
+    "2026-09-27T15:22:58.2511883Z 2026-09-27T15:22:58.232Z  INFO 2480 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.",
+    "2026-09-27T15:23:09.6762960Z 2026-09-27T15:23:09.670Z  INFO 2480 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Start completed.",
+    "2026-09-27T15:23:25.2992790Z 2026-09-27T15:23:25.272Z  INFO 2480 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.",
+    "2026-09-27T15:23:27.5167706Z [INFO] Tests run: 52, Failures: 0, Errors: 0, Skipped: 0",
+    "2026-09-27T15:23:27.5196990Z [INFO] BUILD SUCCESS",
+    "2026-09-27T15:23:27.5903847Z MySQL lifecycle gate failed: Expected five unique started and cleanly stopped MySQL pools"
+  ],
+  "diagnosis": "Managed containers removed premature class stop; cached contexts still deferred to JVM shutdown, where pool completion logs were not observed. Do not claim clean shutdown. Next fix explicitly evicts/closes class context with DirtiesContext AFTER_CLASS while retaining Spring-owned containers and strict gate."
+}
