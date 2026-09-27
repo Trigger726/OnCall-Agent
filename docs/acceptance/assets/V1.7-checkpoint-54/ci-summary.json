@@ -1,0 +1,155 @@
+{
+  "codeCommit": "ad701b7835db5fe179db8e900c65f09a225cf956",
+  "runId": 36335732140,
+  "runUrl": "https://github.com/Trigger726/OnCall-Agent/actions/runs/36335732140",
+  "scope": "handoff coverage details and management revocation UI; not complete global scheduling",
+  "revocationUiImplemented": true,
+  "jobs": [
+    {
+      "id": 108666104203,
+      "name": "On-call real browser integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108666104284,
+      "name": "Backend tests and JAR (H2)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108666104287,
+      "name": "Prometheus rule to Alertmanager integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108666104306,
+      "name": "MySQL 8.4 integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108666104316,
+      "name": "OpsPilot service metric to Incident integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108666104328,
+      "name": "Alertmanager webhook integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108666104337,
+      "name": "OpenTelemetry Collector and Tempo integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108666104342,
+      "name": "Follow-up notification delivery integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108666104344,
+      "name": "Redis Streams relay integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108666104353,
+      "name": "Frontend build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108666104376,
+      "name": "Two JVM Agent SSE integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108666680960,
+      "name": "Container image build and smoke test",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "frontendTests": 47,
+  "browserLifecycleTests": 9,
+  "mysqlLifecycleGateTests": 12,
+  "browserHttpScripts": 7,
+  "h2": {
+    "timezones": [
+      "UTC",
+      "Asia/Shanghai"
+    ],
+    "each": {
+      "discovered": 244,
+      "executed": 175,
+      "skipped": 69,
+      "failures": 0,
+      "errors": 0
+    },
+    "conditionalSuitesRunSeparately": true
+  },
+  "mysql": {
+    "version": "8.4",
+    "executed": 62,
+    "skipped": 0,
+    "handoffSuite": 27,
+    "mavenLogBytes": 89458,
+    "poolsStarted": 5,
+    "poolsCleanlyStopped": 5,
+    "unexpectedLogLines": 0,
+    "localArtifactReplay": "PASS"
+  },
+  "browser": {
+    "version": "153.0.8010.12",
+    "playwright": "1.63.0",
+    "availability": "Browser plugin not available",
+    "viewports": [
+      "1440x1000",
+      "390x844"
+    ],
+    "ownedProcessStopped": true,
+    "jarLogBytes": 14311,
+    "unexpectedJarErrors": 0,
+    "pageErrors": 0,
+    "expectedConsoleNetworkFailures": 3,
+    "expectedConsoleConflicts": 1
+  },
+  "artifacts": [
+    {
+      "id": 10937525499,
+      "name": "mysql-compatibility-evidence",
+      "digest": "sha256:477e4431a8e5a3a138605e423d33caadf78bad9a8caaa34824b460752ed8f1c7",
+      "headSha": "ad701b7835db5fe179db8e900c65f09a225cf956",
+      "downloadedDigestVerified": true
+    },
+    {
+      "id": 10937306318,
+      "name": "oncall-browser-evidence",
+      "digest": "sha256:c0447ff3a85b9df1576b51c139ad9be90678e996d433d667d70cd3ad5f8ba487",
+      "headSha": "ad701b7835db5fe179db8e900c65f09a225cf956",
+      "downloadedDigestVerified": true
+    }
+  ],
+  "baseline": {
+    "jarSha256": "94283d4b253f4f67095e4898b09804776f5a3052cc605c7d425ad809ab74fff7",
+    "actualOldUiCaptured": true,
+    "historicalDemoPreserved": true,
+    "originalArchiveCommit": "0cd654ea49957d05c0e5c683c0e945a5a87c5bab"
+  },
+  "remainingRisks": [
+    "cross-browser",
+    "real role-change 403 UI replay",
+    "cross-timezone/DST",
+    "two-way swap/open claim",
+    "third-party channels",
+    "historical responsibility reconstruction"
+  ]
+}
