@@ -1,0 +1,28 @@
+CREATE TABLE oncall_handoff (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    schedule_id BIGINT NOT NULL,
+    source_shift_id BIGINT NOT NULL,
+    source_version INT NOT NULL,
+    requester_id BIGINT NOT NULL,
+    target_user_id BIGINT NOT NULL,
+    request_key VARCHAR(36) NOT NULL,
+    starts_at TIMESTAMP NOT NULL,
+    ends_at TIMESTAMP NOT NULL,
+    reason VARCHAR(500) NOT NULL,
+    status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
+    version INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    decided_at TIMESTAMP NULL,
+    decided_by BIGINT NULL,
+    decision_reason VARCHAR(500) NULL,
+    replacement_shift_id BIGINT NULL,
+    CONSTRAINT fk_handoff_schedule FOREIGN KEY (schedule_id) REFERENCES oncall_schedule(id),
+    CONSTRAINT fk_handoff_source FOREIGN KEY (source_shift_id) REFERENCES oncall_shift(id),
+    CONSTRAINT fk_handoff_requester FOREIGN KEY (requester_id) REFERENCES sys_user(id),
+    CONSTRAINT fk_handoff_target FOREIGN KEY (target_user_id) REFERENCES sys_user(id),
+    CONSTRAINT fk_handoff_decider FOREIGN KEY (decided_by) REFERENCES sys_user(id),
+    CONSTRAINT fk_handoff_replacement FOREIGN KEY (replacement_shift_id) REFERENCES oncall_shift(id),
+    CONSTRAINT uq_handoff_request UNIQUE (requester_id, request_key),
+    CONSTRAINT uq_handoff_replacement UNIQUE (replacement_shift_id)
+);
+CREATE INDEX idx_handoff_schedule ON oncall_handoff(schedule_id, id);

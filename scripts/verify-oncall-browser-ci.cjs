@@ -98,7 +98,7 @@ async function verify() {
     await waitForHealth(health, child);
     const env = { ...process.env, OPSPILOT_BASE_URL: base, OPSPILOT_EVIDENCE_DIR: evidence,
       OPSPILOT_ACCEPTANCE_ISOLATED: '1', OPSPILOT_PLAYWRIGHT_MODULE: modulePath };
-    for (const name of ['verify-oncall-rotation-ui.cjs', 'verify-oncall-rotation-boundaries.cjs', 'verify-oncall-coverage-ui.cjs']) {
+    for (const name of ['verify-oncall-rotation-ui.cjs', 'verify-oncall-rotation-boundaries.cjs', 'verify-oncall-coverage-ui.cjs', 'verify-oncall-handoff-http.cjs']) {
       if (interrupted) throw new Error('Browser acceptance interrupted');
       result.scripts.push(await runScript(name, env, evidence));
     }

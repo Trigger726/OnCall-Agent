@@ -6,6 +6,8 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
+checkpoint 49 正在实现定向接班请求：本人申请、指定接班人接受/拒绝、申请人撤回；接受以同事务新增临时覆盖保留原班次，用幂等键、版本和最新资格防重复或越权。当前为后端阶段，页面/浏览器与真实 MySQL 本轮证据尚待补齐，不宣称完整换班产品。详见 [阶段报告](docs/acceptance/V1.7-checkpoint-49.md)。
+
 checkpoint 48 新增日历覆盖预览：已持久化班次按实际路由优先级分段，逐日查看有效覆盖/缺班、被遮盖与无资格班次，取消后自动重算；不是未生成轮转的预测，也不是历史账号资格快照。代码 `4573a82` 的 [Run 36291809846](https://github.com/Trigger726/OnCall-Agent/actions/runs/36291809846) 十二项全绿，前端29项、真实MySQL35项零跳过、双时区各189项发现/147项执行/42项条件跳过、Linux桌面/390px与完整停机日志通过，详见 [验收报告](docs/acceptance/V1.7-checkpoint-48.md)。
 
 - 告警治理：外部事件 ID 幂等、SHA-256 指纹压缩、30 分钟窗口聚合、原始告警与 Incident 分层；原生接收 Alertmanager v4 批量 webhook，同状态重试零写入、firing/resolved 共用生命周期，批内永久坏项进入脱敏台账并支持角色受控重放。
@@ -118,7 +120,7 @@ cd ..
 
 | 账号 | 角色 | 典型权限 |
 | --- | --- | --- |
-| `admin` | ADMIN | 全部功能 |
+| `admin` | ADMIN | 管理功能；仍受本人确认、禁止自审等业务约束 |
 | `zhangwei` | ON_CALL | 事故处置与调查 |
 | `lina` | OPS_MANAGER | 运行管理与事故处置 |
 | `auditor` | AUDITOR | 审计只读，不能流转 Incident |
@@ -246,7 +248,7 @@ ALERTMANAGER_REJECTION_PAYLOAD_RETENTION=P3D
 
 新 P1 Incident 创建时立即执行策略的零分钟步骤；之后默认每分钟扫描仍为 `OPEN` 的事故，在 10/20 分钟到期时路由活跃值班人、指定用户或角色。每个 Incident/步骤最多一条持久化执行记录，并进入时间线、审计及站内通知日志。重叠班次优先临时覆盖；没有生效班次或活跃账号时记 `NO_TARGET`，不写虚假的通知。管理角色可手动触发扫描，值班页保留原有班次与策略展示，并增加最近 50 步执行记录。`ACKNOWLEDGED` 后不再升级；迟到扫描会补处理已到期且未执行的步骤。默认定时执行，可设置 `OPSPILOT_ONCALL_ESCALATION_ENABLED=false` 关闭。
 
-当前种子班次属于 2026-08 的历史示例，已过期；演示页面会如实显示“无生效班次”。真实部署需维护有效排班。本功能只记录站内路由，不提供值班班次编辑器、短信/电话投递或人工已读回执；详情见 [checkpoint-42](docs/acceptance/V1.7-checkpoint-42.md)。
+当前种子班次属于 2026-08 的历史示例，已过期；没有新增有效排班时，演示页面会如实显示“无生效班次”。真实部署需维护有效排班；普通/覆盖班次编辑与取消、轮转管理、覆盖日历已分别在 checkpoint 43/46/48 补齐。升级当前仍只记录站内路由，没有短信/电话投递或人工已读回执；早期升级证据见 [checkpoint-42](docs/acceptance/V1.7-checkpoint-42.md)，有效覆盖见 [checkpoint-48](docs/acceptance/V1.7-checkpoint-48.md)。
 
 ## 逾期行动项外部提醒
 
@@ -347,6 +349,8 @@ Runbook 页面保留原版/BM25/Hybrid 当前对照，并列出最近 12 次持�
 | GET | `/api/v1/on-call/current` | 当前值班人 |
 | GET | `/api/v1/on-call/roster` | 班次窗口、可用计划/负责人与数据库时间；最多 31 天/200 条 |
 | GET | `/api/v1/on-call/coverage` | 指定计划的有效覆盖/缺班、胜出与遮盖班次；最长31天，超过1000源班次拒算 |
+| GET/POST | `/api/v1/on-call/handoffs` | 有界读取或本人以 UUID/源班次版本申请定向接班（后端阶段） |
+| POST | `/api/v1/on-call/handoffs/{id}/decisions` | 指定接班人接受/拒绝，申请人撤回；版本化、同事务覆盖与审计 |
 | POST | `/api/v1/on-call/shifts` | 管理角色创建普通/覆盖班次，同层重叠返回 409 |
 | POST | `/api/v1/on-call/shifts/{id}/cancel` | 带版本/原因取消班次，保留历史与审计 |
 | GET/POST | `/api/v1/on-call/rotations` | 查询/创建有序轮转；列表有截断标志，创建限管理角色 |
@@ -365,8 +369,8 @@ Swagger UI: [http://localhost:9900/swagger-ui/index.html](http://localhost:9900/
 cd web && npm test && npm run build
 cd .. && ./mvnw test
 
-# 需要本机 Docker；在真实 MySQL 8.4 上执行 V1-V26 迁移和关键业务链路
-./mvnw -Dopspilot.mysql.it.enabled=true -Dtest=MySqlCompatibilityIntegrationTest,MySqlOnCallRoutingSnapshotIntegrationTest,MySqlOnCallRotationIntegrationTest,MySqlOnCallCoverageIntegrationTest test
+# 需要本机 Docker；在真实 MySQL 8.4 上执行 V1-V27 迁移和关键业务链路
+./mvnw -Dopspilot.mysql.it.enabled=true -Dtest=MySqlCompatibilityIntegrationTest,MySqlOnCallRoutingSnapshotIntegrationTest,MySqlOnCallRotationIntegrationTest,MySqlOnCallCoverageIntegrationTest,MySqlOnCallHandoffIntegrationTest test
 
 # 从最新前端源码打包后，真实浏览器门禁自行启动并清理隔离内存 JAR
 ./mvnw -DskipTests package
