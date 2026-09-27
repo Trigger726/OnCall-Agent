@@ -1,0 +1,101 @@
+{
+  "runId": 36342748669,
+  "headSha": "eb47adbee1ef000f0cef8df0897c5e4531ffc945",
+  "overall": "failure; 10 success, 1 registry-pull failure, container gate skipped",
+  "jobs": [
+    {
+      "id": 108685907249,
+      "name": "Alertmanager webhook integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108685907359,
+      "name": "Backend tests and JAR (H2)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108685907374,
+      "name": "Prometheus rule to Alertmanager integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108685907403,
+      "name": "MySQL 8.4 integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108685907423,
+      "name": "Redis Streams relay integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108685907431,
+      "name": "Frontend build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108685907450,
+      "name": "OpsPilot service metric to Incident integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108685907492,
+      "name": "Follow-up notification delivery integration",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 108685907516,
+      "name": "OpenTelemetry Collector and Tempo integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108685907517,
+      "name": "Two JVM Agent SSE integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108685907566,
+      "name": "On-call real browser integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 108686463620,
+      "name": "Container image build and smoke test",
+      "status": "completed",
+      "conclusion": "skipped"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 10939856130,
+      "name": "follow-up-notification-evidence",
+      "digest": "sha256:10e6ff2e7c07b102a1f72c5cd4453703361aef67611c1fe7c0704e1d50f84b37",
+      "headSha": "eb47adbee1ef000f0cef8df0897c5e4531ffc945"
+    },
+    {
+      "id": 10939418039,
+      "name": "oncall-browser-evidence",
+      "digest": "sha256:29d8483d9b831d90190bb1f1279c200aa1c6bea2e4663ab8b96eb49cc773bb80",
+      "headSha": "eb47adbee1ef000f0cef8df0897c5e4531ffc945"
+    },
+    {
+      "id": 10939232087,
+      "name": "mysql-compatibility-evidence",
+      "digest": "sha256:f86b26b8edd67f7c9e2546807d0fc4129aa6a310e8863f592c598edc544fd9ff",
+      "headSha": "eb47adbee1ef000f0cef8df0897c5e4531ffc945"
+    }
+  ],
+  "digestVerification": "Browser and MySQL ZIP SHA256 match GitHub digest; complete MySQL Maven/XML CLI replay passed",
+  "rerun": "Terminal failed follow-up job rerun API rejected with 403 Resource not accessible by integration; user asked to rerun manually. No disabled gate or fixture substitution."
+}

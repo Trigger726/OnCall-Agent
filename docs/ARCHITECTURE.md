@@ -197,13 +197,14 @@ V20 将永久业务拒绝写入 `alert_ingest_rejection`。对完整 alert 使�
 
 ### Runbook 知识库与检索门禁
 
-V1 的 `runbook` 表和浏览器 `contains` 搜索保留为迁移来源及效果基线。V1.6 新增稳定文档键与不可变版本：内容不变时按 SHA-256 哈希幂等复用，内容变化时创建下一版本并将旧版本标记为 `SUPERSEDED`。每个版本保存来源、资源/服务元数据和角色 ACL；Markdown 按标题分段并限制分块长度，PDF 由 PDFBox 提取文本后进入同一处理链。
+V1 的 `runbook` 表和浏览器 `contains` 搜索保留为迁移来源及效果基线。V1.6 新增稳定文档键与不可变版本，历史实现按正文哈希复用并在导入时替换发布版。检查点56的V30改为同一提交人、正文、来源、元数据、规范化ACL及发布基线共同识别相同待审候选；导入只创建PENDING_REVIEW，另一当前管理账号批准后才替换旧发布版。每个版本保存来源、资源/服务元数据和角色 ACL；Markdown 按标题分段并限制分块长度，PDF 由 PDFBox 提取文本后进入同一处理链。
 
 ```text
 Markdown / extractable PDF
   -> validate size, type and metadata
-  -> content hash + immutable version
-  -> heading-aware chunks + role ACL
+  -> immutable candidate + submission identity + captured publication baseline
+  -> heading-aware candidate chunks + role ACL
+  -> independent approval (reject / owner withdraw never enters retrieval)
   -> role-filtered BM25 ranking ------------------+
   -> optional version-bound embedding + cosine --+-> RRF -> actual engine / ranks / warning
                                       unavailable +-> deterministic BM25 fallback
@@ -233,9 +234,11 @@ V12 把检索遥测从“永久保存完整快照”改为显式生命周期。�
 
 检查点55的V29补非敏感returned_document_count，同一次检索INSERT保存稳定文档键去重数；Java迁移以500行keyset恢复旧ACTIVE结构完整快照，已清理/损坏数据不回填假零。只读管理接口`GET /api/v1/runbooks/searches/trend`固定实际执行引擎、来源和K，先按查询ID聚合独立批准的文档评分，再按查询日聚合。在REPEATABLE_READ事务中读取数据库时钟与统计；默认30天、最大90天。返回率与相关性分开：非空查询全部返回文档完成独立复核才计分，部分正相关不伪装完成；已知空结果计未命中，未知排除并单列，零分母为null。总率由分子分母汇总而非日率平均。K为原协议片段上限，评分按文档去重；不是去重文档Top-K。晚复核更新原查询日，非历史当日评分；只统计成功持久化查询，不外推生产成效。新清理保留计数和已复核结构化事实，避免正文擦除使趋势错误归零。前端保留离线评测，单独显示真实查询趋势、复核覆盖与未知；失败读取清空旧口径，不做隐式重试或造数。
 
-设计还借鉴了 [Backstage TechDocs](https://backstage.io/docs/features/techdocs/) 的 docs-like-code 与可搜索文档思路、[Rundeck](https://docs.rundeck.com/docs/about/introduction.html) 的 Runbook 自动化权限/历史边界，以及 [OpenSearch BM25](https://docs.opensearch.org/latest/im-plugin/similarity/) 的关键词检索模型。当前仍是单机小语料与可选外部 Embedding：没有向量 ANN/OpenSearch，未接 cross-encoder rerank，PDF 不含 OCR。检查点56正在将导入即发布改为待审与独立复核；其最终验收仍进行中，见 [阶段报告](acceptance/V1.7-checkpoint-56.md)。
+设计还借鉴了 [Backstage TechDocs](https://backstage.io/docs/features/techdocs/) 的 docs-like-code 与可搜索文档思路、[Rundeck](https://docs.rundeck.com/docs/about/introduction.html) 的 Runbook 自动化权限/历史边界，以及 [OpenSearch BM25](https://docs.opensearch.org/latest/im-plugin/similarity/) 的关键词检索模型。当前仍是单机小语料与可选外部 Embedding：没有向量 ANN/OpenSearch，未接 cross-encoder rerank，PDF 不含 OCR。检查点56已将导入即发布改为待审与独立复核；其最终验收仍进行中，见 [阶段报告](acceptance/V1.7-checkpoint-56.md)。
 
 V30为Runbook增加待审/拒绝/撤回、提交发布基线、审核版本、决定键/原始说明哈希与脱敏复核事实；已有发布版本不重写。导入和决定先验证当前账号，再用逻辑手册锁与候选锁串行化。锁行使用原子upsert直接取排他锁，避免InnoDB重复INSERT后共享锁升级的竞态。批准才替换旧发布版，基线不符拒绝，不自动rebase。事务中同时写版本状态/审核/审计；精确重放不重发或复活旧版。普通历史只暴露PUBLISHED/SUPERSEDED，所有既有检索候选仍只读PUBLISHED；审核台账只返回元数据，正文由管理详情读取。只读详情/台账采用一致快照，命令回包使用锁定当前读，防止旧谓词快照让发布版本与状态矛盾。UI在首个POST前冻结账号、ID、版本、键、决定及说明，网络结果未知手动同键恢复；权限或冲突拒绝锁定，放弃本地草稿不撤销服务端事实。
+
+冻结意图校验独立于页面GET：损坏JSON、字段错误或账号不匹配均保留原始记录并阻断新提交，不能悄悄换键；quota失败发生在POST前。详情404或队列读取失败不遮住核对/明确放弃入口。会话恢复仅GET，不自动发决定，发送前再次校验当前账号；失败锁持久化失败也保持当前页面阻断。此状态只保存在当前浏览器sessionStorage，不是服务端跨设备执行租约。
 
 ## 6. OnCall 多轮协作
 
