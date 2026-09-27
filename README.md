@@ -6,6 +6,8 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
+checkpoint 51 接班页面本地已验：从本人普通班次申请，指定接班人接受/拒绝、申请人撤回；接受后自动刷新班次/覆盖日历。响应丢失后按账号恢复冻结草稿并同键重试，409锁定旧决定版本而不自动重提。前端39项与隔离JAR五脚本通过，已保留旧JAR和新旧桌面/390px截图；最新远端CI待验，见 [进行中报告](docs/acceptance/V1.7-checkpoint-51.md)。
+
 checkpoint 50 补接班台账筛选：`scope=MINE` 从登录身份匹配申请/接班双方，可与计划、状态组合，SQL先过滤再截断，避免较旧待办被201条无关新请求遮住。代码 `a87265a` 的 [Run 36326409469](https://github.com/Trigger726/OnCall-Agent/actions/runs/36326409469) 十二项全绿，双时区各224发现/165执行/59条件跳过、真实MySQL52执行/零跳过、接班17项通过；旧页面/JAR/HTTP回归已验，接班页面仍待交付，详见 [阶段报告](docs/acceptance/V1.7-checkpoint-50.md)。
 
 checkpoint 49 定向接班后端已验：本人申请、指定接班人接受/拒绝、申请人撤回；同事务新增临时覆盖保留原班次，用幂等键、版本和最新资格防重复或越权。修复提交 `eb3ef78` 的 [Run 36325182213](https://github.com/Trigger726/OnCall-Agent/actions/runs/36325182213) 十二项全绿，真实MySQL50项零跳过、双时区各220项发现/163项执行、真实JAR HTTP与原页面回归通过；接班UI/新旧截图对照仍待交付，不宣称完整换班产品。首轮SSE响应头竞态与修复证据保留，详见 [阶段报告](docs/acceptance/V1.7-checkpoint-49.md)。

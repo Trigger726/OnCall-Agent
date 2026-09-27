@@ -6,6 +6,7 @@ import { auth } from '@/stores/auth'
 import OnCallRosterPanel from '@/components/OnCallRosterPanel.vue'
 import OnCallRotationPanel from '@/components/OnCallRotationPanel.vue'
 import OnCallCoveragePanel from '@/components/OnCallCoveragePanel.vue'
+import OnCallHandoffPanel from '@/components/OnCallHandoffPanel.vue'
 
 interface Shift { scheduleId: number; scheduleName: string; resourceName: string; userName: string | null; department: string | null; startsAt: string | null; endsAt: string | null; override: boolean }
 interface Policy { policyId: number; policyName: string; severity: string | null; resourceName: string; step: number; delayMinutes: number; targetType: string; targetRef: string }
@@ -20,8 +21,10 @@ const error = ref('')
 const rosterPanel = ref<InstanceType<typeof OnCallRosterPanel> | null>(null)
 const rotationPanel = ref<InstanceType<typeof OnCallRotationPanel> | null>(null)
 const coveragePanel = ref<InstanceType<typeof OnCallCoveragePanel> | null>(null)
-async function rosterChanged() { await load(); await rotationPanel.value?.refresh(); await coveragePanel.value?.refresh() }
-async function rotationChanged() { await load(); await rosterPanel.value?.refresh(); await coveragePanel.value?.refresh() }
+const handoffPanel = ref<InstanceType<typeof OnCallHandoffPanel> | null>(null)
+async function rosterChanged() { await load(); await rotationPanel.value?.refresh(); await coveragePanel.value?.refresh(); await handoffPanel.value?.refresh() }
+async function rotationChanged() { await load(); await rosterPanel.value?.refresh(); await coveragePanel.value?.refresh(); await handoffPanel.value?.refresh() }
+async function handoffChanged() { await load(); await rosterPanel.value?.refresh(); await rotationPanel.value?.refresh(); await coveragePanel.value?.refresh() }
 const canScan = computed(() => ['ADMIN', 'OPS_MANAGER'].includes(auth.state.user?.roleCode ?? ''))
 
 async function load() {
@@ -64,8 +67,9 @@ onMounted(load)
         <footer><span><Clock3 :size="15" />{{ formatTime(shift.startsAt, true) }}</span><ArrowDown :size="14" /><span>{{ formatTime(shift.endsAt, true) }}</span></footer>
       </article>
     </section>
+    <OnCallHandoffPanel ref="handoffPanel" @changed="handoffChanged" />
     <OnCallRotationPanel ref="rotationPanel" @changed="rotationChanged" />
-    <OnCallRosterPanel ref="rosterPanel" @changed="rosterChanged" />
+    <OnCallRosterPanel ref="rosterPanel" @changed="rosterChanged" @handoff="source => handoffPanel?.open(source)" />
     <OnCallCoveragePanel ref="coveragePanel" />
     <section class="content-panel policy-panel">
       <div class="panel-heading"><div><h2>升级策略</h2><span>P1 Incident 未确认时自动逐级通知</span></div><PhoneForwarded :size="18" /></div>
