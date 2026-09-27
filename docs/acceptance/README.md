@@ -2,11 +2,11 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
-当前进行中：[V1.7-checkpoint-51.md](V1.7-checkpoint-51.md)：接班页面/请求冻结与恢复/双方决定已实现，39项前端与本地五脚本已过；下拉框可访问名称的首轮失败已修正。最终构建、远端门禁与证据归档待补。
+最新限定验收：[V1.7-checkpoint-51.md](V1.7-checkpoint-51.md)：定向接班页面、冻结恢复、双方决定与409锁定通过；`49c221c` 的 [Run 36328347791](https://github.com/Trigger726/OnCall-Agent/actions/runs/36328347791) 十二作业success，前端39项、双时区、真实MySQL52项断言与Linux五脚本通过，新旧/远端桌面手机证据已归档。另发现MySQL容器停止后后台任务泄漏及fork强制退出，下一工程修复优先处理；非全日志干净或完整换班验收。
 
-最新进行中：[V1.7-checkpoint-50.md](V1.7-checkpoint-50.md)：接班台账本人/状态先过滤再截断，旧待办遗漏有失败对照；`a87265a` 的 [Run 36326409469](https://github.com/Trigger726/OnCall-Agent/actions/runs/36326409469) 十二项全绿，真实MySQL52执行零跳过、双时区各224发现/165执行、原有桌面/手机与HTTP回归通过，ZIP摘要/JSON/截图已核验。接班UI与新旧实页Demo仍未交付。
+前一阶段：[V1.7-checkpoint-50.md](V1.7-checkpoint-50.md)：接班台账本人/状态先过滤再截断，旧待办遗漏有失败对照；`a87265a` 的 [Run 36326409469](https://github.com/Trigger726/OnCall-Agent/actions/runs/36326409469) 十二项全绿，真实MySQL52执行零跳过、双时区各224发现/165执行、原有桌面/手机与HTTP回归通过，ZIP摘要/JSON/截图已核验。当时未交付的接班UI与新旧实页Demo由检查点51补齐；历史报告保留原阶段结论。
 
-进行中：[V1.7-checkpoint-49.md](V1.7-checkpoint-49.md)：定向接班后端已验，V27、本人权限/幂等/版本/行锁/事务覆盖与真实HTTP通过；修复代码 `eb3ef78` 的 [Run 36325182213](https://github.com/Trigger726/OnCall-Agent/actions/runs/36325182213) 十二项全绿，真实MySQL50项零跳过、双时区各220项发现/163项执行。接班页面与桌面/移动新旧 Demo 对照尚未交付，不能等同于完整换班验收；首轮SSE安全头竞态失败与修复已归档。
+前一阶段：[V1.7-checkpoint-49.md](V1.7-checkpoint-49.md)：定向接班后端已验，V27、本人权限/幂等/版本/行锁/事务覆盖与真实HTTP通过；修复代码 `eb3ef78` 的 [Run 36325182213](https://github.com/Trigger726/OnCall-Agent/actions/runs/36325182213) 十二项全绿，真实MySQL50项零跳过、双时区各220项发现/163项执行。当时尚未交付的页面/新旧Demo对照由51补齐，仍不等于完整换班验收；首轮SSE安全头竞态失败与修复已归档。
 
 最新检查点：[V1.7-checkpoint-48.md](V1.7-checkpoint-48.md)：逐日日历、有效覆盖/缺班与取消后自动刷新通过；[Run 36291809846](https://github.com/Trigger726/OnCall-Agent/actions/runs/36291809846) 十二项全绿，前端29项、生命周期9项、双时区各189项发现/147项执行、真实MySQL35项零跳过、Linux桌面/390px与完整停机日志已核验。首次失败证据保留；原始Demo归档分支已上传。
 
@@ -58,7 +58,7 @@
 | V1.7 | 46：轮转管理与异常台账页面 | 通过（限本检查点），21 项前端/双时区/JAR/桌面手机及十一门禁已验 | [V1.7-checkpoint-46.md](V1.7-checkpoint-46.md) |
 | V1.7 | 49：定向接班请求后端 | 部分通过，后端/MySQL/HTTP/十二门禁已验，接班UI待交付 | [V1.7-checkpoint-49.md](V1.7-checkpoint-49.md) |
 | V1.7 | 50：接班台账筛选与待办完整性 | 部分通过，列表/MySQL/双时区/十二门禁已验，接班UI待交付 | [V1.7-checkpoint-50.md](V1.7-checkpoint-50.md) |
-| V1.7 | 51：定向接班页面与故障重试 | 进行中，本地交互已过，最终产物/远端待验 | [V1.7-checkpoint-51.md](V1.7-checkpoint-51.md) |
+| V1.7 | 51：定向接班页面与故障重试 | 限定范围通过，十二作业/新旧Demo已验；MySQL生命周期错误待修 | [V1.7-checkpoint-51.md](V1.7-checkpoint-51.md) |
 
 ## 状态约定
 

@@ -6,11 +6,11 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-checkpoint 51 接班页面本地已验：从本人普通班次申请，指定接班人接受/拒绝、申请人撤回；接受后自动刷新班次/覆盖日历。响应丢失后按账号恢复冻结草稿并同键重试，409锁定旧决定版本而不自动重提。前端39项与隔离JAR五脚本通过，已保留旧JAR和新旧桌面/390px截图；最新远端CI待验，见 [进行中报告](docs/acceptance/V1.7-checkpoint-51.md)。
+checkpoint 51 定向接班页面已验：从本人普通班次申请，指定接班人接受/拒绝、申请人撤回；接受后自动刷新班次/覆盖日历。响应丢失后按账号恢复冻结草稿并同键重试，409锁定旧决定版本而不自动重提。代码 `49c221c` 的 [Run 36328347791](https://github.com/Trigger726/OnCall-Agent/actions/runs/36328347791) 十二作业成功，前端39项、双时区回归、真实MySQL52项断言、Linux隔离JAR五脚本通过；新旧桌面/390px与远端工件已核验。MySQL日志另有容器停止后后台任务泄漏和fork强制退出，须继续修复，不宣称全日志干净或完整换班产品完成，见 [限定验收报告](docs/acceptance/V1.7-checkpoint-51.md)。
 
-checkpoint 50 补接班台账筛选：`scope=MINE` 从登录身份匹配申请/接班双方，可与计划、状态组合，SQL先过滤再截断，避免较旧待办被201条无关新请求遮住。代码 `a87265a` 的 [Run 36326409469](https://github.com/Trigger726/OnCall-Agent/actions/runs/36326409469) 十二项全绿，双时区各224发现/165执行/59条件跳过、真实MySQL52执行/零跳过、接班17项通过；旧页面/JAR/HTTP回归已验，接班页面仍待交付，详见 [阶段报告](docs/acceptance/V1.7-checkpoint-50.md)。
+checkpoint 50 补接班台账筛选：`scope=MINE` 从登录身份匹配申请/接班双方，可与计划、状态组合，SQL先过滤再截断，避免较旧待办被201条无关新请求遮住。代码 `a87265a` 的 [Run 36326409469](https://github.com/Trigger726/OnCall-Agent/actions/runs/36326409469) 十二项全绿，双时区各224发现/165执行/59条件跳过、真实MySQL52执行/零跳过、接班17项通过；旧页面/JAR/HTTP回归已验，当时未交付的接班页面已由检查点51补齐，详见 [阶段报告](docs/acceptance/V1.7-checkpoint-50.md)。
 
-checkpoint 49 定向接班后端已验：本人申请、指定接班人接受/拒绝、申请人撤回；同事务新增临时覆盖保留原班次，用幂等键、版本和最新资格防重复或越权。修复提交 `eb3ef78` 的 [Run 36325182213](https://github.com/Trigger726/OnCall-Agent/actions/runs/36325182213) 十二项全绿，真实MySQL50项零跳过、双时区各220项发现/163项执行、真实JAR HTTP与原页面回归通过；接班UI/新旧截图对照仍待交付，不宣称完整换班产品。首轮SSE响应头竞态与修复证据保留，详见 [阶段报告](docs/acceptance/V1.7-checkpoint-49.md)。
+checkpoint 49 定向接班后端已验：本人申请、指定接班人接受/拒绝、申请人撤回；同事务新增临时覆盖保留原班次，用幂等键、版本和最新资格防重复或越权。修复提交 `eb3ef78` 的 [Run 36325182213](https://github.com/Trigger726/OnCall-Agent/actions/runs/36325182213) 十二项全绿，真实MySQL50项零跳过、双时区各220项发现/163项执行、真实JAR HTTP与原页面回归通过；当时未交付的接班UI/新旧对照已由51补齐，仍不宣称完整换班产品。首轮SSE响应头竞态与修复证据保留，详见 [阶段报告](docs/acceptance/V1.7-checkpoint-49.md)。
 
 checkpoint 48 新增日历覆盖预览：已持久化班次按实际路由优先级分段，逐日查看有效覆盖/缺班、被遮盖与无资格班次，取消后自动重算；不是未生成轮转的预测，也不是历史账号资格快照。代码 `4573a82` 的 [Run 36291809846](https://github.com/Trigger726/OnCall-Agent/actions/runs/36291809846) 十二项全绿，前端29项、真实MySQL35项零跳过、双时区各189项发现/147项执行/42项条件跳过、Linux桌面/390px与完整停机日志通过，详见 [验收报告](docs/acceptance/V1.7-checkpoint-48.md)。
 
@@ -353,7 +353,7 @@ Runbook 页面保留原版/BM25/Hybrid 当前对照，并列出最近 12 次持�
 | GET | `/api/v1/on-call/current` | 当前值班人 |
 | GET | `/api/v1/on-call/roster` | 班次窗口、可用计划/负责人与数据库时间；最多 31 天/200 条 |
 | GET | `/api/v1/on-call/coverage` | 指定计划的有效覆盖/缺班、胜出与遮盖班次；最长31天，超过1000源班次拒算 |
-| GET/POST | `/api/v1/on-call/handoffs` | 以计划、scope=ALL/MINE、status筛选后有界读取；本人以 UUID/源班次版本申请定向接班（后端阶段） |
+| GET/POST | `/api/v1/on-call/handoffs` | 以计划、scope=ALL/MINE、status筛选后有界读取；本人以 UUID/源班次版本申请定向接班，页面支持冻结草稿与同键恢复 |
 | POST | `/api/v1/on-call/handoffs/{id}/decisions` | 指定接班人接受/拒绝，申请人撤回；版本化、同事务覆盖与审计 |
 | POST | `/api/v1/on-call/shifts` | 管理角色创建普通/覆盖班次，同层重叠返回 409 |
 | POST | `/api/v1/on-call/shifts/{id}/cancel` | 带版本/原因取消班次，保留历史与审计 |
