@@ -64,10 +64,10 @@ public class RunbookRetrievalFeedbackService {
                             INSERT INTO runbook_retrieval_query(
                               query_text, query_hash, source_type, requested_mode, actual_engine, role_code,
                               semantic_status, semantic_coverage, candidate_chunk_count, top_k, latency_ms,
-                              results_json, created_by, redacted_fields)
+                              results_json, created_by, redacted_fields, returned_document_count)
                             VALUES (:query, :queryHash, :sourceType, :requestedMode, :actualEngine, :roleCode,
                               :semanticStatus, :semanticCoverage, :candidateCount, :topK, :latencyMs,
-                              :results, :createdBy, :redactedFields)
+                              :results, :createdBy, :redactedFields, :returnedDocuments)
                             """)
                     .param("query", snapshot.query()).param("queryHash", sha256(snapshot.query()))
                     .param("sourceType", sourceType).param("requestedMode", requestedMode)
@@ -76,6 +76,7 @@ public class RunbookRetrievalFeedbackService {
                     .param("candidateCount", candidateChunkCount).param("topK", topK)
                     .param("latencyMs", latencyMs).param("results", snapshot.resultsJson())
                     .param("redactedFields", snapshot.redactedFields())
+                    .param("returnedDocuments", results.stream().map(RunbookService.SearchResult::stableKey).distinct().count())
                     .param("createdBy", actorId).update(keyHolder, "id");
             return keyHolder.getKey() == null ? null : keyHolder.getKey().longValue();
         } catch (RuntimeException exception) {

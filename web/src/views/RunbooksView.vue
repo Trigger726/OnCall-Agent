@@ -6,6 +6,7 @@ import {
 } from 'lucide-vue-next'
 import { api, formatTime, RequestError } from '@/services/api'
 import { auth } from '@/stores/auth'
+import RunbookRetrievalTrend from '@/components/RunbookRetrievalTrend.vue'
 
 interface RunbookDocument {
   id: number
@@ -198,6 +199,7 @@ const form = reactive({
 })
 
 const canManage = computed(() => ['ADMIN', 'OPS_MANAGER'].includes(auth.state.user?.roleCode ?? ''))
+const canRead = computed(() => ['ADMIN', 'OPS_MANAGER', 'ON_CALL'].includes(auth.state.user?.roleCode ?? ''))
 const failedCases = computed(() => {
   if (!evaluation.value) return 0
   try { return (JSON.parse(evaluation.value.failuresJson) as unknown[]).length } catch { return 0 }
@@ -212,6 +214,10 @@ const historyDelta = computed(() => {
 })
 
 onMounted(async () => {
+  if (!canRead.value) {
+    error.value = '当前角色不能访问 Runbook；检索质量趋势仅管理角色可见'
+    return
+  }
   await loadDocuments()
   await loadSemanticIndex()
   await loadLatestEvaluation()
@@ -450,7 +456,7 @@ function retentionLabel(value: string) {
       </div>
     </div>
 
-    <section class="runbook-comparison content-panel" aria-label="新旧 Runbook 能力对比">
+    <section v-if="canRead" class="runbook-comparison content-panel" aria-label="新旧 Runbook 能力对比">
       <article><span>原演示 · contains</span><strong>{{ baselineMetric ? `Recall@3 ${metric(baselineMetric.recallAt3)}` : '3 条内置文本' }}</strong><small>LEGACY_CONTAINS_V1 / 无分数、版本与引用</small></article>
       <article><span>词法基线 · BM25</span><strong>{{ bm25Metric ? `Recall@3 ${metric(bm25Metric.recallAt3)}` : '尚未评测' }}</strong><small>{{ bm25Metric ? `NDCG@3 ${metric(bm25Metric.ndcgAt3)} · MRR ${metric(bm25Metric.mrr)} · 引用 ${metric(bm25Metric.citationHitRate)}` : '13 条固定改写查询' }}</small></article>
       <article><span>混合检索 · RRF</span><strong>{{ hybridMetric?.available ? `Recall@3 ${metric(hybridMetric.recallAt3)}` : '本次不可用' }}</strong><small>{{ hybridMetric?.available ? `NDCG@3 ${metric(hybridMetric.ndcgAt3)} · MRR ${metric(hybridMetric.mrr)} · 引用 ${metric(hybridMetric.citationHitRate)}` : (hybridMetric?.note ?? '构建完整向量索引后计分') }}</small></article>
@@ -459,7 +465,9 @@ function retentionLabel(value: string) {
 
     <p v-if="evaluation" class="evaluation-note">固定集 {{ evaluation.caseCount }} 个查询 · {{ evaluation.judgmentCount }} 个 qrels · 版本 {{ evaluation.datasetVersion }} · {{ evaluation.evaluationNote }} · 选择引擎 {{ evaluation.engine }} · NDCG@3 {{ metric(evaluation.ndcgAt3) }} · 失败 {{ failedCases }}</p>
 
-    <section class="content-panel evaluation-history" aria-label="Runbook 固定集评测历史">
+    <RunbookRetrievalTrend v-if="canManage" :key="auth.state.user?.id" />
+
+    <section v-if="canRead" class="content-panel evaluation-history" aria-label="Runbook 固定集评测历史">
       <header class="panel-heading"><div><h2>固定集评测历史</h2><span>最近 12 次离线运行；只在数据集版本与实际引擎都相同时比较，不代表生产查询命中率</span></div><span v-if="historyDelta !== null" class="keyword-tag">Recall@3 较上次 {{ Number(historyDelta) >= 0 ? '+' : '' }}{{ historyDelta }} 个百分点</span></header>
       <div v-if="evaluationHistory.length" class="evaluation-history-scroll">
         <table>
@@ -473,10 +481,10 @@ function retentionLabel(value: string) {
       <p v-else class="evaluation-history-empty">尚无评测运行；管理角色运行固定集评测后才会形成历史，不用演示值补齐。</p>
     </section>
 
-    <div v-if="error" class="inline-error">{{ error }}</div>
+    <div v-if="error" role="alert" class="inline-error">{{ error }}</div>
     <div v-if="notice" class="success-banner">{{ notice }}</div>
 
-    <form class="runbook-search content-panel" @submit.prevent="search">
+    <form v-if="canRead" class="runbook-search content-panel" @submit.prevent="search">
       <Search :size="17" />
       <input v-model="query" aria-label="Runbook 检索语句" placeholder="输入故障症状、指标、组件或恢复动作" />
       <div class="segmented-control search-mode" aria-label="检索模式">

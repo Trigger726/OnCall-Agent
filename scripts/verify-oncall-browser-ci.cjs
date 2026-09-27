@@ -68,8 +68,11 @@ async function runScript(name, env, evidence) {
   }
 }
 async function verify() {
+  if (process.env.OPSPILOT_TREND_BASELINE === '1' && process.env.CI) throw new Error('Trend baseline capture must not replace CI acceptance');
   if (process.env.OPSPILOT_REVOCATION_BASELINE === '1' && process.env.CI) throw new Error('Baseline capture must not replace CI acceptance');
-  const jar = path.join(root, 'target', 'opspilot-0.1.0-SNAPSHOT.jar');
+  const jar = process.env.OPSPILOT_TREND_BASELINE === '1'
+    ? path.join(root, 'target', 'cp55-before', 'opspilot-cp54.jar')
+    : path.join(root, 'target', 'opspilot-0.1.0-SNAPSHOT.jar');
   if (!fs.existsSync(jar)) throw new Error('Build the fresh frontend and JAR before browser acceptance');
   await requireFreePort(9917);
   await requireFreePort(9921);
@@ -94,12 +97,12 @@ async function verify() {
   process.once('SIGTERM', interrupt);
   const result = { status: 'RUNNING', evidenceDirectory: path.relative(root, evidence), database: 'isolated unique H2 memory',
     url: base + '/on-call', jarTimezone: 'UTC', scanDelayMs: 200, defaultScanDelayMs: 60000, scripts: [],
-    browserCi: Boolean(process.env.CI), revocationBaselineCapture: process.env.OPSPILOT_REVOCATION_BASELINE === '1', userFileDatabaseModified: false, originalProcessesNotStopped: true, ownedProcessStopped: false };
+    browserCi: Boolean(process.env.CI), trendBaselineCapture: process.env.OPSPILOT_TREND_BASELINE === '1', revocationBaselineCapture: process.env.OPSPILOT_REVOCATION_BASELINE === '1', userFileDatabaseModified: false, originalProcessesNotStopped: true, ownedProcessStopped: false };
   try {
     await waitForHealth(health, child);
     const env = { ...process.env, OPSPILOT_BASE_URL: base, OPSPILOT_EVIDENCE_DIR: evidence,
       OPSPILOT_ACCEPTANCE_ISOLATED: '1', OPSPILOT_PLAYWRIGHT_MODULE: modulePath };
-    for (const name of ['verify-oncall-rotation-ui.cjs', 'verify-oncall-rotation-boundaries.cjs', 'verify-oncall-coverage-ui.cjs', 'verify-oncall-handoff-http.cjs', 'verify-oncall-handoff-ui.cjs', 'verify-oncall-handoff-revocation-http.cjs', 'verify-oncall-handoff-revocation-ui.cjs']) {
+    for (const name of ['verify-oncall-rotation-ui.cjs', 'verify-oncall-rotation-boundaries.cjs', 'verify-oncall-coverage-ui.cjs', 'verify-oncall-handoff-http.cjs', 'verify-oncall-handoff-ui.cjs', 'verify-oncall-handoff-revocation-http.cjs', 'verify-oncall-handoff-revocation-ui.cjs', 'verify-runbook-trend-ui.cjs']) {
       if (interrupted) throw new Error('Browser acceptance interrupted');
       result.scripts.push(await runScript(name, env, evidence));
     }

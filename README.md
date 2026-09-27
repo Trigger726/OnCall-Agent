@@ -6,6 +6,8 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
+checkpoint55本地限定通过：新增持久化查询逐日趋势，区分结果返回率、非空查询全量独立复核覆盖、可计分子集Hit@K与历史未知；V29恢复旧有效快照计数、保留清理后分母。桌面/390px新旧对照、50项前端、双时区各250发现/180执行/70条件跳过、八脚本与10项生命周期测试通过；真实MySQL/远端CI待验，见 [阶段报告](docs/acceptance/V1.7-checkpoint-55.md)。不冒充全量生产相关性或版本效果提升。
+
 checkpoint54限定通过：覆盖详情、独立管理撤销确认、账号隔离冻结意图恢复/409锁定及日历刷新已交付，原接受事实与历史Demo保留。`ad701b7` 的 [Run36335732140](https://github.com/Trigger726/OnCall-Agent/actions/runs/36335732140) 十二CI作业success，前端47项、真实MySQL62项零跳过/五池干净关闭、双时区各244发现/175执行/69条件跳过与七脚本通过；新旧桌面/手机、工件摘要与完整MySQL CLI重放已验，见 [验收报告](docs/acceptance/V1.7-checkpoint-54.md)。双向互换/开放认领、外部渠道和跨时区/DST仍未实现。
 
 checkpoint 52 工程修复已验：五套真实MySQL容器由Spring管理并在类结束时显式关闭上下文，补完整日志/五池停机/零跳过门禁。代码 `276b57b` 的 [Run36329512979](https://github.com/Trigger726/OnCall-Agent/actions/runs/36329512979) 十二作业success，真实MySQL52项执行、五池完整关闭、日志拒绝项0、无强制fork退出；12项门禁测试、双时区、39项前端与浏览器五脚本通过，ZIP摘要及失败/成功工件重放已验。51旧错误和52首次严格门禁失败保留，页面/历史Demo不改，见 [工程验收报告](docs/acceptance/V1.7-checkpoint-52.md)。

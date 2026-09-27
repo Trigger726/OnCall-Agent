@@ -6,6 +6,18 @@ const { spawn } = require('node:child_process');
 const { once } = require('node:events');
 const { requireFreePort, stopProcess, waitForHealth, redact, unexpectedLogLines } = require('../../verify-oncall-browser-ci.cjs');
 
+test('trend baseline cannot replace CI acceptance or launch an old JAR', async () => {
+  const child = spawn(process.execPath, [require.resolve('../../verify-oncall-browser-ci.cjs')], {
+    env: { ...process.env, CI: 'true', OPSPILOT_TREND_BASELINE: '1' }, windowsHide: true,
+  });
+  let output = '';
+  child.stderr.on('data', chunk => { output += chunk; });
+  const [code] = await once(child, 'close');
+  assert.equal(code, 1);
+  assert.match(output, /Trend baseline capture must not replace CI acceptance/);
+  assert.doesNotMatch(output, /evidenceDirectory/);
+});
+
 test('occupied port is rejected without stopping the original listener', async () => {
   const server = net.createServer();
   server.listen(0, '127.0.0.1');

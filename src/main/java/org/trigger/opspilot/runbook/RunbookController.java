@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.http.MediaType;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.trigger.opspilot.common.ApiResponse;
 import org.trigger.opspilot.security.UserPrincipal;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Validated
@@ -30,12 +32,15 @@ public class RunbookController {
     private final RunbookService service;
     private final RunbookSemanticIndexService semanticIndexService;
     private final RunbookRetrievalFeedbackService feedbackService;
+    private final RunbookRetrievalTrendService trendService;
 
     public RunbookController(RunbookService service, RunbookSemanticIndexService semanticIndexService,
-                             RunbookRetrievalFeedbackService feedbackService) {
+                             RunbookRetrievalFeedbackService feedbackService,
+                             RunbookRetrievalTrendService trendService) {
         this.service = service;
         this.semanticIndexService = semanticIndexService;
         this.feedbackService = feedbackService;
+        this.trendService = trendService;
     }
 
     @GetMapping
@@ -79,6 +84,17 @@ public class RunbookController {
     @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
     public ApiResponse<RunbookRetrievalFeedbackService.RetentionStatus> retrievalRetention() {
         return ApiResponse.ok(feedbackService.retentionStatus());
+    }
+
+    @GetMapping("/searches/trend")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
+    public ApiResponse<RunbookRetrievalTrendService.Trend> retrievalTrend(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
+            @RequestParam(defaultValue = "CONSOLE") String source,
+            @RequestParam(defaultValue = "BM25_LOCAL_V1") String engine,
+            @RequestParam(defaultValue = "5") int topK) {
+        return ApiResponse.ok(trendService.trend(from, to, source, engine, topK));
     }
 
     @PostMapping("/searches/retention/purge")

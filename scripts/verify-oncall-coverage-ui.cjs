@@ -8,6 +8,7 @@ assert.ok(['localhost', '127.0.0.1'].includes(new URL(root).hostname));
 assert.notEqual(new URL(root).port, '9900');
 const out = fs.mkdtempSync(path.join(process.env.OPSPILOT_EVIDENCE_DIR || require('node:os').tmpdir(), 'coverage-ui-'));
 const addHours = (value, hours) => new Date(new Date(value + 'Z').getTime() + hours * 3600000).toISOString().slice(0, 19);
+const inputTime = value => value.replace(/:00$/, '');
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.OPSPILOT_CHROME_PATH || undefined, headless: true });
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, timezoneId: 'Asia/Shanghai' });
@@ -30,7 +31,7 @@ const addHours = (value, hours) => new Date(new Date(value + 'Z').getTime() + ho
     const options = await api('/on-call/roster');
     const scheduleId = options.schedules[1].id;
     // Beyond the auto-generation horizon, but still within ordinary roster write bounds.
-    const from = addHours(options.databaseNow, 22 * 24), to = addHours(from, 8);
+    const from = addHours(options.databaseNow, 22 * 24).slice(0, 16) + ':00', to = addHours(from, 8);
     const historyPath = '/on-call/roster?from=2026-08-19T00%3A00&to=2026-08-21T00%3A00';
     const history = JSON.stringify((await api(historyPath)).shifts);
     const create = (userId, start, end, override) => api('/on-call/shifts', { scheduleId, userId,
@@ -43,8 +44,8 @@ const addHours = (value, hours) => new Date(new Date(value + 'Z').getTime() + ho
     await panel.locator('.coverage-summary').waitFor();
     const query = async (start, end) => {
       await panel.getByLabel('覆盖计划', { exact: true }).selectOption(String(scheduleId));
-      await panel.getByLabel('覆盖开始', { exact: true }).fill(start);
-      await panel.getByLabel('覆盖结束', { exact: true }).fill(end);
+      await panel.getByLabel('覆盖开始', { exact: true }).fill(inputTime(start));
+      await panel.getByLabel('覆盖结束', { exact: true }).fill(inputTime(end));
       const response = page.waitForResponse(r => new URL(r.url()).pathname === '/api/v1/on-call/coverage');
       await panel.getByRole('button', { name: '查询覆盖', exact: true }).click();
       const r = await response;

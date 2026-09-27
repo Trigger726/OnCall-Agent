@@ -231,6 +231,8 @@ V12 把检索遥测从“永久保存完整快照”改为显式生命周期。�
 
 这一模型对应 [OpenSearch Judgments](https://docs.opensearch.org/latest/search-plugins/search-relevance/judgments/) 的 query-document 相关性等级与显式/隐式判断边界，以及 [OpenSearch Query Sets](https://docs.opensearch.org/latest/search-plugins/search-relevance/query-sets/) 从真实用户查询构造评测集合的思路；其 [Search Relevance Workbench](https://docs.opensearch.org/latest/search-plugins/search-relevance/using-search-relevance-workbench/) 进一步把 query set、search configuration、judgment list 和 experiment 分离。OpsPilot 当前只实现业务所需的显式人工闭环，不用点击即相关的隐式假设，也不让 LLM 自动批准自己的标注。生产化仍需把保留期绑定真实法律/合同要求、细化部门/资源访问范围，并覆盖数据库备份和导出副本的同等删除策略。
 
+检查点55的V29补非敏感returned_document_count，同一次检索INSERT保存稳定文档键去重数；Java迁移以500行keyset恢复旧ACTIVE结构完整快照，已清理/损坏数据不回填假零。只读管理接口`GET /api/v1/runbooks/searches/trend`固定实际执行引擎、来源和K，先按查询ID聚合独立批准的文档评分，再按查询日聚合。在REPEATABLE_READ事务中读取数据库时钟与统计；默认30天、最大90天。返回率与相关性分开：非空查询全部返回文档完成独立复核才计分，部分正相关不伪装完成；已知空结果计未命中，未知排除并单列，零分母为null。总率由分子分母汇总而非日率平均。K为原协议片段上限，评分按文档去重；不是去重文档Top-K。晚复核更新原查询日，非历史当日评分；只统计成功持久化查询，不外推生产成效。新清理保留计数和已复核结构化事实，避免正文擦除使趋势错误归零。前端保留离线评测，单独显示真实查询趋势、复核覆盖与未知；失败读取清空旧口径，不做隐式重试或造数。
+
 设计还借鉴了 [Backstage TechDocs](https://backstage.io/docs/features/techdocs/) 的 docs-like-code 与可搜索文档思路、[Rundeck](https://docs.rundeck.com/docs/about/introduction.html) 的 Runbook 自动化权限/历史边界，以及 [OpenSearch BM25](https://docs.opensearch.org/latest/im-plugin/similarity/) 的关键词检索模型。当前仍是单机小语料与可选外部 Embedding：没有向量 ANN/OpenSearch，未接 cross-encoder rerank，PDF 不含 OCR，导入即发布且没有内容审核流。
 
 ## 6. OnCall 多轮协作
@@ -343,5 +345,5 @@ Trace 只记录受控业务字段：Alert/Incident/run/report ID、来源、严�
 4. 增加系统级并发压测、真实 socket 断流恢复，以及外部 Provider 组合故障注入。
 5. 为多实例事件广播和任务协调接入消息组件。
 6. 将对话 SSE 从完整回答分块升级为模型 Provider 原生 token 流。
-7. 在已完成 MTTA/MTTM/MTTR、行动项逾期治理、精确指纹复发、Prometheus 事件型服务 SLO 和 Alertmanager 入站生命周期之上，补 Runbook 命中率趋势、跨 Incident 语义相似/依赖共因聚类，并以真实生产 recording rules、长期窗口、出站通知和送达回执验证 SLO。
+7. 在已完成 MTTA/MTTM/MTTR、行动项逾期治理、精确指纹复发、Prometheus 事件型服务 SLO 和 Alertmanager 入站生命周期之上，检查点55补真实检索完整独立复核子集趋势；继续获取长期真实样本，建设跨 Incident 语义相似/依赖共因聚类，并以真实生产 recording rules、长期窗口、出站通知和送达回执验证 SLO。
 8. 从真实但脱敏的历史 Incident/查询流量持续扩充已实现的双评分 qrels，加入第三方仲裁、超过两名标注人的一致性和分层抽样；将现有保留任务扩展到备份/导出副本和面向单条数据的受控删除，再以 NDCG/Recall 验证真实 Embedding 与 cross-encoder rerank 是否稳定优于 BM25/RRF，决定是否引入 ANN/OpenSearch/Milvus。

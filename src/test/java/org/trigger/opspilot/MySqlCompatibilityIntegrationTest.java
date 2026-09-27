@@ -72,6 +72,34 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
         "FOLLOW_UP_NOTIFICATION_DISPATCH_INITIAL_DELAY=3600000"
 })
 class MySqlCompatibilityIntegrationTest {
+    @Autowired private org.trigger.opspilot.runbook.RunbookRetrievalTrendService retrievalTrendService;
+
+    @Test
+    @Order(10)
+    @org.springframework.transaction.annotation.Transactional
+    void shouldAggregatePersistedRetrievalCohortsOnMySql() throws Exception {
+        org.trigger.opspilot.runbook.RetrievalTrendScenarios.verify(jdbcClient, retrievalTrendService);
+        var response = runbookService.searchTracked("消息积压 consumer group offset 位点", "ADMIN", 1L, 5, "BM25", "CONSOLE");
+        int distinct = (int) response.results().stream().map(RunbookService.SearchResult::stableKey).distinct().count();
+        assertThat(distinct).isPositive();
+        assertThat(jdbcClient.sql("SELECT returned_document_count FROM runbook_retrieval_query WHERE id = :id")
+                .param("id", response.searchId()).query(Integer.class).single()).isEqualTo(distinct);
+        // Replay the migration's data phase against real MySQL using legacy active data.
+        jdbcClient.sql("UPDATE runbook_retrieval_query SET returned_document_count = NULL WHERE id = :id")
+                .param("id", response.searchId()).update();
+        var connection = org.springframework.jdbc.datasource.DataSourceUtils.getConnection(dataSource);
+        try { new db.migration.V29__runbook_returned_document_count().backfill(connection); }
+        finally { org.springframework.jdbc.datasource.DataSourceUtils.releaseConnection(connection, dataSource); }
+        assertThat(jdbcClient.sql("SELECT returned_document_count FROM runbook_retrieval_query WHERE id = :id")
+                .param("id", response.searchId()).query(Integer.class).single()).isEqualTo(distinct);
+        jdbcClient.sql("UPDATE runbook_retrieval_query SET created_at = '1998-01-01 00:00:00' WHERE id = :id")
+                .param("id", response.searchId()).update();
+        feedbackService.purgeExpired(null);
+        assertThat(jdbcClient.sql("SELECT returned_document_count FROM runbook_retrieval_query WHERE id = :id")
+                .param("id", response.searchId()).query(Integer.class).single()).isEqualTo(distinct);
+        assertThat(jdbcClient.sql("SELECT results_json FROM runbook_retrieval_query WHERE id = :id")
+                .param("id", response.searchId()).query(String.class).single()).isEqualTo("[]");
+    }
     @Autowired private org.trigger.opspilot.investigation.AgentEventOutbox outbox;
     @Autowired private AlertmanagerRejectionService rejectionService;
 

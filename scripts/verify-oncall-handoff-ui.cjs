@@ -11,6 +11,7 @@ assert.notEqual(new URL(root).port, '9900');
 assert.ok(!baseline || !process.env.CI, 'Baseline capture must not replace CI handoff acceptance');
 const out = fs.mkdtempSync(path.join(process.env.OPSPILOT_EVIDENCE_DIR || require('node:os').tmpdir(), 'handoff-ui-'));
 const addHours = (value, hours) => new Date(new Date(value + 'Z').getTime() + hours * 3600000).toISOString().slice(0, 19);
+const inputTime = value => value.replace(/:00$/, '');
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.OPSPILOT_CHROME_PATH || undefined, headless: true });
   const errors = [], logs = [], rejected = [], pages = [], screenshots = [];
@@ -57,7 +58,7 @@ const addHours = (value, hours) => new Date(new Date(value + 'Z').getTime() + ho
       assert.equal(r.status(),status,`${route}: unexpected status`); return (await r.json()).data;
     };
     const options = await api(adminToken,'/on-call/roster');
-    const scheduleId = options.schedules[1].id, from = addHours(options.databaseNow,27*24), to = addHours(from,8);
+    const scheduleId = options.schedules[1].id, from = addHours(options.databaseNow,27*24).slice(0,16)+':00', to = addHours(from,8);
     const historyPath = '/on-call/roster?from=2026-08-19T00%3A00&to=2026-08-21T00%3A00';
     const history = JSON.stringify((await api(adminToken,historyPath)).shifts);
     const source = await api(adminToken,'/on-call/shifts',{scheduleId,userId:2,startsAt:from,endsAt:to,override:false,note:'CP51 接班UI原班次'});
@@ -81,8 +82,8 @@ const addHours = (value, hours) => new Date(new Date(value + 'Z').getTime() + ho
       await roster.locator('.roster-row').filter({hasText:'CP51 接班UI原班次'}).getByRole('button',{name:'申请接班',exact:true}).click();
       const editor = page.locator('.handoff-request-editor');
       await editor.getByLabel('指定接班人',{exact:true}).selectOption('3');
-      await editor.getByLabel('接班开始',{exact:true}).fill(addHours(from,start));
-      await editor.getByLabel('接班结束',{exact:true}).fill(addHours(from,end));
+      await editor.getByLabel('接班开始',{exact:true}).fill(inputTime(addHours(from,start)));
+      await editor.getByLabel('接班结束',{exact:true}).fill(inputTime(addHours(from,end)));
       await editor.getByLabel('申请说明',{exact:true}).fill(reason); return editor;
     };
     const submitRequest = async (page,start,end,reason) => {
@@ -127,8 +128,8 @@ const addHours = (value, hours) => new Date(new Date(value + 'Z').getTime() + ho
     const coverage = target.locator('.coverage-panel');
     await coverage.locator('.coverage-summary').waitFor();
     await coverage.getByLabel('覆盖计划',{exact:true}).selectOption(String(scheduleId));
-    await coverage.getByLabel('覆盖开始',{exact:true}).fill(from);
-    await coverage.getByLabel('覆盖结束',{exact:true}).fill(addHours(from,2));
+    await coverage.getByLabel('覆盖开始',{exact:true}).fill(inputTime(from));
+    await coverage.getByLabel('覆盖结束',{exact:true}).fill(inputTime(addHours(from,2)));
     await coverage.getByRole('button',{name:'查询覆盖',exact:true}).click();
     await target.waitForFunction(()=>document.querySelector('.coverage-panel')?.getAttribute('aria-busy')==='false');
     assert.match(await coverage.locator('.coverage-segment').innerText(),/张伟/);

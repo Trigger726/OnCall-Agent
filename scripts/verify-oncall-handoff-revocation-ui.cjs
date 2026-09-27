@@ -11,6 +11,7 @@ assert.notEqual(new URL(root).port,'9900');
 assert.ok(!baseline || !process.env.CI,'Baseline capture must not replace revocation CI');
 const out = fs.mkdtempSync(path.join(process.env.OPSPILOT_EVIDENCE_DIR || require('node:os').tmpdir(),'revocation-ui-'));
 const addHours = (value,hours) => new Date(new Date(value+'Z').getTime()+hours*3600000).toISOString().slice(0,19);
+const inputTime = value => value.replace(/:00$/, ''); // datetime-local canonicalizes zero seconds; no instant changes.
 const storageKey = 'opspilot_handoff_revocation:v1:1';
 (async () => {
   const browser = await chromium.launch({executablePath:process.env.OPSPILOT_CHROME_PATH || undefined,headless:true});
@@ -42,7 +43,7 @@ const storageKey = 'opspilot_handoff_revocation:v1:1';
       assert.equal(r.status(),status,`${route}: unexpected status`); return (await r.json()).data;
     };
     const roster = await api(tokens[0],'/on-call/roster'), scheduleId = roster.schedules[1].id;
-    const from = addHours(roster.databaseNow,31*24), to = addHours(from,12);
+    const from = addHours(roster.databaseNow,31*24).slice(0,16)+':00', to = addHours(from,12); // Exercise zero-second canonicalization every run.
     const historyPath='/on-call/roster?from=2026-08-19T00%3A00&to=2026-08-21T00%3A00';
     const history=JSON.stringify((await api(tokens[0],historyPath)).shifts);
     const source = await api(tokens[0],'/on-call/shifts',{scheduleId,userId:2,startsAt:from,endsAt:to,override:false,note:'CP54 覆盖撤销UI原班次'});
@@ -92,7 +93,8 @@ const storageKey = 'opspilot_handoff_revocation:v1:1';
     }
     const calendar = admin.locator('.coverage-panel');
     await calendar.getByLabel('覆盖计划',{exact:true}).selectOption(String(scheduleId));
-    await calendar.getByLabel('覆盖开始',{exact:true}).fill(from); await calendar.getByLabel('覆盖结束',{exact:true}).fill(addHours(from,2));
+    await calendar.getByLabel('覆盖开始',{exact:true}).fill(inputTime(from)); await calendar.getByLabel('覆盖结束',{exact:true}).fill(inputTime(addHours(from,2)));
+    assert.equal(new Date((await calendar.getByLabel('覆盖开始',{exact:true}).inputValue())+'Z').getTime(), new Date(from+'Z').getTime());
     await calendar.getByRole('button',{name:'查询覆盖',exact:true}).click();
     await admin.waitForFunction(()=>document.querySelector('.coverage-panel')?.getAttribute('aria-busy')==='false');
     assert.match(await calendar.locator('.coverage-segment').innerText(),/李娜/);
@@ -161,7 +163,7 @@ const storageKey = 'opspilot_handoff_revocation:v1:1';
     await snapshot(admin,'cp54-after-mobile-confirmation.png',details.locator('.revocation-editor'));
     // Set the fixture in the existing calendar; real success must cause its refresh, not only detail repaint.
     await calendar.getByLabel('覆盖计划',{exact:true}).selectOption(String(scheduleId));
-    await calendar.getByLabel('覆盖开始',{exact:true}).fill(addHours(from,4)); await calendar.getByLabel('覆盖结束',{exact:true}).fill(addHours(from,6));
+    await calendar.getByLabel('覆盖开始',{exact:true}).fill(inputTime(addHours(from,4))); await calendar.getByLabel('覆盖结束',{exact:true}).fill(inputTime(addHours(from,6)));
     await calendar.getByRole('button',{name:'查询覆盖',exact:true}).click();
     await admin.waitForFunction(()=>document.querySelector('.coverage-panel')?.getAttribute('aria-busy')==='false');
     assert.match(await calendar.locator('.coverage-segment').innerText(),/李娜/);
