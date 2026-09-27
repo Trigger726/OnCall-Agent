@@ -1,22 +1,23 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { api, RequestError } from '@/services/api'
+import { api } from '@/services/api'
+import { capturePublicationIntent, readPublicationIntent, persistPublicationIntent, discardPublicationIntent,
+  sendPublicationDecision, isPublicationIntentRejected, type PublicationIntent, type PublicationDecision } from '@/services/runbookPublications'
 import { auth } from '@/stores/auth'
 
 const props = defineProps<{ refreshToken: number }>()
 const emit = defineEmits<{ changed: [] }>()
 interface Item { id: number; stableKey: string; versionNo: number; title: string; status: string; createdBy: number | null }
 interface Review { document: Item & { markdown: string; allowedRoles: string[] }; reviewVersion: number; basePublishedVersion: number; currentPublishedVersion: number; reviewNote: string | null }
-interface Intent { actorId: number; id: number; expectedVersion: number; requestKey: string; decision: string; reason: string; locked: boolean }
 const actor = auth.state.user!.id
-const storageKey = `opspilot_publication_intent_${actor}`
 const queue = ref<{ items: Item[]; total: number; truncated: boolean } | null>(null)
 const detail = ref<Review | null>(null)
-const intent = ref<Intent | null>(null)
-const status = ref('PENDING_REVIEW'), decision = ref('APPROVE'), reason = ref('')
+const intent = ref<PublicationIntent | null>(null)
+const status = ref('PENDING_REVIEW'), decision = ref<PublicationDecision>('APPROVE'), reason = ref('')
+const recoveryError = ref('')
 const busy = ref(false), error = ref(''), notice = ref('')
 const own = computed(() => detail.value?.document.createdBy === actor)
-const canStart = computed(() => detail.value?.document.status === 'PENDING_REVIEW' && !intent.value)
+const canStart = computed(() => detail.value?.document.status === 'PENDING_REVIEW' && !intent.value && !recoveryError.value)
 
 async function refresh() {
   busy.value = true; error.value = ''; queue.value = null
@@ -33,51 +34,46 @@ async function select(id: number) {
   } catch (caught) { error.value = caught instanceof Error ? caught.message : '读取候选失败' }
   finally { busy.value = false }
 }
-function persist(value: Intent) {
-  sessionStorage.setItem(storageKey, JSON.stringify(value)) // Persist BEFORE the first POST; fail closed if storage is unavailable.
+function persist(value: PublicationIntent) {
+  persistPublicationIntent(sessionStorage, value) // Persist BEFORE the first POST; fail closed if storage is unavailable.
   intent.value = value
 }
 async function submit() {
-  if (!detail.value || intent.value?.locked) return
+  if (!detail.value || intent.value?.locked || recoveryError.value) return
   error.value = ''; notice.value = ''
   try {
-    if (!intent.value) persist({ actorId: actor, id: detail.value.document.id,
-      expectedVersion: detail.value.reviewVersion, requestKey: crypto.randomUUID(),
-      decision: decision.value, reason: reason.value.trim(), locked: false })
+    if (!intent.value) persist(capturePublicationIntent(actor, detail.value.document.id,
+      detail.value.reviewVersion, decision.value, reason.value))
   } catch { error.value = '无法保存冻结意图，本次未提交'; return }
   const frozen = intent.value!
   busy.value = true
   try {
-    const confirmed = await api<Review>(`/runbooks/publications/${frozen.id}/decisions`, {
-      method: 'POST', body: JSON.stringify({ expectedVersion: frozen.expectedVersion, requestKey: frozen.requestKey,
-        decision: frozen.decision, reason: frozen.reason }),
-    })
+    const confirmed = await sendPublicationDecision<Review>(frozen, auth.state.user?.id ?? 0)
     detail.value = confirmed
-    sessionStorage.removeItem(storageKey); intent.value = null
+    discardPublicationIntent(sessionStorage, actor); intent.value = null
     notice.value = `已确认：${confirmed.document.status}；决定已进入审计`
     emit('changed')
     await refresh()
   } catch (caught) {
-    if (caught instanceof RequestError && [400, 403, 404, 409].includes(caught.status)) {
+    if (isPublicationIntentRejected(caught)) {
       const locked = { ...frozen, locked: true }
       intent.value = locked
-      try { persist(locked) } catch { /* The in-memory lock still prevents automatic reposting. */ }
+      try { persist(locked) } catch { recoveryError.value = '拒绝已锁定，但无法保存锁；请核对后放弃本地意图，不会自动重提' }
     }
     error.value = caught instanceof Error ? caught.message : '提交结果未知；请手动同键重试'
   } finally { busy.value = false }
 }
 function abandon() {
   if (!window.confirm('放弃本地冻结意图不会撤销服务端已发生的决定。请先核对候选状态，确认放弃？')) return
-  sessionStorage.removeItem(storageKey); intent.value = null; detail.value = null; error.value = ''; reason.value = ''
+  try {
+    discardPublicationIntent(sessionStorage, actor)
+    intent.value = null; detail.value = null; error.value = ''; recoveryError.value = ''; reason.value = ''
+  } catch { recoveryError.value = '无法删除本地冻结意图，仍禁止新提交' }
 }
 onMounted(async () => {
   try {
-    const saved = JSON.parse(sessionStorage.getItem(storageKey) ?? 'null') as Intent | null
-    if (saved && saved.actorId === actor && Number.isSafeInteger(saved.id) && Number.isSafeInteger(saved.expectedVersion)
-      && saved.expectedVersion >= 0 && typeof saved.reason === 'string' && saved.reason.length > 0 && saved.reason.length <= 500
-      && typeof saved.requestKey === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(saved.requestKey)
-      && ['APPROVE', 'REJECT', 'WITHDRAW'].includes(saved.decision) && typeof saved.locked === 'boolean') intent.value = saved
-  } catch { error.value = '本地意图无法读取，未自动提交' }
+    intent.value = readPublicationIntent(sessionStorage, actor)
+  } catch (caught) { recoveryError.value = caught instanceof Error ? caught.message : '本地冻结意图无法读取，禁止新提交' }
   await refresh()
   if (intent.value) await select(intent.value.id)
 })
@@ -90,7 +86,12 @@ watch(() => props.refreshToken, refresh)
     <p>导入只产生待审版本。另一管理账号批准后才进入控制台与 Agent 检索；拒绝、撤回不影响旧发布版。</p>
     <div class="publication-controls"><label>候选状态 <select v-model="status" :disabled="busy"><option>PENDING_REVIEW</option><option>PUBLISHED</option><option>SUPERSEDED</option><option>REJECTED</option><option>WITHDRAWN</option></select></label><button class="secondary-button" :disabled="busy" @click="refresh">刷新审核台账</button></div>
     <p v-if="error" role="alert" class="publication-error">{{ error }}</p>
+    <p v-if="recoveryError" role="alert" class="publication-error">{{ recoveryError }}</p>
     <p v-if="notice" role="status">{{ notice }}</p>
+    <div v-if="intent || recoveryError" class="publication-recovery">
+      <p v-if="intent">冻结：#{{ intent.id }} / 审核版本 {{ intent.expectedVersion }} / {{ intent.decision }} / {{ intent.reason }}<br />{{ intent.locked ? '冲突或权限拒绝已锁定，不会自动换版本重提。' : '结果未确认：刷新不会自动提交，重试保留原版本、请求键与说明。' }}</p>
+      <div class="publication-controls"><button v-if="intent" class="secondary-button" :disabled="busy" @click="select(intent.id)">核对候选最新状态</button><button class="secondary-button" :disabled="busy" @click="abandon">核对后放弃本地意图</button></div>
+    </div>
     <div v-if="queue" class="publication-items">
       <p>{{ queue.total }} 个候选<span v-if="queue.truncated">（仅展示最早 200 条，请按状态处理；不是完整台账）</span></p>
       <p v-if="!queue.items.length">此状态无候选</p>
@@ -108,8 +109,7 @@ watch(() => props.refreshToken, refresh)
           <label>复核说明 <textarea v-model="reason" required maxlength="500" placeholder="确认前置条件、权限、恢复及验证步骤；请勿填写凭证" /></label>
         </fieldset>
         <p v-if="own">本人不能审批自己的候选，只能撤回。</p>
-        <p v-if="intent">冻结：#{{ intent.id }} / 审核版本 {{ intent.expectedVersion }} / {{ intent.decision }} / {{ intent.reason }}<br />{{ intent.locked ? '冲突或权限拒绝已锁定，不会自动换版本重提。' : '结果未确认：刷新不会自动提交，重试保留原版本、请求键与说明。' }}</p>
-        <div class="publication-controls"><button class="primary-button" :disabled="busy || intent?.locked || (!intent && !reason.trim())">{{ intent ? '同键重试原决定' : '确认提交决定' }}</button><button v-if="intent" type="button" class="secondary-button" :disabled="busy" @click="abandon">核对后放弃本地意图</button></div>
+        <div class="publication-controls"><button class="primary-button" :disabled="busy || intent?.locked || !!recoveryError || (!intent && !reason.trim())">{{ intent ? '同键重试原决定' : '确认提交决定' }}</button></div>
       </form>
     </div>
   </section>

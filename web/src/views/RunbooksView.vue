@@ -562,13 +562,13 @@ function retentionLabel(value: string) {
       <form class="dialog-panel runbook-import-dialog" @submit.prevent="submitImport">
         <header><div><h2>导入待审 Runbook</h2><span>正文、元数据及权限共同识别候选；独立批准后才发布</span></div><button type="button" class="icon-button" title="关闭" @click="showImport = false"><X :size="18" /></button></header>
         <div class="form-grid">
-          <label><span>稳定键</span><input v-model="form.stableKey" pattern="[a-z0-9][a-z0-9-]{2,79}" required /></label>
+          <label><span>稳定键</span><input v-model="form.stableKey" pattern="[a-z0-9][a-z0-9\-]{2,79}" required /></label>
           <label><span>资源类型</span><select v-model="form.resourceType"><option>APPLICATION</option><option>MIDDLEWARE</option><option>DATABASE</option><option>NETWORK</option></select></label>
           <label><span>服务编码</span><input v-model="form.serviceCode" placeholder="APP-SETTLEMENT" /></label>
           <label><span>标题</span><input v-model="form.title" required /></label>
           <label class="span-2"><span>摘要</span><input v-model="form.summary" /></label>
           <label class="span-2"><span>可访问角色</span><div class="role-options"><label v-for="role in ['ADMIN','OPS_MANAGER','ON_CALL']" :key="role"><input v-model="form.allowedRoles" type="checkbox" :value="role" />{{ role }}</label></div></label>
-          <label class="span-2"><span>来源方式</span><div class="segmented-control"><button type="button" :class="{ active: importMode === 'markdown' }" @click="importMode = 'markdown'">粘贴 Markdown</button><button type="button" :class="{ active: importMode === 'file' }" @click="importMode = 'file'">上传 .md / .pdf</button></div></label>
+          <div class="span-2 import-mode-field" role="group" aria-label="来源方式"><span>来源方式</span><div class="segmented-control"><button type="button" :class="{ active: importMode === 'markdown' }" @click="importMode = 'markdown'">粘贴 Markdown</button><button type="button" :class="{ active: importMode === 'file' }" @click="importMode = 'file'">上传 .md / .pdf</button></div></div>
           <template v-if="importMode === 'markdown'">
             <label class="span-2"><span>来源路径</span><input v-model="form.sourceName" required /></label>
             <label class="span-2"><span>Markdown 内容</span><textarea v-model="form.markdown" rows="12" required /></label>
@@ -582,6 +582,8 @@ function retentionLabel(value: string) {
 </template>
 
 <style scoped>
+.import-mode-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.import-mode-field > span { color: #52646b; font-size: 10px; font-weight: 650; }
 .runbook-page { display: flex; flex-direction: column; gap: 16px; }
 .runbook-toolbar { margin-bottom: 0; }
 .runbook-comparison { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: hidden; }
