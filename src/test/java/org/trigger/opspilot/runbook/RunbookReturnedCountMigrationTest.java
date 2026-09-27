@@ -32,7 +32,7 @@ class RunbookReturnedCountMigrationTest {
                 insert.executeUpdate();
             }
         }
-        assertThat(Flyway.configure().dataSource(url, "sa", "").load().migrate().migrationsExecuted).isEqualTo(1);
+        assertThat(Flyway.configure().dataSource(url, "sa", "").target("29").load().migrate().migrationsExecuted).isEqualTo(1);
         try (var connection = DriverManager.getConnection(url, "sa", "");
              var statement = connection.createStatement();
              var rows = statement.executeQuery("SELECT returned_document_count, results_json, query_text "

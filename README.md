@@ -6,6 +6,8 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
+检查点56部分通过：Runbook导入改为待审候选，另一当前管理账号独立批准后进入检索；拒绝/本人撤回、提交基线保护、精确决定重放与发布审计已实现。最新UTC264发现/189执行/75条件跳过零失败，九个实页脚本及新旧桌面/390px对照通过；前端意图专项单测、更多发布交互及真实MySQL/远端验收仍待完成，见 [阶段报告](docs/acceptance/V1.7-checkpoint-56.md)。
+
 checkpoint55限定通过：新增持久化查询逐日趋势，区分结果返回率、非空查询全量独立复核覆盖、可计分子集Hit@K与历史未知；V29恢复旧有效快照计数、保留清理后分母。`49c0161` 的 [Run36338448177](https://github.com/Trigger726/OnCall-Agent/actions/runs/36338448177) 十二作业success，真实MySQL63项零跳过/五池干净关闭、50项前端、双时区各250发现/180执行/70条件跳过、八脚本与10项生命周期通过；新旧/远端桌面手机、工件摘要与完整MySQL CLI重放已验，见 [验收报告](docs/acceptance/V1.7-checkpoint-55.md)。不冒充全量生产相关性或版本效果提升。
 
 checkpoint54限定通过：覆盖详情、独立管理撤销确认、账号隔离冻结意图恢复/409锁定及日历刷新已交付，原接受事实与历史Demo保留。`ad701b7` 的 [Run36335732140](https://github.com/Trigger726/OnCall-Agent/actions/runs/36335732140) 十二CI作业success，前端47项、真实MySQL62项零跳过/五池干净关闭、双时区各244发现/175执行/69条件跳过与七脚本通过；新旧桌面/手机、工件摘要与完整MySQL CLI重放已验，见 [验收报告](docs/acceptance/V1.7-checkpoint-54.md)。双向互换/开放认领、外部渠道和跨时区/DST仍未实现。
@@ -346,8 +348,11 @@ Runbook 页面保留原版/BM25/Hybrid 当前对照，并列出最近 12 次持�
 | GET | `/api/v1/runbooks/searches/retention` | 管理员/运维经理读取快照保留期、活跃/到期/已擦除数量和脱敏字段计数 |
 | POST | `/api/v1/runbooks/searches/retention/purge` | 按保留策略幂等清理一批到期快照并记录审计 |
 | GET | `/api/v1/runbooks/{stableKey}/versions` | 查询可访问的不可变版本历史 |
-| POST | `/api/v1/runbooks/imports/markdown` | 管理员/运维经理导入并发布 Markdown |
-| POST | `/api/v1/runbooks/imports/file` | 管理员/运维经理上传 Markdown/PDF |
+| POST | `/api/v1/runbooks/imports/markdown` | 管理员/运维经理提交不可变待审 Markdown；不直接发布 |
+| POST | `/api/v1/runbooks/imports/file` | 管理员/运维经理上传 Markdown/PDF 为待审候选 |
+| GET | `/api/v1/runbooks/publications?status=PENDING_REVIEW` | 管理角色按状态先过滤再读取最早200条审核台账，暴露总数与截断 |
+| GET | `/api/v1/runbooks/publications/{id}` | 管理角色核对候选正文、ACL、审核版本及发布基线 |
+| POST | `/api/v1/runbooks/publications/{id}/decisions` | 独立批准/拒绝或本人撤回；绑定捕获版本、请求键和说明，不自动改基线 |
 | POST | `/api/v1/runbooks/evaluations` | 运行并保存固定检索评测 |
 | GET | `/api/v1/runbooks/evaluations/latest` | 读取最近一次评测 |
 | GET | `/api/v1/runbooks/semantic-index` | 查询当前模型的向量覆盖率和最近构建状态 |

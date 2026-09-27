@@ -100,6 +100,7 @@ public class RunbookService {
                                (SELECT COUNT(*) FROM runbook_chunk c WHERE c.document_id = d.id) AS chunk_count
                         FROM runbook_document d
                         WHERE d.stable_key = :stableKey
+                          AND d.status IN ('PUBLISHED', 'SUPERSEDED')
                           AND EXISTS (SELECT 1 FROM runbook_document_acl a
                                       WHERE a.document_id = d.id AND a.role_code = :role)
                         ORDER BY d.version_no DESC
@@ -370,6 +371,7 @@ public class RunbookService {
     }
 
     private ImportResult importContent(ImportCommand raw, String sourceType, Long actorId) {
+        requireManager(actorId);
         String stableKey = normalizeStableKey(raw.stableKey());
         String resourceType = normalizeCode(raw.resourceType(), "resourceType", 32);
         String serviceCode = normalizeOptionalCode(raw.serviceCode());
@@ -383,11 +385,19 @@ public class RunbookService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "RUNBOOK_CONTENT_EMPTY", "Runbook 没有可索引内容");
         }
         String hash = sha256(content);
+        lockPublicationKey(stableKey);
+        int baseVersion = currentPublishedVersion(stableKey);
+        String submissionHash = sha256(json(java.util.Arrays.asList(stableKey, resourceType, serviceCode,
+                title, summary, sourceType, sourceName, content, roles.stream().sorted().toList())));
         Long currentId = jdbcClient.sql("""
                         SELECT id FROM runbook_document
-                        WHERE stable_key = :stableKey AND status = 'PUBLISHED' AND content_hash = :hash
+                        WHERE stable_key = :stableKey AND status = 'PENDING_REVIEW'
+                          AND submission_hash = :hash AND created_by = :actor
+                          AND base_published_version = :base
+                        ORDER BY version_no DESC LIMIT 1
                         """)
-                .param("stableKey", stableKey).param("hash", hash)
+                .param("stableKey", stableKey).param("hash", submissionHash)
+                .param("actor", actorId).param("base", baseVersion)
                 .query(Long.class).optional().orElse(null);
         if (currentId != null) return new ImportResult(documentById(currentId), true);
 
@@ -396,25 +406,23 @@ public class RunbookService {
                         FROM runbook_document WHERE stable_key = :stableKey
                         """)
                 .param("stableKey", stableKey).query(Integer.class).single();
-        jdbcClient.sql("""
-                        UPDATE runbook_document SET status = 'SUPERSEDED'
-                        WHERE stable_key = :stableKey AND status = 'PUBLISHED'
-                        """)
-                .param("stableKey", stableKey).update();
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
             jdbcClient.sql("""
                             INSERT INTO runbook_document(
                               stable_key, version_no, status, resource_type, service_code, title, summary,
-                              source_type, source_name, content_hash, markdown_content, created_by)
-                            VALUES (:stableKey, :versionNo, 'PUBLISHED', :resourceType, :serviceCode, :title,
-                              :summary, :sourceType, :sourceName, :contentHash, :content, :createdBy)
+                              source_type, source_name, content_hash, markdown_content, created_by,
+                              submission_hash, base_published_version, published_at)
+                            VALUES (:stableKey, :versionNo, 'PENDING_REVIEW', :resourceType, :serviceCode, :title,
+                              :summary, :sourceType, :sourceName, :contentHash, :content, :createdBy,
+                              :submissionHash, :baseVersion, NULL)
                             """)
                     .param("stableKey", stableKey).param("versionNo", nextVersion)
                     .param("resourceType", resourceType).param("serviceCode", serviceCode)
                     .param("title", title).param("summary", summary).param("sourceType", sourceType)
                     .param("sourceName", sourceName).param("contentHash", hash)
-                    .param("content", content).param("createdBy", actorId).update(keyHolder, "id");
+                    .param("content", content).param("createdBy", actorId)
+                    .param("submissionHash", submissionHash).param("baseVersion", baseVersion).update(keyHolder, "id");
         } catch (DuplicateKeyException exception) {
             throw new ApiException(HttpStatus.CONFLICT, "RUNBOOK_VERSION_CONFLICT", "Runbook 版本并发冲突，请重试");
         }
@@ -432,9 +440,33 @@ public class RunbookService {
             jdbcClient.sql("INSERT INTO runbook_document_acl(document_id, role_code) VALUES (:id, :role)")
                     .param("id", documentId).param("role", role).update();
         }
-        auditService.record("RUNBOOK_IMPORT", "RUNBOOK", stableKey,
-                "导入 " + sourceType + " 版本 v" + nextVersion + "，分块 " + chunks.size() + "，权限 " + roles);
+        auditService.recordAs(actorId, null, "RUNBOOK_IMPORT", "RUNBOOK", documentId,
+                "提交待审 " + sourceType + " 版本 v" + nextVersion + "，分块 " + chunks.size() + "，权限 " + roles);
         return new ImportResult(documentById(documentId), false);
+    }
+
+    void requireManager(Long actorId) {
+        String role = jdbcClient.sql("SELECT role_code FROM sys_user WHERE id=:id AND status='ACTIVE' FOR UPDATE")
+                .param("id", actorId).query(String.class).optional().orElse("");
+        if (!Set.of("ADMIN", "OPS_MANAGER").contains(role)) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "RUNBOOK_PUBLICATION_ROLE_FORBIDDEN", "当前账号无手册管理权限");
+        }
+    }
+
+    void lockPublicationKey(String stableKey) {
+        // Acquire an exclusive key lock directly. Duplicate INSERT followed by a lock upgrade
+        // can deadlock two InnoDB transactions that first acquired shared duplicate-key locks.
+        jdbcClient.sql("""
+                INSERT INTO runbook_publication_lock(stable_key) VALUES (:key)
+                ON DUPLICATE KEY UPDATE stable_key=:key
+                """).param("key", stableKey).update();
+        jdbcClient.sql("SELECT stable_key FROM runbook_publication_lock WHERE stable_key=:key FOR UPDATE")
+                .param("key", stableKey).query(String.class).single();
+    }
+
+    int currentPublishedVersion(String stableKey) {
+        return jdbcClient.sql("SELECT version_no FROM runbook_document WHERE stable_key=:key AND status='PUBLISHED' FOR UPDATE")
+                .param("key", stableKey).query(Integer.class).optional().orElse(0);
     }
 
     private List<SearchCandidate> loadCandidates(String role) {
@@ -458,14 +490,18 @@ public class RunbookService {
                 .list();
     }
 
-    private DocumentView documentById(long id) {
+    DocumentView documentById(long id) {
+        return documentById(id, false);
+    }
+
+    DocumentView documentById(long id, boolean lock) {
         return jdbcClient.sql("""
                         SELECT d.id, d.stable_key, d.version_no, d.status, d.resource_type,
                                d.service_code, d.title, d.summary, d.source_type, d.source_name,
                                d.content_hash, d.markdown_content, d.created_by, d.created_at, d.published_at,
                                (SELECT COUNT(*) FROM runbook_chunk c WHERE c.document_id = d.id) AS chunk_count
                         FROM runbook_document d WHERE d.id = :id
-                        """)
+                        """ + (lock ? " FOR UPDATE" : ""))
                 .param("id", id)
                 .query((rs, rowNum) -> mapDocument(rs.getLong("id"), rs.getString("stable_key"),
                         rs.getInt("version_no"), rs.getString("status"), rs.getString("resource_type"),
@@ -616,7 +652,7 @@ public class RunbookService {
                 + "#chunk-" + candidate.chunkIndex();
     }
 
-    private static String sha256(String value) {
+    static String sha256(String value) {
         try {
             return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
                     .digest(value.getBytes(StandardCharsets.UTF_8)));

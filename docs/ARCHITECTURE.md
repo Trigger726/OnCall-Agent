@@ -233,7 +233,9 @@ V12 把检索遥测从“永久保存完整快照”改为显式生命周期。�
 
 检查点55的V29补非敏感returned_document_count，同一次检索INSERT保存稳定文档键去重数；Java迁移以500行keyset恢复旧ACTIVE结构完整快照，已清理/损坏数据不回填假零。只读管理接口`GET /api/v1/runbooks/searches/trend`固定实际执行引擎、来源和K，先按查询ID聚合独立批准的文档评分，再按查询日聚合。在REPEATABLE_READ事务中读取数据库时钟与统计；默认30天、最大90天。返回率与相关性分开：非空查询全部返回文档完成独立复核才计分，部分正相关不伪装完成；已知空结果计未命中，未知排除并单列，零分母为null。总率由分子分母汇总而非日率平均。K为原协议片段上限，评分按文档去重；不是去重文档Top-K。晚复核更新原查询日，非历史当日评分；只统计成功持久化查询，不外推生产成效。新清理保留计数和已复核结构化事实，避免正文擦除使趋势错误归零。前端保留离线评测，单独显示真实查询趋势、复核覆盖与未知；失败读取清空旧口径，不做隐式重试或造数。
 
-设计还借鉴了 [Backstage TechDocs](https://backstage.io/docs/features/techdocs/) 的 docs-like-code 与可搜索文档思路、[Rundeck](https://docs.rundeck.com/docs/about/introduction.html) 的 Runbook 自动化权限/历史边界，以及 [OpenSearch BM25](https://docs.opensearch.org/latest/im-plugin/similarity/) 的关键词检索模型。当前仍是单机小语料与可选外部 Embedding：没有向量 ANN/OpenSearch，未接 cross-encoder rerank，PDF 不含 OCR，导入即发布且没有内容审核流。
+设计还借鉴了 [Backstage TechDocs](https://backstage.io/docs/features/techdocs/) 的 docs-like-code 与可搜索文档思路、[Rundeck](https://docs.rundeck.com/docs/about/introduction.html) 的 Runbook 自动化权限/历史边界，以及 [OpenSearch BM25](https://docs.opensearch.org/latest/im-plugin/similarity/) 的关键词检索模型。当前仍是单机小语料与可选外部 Embedding：没有向量 ANN/OpenSearch，未接 cross-encoder rerank，PDF 不含 OCR。检查点56正在将导入即发布改为待审与独立复核；其最终验收仍进行中，见 [阶段报告](acceptance/V1.7-checkpoint-56.md)。
+
+V30为Runbook增加待审/拒绝/撤回、提交发布基线、审核版本、决定键/原始说明哈希与脱敏复核事实；已有发布版本不重写。导入和决定先验证当前账号，再用逻辑手册锁与候选锁串行化。锁行使用原子upsert直接取排他锁，避免InnoDB重复INSERT后共享锁升级的竞态。批准才替换旧发布版，基线不符拒绝，不自动rebase。事务中同时写版本状态/审核/审计；精确重放不重发或复活旧版。普通历史只暴露PUBLISHED/SUPERSEDED，所有既有检索候选仍只读PUBLISHED；审核台账只返回元数据，正文由管理详情读取。只读详情/台账采用一致快照，命令回包使用锁定当前读，防止旧谓词快照让发布版本与状态矛盾。UI在首个POST前冻结账号、ID、版本、键、决定及说明，网络结果未知手动同键恢复；权限或冲突拒绝锁定，放弃本地草稿不撤销服务端事实。
 
 ## 6. OnCall 多轮协作
 

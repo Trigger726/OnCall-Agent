@@ -33,14 +33,17 @@ public class RunbookController {
     private final RunbookSemanticIndexService semanticIndexService;
     private final RunbookRetrievalFeedbackService feedbackService;
     private final RunbookRetrievalTrendService trendService;
+    private final RunbookPublicationService publicationService;
 
     public RunbookController(RunbookService service, RunbookSemanticIndexService semanticIndexService,
                              RunbookRetrievalFeedbackService feedbackService,
-                             RunbookRetrievalTrendService trendService) {
+                             RunbookRetrievalTrendService trendService,
+                             RunbookPublicationService publicationService) {
         this.service = service;
         this.semanticIndexService = semanticIndexService;
         this.feedbackService = feedbackService;
         this.trendService = trendService;
+        this.publicationService = publicationService;
     }
 
     @GetMapping
@@ -146,6 +149,32 @@ public class RunbookController {
                 stableKey, resourceType, serviceCode, title, summary, allowedRoles), file, user.id()));
     }
 
+    @GetMapping("/publications")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
+    public ApiResponse<RunbookPublicationService.Queue> publications(
+            @AuthenticationPrincipal UserPrincipal user,
+            @RequestParam(defaultValue = "PENDING_REVIEW") String status) {
+        service.requireManager(user.id());
+        return ApiResponse.ok(publicationService.list(status));
+    }
+
+    @GetMapping("/publications/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
+    public ApiResponse<RunbookPublicationService.Review> publication(
+            @AuthenticationPrincipal UserPrincipal user, @PathVariable long id) {
+        service.requireManager(user.id());
+        return ApiResponse.ok(publicationService.detail(id));
+    }
+
+    @PostMapping("/publications/{id}/decisions")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
+    public ApiResponse<RunbookPublicationService.Review> decidePublication(
+            @AuthenticationPrincipal UserPrincipal user, @PathVariable long id,
+            @Valid @RequestBody PublicationDecisionRequest request) {
+        return ApiResponse.ok(publicationService.decide(id, request.expectedVersion(), request.decision(),
+                request.requestKey(), request.reason(), user.id()));
+    }
+
     @PostMapping("/evaluations")
     @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
     public ApiResponse<RunbookService.EvaluationView> evaluate(
@@ -192,6 +221,10 @@ public class RunbookController {
             @Min(0) @Max(3) int relevanceGrade,
             @Size(max = 500) String comment) {
     }
+
+    public record PublicationDecisionRequest(@Min(0) int expectedVersion,
+            @NotBlank String decision, @NotBlank @Size(max = 36) String requestKey,
+            @NotBlank @Size(max = 500) String reason) { }
 
     public record JudgmentReviewRequest(
             @Min(0) int expectedVersion,

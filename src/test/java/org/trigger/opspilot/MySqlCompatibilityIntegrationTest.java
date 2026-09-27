@@ -72,6 +72,28 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
         "FOLLOW_UP_NOTIFICATION_DISPATCH_INITIAL_DELAY=3600000"
 })
 class MySqlCompatibilityIntegrationTest {
+    @Autowired private org.trigger.opspilot.runbook.RunbookPublicationService publicationService;
+
+    @Test @Order(11) @org.springframework.transaction.annotation.Transactional
+    void shouldKeepUnapprovedRunbooksOutOfRetrievalOnMySql() {
+        org.trigger.opspilot.runbook.PublicationScenarios.verifyLifecycle(runbookService, publicationService, jdbcClient);
+    }
+    @Test @Order(12) @org.springframework.transaction.annotation.Transactional
+    void shouldFenceAndReplayRunbookPublicationOnMySql() {
+        org.trigger.opspilot.runbook.PublicationScenarios.verifyBaseline(runbookService, publicationService, jdbcClient);
+    }
+    @Test @Order(13) @org.springframework.transaction.annotation.Transactional
+    void shouldBindImportIdentityAndCurrentManagerRoleOnMySql() {
+        org.trigger.opspilot.runbook.PublicationScenarios.verifyIdentity(runbookService, publicationService, jdbcClient);
+    }
+    @Test @Order(14)
+    void shouldSerializeIndependentPublicationTransactionsOnMySql() throws Exception {
+        org.trigger.opspilot.runbook.PublicationScenarios.verifyConcurrent(runbookService, publicationService, jdbcClient);
+    }
+    @Test @Order(15)
+    void shouldRollbackRunbookPublicationAndAuditOnMySql() {
+        org.trigger.opspilot.runbook.PublicationScenarios.verifyRollback(runbookService, publicationService, jdbcClient, transactionManager);
+    }
     @Autowired private org.trigger.opspilot.runbook.RunbookRetrievalTrendService retrievalTrendService;
 
     @Test

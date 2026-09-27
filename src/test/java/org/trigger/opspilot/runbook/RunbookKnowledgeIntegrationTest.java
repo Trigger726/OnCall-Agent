@@ -204,6 +204,8 @@ class RunbookKnowledgeIntegrationTest {
                 .andExpect(jsonPath("$.data.reused").value(true))
                 .andExpect(jsonPath("$.data.document.versionNo").value(1));
 
+        approvePending("payment-gateway-timeout", managerToken);
+
         String onCallSearch = mockMvc.perform(get("/api/v1/runbooks/search")
                         .header("Authorization", bearer(onCallToken))
                         .queryParam("q", "payment gateway upstream timeout"))
@@ -233,6 +235,8 @@ class RunbookKnowledgeIntegrationTest {
                 .andExpect(jsonPath("$.data.reused").value(false))
                 .andExpect(jsonPath("$.data.document.versionNo").value(2));
 
+        approvePending("payment-gateway-timeout", managerToken);
+
         mockMvc.perform(get("/api/v1/runbooks/payment-gateway-timeout/versions")
                         .header("Authorization", bearer(managerToken)))
                 .andExpect(status().isOk())
@@ -260,12 +264,24 @@ class RunbookKnowledgeIntegrationTest {
                 .andExpect(jsonPath("$.data.document.sourceType").value("PDF"))
                 .andExpect(jsonPath("$.data.document.chunkCount").value(1));
 
+        approvePending("kafka-consumer-lag", login("lina", "OpsPilot@2026"));
+
         mockMvc.perform(get("/api/v1/runbooks/search")
                         .header("Authorization", bearer(adminToken))
                         .queryParam("q", "Kafka consumer lag partition rebalance"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.results[0].stableKey").value("kafka-consumer-lag"))
                 .andExpect(jsonPath("$.data.results[0].sourceType").value("PDF"));
+    }
+
+    private void approvePending(String key, String reviewerToken) throws Exception {
+        long id = jdbcClient.sql("SELECT id FROM runbook_document WHERE stable_key=:key AND status='PENDING_REVIEW'")
+                .param("key", key).query(Long.class).single();
+        mockMvc.perform(post("/api/v1/runbooks/publications/" + id + "/decisions")
+                        .header("Authorization", bearer(reviewerToken)).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(Map.of("expectedVersion", 0, "decision", "APPROVE",
+                                "requestKey", java.util.UUID.randomUUID().toString(), "reason", "独立验证恢复步骤"))))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.document.status").value("PUBLISHED"));
     }
 
     @Test

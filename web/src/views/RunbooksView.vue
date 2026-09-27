@@ -7,6 +7,8 @@ import {
 import { api, formatTime, RequestError } from '@/services/api'
 import { auth } from '@/stores/auth'
 import RunbookRetrievalTrend from '@/components/RunbookRetrievalTrend.vue'
+import RunbookPublicationQueue from '@/components/RunbookPublicationQueue.vue'
+const publicationRefresh = ref(0)
 
 interface RunbookDocument {
   id: number
@@ -404,12 +406,10 @@ async function submitImport() {
       result = await api<ImportResult>('/runbooks/imports/file', { method: 'POST', body })
     }
     notice.value = result.reused
-      ? `${result.document.title} 内容未变化，复用 v${result.document.versionNo}`
-      : `${result.document.title} v${result.document.versionNo} 已发布并生成 ${result.document.chunkCount} 个分块`
+      ? `${result.document.title} 复用本人相同待审候选 v${result.document.versionNo}`
+      : `${result.document.title} v${result.document.versionNo} 已提交待审；独立复核批准前不进入检索`
     showImport.value = false
-    await loadDocuments()
-    query.value = result.document.title
-    await search()
+    publicationRefresh.value++
   } catch (caught) {
     error.value = caught instanceof Error ? caught.message : '导入失败'
   } finally {
@@ -466,6 +466,7 @@ function retentionLabel(value: string) {
     <p v-if="evaluation" class="evaluation-note">固定集 {{ evaluation.caseCount }} 个查询 · {{ evaluation.judgmentCount }} 个 qrels · 版本 {{ evaluation.datasetVersion }} · {{ evaluation.evaluationNote }} · 选择引擎 {{ evaluation.engine }} · NDCG@3 {{ metric(evaluation.ndcgAt3) }} · 失败 {{ failedCases }}</p>
 
     <RunbookRetrievalTrend v-if="canManage" :key="auth.state.user?.id" />
+    <RunbookPublicationQueue v-if="canManage" :key="auth.state.user?.id" :refresh-token="publicationRefresh" @changed="loadDocuments" />
 
     <section v-if="canRead" class="content-panel evaluation-history" aria-label="Runbook 固定集评测历史">
       <header class="panel-heading"><div><h2>固定集评测历史</h2><span>最近 12 次离线运行；只在数据集版本与实际引擎都相同时比较，不代表生产查询命中率</span></div><span v-if="historyDelta !== null" class="keyword-tag">Recall@3 较上次 {{ Number(historyDelta) >= 0 ? '+' : '' }}{{ historyDelta }} 个百分点</span></header>
@@ -559,7 +560,7 @@ function retentionLabel(value: string) {
 
     <div v-if="showImport" class="dialog-backdrop" @click.self="showImport = false">
       <form class="dialog-panel runbook-import-dialog" @submit.prevent="submitImport">
-        <header><div><h2>导入版本化 Runbook</h2><span>同 stableKey 内容变化会生成新版本；相同内容幂等复用</span></div><button type="button" class="icon-button" title="关闭" @click="showImport = false"><X :size="18" /></button></header>
+        <header><div><h2>导入待审 Runbook</h2><span>正文、元数据及权限共同识别候选；独立批准后才发布</span></div><button type="button" class="icon-button" title="关闭" @click="showImport = false"><X :size="18" /></button></header>
         <div class="form-grid">
           <label><span>稳定键</span><input v-model="form.stableKey" pattern="[a-z0-9][a-z0-9-]{2,79}" required /></label>
           <label><span>资源类型</span><select v-model="form.resourceType"><option>APPLICATION</option><option>MIDDLEWARE</option><option>DATABASE</option><option>NETWORK</option></select></label>
@@ -574,7 +575,7 @@ function retentionLabel(value: string) {
           </template>
           <label v-else class="span-2"><span>文件（最大 5 MB，PDF 最多 200 页）</span><input type="file" accept=".md,.markdown,.pdf" required @change="chooseFile" /></label>
         </div>
-        <footer><button type="button" class="secondary-button" @click="showImport = false">取消</button><button class="primary-button" :disabled="loading || !form.allowedRoles.length"><Upload :size="15" />{{ loading ? '处理中…' : '导入并发布' }}</button></footer>
+        <footer><button type="button" class="secondary-button" @click="showImport = false">取消</button><button class="primary-button" :disabled="loading || !form.allowedRoles.length"><Upload :size="15" />{{ loading ? '处理中…' : '提交待审候选' }}</button></footer>
       </form>
     </div>
   </div>

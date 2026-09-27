@@ -104,6 +104,15 @@ class RunbookHybridRetrievalIntegrationTest {
                         .content(objectMapper.writeValueAsBytes(newDocument)))
                 .andExpect(status().isOk());
 
+        long candidateId = jdbcClient.sql("SELECT id FROM runbook_document WHERE stable_key='dns-resolution-failure' AND status='PENDING_REVIEW'")
+                .query(Long.class).single();
+        mockMvc.perform(post("/api/v1/runbooks/publications/" + candidateId + "/decisions")
+                        .header("Authorization", bearer(login("lina", "OpsPilot@2026")))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(Map.of("expectedVersion", 0, "decision", "APPROVE",
+                                "requestKey", java.util.UUID.randomUUID().toString(), "reason", "独立复核 DNS 处置"))))
+                .andExpect(status().isOk());
+
         reset(embeddingModel);
         when(embeddingModel.embed(anyList())).thenThrow(new IllegalStateException("provider unavailable"));
         mockMvc.perform(post("/api/v1/runbooks/semantic-index/rebuild")
