@@ -98,17 +98,29 @@ jobs:
           cache: maven
       - name: Enable Maven wrapper
         run: chmod +x mvnw
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Test MySQL lifecycle gate
+        run: node --test scripts/tests/mysql-lifecycle.test.cjs
       - name: Run Testcontainers compatibility test
-        run: >-
-          ./mvnw -B
-          -Dopspilot.mysql.it.enabled=true
-          -Dtest=MySqlCompatibilityIntegrationTest,MySqlOnCallRoutingSnapshotIntegrationTest,MySqlOnCallRotationIntegrationTest,MySqlOnCallCoverageIntegrationTest,MySqlOnCallHandoffIntegrationTest
-          test
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p target/mysql-it
+          ./mvnw -B \
+            -Dopspilot.mysql.it.enabled=true \
+            -Dtest=MySqlCompatibilityIntegrationTest,MySqlOnCallRoutingSnapshotIntegrationTest,MySqlOnCallRotationIntegrationTest,MySqlOnCallCoverageIntegrationTest,MySqlOnCallHandoffIntegrationTest \
+            test 2>&1 | tee target/mysql-it/maven.log
+      - name: Verify complete MySQL logs and shutdown
+        run: node scripts/verify-mysql-lifecycle.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: mysql-compatibility-evidence
-          path: target/surefire-reports/
+          path: |
+            target/surefire-reports/
+            target/mysql-it/
 
   alertmanager-integration:
     name: Alertmanager webhook integration

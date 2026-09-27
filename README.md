@@ -6,6 +6,8 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
+checkpoint 52 工程修复进行中：五套真实MySQL测试容器改由Spring管理，补完整Maven日志、五连接池停机及零跳过门禁；12项门禁单元测试与本地编译通过。真实容器/远端CI待验，保留51的旧错误日志，见 [进行中报告](docs/acceptance/V1.7-checkpoint-52.md)。
+
 checkpoint 51 定向接班页面已验：从本人普通班次申请，指定接班人接受/拒绝、申请人撤回；接受后自动刷新班次/覆盖日历。响应丢失后按账号恢复冻结草稿并同键重试，409锁定旧决定版本而不自动重提。代码 `49c221c` 的 [Run 36328347791](https://github.com/Trigger726/OnCall-Agent/actions/runs/36328347791) 十二作业成功，前端39项、双时区回归、真实MySQL52项断言、Linux隔离JAR五脚本通过；新旧桌面/390px与远端工件已核验。MySQL日志另有容器停止后后台任务泄漏和fork强制退出，须继续修复，不宣称全日志干净或完整换班产品完成，见 [限定验收报告](docs/acceptance/V1.7-checkpoint-51.md)。
 
 checkpoint 50 补接班台账筛选：`scope=MINE` 从登录身份匹配申请/接班双方，可与计划、状态组合，SQL先过滤再截断，避免较旧待办被201条无关新请求遮住。代码 `a87265a` 的 [Run 36326409469](https://github.com/Trigger726/OnCall-Agent/actions/runs/36326409469) 十二项全绿，双时区各224发现/165执行/59条件跳过、真实MySQL52执行/零跳过、接班17项通过；旧页面/JAR/HTTP回归已验，当时未交付的接班页面已由检查点51补齐，详见 [阶段报告](docs/acceptance/V1.7-checkpoint-50.md)。

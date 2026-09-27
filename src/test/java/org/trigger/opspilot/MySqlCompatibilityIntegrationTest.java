@@ -7,6 +7,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.http.HttpStatus;
@@ -14,8 +16,6 @@ import org.trigger.opspilot.alert.AlertmanagerRejectionService;
 import org.trigger.opspilot.alert.AlertmanagerWebhookService;
 import org.trigger.opspilot.common.ApiException;
 import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -54,7 +54,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @EnabledIfSystemProperty(named = "opspilot.mysql.it.enabled", matches = "true")
-@Testcontainers
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(properties = {
         "spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver",
@@ -103,13 +102,19 @@ class MySqlCompatibilityIntegrationTest {
             executor.shutdownNow();
         }
     }
-    @Container
-    @ServiceConnection
-    static final MySQLContainer<?> MYSQL = new MySQLContainer<>("mysql:8.4")
-            .withDatabaseName("opspilot_test")
-            .withUsername("opspilot")
-            .withPassword("opspilot-test")
-            .withCommand("--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci");
+    // Spring owns the container for the entire cached context, including bean shutdown.
+    @TestConfiguration(proxyBeanMethods = false)
+    static class Containers {
+        @Bean
+        @ServiceConnection
+        MySQLContainer<?> mysql() {
+            return new MySQLContainer<>("mysql:8.4")
+                .withDatabaseName("opspilot_test")
+                .withUsername("opspilot")
+                .withPassword("opspilot-test")
+                .withCommand("--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci");
+        }
+    }
 
     @Autowired
     private DataSource dataSource;
