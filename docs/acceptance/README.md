@@ -2,7 +2,7 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
-进行中：[V1.7-checkpoint-49.md](V1.7-checkpoint-49.md)：定向接班后端，新增 V27、本人权限/幂等/版本/行锁/事务覆盖，正在验证；接班页面与桌面/移动新旧 Demo 对照尚未交付，不能等同于完整换班验收。
+进行中：[V1.7-checkpoint-49.md](V1.7-checkpoint-49.md)：定向接班后端已验，V27、本人权限/幂等/版本/行锁/事务覆盖与真实HTTP通过；修复代码 `eb3ef78` 的 [Run 36325182213](https://github.com/Trigger726/OnCall-Agent/actions/runs/36325182213) 十二项全绿，真实MySQL50项零跳过、双时区各220项发现/163项执行。接班页面与桌面/移动新旧 Demo 对照尚未交付，不能等同于完整换班验收；首轮SSE安全头竞态失败与修复已归档。
 
 最新检查点：[V1.7-checkpoint-48.md](V1.7-checkpoint-48.md)：逐日日历、有效覆盖/缺班与取消后自动刷新通过；[Run 36291809846](https://github.com/Trigger726/OnCall-Agent/actions/runs/36291809846) 十二项全绿，前端29项、生命周期9项、双时区各189项发现/147项执行、真实MySQL35项零跳过、Linux桌面/390px与完整停机日志已核验。首次失败证据保留；原始Demo归档分支已上传。
 
@@ -52,6 +52,7 @@
 | V1.7 | 44：升级路由已提交状态可见性 | 通过，双时区/真实 MySQL 八场景与十一项 CI 已验 | [V1.7-checkpoint-44.md](V1.7-checkpoint-44.md) |
 | V1.7 | 45：轮转规则与自动续排后端 | 后端已验；当时 UI 待验，已在 46 补齐 | [V1.7-checkpoint-45.md](V1.7-checkpoint-45.md) |
 | V1.7 | 46：轮转管理与异常台账页面 | 通过（限本检查点），21 项前端/双时区/JAR/桌面手机及十一门禁已验 | [V1.7-checkpoint-46.md](V1.7-checkpoint-46.md) |
+| V1.7 | 49：定向接班请求后端 | 部分通过，后端/MySQL/HTTP/十二门禁已验，接班UI待交付 | [V1.7-checkpoint-49.md](V1.7-checkpoint-49.md) |
 
 ## 状态约定
 

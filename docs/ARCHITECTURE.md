@@ -93,6 +93,22 @@ V26 的轮转规则固化锚点、班长、有序成员；时段序号驱动 rou
 
 日历按无时区的数据库本地日期裁剪，跨午夜/闰日计时不重复；每日日历卡片可筛选裁剪后的有效时间线。汇总是可路由覆盖，不是 SLO，未来/历史窗口都只采用当前账号资格，不能冒充历史资格或未来通知保证。后端共享场景、桌面/移动与第三份浏览器 CI 见 [checkpoint 48](acceptance/V1.7-checkpoint-48.md)。
 
+### 双方同意的定向接班
+
+V27 保存申请时的原班次 ID/版本、双方、UUID、时段和原因。申请只允许原普通班次负责人，接受/拒绝只允许指定接班人，撤回只允许申请人；ADMIN 权限不等于可以代替本人同意。新职责通过已有临时覆盖模型表达，原班次/轮转时段及旧 Incident 路由不改写。
+
+| 从 PENDING 出发 | 本人 | 原子结果 |
+| --- | --- | --- |
+| ACCEPTED | 指定接班人 | 新覆盖 + 请求版本/决策 + 两条审计 |
+| REJECTED | 指定接班人 | 请求版本/决策 + 审计，无覆盖 |
+| WITHDRAWN | 申请人 | 请求版本/决策 + 审计，无覆盖 |
+
+所有变更遵循 `计划行锁 → 请求行锁（决策）→ 双方用户按 ID 升序锁（接受/创建）→ 源版本/重叠重查 → 同事务写入`。READ_COMMITTED 读取已提交状态；外层组合事务必须遵守相同隔离级别。新普通/覆盖班次和轮转都持有同一计划锁，因此申请期间保存的旧版本不能绕过新的取消或覆盖。多个不同请求竞争同一时段只能一个接受，其他保留 PENDING 并返回409，而非静默覆盖。
+
+创建重试以申请人+规范UUID唯一且逐项匹配不可变载荷；决策重试要求终态、原请求版本与说明都匹配。已接受覆盖后来被软取消，重试也不新建、不复活。已开始的请求在所有锁等待后读取 `CURRENT_TIMESTAMP(6)`，向上取整秒形成剩余覆盖，不把整段申请时间补写到过去；H2须维持 MODE=MySQL（时钟按语句，而非普通模式按事务）。过期只禁止接受，不伪造自动EXPIRED任务。拒绝/撤回不依赖原班次仍有效或计划仍开启，便于清理失效请求。
+
+接班后端、H2/MySQL共享15场景与真实JAR HTTP见 [checkpoint 49](acceptance/V1.7-checkpoint-49.md)。当前没有请求页面、开放认领、双向互换、外部提醒或日历同步；已接受覆盖仍由管理角色通过已有班次软取消处理，不称为完整撤销产品流程。
+
 ### 无责复盘与防复发行动
 
 复盘不是调查阶段的即时总结。只有 `RESOLVED/CLOSED` Incident 才能创建，创建事务会先读取当时已有的时间线、告警、最近调查报告和相关变更，经过 `LogRedactor` 后保存 JSON 快照，再写 `POSTMORTEM_CREATED` 事件。因此后续新增时间线不会悄悄改变复盘依据，重复创建也只返回同一份草稿。
@@ -279,6 +295,8 @@ runbook_retrieval_query 1---n runbook_relevance_judgment
 runbook_relevance_judgment 0..1---1 runbook_retrieval_eval_case
 runbook_retrieval_eval_case set ---> runbook_retrieval_eval_run(dataset snapshot)
 cmdb_resource 1---n oncall_schedule 1---n oncall_shift
+oncall_shift(source) 1---n oncall_handoff 1---0..1 oncall_shift(replacement)
+sys_user 1---n oncall_handoff(requester/target/decider)
 cmdb_resource 1---n escalation_policy 1---n escalation_step
 incident 1---n incident_escalation_event n---1 escalation_step
 ```
