@@ -9,6 +9,7 @@ const root = path.resolve(__dirname, '..');
 const base = 'http://127.0.0.1:9917';
 const health = 'http://127.0.0.1:9921/actuator/health';
 const redact = value => value.replace(/Bearer\s+[\w.-]+/g, 'Bearer [REDACTED]');
+const unexpectedLogLines = value => value.split(/\r?\n/).filter(line => /Unhandled request error|\sERROR\s/.test(line)).length;
 
 async function requireFreePort(port) {
   const probe = net.createServer();
@@ -81,7 +82,7 @@ async function verify() {
   const java = process.env.JAVA_HOME ? path.join(process.env.JAVA_HOME, 'bin', process.platform === 'win32' ? 'java.exe' : 'java') : 'java';
   const child = spawn(java, ['-Duser.timezone=UTC', '-jar', jar, '--server.address=127.0.0.1', '--server.port=9917',
     '--management.server.port=9921', '--management.server.address=127.0.0.1',
-    `--spring.datasource.url=jdbc:h2:mem:${database};MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1`,
+    `--spring.datasource.url=jdbc:h2:mem:${database};MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE`,
     '--spring.datasource.username=sa', '--spring.datasource.password=', '--opspilot.ai.enabled=false',
     '--opspilot.oncall.rotation.scan-delay=200', '--opspilot.oncall.rotation.initial-delay=500',
     '--opspilot.oncall.escalation.enabled=false'], { cwd: root, stdio: ['ignore', descriptor, descriptor], windowsHide: true });
@@ -102,7 +103,7 @@ async function verify() {
       result.scripts.push(await runScript(name, env, evidence));
     }
     if (interrupted) throw new Error('Browser acceptance interrupted');
-    if (/Unhandled request error|\sERROR\s/.test(fs.readFileSync(log, 'utf8'))) throw new Error('Owned JAR reported unexpected errors; see sanitized evidence');
+    if (unexpectedLogLines(fs.readFileSync(log, 'utf8'))) throw new Error('Owned JAR reported unexpected errors; see sanitized evidence');
     result.unexpectedJarErrors = 0;
     result.status = 'PASS';
   } catch (error) { result.status = 'FAIL'; result.failure = redact(error.message); throw error; }
@@ -113,11 +114,16 @@ async function verify() {
     catch (error) { result.status = 'FAIL'; result.failure = redact(error.message); throw error; }
     finally {
       fs.closeSync(descriptor);
-      fs.writeFileSync(log, redact(fs.readFileSync(log, 'utf8')));
+      const content = redact(fs.readFileSync(log, 'utf8'));
+      fs.writeFileSync(log, content);
+      result.unexpectedJarErrors = unexpectedLogLines(content); // Include graceful shutdown, not just the running JAR.
+      const shutdownError = result.status === 'PASS' && result.unexpectedJarErrors > 0;
+      if (shutdownError) { result.status = 'FAIL'; result.failure = 'Owned JAR reported errors during shutdown; see sanitized evidence'; }
       fs.writeFileSync(path.join(evidence, 'runner-result.json'), JSON.stringify(result, null, 2));
       console.log(JSON.stringify(result));
+      if (shutdownError) throw new Error(result.failure);
     }
   }
 }
-module.exports = { requireFreePort, stopProcess, waitForHealth, redact };
+module.exports = { requireFreePort, stopProcess, waitForHealth, redact, unexpectedLogLines };
 if (require.main === module) verify().catch(error => { console.error(redact(error.message)); process.exitCode = 1; });

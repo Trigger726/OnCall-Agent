@@ -4,7 +4,7 @@ const net = require('node:net');
 const http = require('node:http');
 const { spawn } = require('node:child_process');
 const { once } = require('node:events');
-const { requireFreePort, stopProcess, waitForHealth, redact } = require('../../verify-oncall-browser-ci.cjs');
+const { requireFreePort, stopProcess, waitForHealth, redact, unexpectedLogLines } = require('../../verify-oncall-browser-ci.cjs');
 
 test('occupied port is rejected without stopping the original listener', async () => {
   const server = net.createServer();
@@ -14,6 +14,13 @@ test('occupied port is rejected without stopping the original listener', async (
     await assert.rejects(requireFreePort(server.address().port), /occupied; no existing process will be stopped/);
     assert.equal(server.listening, true);
   } finally { await new Promise(resolve => server.close(resolve)); }
+});
+
+test('strict log scan includes shutdown errors and does not count a disconnected-client debug line', () => {
+  const content = 'INFO ready\nDEBUG HTTP response client disconnected; no error body will be written\n'
+    + 'INFO Shutdown initiated\n2026-09-27 ERROR scheduler : database closed\nERROR Global : Unhandled request error\n';
+  assert.equal(unexpectedLogLines(content), 2);
+  assert.equal(unexpectedLogLines('INFO Shutdown completed\nWARN routine startup warning'), 0);
 });
 test('free port probe closes its own listener', async () => {
   const server = net.createServer();

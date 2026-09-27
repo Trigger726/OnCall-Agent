@@ -1,6 +1,8 @@
 package org.trigger.opspilot.common;
 
 import jakarta.validation.ConstraintViolationException;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -75,5 +77,12 @@ public class GlobalExceptionHandler {
         log.error("Unhandled request error", exception);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.failure("INTERNAL_ERROR", "系统暂时无法处理该请求"));
+    }
+
+    // Only the servlet container's explicit response-client disconnect, not arbitrary IO/provider errors.
+    @ExceptionHandler(ClientAbortException.class)
+    void handleDisconnectedClient(ClientAbortException exception, HttpServletResponse response) {
+        if (!response.isCommitted()) response.setStatus(499); // Server-side diagnostic; no body or retry on a dead socket.
+        log.debug("HTTP response client disconnected; no error body will be written");
     }
 }
