@@ -228,7 +228,7 @@ checkpoint 25 跨 JVM 加演：保留 checkpoint 24 的红/绿 header 对照，�
 
 checkpoint 43 加演：在隔离 Demo 的“班次维护”创建张伟的普通班次，再创建李娜的同一时段临时覆盖；顶部负责人随之变化。取消覆盖须填写原因，恢复普通班次，记录显示“已取消 · v1”且刷新保留；重复同类建班返回 409，不会静默替换负责人。查询 2026-08 历史窗口证明旧排班仍在。创建成功会切到新班次的计划与时间窗口，避免停在历史查询看不到新记录。每个新告警应形成新的 Incident 才能观察即时首步；若聚合到已有事故，不把它误称为重复首步。
 
-新旧对照及真实桌面/390px 截图见 [checkpoint 42](acceptance/V1.7-checkpoint-42.md) 与 [checkpoint 43](acceptance/V1.7-checkpoint-43.md)。旧视图可从 `ab98907`/`52b344f` 查看，原始 OnCall 保留在本地 `archive/oncall-original-2026-08-19`；不要在有未提交改动的工作区切换或恢复旧文件。
+新旧对照及真实桌面/390px 截图见 [checkpoint 42](acceptance/V1.7-checkpoint-42.md) 与 [checkpoint 43](acceptance/V1.7-checkpoint-43.md)。旧视图可从 `ab98907`/`52b344f` 查看，原始 OnCall 已保留在[远端归档分支](https://github.com/Trigger726/OnCall-Agent/tree/archive/oncall-original-2026-08-19)（`0cd654e`）；不要在有未提交改动的工作区切换或恢复旧文件。
 
 checkpoint 45 后端加演：管理账号通过 `/api/v1/on-call/rotations` 创建锚点、有序成员与班长规则；用 `/rotations/{id}/slots` 对照 `BLOCKED / MEMBER_UNAVAILABLE / GENERATED`。释放手工占用后等待后台自动补齐，验证新 P1 路由；取消生成班后暂停/恢复续排，该时段应保留取消事实而不是复活。真实独立 JAR/HTTP 结果与旧班次逐字段保护见 [checkpoint 45](acceptance/V1.7-checkpoint-45.md)。这一阶段只验 API/后台，不能把旧界面截图当成新增轮转 UI 验收；页面在下面的 checkpoint 46 独立补验。
 

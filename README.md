@@ -6,12 +6,12 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-checkpoint 48 新增日历覆盖预览：已持久化班次按实际路由优先级分段，逐日查看有效覆盖/缺班、被遮盖与无资格班次，取消后自动重算；不是未生成轮转的预测，也不是历史账号资格快照。前端 29 项与本地桌面/390px 通过，远端 MySQL/CI 待补证，详见 [验收报告](docs/acceptance/V1.7-checkpoint-48.md)。
+checkpoint 48 新增日历覆盖预览：已持久化班次按实际路由优先级分段，逐日查看有效覆盖/缺班、被遮盖与无资格班次，取消后自动重算；不是未生成轮转的预测，也不是历史账号资格快照。代码 `4573a82` 的 [Run 36291809846](https://github.com/Trigger726/OnCall-Agent/actions/runs/36291809846) 十二项全绿，前端29项、真实MySQL35项零跳过、双时区各189项发现/147项执行/42项条件跳过、Linux桌面/390px与完整停机日志通过，详见 [验收报告](docs/acceptance/V1.7-checkpoint-48.md)。
 
 - 告警治理：外部事件 ID 幂等、SHA-256 指纹压缩、30 分钟窗口聚合、原始告警与 Incident 分层；原生接收 Alertmanager v4 批量 webhook，同状态重试零写入、firing/resolved 共用生命周期，批内永久坏项进入脱敏台账并支持角色受控重放。
 - Incident 工作台：`OPEN -> ACKNOWLEDGED -> INVESTIGATING -> MITIGATED -> RESOLVED -> CLOSED` 状态机、乐观锁、分派、备注和时间线。
 - CMDB：应用、API、数据库和中间件台账，依赖/调用关系拓扑，事故与近期变更关联。
-- 值班升级：管理角色可创建普通/临时覆盖班次，计划行锁防同层重叠，带版本/原因软取消并保留历史与审计；当前值班和新事故路由排除取消班次。有序成员轮转 API/页面默认每分钟续排未来 14 天开始的班次，冲突/不可用成员留台账，已取消生成班不复活，暂停/恢复受版本与原因约束。P1 未确认 Incident 按 0/10/20 分钟分级路由，首步在告警创建事务内执行，后续分钟扫描，确认后停止。缺班记录 `NO_TARGET`；`ROUTED` 仅是站内事实，非外部送达；跨时区/DST、换班和日历仍待建设。
+- 值班升级：管理角色可创建普通/临时覆盖班次，计划行锁防同层重叠，带版本/原因软取消并保留历史与审计；当前值班和新事故路由排除取消班次。有序成员轮转 API/页面默认每分钟续排未来 14 天开始的班次，冲突/不可用成员留台账，已取消生成班不复活，暂停/恢复受版本与原因约束。P1 未确认 Incident 按 0/10/20 分钟分级路由，首步在告警创建事务内执行，后续分钟扫描，确认后停止。缺班记录 `NO_TARGET`；`ROUTED` 仅是站内事实，非外部送达；跨时区/DST、换班和日历同步仍待建设。
 - 可解释 Agent 调查：以 `PLAN -> EXECUTE -> REPLAN -> FINISH` 编排告警、CMDB、指标、变更、日志和 Runbook 六个只读工具；每步持久化输入、查询范围、数据源、证据、失败原因和耗时。
 - 可恢复调查事件流：运行事件先落库再通过 SSE 实时发送，事件 ID 同时作为断线回放游标；客户端退出不取消后台调查，结果仍会完整进入时间线和审计。
 - Agent 运行控制：同一 Incident 使用幂等键抑制重复 run；任务先进入有界队列，可显式取消并受持久化截止时间预算约束；取消、超时和队列拒绝都形成可回放的持久化终态，执行 JVM 崩溃后由存活实例幂等结算逾期孤儿 run。
@@ -346,6 +346,7 @@ Runbook 页面保留原版/BM25/Hybrid 当前对照，并列出最近 12 次持�
 | GET | `/api/v1/cmdb/topology` | 服务依赖拓扑 |
 | GET | `/api/v1/on-call/current` | 当前值班人 |
 | GET | `/api/v1/on-call/roster` | 班次窗口、可用计划/负责人与数据库时间；最多 31 天/200 条 |
+| GET | `/api/v1/on-call/coverage` | 指定计划的有效覆盖/缺班、胜出与遮盖班次；最长31天，超过1000源班次拒算 |
 | POST | `/api/v1/on-call/shifts` | 管理角色创建普通/覆盖班次，同层重叠返回 409 |
 | POST | `/api/v1/on-call/shifts/{id}/cancel` | 带版本/原因取消班次，保留历史与审计 |
 | GET/POST | `/api/v1/on-call/rotations` | 查询/创建有序轮转；列表有截断标志，创建限管理角色 |
@@ -365,7 +366,14 @@ cd web && npm test && npm run build
 cd .. && ./mvnw test
 
 # 需要本机 Docker；在真实 MySQL 8.4 上执行 V1-V26 迁移和关键业务链路
-./mvnw -Dopspilot.mysql.it.enabled=true -Dtest=MySqlCompatibilityIntegrationTest,MySqlOnCallRoutingSnapshotIntegrationTest,MySqlOnCallRotationIntegrationTest test
+./mvnw -Dopspilot.mysql.it.enabled=true -Dtest=MySqlCompatibilityIntegrationTest,MySqlOnCallRoutingSnapshotIntegrationTest,MySqlOnCallRotationIntegrationTest,MySqlOnCallCoverageIntegrationTest test
+
+# 从最新前端源码打包后，真实浏览器门禁自行启动并清理隔离内存 JAR
+./mvnw -DskipTests package
+npm ci --prefix scripts/browser
+node scripts/browser/node_modules/playwright/cli.js install --with-deps chromium
+npm test --prefix scripts/browser
+node scripts/verify-oncall-browser-ci.cjs
 ```
 
 测试覆盖：
@@ -398,7 +406,7 @@ cd .. && ./mvnw test
 - 跨 Incident 精确指纹复发与单事故告警噪声分离、候选可解释口径、Problem 并发/重复创建幂等、生命周期字段门禁、乐观锁、权限审计、未来 Incident 自动关联和解决后复发。
 - MySQL 8.4 Testcontainers：Flyway V1-V26、中文数据、幂等复合唯一索引、Runbook BM25、完整 9 步/18 事件调查、复盘发布、逾期扫描/行动项确认与完成，以及 Problem、SLO、Alertmanager、值班升级双扫描、排班冲突/取消与轮转并发/故障隔离，已在真实 MySQL 远端门禁通过。
 
-当前默认后端套件发现 169 项测试：135 项在 UTC/上海时区分别执行通过，34 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过。checkpoint 46 前端新增 8 项轮转契约/状态测试，共 21/21，通过生产构建与最新 JAR 的桌面/390px 实际创建、暂停、旧版本 409、后台补班、新 P1 路由、取消不复活和历史保护。代码 `d2541c7` 的 [Run 36268078605](https://github.com/Trigger726/OnCall-Agent/actions/runs/36268078605) 十一项 CI 全绿（4 分 1 秒），直接日志确认真实 MySQL V26/27 项执行/零跳过、远端双时区回归和前端 21 项/生产构建。checkpoint 47 将两份脚本接入独立真实浏览器 CI：`npm ci --prefix scripts/browser`、安装匹配 Chromium 后运行 `node scripts/verify-oncall-browser-ci.cjs`，自动启动唯一内存隔离 JAR、拒绝占用端口并清理自有进程；8 项生命周期测试与本地完整流程通过，代码 `12578c0` 的 [Run 36269425451](https://github.com/Trigger726/OnCall-Agent/actions/runs/36269425451) 十二项全绿；Linux Chromium 桌面/390px 流程、双时区 H2 与真实 MySQL 27 项零跳过均通过，远端 ZIP/JSON/截图已下载核验。旧界面截图与原始 OnCall 本地归档分支继续保留，新旧对照见 [checkpoint 46](docs/acceptance/V1.7-checkpoint-46.md)，最新工程验收见 [checkpoint 47](docs/acceptance/V1.7-checkpoint-47.md)。
+checkpoint 46/47 的历史默认后端套件发现 169 项测试：135 项在 UTC/上海时区分别执行通过，34 项 Docker（MySQL/Redis/双 JVM）条件测试默认跳过。checkpoint 46 前端新增 8 项轮转契约/状态测试，共 21/21，通过生产构建与最新 JAR 的桌面/390px 实际创建、暂停、旧版本 409、后台补班、新 P1 路由、取消不复活和历史保护。代码 `d2541c7` 的 [Run 36268078605](https://github.com/Trigger726/OnCall-Agent/actions/runs/36268078605) 十一项 CI 全绿（4 分 1 秒），直接日志确认真实 MySQL V26/27 项执行/零跳过、远端双时区回归和前端 21 项/生产构建。checkpoint 47 将两份脚本接入独立真实浏览器 CI：`npm ci --prefix scripts/browser`、安装匹配 Chromium 后运行 `node scripts/verify-oncall-browser-ci.cjs`，自动启动唯一内存隔离 JAR、拒绝占用端口并清理自有进程；8 项生命周期测试与本地完整流程通过，代码 `12578c0` 的 [Run 36269425451](https://github.com/Trigger726/OnCall-Agent/actions/runs/36269425451) 十二项全绿；Linux Chromium 桌面/390px 流程、双时区 H2 与真实 MySQL 27 项零跳过均通过，远端 ZIP/JSON/截图已下载核验。旧界面截图与原始 OnCall 归档分支继续保留，新旧对照见 [checkpoint 46](docs/acceptance/V1.7-checkpoint-46.md)，当时工程验收见 [checkpoint 47](docs/acceptance/V1.7-checkpoint-47.md)。
 
 checkpoint 45 新增 10 项轮转共享场景与 1 项真实定时任务测试；代码 `2fc082e` 的 [Run 36266295563](https://github.com/Trigger726/OnCall-Agent/actions/runs/36266295563) 十一项 CI 全部成功（4 分 8 秒），解码日志确认 V26 在真实 MySQL 8.4 上迁移成功，轮转 10 项 + 路由快照 8 项 + 兼容性 9 项共 27 项执行、零跳过；远端双时区回归与前端生产构建也通过。
 

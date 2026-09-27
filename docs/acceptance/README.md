@@ -2,9 +2,9 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
-新增检查点：[V1.7-checkpoint-48.md](V1.7-checkpoint-48.md)：逐日日历、有效覆盖/缺班和取消后自动刷新已实现，前端 29 项、H2 新增 8 场景及桌面/390px 本地实页通过；真实 MySQL/十二项远端门禁待验。
+最新检查点：[V1.7-checkpoint-48.md](V1.7-checkpoint-48.md)：逐日日历、有效覆盖/缺班与取消后自动刷新通过；[Run 36291809846](https://github.com/Trigger726/OnCall-Agent/actions/runs/36291809846) 十二项全绿，前端29项、生命周期9项、双时区各189项发现/147项执行、真实MySQL35项零跳过、Linux桌面/390px与完整停机日志已核验。首次失败证据保留；原始Demo归档分支已上传。
 
-最新检查点：[V1.7-checkpoint-47.md](V1.7-checkpoint-47.md)：真实浏览器 CI、自有进程隔离与证据上传已通过；[Run 36269425451](https://github.com/Trigger726/OnCall-Agent/actions/runs/36269425451) 十二项全绿，Linux/Chromium 桌面与390px流程、8 项生命周期测试、21 项前端、双时区回归与真实 MySQL 27 项通过，ZIP/JSON/截图已下载核验。
+上一工程检查点：[V1.7-checkpoint-47.md](V1.7-checkpoint-47.md)：真实浏览器 CI、自有进程隔离与证据上传已通过；[Run 36269425451](https://github.com/Trigger726/OnCall-Agent/actions/runs/36269425451) 十二项全绿，Linux/Chromium 桌面与390px流程、8 项生命周期测试、21 项前端、双时区回归与真实 MySQL 27 项通过，ZIP/JSON/截图已下载核验。
 
 | 版本 | 检查点 | 状态 | 报告 |
 | --- | --- | --- | --- |
