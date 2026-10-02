@@ -3,7 +3,8 @@ set -Eeuo pipefail
 evidence_dir=target/collector-alerting-it
 mkdir -p "$evidence_dir"
 umask 077
-secret_file="$(mktemp)"
+secret_directory="$(mktemp -d)"
+secret_file="$secret_directory/webhook-secret"
 export ALERTMANAGER_WEBHOOK_SECRET="$(openssl rand -hex 24)"
 export COLLECTOR_ALERTMANAGER_SECRET_FILE="$secret_file"
 printf '%s' "$ALERTMANAGER_WEBHOOK_SECRET" > "$secret_file"
@@ -26,6 +27,7 @@ cleanup() {
   "${compose[@]}" logs --no-color > "$evidence_dir/compose.log" 2>&1 || true
   "${compose[@]}" down --volumes --remove-orphans >/dev/null 2>&1 || true
   rm -f -- "$secret_file"
+  rmdir -- "$secret_directory"
 }
 trap cleanup EXIT
 wait_http() {
@@ -83,18 +85,30 @@ done
 
 task_phase=fault-and-unregistered-resource
 "${compose[@]}" pause tempo
-for _ in {1..12}; do
+for _ in {1..24}; do
   id="$(openssl rand -hex 16)"
-  collector_send_probe "$evidence_dir" "$id" collector-alerting-fault
+  start="$(date +%s%N)"
+  end="$(( start + 1000000 ))"
+  # 24 actual OTLP requests of 32 spans exceed 16 persistent request slots.
+  # These are explicit fault fixtures, not application investigation traces.
+  jq -n --arg trace "$id" --arg start "$start" --arg end "$end" \
+    '{resourceSpans:[{resource:{attributes:[{key:"service.name",value:{stringValue:"collector-alerting-fault-fixture"}}]},
+      scopeSpans:[{scope:{name:"opspilot.alerting-fault"},spans:[range(1;33) | tostring as $span |
+        {traceId:$trace,spanId:(("0000000000000000"+$span)[-16:]),name:"collector-alerting-fault",kind:1,
+         startTimeUnixNano:$start,endTimeUnixNano:$end}]}]}]}' > "$evidence_dir/fault-$id-otlp.json"
+  curl --fail --silent --show-error -H 'Content-Type: application/json' \
+    --data-binary "@$evidence_dir/fault-$id-otlp.json" http://localhost:4318/v1/traces \
+    --output "$evidence_dir/fault-$id-ack.json" --write-out '%{http_code}' > "$evidence_dir/fault-$id-http-status.txt"
+  [[ "$(< "$evidence_dir/fault-$id-http-status.txt")" == 200 ]]
 done
 for _ in {1..15}; do
   curl --fail --silent --show-error http://localhost:18888/metrics > "$evidence_dir/metrics-saturated.txt"
-  if [[ "$(collector_metric otelcol_exporter_queue_size "$evidence_dir/metrics-saturated.txt")" == 4 ]] \
+  if [[ "$(collector_metric otelcol_exporter_queue_size "$evidence_dir/metrics-saturated.txt")" == 16 ]] \
       && (( $(collector_counter otelcol_exporter_enqueue_failed_spans "$evidence_dir/metrics-saturated.txt") > 0 )); then break; fi
   sleep 1
 done
-[[ "$(collector_metric otelcol_exporter_queue_capacity "$evidence_dir/metrics-saturated.txt")" == 4 ]]
-[[ "$(collector_metric otelcol_exporter_queue_size "$evidence_dir/metrics-saturated.txt")" == 4 ]]
+[[ "$(collector_metric otelcol_exporter_queue_capacity "$evidence_dir/metrics-saturated.txt")" == 16 ]]
+[[ "$(collector_metric otelcol_exporter_queue_size "$evidence_dir/metrics-saturated.txt")" == 16 ]]
 (( $(collector_counter otelcol_exporter_enqueue_failed_spans "$evidence_dir/metrics-saturated.txt") > 0 ))
 wait_value 1 "SELECT COUNT(*) > 0 FROM alert_ingest_rejection WHERE source='alertmanager'
   AND resource_code='OBS-OTEL-COLLECTOR' AND error_code='RESOURCE_NOT_FOUND' AND status='OPEN'" 'actual CMDB rejection'
@@ -151,6 +165,8 @@ jq -e 'any(.data.alerts[]; .labels.alertname=="CollectorTraceEnqueueRejected" an
 # restarting Prometheus/Collector to clear a positive rejection counter.
 wait_value 2 "SELECT COUNT(*) FROM alert_event WHERE service_resource_id=$resource_id AND source='alertmanager'
   AND title IN ('CollectorTraceQueueHigh','CollectorTraceEnqueueRejected') AND status='RESOLVED' AND occurrence_count=1" 'both same lifecycle IDs resolved' 420
+curl --fail --silent --show-error http://localhost:18888/metrics > "$evidence_dir/metrics-final.txt"
+[[ "$(collector_counter otelcol_exporter_enqueue_failed_spans "$evidence_dir/metrics-final.txt")" == "$(collector_counter otelcol_exporter_enqueue_failed_spans "$evidence_dir/metrics-drained.txt")" ]]
 capture_alerts "$evidence_dir/resolved-alerts.json"
 jq -e --slurpfile before "$evidence_dir/firing-alerts.json" '([.[].id] == [$before[0][].id])
   and ([.[].incidentId] == [$before[0][].incidentId]) and ([.[].externalEventId] == [$before[0][].externalEventId])' "$evidence_dir/resolved-alerts.json" >/dev/null
@@ -169,7 +185,9 @@ curl --fail --silent --show-error http://localhost:9090/api/v1/alerts > "$eviden
 curl --fail --silent --show-error http://localhost:9920/actuator/health > "$evidence_dir/app-health.json"
 jq -e '.status=="UP"' "$evidence_dir/app-health.json" >/dev/null
 jq -n --argjson resourceId "$resource_id" --argjson before "$notifications_before" --argjson after "$notifications_after" \
-  '{status:"PASS",fault:"tempo-paused+actual-queue-four-rejection",cmdbResourceCode:"OBS-OTEL-COLLECTOR",cmdbResourceId:$resourceId,
+  '{status:"PASS",fault:"tempo-paused+actual-queue-sixteen-rejection",testQueueRequests:16,testBatchSpans:32,
+    faultFixtureRequests:24,faultFixtureSpansPerRequest:32,tracingRemainedEnabled:true,
+    noFurtherRejectionAfterQueueDrain:true,cmdbResourceCode:"OBS-OTEL-COLLECTOR",cmdbResourceId:$resourceId,
     unauthorizedRequestsRejectedWithoutWrites:2,unregisteredResourceRejected:true,explicitDemoRegistrationIdempotent:true,
     nativeFiringAlertsDelivered:2,notificationsBeforeRepeat:$before,notificationsAfterRepeat:$after,
     nativeRepeatAddedNoBusinessWrites:true,bothSameAlertIdsResolved:true,resolutionTimelineRows:2,

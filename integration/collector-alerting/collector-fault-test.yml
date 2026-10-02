@@ -1,0 +1,13 @@
+# Fault injection only. Keep OpsPilot tracing ON, but batch native webhook spans
+# so the recovery phase is not a continuing overload from one-span exports.
+# Production stays queue2048 / default10 / batch512.
+exporters:
+  otlp/tempo:
+    sending_queue:
+      num_consumers: 1
+      queue_size: 16
+processors:
+  batch:
+    timeout: 100ms
+    send_batch_size: 32
+    send_batch_max_size: 32
