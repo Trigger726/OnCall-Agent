@@ -1,0 +1,44 @@
+CP59_HTTP POST /api/v1/auth/login status=200
+CP59_HTTP GET /api/v1/slo/objectives/1/versions/0/prometheus-rules status=200
+CP59_HTTP GET /api/v1/auth/me status=200
+CP59_HTTP GET /api/v1/slo/objectives/1/versions/0/prometheus-rules status=403
+CP59_HTTP GET /api/v1/slo/objectives/1/versions/0/prometheus-rules status=200
+CP59_HTTP POST /api/v1/auth/login status=200
+CP59_HTTP POST /api/v1/incidents/1/notes status=401
+CP59_HTTP POST /api/v1/auth/login status=200
+CP59_HTTP GET /api/v1/auth/me status=401
+CP59_HTTP POST /api/v1/auth/login status=200
+CP59_HTTP GET /api/v1/auth/me status=200
+CP59_HTTP GET /api/v1/dashboard status=200
+CP59_HTTP GET /api/v1/incidents/1 status=200
+CP59_HTTP GET /api/v1/cmdb/topology status=200
+CP59_HTTP GET /api/v1/assistant/sessions status=200
+CP59_HTTP GET /api/v1/slo/objectives status=200
+CP59_HTTP GET /api/v1/slo/objectives/1/versions/0/prometheus-rules status=200
+CP59_HTTP GET /api/v1/auth/me status=401
+CP59_HTTP GET /api/v1/dashboard status=401
+CP59_HTTP GET /api/v1/incidents/1 status=401
+CP59_HTTP GET /api/v1/cmdb/topology status=401
+CP59_HTTP GET /api/v1/assistant/sessions status=401
+CP59_HTTP GET /api/v1/slo/objectives status=401
+CP59_HTTP GET /api/v1/slo/objectives/1/versions/0/prometheus-rules status=401
+CP59_HTTP POST /api/v1/auth/login status=401
+CP59_HTTP GET /api/v1/auth/me status=200
+[WARNING] Tests run: 289, Failures: 0, Errors: 0, Skipped: 79
+[INFO] BUILD SUCCESS
+[ERROR] Tests run: 4, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 12.26 s <<< FAILURE! -- in org.trigger.opspilot.security.AccountStatusHttpIntegrationTest
+[ERROR] org.trigger.opspilot.security.AccountStatusHttpIntegrationTest.shouldRejectDisabledWriteWithoutAuditOrTimeline -- Time elapsed: 0.122 s <<< FAILURE!
+expected: 401
+ but was: 200
+	at org.trigger.opspilot.security.AccountStatusHttpIntegrationTest.shouldRejectDisabledWriteWithoutAuditOrTimeline(AccountStatusHttpIntegrationTest.java:30)
+[ERROR] org.trigger.opspilot.security.AccountStatusHttpIntegrationTest.shouldRejectDisabledReadsAndLogin -- Time elapsed: 0.185 s <<< FAILURE!
+expected: 401
+ but was: 200
+	at org.trigger.opspilot.security.AccountStatusHttpIntegrationTest.shouldRejectDisabledReadsAndLogin(AccountStatusHttpIntegrationTest.java:27)
+[ERROR]   AccountStatusHttpIntegrationTest.shouldRejectDisabledReadsAndLogin:27 [/api/v1/auth/me]
+expected: 401
+ but was: 200
+[ERROR]   AccountStatusHttpIntegrationTest.shouldRejectDisabledWriteWithoutAuditOrTimeline:30 [disabled note]
+expected: 401
+ but was: 200
+[ERROR] Tests run: 4, Failures: 2, Errors: 0, Skipped: 0

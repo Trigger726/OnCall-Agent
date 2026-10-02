@@ -5,6 +5,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.AccountStatusException;
+import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +19,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final OpsUserDetailsService userDetailsService;
+    private final AccountStatusUserDetailsChecker accountStatusChecker = new AccountStatusUserDetailsChecker();
 
     public JwtAuthenticationFilter(JwtService jwtService, OpsUserDetailsService userDetailsService) {
         this.jwtService = jwtService;
@@ -32,10 +35,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 UserPrincipal principal = userDetailsService.loadUserByUsername(
                         jwtService.verifyAndGetUsername(authorization.substring(7)));
+                accountStatusChecker.check(principal);
                 var authentication = new UsernamePasswordAuthenticationToken(
                         principal, null, principal.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            } catch (JWTVerificationException | UsernameNotFoundException ignored) {
+            } catch (JWTVerificationException | UsernameNotFoundException | AccountStatusException ignored) {
                 SecurityContextHolder.clearContext();
             }
         }

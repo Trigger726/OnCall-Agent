@@ -6,6 +6,8 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
+检查点59进行中：真实HTTP复现旧JWT在账户停用后仍读身份/写事故备注200，入口现补账户资格检查，停用/删除统一401、活跃降权仍403。专项28项及MySQL门禁13项通过；真实MySQL/远端和页面回归继续验证。旧JAR/首失败保留，重新启用旧Token与既有后台任务边界明确，见[阶段报告](docs/acceptance/V1.7-checkpoint-59.md)。
+
 检查点58限定通过：SLO 阈值随目标周期计算，修复正分数事件舍入导致的误报健康；管理页面导出捕获版本的 Prometheus 规则并核验摘要，旧版本409阻断下载。bbe00f9的[Run36989009983](https://github.com/Trigger726/OnCall-Agent/actions/runs/36989009983)十三作业success，原生20场景/真实重复firing与同一告警resolved、双时区281发现/206执行/75条件跳过、真实MySQL68零跳过/五池关闭、58前端与Linux十脚本已验，三个工件摘要/重放/实图已核对。新旧Demo保留；规则发布仍由运维执行，生产长期数据与低流量策略待验证，见[检查点58](docs/acceptance/V1.7-checkpoint-58.md)及[规则发布说明](docs/SLO-PROMETHEUS-RULES.md)。
 
 检查点57已补远端验收：缺失/null审核版本六例拒绝，显式0合法。e98ee3a 的 [Run36344164602](https://github.com/Trigger726/OnCall-Agent/actions/runs/36344164602) 十二作业success，双时区270/195/75、真实MySQL68/五池关闭、58前端和Linux九脚本（含六例真实HTTP拒绝/补0成功）已核验，见[阶段报告](docs/acceptance/V1.7-checkpoint-57.md)。

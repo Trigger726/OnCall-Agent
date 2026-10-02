@@ -280,7 +280,9 @@ class ServiceSloIntegrationTest {
         jdbcClient.sql("UPDATE sys_user SET role_code='ON_CALL' WHERE username='lina'").update();
         mockMvc.perform(get(path).header("Authorization", bearer(manager))).andExpect(status().isForbidden());
         jdbcClient.sql("UPDATE sys_user SET role_code='OPS_MANAGER', status='DISABLED' WHERE username='lina'").update();
-        mockMvc.perform(get(path).header("Authorization", bearer(manager))).andExpect(status().isForbidden());
+        mockMvc.perform(get(path).header("Authorization", bearer(manager)))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.error.code").value("AUTHENTICATION_REQUIRED"));
         assertThat(QUERY_EXPRESSIONS).isEmpty();
     }
 

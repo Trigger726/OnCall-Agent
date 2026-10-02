@@ -2,6 +2,8 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
+进行中：[V1.7-checkpoint-59.md](V1.7-checkpoint-59.md)：真实HTTP复现停用后的旧JWT仍读取/写入200，入口补标准账户资格校验，读写统一401、活跃降权仍403。四项HTTP/九项API/十五项SLO专项通过，真实MySQL共享场景/72项命名门禁已接入，双时区、页面和远端继续验证；旧JAR/失败/历次Demo保留，不宣称永久Token撤销。
+
 最新限定验收：[V1.7-checkpoint-58.md](V1.7-checkpoint-58.md)：周期一致的SLO阈值、分数精度与版本绑定原生规则。bbe00f9的[Run36989009983](https://github.com/Trigger726/OnCall-Agent/actions/runs/36989009983)十三作业success，原生20场景/真实firing重复投递与resolved、双时区281/206/75、真实MySQL68零跳过/五池关闭、58前端及Linux十脚本已验；三个工件摘要、CLI重放和远端桌面/390px已核对，旧Demo保留。生产长期数据/低流量政策/自动部署未验收，整体目标继续。
 
 前一契约验收：[V1.7-checkpoint-57.md](V1.7-checkpoint-57.md)：缺失/null审核版本六例拒绝、补显式0六成功；e98ee3a的Run36344164602十二CI作业success，双时区270/195/75、真实MySQL68零跳过/五池关闭、58前端与Linux九脚本已核验，ZIP摘要及MySQL CLI重放通过。旧JAR/失败/桌面手机保留。
@@ -80,6 +82,7 @@
 | V1.7 | 56：Runbook独立复核发布 | 基线十二CI/真实MySQL68/扩展九脚本已验；缺失/null版本字段由57继续补 | [V1.7-checkpoint-56.md](V1.7-checkpoint-56.md) |
 | V1.7 | 57：发布决定显式捕获版本 | 本范围通过，十二CI/真实MySQL68/扩展九脚本与工件已核验 | [V1.7-checkpoint-57.md](V1.7-checkpoint-57.md) |
 | V1.7 | 58：版本绑定的SLO原生告警规则 | 限定通过，十三CI/原生20场景/真实链路/MySQL68/十脚本及新旧Demo | [V1.7-checkpoint-58.md](V1.7-checkpoint-58.md) |
+| V1.7 | 59：停用账户的旧JWT入口资格 | 进行中，真实HTTP首失败/专项通过，MySQL与远端待验 | [V1.7-checkpoint-59.md](V1.7-checkpoint-59.md) |
 
 ## 状态约定
 

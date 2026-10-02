@@ -7,6 +7,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.annotation.DirtiesContext;
@@ -57,7 +58,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @EnabledIfSystemProperty(named = "opspilot.mysql.it.enabled", matches = "true")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@SpringBootTest(properties = {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {
+        "server.address=127.0.0.1", "management.server.port=0", "management.server.address=127.0.0.1",
         "spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver",
         "spring.h2.console.enabled=false",
         "spring.ai.dashscope.api-key=disabled",
@@ -72,6 +74,34 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
         "FOLLOW_UP_NOTIFICATION_DISPATCH_INITIAL_DELAY=3600000"
 })
 class MySqlCompatibilityIntegrationTest {
+    @LocalServerPort private int httpPort;
+    @Autowired private com.fasterxml.jackson.databind.ObjectMapper httpMapper;
+
+    @Test @Order(16)
+    void shouldRejectDisabledReadsAndLogin() throws Exception {
+        try (var scenario = new org.trigger.opspilot.security.AccountStatusHttpScenarios(jdbcClient, httpMapper, httpPort)) {
+            scenario.disabledReadsAndLogin();
+        }
+    }
+    @Test @Order(17)
+    void shouldRejectDisabledWriteWithoutAuditOrTimeline() throws Exception {
+        try (var scenario = new org.trigger.opspilot.security.AccountStatusHttpScenarios(jdbcClient, httpMapper, httpPort)) {
+            scenario.disabledWriteHasNoSideEffects();
+        }
+    }
+    @Test @Order(18)
+    void shouldRejectOldJwtAfterAccountRemoval() throws Exception {
+        try (var scenario = new org.trigger.opspilot.security.AccountStatusHttpScenarios(jdbcClient, httpMapper, httpPort)) {
+            scenario.removedAccountCannotUseOldToken();
+        }
+    }
+    @Test @Order(19)
+    void shouldReloadCurrentRoleButKeepActiveAuthentication() throws Exception {
+        try (var scenario = new org.trigger.opspilot.security.AccountStatusHttpScenarios(jdbcClient, httpMapper, httpPort)) {
+            scenario.activeRoleUsesCurrentDatabaseAuthority();
+        }
+    }
+
     @Autowired private org.trigger.opspilot.runbook.RunbookPublicationService publicationService;
 
     @Test @Order(11) @org.springframework.transaction.annotation.Transactional
