@@ -347,6 +347,8 @@ Trace 只记录受控业务字段：Alert/Incident/run/report ID、来源、严�
 
 ## 10. 交付与回归门禁
 
+checkpoint61补Collector出口持久队列：`file_storage`引用专属命名卷、fsync写入、每bbolt文件256MiB增长上限；非root10001:10001运行，一次性init将卷根目录设0750。当前固定版本的隔离实验已在Tempo停止时SIGKILL并重建Collector，再恢复同一原Trace完整图，旧内存配置/首失败保留；此前段落所述“尚未验证”是历史checkpoint25的范围。本实验的单消费者仅为测试诊断，生产仍默认十消费者；不是Exactly Once、SDK未入队零丢失或生产容量结论，详见[队列运行边界](COLLECTOR-QUEUE-RECOVERY.md)和[61证据](acceptance/V1.7-checkpoint-61.md)。
+
 - 默认 Maven 套件以 H2 覆盖领域规则、HTTP API、事件回放、运行控制、审批和外部 Provider 契约；MySQL Testcontainers 用系统属性显式启用，避免开发机没有 Docker 时误报失败。
 - GitHub Actions 独立执行前端生产构建、H2 测试与 JAR、MySQL 8.4、Redis、双 JVM SSE，以及 Collector/Tempo/Grafana Trace 端到端集成；全部前置门禁通过后才构建最终容器镜像。
 - 镜像门禁不止检查 `docker build`：还以非 root `opspilot` 用户启动容器，并轮询 `/actuator/health`。镜像预建可写 `/app/data`，保证默认 H2 数据文件能在最小权限下创建。

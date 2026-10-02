@@ -2,6 +2,8 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
+最新限定验收：[V1.7-checkpoint-61.md](V1.7-checkpoint-61.md)：Collector SIGKILL/不同容器重建的旧内存队列7→0、原Trace404已复现；独立卷/file_storage/fsync版6→6、六工具及两跨JVM分支完整恢复。5ed5a9f的[Run36999165718](https://github.com/Trigger726/OnCall-Agent/actions/runs/36999165718)十三作业success，15损坏图拒绝、真实MySQL76/双时区338/255/83/58前端/十一脚本及最终容器通过；三工件摘要和四图/MySQL重放已验。首失败/旧配置/JAR/Demo保留，生产容量与磁盘/队满未验，整体目标继续。
+
 最新限定验收：[V1.7-checkpoint-60.md](V1.7-checkpoint-60.md)：签发身份绑定与时间极值500→401。b1a0945的[Run36996179284](https://github.com/Trigger726/OnCall-Agent/actions/runs/36996179284)十三作业success，真实MySQL76零跳过/八场景/五池干净关闭、双时区338/255/83、58前端与Linux十一脚本及最终容器通过；工件摘要/CLI重放/实页已验。实际新旧JAR12请求与异常12→0、两份旧JAR/首次失败/历史Demo保留；整体目标继续。
 
 最新限定验收：[V1.7-checkpoint-59.md](V1.7-checkpoint-59.md)：停用后的旧JWT读写200首失败已复现并修正为401，活跃降权403不变。aa76689的[Run36992121756](https://github.com/Trigger726/OnCall-Agent/actions/runs/36992121756)十三作业success，真实MySQL73零跳过/五池干净关闭、五个命名HTTP场景/真实审计IP、双时区291/211/80、58前端与Linux十脚本已验；工件摘要/CLI重放通过。首次MySQL上下文失败、旧JAR与历次Demo保留，永久撤销与既有任务再授权仍待完善，整体目标继续。

@@ -2,6 +2,8 @@
 
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
+当前61限定通过：独立持久卷/file_storage/fsync补Collector SIGKILL重建恢复，真实旧内存7→0/原Trace404，新版6→6/完整图恢复，默认吞吐不以单消费者测试推断。5ed5a9f的[Run36999165718](https://github.com/Trigger726/OnCall-Agent/actions/runs/36999165718)十三作业success，三工件摘要及四图/MySQL重放已验，历史Demo/首失败/旧JAR保留，见[61报告](acceptance/V1.7-checkpoint-61.md)。生产容量、默认十消费者混合故障、磁盘/队满/卷丢失仍待验；其余业务目标不删减。
+
 当前60限定通过：签发身份绑定及极值exp/iat/nbf错误签名500→结构化401。b1a0945的[Run36996179284](https://github.com/Trigger726/OnCall-Agent/actions/runs/36996179284)十三作业success，真实MySQL76零跳过/八场景/五池关闭、双时区338/255/83、58前端与Linux十一脚本及最终容器通过；新旧JAR12请求/异常12→0、工件摘要/CLI重放/桌面390px已验，见[60报告](acceptance/V1.7-checkpoint-60.md)。人工ID复用/数据库回滚、密码变更撤销、永久Token撤销及既有SSE/后台任务再授权仍未完成，整体目标继续。
 
 前一59限定通过：停用后旧JWT绕过资格的真实读写问题已由入口检查修复。aa76689的[Run36992121756](https://github.com/Trigger726/OnCall-Agent/actions/runs/36992121756)十三作业success，真实MySQL73零跳过/五池完整关闭、双时区291/211/80、58前端与Linux十脚本通过；五个命名HTTP场景、实际审计IP及两个工件摘要/CLI重放已核对，首失败/旧JAR/新旧Demo保留，见[59报告](acceptance/V1.7-checkpoint-59.md)。该历史范围不包括60的签发身份绑定。
