@@ -55,11 +55,11 @@ capture_alerts() {
     WHERE source='alertmanager' AND title IN ('CollectorTraceQueueHigh','CollectorTraceEnqueueRejected') ORDER BY id" | jq -s . > "$1"
 }
 notifications() {
-  curl --fail --silent --show-error http://localhost:9093/metrics > "$1"
-  awk '/^alertmanager_notifications_total\{/ && /integration="webhook"/ && /receiver="opspilot-collector"/ { sum += $2; found=1 }
-    END { if (!found) exit 1; printf "%.0f\n", sum }' "$1"
+  curl --fail --silent --show-error http://localhost:9093/metrics > "$1" || return 1
+  alertmanager_webhook_attempts_without_failures "$1"
 }
 source scripts/lib/verify-collector-restart.sh
+source scripts/lib/collector-alertmanager-metrics.sh
 "${compose[@]}" up --build --detach mysql tempo otel-collector opspilot prometheus collector-alertmanager
 wait_http http://localhost:9920/actuator/health OpsPilot
 wait_http http://localhost:3200/ready Tempo
@@ -109,6 +109,8 @@ mysql_value "$(< deploy/register-demo-collector-resource.sql)"
 mysql_value "$(< deploy/register-demo-collector-resource.sql)"
 [[ "$(mysql_value "SELECT COUNT(*) FROM cmdb_resource WHERE resource_code='OBS-OTEL-COLLECTOR' AND resource_type='MIDDLEWARE' AND environment='DEVELOPMENT' AND owner_user_id IS NULL")" == 1 ]]
 resource_id="$(mysql_value "SELECT id FROM cmdb_resource WHERE resource_code='OBS-OTEL-COLLECTOR'")"
+mysql_value "SELECT JSON_OBJECT('id',id,'code',resource_code,'type',resource_type,'environment',environment,
+  'ownerUserId',owner_user_id) FROM cmdb_resource WHERE id=$resource_id" | jq -s . > "$evidence_dir/registered-resource.json"
 wait_value 2 "SELECT COUNT(*) FROM alert_event WHERE source='alertmanager' AND service_resource_id=$resource_id
   AND title IN ('CollectorTraceQueueHigh','CollectorTraceEnqueueRejected') AND status='FIRING' AND occurrence_count=1" 'two actual native deliveries'
 capture_alerts "$evidence_dir/firing-alerts.json"
@@ -154,6 +156,9 @@ jq -e --slurpfile before "$evidence_dir/firing-alerts.json" '([.[].id] == [$befo
   and ([.[].incidentId] == [$before[0][].incidentId]) and ([.[].externalEventId] == [$before[0][].externalEventId])' "$evidence_dir/resolved-alerts.json" >/dev/null
 wait_value 2 "SELECT COUNT(*) FROM incident_timeline t JOIN alert_event a ON t.evidence_ref=CONCAT('alert:',a.id)
   WHERE a.service_resource_id=$resource_id AND a.source='alertmanager' AND t.event_type='ALERT_RESOLVED'" 'one durable resolution per alert'
+mysql_value "SELECT JSON_OBJECT('id',t.id,'incidentId',t.incident_id,'eventType',t.event_type,
+  'evidenceRef',t.evidence_ref,'createdAt',t.created_at) FROM incident_timeline t JOIN alert_event a ON t.evidence_ref=CONCAT('alert:',a.id)
+  WHERE a.service_resource_id=$resource_id AND a.source='alertmanager' AND t.event_type='ALERT_RESOLVED' ORDER BY t.id" | jq -s . > "$evidence_dir/final-timeline.json"
 [[ "$(mysql_value "SELECT COUNT(*) FROM incident WHERE service_resource_id=$resource_id AND status='OPEN'")" == 2 ]]
 [[ "$(mysql_value "SELECT COUNT(*) FROM incident WHERE service_resource_id=$resource_id AND (assignee_id IS NOT NULL OR commander_id IS NOT NULL OR acknowledged_at IS NOT NULL OR resolved_at IS NOT NULL)")" == 0 ]]
 mysql_value "SELECT JSON_OBJECT('id',id,'alertName',alert_name,'status',status,'resolvedAlertId',resolved_alert_id,

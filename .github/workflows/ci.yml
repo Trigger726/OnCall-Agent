@@ -324,6 +324,8 @@ jobs:
       - uses: actions/checkout@v5
       - name: Verify native route isolation
         run: bash scripts/verify-collector-alerting-routes.sh
+      - name: Verify pinned notification metric labels
+        run: bash scripts/verify-collector-alertmanager-metrics.sh
       - name: Verify fault, CMDB rejection, native repeat and same-ID resolution
         run: bash scripts/verify-collector-alerting-pipeline.sh
       - uses: actions/upload-artifact@v5
