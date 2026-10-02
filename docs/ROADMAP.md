@@ -2,7 +2,7 @@
 
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
-当前60继续自检：身份绑定阶段9980e9e十三CI/真实MySQL75已验，保护正常分配新ID的同名重建账户；继续补极值exp/iat/nbf错误签名500→结构化401，新双时区338/255/83、专项73、实际新旧JAR与正常桌面390px/十一脚本通过。新76项MySQL及远端新代码仍待验，见[60报告](acceptance/V1.7-checkpoint-60.md)。人工ID复用/数据库回滚、密码变更撤销、永久Token撤销及既有SSE/后台任务再授权仍未完成，整体目标继续。
+当前60限定通过：签发身份绑定及极值exp/iat/nbf错误签名500→结构化401。b1a0945的[Run36996179284](https://github.com/Trigger726/OnCall-Agent/actions/runs/36996179284)十三作业success，真实MySQL76零跳过/八场景/五池关闭、双时区338/255/83、58前端与Linux十一脚本及最终容器通过；新旧JAR12请求/异常12→0、工件摘要/CLI重放/桌面390px已验，见[60报告](acceptance/V1.7-checkpoint-60.md)。人工ID复用/数据库回滚、密码变更撤销、永久Token撤销及既有SSE/后台任务再授权仍未完成，整体目标继续。
 
 前一59限定通过：停用后旧JWT绕过资格的真实读写问题已由入口检查修复。aa76689的[Run36992121756](https://github.com/Trigger726/OnCall-Agent/actions/runs/36992121756)十三作业success，真实MySQL73零跳过/五池完整关闭、双时区291/211/80、58前端与Linux十脚本通过；五个命名HTTP场景、实际审计IP及两个工件摘要/CLI重放已核对，首失败/旧JAR/新旧Demo保留，见[59报告](acceptance/V1.7-checkpoint-59.md)。该历史范围不包括60的签发身份绑定。
 

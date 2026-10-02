@@ -6,7 +6,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-检查点60继续自检：签发uid与当前账户ID绑定已由9980e9e的十三CI/真实MySQL75项验证；随后复现极值exp/iat/nbf即使错误签名仍500，现补特定时间异常归为401。新代码双时区各338发现/255执行/83条件跳过、专项73、实际新旧JAR12请求500→401/异常12→0、正常账号桌面390px与十一脚本通过。新76项MySQL与LinuxCI仍待验，旧工件不替代新验收。两份旧JAR、首失败与历史Demo保留，见[阶段报告](docs/acceptance/V1.7-checkpoint-60.md)；永久撤销/人工ID复用未完成。
+检查点60限定通过：签发uid绑定当前账户ID，阻止同名重建继承旧Token；继续自检修复极值exp/iat/nbf即使错误签名仍500，现为结构化401。b1a0945的[Run36996179284](https://github.com/Trigger726/OnCall-Agent/actions/runs/36996179284)十三作业success，真实MySQL76零跳过/八场景/五池干净关闭、双时区338发现/255执行/83条件跳过、58前端与Linux十一脚本及最终容器通过；工件摘要/CLI重放/实页已验。实际新旧JAR12请求500→401、异常12→0；两份旧JAR、首失败和历史Demo保留，见[验收报告](docs/acceptance/V1.7-checkpoint-60.md)。永久撤销/人工ID复用未完成，整体目标继续。
 
 检查点59限定通过：真实HTTP复现账户停用后旧JWT仍读身份/写备注200，入口现补资格检查，停用/删除统一401、活跃降权403。aa76689的[Run36992121756](https://github.com/Trigger726/OnCall-Agent/actions/runs/36992121756)十三作业success，真实MySQL73零跳过/五池干净关闭、双时区291发现/211执行/80条件跳过、58前端与Linux十脚本通过；五个命名HTTP场景及实际审计IP、工件摘要/CLI重放已核验。首轮MySQL请求fixture失败、旧JAR与Demo保留；永久Token撤销及既有任务再授权仍未完成，见[验收报告](docs/acceptance/V1.7-checkpoint-59.md)。
 
