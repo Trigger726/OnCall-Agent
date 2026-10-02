@@ -1,0 +1,26 @@
+# Opt-in local Compose receiver. Unknown/unmapped alerts are deliberately not
+# sent into OpsPilot. CMDB registration is a separate explicit operator step.
+route:
+  receiver: unmatched
+  group_by: [alertname, resource_code, instance, exporter]
+  group_wait: 30s
+  group_interval: 1m
+  repeat_interval: 1h
+  routes:
+    - receiver: opspilot-collector
+      matchers:
+        - 'alertname=~"CollectorTraceQueueHigh|CollectorTraceEnqueueRejected"'
+        - 'job="otel-collector"'
+        - 'resource_code="OBS-OTEL-COLLECTOR"'
+receivers:
+  - name: unmatched
+  - name: opspilot-collector
+    webhook_configs:
+      - url: http://opspilot:9900/api/v1/integrations/alertmanager/webhook
+        send_resolved: true
+        max_alerts: 100
+        timeout: 3s
+        http_config:
+          authorization:
+            type: OpsPilot
+            credentials_file: /etc/alertmanager/opspilot-webhook-secret

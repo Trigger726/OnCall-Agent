@@ -1,0 +1,22 @@
+# Requires tracing + collector-alerting profiles. The ordinary offline Compose
+# and checkpoint-62 monitoring-only overlay remain unchanged.
+services:
+  opspilot:
+    environment:
+      ALERTMANAGER_WEBHOOK_SECRET: ${ALERTMANAGER_WEBHOOK_SECRET:?Set an explicit shared webhook secret}
+  prometheus:
+    volumes:
+      - ./deploy/prometheus-collector-alerting.yml:/etc/prometheus/prometheus.yml:ro
+      - ./deploy/otel-collector-alerts.yml:/etc/prometheus/otel-collector-alerts.yml:ro
+  collector-alertmanager:
+    image: prom/alertmanager:v0.34.1
+    profiles: ["collector-alerting"]
+    command: ["--config.file=/etc/alertmanager/alertmanager.yml", "--cluster.listen-address="]
+    ports:
+      - "127.0.0.1:9093:9093"
+    volumes:
+      - ./deploy/collector-alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ${COLLECTOR_ALERTMANAGER_SECRET_FILE:?Set a readable matching secret file}:/etc/alertmanager/opspilot-webhook-secret:ro
+    depends_on:
+      opspilot:
+        condition: service_started

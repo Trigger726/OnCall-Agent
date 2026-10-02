@@ -180,7 +180,7 @@ jobs:
 
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, browser-integration, backend-h2, mysql-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration]
+    needs: [frontend, browser-integration, backend-h2, mysql-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration, collector-alerting-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -315,3 +315,20 @@ jobs:
         with:
           name: tracing-pipeline-evidence
           path: target/tracing-it/
+
+  collector-alerting-integration:
+    name: Collector native alert to Incident lifecycle
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - name: Verify native route isolation
+        run: bash scripts/verify-collector-alerting-routes.sh
+      - name: Verify fault, CMDB rejection, native repeat and same-ID resolution
+        run: bash scripts/verify-collector-alerting-pipeline.sh
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: collector-alerting-evidence
+          path: target/collector-alerting-it/
+          retention-days: 30
