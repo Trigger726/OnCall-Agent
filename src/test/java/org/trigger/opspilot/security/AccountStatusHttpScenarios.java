@@ -83,6 +83,16 @@ public final class AccountStatusHttpScenarios implements AutoCloseable {
         assertThat(request("GET", path, token, null).statusCode()).isEqualTo(200);
     }
 
+    public void activeWriteUsesRealRequestContext() throws Exception {
+        String token = login();
+        assertThat(request("POST", "/api/v1/incidents/1/notes", token,
+                Map.of("content", "Real servlet context fixture", "evidenceRef", "cp59:" + userId)).statusCode()).isEqualTo(200);
+        assertThat(count("incident_timeline")).isEqualTo(1);
+        assertThat(count("audit_log")).isEqualTo(1);
+        assertThat(jdbc.sql("SELECT ip_address FROM audit_log WHERE actor_id = :id")
+                .param("id", userId).query(String.class).single()).isEqualTo("127.0.0.1");
+    }
+
     private String exportPath() {
         int version = jdbc.sql("SELECT version FROM service_slo_objective WHERE id = 1").query(Integer.class).single();
         return "/api/v1/slo/objectives/1/versions/" + version + "/prometheus-rules";

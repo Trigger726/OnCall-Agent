@@ -19,6 +19,18 @@ import org.springframework.test.annotation.DirtiesContext;
         "server.address=127.0.0.1", "management.server.address=127.0.0.1"
 })
 class AccountStatusHttpIntegrationTest {
+    @Autowired private org.trigger.opspilot.audit.AuditService auditService;
+    @org.junit.jupiter.api.BeforeEach
+    void bindLegacyServiceRequestFixture() {
+        var request = new org.springframework.mock.web.MockHttpServletRequest();
+        request.setRemoteAddr("192.0.2.59");
+        org.springframework.web.context.request.RequestContextHolder.setRequestAttributes(
+                new org.springframework.web.context.request.ServletRequestAttributes(request));
+    }
+    @org.junit.jupiter.api.AfterEach
+    void clearLegacyServiceRequestFixture() {
+        org.springframework.web.context.request.RequestContextHolder.resetRequestAttributes();
+    }
     @Autowired private JdbcClient jdbc;
     @Autowired private ObjectMapper mapper;
     @LocalServerPort private int port;
@@ -34,5 +46,12 @@ class AccountStatusHttpIntegrationTest {
     }
     @Test void shouldReloadCurrentRoleButKeepActiveAuthentication() throws Exception {
         try (var scenario = new AccountStatusHttpScenarios(jdbc, mapper, port)) { scenario.activeRoleUsesCurrentDatabaseAuthority(); }
+    }
+    @Test void shouldUseRealServletRequestForAuthenticatedHttpWrite() throws Exception {
+        assertThatLegacyIp();
+        try (var scenario = new AccountStatusHttpScenarios(jdbc, mapper, port)) { scenario.activeWriteUsesRealRequestContext(); }
+    }
+    private void assertThatLegacyIp() {
+        org.assertj.core.api.Assertions.assertThat(auditService.currentIp()).isEqualTo("192.0.2.59");
     }
 }

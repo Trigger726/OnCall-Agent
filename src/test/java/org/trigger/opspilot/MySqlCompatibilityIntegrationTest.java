@@ -74,6 +74,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
         "FOLLOW_UP_NOTIFICATION_DISPATCH_INITIAL_DELAY=3600000"
 })
 class MySqlCompatibilityIntegrationTest {
+    @org.junit.jupiter.api.BeforeEach
+    void bindLegacyServiceRequestFixture() {
+        var request = new org.springframework.mock.web.MockHttpServletRequest();
+        request.setRemoteAddr("192.0.2.59");
+        org.springframework.web.context.request.RequestContextHolder.setRequestAttributes(
+                new org.springframework.web.context.request.ServletRequestAttributes(request));
+    }
+    @org.junit.jupiter.api.AfterEach
+    void clearLegacyServiceRequestFixture() {
+        org.springframework.web.context.request.RequestContextHolder.resetRequestAttributes();
+    }
     @LocalServerPort private int httpPort;
     @Autowired private com.fasterxml.jackson.databind.ObjectMapper httpMapper;
 
@@ -99,6 +110,12 @@ class MySqlCompatibilityIntegrationTest {
     void shouldReloadCurrentRoleButKeepActiveAuthentication() throws Exception {
         try (var scenario = new org.trigger.opspilot.security.AccountStatusHttpScenarios(jdbcClient, httpMapper, httpPort)) {
             scenario.activeRoleUsesCurrentDatabaseAuthority();
+        }
+    }
+    @Test @Order(20)
+    void shouldUseRealServletRequestForAuthenticatedHttpWrite() throws Exception {
+        try (var scenario = new org.trigger.opspilot.security.AccountStatusHttpScenarios(jdbcClient, httpMapper, httpPort)) {
+            scenario.activeWriteUsesRealRequestContext();
         }
     }
 

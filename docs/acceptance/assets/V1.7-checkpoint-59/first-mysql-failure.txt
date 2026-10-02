@@ -1,0 +1,35 @@
+Code SHA: e80f212fa6cc0c51c6c86487d48381108503f7fd
+Run: 36991431146; job: 110788311438; artifact: 11219464598
+Verified ZIP SHA256: a2222538f574c0c8d042c377d275193d92c7a89717ea6ba1e55ec4873f29fe72
+2026-10-02T09:45:54.0703921Z CP59_HTTP POST /api/v1/auth/login status=200
+2026-10-02T09:45:54.0712804Z CP59_HTTP GET /api/v1/auth/me status=200
+2026-10-02T09:45:54.0713627Z CP59_HTTP GET /api/v1/dashboard status=200
+2026-10-02T09:45:54.0714316Z CP59_HTTP GET /api/v1/incidents/1 status=200
+2026-10-02T09:45:54.0715022Z CP59_HTTP GET /api/v1/cmdb/topology status=200
+2026-10-02T09:45:54.0715764Z CP59_HTTP GET /api/v1/assistant/sessions status=200
+2026-10-02T09:45:54.0716529Z CP59_HTTP GET /api/v1/slo/objectives status=200
+2026-10-02T09:45:54.1556602Z CP59_HTTP GET /api/v1/slo/objectives/1/versions/0/prometheus-rules status=200
+2026-10-02T09:45:54.1592049Z CP59_HTTP GET /api/v1/auth/me status=401
+2026-10-02T09:45:54.1592943Z CP59_HTTP GET /api/v1/dashboard status=401
+2026-10-02T09:45:54.1593595Z CP59_HTTP GET /api/v1/incidents/1 status=401
+2026-10-02T09:45:54.1594555Z CP59_HTTP GET /api/v1/cmdb/topology status=401
+2026-10-02T09:45:54.1595240Z CP59_HTTP GET /api/v1/assistant/sessions status=401
+2026-10-02T09:45:54.1595911Z CP59_HTTP GET /api/v1/slo/objectives status=401
+2026-10-02T09:45:54.1596775Z CP59_HTTP GET /api/v1/slo/objectives/1/versions/0/prometheus-rules status=401
+2026-10-02T09:45:54.1597579Z CP59_HTTP POST /api/v1/auth/login status=401
+2026-10-02T09:45:54.1598198Z CP59_HTTP GET /api/v1/auth/me status=200
+2026-10-02T09:45:54.2537979Z CP59_HTTP POST /api/v1/auth/login status=200
+2026-10-02T09:45:54.2538869Z CP59_HTTP POST /api/v1/incidents/1/notes status=401
+2026-10-02T09:45:54.3466566Z CP59_HTTP POST /api/v1/auth/login status=200
+2026-10-02T09:45:54.3467501Z CP59_HTTP GET /api/v1/auth/me status=401
+2026-10-02T09:45:54.4563036Z CP59_HTTP POST /api/v1/auth/login status=200
+2026-10-02T09:45:54.4570435Z CP59_HTTP GET /api/v1/slo/objectives/1/versions/0/prometheus-rules status=200
+2026-10-02T09:45:54.4571317Z CP59_HTTP GET /api/v1/auth/me status=200
+2026-10-02T09:45:54.4572120Z CP59_HTTP GET /api/v1/slo/objectives/1/versions/0/prometheus-rules status=403
+2026-10-02T09:45:54.4573280Z CP59_HTTP GET /api/v1/slo/objectives/1/versions/0/prometheus-rules status=200
+2026-10-02T09:45:54.6673211Z [ERROR] Tests run: 19, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 13.36 s <<< FAILURE! -- in org.trigger.opspilot.MySqlCompatibilityIntegrationTest
+2026-10-02T09:45:54.6677401Z java.lang.IllegalStateException: No thread-bound request found: Are you referring to request attributes outside of an actual web request, or processing a request outside of the originally receiving thread? If you are actually operating within a web request and still receive this message, your code is probably running outside of DispatcherServlet: In this case, use RequestContextListener or RequestContextFilter to expose the current request.
+2026-10-02T09:45:54.6719584Z java.lang.IllegalStateException: No thread-bound request found: Are you referring to request attributes outside of an actual web request, or processing a request outside of the originally receiving thread? If you are actually operating within a web request and still receive this message, your code is probably running outside of DispatcherServlet: In this case, use RequestContextListener or RequestContextFilter to expose the current request.
+2026-10-02T09:45:55.0148948Z [ERROR]   MySqlCompatibilityIntegrationTest.shouldApplyAllMigrationsAndRunIdempotentInvestigationOnMySql:485 » IllegalState No thread-bound request found: Are you referring to request attributes outside of an actual web request, or processing a request outside of the originally receiving thread? If you are actually operating within a web request and still receive this message, your code is probably running outside of DispatcherServlet: In this case, use RequestContextListener or RequestContextFilter to expose the current request.
+2026-10-02T09:45:55.0153271Z [ERROR]   MySqlCompatibilityIntegrationTest.shouldReadBoundedEvaluationHistoryOnMySql:740 » IllegalState No thread-bound request found: Are you referring to request attributes outside of an actual web request, or processing a request outside of the originally receiving thread? If you are actually operating within a web request and still receive this message, your code is probably running outside of DispatcherServlet: In this case, use RequestContextListener or RequestContextFilter to expose the current request.
+2026-10-02T09:45:55.0155364Z [ERROR] Tests run: 72, Failures: 0, Errors: 2, Skipped: 0
