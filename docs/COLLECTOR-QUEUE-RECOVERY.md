@@ -49,7 +49,7 @@ docker compose --project-name opspilot-trace-monitoring-demo-62 \
 - `CollectorTraceQueueHigh`：每个实例的trace出口队列超过90%持续30秒，容量须为正；队列下降后恢复。
 - `CollectorTraceEnqueueRejected`：最近计数增量，或首次观测到正值拒绝序列。拒绝counter按实际固定版本标签筛选，不虚构queue gauge才有的data_type。无后续拒绝时5分钟历史窗口过期；队列恢复后短期继续firing并不等于当前仍满。
 - 缺数据不伪造健康，也不生成这两类事故。首次正值只说明已观测到拒绝，不证明每条拒绝的精确时刻；抓取间隔/重启/丢样会影响计数，本规则不替代持久审计账本。
-- 当前只到Prometheus原生告警，未配置Alertmanager路由或OpsPilot Incident/人工通知；不得把反馈规则当成外部渠道已送达。
+- 本节62监控-only覆盖只到Prometheus原生告警，未配置Alertmanager路由或OpsPilot Incident/人工通知；不得把反馈规则当成外部渠道已送达。63另有[显式受控接入覆盖](COLLECTOR-ALERTING.md)，不改本节历史Demo或自动启用人工通知。
 
 故障测试仅用queue4/消费者1/每批1Span，生产配置仍2048/默认10/批触发512。OTLP200及partialSuccess拒绝0、业务COMPLETED/健康UP仍可能与入队拒绝/已知Trace缺失同时发生；这个实验用于直接展示边界与检测反馈，不修改SDK业务状态或承诺无丢失。判定缺失须先确认Tempo恢复、队列和在途均清空、恢复后独立已知ID正对照经同一入口实际送达以及缺失计数重复稳定。后台Span可能提前占满小队列，原探针不保证有一条幸存；不能仅以12条都404当作下游已恢复。
 

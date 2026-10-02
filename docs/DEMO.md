@@ -1,5 +1,7 @@
 # OpsPilot 10 分钟演示脚本
 
+检查点63工程加演：保留62监控-only覆盖与旧内存/默认十消费者/极小队列反例，另用独立项目开启[受控Collector告警](COLLECTOR-ALERTING.md)。展示未登记资源拒绝→显式登记→原生重复投递建Alert/Incident→重复无业务写→同ID告警恢复、单条时间线，而Incident仍OPEN等待人工处置。可先用仓库耐久数据直接运行 `node docs/assets/v1.7-cp63/current/replay-current-alerting.cjs docs/assets/v1.7-cp63/current` 展示真实快照核验，真实故障复跑需空闲端口/Docker Linux，不能给日常Demo执行测试清卷。7e81395十四CI及工件/重放已验，见[63报告](acceptance/V1.7-checkpoint-63.md)。本轮不是页面改版，历史图/JAR和两次失败保留；不拿本地开发库存当生产自动发现或人工回执。
+
 检查点62工程加演：保留61旧内存/单消费者对照，新增默认十消费者SIGKILL重建、10/10在途探针/原完整图恢复，再展示小队列满时12个OTLP200探针持续404与真实Prometheus告警。恢复后独立同入口已知ID成功，区分“业务健康”“接收成功”“最终送达”；queue包括in-flight，不能相加计数。十三CI作业/工件摘要及严格重放已验，见[62报告](acceptance/V1.7-checkpoint-62.md)和[复跑及可选监控](COLLECTOR-QUEUE-RECOVERY.md)。本轮仍不是页面改版，历史截图/JAR不删除；Collector反馈尚未接Alertmanager/Incident。
 
 检查点61新增工程对照：旧内存队列已在真实Linux实验中复现Collector SIGKILL/重建后的指定Trace丢失（队列7→0、最终404，业务仍COMPLETED/健康UP）。新配置增加独立持久卷、同步落盘与文件上限；同条件修复验收见[61报告](acceptance/V1.7-checkpoint-61.md)，操作/边界及保留的旧内存Demo见[队列恢复说明](COLLECTOR-QUEUE-RECOVERY.md)。本轮不是页面改版，不伪造新截图，历史页面与JAR继续保留。

@@ -2,7 +2,9 @@
 
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
-当前62限定通过：默认十消费者/在途项SIGKILL重建后原图与10/10探针恢复；小队列真实拒绝及原生Prometheus反馈、恢复正对照已验。4cdda31的[Run37039755121](https://github.com/Trigger726/OnCall-Agent/actions/runs/37039755121)十三作业success，真实MySQL76/双时区338/255/83/前端58/十一脚本、三工件摘要与六图/逐ID/MySQL重放通过，见[62报告](acceptance/V1.7-checkpoint-62.md)。下一步候选为Collector反馈→受控Alertmanager→Incident，仍未宣称投递或人工回执；磁盘/坏卷/生产规模、其余完整业务路线保留。
+当前63限定通过：Collector反馈→专属文件凭证Alertmanager→显式CMDB→Incident，真实未知库存拒绝/修复后native重复送达、重复无写/原ID恢复/单条时间线已验，Incident仍OPEN不冒充人工回执。7e81395的[Run37045120031](https://github.com/Trigger726/OnCall-Agent/actions/runs/37045120031)十四作业success，四ZIP摘要与原始数据重放通过，见[63报告](acceptance/V1.7-checkpoint-63.md)。原始与62监控-only/两次失败/旧JAR继续保留；下一候选是已实际发现的brace-expansion2.1.4构建期high依赖修复（官方registry全量1high、omit-dev0，不扩大为生产利用结论），以及磁盘/坏卷/生产规模与其余完整业务路线，不标整体完成。
+
+历史62限定通过：默认十消费者/在途项SIGKILL重建后原图与10/10探针恢复；小队列真实拒绝及原生Prometheus反馈、恢复正对照已验。4cdda31的[Run37039755121](https://github.com/Trigger726/OnCall-Agent/actions/runs/37039755121)十三作业success，真实MySQL76/双时区338/255/83/前端58/十一脚本、三工件摘要与六图/逐ID/MySQL重放通过，见[62报告](acceptance/V1.7-checkpoint-62.md)。当时Collector反馈未到Alertmanager/Incident，63现已补受控接入，人工回执仍未宣称；磁盘/坏卷/生产规模、其余完整业务路线保留。
 
 当前61限定通过：独立持久卷/file_storage/fsync补Collector SIGKILL重建恢复，真实旧内存7→0/原Trace404，新版6→6/完整图恢复，默认吞吐不以单消费者测试推断。5ed5a9f的[Run36999165718](https://github.com/Trigger726/OnCall-Agent/actions/runs/36999165718)十三作业success，三工件摘要及四图/MySQL重放已验，历史Demo/首失败/旧JAR保留，见[61报告](acceptance/V1.7-checkpoint-61.md)。生产容量、默认十消费者混合故障、磁盘/队满/卷丢失仍待验；其余业务目标不删减。
 

@@ -2,6 +2,8 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
+最新限定验收：[V1.7-checkpoint-63.md](V1.7-checkpoint-63.md)：显式可选Collector原生告警受控进入Incident，未知库存拒绝/显式修复、native重复无写及两条原ID恢复/各一次时间线通过，Incident仍OPEN无人工回执。7e81395的[Run37045120031](https://github.com/Trigger726/OnCall-Agent/actions/runs/37045120031)十四作业success，真实MySQL76/双时区338/255/83/前端58/十一脚本、四ZIP摘要与原始数据重放通过。两次失败/历史Demo保留，生产容量/磁盘卷故障/依赖安全修复与完整目标继续。
+
 最新限定验收：[V1.7-checkpoint-62.md](V1.7-checkpoint-62.md)：默认十消费者SIGKILL/重建后队列13→13/在途10→10，原图及10/10探针恢复；小队列真实拒绝/12个200后持续404、原生双告警与独立恢复正对照通过。4cdda31的[Run37039755121](https://github.com/Trigger726/OnCall-Agent/actions/runs/37039755121)十三作业success，真实MySQL76/双时区338/255/83/前端58/十一脚本、三ZIP摘要及六图/逐ID/MySQL重放已核对。三次远端失败/历史Demo保留；Collector反馈未到Alertmanager/Incident，生产容量/磁盘/卷故障仍待验，整体目标继续。
 
 最新限定验收：[V1.7-checkpoint-61.md](V1.7-checkpoint-61.md)：Collector SIGKILL/不同容器重建的旧内存队列7→0、原Trace404已复现；独立卷/file_storage/fsync版6→6、六工具及两跨JVM分支完整恢复。5ed5a9f的[Run36999165718](https://github.com/Trigger726/OnCall-Agent/actions/runs/36999165718)十三作业success，15损坏图拒绝、真实MySQL76/双时区338/255/83/58前端/十一脚本及最终容器通过；三工件摘要和四图/MySQL重放已验。首失败/旧配置/JAR/Demo保留，生产容量与磁盘/队满未验，整体目标继续。
@@ -90,6 +92,7 @@
 | V1.7 | 58：版本绑定的SLO原生告警规则 | 限定通过，十三CI/原生20场景/真实链路/MySQL68/十脚本及新旧Demo | [V1.7-checkpoint-58.md](V1.7-checkpoint-58.md) |
 | V1.7 | 59：停用账户的旧JWT入口资格 | 限定通过，十三CI/MySQL73/五场景/双时区/十脚本；首失败保留 | [V1.7-checkpoint-59.md](V1.7-checkpoint-59.md) |
 | V1.7 | 60：签发身份绑定与畸形Token时间边界 | 限定通过，十三CI/MySQL76/八场景/十一脚本/新旧JAR与工件已验 | [V1.7-checkpoint-60.md](V1.7-checkpoint-60.md) |
+| V1.7 | 63：Collector原生告警受控进入Incident | 限定通过，十四CI/同ID恢复/原始重放；两次失败与旧Demo保留 | [V1.7-checkpoint-63.md](V1.7-checkpoint-63.md) |
 
 ## 状态约定
 

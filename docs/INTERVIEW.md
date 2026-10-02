@@ -1,5 +1,7 @@
 # OpsPilot 面试讲解与追问
 
+检查点63可讲案例：Collector告警由原生规则经严格路由/文件凭证进入CMDB/Incident。库存未登记时保留拒绝，显式修复后原生重复送达恢复；两条告警重复不改业务快照、恢复原ID及单条时间线，Incident仍OPEN而非人工接单。首轮验收器读不存在receiver标签，第二轮极小queue4/batch1在Tempo恢复后仍过载，均保留真实失败；只调整63故障配置为16/32、保留应用Trace与5分钟窗口，并要求清空后counter447稳定到恢复。7e81395十四CI/四工件与原始重放已验，见[63报告](acceptance/V1.7-checkpoint-63.md)。不宣称生产容量、HA或第三方人工送达，原始RAG/rerank基线与旧Demo不删。
+
 ## 30 秒项目介绍
 
 检查点62新增面试案例：默认十消费者SIGKILL/新容器后10/10在途探针与原调查完整Trace恢复；但持久化也不能挽救未入队数据，小队列真实满时12个OTLP200探针持续404、业务仍COMPLETED/UP，拒绝counter及两条Prometheus原生告警实际触发。恢复后独立已知ID同入口送达，避免把下游尚不可用误说成丢失。4cdda31十三CI作业、三工件摘要和严格重放已验；反馈未到Alertmanager/Incident，不能说外部通知已送达，见[62报告](acceptance/V1.7-checkpoint-62.md)。
