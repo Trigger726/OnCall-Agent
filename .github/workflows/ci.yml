@@ -78,6 +78,34 @@ jobs:
           path: target/oncall-browser-it/
           retention-days: 30
 
+  auth-session-integration:
+    name: Persistent auth session revocation and JVM restart
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: chmod +x mvnw
+      - name: Package real application
+        run: ./mvnw -B -DskipTests package
+      - name: Verify actual HTTP revocation across owned JVM restart
+        run: node scripts/verify-auth-session-ci.cjs
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: auth-session-evidence
+          path: |
+            target/auth-session-it/**/*.json
+            target/auth-session-it/**/*.log
+          retention-days: 30
+
   backend-h2:
     name: Backend tests and JAR (H2)
     runs-on: ubuntu-latest
@@ -191,7 +219,7 @@ jobs:
 
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, browser-integration, backend-h2, mysql-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration, collector-alerting-integration]
+    needs: [frontend, browser-integration, backend-h2, mysql-integration, auth-session-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration, collector-alerting-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

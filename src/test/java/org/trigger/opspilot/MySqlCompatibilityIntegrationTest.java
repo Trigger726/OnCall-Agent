@@ -88,6 +88,45 @@ class MySqlCompatibilityIntegrationTest {
     @LocalServerPort private int httpPort;
     @Autowired private com.fasterxml.jackson.databind.ObjectMapper httpMapper;
     @Autowired private org.trigger.opspilot.security.JwtProperties httpJwtProperties;
+    @Autowired private org.springframework.security.crypto.password.PasswordEncoder httpPasswordEncoder;
+    @org.springframework.boot.test.mock.mockito.SpyBean private org.trigger.opspilot.audit.AuditService sessionAudit;
+
+    private org.trigger.opspilot.security.AuthSessionHttpScenarios sessionScenario() {
+        return new org.trigger.opspilot.security.AuthSessionHttpScenarios(jdbcClient, httpMapper, httpPasswordEncoder, httpPort);
+    }
+    @Test @Order(24) void shouldRevokeAllIssuedTokensWithoutFreshLoginRevivingThem() throws Exception {
+        try (var s = sessionScenario()) { s.logoutAllRevokesTwoTokensPermanently(); }
+    }
+    @Test @Order(25) void shouldChangePasswordAndRevokeTokensAtomically() throws Exception {
+        try (var s = sessionScenario()) { s.passwordChangeRevokesTokensAndRequiresNewPassword(); }
+    }
+    @Test @Order(26) void shouldRejectInvalidPasswordChangesWithoutWrites() throws Exception {
+        try (var s = sessionScenario()) { s.invalidPasswordChangesDoNotWrite(); }
+    }
+    @Test @Order(27) void shouldFenceConcurrentLogoutRequests() throws Exception {
+        try (var s = sessionScenario()) { s.concurrentRevocationsOnlyAdvanceOnce(); }
+    }
+    @Test @Order(28) void shouldOnlyRevokeAuthenticatedActorsOwnSessions() throws Exception {
+        try (var s = sessionScenario()) { s.revocationDoesNotAffectAnotherAccount(); }
+    }
+    @Test @Order(29) void shouldRejectLegacyAndMalformedSessionVersions() throws Exception {
+        try (var s = sessionScenario()) { s.rejectsLegacyAndMalformedVersions(httpJwtProperties); }
+    }
+    @Test @Order(30) void shouldSupportUnicodeWithoutAllowingUnchangedPassword() throws Exception {
+        try (var s = sessionScenario()) { s.supportsUnicodeAndRejectsUnchangedPassword(); }
+    }
+    @Test @Order(31) void shouldRejectSessionVersionExhaustionWithoutWrapping() throws Exception {
+        try (var s = sessionScenario()) { s.versionExhaustionDoesNotWrap(); }
+    }
+    @Test @Order(32) void shouldRollbackPasswordAndVersionWhenAuditFails() throws Exception {
+        org.mockito.Mockito.doThrow(new ApiException(HttpStatus.CONFLICT, "FORCED_AUDIT_FAILURE", "controlled audit failure"))
+                .when(sessionAudit).record(org.mockito.ArgumentMatchers.eq("AUTH_PASSWORD_CHANGED"),
+                        org.mockito.ArgumentMatchers.eq("USER"), org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.anyString());
+        try (var s = sessionScenario()) { s.failedAuditRollsBackPasswordAndVersion(); }
+    }
+    @Test @Order(33) void shouldRejectBcryptByteTruncationAliasesAtLogin() throws Exception {
+        try (var s = sessionScenario()) { s.rejectsBcryptTruncationAliasesAtLogin(); }
+    }
 
     @Test @Order(16)
     void shouldRejectDisabledReadsAndLogin() throws Exception {

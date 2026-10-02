@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 @Service
 public class JwtService {
@@ -26,7 +27,9 @@ public class JwtService {
         return JWT.create()
                 .withIssuer("opspilot")
                 .withSubject(principal.username())
+                .withJWTId(UUID.randomUUID().toString())
                 .withClaim("uid", principal.id())
+                .withClaim("sv", principal.authVersion())
                 .withClaim("role", principal.roleCode())
                 .withIssuedAt(now)
                 .withExpiresAt(now.plus(properties.accessTokenMinutes(), ChronoUnit.MINUTES))
@@ -47,16 +50,18 @@ public class JwtService {
         JsonNode uid = decoded.getClaim("uid").as(JsonNode.class);
         JsonNode subject = decoded.getClaim("sub").as(JsonNode.class);
         JsonNode expiry = decoded.getClaim("exp").as(JsonNode.class);
+        JsonNode version = decoded.getClaim("sv").as(JsonNode.class);
         if (uid == null || !uid.isIntegralNumber() || !uid.canConvertToLong() || uid.longValue() <= 0
                 || subject == null || !subject.isTextual() || subject.textValue().isBlank()
                 || subject.textValue().codePointCount(0, subject.textValue().length()) > 64
-                || expiry == null || !expiry.isIntegralNumber() || !expiry.canConvertToLong() || expiry.longValue() <= 0) {
+                || expiry == null || !expiry.isIntegralNumber() || !expiry.canConvertToLong() || expiry.longValue() <= 0
+                || version == null || !version.isIntegralNumber() || !version.canConvertToLong() || version.longValue() < 0) {
             throw new JWTVerificationException("Invalid token identity or expiry");
         }
-        return new TokenIdentity(uid.longValue(), subject.textValue());
+        return new TokenIdentity(uid.longValue(), subject.textValue(), version.longValue());
     }
 
-    public record TokenIdentity(long userId, String username) { }
+    public record TokenIdentity(long userId, String username, long authVersion) { }
 
     public long expiresInSeconds() {
         return properties.accessTokenMinutes() * 60;

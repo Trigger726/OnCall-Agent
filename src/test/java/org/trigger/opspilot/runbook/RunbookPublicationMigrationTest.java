@@ -16,7 +16,7 @@ class RunbookPublicationMigrationTest {
             }
         }
         assertThat(before).hasSize(6);
-        assertThat(Flyway.configure().dataSource(url, "sa", "").load().migrate().migrationsExecuted).isEqualTo(1);
+        assertThat(Flyway.configure().dataSource(url, "sa", "").target("30").load().migrate().migrationsExecuted).isEqualTo(1);
         try (var c = DriverManager.getConnection(url, "sa", ""); var s = c.createStatement()) {
             java.util.List<String> after = new java.util.ArrayList<>();
             try (var rows = s.executeQuery("SELECT id,status,markdown_content,published_at,review_version,decision_key FROM runbook_document ORDER BY id")) {

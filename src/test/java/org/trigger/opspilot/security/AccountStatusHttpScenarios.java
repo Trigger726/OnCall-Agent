@@ -126,7 +126,7 @@ public final class AccountStatusHttpScenarios implements AutoCloseable {
     }
 
     public void malformedSignedIdentityIsUnauthorized(JwtProperties properties) throws Exception {
-        var valid = mapper.createObjectNode().put("iss", "opspilot").put("sub", username)
+        var valid = mapper.createObjectNode().put("iss", "opspilot").put("sub", username).put("sv", 0)
                 .put("uid", userId).put("exp", java.time.Instant.now().plusSeconds(60).getEpochSecond());
         var cases = new java.util.LinkedHashMap<String, com.fasterxml.jackson.databind.node.ObjectNode>();
         var missingUid = valid.deepCopy(); missingUid.remove("uid"); cases.put("missing-uid", missingUid);

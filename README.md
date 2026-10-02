@@ -6,6 +6,8 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
+检查点65服务端与本地验证通过、远端待验：本人改密/退出全部会话、持久化版本校验、事务审计、BCrypt字节边界；UTC/上海各374发现281执行93条件跳过，同文件库不同JVM旧Token401/当前Token200/版本2与审计保留。新增第十五CI会话重启门禁、MySQL预期86项零跳过，见[65报告](docs/acceptance/V1.7-checkpoint-65.md)和[升级/API边界](docs/AUTH-SESSIONS.md)。保留全部旧Demo与真实失败；自助UI、既有SSE/任务再授权及完整目标继续。
+
 检查点64限定通过：真实复现构建链brace-expansion2.1.4的栈耗尽，以及vue-tsc“打印错误但exit0”的隐蔽失败；仅锁文件三字段升到2.1.7，加4项隔离/有时限真实引擎与编译器回归、CI全树官方audit（含dev）。`0e76296`的[Run37049527001](https://github.com/Trigger726/OnCall-Agent/actions/runs/37049527001)十四作业success，前端62/审计0/双时区338发现255执行83条件跳过/真实MySQL76及十一脚本、五ZIP摘要与重放已验。新旧Demo都保留、四静态文件逐字节一致，非线上HTTP漏洞利用或UI改版，见[64报告](docs/acceptance/V1.7-checkpoint-64.md)。账号永久撤销/任务再授权、生产容量与其余完整路线继续。
 
 检查点63限定通过：新增显式可选Collector→原生Prometheus→文件凭证Alertmanager→CMDB/Incident链路。真实未知库存拒绝及修复后重复送达、两条告警重复无写/原ID恢复/各一次时间线已验，Incident仍OPEN不冒充人工回执。`7e81395` 的[Run37045120031](https://github.com/Trigger726/OnCall-Agent/actions/runs/37045120031)十四作业success，四ZIP摘要和原始数据重放通过，见[63报告](docs/acceptance/V1.7-checkpoint-63.md)与[可选启用说明](docs/COLLECTOR-ALERTING.md)。两次失败、62监控-only及历史Demo/JAR均保留；生产容量/磁盘卷故障、依赖安全修复和完整目标继续。

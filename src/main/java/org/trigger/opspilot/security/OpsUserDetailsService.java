@@ -16,7 +16,7 @@ public class OpsUserDetailsService implements UserDetailsService {
     @Override
     public UserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
         return jdbcClient.sql("""
-                        SELECT id, username, password_hash, display_name, role_code, status
+                        SELECT id, username, password_hash, display_name, role_code, status, auth_version
                         FROM sys_user WHERE username = :username
                         """)
                 .param("username", username)
@@ -26,7 +26,8 @@ public class OpsUserDetailsService implements UserDetailsService {
                         rs.getString("password_hash"),
                         rs.getString("display_name"),
                         rs.getString("role_code"),
-                        "ACTIVE".equals(rs.getString("status"))))
+                        "ACTIVE".equals(rs.getString("status")),
+                        rs.getLong("auth_version")))
                 .optional()
                 .orElseThrow(() -> new UsernameNotFoundException("用户不存在"));
     }

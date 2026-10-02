@@ -13,7 +13,8 @@ public record UserPrincipal(
         String password,
         String displayName,
         String roleCode,
-        boolean active
+        boolean active,
+        long authVersion
 ) implements UserDetails {
     @Override
     public String getUsername() {

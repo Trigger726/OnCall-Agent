@@ -1,0 +1,14 @@
+{
+  "source": "Read-only H2 Shell queries after failed run-kE6gh8; no password hashes or tokens selected",
+  "database": "target/auth-session-it/run-kE6gh8/db/opspilot",
+  "accessMode": "IFEXISTS=TRUE;ACCESS_MODE_DATA=r",
+  "observedWriteDelayMilliseconds": 500,
+  "observedAdminAuthVersion": 1,
+  "observedAuthAuditCounts": {"AUTH_SESSIONS_REVOKED": 1},
+  "expectedAfterCompletedPasswordHttp200": {"authVersion": 2,"AUTH_PASSWORD_CHANGED": 1},
+  "currentTokenAfterRestartHttpStatus": 401,
+  "oldTokenRevivalActuallyTestedAfterFailure": false,
+  "fix": "WRITE_DELAY=0 in real default application H2 URL and owned acceptance URL; no artificial delay added",
+  "oldDatabaseAndLogsPreserved": true,
+  "scope": "Observed forced-process-stop on Windows and fresh owned H2 file; not power-loss/storage-hardware certification"
+}

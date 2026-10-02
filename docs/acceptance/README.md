@@ -2,6 +2,8 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
+最新阶段报告：[V1.7-checkpoint-65.md](V1.7-checkpoint-65.md)：本人改密/持久化全部会话撤销、严格版本与事务审计，真实字节截断/H2延迟落盘失败已修复；双时区374发现281执行93条件跳过及同文件库跨JVM正反对照通过。十五CI、真实MySQL86待远端实跑。自助UI与已建SSE/后台任务再授权尚未交付，保留所有旧Demo/失败与整体目标。
+
 最新限定验收：[V1.7-checkpoint-64.md](V1.7-checkpoint-64.md)：真实旧构建栈耗尽/vue-tsc隐性exit0错误已复现，仅brace-expansion2.1.4→2.1.7、4项隔离回归与全树官方audit含dev门禁；0e76296的[Run37049527001](https://github.com/Trigger726/OnCall-Agent/actions/runs/37049527001)十四作业success，前端62/全量audit0/双时区338发现255执行83条件跳过/MySQL76/十一脚本/五ZIP源SHA摘要与回放通过。新旧实页/旧JAR/首次环境失败保留，四静态文件逐字节一致。非线上远程利用或全项目安全验收，完整目标继续。
 
 最新限定验收：[V1.7-checkpoint-63.md](V1.7-checkpoint-63.md)：显式可选Collector原生告警受控进入Incident，未知库存拒绝/显式修复、native重复无写及两条原ID恢复/各一次时间线通过，Incident仍OPEN无人工回执。7e81395的[Run37045120031](https://github.com/Trigger726/OnCall-Agent/actions/runs/37045120031)十四作业success，真实MySQL76/双时区338/255/83/前端58/十一脚本、四ZIP摘要与原始数据重放通过。两次失败/历史Demo保留，生产容量/磁盘卷故障/依赖安全修复与完整目标继续。
