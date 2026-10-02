@@ -6,6 +6,8 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
+检查点60本地通过、远端待验：JWT绑定已签发uid与当前数据库账户ID，阻止同名重建新账户继承旧Token；八类已签名但身份/时效非法的Token读写均401，当前角色仍由数据库决定。双时区各330项发现/248执行/82条件跳过、零失败错误，MySQL门禁自身13项通过；真实MySQL及远端新源码尚待验。首次身份转移200/写入200、旧JAR与历史Demo保留，见[阶段报告](docs/acceptance/V1.7-checkpoint-60.md)。不宣称永久撤销或人工ID复用保护。
+
 检查点59限定通过：真实HTTP复现账户停用后旧JWT仍读身份/写备注200，入口现补资格检查，停用/删除统一401、活跃降权403。aa76689的[Run36992121756](https://github.com/Trigger726/OnCall-Agent/actions/runs/36992121756)十三作业success，真实MySQL73零跳过/五池干净关闭、双时区291发现/211执行/80条件跳过、58前端与Linux十脚本通过；五个命名HTTP场景及实际审计IP、工件摘要/CLI重放已核验。首轮MySQL请求fixture失败、旧JAR与Demo保留；永久Token撤销及既有任务再授权仍未完成，见[验收报告](docs/acceptance/V1.7-checkpoint-59.md)。
 
 检查点58限定通过：SLO 阈值随目标周期计算，修复正分数事件舍入导致的误报健康；管理页面导出捕获版本的 Prometheus 规则并核验摘要，旧版本409阻断下载。bbe00f9的[Run36989009983](https://github.com/Trigger726/OnCall-Agent/actions/runs/36989009983)十三作业success，原生20场景/真实重复firing与同一告警resolved、双时区281发现/206执行/75条件跳过、真实MySQL68零跳过/五池关闭、58前端与Linux十脚本已验，三个工件摘要/重放/实图已核对。新旧Demo保留；规则发布仍由运维执行，生产长期数据与低流量策略待验证，见[检查点58](docs/acceptance/V1.7-checkpoint-58.md)及[规则发布说明](docs/SLO-PROMETHEUS-RULES.md)。

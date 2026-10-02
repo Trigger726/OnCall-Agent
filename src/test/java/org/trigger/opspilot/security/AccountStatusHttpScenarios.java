@@ -23,6 +23,7 @@ public final class AccountStatusHttpScenarios implements AutoCloseable {
     private final String base;
     private final String username = "cp59_" + UUID.randomUUID().toString().replace("-", "");
     private final long userId;
+    private Long replacementUserId;
 
     public AccountStatusHttpScenarios(JdbcClient jdbc, ObjectMapper mapper, int port) {
         this.jdbc = jdbc;
@@ -93,6 +94,67 @@ public final class AccountStatusHttpScenarios implements AutoCloseable {
                 .param("id", userId).query(String.class).single()).isEqualTo("127.0.0.1");
     }
 
+    public void recreatedUsernameCannotInheritOldToken() throws Exception {
+        String oldToken = login();
+        assertThat(jdbc.sql("DELETE FROM sys_user WHERE id = :id").param("id", userId).update()).isEqualTo(1);
+        assertThat(jdbc.sql("""
+                INSERT INTO sys_user (username, password_hash, display_name, role_code, status)
+                SELECT :username, password_hash, 'Recreated account fixture', 'ADMIN', 'ACTIVE'
+                FROM sys_user WHERE username = 'admin'
+                """).param("username", username).update()).isEqualTo(1);
+        replacementUserId = jdbc.sql("SELECT id FROM sys_user WHERE username = :username")
+                .param("username", username).query(Long.class).single();
+        assertThat(replacementUserId).isNotEqualTo(userId);
+        var oldRead = request("GET", "/api/v1/auth/me", oldToken, null);
+        var oldWrite = request("POST", "/api/v1/incidents/1/notes", oldToken,
+                Map.of("content", "Old account must not become recreated admin", "evidenceRef", "cp60:" + userId));
+        JsonNode observed = mapper.readTree(oldRead.body()).path("data");
+        System.out.printf("CP60_RECREATED oldId=%d replacementId=%d observedId=%s observedRole=%s read=%d write=%d%n",
+                userId, replacementUserId, observed.path("id").asText(), observed.path("roleCode").asText(),
+                oldRead.statusCode(), oldWrite.statusCode());
+        securityError(oldRead, 401, "AUTHENTICATION_REQUIRED", "recreated username old token read");
+        securityError(oldWrite, 401, "AUTHENTICATION_REQUIRED", "recreated username old token write");
+        assertThat(jdbc.sql("SELECT COUNT(*) FROM incident_timeline WHERE actor_id = :id")
+                .param("id", replacementUserId).query(Long.class).single()).isZero();
+        assertThat(jdbc.sql("SELECT COUNT(*) FROM audit_log WHERE actor_id = :id")
+                .param("id", replacementUserId).query(Long.class).single()).isZero();
+        var freshRead = request("GET", "/api/v1/auth/me", login(), null);
+        assertThat(freshRead.statusCode()).isEqualTo(200);
+        assertThat(mapper.readTree(freshRead.body()).path("data").path("id").asLong()).isEqualTo(replacementUserId);
+        securityError(request("GET", "/api/v1/auth/me", oldToken, null),
+                401, "AUTHENTICATION_REQUIRED", "old token still rejected after fresh login");
+    }
+
+    public void malformedSignedIdentityIsUnauthorized(JwtProperties properties) throws Exception {
+        var valid = mapper.createObjectNode().put("iss", "opspilot").put("sub", username)
+                .put("uid", userId).put("exp", java.time.Instant.now().plusSeconds(60).getEpochSecond());
+        var cases = new java.util.LinkedHashMap<String, com.fasterxml.jackson.databind.node.ObjectNode>();
+        var missingUid = valid.deepCopy(); missingUid.remove("uid"); cases.put("missing-uid", missingUid);
+        cases.put("null-uid", valid.deepCopy().putNull("uid"));
+        cases.put("text-uid", valid.deepCopy().put("uid", Long.toString(userId)));
+        cases.put("fractional-uid", valid.deepCopy().put("uid", userId + 0.25));
+        cases.put("wrong-account-uid", valid.deepCopy().put("uid", 1));
+        var missingExpiry = valid.deepCopy(); missingExpiry.remove("exp"); cases.put("missing-expiry", missingExpiry);
+        cases.put("numeric-subject", valid.deepCopy().put("sub", userId));
+        cases.put("expired", valid.deepCopy().put("exp", 1));
+        for (var entry : cases.entrySet()) {
+            String token = SignedJwtFixture.sign(entry.getValue().toString(), properties.jwtSecret());
+            var read = request("GET", "/api/v1/auth/me", token, null);
+            var write = request("POST", "/api/v1/incidents/1/notes", token,
+                    Map.of("content", "Malformed identity must not write", "evidenceRef", "cp60:" + entry.getKey()));
+            System.out.printf("CP60_CLAIM case=%s read=%d write=%d%n", entry.getKey(), read.statusCode(), write.statusCode());
+            securityError(read, 401, "AUTHENTICATION_REQUIRED", entry.getKey() + " read");
+            securityError(write, 401, "AUTHENTICATION_REQUIRED", entry.getKey() + " write");
+        }
+        assertThat(count("incident_timeline")).isZero();
+        assertThat(count("audit_log")).isZero();
+        // A signed role claim is not an authorization source; current DB role is still used.
+        var roleRead = request("GET", "/api/v1/auth/me",
+                SignedJwtFixture.sign(valid.deepCopy().put("role", "ADMIN").toString(), properties.jwtSecret()), null);
+        assertThat(roleRead.statusCode()).isEqualTo(200);
+        assertThat(mapper.readTree(roleRead.body()).path("data").path("roleCode").asText()).isEqualTo("OPS_MANAGER");
+    }
+
     private String exportPath() {
         int version = jdbc.sql("SELECT version FROM service_slo_objective WHERE id = 1").query(Integer.class).single();
         return "/api/v1/slo/objectives/1/versions/" + version + "/prometheus-rules";
@@ -139,8 +201,13 @@ public final class AccountStatusHttpScenarios implements AutoCloseable {
     @Override
     public void close() {
         // Only rows owned by this newly-created fixture; preserve seed users and existing demo facts.
-        jdbc.sql("DELETE FROM incident_timeline WHERE actor_id = :id").param("id", userId).update();
-        jdbc.sql("DELETE FROM audit_log WHERE actor_id = :id").param("id", userId).update();
-        jdbc.sql("DELETE FROM sys_user WHERE id = :id").param("id", userId).update();
+        removeFixtureUser(userId);
+        if (replacementUserId != null) removeFixtureUser(replacementUserId);
+    }
+
+    private void removeFixtureUser(long id) {
+        jdbc.sql("DELETE FROM incident_timeline WHERE actor_id = :id").param("id", id).update();
+        jdbc.sql("DELETE FROM audit_log WHERE actor_id = :id").param("id", id).update();
+        jdbc.sql("DELETE FROM sys_user WHERE id = :id").param("id", id).update();
     }
 }

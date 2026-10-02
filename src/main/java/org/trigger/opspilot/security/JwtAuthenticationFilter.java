@@ -33,8 +33,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authorization != null && authorization.startsWith("Bearer ")
                 && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
-                UserPrincipal principal = userDetailsService.loadUserByUsername(
-                        jwtService.verifyAndGetUsername(authorization.substring(7)));
+                var identity = jwtService.verifyIdentity(authorization.substring(7));
+                UserPrincipal principal = userDetailsService.loadUserByUsername(identity.username());
+                if (principal.id().longValue() != identity.userId()) {
+                    throw new JWTVerificationException("Token identity no longer matches account");
+                }
                 accountStatusChecker.check(principal);
                 var authentication = new UsernamePasswordAuthenticationToken(
                         principal, null, principal.getAuthorities());

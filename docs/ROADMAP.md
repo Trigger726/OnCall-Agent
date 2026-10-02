@@ -2,7 +2,9 @@
 
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
-当前59限定通过：停用后旧JWT绕过资格的真实读写问题已由入口检查修复。aa76689的[Run36992121756](https://github.com/Trigger726/OnCall-Agent/actions/runs/36992121756)十三作业success，真实MySQL73零跳过/五池完整关闭、双时区291/211/80、58前端与Linux十脚本通过；五个命名HTTP场景、实际审计IP及两个工件摘要/CLI重放已核对，首失败/旧JAR/新旧Demo保留，见[59报告](acceptance/V1.7-checkpoint-59.md)。新请求401不等于永久Token撤销，账户ID复用防护、密码变更撤销及既有SSE/后台任务再授权仍需后续验证；整体目标继续。
+当前60本地通过、远端待验：签发uid必须匹配当前数据库账户ID，保护正常分配新ID的同名重建账户；真实HTTP旧Token读写401、新账户新登录200，双时区330发现/248执行/82条件跳过、零失败错误。真实MySQL及远端新源码仍待验，见[60报告](acceptance/V1.7-checkpoint-60.md)。人工ID复用/数据库回滚、密码变更撤销、永久Token撤销及既有SSE/后台任务再授权仍未完成，整体目标继续。
+
+前一59限定通过：停用后旧JWT绕过资格的真实读写问题已由入口检查修复。aa76689的[Run36992121756](https://github.com/Trigger726/OnCall-Agent/actions/runs/36992121756)十三作业success，真实MySQL73零跳过/五池完整关闭、双时区291/211/80、58前端与Linux十脚本通过；五个命名HTTP场景、实际审计IP及两个工件摘要/CLI重放已核对，首失败/旧JAR/新旧Demo保留，见[59报告](acceptance/V1.7-checkpoint-59.md)。该历史范围不包括60的签发身份绑定。
 
 当前检查点58限定通过：SLO目标周期与预算阈值统一，分数样本保留到判定，管理页面导出版本绑定规则，旧版本409阻断。bbe00f9的[Run36989009983](https://github.com/Trigger726/OnCall-Agent/actions/runs/36989009983)十三作业success，原生20场景/真实重复firing与resolved、双时区281/206/75、真实MySQL68零跳过/五池关闭、58前端、Linux十脚本和最终容器烟测已验；三个工件摘要/CLI重放/桌面手机核对通过，见[报告](acceptance/V1.7-checkpoint-58.md)。原始代码、旧失败和新旧Demo继续保留，整体目标进行中，生产长期数据/自动部署/低流量策略仍待验。
 

@@ -87,6 +87,7 @@ class MySqlCompatibilityIntegrationTest {
     }
     @LocalServerPort private int httpPort;
     @Autowired private com.fasterxml.jackson.databind.ObjectMapper httpMapper;
+    @Autowired private org.trigger.opspilot.security.JwtProperties httpJwtProperties;
 
     @Test @Order(16)
     void shouldRejectDisabledReadsAndLogin() throws Exception {
@@ -116,6 +117,19 @@ class MySqlCompatibilityIntegrationTest {
     void shouldUseRealServletRequestForAuthenticatedHttpWrite() throws Exception {
         try (var scenario = new org.trigger.opspilot.security.AccountStatusHttpScenarios(jdbcClient, httpMapper, httpPort)) {
             scenario.activeWriteUsesRealRequestContext();
+        }
+    }
+
+    @Test @Order(21)
+    void shouldRejectOldJwtWhenUsernameIsRecreated() throws Exception {
+        try (var scenario = new org.trigger.opspilot.security.AccountStatusHttpScenarios(jdbcClient, httpMapper, httpPort)) {
+            scenario.recreatedUsernameCannotInheritOldToken();
+        }
+    }
+    @Test @Order(22)
+    void shouldRejectMalformedSignedIdentityWithoutBusinessWrites() throws Exception {
+        try (var scenario = new org.trigger.opspilot.security.AccountStatusHttpScenarios(jdbcClient, httpMapper, httpPort)) {
+            scenario.malformedSignedIdentityIsUnauthorized(httpJwtProperties);
         }
     }
 

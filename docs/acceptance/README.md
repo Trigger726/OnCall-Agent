@@ -2,6 +2,8 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
+最新阶段：[V1.7-checkpoint-60.md](V1.7-checkpoint-60.md)：已签发uid与当前账户ID绑定，同名重建旧Token读写401、新账户正常登录可用。专项65项及随后补Unicode边界的双时区330发现/248执行/82条件跳过通过，MySQL门禁自身13项通过。真实MySQL、实际JAR/浏览器及远端CI仍待验；首次身份转移、旧JAR与历史Demo保留。
+
 最新限定验收：[V1.7-checkpoint-59.md](V1.7-checkpoint-59.md)：停用后的旧JWT读写200首失败已复现并修正为401，活跃降权403不变。aa76689的[Run36992121756](https://github.com/Trigger726/OnCall-Agent/actions/runs/36992121756)十三作业success，真实MySQL73零跳过/五池干净关闭、五个命名HTTP场景/真实审计IP、双时区291/211/80、58前端与Linux十脚本已验；工件摘要/CLI重放通过。首次MySQL上下文失败、旧JAR与历次Demo保留，永久撤销与既有任务再授权仍待完善，整体目标继续。
 
 最新限定验收：[V1.7-checkpoint-58.md](V1.7-checkpoint-58.md)：周期一致的SLO阈值、分数精度与版本绑定原生规则。bbe00f9的[Run36989009983](https://github.com/Trigger726/OnCall-Agent/actions/runs/36989009983)十三作业success，原生20场景/真实firing重复投递与resolved、双时区281/206/75、真实MySQL68零跳过/五池关闭、58前端及Linux十脚本已验；三个工件摘要、CLI重放和远端桌面/390px已核对，旧Demo保留。生产长期数据/低流量政策/自动部署未验收，整体目标继续。

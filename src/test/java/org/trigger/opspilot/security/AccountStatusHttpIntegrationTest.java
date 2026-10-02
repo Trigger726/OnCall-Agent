@@ -33,6 +33,7 @@ class AccountStatusHttpIntegrationTest {
     }
     @Autowired private JdbcClient jdbc;
     @Autowired private ObjectMapper mapper;
+    @Autowired private JwtProperties jwtProperties;
     @LocalServerPort private int port;
 
     @Test void shouldRejectDisabledReadsAndLogin() throws Exception {
@@ -50,6 +51,14 @@ class AccountStatusHttpIntegrationTest {
     @Test void shouldUseRealServletRequestForAuthenticatedHttpWrite() throws Exception {
         assertThatLegacyIp();
         try (var scenario = new AccountStatusHttpScenarios(jdbc, mapper, port)) { scenario.activeWriteUsesRealRequestContext(); }
+    }
+    @Test void shouldRejectOldJwtWhenUsernameIsRecreated() throws Exception {
+        try (var scenario = new AccountStatusHttpScenarios(jdbc, mapper, port)) { scenario.recreatedUsernameCannotInheritOldToken(); }
+    }
+    @Test void shouldRejectMalformedSignedIdentityWithoutBusinessWrites() throws Exception {
+        try (var scenario = new AccountStatusHttpScenarios(jdbc, mapper, port)) {
+            scenario.malformedSignedIdentityIsUnauthorized(jwtProperties);
+        }
     }
     private void assertThatLegacyIp() {
         org.assertj.core.api.Assertions.assertThat(auditService.currentIp()).isEqualTo("192.0.2.59");
