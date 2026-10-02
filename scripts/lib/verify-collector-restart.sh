@@ -16,6 +16,7 @@ verify_collector_restart() {
   local trace_id parent_id sentinel payload incident_id run_id
   local accepted_before accepted_delta queue_before queue_after
   local old_container new_container exit_code restart_started_at
+  local old_volume new_volume
   local backlog_ready=false graph_restored=false query_matches=false drained=false
 
   wait_http "$metrics_url" "Collector diagnostic metrics"
@@ -91,6 +92,15 @@ verify_collector_restart() {
   grep --extended-regexp --ignore-case --quiet 'Exporting failed|connection refused|Unavailable' "$evidence_dir/restart-collector-before.log"
   old_container="$("${compose[@]}" ps --quiet otel-collector)"
   docker inspect --format '{{json .Config.User}}' "$old_container" > "$evidence_dir/restart-collector-user.json"
+  jq -e '. == "10001:10001"' "$evidence_dir/restart-collector-user.json" >/dev/null
+  docker inspect --format '{{json .Mounts}}' "$old_container" > "$evidence_dir/restart-mounts-before.json"
+  old_volume="$(jq -er '[.[] | select(.Destination == "/var/lib/otelcol/storage" and .Type == "volume" and .RW == true)][0].Name' "$evidence_dir/restart-mounts-before.json")"
+  [[ "$old_volume" == "${COMPOSE_PROJECT_NAME}_otel-collector-data" ]]
+  # A read-only helper verifies the pinned non-root process can access the
+  # initialized directory; it cannot alter queue contents or ownership.
+  docker run --rm --user 10001:10001 --mount "type=volume,source=${old_volume},target=/storage,readonly" \
+    busybox:1.37.0 stat -c '%u:%g %a' /storage > "$evidence_dir/restart-storage-permissions.txt"
+  [[ "$(< "$evidence_dir/restart-storage-permissions.txt")" == "10001:10001 750" ]]
   "${compose[@]}" kill --signal SIGKILL otel-collector
   docker inspect --format '{{json .State}}' "$old_container" > "$evidence_dir/restart-killed-state.json"
   exit_code="$(jq -er '.ExitCode' "$evidence_dir/restart-killed-state.json")"
@@ -100,6 +110,9 @@ verify_collector_restart() {
   "${compose[@]}" up --detach --no-deps --force-recreate otel-collector
   new_container="$("${compose[@]}" ps --quiet otel-collector)"
   [[ -n "$new_container" && "$new_container" != "$old_container" ]]
+  docker inspect --format '{{json .Mounts}}' "$new_container" > "$evidence_dir/restart-mounts-after.json"
+  new_volume="$(jq -er '[.[] | select(.Destination == "/var/lib/otelcol/storage" and .Type == "volume" and .RW == true)][0].Name' "$evidence_dir/restart-mounts-after.json")"
+  [[ "$old_volume" == "$new_volume" ]]
   wait_http http://localhost:13133/ "Collector after SIGKILL and recreation"
   wait_http "$metrics_url" "Recreated Collector metrics"
   curl --fail --silent --show-error "$metrics_url" > "$evidence_dir/restart-metrics-recreated.txt"
@@ -143,15 +156,22 @@ verify_collector_restart() {
   if [[ "$graph_restored" == true && "$query_matches" == true && "$drained" == true ]]; then
     status=PASS
   fi
+  if [[ "$status" == PASS ]]; then
+    curl --fail --silent --show-error "http://localhost:3000/api/datasources/proxy/uid/tempo/api/traces/${trace_id}" \
+      > "$evidence_dir/restart-grafana-trace.json"
+    assert_agent_trace "$evidence_dir/restart-grafana-trace.json" "$evidence_dir/restart-grafana-spans.json" "$sentinel"
+    assert_cross_service_trace "$evidence_dir/restart-grafana-trace.json" "$evidence_dir/restart-grafana-cross-service-spans.json"
+  fi
   jq -n --arg status "$status" --arg traceId "$trace_id" --argjson incidentId "$incident_id" --argjson runId "$run_id" \
     --arg oldContainer "$old_container" --arg newContainer "$new_container" --argjson exitCode "$exit_code" \
     --argjson acceptedSpansDelta "$accepted_delta" --argjson queueBefore "$queue_before" --argjson queueAfter "$queue_after" \
-    --arg blockerTraceId "$blocker_id" --argjson graphRestored "$graph_restored" --argjson queryMatches "$query_matches" --argjson drained "$drained" \
+    --arg storageVolume "$new_volume" --arg blockerTraceId "$blocker_id" --argjson graphRestored "$graph_restored" --argjson queryMatches "$query_matches" --argjson drained "$drained" \
     '{status:$status, traceId:$traceId, incidentId:$incidentId, runId:$runId,
       injectedFailure:"tempo-stopped+collector-SIGKILL+container-recreated", investigationStatus:"COMPLETED", applicationHealthDuringOutage:"UP",
       investigationResubmitted:false, diagnosticNumConsumers:1, separateBlockerTraceId:$blockerTraceId, acceptedSpansDelta:$acceptedSpansDelta,
       queueRequestsBeforeCrash:$queueBefore, queueRequestsAfterRecreation:$queueAfter,
       killedExitCode:$exitCode, oldContainerId:$oldContainer, newContainerId:$newContainer,
+      persistentVolume:$storageVolume, sameVolumeAcrossRecreation:true, collectorUser:"10001:10001", storageDirectoryMode:"0750",
       completeGraphRestored:$graphRestored, traceQueryMatchesPredeterminedId:$queryMatches, queueDrained:$drained,
       expectedSpanCounts:{agentRun:1, agentTool:6, providerQuery:2, providerClient:2, fixtureServer:2}}' \
     > "$evidence_dir/restart-result.json"

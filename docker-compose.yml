@@ -77,6 +77,14 @@ services:
       tempo-init:
         condition: service_completed_successfully
 
+  otel-collector-init:
+    image: busybox:1.37.0
+    profiles: ["tracing"]
+    user: root
+    entrypoint: ["sh", "-ec", "chown 10001:10001 /var/lib/otelcol/storage && chmod 0750 /var/lib/otelcol/storage"]
+    volumes:
+      - otel-collector-data:/var/lib/otelcol/storage
+
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.158.0
     profiles: ["tracing"]
@@ -86,8 +94,12 @@ services:
       - "13133:13133"
     volumes:
       - ./deploy/otel-collector.yml:/etc/otelcol-contrib/config.yml:ro
+      - otel-collector-data:/var/lib/otelcol/storage
     depends_on:
-      - tempo
+      tempo:
+        condition: service_started
+      otel-collector-init:
+        condition: service_completed_successfully
 
   grafana:
     image: grafana/grafana:13.2.2
@@ -118,3 +130,4 @@ services:
 volumes:
   mysql-data:
   tempo-data:
+  otel-collector-data:

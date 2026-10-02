@@ -1,0 +1,5 @@
+# Optional historical Demo only; current CI never loads this override.
+services:
+  otel-collector:
+    volumes:
+      - ./integration/tracing/baseline/otel-collector-memory.yml:/etc/otelcol-contrib/config.yml:ro

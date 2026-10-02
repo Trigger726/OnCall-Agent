@@ -1,12 +1,7 @@
+# Preserved checkpoint-60 memory-only exporter baseline, not the current default.
 extensions:
   health_check:
     endpoint: 0.0.0.0:13133
-  file_storage:
-    directory: /var/lib/otelcol/storage
-    fsync: true
-    # Per-bbolt-file growth limit, not a whole-volume quota.
-    max_size: 268435456
-
 receivers:
   otlp:
     protocols:
@@ -14,7 +9,6 @@ receivers:
         endpoint: 0.0.0.0:4317
       http:
         endpoint: 0.0.0.0:4318
-
 processors:
   memory_limiter:
     check_interval: 1s
@@ -23,7 +17,6 @@ processors:
   batch:
     timeout: 1s
     send_batch_size: 512
-
 exporters:
   otlp/tempo:
     endpoint: tempo:4317
@@ -32,15 +25,13 @@ exporters:
     sending_queue:
       enabled: true
       queue_size: 2048
-      storage: file_storage
     retry_on_failure:
       enabled: true
       initial_interval: 1s
       max_interval: 10s
       max_elapsed_time: 60s
-
 service:
-  extensions: [health_check, file_storage]
+  extensions: [health_check]
   pipelines:
     traces:
       receivers: [otlp]
