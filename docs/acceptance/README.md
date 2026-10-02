@@ -2,6 +2,8 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
+最新限定验收：[V1.7-checkpoint-64.md](V1.7-checkpoint-64.md)：真实旧构建栈耗尽/vue-tsc隐性exit0错误已复现，仅brace-expansion2.1.4→2.1.7、4项隔离回归与全树官方audit含dev门禁；0e76296的[Run37049527001](https://github.com/Trigger726/OnCall-Agent/actions/runs/37049527001)十四作业success，前端62/全量audit0/双时区338发现255执行83条件跳过/MySQL76/十一脚本/五ZIP源SHA摘要与回放通过。新旧实页/旧JAR/首次环境失败保留，四静态文件逐字节一致。非线上远程利用或全项目安全验收，完整目标继续。
+
 最新限定验收：[V1.7-checkpoint-63.md](V1.7-checkpoint-63.md)：显式可选Collector原生告警受控进入Incident，未知库存拒绝/显式修复、native重复无写及两条原ID恢复/各一次时间线通过，Incident仍OPEN无人工回执。7e81395的[Run37045120031](https://github.com/Trigger726/OnCall-Agent/actions/runs/37045120031)十四作业success，真实MySQL76/双时区338/255/83/前端58/十一脚本、四ZIP摘要与原始数据重放通过。两次失败/历史Demo保留，生产容量/磁盘卷故障/依赖安全修复与完整目标继续。
 
 最新限定验收：[V1.7-checkpoint-62.md](V1.7-checkpoint-62.md)：默认十消费者SIGKILL/重建后队列13→13/在途10→10，原图及10/10探针恢复；小队列真实拒绝/12个200后持续404、原生双告警与独立恢复正对照通过。4cdda31的[Run37039755121](https://github.com/Trigger726/OnCall-Agent/actions/runs/37039755121)十三作业success，真实MySQL76/双时区338/255/83/前端58/十一脚本、三ZIP摘要及六图/逐ID/MySQL重放已核对。三次远端失败/历史Demo保留；Collector反馈未到Alertmanager/Incident，生产容量/磁盘/卷故障仍待验，整体目标继续。

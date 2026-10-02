@@ -1,5 +1,7 @@
 # OpsPilot 10 分钟演示脚本
 
+检查点64工程加演：无需改界面，先展示[真实旧1pass/3fail和exit0却打印栈错误](assets/v1.7-cp64/local/cp64OldRegression.json)，对照锁文件单包2.1.7、前端62项通过/全树官方audit0和十四CI，再以 `node docs/assets/v1.7-cp64/replay-build-security.cjs` 只读核对耐久证据。新旧桌面/390px及旧JAR均保留，四静态文件逐字节一致，这是构建供应链风险与隐性错误验收案例，不是页面重设计、线上业务崩溃或全部安全能力完成。完整命令/工件/边界见[64报告](acceptance/V1.7-checkpoint-64.md)。
+
 检查点63工程加演：保留62监控-only覆盖与旧内存/默认十消费者/极小队列反例，另用独立项目开启[受控Collector告警](COLLECTOR-ALERTING.md)。展示未登记资源拒绝→显式登记→原生重复投递建Alert/Incident→重复无业务写→同ID告警恢复、单条时间线，而Incident仍OPEN等待人工处置。可先用仓库耐久数据直接运行 `node docs/assets/v1.7-cp63/current/replay-current-alerting.cjs docs/assets/v1.7-cp63/current` 展示真实快照核验，真实故障复跑需空闲端口/Docker Linux，不能给日常Demo执行测试清卷。7e81395十四CI及工件/重放已验，见[63报告](acceptance/V1.7-checkpoint-63.md)。本轮不是页面改版，历史图/JAR和两次失败保留；不拿本地开发库存当生产自动发现或人工回执。
 
 检查点62工程加演：保留61旧内存/单消费者对照，新增默认十消费者SIGKILL重建、10/10在途探针/原完整图恢复，再展示小队列满时12个OTLP200探针持续404与真实Prometheus告警。恢复后独立同入口已知ID成功，区分“业务健康”“接收成功”“最终送达”；queue包括in-flight，不能相加计数。十三CI作业/工件摘要及严格重放已验，见[62报告](acceptance/V1.7-checkpoint-62.md)和[复跑及可选监控](COLLECTOR-QUEUE-RECOVERY.md)。本轮仍不是页面改版，历史截图/JAR不删除；Collector反馈尚未接Alertmanager/Incident。

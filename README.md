@@ -6,6 +6,8 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
+检查点64限定通过：真实复现构建链brace-expansion2.1.4的栈耗尽，以及vue-tsc“打印错误但exit0”的隐蔽失败；仅锁文件三字段升到2.1.7，加4项隔离/有时限真实引擎与编译器回归、CI全树官方audit（含dev）。`0e76296`的[Run37049527001](https://github.com/Trigger726/OnCall-Agent/actions/runs/37049527001)十四作业success，前端62/审计0/双时区338发现255执行83条件跳过/真实MySQL76及十一脚本、五ZIP摘要与重放已验。新旧Demo都保留、四静态文件逐字节一致，非线上HTTP漏洞利用或UI改版，见[64报告](docs/acceptance/V1.7-checkpoint-64.md)。账号永久撤销/任务再授权、生产容量与其余完整路线继续。
+
 检查点63限定通过：新增显式可选Collector→原生Prometheus→文件凭证Alertmanager→CMDB/Incident链路。真实未知库存拒绝及修复后重复送达、两条告警重复无写/原ID恢复/各一次时间线已验，Incident仍OPEN不冒充人工回执。`7e81395` 的[Run37045120031](https://github.com/Trigger726/OnCall-Agent/actions/runs/37045120031)十四作业success，四ZIP摘要和原始数据重放通过，见[63报告](docs/acceptance/V1.7-checkpoint-63.md)与[可选启用说明](docs/COLLECTOR-ALERTING.md)。两次失败、62监控-only及历史Demo/JAR均保留；生产容量/磁盘卷故障、依赖安全修复和完整目标继续。
 
 检查点62限定通过：默认十消费者SIGKILL/新容器/同卷恢复原调查完整Trace与10/10在途探针；真实队满中12个OTLP200仍最终缺失，原生队列/拒绝告警触发、恢复后独立已知ID送达。`4cdda31` 的 [Run37039755121](https://github.com/Trigger726/OnCall-Agent/actions/runs/37039755121) 十三作业success，三工件摘要及六图/逐ID/MySQL重放已核对；旧Demo与三轮失败保留。Collector反馈仅到Prometheus，未验Alertmanager投递/生产容量/磁盘卷故障，见[62报告](docs/acceptance/V1.7-checkpoint-62.md)与[复跑说明](docs/COLLECTOR-QUEUE-RECOVERY.md)，整体目标继续。
