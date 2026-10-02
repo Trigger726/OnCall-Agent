@@ -1,0 +1,96 @@
+rule_files: [otel-collector-alerts.yml]
+evaluation_interval: 30s
+tests:
+  - name: high queue waits and resolves
+    interval: 30s
+    input_series:
+      - series: 'otelcol_exporter_queue_size{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="collector:8888"}'
+        values: '91 91 0'
+      - series: 'otelcol_exporter_queue_capacity{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="collector:8888"}'
+        values: '100+0x2'
+    alert_rule_test:
+      - eval_time: 0s
+        alertname: CollectorTraceQueueHigh
+        exp_alerts: []
+      - eval_time: 30s
+        alertname: CollectorTraceQueueHigh
+        exp_alerts:
+          - exp_labels: {job: otel-collector, data_type: traces, exporter: otlp/tempo, instance: 'collector:8888', severity: warning}
+            exp_annotations: {summary: Collector trace queue above 90 percent for 30 seconds}
+      - eval_time: 1m
+        alertname: CollectorTraceQueueHigh
+        exp_alerts: []
+  - name: exact threshold and zero capacity do not fire
+    interval: 30s
+    input_series:
+      - series: 'otelcol_exporter_queue_size{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="threshold"}'
+        values: '90+0x2'
+      - series: 'otelcol_exporter_queue_capacity{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="threshold"}'
+        values: '100+0x2'
+      - series: 'otelcol_exporter_queue_size{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="zero"}'
+        values: '10+0x2'
+      - series: 'otelcol_exporter_queue_capacity{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="zero"}'
+        values: '0+0x2'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: CollectorTraceQueueHigh
+        exp_alerts: []
+  - name: missing collector produces no invented health or incident
+    input_series: []
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: CollectorTraceQueueHigh
+        exp_alerts: []
+      - eval_time: 1m
+        alertname: CollectorTraceEnqueueRejected
+        exp_alerts: []
+  - name: first positive counter alerts then expires without further rejection
+    interval: 1m
+    input_series:
+      - series: 'otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="new"}'
+        values: '5+0x8'
+      - series: 'otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="zero"}'
+        values: '0+0x8'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: CollectorTraceEnqueueRejected
+        exp_alerts:
+          - exp_labels: {job: otel-collector, data_type: traces, exporter: otlp/tempo, instance: new, severity: critical}
+            exp_annotations: {summary: Collector trace enqueue rejection observed}
+      - eval_time: 6m
+        alertname: CollectorTraceEnqueueRejected
+        exp_alerts: []
+  - name: increments and counter resets are detected
+    interval: 1m
+    input_series:
+      - series: 'otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="increment"}'
+        values: '0 0 4 4 4 4 4 4 4 4'
+      - series: 'otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="reset"}'
+        values: '8 8 1 1 1 1 1 1 1 1'
+    alert_rule_test:
+      - eval_time: 2m
+        alertname: CollectorTraceEnqueueRejected
+        exp_alerts:
+          - exp_labels: {job: otel-collector, data_type: traces, exporter: otlp/tempo, instance: increment, severity: critical}
+            exp_annotations: {summary: Collector trace enqueue rejection observed}
+          - exp_labels: {job: otel-collector, data_type: traces, exporter: otlp/tempo, instance: reset, severity: critical}
+            exp_annotations: {summary: Collector trace enqueue rejection observed}
+      - eval_time: 8m
+        alertname: CollectorTraceEnqueueRejected
+        exp_alerts: []
+  - name: unrelated job does not fire Collector rules
+    interval: 30s
+    input_series:
+      - series: 'otelcol_exporter_queue_size{job="unrelated",data_type="traces",exporter="otlp/tempo"}'
+        values: '100+0x2'
+      - series: 'otelcol_exporter_queue_capacity{job="unrelated",data_type="traces",exporter="otlp/tempo"}'
+        values: '100+0x2'
+      - series: 'otelcol_exporter_enqueue_failed_spans{job="unrelated",data_type="traces",exporter="otlp/tempo"}'
+        values: '5+0x2'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: CollectorTraceQueueHigh
+        exp_alerts: []
+      - eval_time: 1m
+        alertname: CollectorTraceEnqueueRejected
+        exp_alerts: []

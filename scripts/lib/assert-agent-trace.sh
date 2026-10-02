@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 # Explicit failure returns are required: callers use these functions in && / if.
+trace_search_has_id() {
+  local search_file="$1" trace_id="$2"
+  jq -L scripts/lib -e --arg id "$trace_id" 'include "trace-id";
+    if ($id | length) != 32 then error("Expected full W3C trace ID") else
+      ($id | canonical_trace_id) as $expected
+      | .traces | any((.traceID | canonical_trace_id) == $expected)
+    end' "$search_file" >/dev/null || return 1
+}
+
 assert_agent_trace() {
   local trace_file="$1"
   local spans_file="$2"

@@ -1,0 +1,13 @@
+services:
+  otel-collector:
+    command:
+      - --config=/etc/otelcol-contrib/config.yml
+      - --config=/etc/otelcol-contrib/saturation-test.yml
+    ports:
+      - "127.0.0.1:18888:8888"
+    volumes:
+      - ./integration/tracing/otel-collector-saturation-test.yml:/etc/otelcol-contrib/saturation-test.yml:ro
+  prometheus:
+    volumes:
+      - ./integration/tracing/prometheus-saturation-test.yml:/etc/prometheus/prometheus.yml:ro
+      - ./deploy/otel-collector-alerts.yml:/etc/prometheus/otel-collector-alerts.yml:ro

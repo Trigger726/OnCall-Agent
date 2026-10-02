@@ -1,0 +1,6 @@
+# Use together with the tracing profile; ordinary Compose remains unchanged.
+services:
+  prometheus:
+    volumes:
+      - ./deploy/prometheus-tracing.yml:/etc/prometheus/prometheus.yml:ro
+      - ./deploy/otel-collector-alerts.yml:/etc/prometheus/otel-collector-alerts.yml:ro

@@ -52,3 +52,20 @@ expect_rejected wrong-server-endpoint '(.batches[1].scopeSpans[0].spans[] | sele
 expect_rejected sensitive-payload '.batches[0].resource.attributes += [{key:"private",value:{stringValue:"private-sentinel"}}]'
 jq -n --argjson rejected "$reject_count" '{status:"PASS",validGraphAccepted:true,brokenGraphsRejected:$rejected,conditionalInvocationVerified:true}' > "$evidence_dir/result.json"
 cat "$evidence_dir/result.json"
+
+# Same real first-failure ID: valid shortened/uppercase IDs match, different or
+# malformed IDs do not. No substring matching or dropping the ID requirement.
+expected_id=0b0328f35d6ef4ac02d3353db33163dd
+for id in "$expected_id" b0328f35d6ef4ac02d3353db33163dd 0B0328F35D6EF4AC02D3353DB33163DD; do
+  jq -n --arg id "$id" '{traces:[{traceID:$id}]}' > "$evidence_dir/search-id.json"
+  trace_search_has_id "$evidence_dir/search-id.json" "$expected_id"
+done
+for id in '' wrong 00000000000000000000000000000000 00b0328f35d6ef4ac02d3353db33163dd 1b0328f35d6ef4ac02d3353db33163dd; do
+  jq -n --arg id "$id" '{traces:[{traceID:$id}]}' > "$evidence_dir/search-id.json"
+  if trace_search_has_id "$evidence_dir/search-id.json" "$expected_id"; then
+    echo "Invalid/different trace ID accepted: $id" >&2
+    exit 1
+  fi
+done
+jq -n '{status:"PASS",equivalentHexIdsAccepted:3,malformedOrDifferentIdsRejected:5,leadingZeroRegressionVerified:true}' > "$evidence_dir/trace-id-result.json"
+cat "$evidence_dir/trace-id-result.json"

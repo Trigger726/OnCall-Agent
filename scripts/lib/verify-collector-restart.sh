@@ -53,7 +53,8 @@ verify_collector_restart() {
     [[ "$blocker_ready" == true ]] || { echo "Expected consumer was not in flight before investigation" >&2; return 1; }
   done
   jq . <<< "$blocker_ids" > "$evidence_dir/restart-blocker-trace-ids.json"
-  trace_id="$(openssl rand -hex 16)"
+  # Force a leading zero so every CI run covers Tempo's shortened search IDs.
+  trace_id="0$(openssl rand -hex 16 | cut -c2-)"
   parent_id="$(openssl rand -hex 8)"
   sentinel="trace-restart-private-${trace_id}"
   payload="$(jq -n --arg event "otel-restart-${trace_id}" --arg private "$sentinel" \
@@ -136,11 +137,15 @@ verify_collector_restart() {
     sleep 2
   done
   if [[ "$graph_restored" == true ]]; then
-    curl --fail --silent --show-error --get --data-urlencode "q=$trace_query" \
-      http://localhost:3200/api/search > "$evidence_dir/restart-tempo-search.json"
-    if jq -e --arg id "$trace_id" '.traces | any(.traceID == $id)' "$evidence_dir/restart-tempo-search.json" >/dev/null; then
-      query_matches=true
-    fi
+    for _ in {1..20}; do
+      curl --fail --silent --show-error --get --data-urlencode "q=$trace_query" \
+        http://localhost:3200/api/search > "$evidence_dir/restart-tempo-search.json"
+      if trace_search_has_id "$evidence_dir/restart-tempo-search.json" "$trace_id"; then
+        query_matches=true
+        break
+      fi
+      sleep 1
+    done
   fi
   drained=false
   for _ in {1..20}; do
@@ -195,7 +200,7 @@ verify_collector_restart() {
       expectedSpanCounts:{agentRun:1, agentTool:6, providerQuery:2, providerClient:2, fixtureServer:2}}' \
     > "$evidence_dir/restart-result.json"
   cat "$evidence_dir/restart-result.json"
-  [[ "$status" == PASS ]] || { echo "Predetermined complete trace was lost across Collector SIGKILL/recreation" >&2; return 1; }
+  [[ "$status" == PASS ]] || { echo "Collector recovery verification failed (graph/query/drain/probes); inspect evidence" >&2; return 1; }
 }
 
 collector_send_probe() {
@@ -210,5 +215,6 @@ collector_send_probe() {
     > "$evidence_dir/probe-${trace_id}-otlp.json"
   curl --fail --silent --show-error -H 'Content-Type: application/json' \
     --data-binary "@$evidence_dir/probe-${trace_id}-otlp.json" http://localhost:4318/v1/traces \
-    > "$evidence_dir/probe-${trace_id}-ack.json"
+    --output "$evidence_dir/probe-${trace_id}-ack.json" --write-out '%{http_code}' \
+    > "$evidence_dir/probe-${trace_id}-http-status.txt"
 }

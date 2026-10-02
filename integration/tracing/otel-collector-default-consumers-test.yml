@@ -1,12 +1,4 @@
 # No exporter override: pinned v0.158.0 uses its production default ten consumers.
-service:
-  telemetry:
-    metrics:
-      readers:
-        - pull:
-            exporter:
-              prometheus:
-                host: 0.0.0.0
-                port: 8888
-                without_type_suffix: true
-                without_units: true
+# Metrics now inherit production configuration; the Compose overlay only maps
+# the test host's loopback port. Empty map intentionally overrides nothing.
+{}

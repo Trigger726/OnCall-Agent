@@ -1,0 +1,14 @@
+# Optional tracing-monitoring overlay, not the ordinary offline Compose config.
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+rule_files:
+  - /etc/prometheus/otel-collector-alerts.yml
+scrape_configs:
+  - job_name: opspilot
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["opspilot:9920"]
+  - job_name: otel-collector
+    static_configs:
+      - targets: ["otel-collector:8888"]

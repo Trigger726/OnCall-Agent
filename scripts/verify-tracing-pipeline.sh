@@ -244,8 +244,14 @@ compose=(docker compose -f docker-compose.yml -f integration/tracing/docker-comp
 mkdir -p "$evidence_dir/default-consumers"
 verify_collector_restart "$evidence_dir/default-consumers" "$token" 10
 
+compose=(docker compose -f docker-compose.yml -f integration/tracing/docker-compose.saturation-test.yml --profile tracing --profile tracing-test)
+"${compose[@]}" up --detach --no-deps --force-recreate otel-collector prometheus
+source scripts/lib/verify-collector-saturation.sh
+verify_collector_saturation "$evidence_dir/saturation" "$token"
+
 collect_logs
 cat "$evidence_dir/result.json"
 cat "$evidence_dir/outage-result.json"
 cat "$evidence_dir/restart-result.json"
 cat "$evidence_dir/default-consumers/restart-result.json"
+cat "$evidence_dir/saturation/result.json"

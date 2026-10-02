@@ -1,0 +1,11 @@
+# Fault injection only. Production keeps queue 2048 / consumers 10 / batch 512.
+exporters:
+  otlp/tempo:
+    sending_queue:
+      num_consumers: 1
+      queue_size: 4
+processors:
+  batch:
+    timeout: 100ms
+    send_batch_size: 1
+    send_batch_max_size: 1

@@ -1,0 +1,24 @@
+groups:
+  - name: opspilot-collector-resilience
+    rules:
+      - alert: CollectorTraceQueueHigh
+        expr: |
+          (otelcol_exporter_queue_size{job="otel-collector",data_type="traces",exporter="otlp/tempo"}
+            / otelcol_exporter_queue_capacity{job="otel-collector",data_type="traces",exporter="otlp/tempo"} > 0.9)
+          and (otelcol_exporter_queue_capacity{job="otel-collector",data_type="traces",exporter="otlp/tempo"} > 0)
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: Collector trace queue above 90 percent for 30 seconds
+      - alert: CollectorTraceEnqueueRejected
+        # Counter labels may appear only on first rejection: increase alone
+        # misses an initial positive sample when no earlier zero was scraped.
+        expr: |
+          (increase(otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo"}[5m]) > 0)
+          or ((otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo"} > 0)
+            unless otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo"} offset 5m)
+        labels:
+          severity: critical
+        annotations:
+          summary: Collector trace enqueue rejection observed
