@@ -6,6 +6,8 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
+检查点62限定通过：默认十消费者SIGKILL/新容器/同卷恢复原调查完整Trace与10/10在途探针；真实队满中12个OTLP200仍最终缺失，原生队列/拒绝告警触发、恢复后独立已知ID送达。`4cdda31` 的 [Run37039755121](https://github.com/Trigger726/OnCall-Agent/actions/runs/37039755121) 十三作业success，三工件摘要及六图/逐ID/MySQL重放已核对；旧Demo与三轮失败保留。Collector反馈仅到Prometheus，未验Alertmanager投递/生产容量/磁盘卷故障，见[62报告](docs/acceptance/V1.7-checkpoint-62.md)与[复跑说明](docs/COLLECTOR-QUEUE-RECOVERY.md)，整体目标继续。
+
 检查点61限定通过：Collector发送队列加独立卷与file_storage，同步落盘/文件上限/非root初始化；旧内存版SIGKILL重建队列7→0、原Trace404，新版6→6、同一原Trace及两跨JVM分支完整恢复。5ed5a9f的[Run36999165718](https://github.com/Trigger726/OnCall-Agent/actions/runs/36999165718)十三作业success，三工件摘要及图结构/MySQL重放已验，历史Demo保留；生产容量、磁盘/队满与卷丢失不在保证范围，见[验收报告](docs/acceptance/V1.7-checkpoint-61.md)与[操作边界](docs/COLLECTOR-QUEUE-RECOVERY.md)。整体目标继续。
 
 检查点60限定通过：签发uid绑定当前账户ID，阻止同名重建继承旧Token；继续自检修复极值exp/iat/nbf即使错误签名仍500，现为结构化401。b1a0945的[Run36996179284](https://github.com/Trigger726/OnCall-Agent/actions/runs/36996179284)十三作业success，真实MySQL76零跳过/八场景/五池干净关闭、双时区338发现/255执行/83条件跳过、58前端与Linux十一脚本及最终容器通过；工件摘要/CLI重放/实页已验。实际新旧JAR12请求500→401、异常12→0；两份旧JAR、首失败和历史Demo保留，见[验收报告](docs/acceptance/V1.7-checkpoint-60.md)。永久撤销/人工ID复用未完成，整体目标继续。

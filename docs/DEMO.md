@@ -1,5 +1,7 @@
 # OpsPilot 10 分钟演示脚本
 
+检查点62工程加演：保留61旧内存/单消费者对照，新增默认十消费者SIGKILL重建、10/10在途探针/原完整图恢复，再展示小队列满时12个OTLP200探针持续404与真实Prometheus告警。恢复后独立同入口已知ID成功，区分“业务健康”“接收成功”“最终送达”；queue包括in-flight，不能相加计数。十三CI作业/工件摘要及严格重放已验，见[62报告](acceptance/V1.7-checkpoint-62.md)和[复跑及可选监控](COLLECTOR-QUEUE-RECOVERY.md)。本轮仍不是页面改版，历史截图/JAR不删除；Collector反馈尚未接Alertmanager/Incident。
+
 检查点61新增工程对照：旧内存队列已在真实Linux实验中复现Collector SIGKILL/重建后的指定Trace丢失（队列7→0、最终404，业务仍COMPLETED/健康UP）。新配置增加独立持久卷、同步落盘与文件上限；同条件修复验收见[61报告](acceptance/V1.7-checkpoint-61.md)，操作/边界及保留的旧内存Demo见[队列恢复说明](COLLECTOR-QUEUE-RECOVERY.md)。本轮不是页面改版，不伪造新截图，历史页面与JAR继续保留。
 
 检查点60安全加演：`mvn -Dtest=AccountStatusHttpIntegrationTest,JwtServiceIdentityTest test`使用隔离内存库/随机端口。旧59同名重建后旧Token读写200且变成新ADMIN；身份绑定版阻断为401，新账户独立登录200。继续自检的身份绑定版面对超范围exp/iat/nbf仍返回500（错误签名也触发），补时间异常边界后返回结构化401且备注/审计零新增。执行`node scripts/verify-oncall-browser-ci.cjs`会启动拥有的隔离JAR，验证正常桌面/390px流程并运行`verify-jwt-numeric-date-http.cjs`；该畸形Token脚本不读取运行时密钥、不针对日常9900端口。首次失败、两份旧JAR和历史页面保留，最新验收范围见[60阶段报告](acceptance/V1.7-checkpoint-60.md)。此轮改安全行为，不伪造新外观，也不对日常Demo数据库删用户。

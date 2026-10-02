@@ -2,6 +2,8 @@
 
 ## 30 秒项目介绍
 
+检查点62新增面试案例：默认十消费者SIGKILL/新容器后10/10在途探针与原调查完整Trace恢复；但持久化也不能挽救未入队数据，小队列真实满时12个OTLP200探针持续404、业务仍COMPLETED/UP，拒绝counter及两条Prometheus原生告警实际触发。恢复后独立已知ID同入口送达，避免把下游尚不可用误说成丢失。4cdda31十三CI作业、三工件摘要和严格重放已验；反馈未到Alertmanager/Incident，不能说外部通知已送达，见[62报告](acceptance/V1.7-checkpoint-62.md)。
+
 检查点61可讲的故障案例：Tempo停机时业务调查仍完成，但旧内存Collector被SIGKILL并重建后队列7→0、指定Trace404。加独立卷/file_storage/fsync后同条件6→6，恢复原Trace的六工具、两条跨JVM父子链，且没有重提调查。十三CI作业/工件摘要/本地严格重放均通过。必须同时说明测试用单消费者、60秒重试内、保留同卷；不宣称磁盘满/队满/卷丢失下零丢失或生产容量，见[61验收](acceptance/V1.7-checkpoint-61.md)。
 
 > OpsPilot 是我把原 OnCall AI Agent 重构成的企业级故障闭环平台。它先对 Prometheus/APM 告警去重聚合，再结合 CMDB 形成 Incident，通过状态机、值班升级和审计完成闭环。调查部分采用可解释 Agent 工作流，按计划调用告警、拓扑、指标、变更、日志和 Runbook 六个只读工具；真实检索快照写前脱敏，并通过盲化双评分和 NDCG 形成可复现评测。步骤和实时事件先落库，再通过 SSE 推送并支持游标回放。事故恢复后从真实证据生成无责复盘，必须补全影响、原因和经验并绑定负责人/期限行动项，提交人不能自审，发布后正文冻结；运营页再按独立样本口径展示 MTTA/MTTM/MTTR，并对跨事故逾期行动项形成幂等、可关闭的升级事实。高置信度变更关联也只生成回滚草案，系统不会直接修改生产环境。
@@ -248,7 +250,7 @@ Agent 调查事件是执行过程中逐步产生的真实事件，先写 `agent_
 
 ### Agent 进入异步线程池后，Trace 为什么不会断？
 
-HTTP 线程在把任务交给有界执行器前捕获当前 Micrometer `Span`，worker 在该 span scope 内创建 `opspilot.agent.run`，然后工具和 Provider 逐层成为子 span。OpenTelemetry span 结束后其 context 仍可作为后续父上下文，所以 HTTP 响应先返回也能保持 traceId。SDK 测试专门在根 span 结束后才启动 worker 并断言四层 ID；独立容器门禁再把真实调查经 Collector 写入 Tempo，用 TraceQL 按 run ID 找回并经 Grafana 数据源代理读回。故障场景中 Tempo 在调查期间被停止，调查仍完成且应用健康，Collector 观察到连接拒绝并在 Tempo 重启后完成导出。Prometheus/Loki 不能直接调用 `RestClient.builder()`，否则绕过 Boot 的观测定制器；现在注入自动配置 builder。checkpoint-24 协议测试证明两个下游收到 W3C `traceparent` 且 header spanId 对应导出的 HTTP client span；checkpoint-25 又用独立 JVM 验证两个服务在同一 Tempo trace 中严格形成 `provider.query -> CLIENT -> SERVER`，正常和短暂停机恢复均为两条完整分支。无当前 span 时不强行 scope `null`，run 作为新根。真实生产 Prometheus/Loki 集群、生产采样和 Collector 重启后持久队列仍需独立验收。
+HTTP 线程在把任务交给有界执行器前捕获当前 Micrometer `Span`，worker 在该 span scope 内创建 `opspilot.agent.run`，然后工具和 Provider 逐层成为子 span。OpenTelemetry span 结束后其 context 仍可作为后续父上下文，所以 HTTP 响应先返回也能保持 traceId。SDK 测试专门在根 span 结束后才启动 worker 并断言四层 ID；独立容器门禁再把真实调查经 Collector 写入 Tempo，用 TraceQL 按 run ID 找回并经 Grafana 数据源代理读回。故障场景中 Tempo 在调查期间被停止，调查仍完成且应用健康，Collector 观察到连接拒绝并在 Tempo 重启后完成导出。Prometheus/Loki 不能直接调用 `RestClient.builder()`，否则绕过 Boot 的观测定制器；现在注入自动配置 builder。checkpoint-24 协议测试证明两个下游收到 W3C `traceparent` 且 header spanId 对应导出的 HTTP client span；checkpoint-25 又用独立 JVM 验证两个服务在同一 Tempo trace 中严格形成 `provider.query -> CLIENT -> SERVER`，正常和短暂停机恢复均为两条完整分支。无当前 span 时不强行 scope `null`，run 作为新根。61/62已补同卷SIGKILL/新容器及默认十消费者恢复；真实生产 Prometheus/Loki 集群、生产采样、磁盘/卷故障与生产容量仍需独立验收。
 
 ### 高风险处置为什么禁止发起人自批？
 
@@ -279,7 +281,7 @@ Agent 结论和发起操作可能共享同一个人的判断，独立审批可�
 - Runbook 已具备可选 Embedding、持久化向量、RRF、盲化双评分、线性加权 κ、分级 NDCG，以及主库快照写前脱敏与定时保留期擦除，但默认未启用真实 Provider；13 条仍是种子集，隔离 QA 的双评分也不是历史生产标注，未证明真实 Embedding 或 cross-encoder rerank 优于 BM25。当前一致性只支持两名标注人且没有第三方仲裁；快照治理尚未覆盖备份/导出副本、按租户差异化策略和用户级删除请求，当前向量查询为内存全量余弦，不适合大语料；PDF 只支持可提取文本，不做 OCR。
 - AI 模式需要外部 DashScope Key，默认演示采用规则引擎。
 - 已提供 Prometheus 与 Loki HTTP 适配器，但默认演示关闭外部依赖；当前通过协议级本地 HTTP 契约测试验证，尚未与真实生产集群联调和压测。
-- OpenTelemetry 业务 span、异步上下文和真实 SDK exporter 契约已验证；可选 Compose 已包含 Collector、Tempo 和 Grafana，正常读回、Tempo 短暂停机恢复、W3C 出站传播及独立 fixture 的跨 JVM CLIENT/SERVER 拼接均已验证。仍未与真实生产 Prometheus/Loki 集群联调，也未验证生产采样成本、对象存储保留和 Collector 重启后持久队列。
+- OpenTelemetry 业务 span、异步上下文和真实 SDK exporter 契约已验证；可选 Compose 已包含 Collector、Tempo 和 Grafana，正常读回、Tempo 短暂停机恢复、W3C 出站传播及独立 fixture 的跨 JVM CLIENT/SERVER 拼接均已验证。61/62已验证同卷SIGKILL/新容器恢复及默认十消费者；仍未与真实生产 Prometheus/Loki 集群联调，也未验证生产采样成本、对象存储保留、磁盘/卷故障和生产容量。
 - Agent 步骤已经使用持久化实时 SSE 和游标回放；对话仍是完整回答落库后的协议分块，尚未做到模型 Provider 原生 token 流。
 - Agent 事件已通过 outbox + Redis Streams + 数据库补读支持跨实例广播，崩溃孤儿 run 可在持久化 deadline 后收敛到终态；但工具链仍不会跨节点续跑，也没有执行租约/fencing token 或 exactly-once 保证。
 - 处置审批已完成治理闭环，但尚未接 Argo CD、Ansible、Kubernetes 等生产执行器。

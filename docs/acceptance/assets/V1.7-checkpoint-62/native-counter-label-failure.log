@@ -1,0 +1,23 @@
+
+  FAILED:
+    name: first positive counter alerts then expires without further rejection,
+
+
+    alertname: CollectorTraceEnqueueRejected, time: 1m,
+        exp:[
+            0:
+              Labels:{alertname="CollectorTraceEnqueueRejected", exporter="otlp/tempo", instance="new", job="otel-collector", severity="critical"}
+              Annotations:{summary="Collector trace enqueue rejection observed"}
+            ],
+        got:[]
+    name: increments and counter resets are detected,
+    alertname: CollectorTraceEnqueueRejected, time: 2m,
+        exp:[
+            0:
+              Labels:{alertname="CollectorTraceEnqueueRejected", exporter="otlp/tempo", instance="increment", job="otel-collector", severity="critical"}
+              Annotations:{summary="Collector trace enqueue rejection observed"},
+            1:
+              Labels:{alertname="CollectorTraceEnqueueRejected", exporter="otlp/tempo", instance="reset", job="otel-collector", severity="critical"}
+              Annotations:{summary="Collector trace enqueue rejection observed"}
+            ],
+        got:[]

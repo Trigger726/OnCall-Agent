@@ -349,6 +349,8 @@ Trace 只记录受控业务字段：Alert/Incident/run/report ID、来源、严�
 
 checkpoint61补Collector出口持久队列：`file_storage`引用专属命名卷、fsync写入、每bbolt文件256MiB增长上限；非root10001:10001运行，一次性init将卷根目录设0750。当前固定版本的隔离实验已在Tempo停止时SIGKILL并重建Collector，再恢复同一原Trace完整图，旧内存配置/首失败保留；此前段落所述“尚未验证”是历史checkpoint25的范围。本实验的单消费者仅为测试诊断，生产仍默认十消费者；不是Exactly Once、SDK未入队零丢失或生产容量结论，详见[队列运行边界](COLLECTOR-QUEUE-RECOVERY.md)和[61证据](acceptance/V1.7-checkpoint-61.md)。
 
+checkpoint62进一步验证默认十消费者在途项跨SIGKILL/新容器恢复，原完整图/10个已知ID探针均找回；requests队列大小包含在途项，不与in-flight相加。指标只监听容器网络8888，可选Prometheus覆盖保留业务抓取、加入实际queue gauge/拒绝counter规则；原生评估与真实队满实验触发并恢复告警。batch异步接收200不代表已入队：12已知探针可全缺失，业务仍COMPLETED/UP，恢复后独立同入口已知ID正对照必须送达。首轮ID省略前导0、懒counter和背景流量问题均有失败证据。未配置Collector告警的Alertmanager路由，不借其他链路成功声称Incident接入；详见[62限定证据](acceptance/V1.7-checkpoint-62.md)。
+
 - 默认 Maven 套件以 H2 覆盖领域规则、HTTP API、事件回放、运行控制、审批和外部 Provider 契约；MySQL Testcontainers 用系统属性显式启用，避免开发机没有 Docker 时误报失败。
 - GitHub Actions 独立执行前端生产构建、H2 测试与 JAR、MySQL 8.4、Redis、双 JVM SSE，以及 Collector/Tempo/Grafana Trace 端到端集成；全部前置门禁通过后才构建最终容器镜像。
 - 镜像门禁不止检查 `docker build`：还以非 root `opspilot` 用户启动容器，并轮询 `/actuator/health`。镜像预建可写 `/app/data`，保证默认 H2 数据文件能在最小权限下创建。

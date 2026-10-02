@@ -7,6 +7,7 @@
 `deploy/otel-collector.yml` 在 `otlp/tempo.sending_queue` 引用已启用的 `file_storage`。目录 `/var/lib/otelcol/storage` 挂独立 `otel-collector-data` 命名卷，容器重建不依赖可写层。镜像用户10001:10001；一次性 init 只将卷根目录设为该所有者和0750，Collector 本身不改 root。
 
 - 队列2048的默认单位是导出请求/批次，不是2048个Span或固定内存大小。默认消费者仍为10。
+- 固定版本持久队列的requests大小包含已派发未完成项（`writeIndex-readIndex+dispatchedItems`），不是纯等待队列。queue14/in-flight10不能相加声称24个请求；单消费者queue4也不意味着另有第5个在途容量。依据[v0.158.0 persistent_queue.go](https://raw.githubusercontent.com/open-telemetry/opentelemetry-collector/v0.158.0/exporter/exporterhelper/internal/queue/persistent_queue.go)。
 - 单消费者和宿主机回环18888映射只在故障测试中启用。Collector指标监听容器内8888，不在普通Compose发布该宿主机端口；可选Prometheus监控从容器网络抓取。
 - `fsync:true` 每次写同步落盘，有性能成本，尚无生产吞吐结论。
 - `max_size:268435456` 是每个 bbolt 文件的增长上限，不是目录总大小、卷配额或保留期；已分配空间中的部分写入仍可能成功。
