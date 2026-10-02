@@ -15,9 +15,9 @@ groups:
         # Counter labels may appear only on first rejection: increase alone
         # misses an initial positive sample when no earlier zero was scraped.
         expr: |
-          (increase(otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo"}[5m]) > 0)
-          or ((otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo"} > 0)
-            unless otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo"} offset 5m)
+          (increase(otelcol_exporter_enqueue_failed_spans{job="otel-collector",exporter="otlp/tempo"}[5m]) > 0)
+          or ((otelcol_exporter_enqueue_failed_spans{job="otel-collector",exporter="otlp/tempo"} > 0)
+            unless otelcol_exporter_enqueue_failed_spans{job="otel-collector",exporter="otlp/tempo"} offset 5m)
         labels:
           severity: critical
         annotations:

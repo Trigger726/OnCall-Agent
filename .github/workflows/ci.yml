@@ -298,6 +298,8 @@ jobs:
       - uses: actions/checkout@v5
       - name: Reject incomplete and mis-parented trace fixtures
         run: bash scripts/verify-trace-assertions.sh
+      - name: Verify fresh Collector counters and strict queue gauges
+        run: bash scripts/verify-collector-metrics.sh
       - name: Check native Collector alert rules and boundary fixtures
         run: |
           mkdir -p target/tracing-it

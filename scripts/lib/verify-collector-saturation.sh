@@ -1,12 +1,6 @@
 #!/usr/bin/env bash
 # Sourced after restart experiments. No alert delivery/Incident claim: verifies
 # native Prometheus feedback against the actual Collector, then known-ID loss.
-collector_counter() {
-  # Lazy counters may not have a series before the first event. Missing counters
-  # mean zero here; missing queue gauges still fail via collector_metric.
-  awk -v metric="$1" '$1 ~ ("^" metric "(\\{|$)") { sum += $2 } END { printf "%.0f\n", sum }' "$2"
-}
-
 verify_collector_saturation() {
   local evidence_dir="$1" token="$2" metrics_url=http://localhost:18888/metrics
   local ids='[]' id accepted_before rejected_before accepted_delta rejected_delta queue capacity
@@ -107,12 +101,12 @@ verify_collector_saturation() {
     status=PASS
   fi
   jq -n --arg status "$status" --argjson accepted "$accepted_delta" --argjson rejected "$rejected_delta" \
-    --argjson recovered "$recovered_count" --argjson fired "$alerts_fired" --argjson queueRecovered "$queue_recovered" --argjson runId "$run_id" \
+    --argjson recovered "$recovered_count" --argjson stableSamples "$stable_samples" --argjson fired "$alerts_fired" --argjson queueRecovered "$queue_recovered" --argjson runId "$run_id" \
     '{status:$status, fault:"tempo-stopped+queue-capacity-four", testOnly:{consumers:1,queueCapacity:4,maxBatchSpans:1},
       probeRequests:12,probeHttp200:12,probePartialSuccessRejectedSpans:0,aggregateAcceptedSpansDelta:$accepted,aggregateEnqueueRejectedSpansDelta:$rejected,
       recoveredProbeTraces:$recovered,missingAcknowledgedProbeTraces:(12-$recovered),businessInvestigationRunId:$runId,
       businessInvestigationStatus:"COMPLETED",applicationHealth:"UP",queueHighAndRejectionAlertsFired:$fired,
-      queueAndInFlightDrainedAndHighAlertResolved:$queueRecovered,probeRecoveryCountStable:true,rejectionAlertHasFiveMinuteHistoryWindow:true,
+      queueAndInFlightDrainedAndHighAlertResolved:$queueRecovered,probeRecoveryCountStable:($stableSamples >= 3),stableProbeRecoverySamples:$stableSamples,rejectionAlertHasFiveMinuteHistoryWindow:true,
       alertmanagerDeliveryVerified:false,incidentLifecycleVerified:false}' > "$evidence_dir/result.json"
   cat "$evidence_dir/result.json"
   [[ "$status" == PASS ]] || { echo "Saturation feedback or known-ID loss not proven" >&2; return 1; }

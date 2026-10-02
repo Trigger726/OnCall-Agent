@@ -10,6 +10,16 @@ collector_metric() {
   ' "$metrics_file"
 }
 
+collector_counter() {
+  # Only these lazy counters may be absent before their first event. Never
+  # reinterpret missing queue/in-flight gauges as a healthy zero value.
+  case "$1" in
+    otelcol_receiver_accepted_spans|otelcol_exporter_enqueue_failed_spans) ;;
+    *) echo "Not a supported lazy Collector counter: $1" >&2; return 1 ;;
+  esac
+  awk -v metric="$1" '$1 ~ ("^" metric "(\\{|$)") { sum += $2 } END { printf "%.0f\n", sum }' "$2"
+}
+
 verify_collector_restart() {
   local evidence_dir="$1" token="$2" expected_consumers="${3:-1}"
   [[ "$expected_consumers" == 1 || "$expected_consumers" == 10 ]] || return 1
@@ -31,7 +41,7 @@ verify_collector_restart() {
     sleep 1
   done
   [[ "$drained" == true ]] || { echo "Previous scenario queue did not drain" >&2; return 1; }
-  accepted_before="$(collector_metric otelcol_receiver_accepted_spans "$evidence_dir/restart-metrics-before.txt")"
+  accepted_before="$(collector_counter otelcol_receiver_accepted_spans "$evidence_dir/restart-metrics-before.txt")"
   "${compose[@]}" stop tempo
   restart_started_at="$(date --utc +%Y-%m-%dT%H:%M:%SZ)"
   # Each probe is flushed before the next, so all expected consumers are
@@ -76,7 +86,7 @@ verify_collector_restart() {
   sleep 12
   for _ in {1..15}; do
     curl --fail --silent --show-error "$metrics_url" > "$evidence_dir/restart-metrics-queued.txt"
-    accepted_delta=$(( $(collector_metric otelcol_receiver_accepted_spans "$evidence_dir/restart-metrics-queued.txt") - accepted_before ))
+    accepted_delta=$(( $(collector_counter otelcol_receiver_accepted_spans "$evidence_dir/restart-metrics-queued.txt") - accepted_before ))
     queue_before="$(collector_metric otelcol_exporter_queue_size "$evidence_dir/restart-metrics-queued.txt")"
     if (( accepted_delta >= 14 && queue_before > 0 )); then
       backlog_ready=true

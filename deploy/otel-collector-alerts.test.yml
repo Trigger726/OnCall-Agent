@@ -47,15 +47,15 @@ tests:
   - name: first positive counter alerts then expires without further rejection
     interval: 1m
     input_series:
-      - series: 'otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="new"}'
+      - series: 'otelcol_exporter_enqueue_failed_spans{job="otel-collector",exporter="otlp/tempo",instance="new"}'
         values: '5+0x8'
-      - series: 'otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="zero"}'
+      - series: 'otelcol_exporter_enqueue_failed_spans{job="otel-collector",exporter="otlp/tempo",instance="zero"}'
         values: '0+0x8'
     alert_rule_test:
       - eval_time: 1m
         alertname: CollectorTraceEnqueueRejected
         exp_alerts:
-          - exp_labels: {job: otel-collector, data_type: traces, exporter: otlp/tempo, instance: new, severity: critical}
+          - exp_labels: {job: otel-collector, exporter: otlp/tempo, instance: new, severity: critical}
             exp_annotations: {summary: Collector trace enqueue rejection observed}
       - eval_time: 6m
         alertname: CollectorTraceEnqueueRejected
@@ -63,17 +63,17 @@ tests:
   - name: increments and counter resets are detected
     interval: 1m
     input_series:
-      - series: 'otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="increment"}'
+      - series: 'otelcol_exporter_enqueue_failed_spans{job="otel-collector",exporter="otlp/tempo",instance="increment"}'
         values: '0 0 4 4 4 4 4 4 4 4'
-      - series: 'otelcol_exporter_enqueue_failed_spans{job="otel-collector",data_type="traces",exporter="otlp/tempo",instance="reset"}'
+      - series: 'otelcol_exporter_enqueue_failed_spans{job="otel-collector",exporter="otlp/tempo",instance="reset"}'
         values: '8 8 1 1 1 1 1 1 1 1'
     alert_rule_test:
       - eval_time: 2m
         alertname: CollectorTraceEnqueueRejected
         exp_alerts:
-          - exp_labels: {job: otel-collector, data_type: traces, exporter: otlp/tempo, instance: increment, severity: critical}
+          - exp_labels: {job: otel-collector, exporter: otlp/tempo, instance: increment, severity: critical}
             exp_annotations: {summary: Collector trace enqueue rejection observed}
-          - exp_labels: {job: otel-collector, data_type: traces, exporter: otlp/tempo, instance: reset, severity: critical}
+          - exp_labels: {job: otel-collector, exporter: otlp/tempo, instance: reset, severity: critical}
             exp_annotations: {summary: Collector trace enqueue rejection observed}
       - eval_time: 8m
         alertname: CollectorTraceEnqueueRejected
@@ -85,7 +85,7 @@ tests:
         values: '100+0x2'
       - series: 'otelcol_exporter_queue_capacity{job="unrelated",data_type="traces",exporter="otlp/tempo"}'
         values: '100+0x2'
-      - series: 'otelcol_exporter_enqueue_failed_spans{job="unrelated",data_type="traces",exporter="otlp/tempo"}'
+      - series: 'otelcol_exporter_enqueue_failed_spans{job="unrelated",exporter="otlp/tempo"}'
         values: '5+0x2'
     alert_rule_test:
       - eval_time: 1m
