@@ -237,7 +237,15 @@ jq -n \
 source scripts/lib/verify-collector-restart.sh
 verify_collector_restart "$evidence_dir" "$token"
 
+# Preserve the one-consumer experiment, then repeat with the actual production
+# default. A separate override only exposes diagnostics, not exporter settings.
+compose=(docker compose -f docker-compose.yml -f integration/tracing/docker-compose.default-consumers-test.yml --profile tracing --profile tracing-test)
+"${compose[@]}" up --detach --no-deps --force-recreate otel-collector
+mkdir -p "$evidence_dir/default-consumers"
+verify_collector_restart "$evidence_dir/default-consumers" "$token" 10
+
 collect_logs
 cat "$evidence_dir/result.json"
 cat "$evidence_dir/outage-result.json"
 cat "$evidence_dir/restart-result.json"
+cat "$evidence_dir/default-consumers/restart-result.json"

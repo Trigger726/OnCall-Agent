@@ -1,0 +1,10 @@
+# Keeps production default consumers; only adds access to diagnostic metrics.
+services:
+  otel-collector:
+    command:
+      - --config=/etc/otelcol-contrib/config.yml
+      - --config=/etc/otelcol-contrib/default-consumers-test.yml
+    ports:
+      - "127.0.0.1:18888:8888"
+    volumes:
+      - ./integration/tracing/otel-collector-default-consumers-test.yml:/etc/otelcol-contrib/default-consumers-test.yml:ro

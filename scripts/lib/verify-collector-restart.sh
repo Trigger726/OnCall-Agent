@@ -11,7 +11,8 @@ collector_metric() {
 }
 
 verify_collector_restart() {
-  local evidence_dir="$1" token="$2"
+  local evidence_dir="$1" token="$2" expected_consumers="${3:-1}"
+  [[ "$expected_consumers" == 1 || "$expected_consumers" == 10 ]] || return 1
   local metrics_url=http://localhost:18888/metrics
   local trace_id parent_id sentinel payload incident_id run_id
   local accepted_before accepted_delta queue_before queue_after
@@ -33,30 +34,25 @@ verify_collector_restart() {
   accepted_before="$(collector_metric otelcol_receiver_accepted_spans "$evidence_dir/restart-metrics-before.txt")"
   "${compose[@]}" stop tempo
   restart_started_at="$(date --utc +%Y-%m-%dT%H:%M:%SZ)"
-  # Occupy the sole TEST consumer before the real investigation. Otherwise two
-  # JVM exports could coalesce into one in-flight request and queue_size stay 0.
-  # This separate synthetic trace is never used as recovery success evidence.
-  local blocker_id blocker_span blocker_start blocker_end blocker_ready=false
-  blocker_id="$(openssl rand -hex 16)"
-  blocker_span="$(openssl rand -hex 8)"
-  blocker_start="$(date +%s%N)"
-  blocker_end="$(( blocker_start + 1000000 ))"
-  jq -n --arg trace "$blocker_id" --arg span "$blocker_span" --arg start "$blocker_start" --arg end "$blocker_end" \
-    '{resourceSpans:[{resource:{attributes:[{key:"service.name",value:{stringValue:"collector-restart-blocker"}}]},
-      scopeSpans:[{scope:{name:"opspilot.restart-test"},spans:[{traceId:$trace,spanId:$span,name:"exporter-blocker",kind:1,startTimeUnixNano:$start,endTimeUnixNano:$end}]}]}]}' \
-    > "$evidence_dir/restart-blocker-otlp.json"
-  curl --fail --silent --show-error -H 'Content-Type: application/json' \
-    --data-binary "@$evidence_dir/restart-blocker-otlp.json" http://localhost:4318/v1/traces \
-    > "$evidence_dir/restart-blocker-ack.json"
-  for _ in {1..10}; do
-    curl --fail --silent --show-error "$metrics_url" > "$evidence_dir/restart-metrics-blocker.txt"
-    if (( $(collector_metric otelcol_exporter_in_flight_requests "$evidence_dir/restart-metrics-blocker.txt") > 0 )); then
-      blocker_ready=true
-      break
-    fi
-    sleep 1
+  # Each probe is flushed before the next, so all expected consumers are
+  # observably in flight. Probe recovery never replaces the real Agent graph.
+  local blocker_id blocker_ready=false blocker_ids='[]' inflight_before inflight_after
+  for consumer in $(seq 1 "$expected_consumers"); do
+    blocker_id="$(openssl rand -hex 16)"
+    collector_send_probe "$evidence_dir" "$blocker_id" exporter-blocker
+    blocker_ids="$(jq --arg id "$blocker_id" '. + [$id]' <<< "$blocker_ids")"
+    blocker_ready=false
+    for _ in {1..10}; do
+      curl --fail --silent --show-error "$metrics_url" > "$evidence_dir/restart-metrics-blocker.txt"
+      if (( $(collector_metric otelcol_exporter_in_flight_requests "$evidence_dir/restart-metrics-blocker.txt") >= consumer )); then
+        blocker_ready=true
+        break
+      fi
+      sleep 1
+    done
+    [[ "$blocker_ready" == true ]] || { echo "Expected consumer was not in flight before investigation" >&2; return 1; }
   done
-  [[ "$blocker_ready" == true ]] || { echo "Test consumer was not occupied before investigation" >&2; return 1; }
+  jq . <<< "$blocker_ids" > "$evidence_dir/restart-blocker-trace-ids.json"
   trace_id="$(openssl rand -hex 16)"
   parent_id="$(openssl rand -hex 8)"
   sentinel="trace-restart-private-${trace_id}"
@@ -88,6 +84,8 @@ verify_collector_restart() {
     sleep 1
   done
   [[ "$backlog_ready" == true ]] || { echo "No accepted spans + queued backlog before crash; fault not proven" >&2; return 1; }
+  inflight_before="$(collector_metric otelcol_exporter_in_flight_requests "$evidence_dir/restart-metrics-queued.txt")"
+  [[ "$inflight_before" == "$expected_consumers" ]]
   "${compose[@]}" logs --since "$restart_started_at" --no-color otel-collector > "$evidence_dir/restart-collector-before.log" 2>&1
   grep --extended-regexp --ignore-case --quiet 'Exporting failed|connection refused|Unavailable' "$evidence_dir/restart-collector-before.log"
   old_container="$("${compose[@]}" ps --quiet otel-collector)"
@@ -117,6 +115,7 @@ verify_collector_restart() {
   wait_http "$metrics_url" "Recreated Collector metrics"
   curl --fail --silent --show-error "$metrics_url" > "$evidence_dir/restart-metrics-recreated.txt"
   queue_after="$(collector_metric otelcol_exporter_queue_size "$evidence_dir/restart-metrics-recreated.txt")"
+  inflight_after="$(collector_metric otelcol_exporter_in_flight_requests "$evidence_dir/restart-metrics-recreated.txt")"
   "${compose[@]}" start tempo
   wait_http http://localhost:3200/ready "Tempo after Collector recreation"
 
@@ -152,8 +151,25 @@ verify_collector_restart() {
     fi
     sleep 1
   done
+  local blockers_restored=false recovered_blockers=0
+  for _ in {1..20}; do
+    recovered_blockers=0
+    while IFS= read -r blocker_id; do
+      if curl --fail --silent --show-error "http://localhost:3200/api/traces/${blocker_id}" \
+          > "$evidence_dir/probe-${blocker_id}-trace.json" 2> "$evidence_dir/probe-${blocker_id}-error.txt" \
+          && jq -e '[.. | objects | select(has("spanId") and has("name"))] | length == 1 and .[0].name == "exporter-blocker"' \
+            "$evidence_dir/probe-${blocker_id}-trace.json" >/dev/null; then
+        recovered_blockers=$(( recovered_blockers + 1 ))
+      fi
+    done < <(jq -r '.[]' "$evidence_dir/restart-blocker-trace-ids.json")
+    if [[ "$recovered_blockers" == "$expected_consumers" ]]; then
+      blockers_restored=true
+      break
+    fi
+    sleep 1
+  done
   local status=FAIL
-  if [[ "$graph_restored" == true && "$query_matches" == true && "$drained" == true ]]; then
+  if [[ "$graph_restored" == true && "$query_matches" == true && "$drained" == true && "$blockers_restored" == true ]]; then
     status=PASS
   fi
   if [[ "$status" == PASS ]]; then
@@ -165,10 +181,13 @@ verify_collector_restart() {
   jq -n --arg status "$status" --arg traceId "$trace_id" --argjson incidentId "$incident_id" --argjson runId "$run_id" \
     --arg oldContainer "$old_container" --arg newContainer "$new_container" --argjson exitCode "$exit_code" \
     --argjson acceptedSpansDelta "$accepted_delta" --argjson queueBefore "$queue_before" --argjson queueAfter "$queue_after" \
-    --arg storageVolume "$new_volume" --arg blockerTraceId "$blocker_id" --argjson graphRestored "$graph_restored" --argjson queryMatches "$query_matches" --argjson drained "$drained" \
+    --arg storageVolume "$new_volume" --argjson blockerTraceIds "$blocker_ids" --argjson consumers "$expected_consumers" \
+    --argjson inflightBefore "$inflight_before" --argjson inflightAfter "$inflight_after" --argjson recoveredBlockers "$recovered_blockers" \
+    --argjson graphRestored "$graph_restored" --argjson queryMatches "$query_matches" --argjson drained "$drained" \
     '{status:$status, traceId:$traceId, incidentId:$incidentId, runId:$runId,
       injectedFailure:"tempo-stopped+collector-SIGKILL+container-recreated", investigationStatus:"COMPLETED", applicationHealthDuringOutage:"UP",
-      investigationResubmitted:false, diagnosticNumConsumers:1, separateBlockerTraceId:$blockerTraceId, acceptedSpansDelta:$acceptedSpansDelta,
+      investigationResubmitted:false, consumersTested:$consumers, blockerTraceIds:$blockerTraceIds, recoveredBlockerTraces:$recoveredBlockers,
+      inFlightRequestsBeforeCrash:$inflightBefore, inFlightRequestsAfterRecreation:$inflightAfter, acceptedSpansDelta:$acceptedSpansDelta,
       queueRequestsBeforeCrash:$queueBefore, queueRequestsAfterRecreation:$queueAfter,
       killedExitCode:$exitCode, oldContainerId:$oldContainer, newContainerId:$newContainer,
       persistentVolume:$storageVolume, sameVolumeAcrossRecreation:true, collectorUser:"10001:10001", storageDirectoryMode:"0750",
@@ -177,4 +196,19 @@ verify_collector_restart() {
     > "$evidence_dir/restart-result.json"
   cat "$evidence_dir/restart-result.json"
   [[ "$status" == PASS ]] || { echo "Predetermined complete trace was lost across Collector SIGKILL/recreation" >&2; return 1; }
+}
+
+collector_send_probe() {
+  local evidence_dir="$1" trace_id="$2" span_name="$3"
+  local span_id start end
+  span_id="$(openssl rand -hex 8)"
+  start="$(date +%s%N)"
+  end="$(( start + 1000000 ))"
+  jq -n --arg trace "$trace_id" --arg span "$span_id" --arg name "$span_name" --arg start "$start" --arg end "$end" \
+    '{resourceSpans:[{resource:{attributes:[{key:"service.name",value:{stringValue:"collector-fault-probe"}}]},
+      scopeSpans:[{scope:{name:"opspilot.fault-test"},spans:[{traceId:$trace,spanId:$span,name:$name,kind:1,startTimeUnixNano:$start,endTimeUnixNano:$end}]}]}]}' \
+    > "$evidence_dir/probe-${trace_id}-otlp.json"
+  curl --fail --silent --show-error -H 'Content-Type: application/json' \
+    --data-binary "@$evidence_dir/probe-${trace_id}-otlp.json" http://localhost:4318/v1/traces \
+    > "$evidence_dir/probe-${trace_id}-ack.json"
 }
