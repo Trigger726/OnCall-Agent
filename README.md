@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-检查点57部分通过：发现发布决定的缺失/null审核版本被原始int默认为0并接受，现改为必填可空类型校验，显式0仍合法。六例首失败保留，专项15项、双时区各270发现/195执行/75条件跳过、58项前端及新JAR九脚本通过；真实HTTP六例拒绝后候选不变、同键补0后成功。修复后远端仍待验，见[阶段报告](docs/acceptance/V1.7-checkpoint-57.md)。
+检查点58本地通过、远端待验：SLO 阈值随目标周期计算，修复正分数事件舍入导致的误报健康；管理页面可导出捕获版本的 Prometheus 规则并核验内容摘要，旧版本409阻断下载。20组原生 promtool 场景、真实 Prometheus→Alertmanager→OpsPilot 重复 firing/同一告警 resolved、双时区281发现/206执行/75条件跳过、58前端、十脚本与新旧桌面/手机已验。规则发布仍由运维执行，生产业务数据与低流量策略待验证，见[检查点58](docs/acceptance/V1.7-checkpoint-58.md)及[规则发布说明](docs/SLO-PROMETHEUS-RULES.md)。
+
+检查点57已补远端验收：缺失/null审核版本六例拒绝，显式0合法。e98ee3a 的 [Run36344164602](https://github.com/Trigger726/OnCall-Agent/actions/runs/36344164602) 十二作业success，双时区270/195/75、真实MySQL68/五池关闭、58前端和Linux九脚本（含六例真实HTTP拒绝/补0成功）已核验，见[阶段报告](docs/acceptance/V1.7-checkpoint-57.md)。
 
 检查点56基线已验：Runbook导入待审、另一当前管理账号独立发布、拒绝/本人撤回、基线保护及精确重放。8b5c95b的[Run36343295826](https://github.com/Trigger726/OnCall-Agent/actions/runs/36343295826)十二作业全绿，前端58项、双时区各264/189/75、真实MySQL68零跳过/五池关闭与Linux扩展九脚本工件已验；通知真实接收器503→204/同键/重复扫描零新增、最终容器烟测通过。eb47adb首失败/403仍保留；该基线未覆盖的缺失版本问题由57继续补，不宣称整体完成。见[报告](docs/acceptance/V1.7-checkpoint-56.md)，新旧Demo继续保留。
 
@@ -40,7 +42,7 @@ checkpoint 48 新增日历覆盖预览：已持久化班次按实际路由优先
 - 无责事故复盘：只有已恢复/已关闭 Incident 才能从当时的时间线、告警、调查报告和变更引用生成脱敏快照；五类复盘内容必须补全，并绑定有负责人和期限的防复发行动项后才能提交。提交人不能自审，发布后正文冻结，行动项仍可由负责人闭环，全部过程进入时间线和审计。
 - 行动项发布门禁：未发布复盘的草稿行动项不会被后台逾期扫描升级或外部通知，也不能提前标记完成；历史草稿通知在派发与人工重试时再次检查发布状态，避免未经复核的内容外发。
 - 事故运营分析：按创建窗口与严重等级计算 MTTA/MTTM/MTTR 的均值、中位数和独立样本数，排除缺失与负时长；按 CMDB 归属服务拆分事故量、未关闭数和有效里程碑分母，并提供慢事故下钻。跨 Incident 管理行动项、逾期天数和持久化升级事实，重复扫描幂等、完成后关闭且不冒充外部通知送达；这些响应指标不冒充可用性 SLO。
-- 服务 SLO：按 CMDB 服务持久化目标、滚动窗口和版本化 PromQL 模板，从 Prometheus 分别读取好事件与总事件，计算 SLI、剩余/消耗错误预算，并用 1h/5m、6h/30m、3d/6h 三档长短窗口区分急速 PAGE、持续 PAGE 和工单信号。关闭、失败、零分母、多序列或矛盾数据均显式拒算，不用 Incident 指标或本地样例补数。管理角色可带乐观锁调整目标并进入审计。
+- 服务 SLO：按 CMDB 服务持久化目标、滚动窗口和版本化 PromQL 模板，从 Prometheus 分别读取好事件与总事件，计算 SLI、错误预算和三档长短窗口燃烧率，阈值随目标周期计算。1/2天目标相应缩短票据窗口。关闭、失败、零分母、多序列或矛盾数据均显式拒算。管理角色可带乐观锁调整目标，并导出捕获版本的记录/告警规则，经原生校验后由运维发布到 Prometheus；Alertmanager 送回 OpsPilot，重复投递幂等，恢复告警保留 Incident 人工处置流程。
 - 重复事故与 Problem 治理：按“归属服务 + 精确告警指纹”识别跨 Incident 复发，明确区分独立事故数和单次事故内的告警 occurrence；管理角色可将候选提升为唯一 Problem，维护 `OPEN / KNOWN_ERROR / RESOLVED`、根因、规避方案和长期解决说明。新同指纹 Incident 自动幂等关联，已解决后复发只显示事实、不静默重开。
 - 安全审计：JWT、BCrypt、角色权限、关键操作审计、Prometheus 指标和健康检查。
 - 运维控制台：Vue 3 + TypeScript，高密度桌面工作台及移动端响应式视图。
@@ -334,6 +336,7 @@ Runbook 页面保留原版/BM25/Hybrid 当前对照，并列出最近 12 次持�
 | GET | `/api/v1/analytics/incidents` | 按日期/严重等级读取 MTTA、MTTM、MTTR、样本数、服务级拆分、分布、慢事故和当前行动项摘要 |
 | GET | `/api/v1/slo/objectives` | 读取服务 SLI、错误预算和三档多窗口燃烧率；外部不可用时显式返回状态 |
 | PATCH | `/api/v1/slo/objectives/{id}` | 管理角色以乐观锁修改目标、滚动窗口和 PromQL 模板并写审计 |
+| GET | `/api/v1/slo/objectives/{id}/versions/{version}/prometheus-rules` | 当前活跃管理角色导出捕获版本的规则与SHA256；旧版本/停用409，不自动部署 |
 | GET | `/api/v1/postmortem-follow-ups` | 按本人/全部、完成状态、负责人确认状态与逾期筛选跨 Incident 行动项 |
 | POST | `/api/v1/postmortem-follow-ups/escalations/run` | 管理员/运维经理按业务日期幂等生成逾期升级事实 |
 | POST | `/api/v1/postmortem-follow-ups/{id}/notification/retry` | 管理员/运维经理重试仍开放的失败外部提醒并写审计 |

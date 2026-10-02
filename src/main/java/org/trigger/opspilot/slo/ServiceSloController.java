@@ -48,6 +48,13 @@ public class ServiceSloController {
                 request.goodEventsQueryTemplate(), request.totalEventsQueryTemplate()), user.id()));
     }
 
+    @GetMapping("/{id}/versions/{version}/prometheus-rules")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
+    public ApiResponse<SloPrometheusRules.Bundle> prometheusRules(
+            @PathVariable long id, @PathVariable int version, @AuthenticationPrincipal UserPrincipal user) {
+        return ApiResponse.ok(service.prometheusRules(id, version, user.id()));
+    }
+
     public record UpdateRequest(@NotNull @Min(0) Integer expectedVersion,
                                 @NotBlank @Size(max = 120) String name,
                                 @DecimalMin(value = "0.001") @DecimalMax(value = "99.999") double targetPercent,

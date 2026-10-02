@@ -180,7 +180,7 @@ jobs:
 
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, browser-integration, backend-h2, mysql-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration]
+    needs: [frontend, browser-integration, backend-h2, mysql-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -222,6 +222,52 @@ jobs:
           path: |
             target/redis-it/
             target/surefire-reports/
+
+  slo-alerting-integration:
+    name: Native SLO rules and Alertmanager lifecycle
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Build fresh JAR
+        run: |
+          chmod +x mvnw
+          ./mvnw -B -DskipTests package
+      - name: Install verified pinned native tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p target/native-slo-tools
+          cd target/native-slo-tools
+          curl --fail --location --retry 3 --output prometheus.tar.gz https://github.com/prometheus/prometheus/releases/download/v3.4.2/prometheus-3.4.2.linux-amd64.tar.gz
+          echo '630177c6ad011193987904f09ffafec29d531abfeb5e43fa3714e376e5f28ddc  prometheus.tar.gz' | sha256sum --check
+          tar -xzf prometheus.tar.gz
+          curl --fail --location --retry 3 --output alertmanager.tar.gz https://github.com/prometheus/alertmanager/releases/download/v0.34.1/alertmanager-0.34.1.linux-amd64.tar.gz
+          echo '265b9d1e55ef0d5306a436018af6d2b686c2ce051f03d968f7464ecb1372a7e8  alertmanager.tar.gz' | sha256sum --check
+          tar -xzf alertmanager.tar.gz
+          echo "OPSPILOT_PROMTOOL=$PWD/prometheus-3.4.2.linux-amd64/promtool" >> "$GITHUB_ENV"
+          echo "OPSPILOT_PROMETHEUS=$PWD/prometheus-3.4.2.linux-amd64/prometheus" >> "$GITHUB_ENV"
+          echo "OPSPILOT_ALERTMANAGER=$PWD/alertmanager-0.34.1.linux-amd64/alertmanager" >> "$GITHUB_ENV"
+      - name: Verify captured rules with native evaluation
+        run: node scripts/verify-slo-prometheus-rules.cjs
+      - name: Verify firing repeated delivery and resolution
+        run: node scripts/verify-slo-alerting-pipeline.cjs
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: slo-alerting-evidence
+          path: |
+            target/slo-rules-it/
+            target/slo-pipeline-it/
+          retention-days: 30
 
   distributed-integration:
     name: Two JVM Agent SSE integration

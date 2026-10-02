@@ -1,0 +1,18 @@
+Token-free excerpts; full original MockMvc logs remain ignored under target.
+
+cp58-period-first-failure.log
+ServiceSloIntegrationTest.shouldChangeAlertDecisionWithTheCapturedObjectivePeriod
+expected: "PAGE_FAST"
+ but was: "PAGE_SLOW"
+expected: "TICKET"
+ but was: "PAGE_FAST"
+Tests run: 11, Failures: 6, Errors: 0, Skipped: 0
+
+cp58-fractional-first-failure.log
+JSON path "$.data.objectives[0].burnRate.status" expected:<PAGE_FAST> but was:<HEALTHY>
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+
+target/oncall-browser-it/run-e4BMkT/verify-slo-rules-ui.cjs.log
+Expected values to be strictly equal:
+593 !== 390
+Later observation waits for the existing responsive sidebar animation before checking 390px.

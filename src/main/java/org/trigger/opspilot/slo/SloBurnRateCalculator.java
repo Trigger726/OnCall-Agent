@@ -2,12 +2,9 @@ package org.trigger.opspilot.slo;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public final class SloBurnRateCalculator {
-    private static final List<LaneDefinition> DEFINITIONS = List.of(
-            new LaneDefinition("FAST_PAGE", "PAGE", "1h", "5m", 14.4, 2),
-            new LaneDefinition("SLOW_PAGE", "PAGE", "6h", "30m", 6, 5),
-            new LaneDefinition("TICKET", "TICKET", "3d", "6h", 1, 10));
     private static final List<String> REQUIRED_WINDOWS = List.of("5m", "30m", "1h", "6h", "3d");
 
     private SloBurnRateCalculator() {
@@ -17,9 +14,31 @@ public final class SloBurnRateCalculator {
         return REQUIRED_WINDOWS;
     }
 
+    public static List<String> requiredWindows(int windowDays) {
+        return definitions(windowDays).stream()
+                .flatMap(lane -> Stream.of(lane.shortWindow(), lane.longWindow())).distinct().toList();
+    }
+
+    public static List<LaneDefinition> definitions(int windowDays) {
+        if (windowDays < 1 || windowDays > 90) {
+            throw new IllegalArgumentException("SLO period must be between 1 and 90 days");
+        }
+        int ticketDays = Math.min(3, windowDays);
+        // Budget consumed = burn rate * alert window / SLO period.
+        return List.of(
+                new LaneDefinition("FAST_PAGE", "PAGE", "1h", "5m", windowDays * 24.0 * 0.02, 2),
+                new LaneDefinition("SLOW_PAGE", "PAGE", "6h", "30m", windowDays * 24.0 * 0.05 / 6, 5),
+                new LaneDefinition("TICKET", "TICKET", ticketDays + "d", ticketDays * 2 + "h",
+                        windowDays * 0.1 / ticketDays, 10));
+    }
+
     public static Assessment assess(double targetPercent, Map<String, WindowSample> samples) {
+        return assess(targetPercent, 30, samples);
+    }
+
+    public static Assessment assess(double targetPercent, int windowDays, Map<String, WindowSample> samples) {
         double budgetFraction = (100 - targetPercent) / 100;
-        List<Lane> lanes = DEFINITIONS.stream()
+        List<Lane> lanes = definitions(windowDays).stream()
                 .map(definition -> evaluate(definition, budgetFraction, samples))
                 .toList();
         Lane firing = lanes.stream().filter(lane -> "FIRING".equals(lane.status())).findFirst().orElse(null);
@@ -102,7 +121,7 @@ public final class SloBurnRateCalculator {
         return Math.round(value * 10_000.0) / 10_000.0;
     }
 
-    private record LaneDefinition(String id, String severity, String longWindow, String shortWindow,
+    public record LaneDefinition(String id, String severity, String longWindow, String shortWindow,
                                   double threshold, double budgetConsumedPercent) {
     }
 

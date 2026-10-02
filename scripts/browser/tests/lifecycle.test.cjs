@@ -6,6 +6,18 @@ const { spawn } = require('node:child_process');
 const { once } = require('node:events');
 const { requireFreePort, stopProcess, waitForHealth, redact, unexpectedLogLines } = require('../../verify-oncall-browser-ci.cjs');
 
+test('SLO baseline cannot replace CI acceptance or launch the archived JAR', async () => {
+  const child = spawn(process.execPath, [require.resolve('../../verify-oncall-browser-ci.cjs')], {
+    env: { ...process.env, CI: 'true', OPSPILOT_SLO_BASELINE: '1' }, windowsHide: true,
+  });
+  let output = '';
+  child.stderr.on('data', chunk => { output += chunk; });
+  const [code] = await once(child, 'close');
+  assert.equal(code, 1);
+  assert.match(output, /SLO baseline capture must not replace CI acceptance/);
+  assert.doesNotMatch(output, /evidenceDirectory/);
+});
+
 test('publication baseline cannot replace CI acceptance or launch the old published-immediately JAR', async () => {
   const child = spawn(process.execPath, [require.resolve('../../verify-oncall-browser-ci.cjs')], {
     env: { ...process.env, CI: 'true', OPSPILOT_PUBLICATION_BASELINE: '1' }, windowsHide: true,

@@ -139,6 +139,12 @@ checkpoint54界面将原决定/实际覆盖/独立撤销分栏展示。详情读
 
 Problem 状态为 `OPEN / KNOWN_ERROR / RESOLVED`：已知错误必须同时具备已确认根因与可执行规避方案，解决必须具备长期解决说明，更新使用 `expectedVersion` 乐观锁。已解决后出现新匹配 Incident 时，系统保留 `RESOLVED` 并计算 `recurredAfterResolution=true`，要求负责人显式判断是否重开，避免后台任务静默改写治理结论。该模型参考 ITIL Problem/known error 的职责划分，但当前不声称具备 PagerDuty 式机器学习相似度、跨服务因果聚类或外部 Jira 同步。
 
+### 版本绑定的 SLO 原生告警规则
+
+服务 SLO 的界面评估与规则导出共用预算策略：阈值为目标周期小时数×预算比例/长窗口小时数；1/2天目标相应缩短票据窗口。有效计数保留精度到判定，避免极小正分母被舍为零。只读导出在REPEATABLE_READ快照中核对当前活跃管理角色、目标版本和启用状态，产生带目标版本标签、策略版本和SHA256的确定性规则文件。
+
+规则文件由运维经原生promtool校验后发布到Prometheus：好/总事件记录→有限且有效的窗口燃烧率→长短窗口与优先级告警→Alertmanager→既有webhook幂等入站。每30秒评估，记录超过60秒或无效数据独立告警；该新鲜度不证明原始数据的采集完整性。规则替换由运维管理，目标数据库更新不会重载生产Prometheus，旧版本导出409阻断。恢复仍保留Incident人工治理。具体发布和数据边界见[规则说明](SLO-PROMETHEUS-RULES.md)与[检查点58](acceptance/V1.7-checkpoint-58.md)。
+
 ## 5. 可解释 Agent 调查
 
 一次调查生成独立 `agent_investigation_run`，由确定性编排器执行：

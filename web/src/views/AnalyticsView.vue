@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import {
   AlertTriangle, BarChart3, CheckCircle2, Clock3, RefreshCw,
   RotateCw, ShieldAlert, TimerReset, UsersRound, X,
 } from 'lucide-vue-next'
 import StatusBadge from '@/components/StatusBadge.vue'
-import { api, formatTime, type PageResponse } from '@/services/api'
+import { api, formatTime, RequestError, type PageResponse } from '@/services/api'
 import { auth } from '@/stores/auth'
 
 interface DurationMetric {
@@ -129,6 +129,18 @@ interface SloOverview {
   objectives: SloObjective[]
 }
 
+interface SloRulesBundle {
+  objectiveId: number
+  objectiveVersion: number
+  serviceCode: string
+  targetPercent: number
+  windowDays: number
+  policyVersion: string
+  ruleCount: number
+  sha256: string
+  rulesYaml: string
+}
+
 function localDate(date: Date): string {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -160,11 +172,18 @@ const savingSloId = ref<number | null>(null)
 const editingSlo = ref<SloObjective | null>(null)
 const sloTargetInput = ref(0)
 const sloWindowInput = ref(30)
+const exportingSlo = ref<SloObjective | null>(null)
+const exportingActorId = ref<number | null>(null)
+const sloRules = ref<SloRulesBundle | null>(null)
+const rulesLoading = ref(false)
+const rulesError = ref('')
+let rulesAbort: AbortController | null = null
 const error = ref('')
 const notice = ref('')
 
 const canScan = computed(() => ['ADMIN', 'OPS_MANAGER'].includes(auth.state.user?.roleCode ?? ''))
 const canManageSlo = computed(() => ['ADMIN', 'OPS_MANAGER'].includes(auth.state.user?.roleCode ?? ''))
+const canDownloadRules = computed(() => canManageSlo.value && exportingActorId.value === auth.state.user?.id)
 const maxSeverityCount = computed(() => Math.max(1, ...(overview.value?.severityDistribution.map(item => item.count) ?? [1])))
 
 function query(path: string, params: Record<string, string>): string {
@@ -244,6 +263,57 @@ async function saveSlo() {
   } finally {
     savingSloId.value = null
   }
+}
+
+function closeSloRules() {
+  rulesAbort?.abort()
+  exportingSlo.value = null
+  exportingActorId.value = null
+  sloRules.value = null
+  rulesLoading.value = false
+}
+
+async function exportSloRules(item: SloObjective) {
+  closeSloRules()
+  const actorId = auth.state.user?.id
+  const captured = { ...item }
+  const controller = new AbortController()
+  rulesAbort = controller
+  exportingSlo.value = captured
+  exportingActorId.value = actorId ?? null
+  rulesLoading.value = true
+  rulesError.value = ''
+  try {
+    const bundle = await api<SloRulesBundle>(`/slo/objectives/${captured.id}/versions/${captured.version}/prometheus-rules`,
+      { signal: controller.signal })
+    if (controller.signal.aborted || actorId !== auth.state.user?.id || !canManageSlo.value) return
+    const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(bundle.rulesYaml))
+    const digest = Array.from(new Uint8Array(bytes), value => value.toString(16).padStart(2, '0')).join('')
+    if (bundle.objectiveId !== captured.id || bundle.objectiveVersion !== captured.version
+        || bundle.serviceCode !== captured.serviceCode || bundle.targetPercent !== captured.targetPercent
+        || bundle.windowDays !== captured.windowDays || digest !== bundle.sha256) {
+      throw new Error('规则内容或版本校验失败，请重新核对目标。')
+    }
+    if (!controller.signal.aborted && actorId === auth.state.user?.id && canManageSlo.value) sloRules.value = bundle
+  } catch (caught) {
+    if (controller.signal.aborted) return
+    rulesError.value = caught instanceof RequestError && caught.status === 409
+      ? '目标已变化或停用，请关闭后刷新并核对目标，再重新导出。'
+      : caught instanceof Error ? caught.message : '规则导出失败'
+  } finally {
+    if (rulesAbort === controller) rulesLoading.value = false
+  }
+}
+
+function downloadSloRules() {
+  const bundle = sloRules.value
+  if (!bundle || !canDownloadRules.value) return
+  const url = URL.createObjectURL(new Blob([bundle.rulesYaml], { type: 'application/yaml;charset=utf-8' }))
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `opspilot-slo-${bundle.objectiveId}-v${bundle.objectiveVersion}.rules.yml`
+  link.click()
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
 function sloStatus(value: string): string {
@@ -377,6 +447,7 @@ function priorityClass(value: string): string {
 }
 
 onMounted(load)
+onUnmounted(closeSloRules)
 </script>
 
 <template>
@@ -486,7 +557,7 @@ onMounted(load)
           <tbody>
             <tr v-for="item in sloOverview?.objectives" :key="item.id">
               <td class="primary-cell"><strong>{{ item.serviceName }}</strong><span>{{ item.serviceCode }} · {{ item.name }}</span></td>
-              <td><strong>{{ item.targetPercent }}%</strong><br /><span class="muted">{{ item.windowDays }} 天滚动</span></td>
+              <td><strong>{{ item.targetPercent }}%</strong><br /><span class="muted">{{ item.windowDays }} 天滚动 · v{{ item.version }}</span></td>
               <td><strong>{{ number(item.measurement.sliPercent, '%') }}</strong></td>
               <td>{{ number(item.measurement.goodEvents) }} / {{ number(item.measurement.totalEvents) }}</td>
               <td><strong>{{ number(item.measurement.remainingEvents) }}</strong><br /><span class="muted">已消耗 {{ number(item.measurement.consumedPercent, '%') }}</span></td>
@@ -494,19 +565,19 @@ onMounted(load)
                 <span class="status-badge" :class="burnClass(item.burnRate.status)">{{ burnStatus(item.burnRate.status) }}</span>
                 <div v-if="item.burnRate.lanes.length" class="burn-rate-list">
                   <span v-for="lane in item.burnRate.lanes" :key="lane.id" :class="{ firing: lane.status === 'FIRING' }">
-                    {{ burnLane(lane.id) }} {{ lane.longWindow }}/{{ lane.shortWindow }}：{{ number(lane.longBurnRate, 'x') }} / {{ number(lane.shortBurnRate, 'x') }}
+                    {{ burnLane(lane.id) }} {{ lane.longWindow }}/{{ lane.shortWindow }}：{{ number(lane.longBurnRate, 'x') }} / {{ number(lane.shortBurnRate, 'x') }} · 阈值 {{ number(lane.threshold, 'x') }}
                   </span>
                 </div>
                 <small v-else class="slo-message">{{ item.burnRate.message }}</small>
               </td>
               <td><span class="status-badge" :class="sloClass(item.measurement.status)">{{ sloStatus(item.measurement.status) }}</span><small v-if="item.measurement.message" class="slo-message">{{ item.measurement.message }}</small></td>
-              <td><button v-if="canManageSlo" class="table-action" :disabled="savingSloId === item.id" @click="openSloEdit(item)">{{ savingSloId === item.id ? '保存中' : '调整目标' }}</button><span v-else class="muted">只读</span></td>
+              <td><template v-if="canManageSlo"><button class="table-action" :disabled="savingSloId === item.id" @click="openSloEdit(item)">{{ savingSloId === item.id ? '保存中' : '调整目标' }}</button><button class="table-action" :disabled="rulesLoading || savingSloId === item.id" @click="exportSloRules(item)">导出告警规则</button></template><span v-else class="muted">只读</span></td>
             </tr>
           </tbody>
         </table>
         <div v-if="!sloOverview?.objectives.length" class="analytics-empty">尚未配置服务 SLO。</div>
       </div>
-      <footer class="follow-up-boundary">燃烧率按长/短窗口同时超阈值判定：1h/5m · 14.4x，6h/30m · 6x，3d/6h · 1x。低流量服务需另行制定样本政策，不在此自动压制告警。</footer>
+      <footer class="follow-up-boundary">燃烧率按长/短窗口同时超阈值判定，阈值随目标周期计算。30天目标：1h/5m · 14.4x，6h/30m · 6x，3d/6h · 1x；1/2天目标使用1d/2h、2d/4h票据窗口。低流量服务需另行制定样本政策。</footer>
     </section>
 
     <section class="content-panel follow-up-operations">
@@ -553,6 +624,24 @@ onMounted(load)
       </div>
       <footer class="follow-up-boundary"><ShieldAlert :size="14" />“端点已收”仅代表 webhook 返回 2xx；“已确认接手”须当前负责人登录操作，仍不代表行动项完成。未入队表示未启用通知或历史升级事实。</footer>
     </section>
+
+    <div v-if="exportingSlo && canDownloadRules" class="dialog-backdrop" @click.self="closeSloRules">
+      <section class="dialog-panel slo-rules-dialog" role="dialog" aria-modal="true" aria-labelledby="slo-rules-title" :aria-busy="rulesLoading">
+        <header><div><h2 id="slo-rules-title">导出 SLO 告警规则</h2><span>{{ exportingSlo.serviceCode }} · v{{ exportingSlo.version }} · {{ exportingSlo.targetPercent }}% / {{ exportingSlo.windowDays }}天</span></div><button type="button" class="icon-button" title="关闭规则导出" @click="closeSloRules"><X :size="18" /></button></header>
+        <div class="slo-rules-body">
+          <p>核对当前目标后下载规则，用 promtool 校验并由运维发布到 Prometheus。目标后续变更时，需要重新导出并替换旧规则。</p>
+          <p v-if="rulesLoading" role="status">正在读取捕获版本的规则…</p>
+          <p v-if="rulesError" role="alert" class="form-error">{{ rulesError }}</p>
+          <template v-if="sloRules">
+            <p>{{ sloRules.ruleCount }}条规则 · {{ sloRules.policyVersion }} · 内容摘要已核验</p>
+            <code class="slo-rules-digest">SHA256 {{ sloRules.sha256 }}</code>
+            <label for="slo-rules-content">规则文件内容</label>
+            <textarea id="slo-rules-content" :value="sloRules.rulesYaml" readonly rows="12" spellcheck="false" />
+          </template>
+        </div>
+        <footer><button type="button" class="secondary-button" @click="closeSloRules">关闭</button><button type="button" class="primary-button" :disabled="!sloRules || rulesLoading || !canDownloadRules" @click="downloadSloRules">下载规则文件</button></footer>
+      </section>
+    </div>
 
     <div v-if="editingSlo" class="dialog-backdrop" @click.self="editingSlo = null">
       <form class="dialog-panel slo-edit-dialog" role="dialog" aria-modal="true" aria-labelledby="slo-edit-title" @submit.prevent="saveSlo">

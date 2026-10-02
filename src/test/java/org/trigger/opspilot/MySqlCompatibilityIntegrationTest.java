@@ -175,6 +175,9 @@ class MySqlCompatibilityIntegrationTest {
     private JdbcClient jdbcClient;
 
     @Autowired
+    private org.trigger.opspilot.slo.ServiceSloService sloService;
+
+    @Autowired
     private InvestigationService investigationService;
 
     @Autowired
@@ -369,6 +372,15 @@ class MySqlCompatibilityIntegrationTest {
                 .query(Integer.class).single()).isZero();
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM service_slo_objective WHERE enabled = TRUE")
                 .query(Integer.class).single()).isEqualTo(2);
+        long sloManagerId = jdbcClient.sql("SELECT id FROM sys_user WHERE username='lina'").query(Long.class).single();
+        var capturedRules = sloService.prometheusRules(1, 0, sloManagerId);
+        assertThat(capturedRules.objectiveVersion()).isZero();
+        assertThat(capturedRules.ruleCount()).isEqualTo(23);
+        assertThat(capturedRules.serviceCode()).isEqualTo("APP-SETTLEMENT");
+        assertThat(sloService.prometheusRules(1, 0, sloManagerId)).isEqualTo(capturedRules);
+        assertThat(capturedRules.sha256()).isEqualTo(java.util.HexFormat.of().formatHex(
+                java.security.MessageDigest.getInstance("SHA-256").digest(capturedRules.rulesYaml()
+                        .getBytes(java.nio.charset.StandardCharsets.UTF_8))));
         assertThat(jdbcClient.sql("SELECT COUNT(*) FROM alert_ingest_rejection")
                 .query(Integer.class).single()).isZero();
         assertThat(jdbcClient.sql("""

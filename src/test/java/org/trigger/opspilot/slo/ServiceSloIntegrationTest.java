@@ -7,10 +7,14 @@ import com.sun.net.httpserver.HttpServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,6 +32,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -55,6 +60,7 @@ class ServiceSloIntegrationTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
+    @Autowired private JdbcClient jdbcClient;
 
     @DynamicPropertySource
     static void prometheusProperties(DynamicPropertyRegistry registry) {
@@ -150,6 +156,132 @@ class ServiceSloIntegrationTest {
                                 """))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error.code").value("SLO_QUERY_WINDOW_REQUIRED"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 28, 30, 90})
+    void shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int days) throws Exception {
+        String token = login("lina");
+        updatePeriod(token, days);
+        QUERY_EXPRESSIONS.clear();
+        JsonNode objective = settlementOverview(token);
+        JsonNode lanes = objective.path("burnRate").path("lanes");
+        assertThat(lanes.get(0).path("threshold").asDouble()).isCloseTo(days * 0.48, within(1e-10));
+        assertThat(lanes.get(1).path("threshold").asDouble()).isCloseTo(days * 0.2, within(1e-10));
+        int ticketDays = Math.min(3, days);
+        assertThat(lanes.get(2).path("threshold").asDouble())
+                .isCloseTo(days * 0.1 / ticketDays, within(1e-10));
+        assertThat(lanes.get(2).path("longWindow").asText()).isEqualTo(ticketDays + "d");
+        assertThat(lanes.get(2).path("shortWindow").asText()).isEqualTo(ticketDays * 2 + "h");
+        assertThat(QUERY_EXPRESSIONS).contains(
+                "sum(increase(opspilot_http_requests_good_total{service_code=\"APP-SETTLEMENT\"}["
+                        + ticketDays + "d]))",
+                "sum(increase(opspilot_http_requests_good_total{service_code=\"APP-SETTLEMENT\"}["
+                        + ticketDays * 2 + "h]))");
+    }
+
+    @ParameterizedTest
+    @CsvSource({"28, 9862, PAGE_FAST", "90, 9850, TICKET"})
+    void shouldChangeAlertDecisionWithTheCapturedObjectivePeriod(int days, String good, String expected)
+            throws Exception {
+        String token = login("lina");
+        updatePeriod(token, days);
+        GOOD_EVENTS.set(good);
+        assertThat(settlementOverview(token).path("burnRate").path("status").asText()).isEqualTo(expected);
+    }
+
+    private void updatePeriod(String token, int days) throws Exception {
+        mockMvc.perform(patch("/api/v1/slo/objectives/1")
+                        .header("Authorization", bearer(token)).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(Map.of(
+                                "expectedVersion", 0, "name", "周期验证", "targetPercent", 99.9,
+                                "windowDays", days,
+                                "goodEventsQueryTemplate", "sum(increase(opspilot_http_requests_good_total"
+                                        + "{service_code=\"{{service}}\"}[{{window}}]))",
+                                "totalEventsQueryTemplate", "sum(increase(opspilot_http_requests_total"
+                                        + "{service_code=\"{{service}}\"}[{{window}}]))"))))
+                .andExpect(status().isOk());
+    }
+
+    private JsonNode settlementOverview(String token) throws Exception {
+        String response = mockMvc.perform(get("/api/v1/slo/objectives").header("Authorization", bearer(token)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        return objectMapper.readTree(response).path("data").path("objectives").get(1);
+    }
+
+    @Test
+    void shouldExportDeterministicVersionBoundRulesWithoutQueryingOrWriting() throws Exception {
+        String token = login("lina");
+        long audits = jdbcClient.sql("SELECT COUNT(*) FROM audit_log").query(Long.class).single();
+        String path = "/api/v1/slo/objectives/1/versions/0/prometheus-rules";
+        String first = mockMvc.perform(get(path).header("Authorization", bearer(token)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.ruleCount").value(23))
+                .andExpect(jsonPath("$.data.objectiveVersion").value(0))
+                .andReturn().getResponse().getContentAsString();
+        String second = mockMvc.perform(get(path).header("Authorization", bearer(token)))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        assertThat(objectMapper.readTree(first).path("data")).isEqualTo(objectMapper.readTree(second).path("data"));
+        JsonNode bundle = objectMapper.readTree(first).path("data");
+        String yaml = bundle.path("rulesYaml").asText();
+        assertThat(bundle.path("sha256").asText()).isEqualTo(java.util.HexFormat.of().formatHex(
+                java.security.MessageDigest.getInstance("SHA-256").digest(yaml.getBytes(StandardCharsets.UTF_8))));
+        assertThat(yaml).contains("APP-SETTLEMENT", "OpsPilotSloDataUnavailable", "unless on()")
+                .doesNotContain("{{window}}", "{{service}}");
+        assertThat(QUERY_EXPRESSIONS).isEmpty();
+        assertThat(jdbcClient.sql("SELECT COUNT(*) FROM audit_log").query(Long.class).single()).isEqualTo(audits);
+        assertThat(jdbcClient.sql("SELECT version FROM service_slo_objective WHERE id=1")
+                .query(Integer.class).single()).isZero();
+    }
+
+    @Test
+    void shouldPreservePositiveFractionalEventsUntilBurnRateDecision() throws Exception {
+        GOOD_EVENTS.set("0.000001");
+        TOTAL_EVENTS.set("0.00001");
+        String token = login("lina");
+        mockMvc.perform(get("/api/v1/slo/objectives").header("Authorization", bearer(token)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.objectives[0].burnRate.status").value("PAGE_FAST"))
+                .andExpect(jsonPath("$.data.objectives[0].burnRate.lanes[0].longBurnRate").value(900.0));
+    }
+
+    @Test
+    void shouldRejectStaleDisabledMissingOrInvalidRuleExport() throws Exception {
+        String token = login("lina");
+        updatePeriod(token, 28);
+        mockMvc.perform(get("/api/v1/slo/objectives/1/versions/0/prometheus-rules")
+                        .header("Authorization", bearer(token)))
+                .andExpect(status().isConflict()).andExpect(jsonPath("$.error.code").value("SLO_VERSION_CONFLICT"));
+        mockMvc.perform(get("/api/v1/slo/objectives/1/versions/1/prometheus-rules")
+                        .header("Authorization", bearer(token)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.windowDays").value(28));
+        jdbcClient.sql("UPDATE service_slo_objective SET enabled=FALSE WHERE id=1").update();
+        mockMvc.perform(get("/api/v1/slo/objectives/1/versions/1/prometheus-rules")
+                        .header("Authorization", bearer(token)))
+                .andExpect(status().isConflict()).andExpect(jsonPath("$.error.code").value("SLO_DISABLED"));
+        mockMvc.perform(get("/api/v1/slo/objectives/9000000/versions/0/prometheus-rules")
+                        .header("Authorization", bearer(token)))
+                .andExpect(status().isNotFound());
+        mockMvc.perform(get("/api/v1/slo/objectives/1/versions/-1/prometheus-rules")
+                        .header("Authorization", bearer(token)))
+                .andExpect(status().isBadRequest());
+        mockMvc.perform(get("/api/v1/slo/objectives/1/versions/null/prometheus-rules")
+                        .header("Authorization", bearer(token)))
+                .andExpect(status().isBadRequest());
+        assertThat(QUERY_EXPRESSIONS).isEmpty();
+    }
+
+    @Test
+    void shouldRequireCurrentActiveManagementRoleForExport() throws Exception {
+        String path = "/api/v1/slo/objectives/1/versions/0/prometheus-rules";
+        mockMvc.perform(get(path)).andExpect(status().isUnauthorized());
+        String onCall = login("zhangwei");
+        mockMvc.perform(get(path).header("Authorization", bearer(onCall))).andExpect(status().isForbidden());
+        String manager = login("lina");
+        jdbcClient.sql("UPDATE sys_user SET role_code='ON_CALL' WHERE username='lina'").update();
+        mockMvc.perform(get(path).header("Authorization", bearer(manager))).andExpect(status().isForbidden());
+        jdbcClient.sql("UPDATE sys_user SET role_code='OPS_MANAGER', status='DISABLED' WHERE username='lina'").update();
+        mockMvc.perform(get(path).header("Authorization", bearer(manager))).andExpect(status().isForbidden());
+        assertThat(QUERY_EXPRESSIONS).isEmpty();
     }
 
     @Test

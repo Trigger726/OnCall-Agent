@@ -1,8 +1,10 @@
 package org.trigger.opspilot.slo;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.trigger.opspilot.audit.AuditService;
 import org.trigger.opspilot.common.ApiException;
@@ -19,12 +21,37 @@ public class ServiceSloService {
     private final JdbcClient jdbcClient;
     private final PrometheusSloClient prometheus;
     private final AuditService auditService;
+    private final ObjectMapper objectMapper;
 
     public ServiceSloService(JdbcClient jdbcClient, PrometheusSloClient prometheus,
-                             AuditService auditService) {
+                             AuditService auditService, ObjectMapper objectMapper) {
         this.jdbcClient = jdbcClient;
         this.prometheus = prometheus;
         this.auditService = auditService;
+        this.objectMapper = objectMapper;
+    }
+
+    @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
+    public SloPrometheusRules.Bundle prometheusRules(long id, int capturedVersion, long actorId) {
+        if (capturedVersion < 0) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "SLO_INVALID_VERSION", "版本必须非负");
+        }
+        boolean manager = jdbcClient.sql("""
+                        SELECT COUNT(*) FROM sys_user WHERE id = :id AND status = 'ACTIVE'
+                        AND role_code IN ('ADMIN', 'OPS_MANAGER')
+                        """).param("id", actorId).query(Long.class).single() == 1;
+        if (!manager) {
+            throw new ApiException(HttpStatus.FORBIDDEN, "ACCESS_DENIED", "当前角色无权导出 SLO 规则");
+        }
+        ObjectiveView objective = viewById(id);
+        if (objective.version() != capturedVersion) {
+            throw new ApiException(HttpStatus.CONFLICT, "SLO_VERSION_CONFLICT", "SLO 已变更，请核对当前目标再导出");
+        }
+        if (!jdbcClient.sql("SELECT enabled FROM service_slo_objective WHERE id = :id")
+                .param("id", id).query(Boolean.class).single()) {
+            throw new ApiException(HttpStatus.CONFLICT, "SLO_DISABLED", "已停用的 SLO 不能导出新规则");
+        }
+        return SloPrometheusRules.compile(objective, objectMapper);
     }
 
     public SloOverview overview(Instant at) {
@@ -136,10 +163,10 @@ public class ServiceSloService {
                     "Prometheus 未启用；不生成虚假燃烧率");
         }
         Map<String, SloBurnRateCalculator.WindowSample> samples = new LinkedHashMap<>();
-        for (String window : SloBurnRateCalculator.requiredWindows()) {
+        for (String window : SloBurnRateCalculator.requiredWindows(row.windowDays())) {
             samples.put(window, queryWindow(row, window, at));
         }
-        return SloBurnRateCalculator.assess(row.targetPercent(), samples);
+        return SloBurnRateCalculator.assess(row.targetPercent(), row.windowDays(), samples);
     }
 
     private SloBurnRateCalculator.WindowSample queryWindow(ObjectiveRow row, String window, Instant at) {
@@ -156,7 +183,7 @@ public class ServiceSloService {
                 return new SloBurnRateCalculator.WindowSample("INVALID_DATA", round(good), round(total),
                         window + " 窗口的好事件不在 0 到总事件之间");
             }
-            return new SloBurnRateCalculator.WindowSample("VALID", round(good), round(total), null);
+            return new SloBurnRateCalculator.WindowSample("VALID", good, total, null);
         } catch (RuntimeException exception) {
             return new SloBurnRateCalculator.WindowSample("PROVIDER_ERROR", null, null,
                     window + " 窗口查询失败（" + exception.getClass().getSimpleName() + "）");
