@@ -109,7 +109,7 @@ async function verify() {
     const env = { ...process.env, OPSPILOT_BASE_URL: base, OPSPILOT_EVIDENCE_DIR: evidence,
       OPSPILOT_ACCEPTANCE_ISOLATED: '1', OPSPILOT_PLAYWRIGHT_MODULE: modulePath };
     const scripts = process.env.OPSPILOT_SLO_BASELINE === '1' ? ['verify-slo-rules-ui.cjs']
-      : ['verify-oncall-rotation-ui.cjs', 'verify-oncall-rotation-boundaries.cjs', 'verify-oncall-coverage-ui.cjs', 'verify-oncall-handoff-http.cjs', 'verify-oncall-handoff-ui.cjs', 'verify-oncall-handoff-revocation-http.cjs', 'verify-oncall-handoff-revocation-ui.cjs', 'verify-runbook-trend-ui.cjs', 'verify-runbook-publication-ui.cjs', 'verify-slo-rules-ui.cjs'];
+      : ['verify-oncall-rotation-ui.cjs', 'verify-oncall-rotation-boundaries.cjs', 'verify-oncall-coverage-ui.cjs', 'verify-oncall-handoff-http.cjs', 'verify-oncall-handoff-ui.cjs', 'verify-oncall-handoff-revocation-http.cjs', 'verify-oncall-handoff-revocation-ui.cjs', 'verify-runbook-trend-ui.cjs', 'verify-runbook-publication-ui.cjs', 'verify-slo-rules-ui.cjs', 'verify-jwt-numeric-date-http.cjs'];
     result.sloBaselineCapture = process.env.OPSPILOT_SLO_BASELINE === '1';
     for (const name of scripts) {
       if (interrupted) throw new Error('Browser acceptance interrupted');

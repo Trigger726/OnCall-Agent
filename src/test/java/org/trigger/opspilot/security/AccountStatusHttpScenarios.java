@@ -155,6 +155,32 @@ public final class AccountStatusHttpScenarios implements AutoCloseable {
         assertThat(mapper.readTree(roleRead.body()).path("data").path("roleCode").asText()).isEqualTo("OPS_MANAGER");
     }
 
+    public void outOfRangeNumericDatesAreUnauthorized(JwtProperties properties) throws Exception {
+        var responses = new java.util.ArrayList<HttpResponse<String>>();
+        for (String field : new String[]{"exp", "iat", "nbf"}) {
+            for (long seconds : new long[]{Long.MAX_VALUE, Long.MIN_VALUE}) {
+                for (boolean validSignature : new boolean[]{true, false}) {
+                    var payload = mapper.createObjectNode().put("iss", "opspilot").put("sub", username)
+                            .put("uid", userId).put("exp", java.time.Instant.now().plusSeconds(60).getEpochSecond())
+                            .put(field, seconds);
+                    String token = SignedJwtFixture.sign(payload.toString(),
+                            validSignature ? properties.jwtSecret() : "different-test-key");
+                    var read = request("GET", "/api/v1/auth/me", token, null);
+                    var write = request("POST", "/api/v1/incidents/1/notes", token,
+                            Map.of("content", "Out-of-range date must not write", "evidenceRef", "cp60:date"));
+                    System.out.printf("CP60_DATE field=%s seconds=%d validSignature=%s read=%d write=%d%n",
+                            field, seconds, validSignature, read.statusCode(), write.statusCode());
+                    responses.add(read);
+                    responses.add(write);
+                }
+            }
+        }
+        assertThat(count("incident_timeline")).isZero();
+        assertThat(count("audit_log")).isZero();
+        for (var response : responses) securityError(response, 401, "AUTHENTICATION_REQUIRED", "out-of-range JWT date");
+        assertThat(request("GET", "/api/v1/auth/me", login(), null).statusCode()).isEqualTo(200);
+    }
+
     private String exportPath() {
         int version = jdbc.sql("SELECT version FROM service_slo_objective WHERE id = 1").query(Integer.class).single();
         return "/api/v1/slo/objectives/1/versions/" + version + "/prometheus-rules";

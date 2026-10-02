@@ -133,6 +133,13 @@ class MySqlCompatibilityIntegrationTest {
         }
     }
 
+    @Test @Order(23)
+    void shouldRejectOutOfRangeJwtDatesWithoutServerErrors() throws Exception {
+        try (var scenario = new org.trigger.opspilot.security.AccountStatusHttpScenarios(jdbcClient, httpMapper, httpPort)) {
+            scenario.outOfRangeNumericDatesAreUnauthorized(httpJwtProperties);
+        }
+    }
+
     @Autowired private org.trigger.opspilot.runbook.RunbookPublicationService publicationService;
 
     @Test @Order(11) @org.springframework.transaction.annotation.Transactional

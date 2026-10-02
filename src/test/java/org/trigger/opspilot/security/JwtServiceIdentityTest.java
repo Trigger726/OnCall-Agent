@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Instant;
@@ -53,6 +54,17 @@ class JwtServiceIdentityTest {
         assertThat(service.verifyIdentity(token).username()).isEqualTo(username);
         String oversized = signed("{\"uid\":1,\"sub\":\"" + username + "𐐷\",\"exp\":" + future() + "}");
         assertThatThrownBy(() -> service.verifyIdentity(oversized)).isInstanceOf(JWTVerificationException.class);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"exp,9223372036854775807", "exp,-9223372036854775808",
+            "iat,9223372036854775807", "iat,-9223372036854775808",
+            "nbf,9223372036854775807", "nbf,-9223372036854775808"})
+    void shouldRejectOutOfRangeNumericDateAsVerificationFailure(String field, long seconds) {
+        String payload = "{\"iss\":\"opspilot\",\"uid\":1,\"sub\":\"identity-test\",\"exp\":" + future();
+        if (field.equals("exp")) payload = "{\"iss\":\"opspilot\",\"uid\":1,\"sub\":\"identity-test\"";
+        String token = SignedJwtFixture.sign(payload + ",\"" + field + "\":" + seconds + "}", SECRET);
+        assertThatThrownBy(() -> service.verifyIdentity(token)).isInstanceOf(JWTVerificationException.class);
     }
 
     @Test void shouldRejectOversizedSubjectExpiredWrongIssuerAndWrongSignature() {

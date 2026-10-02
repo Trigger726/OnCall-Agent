@@ -278,7 +278,9 @@ Agent evidence -> PENDING_APPROVAL -> APPROVED
 | ON_CALL | 运行数据 | 是 | 是 | 否 | 否 |
 | AUDITOR | 运行与审计 | 否 | 否 | 否 | 是 |
 
-密码使用 BCrypt，JWT签名验证后每次请求重新加载当前账户/角色，并在建立认证前检查UserDetails账户资格；停用/删除拒绝新请求并返回401，活跃角色不足403。checkpoint59补齐此前遗漏的资格检查，真实HTTP先复现停用后读身份/写备注仍200，再验证阻断和业务零新增。JWT虽包含ID/角色，当前资格由数据库决定；不宣称永久撤销：重新启用后未过期旧Token可用，已打开SSE/已接纳后台任务不追溯取消，账号ID复用与密码变更撤销仍待完善。关键状态流转、分派、备注和调查均写入`audit_log`。见[阶段证据](acceptance/V1.7-checkpoint-59.md)。
+密码使用 BCrypt，JWT签名验证后每次请求重新加载当前账户/角色，并在建立认证前检查UserDetails账户资格；停用/删除拒绝新请求并返回401，活跃角色不足403。checkpoint59补齐此前遗漏的资格检查，真实HTTP先复现停用后读身份/写备注仍200，再验证阻断和业务零新增。checkpoint60进一步要求已签发uid为正的精确64位JSON整数，sub为不超过64个Unicode字符的非空文本、exp必须存在且为正整数；当前账户数据库ID必须匹配uid，防止同名重建且分配新ID的账户继承旧Token。权限仍来自当前数据库角色，不信任Token中的role。
+
+时间反序列化发生在签名检查之前；极值exp/iat/nbf即使签名错误也曾造成DateTimeException和500。JwtService只在库验证调用周围将该时间异常转换为JWTVerificationException，沿用入口结构化401，不捕获所有运行时错误，也不自行实现签名验证。H2/MySQL共享真实HTTP场景同时检查读写拒绝、备注/审计零新增及正常登录恢复，实际JAR畸形Token门禁不读取运行时密钥。最新验证范围见[60阶段证据](acceptance/V1.7-checkpoint-60.md)。不宣称永久撤销：重新启用同一ID后未过期旧Token可用；人工ID复用/数据库回滚、密码变更撤销与既有SSE/后台任务再授权仍未实现。关键状态流转、分派、备注和调查均写入`audit_log`。
 
 ## 8. 数据模型
 

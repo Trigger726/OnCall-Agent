@@ -60,6 +60,11 @@ class AccountStatusHttpIntegrationTest {
             scenario.malformedSignedIdentityIsUnauthorized(jwtProperties);
         }
     }
+    @Test void shouldRejectOutOfRangeJwtDatesWithoutServerErrors() throws Exception {
+        try (var scenario = new AccountStatusHttpScenarios(jdbc, mapper, port)) {
+            scenario.outOfRangeNumericDatesAreUnauthorized(jwtProperties);
+        }
+    }
     private void assertThatLegacyIp() {
         org.assertj.core.api.Assertions.assertThat(auditService.currentIp()).isEqualTo("192.0.2.59");
     }

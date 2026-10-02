@@ -1,5 +1,7 @@
 # OpsPilot 10 分钟演示脚本
 
+检查点60安全加演：`mvn -Dtest=AccountStatusHttpIntegrationTest,JwtServiceIdentityTest test`使用隔离内存库/随机端口。旧59同名重建后旧Token读写200且变成新ADMIN；身份绑定版阻断为401，新账户独立登录200。继续自检的身份绑定版面对超范围exp/iat/nbf仍返回500（错误签名也触发），补时间异常边界后返回结构化401且备注/审计零新增。执行`node scripts/verify-oncall-browser-ci.cjs`会启动拥有的隔离JAR，验证正常桌面/390px流程并运行`verify-jwt-numeric-date-http.cjs`；该畸形Token脚本不读取运行时密钥、不针对日常9900端口。首次失败、两份旧JAR和历史页面保留，最新验收范围见[60阶段报告](acceptance/V1.7-checkpoint-60.md)。此轮改安全行为，不伪造新外观，也不对日常Demo数据库删用户。
+
 检查点59安全行为对照：`mvn -Dtest=AccountStatusHttpIntegrationTest test`使用随机端口和独立内存库，真实登录后提交账户停用，再从HTTP读取七个业务入口并尝试提交事故备注。旧58的首失败是/auth/me与备注仍200；新入口应401且备注/审计零新增，当前活跃角色降级的管理操作仍403。删除账户也401，重新启用后未过期旧JWT按现有政策可再次使用，不能宣称永久撤销。旧JAR/首次失败与新验证见[检查点59](acceptance/V1.7-checkpoint-59.md)；不能对日常Demo数据库执行账户变更。
 
 检查点58加演：在运营分析的SLO表核对服务、目标周期和版本，点击“导出告警规则”，查看捕获版本及摘要并下载；另一个管理操作修改目标后，旧页面再次导出应409且下载禁用。关闭窗口，点击“查询”，核对新版本再导出。将目标周期改为1天后，应导出27条规则，票据窗口1d/2h；30天旧示例仍为23条。桌面/390px新旧图见[检查点58](acceptance/V1.7-checkpoint-58.md)，CP57旧JAR和原OnCall demo继续保留。

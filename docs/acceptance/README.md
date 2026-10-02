@@ -2,7 +2,7 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
-最新阶段：[V1.7-checkpoint-60.md](V1.7-checkpoint-60.md)：已签发uid与当前账户ID绑定，同名重建旧Token读写401、新账户正常登录可用。专项65项及随后补Unicode边界的双时区330发现/248执行/82条件跳过通过，MySQL门禁自身13项通过。真实MySQL、实际JAR/浏览器及远端CI仍待验；首次身份转移、旧JAR与历史Demo保留。
+最新阶段：[V1.7-checkpoint-60.md](V1.7-checkpoint-60.md)：身份绑定阶段9980e9e十三CI/真实MySQL75已验；继续自检补时间极值500→401，专项73、双时区338/255/83、实际新旧JAR12请求/异常12→0及桌面390px/十一脚本通过。新76项MySQL及Linux新代码仍待验；两份旧JAR、首次失败和历史Demo保留。
 
 最新限定验收：[V1.7-checkpoint-59.md](V1.7-checkpoint-59.md)：停用后的旧JWT读写200首失败已复现并修正为401，活跃降权403不变。aa76689的[Run36992121756](https://github.com/Trigger726/OnCall-Agent/actions/runs/36992121756)十三作业success，真实MySQL73零跳过/五池干净关闭、五个命名HTTP场景/真实审计IP、双时区291/211/80、58前端与Linux十脚本已验；工件摘要/CLI重放通过。首次MySQL上下文失败、旧JAR与历次Demo保留，永久撤销与既有任务再授权仍待完善，整体目标继续。
 
@@ -85,6 +85,7 @@
 | V1.7 | 57：发布决定显式捕获版本 | 本范围通过，十二CI/真实MySQL68/扩展九脚本与工件已核验 | [V1.7-checkpoint-57.md](V1.7-checkpoint-57.md) |
 | V1.7 | 58：版本绑定的SLO原生告警规则 | 限定通过，十三CI/原生20场景/真实链路/MySQL68/十脚本及新旧Demo | [V1.7-checkpoint-58.md](V1.7-checkpoint-58.md) |
 | V1.7 | 59：停用账户的旧JWT入口资格 | 限定通过，十三CI/MySQL73/五场景/双时区/十脚本；首失败保留 | [V1.7-checkpoint-59.md](V1.7-checkpoint-59.md) |
+| V1.7 | 60：签发身份绑定与畸形Token时间边界 | 身份阶段十三CI/MySQL75已验；继续修复本地通过，新76项MySQL/远端待验 | [V1.7-checkpoint-60.md](V1.7-checkpoint-60.md) |
 
 ## 状态约定
 
