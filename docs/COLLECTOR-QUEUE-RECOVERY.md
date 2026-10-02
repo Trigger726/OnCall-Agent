@@ -17,14 +17,16 @@
 
 ## 可复跑故障实验
 
-在带 Docker Linux daemon、Compose、Bash、curl、jq、openssl 的环境，从仓库根目录运行：
+在带 Docker Linux daemon、Compose、Bash、curl、jq、openssl、xxd 的环境，从仓库根目录运行：
 
 ```bash
 bash scripts/verify-trace-assertions.sh
+bash scripts/verify-collector-metrics.sh
+bash scripts/verify-collector-saturation-assertions.sh
 bash scripts/verify-tracing-pipeline.sh
 ```
 
-脚本生成独立 Compose 项目名，只清理该次拥有的临时容器/卷，保留 `target/tracing-it/`。9900、9920、3200、3000、4318、13133、18888和9910端口须空闲，不能与日常 Demo 并跑。CI同样执行两步并上传原始工件。
+脚本生成独立 Compose 项目名，只清理该次拥有的临时容器/卷，保留 `target/tracing-it/`。9900、9920、3200、3000、4318、13133、18888、9090和9910端口须空闲，不能与日常 Demo 并跑。CI同样执行以上步骤、原生promtool两条规则/12告警断言，并上传原始工件。
 
 实验保留正常链路、Tempo 单独停机和单消费者SIGKILL/不同容器重建，再补默认十消费者及小容量饱和场景，当前阶段证据见[62报告](acceptance/V1.7-checkpoint-62.md)。重建前探针用于观察在途请求，不替代真实调查图；所有探针和原Trace ID/runId、六工具及两条Provider→CLIENT→SERVER须恢复，父子关系正确、同Trace且Span ID唯一。TraceQL/Grafana读回不重提调查。
 
@@ -48,7 +50,7 @@ docker compose --project-name opspilot-trace-monitoring-demo-62 \
 - 缺数据不伪造健康，也不生成这两类事故。首次正值只说明已观测到拒绝，不证明每条拒绝的精确时刻；抓取间隔/重启/丢样会影响计数，本规则不替代持久审计账本。
 - 当前只到Prometheus原生告警，未配置Alertmanager路由或OpsPilot Incident/人工通知；不得把反馈规则当成外部渠道已送达。
 
-故障测试仅用queue4/消费者1/每批1Span，生产配置仍2048/默认10/批触发512。OTLP200及partialSuccess拒绝0、业务COMPLETED/健康UP仍可能与入队拒绝/已知Trace缺失同时发生；这个实验用于直接展示边界与检测反馈，不修改SDK业务状态或承诺无丢失。判定缺失须先确认Tempo恢复、队列和在途均清空、另一部分探针成功以及缺失计数重复稳定。
+故障测试仅用queue4/消费者1/每批1Span，生产配置仍2048/默认10/批触发512。OTLP200及partialSuccess拒绝0、业务COMPLETED/健康UP仍可能与入队拒绝/已知Trace缺失同时发生；这个实验用于直接展示边界与检测反馈，不修改SDK业务状态或承诺无丢失。判定缺失须先确认Tempo恢复、队列和在途均清空、恢复后独立已知ID正对照经同一入口实际送达以及缺失计数重复稳定。后台Span可能提前占满小队列，原探针不保证有一条幸存；不能仅以12条都404当作下游已恢复。
 
 ## 保留旧内存 Demo
 

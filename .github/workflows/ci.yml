@@ -300,6 +300,8 @@ jobs:
         run: bash scripts/verify-trace-assertions.sh
       - name: Verify fresh Collector counters and strict queue gauges
         run: bash scripts/verify-collector-metrics.sh
+      - name: Reject saturation loss claims without independent recovery control
+        run: bash scripts/verify-collector-saturation-assertions.sh
       - name: Check native Collector alert rules and boundary fixtures
         run: |
           mkdir -p target/tracing-it

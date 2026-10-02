@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 # Sourced after restart experiments. No alert delivery/Incident claim: verifies
 # native Prometheus feedback against the actual Collector, then known-ID loss.
+collector_saturation_recovery_proven() {
+  local alerts_fired="$1" queue_recovered="$2" recovered_count="$3" stable_samples="$4" control_restored="$5"
+  [[ "$alerts_fired" == true && "$queue_recovered" == true && "$control_restored" == true ]] \
+    && [[ "$recovered_count" =~ ^[0-9]+$ && "$stable_samples" =~ ^[0-9]+$ ]] \
+    && (( recovered_count < 12 && stable_samples >= 3 ))
+}
+
 verify_collector_saturation() {
   local evidence_dir="$1" token="$2" metrics_url=http://localhost:18888/metrics
   local ids='[]' id accepted_before rejected_before accepted_delta rejected_delta queue capacity
@@ -74,8 +81,28 @@ verify_collector_saturation() {
     fi
     sleep 1
   done
-  # At least one acknowledged probe must arrive, while at least one is missing.
-  # This rules out declaring loss solely because Tempo is still unavailable.
+  # Background JVM exports can occupy all four slots before the probes arrive.
+  # Prove this SAME pipeline can deliver a fresh known ID after recovery; an
+  # arbitrary subset of the rejected burst is not a valid availability control.
+  local control_id control_restored=false control_trace_base64
+  control_id="$(openssl rand -hex 16)"
+  collector_send_probe "$evidence_dir" "$control_id" saturation-recovery-control
+  [[ "$(< "$evidence_dir/probe-${control_id}-http-status.txt")" == 200 ]]
+  jq -e '(.partialSuccess.rejectedSpans // "0" | tonumber) == 0' "$evidence_dir/probe-${control_id}-ack.json" >/dev/null
+  control_trace_base64="$(printf '%s' "$control_id" | xxd -r -p | base64 -w 0)"
+  for _ in {1..20}; do
+    if curl --fail --silent --show-error "http://localhost:3200/api/traces/${control_id}" \
+        > "$evidence_dir/recovery-control-trace.json" 2> "$evidence_dir/recovery-control-error.txt" \
+        && jq -e --arg id "$control_trace_base64" '[.. | objects | select(has("spanId") and has("name"))]
+          | length == 1 and .[0].name == "saturation-recovery-control" and .[0].traceId == $id' \
+          "$evidence_dir/recovery-control-trace.json" >/dev/null; then
+      control_restored=true
+      break
+    fi
+    sleep 1
+  done
+  # Once the control arrives, wait for the burst result to stabilize. Zero may
+  # be genuine loss of the entire burst; it cannot pass without the control.
   local previous_count=-1 stable_samples=0
   for _ in {1..10}; do
     recovered_count=0
@@ -93,18 +120,20 @@ verify_collector_saturation() {
       stable_samples=0
       previous_count="$recovered_count"
     fi
-    (( recovered_count > 0 && stable_samples >= 3 )) && break
+    (( stable_samples >= 3 )) && break
     sleep 2
   done
   local status=FAIL
-  if [[ "$alerts_fired" == true && "$queue_recovered" == true ]] && (( recovered_count > 0 && recovered_count < 12 && stable_samples >= 3 )); then
+  if collector_saturation_recovery_proven "$alerts_fired" "$queue_recovered" "$recovered_count" "$stable_samples" "$control_restored"; then
     status=PASS
   fi
   jq -n --arg status "$status" --argjson accepted "$accepted_delta" --argjson rejected "$rejected_delta" \
     --argjson recovered "$recovered_count" --argjson stableSamples "$stable_samples" --argjson fired "$alerts_fired" --argjson queueRecovered "$queue_recovered" --argjson runId "$run_id" \
+    --arg controlId "$control_id" --argjson controlRestored "$control_restored" \
     '{status:$status, fault:"tempo-stopped+queue-capacity-four", testOnly:{consumers:1,queueCapacity:4,maxBatchSpans:1},
       probeRequests:12,probeHttp200:12,probePartialSuccessRejectedSpans:0,aggregateAcceptedSpansDelta:$accepted,aggregateEnqueueRejectedSpansDelta:$rejected,
       recoveredProbeTraces:$recovered,missingAcknowledgedProbeTraces:(12-$recovered),businessInvestigationRunId:$runId,
+      recoveryControlTraceId:$controlId,recoveryControlSamePipelineDelivered:$controlRestored,
       businessInvestigationStatus:"COMPLETED",applicationHealth:"UP",queueHighAndRejectionAlertsFired:$fired,
       queueAndInFlightDrainedAndHighAlertResolved:$queueRecovered,probeRecoveryCountStable:($stableSamples >= 3),stableProbeRecoverySamples:$stableSamples,rejectionAlertHasFiveMinuteHistoryWindow:true,
       alertmanagerDeliveryVerified:false,incidentLifecycleVerified:false}' > "$evidence_dir/result.json"
