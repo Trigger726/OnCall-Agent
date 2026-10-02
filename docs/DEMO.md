@@ -1,6 +1,6 @@
 # OpsPilot 10 分钟演示脚本
 
-检查点66本人安全加演：仅在隔离演示库打开“账号安全”，先示范错误当前密码仍保登录，再正确改密→明确重登/本人用户名保留/旧密码拒绝；第二个浏览器下一受保护请求退出。确认退出全部会话后重登不会复活旧Token；工程补充可展示真实服务已提交但丢响应，只发一次POST、不缓存口令并用新密码恢复。旧65只有本地退出且无安全页，保留[旧桌面](assets/v1.7-cp66/old/before-desktop.png)与[新页](assets/v1.7-cp66/new/after-desktop.png)/[手机](assets/v1.7-cp66/new/after-mobile.png)及真实失败，见[66报告](acceptance/V1.7-checkpoint-66.md)。勿在日常历史Demo账号上改密码或执行全部会话撤销。当前普通退出仍仅本浏览器；已建立SSE/后台任务不会被这次入口撤销原子中断，66远端CI仍待验。
+检查点66本人安全加演：仅在隔离演示库打开“账号安全”，先示范错误当前密码仍保登录，再正确改密→明确重登/本人用户名保留/旧密码拒绝；第二个浏览器下一受保护请求退出。确认退出全部会话后重登不会复活旧Token；工程补充可展示真实服务已提交但丢响应，只发一次POST、不缓存口令并用新密码恢复。旧65只有本地退出且无安全页，保留[旧桌面](assets/v1.7-cp66/old/before-desktop.png)与[新页](assets/v1.7-cp66/new/after-desktop.png)/[手机](assets/v1.7-cp66/new/after-mobile.png)及真实失败，见[66报告](acceptance/V1.7-checkpoint-66.md)。勿在日常历史Demo账号上改密码或执行全部会话撤销。当前普通退出仍仅本浏览器；已建立SSE/后台任务不会被这次入口撤销原子中断，66自身十五CI/MySQL86和Linux实页证据已验。
 
 检查点64工程加演：无需改界面，先展示[真实旧1pass/3fail和exit0却打印栈错误](assets/v1.7-cp64/local/cp64OldRegression.json)，对照锁文件单包2.1.7、前端62项通过/全树官方audit0和十四CI，再以 `node docs/assets/v1.7-cp64/replay-build-security.cjs` 只读核对耐久证据。新旧桌面/390px及旧JAR均保留，四静态文件逐字节一致，这是构建供应链风险与隐性错误验收案例，不是页面重设计、线上业务崩溃或全部安全能力完成。完整命令/工件/边界见[64报告](acceptance/V1.7-checkpoint-64.md)。
 
