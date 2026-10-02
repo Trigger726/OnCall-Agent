@@ -1,0 +1,17 @@
+# One consumer leaves observable queued requests during an outage. Production
+# keeps the exporter's default ten consumers; this is not a throughput setting.
+exporters:
+  otlp/tempo:
+    sending_queue:
+      num_consumers: 1
+service:
+  telemetry:
+    metrics:
+      readers:
+        - pull:
+            exporter:
+              prometheus:
+                host: 0.0.0.0
+                port: 8888
+                without_type_suffix: true
+                without_units: true

@@ -1,0 +1,10 @@
+# Diagnostics/fault-test overrides only; the normal tracing Demo does not load this file.
+services:
+  otel-collector:
+    command:
+      - --config=/etc/otelcol-contrib/config.yml
+      - --config=/etc/otelcol-contrib/restart-test.yml
+    ports:
+      - "127.0.0.1:18888:8888"
+    volumes:
+      - ./integration/tracing/otel-collector-restart-test.yml:/etc/otelcol-contrib/restart-test.yml:ro

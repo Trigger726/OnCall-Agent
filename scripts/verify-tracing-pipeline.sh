@@ -14,7 +14,7 @@ export PROMETHEUS_BASE_URL=http://trace-provider-fixture:9910
 export LOKI_ENABLED=true
 export LOKI_BASE_URL=http://trace-provider-fixture:9910
 
-compose=(docker compose --profile tracing --profile tracing-test)
+compose=(docker compose -f docker-compose.yml -f integration/tracing/docker-compose.restart-test.yml --profile tracing --profile tracing-test)
 
 collect_logs() {
   "${compose[@]}" logs --no-color > "$evidence_dir/compose.log" 2>&1 || true
@@ -46,21 +46,21 @@ assert_agent_trace() {
 
   jq '[.. | objects | select(has("traceId") and has("spanId") and has("name")) |
     {traceId, spanId, parentSpanId, name, attributes}]' \
-    "$trace_file" > "$spans_file"
-  jq -e '[.[] | select(.name == "opspilot.agent.run")] | length == 1' "$spans_file" >/dev/null
-  jq -e '[.[] | select(.name == "opspilot.agent.tool")] | length == 6' "$spans_file" >/dev/null
-  jq -e '[.[] | select(.name == "opspilot.provider.query")] | length == 2' "$spans_file" >/dev/null
+    "$trace_file" > "$spans_file" || return 1
+  jq -e '[.[] | select(.name == "opspilot.agent.run")] | length == 1' "$spans_file" >/dev/null || return 1
+  jq -e '[.[] | select(.name == "opspilot.agent.tool")] | length == 6' "$spans_file" >/dev/null || return 1
+  jq -e '[.[] | select(.name == "opspilot.provider.query")] | length == 2' "$spans_file" >/dev/null || return 1
   jq -e '
     ([.[] | select(.name == "opspilot.agent.run")][0].spanId) as $run
     | $run != null
       and ([.[] | select(.name == "opspilot.agent.run")][0].parentSpanId | length > 0)
       and ([.[] | select(.name == "opspilot.agent.tool") | .parentSpanId] | all(. == $run))
-  ' "$spans_file" >/dev/null
+  ' "$spans_file" >/dev/null || return 1
   jq -e '
     [.[] | select(.name == "opspilot.agent.tool") | .spanId] as $tools
     | [.[] | select(.name == "opspilot.provider.query") | .parentSpanId]
     | all(. as $parent | $tools | index($parent) != null)
-  ' "$spans_file" >/dev/null
+  ' "$spans_file" >/dev/null || return 1
 
   if grep --fixed-strings --quiet "$sensitive_sentinel" "$trace_file"; then
     echo "Sensitive alert payload leaked into exported trace" >&2
@@ -78,7 +78,7 @@ assert_cross_service_trace() {
        | first // "unknown") as $service
     | $batch.scopeSpans[].spans[]
     | {service:$service, traceId, spanId, parentSpanId, name, kind}]' \
-    "$trace_file" > "$spans_file"
+    "$trace_file" > "$spans_file" || return 1
   jq -e '
     [.[] | select(.service == "opspilot" and .name == "opspilot.provider.query")] as $providers
     | [.[] | select(.service == "opspilot" and .kind == "SPAN_KIND_CLIENT")
@@ -91,7 +91,7 @@ assert_cross_service_trace() {
       and ([$servers[].parentSpanId] | sort) == ([$clients[].spanId] | sort)
       and ([$servers[].name] | sort) == (["http get /api/v1/query", "http get /loki/api/v1/query_range"] | sort)
       and ([$providers[].traceId, $clients[].traceId, $servers[].traceId] | unique | length) == 1
-  ' "$spans_file" >/dev/null
+  ' "$spans_file" >/dev/null || return 1
 }
 
 "${compose[@]}" up --build --detach mysql tempo-init tempo otel-collector grafana trace-provider-fixture opspilot
@@ -287,6 +287,10 @@ jq -n \
   '{incidentId:$incidentId, runId:$runId, traceId:$traceId, injectedFailure:"tempo-stopped", investigationStatus:"COMPLETED", applicationHealthDuringOutage:"UP", collectorFailureObserved:true, traceRecoveredAfterTempoRestart:true, spanCounts:{agentRun:1, agentTool:$toolSpans, providerQuery:$providerSpans, client:$clientSpans, server:$serverSpans}, parentHierarchyVerified:true, crossServiceParentHierarchyVerified:true, sensitivePayloadExcluded:true}' \
   > "$evidence_dir/outage-result.json"
 
+source scripts/lib/verify-collector-restart.sh
+verify_collector_restart "$evidence_dir" "$token"
+
 collect_logs
 cat "$evidence_dir/result.json"
 cat "$evidence_dir/outage-result.json"
+cat "$evidence_dir/restart-result.json"
