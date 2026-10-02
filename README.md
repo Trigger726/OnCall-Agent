@@ -6,7 +6,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-检查点58本地通过、远端待验：SLO 阈值随目标周期计算，修复正分数事件舍入导致的误报健康；管理页面可导出捕获版本的 Prometheus 规则并核验内容摘要，旧版本409阻断下载。20组原生 promtool 场景、真实 Prometheus→Alertmanager→OpsPilot 重复 firing/同一告警 resolved、双时区281发现/206执行/75条件跳过、58前端、十脚本与新旧桌面/手机已验。规则发布仍由运维执行，生产业务数据与低流量策略待验证，见[检查点58](docs/acceptance/V1.7-checkpoint-58.md)及[规则发布说明](docs/SLO-PROMETHEUS-RULES.md)。
+检查点58限定通过：SLO 阈值随目标周期计算，修复正分数事件舍入导致的误报健康；管理页面导出捕获版本的 Prometheus 规则并核验摘要，旧版本409阻断下载。bbe00f9的[Run36989009983](https://github.com/Trigger726/OnCall-Agent/actions/runs/36989009983)十三作业success，原生20场景/真实重复firing与同一告警resolved、双时区281发现/206执行/75条件跳过、真实MySQL68零跳过/五池关闭、58前端与Linux十脚本已验，三个工件摘要/重放/实图已核对。新旧Demo保留；规则发布仍由运维执行，生产长期数据与低流量策略待验证，见[检查点58](docs/acceptance/V1.7-checkpoint-58.md)及[规则发布说明](docs/SLO-PROMETHEUS-RULES.md)。
 
 检查点57已补远端验收：缺失/null审核版本六例拒绝，显式0合法。e98ee3a 的 [Run36344164602](https://github.com/Trigger726/OnCall-Agent/actions/runs/36344164602) 十二作业success，双时区270/195/75、真实MySQL68/五池关闭、58前端和Linux九脚本（含六例真实HTTP拒绝/补0成功）已核验，见[阶段报告](docs/acceptance/V1.7-checkpoint-57.md)。
 
