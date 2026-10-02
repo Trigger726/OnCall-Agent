@@ -1,0 +1,12 @@
+{
+  "sourceCommit": "0f21f686870ebf462f079d50fd4c61a88b14be0c",
+  "command": "node --test tests/authSessions.test.mjs",
+  "executed": 5,
+  "passed": 3,
+  "failed": 2,
+  "failures": [
+    {"scenario":"incorrect current password","expectedErrorCode":"AUTHENTICATION_FAILED","actualErrorCode":"AUTHENTICATION_REQUIRED","expectedExpiredEvents":0},
+    {"scenario":"late 401 after new login","expectedExpiredEvents":0,"actualExpiredEvents":1}
+  ],
+  "scope": "Actual old service bundled with esbuild and deterministic fetch responses; not yet a rendered browser proof"
+}

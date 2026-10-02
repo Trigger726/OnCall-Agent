@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-检查点65服务端与本地验证通过、远端待验：本人改密/退出全部会话、持久化版本校验、事务审计、BCrypt字节边界；UTC/上海各374发现281执行93条件跳过，同文件库不同JVM旧Token401/当前Token200/版本2与审计保留。新增第十五CI会话重启门禁、MySQL预期86项零跳过，见[65报告](docs/acceptance/V1.7-checkpoint-65.md)和[升级/API边界](docs/AUTH-SESSIONS.md)。保留全部旧Demo与真实失败；自助UI、既有SSE/任务再授权及完整目标继续。
+检查点66本地通过、远端待验：新增本人账号安全页、改密/确认退出全部会话与明确重登；修复错误当前密码误退出和旧401踢新身份，刷新入口/数据鉴权正反对照通过。前端72/全树audit0、双时区375发现282执行93条件跳过、十二实页脚本/同库跨JVM通过，真实提交后丢响应不重试、新凭证能恢复。新旧桌面/390px和失败证据保留，见[66报告](docs/acceptance/V1.7-checkpoint-66.md)。既有SSE/任务再授权及完整目标继续。
+
+检查点65服务端限定通过：0f21f68的[Run37055729127](https://github.com/Trigger726/OnCall-Agent/actions/runs/37055729127)十五作业success；本人改密/退出全部会话、持久化版本校验、事务审计、BCrypt字节边界。双时区374/281/93、真实MySQL86零跳过/五池关闭、Linux同库跨JVM与三ZIP源SHA/digest/重放已验，见[65报告](docs/acceptance/V1.7-checkpoint-65.md)和[升级/API边界](docs/AUTH-SESSIONS.md)。保留全部旧Demo与失败；该提交没有自助UI，66另行补齐；既有SSE/任务再授权及完整目标继续。
 
 检查点64限定通过：真实复现构建链brace-expansion2.1.4的栈耗尽，以及vue-tsc“打印错误但exit0”的隐蔽失败；仅锁文件三字段升到2.1.7，加4项隔离/有时限真实引擎与编译器回归、CI全树官方audit（含dev）。`0e76296`的[Run37049527001](https://github.com/Trigger726/OnCall-Agent/actions/runs/37049527001)十四作业success，前端62/审计0/双时区338发现255执行83条件跳过/真实MySQL76及十一脚本、五ZIP摘要与重放已验。新旧Demo都保留、四静态文件逐字节一致，非线上HTTP漏洞利用或UI改版，见[64报告](docs/acceptance/V1.7-checkpoint-64.md)。账号永久撤销/任务再授权、生产容量与其余完整路线继续。
 

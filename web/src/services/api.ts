@@ -36,20 +36,22 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   if (token) headers.set('Authorization', `Bearer ${token}`)
 
   const response = await fetch(`/api/v1${path}`, { ...init, headers })
-  if (response.status === 401 && token) {
-    window.dispatchEvent(new Event('opspilot-auth-expired'))
-    throw new RequestError('登录已过期，请重新登录', 'AUTHENTICATION_REQUIRED', response.status)
-  }
   let envelope: ApiEnvelope<T> | null = null
   try {
     envelope = (await response.json()) as ApiEnvelope<T>
   } catch {
-    throw new RequestError('服务响应格式异常', 'INVALID_RESPONSE', response.status)
+    if (response.status !== 401) throw new RequestError('服务响应格式异常', 'INVALID_RESPONSE', response.status)
   }
-  if (!response.ok || !envelope.success) {
+  // Wrong current password is a command error, not a revoked session. All other 401s fail closed.
+  const credentialError = path === '/auth/password' && envelope?.error?.code === 'AUTHENTICATION_FAILED'
+  if (response.status === 401 && token && !credentialError) {
+    if (localStorage.getItem('opspilot_token') === token) window.dispatchEvent(new Event('opspilot-auth-expired'))
+    throw new RequestError('登录已过期，请重新登录', 'AUTHENTICATION_REQUIRED', response.status)
+  }
+  if (!response.ok || !envelope?.success) {
     throw new RequestError(
-      envelope.error?.message ?? '请求失败',
-      envelope.error?.code ?? 'REQUEST_FAILED',
+      envelope?.error?.message ?? '请求失败',
+      envelope?.error?.code ?? 'REQUEST_FAILED',
       response.status,
     )
   }

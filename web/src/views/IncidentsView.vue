@@ -3,7 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Bot, Check, CheckCircle2, ChevronDown, ChevronRight, CircleCheck, CircleStop, ClipboardCheck, Clock3, Database, FileText, ListChecks, LoaderCircle, MessageSquarePlus, MessageSquareText, Plus, Radio, RefreshCw, Save, Send, ShieldAlert, UserRound, Workflow, XCircle } from 'lucide-vue-next'
 import StatusBadge from '@/components/StatusBadge.vue'
-import { api, formatTime, type PageResponse } from '@/services/api'
+import { api, formatTime, RequestError, type PageResponse } from '@/services/api'
 import { clearAgentInvestigationIdempotency, streamAgentInvestigation, subscribeAgentInvestigation } from '@/services/agentStream'
 import { auth } from '@/stores/auth'
 import type { AgentRun, AgentRunEvent, AgentStep, RemediationProposal } from '@/types/investigation'
@@ -457,8 +457,13 @@ async function addNote() {
 
 watch([statusFilter, severityFilter], () => void loadList())
 onMounted(async () => {
-  users.value = await api<UserOption[]>('/reference/users')
-  await loadList()
+  try {
+    users.value = await api<UserOption[]>('/reference/users')
+    await loadList()
+  } catch (cause) {
+    // The API has already redirected a revoked session; do not turn it into an unhandled mount error.
+    if (!(cause instanceof RequestError && cause.status === 401)) throw cause
+  }
 })
 onBeforeUnmount(() => {
   disposed = true

@@ -25,6 +25,7 @@ const nav = [
   { to: '/analytics', label: '运营分析', icon: BarChart3 },
   { to: '/problems', label: '问题治理', icon: GitBranch },
   { to: '/audit', label: '审计日志', icon: ClipboardList },
+  { to: '/account/security', label: '账号安全', icon: ShieldCheck },
 ]
 
 const pageTitle = computed(() => String(route.meta.title ?? 'OpsPilot'))

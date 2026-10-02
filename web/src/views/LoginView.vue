@@ -6,11 +6,16 @@ import { auth } from '@/stores/auth'
 
 const router = useRouter()
 const route = useRoute()
-const username = ref('admin')
-const password = ref('OpsPilot@2026')
+const username = ref(typeof route.query.username === 'string' && route.query.username.length <= 64 ? route.query.username : 'admin')
+const password = ref(route.query.reason ? '' : 'OpsPilot@2026')
 const loading = ref(false)
 const error = ref('')
-const notice = computed(() => route.query.reason === 'expired' ? '登录已过期，请重新登录后继续操作。' : '')
+const notice = computed(() => ({
+  expired: '登录已过期，请重新登录后继续操作。',
+  'password-changed': '密码已修改，全部已签发会话已撤销。请使用新密码重新登录。',
+  'sessions-revoked': '本人全部已签发会话已撤销，请重新登录。',
+  'session-result-unknown': '无法确认操作结果，已清理本地凭证且不会自动重试。请重新登录核对；改密请先尝试新密码。',
+}[String(route.query.reason)] ?? ''))
 
 async function submit() {
   loading.value = true

@@ -85,7 +85,10 @@ public final class AuthSessionHttpScenarios implements AutoCloseable {
                 Map.entry(Map.of("currentPassword", OLD_PASSWORD, "newPassword", "界".repeat(25)), 400),
                 Map.entry(Map.of("currentPassword", OLD_PASSWORD, "newPassword", "a".repeat(73)), 400),
                 Map.entry(Map.of("currentPassword", OLD_PASSWORD, "newPassword", ""), 400))) {
-            assertThat(call("POST", "/auth/password", token, entry.getKey()).statusCode()).isEqualTo(entry.getValue());
+            var response = call("POST", "/auth/password", token, entry.getKey());
+            assertThat(response.statusCode()).isEqualTo(entry.getValue());
+            if (entry.getValue() == 401) assertThat(mapper.readTree(response.body()).path("error").path("code").asText())
+                    .isEqualTo("AUTHENTICATION_FAILED");
         }
         assertThat(hash()).isEqualTo(hash);
         assertThat(version()).isZero();
@@ -98,11 +101,14 @@ public final class AuthSessionHttpScenarios implements AutoCloseable {
         var start = new java.util.concurrent.CountDownLatch(1);
         var pool = java.util.concurrent.Executors.newFixedThreadPool(2);
         try {
-            var first = pool.submit(() -> { start.await(); return call("POST", "/auth/logout-all", token, Map.of()).statusCode(); });
-            var second = pool.submit(() -> { start.await(); return call("POST", "/auth/logout-all", token, Map.of()).statusCode(); });
+            var first = pool.submit(() -> { start.await(); return call("POST", "/auth/logout-all", token, Map.of()); });
+            var second = pool.submit(() -> { start.await(); return call("POST", "/auth/logout-all", token, Map.of()); });
             start.countDown();
-            assertThat(List.of(first.get(10, java.util.concurrent.TimeUnit.SECONDS),
-                    second.get(10, java.util.concurrent.TimeUnit.SECONDS))).containsExactlyInAnyOrder(200, 401);
+            var results = List.of(first.get(10, java.util.concurrent.TimeUnit.SECONDS), second.get(10, java.util.concurrent.TimeUnit.SECONDS));
+            assertThat(results.stream().map(java.net.http.HttpResponse::statusCode).toList()).containsExactlyInAnyOrder(200, 401);
+            for (var response : results) if (response.statusCode() == 401) {
+                assertThat(mapper.readTree(response.body()).path("error").path("code").asText()).isEqualTo("AUTHENTICATION_REQUIRED");
+            }
         } finally {
             pool.shutdownNow();
             assertThat(pool.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS)).isTrue();

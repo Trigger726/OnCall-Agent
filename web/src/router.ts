@@ -12,6 +12,7 @@ import AuditView from '@/views/AuditView.vue'
 import AssistantView from '@/views/AssistantView.vue'
 import AnalyticsView from '@/views/AnalyticsView.vue'
 import ProblemsView from '@/views/ProblemsView.vue'
+import AccountSecurityView from '@/views/AccountSecurityView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -31,6 +32,7 @@ const router = createRouter({
         { path: 'audit', name: 'audit', component: AuditView, meta: { title: '审计日志' } },
         { path: 'analytics', name: 'analytics', component: AnalyticsView, meta: { title: '运营分析' } },
         { path: 'problems', name: 'problems', component: ProblemsView, meta: { title: '问题治理' } },
+        { path: 'account/security', name: 'account-security', component: AccountSecurityView, meta: { title: '账号安全' } },
       ],
     },
   ],

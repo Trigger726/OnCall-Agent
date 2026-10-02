@@ -59,4 +59,14 @@ class AuthSessionHttpIntegrationTest {
     @Test void shouldRejectBcryptByteTruncationAliasesAtLogin() throws Exception {
         try (var s = scenario()) { s.rejectsBcryptTruncationAliasesAtLogin(); }
     }
+    @Test void shouldServeAccountSpaDeepLinkButKeepApiProtected() throws Exception {
+        var client = java.net.http.HttpClient.newHttpClient();
+        var page = client.send(java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://127.0.0.1:" + port + "/account/security"))
+                .GET().build(), java.net.http.HttpResponse.BodyHandlers.ofString());
+        org.assertj.core.api.Assertions.assertThat(page.statusCode()).isEqualTo(200);
+        org.assertj.core.api.Assertions.assertThat(page.body()).contains("<div id=\"app\">").doesNotContain("password_hash");
+        var api = client.send(java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://127.0.0.1:" + port + "/api/v1/auth/me"))
+                .GET().build(), java.net.http.HttpResponse.BodyHandlers.ofString());
+        org.assertj.core.api.Assertions.assertThat(api.statusCode()).isEqualTo(401);
+    }
 }

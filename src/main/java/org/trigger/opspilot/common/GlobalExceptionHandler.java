@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -46,6 +47,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     ResponseEntity<ApiResponse<Void>> handleParameterTypeMismatch(MethodArgumentTypeMismatchException exception) {
         return ResponseEntity.badRequest().body(ApiResponse.failure("VALIDATION_ERROR", "请求参数类型不合法"));
+    }
+
+    @ExceptionHandler(CredentialsExpiredException.class)
+    ResponseEntity<ApiResponse<Void>> handleExpiredCredentials(CredentialsExpiredException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.failure("AUTHENTICATION_REQUIRED", "登录已失效，请重新登录"));
     }
 
     @ExceptionHandler(AuthenticationException.class)

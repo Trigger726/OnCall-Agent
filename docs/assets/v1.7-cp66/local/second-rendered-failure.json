@@ -1,0 +1,37 @@
+{
+  "status": "FAIL",
+  "baselineCapture": false,
+  "browser": "154.0.8037.93",
+  "browserPath": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "pageErrors": [],
+  "consoleLogs": [
+    "Failed to load resource: the server responded with a status of 401 ()",
+    "Failed to load resource: the server responded with a status of 401 ()",
+    "Ke: 登录已过期，请重新登录\n    at le (http://127.0.0.1:9917/assets/index-Bmn0nyxh.js:26:19712)\n    at async http://127.0.0.1:9917/assets/index-Bmn0nyxh.js:367:12938",
+    "Failed to load resource: net::ERR_FAILED"
+  ],
+  "rejected": [
+    {
+      "status": 401,
+      "path": "/api/v1/auth/password"
+    },
+    {
+      "status": 401,
+      "path": "/api/v1/reference/users"
+    }
+  ],
+  "screenshots": [
+    "after-desktop.png",
+    "after-mobile.png",
+    "wrong-current-desktop.png",
+    "logout-confirm-mobile.png",
+    "lost-response-mobile.png"
+  ],
+  "tokensPersistedToEvidence": false,
+  "passwordDraftPersisted": false,
+  "failure": "The expression evaluated to a falsy value:\n\n  assert.ok(rejected.every(row=>row.status===401&&['/api/v1/auth/password','/api/v1/incidents'].includes(row.path)))\n"
+}
