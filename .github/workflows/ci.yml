@@ -28,6 +28,17 @@ jobs:
       - name: Install and build
         working-directory: web
         run: npm ci && npm test && npm run build
+      - name: Audit full frontend dependency tree including build tools
+        working-directory: web
+        run: |
+          mkdir -p ../target/frontend-security-it
+          npm audit --registry=https://registry.npmjs.org --json > ../target/frontend-security-it/audit.json
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: frontend-security-evidence
+          path: target/frontend-security-it/
+          retention-days: 30
 
   browser-integration:
     name: On-call real browser integration
