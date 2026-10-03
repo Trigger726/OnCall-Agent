@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-75默认助手原生流本地限定通过：[报告](docs/acceptance/V1.7-checkpoint-75.md)。真实模型结束前可见临时片段，只有SQL提交后发布答案ID；取消/超时实际关闭原HTTP，worker可复用，截断不保存半个答案、不混规则降级。54项原生契约、双时区各513发现/407执行/106条件跳过、前端107、生命周期17及六组真实runner通过，完整JAR日志无意外ERROR；新旧25图和失败保留。本轮自身Linux/Java17/真实MySQL及远端工件仍待CI，不借74绿灯外推，整体目标继续。
+76新增双节点助手四场景本地两次通过：[报告](docs/acceptance/V1.7-checkpoint-76.md)。两个独立JVM共享新建SQL文件库，A执行、B回放/取消/清空/撤销；新原生流在旧模型未放行时已关闭实际HTTP并复用原worker，旧74对照两项均未释放。重复请求409、他人404、单次审计及不落半答案同时验证。新增CI门禁待本次提交自身远端验收，不外推跨机器、MySQL原生HTTP、数据库HA或全局容量，历史Demo保留。
+
+75默认助手原生流本地与自身远端限定通过：[报告](docs/acceptance/V1.7-checkpoint-75.md)。55d80e5的[Run37128573740](https://github.com/Trigger726/OnCall-Agent/actions/runs/37128573740)十五作业success，四ZIP源SHA/官方摘要/实际下载及原门禁重放已核验；54原生契约、双时区各513发现/407执行/106条件跳过、真实MySQL99/五池关闭、Linux原十三页面/八助手UI/五原生UI和五认证runner已验。真实模型结束前可见临时片段，SQL提交后才发布答案ID；取消/超时关闭原HTTP、worker可复用，截断不保存半个答案。前端107/生命周期17、新旧27图与失败保留。原生MySQL HTTP矩阵、跨节点、慢消费者/生产容量和整体目标继续。
 
 历史74底层适配器的[Run37117383000](https://github.com/Trigger726/OnCall-Agent/actions/runs/37117383000)十五作业success，新增原生工件17项的源SHA/官方摘要/实际ZIP/XML/故障注入日志已独立核验，其他工件尚未独立重放，见[74报告](docs/acceptance/V1.7-checkpoint-74.md)。当时默认端点尚未接入，75另行补齐。以下历史检查点的“当前/尚未”等边界均对应当时，不替代75的新证据。
 

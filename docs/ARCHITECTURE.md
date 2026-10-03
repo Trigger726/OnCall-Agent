@@ -1,5 +1,9 @@
 # OpsPilot 架构设计
 
+## CP76双节点助手停止围栏
+
+节点A持有执行中的原生订阅，节点B仅提交共享SQL取消/清空/账户版本事实；A现有100ms周期检查读取这些事实，走75的订阅/物理HTTP关闭及最终事务围栏，不引入新内存协调器。两JVM同一专属H2文件、真实模型HTTP四场景两次验证：B回放不多调模型，B取消的重复409/他人404/单次审计成立，旧模型未放行时A原worker可用；B清空/撤销均无半答案或晚done。证据见[76报告](acceptance/V1.7-checkpoint-76.md)。这是周期观察，不是即时通知或数据库HA验收；跨机器网络分区、MySQL原生HTTP矩阵、全局容量、慢消费者和自定义TLS/代理仍待验。
+
 ## CP75默认助手原生流与提交围栏
 
 默认POST /assistant/sessions/{id}/stream已调用原生streamAnswer，在原有有界worker内逐片段消费；空闲100ms检查原授权/原预算/持久化停止状态。generation/token只能带null答案ID及证据，前端标注“片段尚未保存”且不提供复制；只有正常STOP、有效原问题/账号租约及最终SQL事务提交后，done才发布正数答案ID。答案、标题、审计、请求COMPLETED仍原子提交。已完成幂等键回放原答案，不重新调模型；同步/messages及AI关闭的规则模式保持原路径。
@@ -393,6 +397,6 @@ checkpoint63通过独立可选覆盖补Collector原生告警→受控Incident：
 3. 将数据范围权限细化到部门、系统和资源负责人。
 4. 增加系统级并发压测、真实 socket 断流恢复，以及外部 Provider 组合故障注入。
 5. 为多实例事件广播和任务协调接入消息组件。
-6. 默认助手原生流已在75本地接入；继续自身Linux/Java17/MySQL、跨节点原生取消、慢消费者和生产容量验证。
+6. 默认助手原生流及75自身Linux/Java17、既有MySQL99已验；继续原生AI预览的MySQL HTTP矩阵、跨节点原生取消、慢消费者和生产容量验证。
 7. 在已完成 MTTA/MTTM/MTTR、行动项逾期治理、精确指纹复发、Prometheus 事件型服务 SLO 和 Alertmanager 入站生命周期之上，检查点55补真实检索完整独立复核子集趋势；继续获取长期真实样本，建设跨 Incident 语义相似/依赖共因聚类，并以真实生产 recording rules、长期窗口、出站通知和送达回执验证 SLO。
 8. 从真实但脱敏的历史 Incident/查询流量持续扩充已实现的双评分 qrels，加入第三方仲裁、超过两名标注人的一致性和分层抽样；将现有保留任务扩展到备份/导出副本和面向单条数据的受控删除，再以 NDCG/Recall 验证真实 Embedding 与 cross-encoder rerank 是否稳定优于 BM25/RRF，决定是否引入 ANN/OpenSearch/Milvus。

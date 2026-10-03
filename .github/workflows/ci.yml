@@ -116,6 +116,8 @@ jobs:
         run: node scripts/verify-assistant-idempotency-ci.cjs
       - name: Verify explicit assistant cancellation, lost cancel response and queued SIGKILL recovery
         run: node scripts/verify-assistant-cancel-ci.cjs
+      - name: Verify cross-node native assistant cancellation and authorization fences
+        run: node scripts/verify-assistant-cross-node-ci.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
@@ -131,6 +133,8 @@ jobs:
             target/assistant-idempotency-it/**/*.log
             target/assistant-cancel-it/**/*.json
             target/assistant-cancel-it/**/*.log
+            target/assistant-cross-node-it/**/*.json
+            target/assistant-cross-node-it/**/*.log
           retention-days: 30
 
   backend-h2:

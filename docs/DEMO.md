@@ -1,5 +1,11 @@
 # OpsPilot 10 分钟演示脚本
 
+## CP76：跨节点共享取消事实不等于释放执行资源
+
+先只读展示[新旧对照证据](assets/v1.7-cp76/local-proof.json)，旧74的B取消已让A/B均为CANCELLED、答案0，但旧模型未放行时A原HTTP和worker仍占用；75原生包两次相同夹具均先关闭HTTP并复用worker。另展示B清空后SUPERSEDED/消息0、B撤销后两节点旧401/A无新增payload以及B完成回放不多调模型。
+
+真实复跑仅限自有隔离环境：先构建当前JAR，再执行 `node scripts/verify-assistant-cross-node-ci.cjs`，使用空闲9965/9966/9967/9968/9970、两个自有JVM及新建共享H2文件。仅本地旧74对照可设置OPSPILOT_ASSISTANT_CROSS_NODE_BASELINE=1；运行后清除此开关，CI会拒绝基线模式。脚本仅停止自己启动的进程，不碰日常9900库，不上传数据库/签名密钥/Token。四场景本地已验、当前新增CI待自身提交验证；不把本机共享SQL夸成跨机器HA或全局队列容量，见[76报告](acceptance/V1.7-checkpoint-76.md)。历史UI Demo不覆盖，本轮没有页面改版。
+
 ## CP75：真实提前片段，不等于已保存答案
 
 仅在自有隔离Demo运行 `node scripts/verify-assistant-native-ui-ci.cjs`：使用新JAR、9955/9956、独立内存库和受控真实DashScope HTTP协议。桌面与390px先看到中文/emoji片段及“片段尚未保存”，末段尚未放行、数据库答案为0；结束后保留精确正文，移除临时标记。取消后撤掉预览，新问题在原单worker完成，旧模型门闩尚未放行但实际HTTP已关闭。再演示EOF失败、空闲超时、刷新后仅GET恢复原答案。

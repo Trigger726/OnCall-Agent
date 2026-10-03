@@ -1,0 +1,850 @@
+{
+  "checkpoint": 75,
+  "status": "SOURCE_COMMIT_LIMITED_REMOTE_PASS",
+  "run": {
+    "id": 37128573740,
+    "url": "https://github.com/Trigger726/OnCall-Agent/actions/runs/37128573740",
+    "sourceCommit": "55d80e54309e7e46fb687c8d0375894183ce5be9",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "jobs": [
+    {
+      "id": 111218863800,
+      "name": "Backend tests and JAR (H2)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111218863892,
+      "name": "MySQL 8.4 integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111218863909,
+      "name": "Prometheus rule to Alertmanager integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111218863915,
+      "name": "Alertmanager webhook integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111218863926,
+      "name": "Native SLO rules and Alertmanager lifecycle",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111218863935,
+      "name": "Frontend build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111218863949,
+      "name": "OpenTelemetry Collector and Tempo integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111218863954,
+      "name": "On-call real browser integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111218863960,
+      "name": "Collector native alert to Incident lifecycle",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111218863965,
+      "name": "Persistent auth session revocation and JVM restart",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111218863966,
+      "name": "Redis Streams relay integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111218863993,
+      "name": "OpsPilot service metric to Incident integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111218864001,
+      "name": "Follow-up notification delivery integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111218864025,
+      "name": "Two JVM Agent SSE integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111220197291,
+      "name": "Container image build and smoke test",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11276415597,
+      "name": "mysql-compatibility-evidence",
+      "digest": "sha256:0dfc5508810f5e5aa8f87cc43e5dae06ee7a6c097773a7d7ddfc8277068dac98",
+      "sourceCommit": "55d80e54309e7e46fb687c8d0375894183ce5be9",
+      "independentlyDownloadedAndDigestMatched": true
+    },
+    {
+      "id": 11276350818,
+      "name": "auth-session-evidence",
+      "digest": "sha256:d3ae2049006c06a2aabffbe0c55ce0f844be21d1158981f19fbf5b3fa21561d4",
+      "sourceCommit": "55d80e54309e7e46fb687c8d0375894183ce5be9",
+      "independentlyDownloadedAndDigestMatched": true
+    },
+    {
+      "id": 11276166287,
+      "name": "oncall-browser-evidence",
+      "digest": "sha256:af78ff64bd40fc96b46e5eb9a92c06f2c1f8ae5334cc24b048432623d2ba7dc4",
+      "sourceCommit": "55d80e54309e7e46fb687c8d0375894183ce5be9",
+      "independentlyDownloadedAndDigestMatched": true
+    },
+    {
+      "id": 11274789738,
+      "name": "assistant-native-contract-evidence",
+      "digest": "sha256:8d8ef65cb295428bd92298fefa1796c1c52d9438bf45449283cd7bce0ac173b1",
+      "sourceCommit": "55d80e54309e7e46fb687c8d0375894183ce5be9",
+      "independentlyDownloadedAndDigestMatched": true
+    }
+  ],
+  "native": {
+    "tests": 54,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "java": "17.0.20.1",
+    "suites": [
+      {
+        "file": "TEST-org.trigger.opspilot.assistant.AssistantAiStreamingTest.xml",
+        "sha256": "7219ae6d31e55a0c3f761f43a7804ad3c28632bc50e6d42e8b997333ae677c55",
+        "testNames": [
+          "shouldBoundResponseCountIncludingEmptyFramesAndCancelSource",
+          "shouldCancelIdleUpstreamWithoutClaimingNormalCompletion",
+          "shouldPreserveExactIncrementalWhitespaceAndUnicodeWithEmptyStopFrame",
+          "shouldAcceptExactCharacterBoundaryAndRejectOverflowBeforeDelivery",
+          "shouldKeepValidationStateIsolatedForEachColdSubscription",
+          "shouldPropagateLateProviderFailureWithoutRetryOrFallbackEvenAfterStop",
+          "shouldRejectEmptyOrWhitespaceOnlyAnswerEvenWithStop",
+          "shouldAcceptExactResponseCountBoundary",
+          "shouldRejectUnknownFilteredOrToolTerminalWithoutEmittingItsContent",
+          "shouldRejectActualToolCallPayloadAndDisableSdkToolExecutionInPrompt",
+          "shouldRejectEmptyStreamAndNonterminalEof",
+          "shouldNotMergeMultipleAlternativeGenerations",
+          "shouldRejectMoreContentOrDuplicateTerminalAfterStop"
+        ],
+        "tests": 13,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "TEST-org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest.xml",
+        "sha256": "714d01418ce1712581b81c8ca856af24e11de8915b5bf4df67369953ecb3a5fd",
+        "testNames": [
+          "browserDisconnectShouldContinueOriginalDurableRequestWithoutAnotherPost",
+          "shouldTimeoutAnIdleProviderAfterPreviewWithoutCommittingPartialAnswer",
+          "shouldStopRevokedNativePreviewWithoutLateAnswerOrErrorPayload",
+          "shouldNotResurrectClearedNativePreviewWhenModelCompletesLate",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "nativeDoneMustNotEscapeAFailedFinalAuditTransaction",
+          "shouldDeliverRealNativeTokenBeforeCompletionAndCommitExactAnswer",
+          "shouldCancelAfterPreviewAndReuseWorkerBeforeOldProviderIsReleased"
+        ],
+        "tests": 17,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "TEST-org.trigger.opspilot.assistant.AssistantNativeHttpClientTest.xml",
+        "sha256": "77e65e56a5e3a9ecc2731a640df81a69461d701aa99d49108fa62e3653b16517",
+        "testNames": [
+          "cancellationSettlesSubscriberBeforeJdkWrappedCancellationArrives",
+          "successIsExactAndCancellingOneExchangeCannotCancelAnother",
+          "clientDelegatesBothAsyncOverloadsSyncAndConfiguration",
+          "ordinaryProviderFailureIsPropagatedWithoutBeingReclassifiedOrIgnored",
+          "lateSuccessCannotReplaceCancellationEvenWhenUnderlyingFutureCannotBeCancelled"
+        ],
+        "tests": 5,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "TEST-org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest.xml",
+        "sha256": "ea2f0f8044f2e86820b02852c8183a28a79b1e1824b581b7535fcae813b10503",
+        "testNames": [
+          "shouldRejectRealHttpEofWithoutStopRatherThanAcceptingPartialAnswer",
+          "shouldRequestNativeIncrementalProtocolRatherThanACompleteJsonAnswer",
+          "shouldRejectRealHttpLengthTerminationWithoutRetryOrRuleFallback",
+          "shouldDeliverFirstRealHttpDeltaBeforeProviderCanFinish"
+        ],
+        "tests": 4,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "TEST-org.trigger.opspilot.assistant.AssistantNativeTransportTest.xml",
+        "sha256": "b714a850f14df5bcb4fbc4467dbf951b61b9ae9a9ac41dd3f21590c2f93747f4",
+        "testNames": [
+          "requestsWithoutAssistantScopeKeepTheirResponseUnmodified",
+          "cancellationBeforeHeadersClosesRetainedPendingExchange",
+          "scopedNonNativeRequestsKeepTheirResponseUnmodified",
+          "cancellationClosesBodyEvenWhenIntermediatePublisherRetainsItsUpstream",
+          "validationFailureAlsoClosesRetainedBodyWithoutRetry",
+          "eachColdSubscriptionHasItsOwnCancellationSignal",
+          "originalConnectorIsPreservedOutsideNativeAssistantScope",
+          "onlyNativeContextSelectsDedicatedConnector"
+        ],
+        "tests": 8,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "TEST-org.trigger.opspilot.assistant.AssistantStreamReaderTest.xml",
+        "sha256": "d64e9f30b32eb611b2f7500b4ad92e28f99d6733327512fd9f23572087f3172f",
+        "testNames": [
+          "previewCallbackFailureCancelsTheProvider",
+          "upstreamFailureCannotReturnAnAnswer",
+          "idleProviderStillChecksStopAndCancelsSubscription",
+          "stoppedBeforeStartNeverSubscribes",
+          "preservesExactFragmentsAndRequestsOnlyOneAtATime",
+          "sizeLimitIsCheckedBeforePublishingAnOversizedFragment",
+          "emptyOrWhitespaceOnlyCannotCommit"
+        ],
+        "tests": 7,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      }
+    ],
+    "logSha256": "5ac0832b557865c142fce63c94c318e257e232f5385c66e8957bfcd3857bfaff",
+    "expectedControlledTransportFailureLogs": 2
+  },
+  "backend": {
+    "jobId": 111218863800,
+    "decodedFullJobLogSha256": "86db2348741cbf29ac62c7bf242143d29565b60cdc44280677c93b9ac62dcaca",
+    "utc": {
+      "discovered": 513,
+      "executed": 407,
+      "conditionalSkipped": 106,
+      "failures": 0,
+      "errors": 0
+    },
+    "shanghai": {
+      "discovered": 513,
+      "executed": 407,
+      "conditionalSkipped": 106,
+      "failures": 0,
+      "errors": 0
+    },
+    "expectedFaultInjectionErrorLogs": 8,
+    "defaultOnErrorDropped": 0
+  },
+  "mysql": {
+    "status": "PASS",
+    "suites": [
+      {
+        "name": "org.trigger.opspilot.MySqlCompatibilityIntegrationTest",
+        "tests": 46,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "executed": 99,
+    "skipped": 0,
+    "unexpectedLogLines": 0,
+    "startedPools": [
+      "HikariPool-1",
+      "HikariPool-2",
+      "HikariPool-3",
+      "HikariPool-4",
+      "HikariPool-5"
+    ],
+    "stoppedPools": [
+      "HikariPool-1",
+      "HikariPool-2",
+      "HikariPool-3",
+      "HikariPool-4",
+      "HikariPool-5"
+    ],
+    "completeMavenOutputIncludingShutdown": true,
+    "logSha256": "cfa425ab549d7e63e568584ebabbd18da9c47e457eda857d0a5701c3729ec7b2",
+    "replayedGateSource": "scripts/verify-mysql-lifecycle.cjs",
+    "gateSourceSha256": "b6f9fd43c9e316945983dac5bc1d1f52fa23ed1d23366368787b5b92fcd2045f",
+    "upgradeThroughV33": true,
+    "nativeAiMySqlHttpMatrixExecuted": false
+  },
+  "runs": [
+    {
+      "name": "nativeUi",
+      "directory": "target/cp75-remote-browser/unpacked/assistant-native-ui-it/run-BBm9F0",
+      "resultSha256": "33a63f5520c8c35767bb1c308ee645a416aef01dcfe9889d9a2775a75f36d7be",
+      "jarSha256": "db87724b6cb71507720b2af589bee7263228d3e607c18a7f6b7ec19b73075808",
+      "status": "PASS",
+      "cases": [
+        {
+          "name": "preview-before-final-commit",
+          "native": true,
+          "incremental": true,
+          "previewVisibleBeforeProviderRelease": true,
+          "databaseAnswersBeforeRelease": 0,
+          "finalAnswers": 1,
+          "modelCalls": 1
+        },
+        {
+          "name": "explicit-cancel-after-preview",
+          "status": "CANCELLED",
+          "cancelledAnswers": 0,
+          "originalKeyUsed": true,
+          "workerReusedBeforeOldProviderRelease": true,
+          "nativeHttpConnectionClosedBeforeProviderRelease": true
+        },
+        {
+          "name": "truncated-preview",
+          "status": "FAILED",
+          "partialAnswersCommitted": 0,
+          "modelCalls": 1
+        },
+        {
+          "name": "idle-after-preview",
+          "status": "TIMED_OUT",
+          "executionBudgetSeconds": 12,
+          "partialAnswersCommitted": 0,
+          "nativeHttpConnectionClosedBeforeProviderRelease": true
+        },
+        {
+          "name": "disconnect-after-preview-manual-query",
+          "status": "COMPLETED",
+          "originalAnswerIdPreserved": true,
+          "streamPosts": 1,
+          "modelCalls": 1
+        }
+      ],
+      "providerCalls": 6,
+      "unexpectedJarErrors": 0,
+      "ownedProcessesStopped": true,
+      "logs": [
+        {
+          "file": "jar.log",
+          "sha256": "acd7cd09e843084be7e0bc7b3d41aa35b4314b20f376e59b9c8699b0af8b31e3"
+        }
+      ]
+    },
+    {
+      "name": "assistantUi",
+      "directory": "target/cp75-remote-browser/unpacked/assistant-request-ui-it/run-oxW7fa",
+      "resultSha256": "b17d25fec9407b5c2dfc0a713b5f7777413d8685d85f1230a9a6513da74ca247",
+      "jarSha256": "db87724b6cb71507720b2af589bee7263228d3e607c18a7f6b7ec19b73075808",
+      "status": "PASS",
+      "cases": [
+        {
+          "name": "explicit-running-cancel",
+          "originalKeyUsed": true,
+          "serverState": "CANCELLED",
+          "lateAnswers": 0,
+          "actualWorkerSettledByFreshAnswer": true
+        },
+        {
+          "name": "lost-completed-response-refresh-query",
+          "actualCompletedResponseLost": true,
+          "originalAnswerIdPreserved": true,
+          "streamPostsIncludingRecovery": 1,
+          "modelCallsIncludingRecovery": 1
+        },
+        {
+          "name": "lost-cancel-response",
+          "backendCancelResponseActuallyLost": true,
+          "noFalseCancelledBeforeQuery": true,
+          "queriedServerState": "CANCELLED",
+          "cancelAuditRows": 1,
+          "lateAnswers": 0
+        },
+        {
+          "name": "not-admitted-manual-retry",
+          "serverLookupStatus": 404,
+          "noAutomaticPost": true,
+          "exactOriginalKeyAndContent": true,
+          "actualModelCalls": 1
+        },
+        {
+          "name": "queued-ui-cancel",
+          "queriedStateBeforeCancel": "QUEUED",
+          "questionAndAnswerRows": 0,
+          "modelCallsForQueuedQuestion": 0
+        },
+        {
+          "name": "real-capacity-feedback",
+          "serverCapacity": "one worker and one queue slot",
+          "actualRejectedStatus": 503,
+          "actualJsonErrorResponse": true,
+          "rejectedQuestionRows": 0,
+          "noAutomaticPost": true,
+          "lookupStatus": 404,
+          "manualRecoveryWithOriginalKeyAndQuestion": true
+        },
+        {
+          "name": "real-budget-timeout",
+          "serverBudgetSeconds": 30,
+          "queriedTerminal": "TIMED_OUT",
+          "originalRequestNotRerun": true,
+          "lateAnswers": 0,
+          "actualWorkerSettledByFreshAnswer": true
+        },
+        {
+          "name": "late-successful-clear-after-account-change",
+          "actualOldClearStatus": 200,
+          "actualOldLogoutStatus": 200,
+          "replacementTokenPreserved": true,
+          "replacementServerStatus": 200,
+          "oldPrivateMessagesNotReintroduced": true
+        }
+      ],
+      "providerCalls": 10,
+      "unexpectedJarErrors": 0,
+      "ownedProcessesStopped": true,
+      "logs": [
+        {
+          "file": "jar.log",
+          "sha256": "027f0a08720cfcf3a53d43af7619f42851dcac39c00da46a9d8a733a3d78a79d"
+        }
+      ]
+    },
+    {
+      "name": "oncallBrowser",
+      "directory": "target/cp75-remote-browser/unpacked/oncall-browser-it/run-3o3d4j",
+      "resultSha256": "b8e625713482f3875b0d09f131e75461a38fd5061c30b3cdc72bd72bde614d01",
+      "status": "PASS",
+      "cases": [
+        {
+          "name": "verify-oncall-rotation-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-rotation-boundaries.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-coverage-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-http.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-revocation-http.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-revocation-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-runbook-trend-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-runbook-publication-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-slo-rules-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-jwt-numeric-date-http.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-stream-session-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-account-security-ui.cjs",
+          "exitCode": 0
+        }
+      ],
+      "unexpectedJarErrors": 0,
+      "ownedProcessesStopped": true,
+      "logs": [
+        {
+          "file": "jar.log",
+          "sha256": "fc94318fac013da04ec679d5a9991888193d35b0f5a07b9b9ec5d6d4f041e672"
+        }
+      ]
+    },
+    {
+      "name": "auth",
+      "directory": "target/cp75-remote-auth/unpacked/auth-session-it/run-FwEx9F",
+      "resultSha256": "b566db04dfdbede61fba17fb988b69234b7eecac9db909767c4b7043354832aa",
+      "status": "PASS",
+      "unexpectedJarErrors": 0,
+      "ownedProcessesStopped": true,
+      "logs": [
+        {
+          "file": "jar-1.log",
+          "sha256": "4e43a2aa77a9db25be279cff429e7b868f03e7c0e8f938f4940d52c3b1086192"
+        },
+        {
+          "file": "jar-2.log",
+          "sha256": "47193f1b190508d0bb559dcdaacd87f819743717fe8d9c3742b490b6e934eccc"
+        }
+      ]
+    },
+    {
+      "name": "agent",
+      "directory": "target/cp75-remote-auth/unpacked/agent-session-it/run-gpzcxj",
+      "resultSha256": "89837fcfe63758aad0fb65c4545ecad89bc942dabb5138cc22a8af22c22f3b45",
+      "jarSha256": "04ecc4f2d9e7d95812fc5e970c0b95ab0824d6eb812c40a7df6e644b286cafd4",
+      "status": "PASS",
+      "unexpectedJarErrors": 0,
+      "ownedProcessesStopped": true,
+      "logs": [
+        {
+          "file": "jar.log",
+          "sha256": "2376ee87ed8463e7d42957e5d5b3ba7334bb38e33cb59b21b8ce4b135f35823e"
+        }
+      ]
+    },
+    {
+      "name": "session",
+      "directory": "target/cp75-remote-auth/unpacked/assistant-session-it/run-SBTWFK",
+      "resultSha256": "3addd23b8f7df6c4eff5e4832ca77fae7647b671a122942d811683b9f4b5027d",
+      "jarSha256": "04ecc4f2d9e7d95812fc5e970c0b95ab0824d6eb812c40a7df6e644b286cafd4",
+      "status": "PASS",
+      "cases": [
+        {
+          "name": "synchronous-logout",
+          "responseStatus": 401,
+          "lateAssistantMessages": 0,
+          "lateAnswerSent": false,
+          "closedBeforeProviderRelease": true
+        },
+        {
+          "name": "stream-logout",
+          "responseStatus": 200,
+          "lateAssistantMessages": 0,
+          "lateAnswerSent": false,
+          "closedBeforeProviderRelease": true,
+          "nativeHttpConnectionClosedBeforeProviderRelease": true,
+          "workerReusedBeforeProviderRelease": true
+        },
+        {
+          "name": "clear-messages",
+          "responseStatus": 409,
+          "lateAssistantMessages": 0,
+          "lateAnswerSent": false,
+          "closedBeforeProviderRelease": false
+        },
+        {
+          "name": "timeout",
+          "closedBeforeProviderRelease": true,
+          "explicitSafeErrorEvent": true,
+          "nativeHttpConnectionClosedBeforeProviderRelease": true,
+          "workerReusedBeforeProviderRelease": true,
+          "lateWorkerSettledByFreshStream": true,
+          "lateAssistantMessages": 0
+        },
+        {
+          "name": "mixed-capacity",
+          "responseStatus": 503,
+          "rejectedQuestionWrites": 0,
+          "queuedQuestionWritesBeforeProviderRelease": 0,
+          "simultaneousProviderCalls": 1
+        },
+        {
+          "name": "synchronous-running-and-queued-timeout",
+          "responseStatuses": [
+            504,
+            504
+          ],
+          "settledBeforeProviderRelease": true,
+          "lateAssistantMessages": 0,
+          "queuedQuestionWrites": 0,
+          "lateWorkerSettledByFreshSynchronousAnswer": true
+        }
+      ],
+      "providerCalls": 11,
+      "unexpectedJarErrors": 0,
+      "ownedProcessesStopped": true,
+      "logs": [
+        {
+          "file": "jar.log",
+          "sha256": "a517d753d824f67bf23a16cf55322f0761d71714b6cc79b9861bb9d20805d7c8"
+        }
+      ]
+    },
+    {
+      "name": "cancel",
+      "directory": "target/cp75-remote-auth/unpacked/assistant-cancel-it/run-9MpfY6",
+      "resultSha256": "fb8dfcf4a98841ffc4311f0be5240e189b40afa3772a68b1fff79eaf7aa09c7b",
+      "jarSha256": "04ecc4f2d9e7d95812fc5e970c0b95ab0824d6eb812c40a7df6e644b286cafd4",
+      "status": "PASS",
+      "cases": [
+        {
+          "name": "lost-queued-cancel-and-running-cancel",
+          "cancelResponseActuallyLost": true,
+          "relayBackendStatus": 200,
+          "repeatedCancelAuditRows": 1,
+          "queuedQuestionWrites": 0,
+          "freedQueueSlotReused": true,
+          "synchronousStatusBeforeProviderRelease": 409,
+          "lateAssistantMessages": 0
+        },
+        {
+          "name": "stream-cancel",
+          "cancelledEventBeforeProviderRelease": true,
+          "doneEventSent": false,
+          "lateAssistantMessages": 0,
+          "nativeHttpConnectionClosedBeforeProviderRelease": true,
+          "workerReusedBeforeProviderRelease": true,
+          "actualWorkerSettledByFreshAnswer": true
+        },
+        {
+          "name": "queued-sigkill-recovery",
+          "statusBeforeCrash": "QUEUED",
+          "statusAfterOriginalBudget": "TIMED_OUT",
+          "questionWrites": 0,
+          "modelReexecuted": false,
+          "cancelledFactsAndSingleAuditSurviveRestart": true
+        }
+      ],
+      "providerCalls": 6,
+      "upgradeFixtureExecuted": false,
+      "unexpectedJarErrors": 0,
+      "ownedProcessesStopped": true,
+      "logs": [
+        {
+          "file": "jar-1.log",
+          "sha256": "b7712126dfcf6e6823ce95fbe6f5787c535ffd89661c43611b989012b5c91780"
+        },
+        {
+          "file": "jar-2.log",
+          "sha256": "3bb30ae2a613152f8489298ca5549174c805ff63995b95845b447555345a770f"
+        }
+      ]
+    },
+    {
+      "name": "idempotency",
+      "directory": "target/cp75-remote-auth/unpacked/assistant-idempotency-it/run-KPbjKA",
+      "resultSha256": "e1a371294c1799797a4163bd2f5668ddf8cb2c23493ba83d64cbdeeaf40da8c2",
+      "jarSha256": "04ecc4f2d9e7d95812fc5e970c0b95ab0824d6eb812c40a7df6e644b286cafd4",
+      "status": "PASS",
+      "cases": [
+        {
+          "name": "lost-completed-response-and-jvm-restart",
+          "backendStatusBeforeResponseLoss": 200,
+          "actualClientResponseLost": true,
+          "sameMessageIdAfterRestart": true,
+          "changedContentStatus": 409,
+          "requestStateAfterRestart": "COMPLETED",
+          "counts": {
+            "user": 1,
+            "assistant": 1
+          },
+          "modelCallsForQuestionIncludingRetries": 1
+        },
+        {
+          "name": "keyed-timeout",
+          "inProgressDuplicateStatus": 409,
+          "timeoutStatus": 504,
+          "stateBeforeProviderRelease": "TIMED_OUT",
+          "lateAssistantMessages": 0,
+          "lateWorkerSettledByFreshKey": true
+        },
+        {
+          "name": "sigkill-accepted-request-recovery",
+          "statusBeforeCrash": "RUNNING",
+          "currentStateAfterIndependentJvmRestart": "TIMED_OUT",
+          "sameKeyRetryStatus": 409,
+          "modelReexecuted": false,
+          "counts": {
+            "user": 1,
+            "assistant": 0
+          }
+        }
+      ],
+      "providerCalls": 5,
+      "unexpectedJarErrors": 0,
+      "ownedProcessesStopped": true,
+      "logs": [
+        {
+          "file": "jar-1.log",
+          "sha256": "ec21210993658c6e07491d05e5eb730a3e3fc90215133089762522c2f10294af"
+        },
+        {
+          "file": "jar-2.log",
+          "sha256": "9d89dbb898c5c7e61e30511337e537edb52f1fde3bce111c9dc40ace95d34951"
+        },
+        {
+          "file": "jar-3.log",
+          "sha256": "b8196673bc4ef6ddbc4a3b4ee95cbcd2bb48cf111c6be3e69dad46aca5d3b6c7"
+        }
+      ]
+    }
+  ],
+  "nativePage": {
+    "url": "http://127.0.0.1:9955/assistant",
+    "viewports": [
+      "1440x1000",
+      "390x844"
+    ],
+    "consoleErrors": [],
+    "pageErrors": [],
+    "streamPosts": 6,
+    "explicitCancelPosts": 1,
+    "providerRequests": [
+      {
+        "question": "cp75-first-preview-9dc153dd-87c6-4485-9f37-e3bc69ad27e2",
+        "calls": 1,
+        "native": true,
+        "incremental": true,
+        "transportClosed": true
+      },
+      {
+        "question": "cp75-cancel-preview-b7256a84-44e2-4f6d-996a-3aaa9b4317f0",
+        "calls": 1,
+        "native": true,
+        "incremental": true,
+        "transportClosed": true
+      },
+      {
+        "question": "cp75-fresh-before-old-release-3bb3e30a-952f-4b12-b78a-bd89bd94209b",
+        "calls": 1,
+        "native": true,
+        "incremental": true,
+        "transportClosed": true
+      },
+      {
+        "question": "cp75-truncated-preview-2b493f42-0e83-4e21-ac04-d229b68b2b2c",
+        "calls": 1,
+        "native": true,
+        "incremental": true,
+        "transportClosed": true
+      },
+      {
+        "question": "cp75-idle-timeout-73bbc1c3-ae8b-456c-abbf-dc9bd78c0e94",
+        "calls": 1,
+        "native": true,
+        "incremental": true,
+        "transportClosed": true
+      },
+      {
+        "question": "cp75-disconnect-preview-331acce7-734d-4d14-aa92-b5f8a8ce55ad",
+        "calls": 1,
+        "native": true,
+        "incremental": true,
+        "transportClosed": true
+      }
+    ],
+    "allSevenScreenshots": [
+      {
+        "file": "native-preview-desktop.png",
+        "sha256": "5086701de7cdc72ded50636c1894f464b44655ed9215e843d75bd19a3adfb885"
+      },
+      {
+        "file": "native-preview-mobile.png",
+        "sha256": "ac21a928b205bbf07c121f3f61e5d879ef1f0aeb5829e0aac6a53f1de1508f01"
+      },
+      {
+        "file": "native-completed-mobile.png",
+        "sha256": "25dd816a4d9d5b41c65fed343786e88fd6c482101049f167aca3e21cc97f6f9c"
+      },
+      {
+        "file": "native-cancelled-mobile.png",
+        "sha256": "ec3256e9fb1712e52317e31c48688eea2999f480dfdec1ab1e2b348d98e38515"
+      },
+      {
+        "file": "native-failed-mobile.png",
+        "sha256": "8939b611263c4f013554ee57c7cf1d65db95f944db3596f87e5224b0255c0d66"
+      },
+      {
+        "file": "native-timeout-mobile.png",
+        "sha256": "702365b17c69e37eeef9c8f90e91637eb4af2da516905e75144528ee40c82428"
+      },
+      {
+        "file": "native-recovered-desktop.png",
+        "sha256": "3350bdb0ecba5ba97065ed5ac33f462347fd88637c982aee01d9a3d8209ee402"
+      }
+    ],
+    "independentlyViewedScreenshots": [
+      "native-preview-desktop.png",
+      "native-preview-mobile.png"
+    ]
+  },
+  "limits": [
+    "native model partial-stream matrix uses H2, not a new native AI MySQL HTTP matrix",
+    "remote cancel runner has 3 cases/2 JVMs and no historical JAR upgrade fixture; local upgrade evidence remains separate",
+    "controlled provider is not real model quality or production capacity",
+    "cross-node native cancellation and slow consumers remain unverified at CP75",
+    "other workflow artifacts are not independently downloaded/replayed"
+  ]
+}
