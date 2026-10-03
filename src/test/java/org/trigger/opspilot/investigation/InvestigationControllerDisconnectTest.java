@@ -15,7 +15,7 @@ class InvestigationControllerDisconnectTest {
     void shouldIsolateClientDisconnectFromBackgroundEventPublishing() {
         DisconnectingEmitter emitter = new DisconnectingEmitter();
         AtomicBoolean connected = new AtomicBoolean(true);
-        AgentRunEventService.EventSink sink = InvestigationController.emitterSink(emitter, connected);
+        AgentRunEventService.EventSink sink = InvestigationController.emitterSink(emitter, connected, () -> true);
         AgentRunEventService.EventView event = new AgentRunEventService.EventView(
                 1, 7, 1, "RUN_STARTED", null, null, "RUNNING", "{}", LocalDateTime.now());
 

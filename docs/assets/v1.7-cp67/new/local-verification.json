@@ -1,0 +1,49 @@
+{
+  "scope": "CP67 local backend and actual HTTP JAR; remote and rendered UI pending",
+  "baselineBusinessCommit": "7705b8db06ff1393ace49b60aae7d8bb58523e73",
+  "baseWorkingTreeCommit": "63ce9f46e7314dc1624bd31eeae5e5f357ad368f",
+  "timezones": {
+    "UTC": {
+      "found": 394,
+      "executed": 299,
+      "failures": 0,
+      "errors": 0,
+      "conditionalSkipped": 95,
+      "buildSuccess": true,
+      "finished": "2026-10-03T02:05:23Z"
+    },
+    "Asia/Shanghai": {
+      "found": 394,
+      "executed": 299,
+      "failures": 0,
+      "errors": 0,
+      "conditionalSkipped": 95,
+      "buildSuccess": true,
+      "finished": "2026-10-03T10:07:57+08:00"
+    }
+  },
+  "requiredHttpAndToolCases": [
+    "shouldRefuseFinalReportCommitWhenSessionIsRevokedAfterLastCheckpoint",
+    "shouldPersistCancellationWhenToolReturnsWithInterruptFlag",
+    "shouldCloseIdleSubscriptionAfterPasswordChangeAndKeepOtherAccountValid",
+    "shouldStopExistingHttpSubscriptionAfterCommittedLogoutWithoutLeakingNewEvent",
+    "shouldCloseAlreadyEstablishedSubscriptionWhenSignedTokenExpires",
+    "shouldCancelQueuedInvestigationAfterRoleDowngradeButKeepAuthorizedRead",
+    "shouldNotStartQueuedRunAfterItsCapturedSessionIsRevoked",
+    "shouldDiscardLateToolResultAfterRealPostStreamSessionIsRevoked",
+    "shouldCloseIdleSubscriptionWhenAccountIsDisabled"
+  ],
+  "mysql": {
+    "localExecuted": false,
+    "remoteMinimumExecuted": 88,
+    "requiredAccountCases": 20,
+    "gateUnitTests": 13
+  },
+  "staticComparison": {
+    "oldNonemptyEntries": 99,
+    "newNonemptyEntries": 99,
+    "compared": 99,
+    "different": 0,
+    "renderedUiTest": false
+  }
+}

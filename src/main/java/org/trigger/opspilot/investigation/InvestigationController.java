@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.trigger.opspilot.common.ApiResponse;
 import org.trigger.opspilot.security.UserPrincipal;
+import org.trigger.opspilot.security.SessionAuthorization;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BooleanSupplier;
 
 @RestController
 @RequestMapping("/api/v1/incidents")
@@ -29,12 +31,14 @@ public class InvestigationController {
     private final InvestigationService service;
     private final AgentRunEventService eventService;
     private final AgentExecutionManager executionManager;
+    private final SessionAuthorization authorization;
 
     public InvestigationController(InvestigationService service, AgentRunEventService eventService,
-                                   AgentExecutionManager executionManager) {
+                                   AgentExecutionManager executionManager, SessionAuthorization authorization) {
         this.service = service;
         this.eventService = eventService;
         this.executionManager = executionManager;
+        this.authorization = authorization;
     }
 
     @PostMapping("/{id}/investigations")
@@ -66,7 +70,8 @@ public class InvestigationController {
         emitter.onCompletion(() -> connected.set(false));
         emitter.onTimeout(() -> connected.set(false));
         emitter.onError(error -> connected.set(false));
-        AgentRunEventService.EventSink sink = emitterSink(emitter, connected);
+        var lease = authorization.current();
+        AgentRunEventService.EventSink sink = emitterSink(emitter, connected, () -> authorization.authorized(lease, false));
         eventService.list(prepared.runId(), 0).forEach(sink::publish);
         if (prepared.reused()) {
             emitter.complete();
@@ -78,7 +83,11 @@ public class InvestigationController {
                 service.execute(prepared, actor, sink);
                 if (connected.get()) emitter.complete();
             } catch (RuntimeException exception) {
+                org.slf4j.LoggerFactory.getLogger(InvestigationController.class).warn(
+                        "Agent run {} escaped execution settlement: {} / {}", prepared.runId(),
+                        exception.getClass().getSimpleName(), exception.getCause() == null ? "none" : exception.getCause().getClass().getSimpleName());
                 if (!connected.get()) return;
+                if (!authorization.authorized(lease, false)) { connected.set(false); emitter.complete(); return; }
                 try {
                     emitter.send(SseEmitter.event().name("error")
                             .data(new StreamError("RUN_FAILED", safeMessage(exception))));
@@ -87,7 +96,10 @@ public class InvestigationController {
                     connected.set(false);
                 }
             }
-            }, () -> service.requestTimeout(prepared.runId()));
+            }, () -> service.requestTimeout(prepared.runId()), () -> authorization.authorized(prepared.authorization(), true), () -> {
+                try { service.requestAuthorizationCancellation(prepared.runId()); }
+                finally { connected.set(false); emitter.complete(); }
+            });
         } catch (TaskRejectedException exception) {
             service.rejectQueue(prepared.runId(), exception, sink);
             if (connected.get()) emitter.complete();
@@ -95,17 +107,19 @@ public class InvestigationController {
         return emitter;
     }
 
-    static AgentRunEventService.EventSink emitterSink(SseEmitter emitter, AtomicBoolean connected) {
+    static AgentRunEventService.EventSink emitterSink(SseEmitter emitter, AtomicBoolean connected, BooleanSupplier authorized) {
         return event -> {
             if (!connected.get()) return;
             try {
+                if (!authorized.getAsBoolean()) { connected.set(false); emitter.complete(); return; }
                 emitter.send(SseEmitter.event()
                         .id(String.valueOf(event.id()))
                         .name(event.eventType().toLowerCase(Locale.ROOT))
                         .reconnectTime(2_000L)
                         .data(event));
-            } catch (IOException | IllegalStateException exception) {
+            } catch (IOException | RuntimeException exception) {
                 connected.set(false);
+                emitter.complete();
             }
         };
     }

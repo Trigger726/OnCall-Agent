@@ -1,0 +1,18 @@
+{
+  "status": "EXPECTED_REGRESSION_FAILURES",
+  "businessSourceCommit": "7705b8db06ff1393ace49b60aae7d8bb58523e73",
+  "worktreeStartCommit": "63ce9f46e7314dc1624bd31eeae5e5f357ad368f",
+  "tests": 3,
+  "failures": 3,
+  "errors": 0,
+  "skipped": 0,
+  "finishedAt": "2026-10-03T04:36:36+08:00",
+  "initialFixtureFailure": "Wrong login token field produced 401 before target assertions; preserved separately, not security regression proof",
+  "observations": [
+    {"test": "shouldStopExistingHttpSubscriptionAfterCommittedLogoutWithoutLeakingNewEvent", "expected": "EOF", "actual": "event:after_revoke"},
+    {"test": "shouldNotStartQueuedRunAfterItsCapturedSessionIsRevoked", "expected": "CANCELLED", "actual": "COMPLETED"},
+    {"test": "shouldDiscardLateToolResultAfterRealPostStreamSessionIsRevoked", "expected": "CANCELLED", "actual": "COMPLETED"}
+  ],
+  "tokensPersistedToEvidence": false,
+  "limitation": "Direct PreparedRun queue-boundary case is not physical bounded-queue reclamation; controlled blocked tool is not a production Provider"
+}

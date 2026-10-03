@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -33,6 +32,8 @@ class AgentEventStreamIntegrationTest {
     @Autowired AgentRunEventService events;
     @Autowired AgentEventSubscriptions subscriptions;
     @Autowired SecurityFilterChain security;
+    @Autowired org.trigger.opspilot.security.JwtService jwt;
+    @Autowired org.trigger.opspilot.security.OpsUserDetailsService users;
 
     @Test
     void shouldWriteSecurityHeadersBeforeSseWorkStartsAndRetainStreamCachePolicy() throws Exception {
@@ -56,7 +57,7 @@ class AgentEventStreamIntegrationTest {
         long queued = events.list(runId, 0).get(0).id();
         var terminal = finish(runId);
         String path = path(runId);
-        var result = mvc.perform(get(path).with(user("reader").roles("VIEWER"))
+        var result = mvc.perform(get(path).header("Authorization", bearer())
                         .header("Last-Event-ID", queued))
                 .andExpect(request().asyncStarted()).andReturn();
         result.getAsyncResult(5000);
@@ -66,7 +67,7 @@ class AgentEventStreamIntegrationTest {
         String body = result.getResponse().getContentAsString();
         assertThat(body).contains("id:" + terminal.id(), "event:run_completed")
                 .doesNotContain("event:run_queued");
-        var consumed = mvc.perform(get(path).with(user("reader"))
+        var consumed = mvc.perform(get(path).header("Authorization", bearer())
                         .param("after", Long.toString(terminal.id())))
                 .andExpect(request().asyncStarted()).andReturn();
         consumed.getAsyncResult(5000);
@@ -77,7 +78,7 @@ class AgentEventStreamIntegrationTest {
     @Test
     void shouldCatchUpActiveSubscriptionWithoutRedisAndHonorQueryCursor() throws Exception {
         long runId = prepare();
-        var result = mvc.perform(get(path(runId)).with(user("reader"))
+        var result = mvc.perform(get(path(runId)).header("Authorization", bearer())
                         .param("after", "0").header("Last-Event-ID", Long.MAX_VALUE))
                 .andExpect(request().asyncStarted()).andReturn();
         var terminal = finish(runId);
@@ -95,9 +96,9 @@ class AgentEventStreamIntegrationTest {
         long runId = prepare();
         long foreign = events.list(prepare(), 0).get(0).id();
         mvc.perform(get(path(runId))).andExpect(status().isUnauthorized());
-        mvc.perform(get(path(Long.MAX_VALUE)).with(user("reader"))).andExpect(status().isNotFound());
+        mvc.perform(get(path(Long.MAX_VALUE)).header("Authorization", bearer())).andExpect(status().isNotFound());
         for (String cursor : new String[]{"-1", "garbage", Long.toString(foreign), Long.toString(Long.MAX_VALUE)}) {
-            mvc.perform(get(path(runId)).with(user("reader")).param("after", cursor))
+            mvc.perform(get(path(runId)).header("Authorization", bearer()).param("after", cursor))
                     .andExpect(status().isBadRequest());
         }
     }
@@ -109,7 +110,7 @@ class AgentEventStreamIntegrationTest {
                         .header("Access-Control-Request-Headers", "authorization,last-event-id,idempotency-key"))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:5173"));
-        mvc.perform(get("/api/v1/agent-runs/1/events").with(user("reader"))
+        mvc.perform(get("/api/v1/agent-runs/1/events").header("Authorization", bearer())
                         .header("Origin", "http://localhost:5173"))
                 .andExpect(header().string("Access-Control-Expose-Headers",
                         "X-OpsPilot-Run-Id, X-OpsPilot-Idempotent-Replay"));
@@ -126,4 +127,5 @@ class AgentEventStreamIntegrationTest {
     }
 
     private static String path(long runId) { return "/api/v1/agent-runs/" + runId + "/events/stream"; }
+    private String bearer() { return "Bearer " + jwt.createToken(users.loadUserByUsername("auditor")); }
 }

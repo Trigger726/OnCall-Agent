@@ -37,6 +37,11 @@ public class JwtService {
     }
 
     public TokenIdentity verifyIdentity(String token) throws JWTVerificationException {
+        var lease = verifySession(token);
+        return new TokenIdentity(lease.userId(), lease.username(), lease.authVersion());
+    }
+
+    public SessionAuthorization.Lease verifySession(String token) throws JWTVerificationException {
         DecodedJWT decoded;
         try {
             decoded = JWT.require(algorithm)
@@ -58,7 +63,7 @@ public class JwtService {
                 || version == null || !version.isIntegralNumber() || !version.canConvertToLong() || version.longValue() < 0) {
             throw new JWTVerificationException("Invalid token identity or expiry");
         }
-        return new TokenIdentity(uid.longValue(), subject.textValue(), version.longValue());
+        return new SessionAuthorization.Lease(uid.longValue(), subject.textValue(), version.longValue(), decoded.getExpiresAtAsInstant());
     }
 
     public record TokenIdentity(long userId, String username, long authVersion) { }

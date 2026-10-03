@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const expectedSuites = {
-  'org.trigger.opspilot.MySqlCompatibilityIntegrationTest': 33,
+  'org.trigger.opspilot.MySqlCompatibilityIntegrationTest': 35,
   'org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest': 8,
   'org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest': 10,
   'org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest': 8,
@@ -20,6 +20,8 @@ const requiredAccountTests = [
   'shouldSupportUnicodeWithoutAllowingUnchangedPassword', 'shouldRejectSessionVersionExhaustionWithoutWrapping',
   'shouldRollbackPasswordAndVersionWhenAuditFails',
   'shouldRejectBcryptByteTruncationAliasesAtLogin',
+  'shouldFenceFinalAuthorizationAgainstConcurrentRevocationCommit',
+  'shouldRecheckLeaseExpiryAfterFinalAuthorizationLockWait',
 ];
 
 function suiteResult(xml, name, minimum) {

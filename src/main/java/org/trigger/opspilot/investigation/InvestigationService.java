@@ -20,6 +20,7 @@ import org.trigger.opspilot.investigation.tool.InvestigationTool;
 import org.trigger.opspilot.investigation.tool.InvestigationTool.ToolEvidence;
 import org.trigger.opspilot.observability.tracing.OpsPilotTracing;
 import org.trigger.opspilot.remediation.RemediationProposalService;
+import org.trigger.opspilot.security.SessionAuthorization;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -47,6 +48,7 @@ public class InvestigationService {
     private final RemediationProposalService remediationProposalService;
     private final TransactionTemplate transactionTemplate;
     private final OpsPilotTracing tracing;
+    private final SessionAuthorization authorization;
     private final List<InvestigationTool> tools;
     private final Duration defaultExecutionTimeout;
     private final Duration maxExecutionTimeout;
@@ -59,6 +61,7 @@ public class InvestigationService {
                                 RemediationProposalService remediationProposalService,
                                 TransactionTemplate transactionTemplate,
                                 OpsPilotTracing tracing,
+                                SessionAuthorization authorization,
                                 List<InvestigationTool> tools,
                                 @Value("${opspilot.agent.execution-timeout:60s}") Duration defaultExecutionTimeout,
                                 @Value("${opspilot.agent.max-execution-timeout:5m}") Duration maxExecutionTimeout) {
@@ -72,6 +75,7 @@ public class InvestigationService {
         this.remediationProposalService = remediationProposalService;
         this.transactionTemplate = transactionTemplate;
         this.tracing = tracing;
+        this.authorization = authorization;
         this.tools = tools.stream().sorted(Comparator.comparingInt(InvestigationTool::order)).toList();
         this.defaultExecutionTimeout = defaultExecutionTimeout;
         this.maxExecutionTimeout = maxExecutionTimeout;
@@ -91,6 +95,10 @@ public class InvestigationService {
 
     public PreparedRun prepare(long incidentId, String rawTriggerSource, RunActor actor,
                                String rawIdempotencyKey, Duration requestedTimeout) {
+        var lease = authorization.capture(actor.userId());
+        if (!authorization.authorized(lease, true)) {
+            throw new org.springframework.security.authentication.CredentialsExpiredException("Investigation authorization expired");
+        }
         incidentService.findSummary(incidentId);
         String triggerSource = normalizeTriggerSource(rawTriggerSource);
         String idempotencyKey = normalizeIdempotencyKey(rawIdempotencyKey);
@@ -109,7 +117,7 @@ public class InvestigationService {
             agentRunEventService.record(runId, "RUN_QUEUED", null, null, "QUEUED",
                     payload, AgentRunEventService.EventSink.NOOP);
             return new PreparedRun(runId, incidentId, triggerSource, idempotencyKey,
-                    deadlineAt, false, "QUEUED");
+                    deadlineAt, false, "QUEUED", lease);
         } catch (DuplicateKeyException exception) {
             return findPreparedRun(incidentId, idempotencyKey, true);
         }
@@ -124,9 +132,17 @@ public class InvestigationService {
                                                AgentRunEventService.EventSink eventSink) {
         long incidentId = prepared.incidentId();
         String triggerSource = prepared.triggerSource();
+        long runId = prepared.runId();
+        if (prepared.reused() || prepared.authorization() == null || actor.userId() == null
+                || actor.userId() != prepared.authorization().userId()) {
+            throw new org.springframework.security.authentication.CredentialsExpiredException("Original execution authorization required");
+        }
+        if (!authorization.authorized(prepared.authorization(), true)) {
+            requestAuthorizationCancellation(runId);
+            return cancelledResult(runId);
+        }
         IncidentService.IncidentDetail detail = incidentService.get(incidentId);
         LocalDateTime runStartedAt = LocalDateTime.now();
-        long runId = prepared.runId();
         if (!startRun(runId, runStartedAt)) {
             throw new ApiException(HttpStatus.CONFLICT, "AGENT_RUN_NOT_QUEUED",
                     "Agent 调查运行当前不可启动，运行 #" + runId);
@@ -149,7 +165,7 @@ public class InvestigationService {
 
         try {
             for (InvestigationTool tool : tools) {
-                checkControl(runId);
+                checkControl(runId, prepared.authorization());
                 int stepSequence = sequence++;
                 LocalDateTime startedAt = LocalDateTime.now();
                 String inputJson = serialize(Map.of(
@@ -162,7 +178,7 @@ public class InvestigationService {
                 try {
                     InvestigationTool.ToolResult result = tracing.traceAgentTool(runId, incidentId, tool,
                             () -> tool.execute(detail, new InvestigationTool.ToolContext(actor.userId())));
-                    checkControl(runId);
+                    checkControl(runId, prepared.authorization());
                     evidence.addAll(result.evidence());
                     LocalDateTime completedAt = LocalDateTime.now();
                     Map<String, Object> tracedInput = new LinkedHashMap<>();
@@ -184,9 +200,11 @@ public class InvestigationService {
                                     "summary", result.summary(), "evidenceCount", result.evidence().size(),
                                     "evidenceRefs", result.evidence().stream().map(ToolEvidence::ref).toList(),
                                     "durationMs", durationMs, "metadata", result.traceMetadata()), eventSink);
-                    checkControl(runId);
-                } catch (RuntimeException exception) {
+                    checkControl(runId, prepared.authorization());
+                } catch (RuntimeException | LinkageError exception) {
                     if (exception instanceof RunTerminatedException) throw exception;
+                    consumeInterruption(runId);
+                    if (!authorization.authorized(prepared.authorization(), true)) requestAuthorizationCancellation(runId);
                     TerminationSignal termination = detectTermination(runId);
                     if (termination != null) {
                         LocalDateTime completedAt = LocalDateTime.now();
@@ -201,9 +219,10 @@ public class InvestigationService {
                                         "reason", termination.reason(), "durationMs", durationMs), eventSink);
                         throw new RunTerminatedException(termination);
                     }
+                    if (exception instanceof LinkageError error) throw error;
                     failedTools++;
                     LocalDateTime completedAt = LocalDateTime.now();
-                    String error = clippedError(exception);
+                    String error = clippedError((RuntimeException) exception);
                     long durationMs = elapsedMillis(startedAt, completedAt);
                     insertStep(runId, stepSequence, "EXECUTE", tool.name(), "FAILED", tool.title(), inputJson,
                             "工具执行失败，已保留其他证据源并继续调查。", "[]", error,
@@ -215,7 +234,7 @@ public class InvestigationService {
                 }
             }
 
-            checkControl(runId);
+            checkControl(runId, prepared.authorization());
             RuleConclusion conclusion = conclude(detail, evidence);
             String replanSummary = buildReplanSummary(evidence, failedTools);
             LocalDateTime replanAt = LocalDateTime.now();
@@ -229,7 +248,7 @@ public class InvestigationService {
 
             String engine = "AGENT_TOOLCHAIN";
             String summary = conclusion.summary();
-            checkControl(runId);
+            checkControl(runId, prepared.authorization());
             AiNarrativeService ai = aiNarrativeService.getIfAvailable();
             if (ai != null) {
                 try {
@@ -240,13 +259,16 @@ public class InvestigationService {
                             exception.getMessage());
                 }
             }
-            checkControl(runId);
+            checkControl(runId, prepared.authorization());
 
             String runStatus = failedTools == 0 ? "COMPLETED" : "PARTIAL";
             String finalEngine = engine;
             String finalSummary = summary;
             int finishSequence = sequence;
             FinalizedReport finalized = transactionTemplate.execute(transaction -> {
+                if (!authorization.authorized(prepared.authorization(), true, true)) {
+                    throw new RunTerminatedException(new TerminationSignal("CANCELLED", AUTHORIZATION_REASON));
+                }
                 long reportId = createReport(incidentId, finalEngine, runStatus, finalSummary,
                         conclusion, evidence, actor.userId());
                 LocalDateTime finishedAt = LocalDateTime.now();
@@ -564,7 +586,26 @@ public class InvestigationService {
         if (termination != null) throw new RunTerminatedException(termination);
     }
 
+    private static final String AUTHORIZATION_REASON = "发起会话已失效或当前账号不再具备调查权限，调查已安全取消";
+
+    public void requestAuthorizationCancellation(long runId) {
+        requestTermination(runId, "CANCEL", "CANCELLED", null, AUTHORIZATION_REASON, AgentRunEventService.EventSink.NOOP);
+    }
+
+    private void checkControl(long runId, SessionAuthorization.Lease lease) {
+        consumeInterruption(runId);
+        if (!authorization.authorized(lease, true)) requestAuthorizationCancellation(runId);
+        checkControl(runId);
+    }
+
+    private InvestigationResult cancelledResult(long runId) {
+        var run = agentRunQueryService.get(runId);
+        return new InvestigationResult(runId, null, run.status(), "AGENT_TOOLCHAIN", AUTHORIZATION_REASON,
+                AUTHORIZATION_REASON, null, null, List.of(), run.steps());
+    }
+
     private TerminationSignal detectTermination(long runId) {
+        consumeInterruption(runId);
         RunControlState state = loadControlState(runId);
         TerminationSignal signal = signalFrom(state);
         if (signal != null) return signal;
@@ -572,12 +613,14 @@ public class InvestigationService {
             requestTimeout(runId);
             return new TerminationSignal("TIMED_OUT", "Agent 调查超过全链路超时预算");
         }
-        if (Thread.currentThread().isInterrupted()) {
-            requestTermination(runId, "CANCEL", "CANCELLED", null,
-                    "Agent 调查执行线程已被中断", AgentRunEventService.EventSink.NOOP);
-            return new TerminationSignal("CANCELLED", "Agent 调查执行线程已被中断");
-        }
         return null;
+    }
+
+    private void consumeInterruption(long runId) {
+        // Terminal settlement owns this signal: clear it before JDBC or cold nested-JAR class loading.
+        // Persist it as control state; never resume business work after consuming cancellation.
+        if (Thread.interrupted()) requestTermination(runId, "CANCEL", "CANCELLED", null,
+                "Agent 调查执行线程已被中断", AgentRunEventService.EventSink.NOOP);
     }
 
     private RunControlState loadControlState(long runId) {
@@ -736,7 +779,11 @@ public class InvestigationService {
 
     public record PreparedRun(long runId, long incidentId, String triggerSource,
                               String idempotencyKey, LocalDateTime deadlineAt,
-                              boolean reused, String status) {
+                              boolean reused, String status, SessionAuthorization.Lease authorization) {
+        public PreparedRun(long runId, long incidentId, String triggerSource, String idempotencyKey,
+                           LocalDateTime deadlineAt, boolean reused, String status) {
+            this(runId, incidentId, triggerSource, idempotencyKey, deadlineAt, reused, status, null);
+        }
     }
 
     public record InvestigationResult(Long runId, Long reportId, String status, String engine,

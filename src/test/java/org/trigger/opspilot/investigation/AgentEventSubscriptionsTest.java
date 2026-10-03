@@ -27,7 +27,7 @@ class AgentEventSubscriptionsTest {
             return List.of(event(1, "RUN_STARTED"));
         });
         when(events.page(1, 1, 100)).thenReturn(List.of(event(2, "RUN_COMPLETED")));
-        hub.subscribe(1, 0, output);
+        hub.subscribe(1, 0, output, () -> true);
         assertThat(hub.size()).isEqualTo(1);
         hub.notified(new AgentEventReceiver.Notification(1, 2));
         assertThat(tasks).hasSize(1);
@@ -45,7 +45,7 @@ class AgentEventSubscriptionsTest {
     void shouldRecoverWithoutNotificationsAndReleaseDisconnectedSlots() {
         var output = new RecordingOutput();
         when(events.page(1, 0, 100)).thenReturn(List.of(), List.of(event(1, "RUN_STARTED")));
-        hub.subscribe(1, 0, output);
+        hub.subscribe(1, 0, output, () -> true);
         tasks.remove().run();
         assertThat(output.ids).isEmpty();
         hub.catchUp();
@@ -64,16 +64,16 @@ class AgentEventSubscriptionsTest {
         for (int i = 0; i < 128; i++) {
             var output = new RecordingOutput();
             outputs.add(output);
-            hub.subscribe(1, 0, output);
+            hub.subscribe(1, 0, output, () -> true);
         }
-        assertThatThrownBy(() -> hub.subscribe(1, 0, new RecordingOutput()))
+        assertThatThrownBy(() -> hub.subscribe(1, 0, new RecordingOutput(), () -> true))
                 .isInstanceOf(org.trigger.opspilot.common.ApiException.class);
         for (int i = 0; i < 100; i++) hub.catchUp();
         assertThat(tasks).hasSize(128);
         outputs.forEach(o -> o.disconnect.run());
         while (!tasks.isEmpty()) tasks.remove().run();
         assertThat(hub.size()).isZero();
-        hub.subscribe(1, 0, new RecordingOutput());
+        hub.subscribe(1, 0, new RecordingOutput(), () -> true);
         assertThat(hub.size()).isEqualTo(1);
     }
 
@@ -85,13 +85,13 @@ class AgentEventSubscriptionsTest {
                     .mapToObj(id -> event(id, "STEP_STARTED")).toList();
         });
         var output = new RecordingOutput();
-        hub.subscribe(1, 0, output);
+        hub.subscribe(1, 0, output, () -> true);
         while (!tasks.isEmpty()) tasks.remove().run();
         assertThat(output.ids).hasSize(1000).doesNotHaveDuplicates();
         assertThat(output.completed).isTrue();
         assertThat(hub.size()).isZero();
         var resumed = new RecordingOutput();
-        hub.subscribe(1, 1000, resumed);
+        hub.subscribe(1, 1000, resumed, () -> true);
         tasks.remove().run();
         assertThat(resumed.ids.get(0)).isEqualTo(1001);
         resumed.disconnect.run();
@@ -101,7 +101,7 @@ class AgentEventSubscriptionsTest {
     void shouldCloseAlreadyConsumedTerminalAndIsolateBrokenOutput() {
         when(events.validateCursor(1, 2)).thenReturn(event(2, "RUN_CANCELLED"));
         var terminal = new RecordingOutput();
-        hub.subscribe(1, 2, terminal);
+        hub.subscribe(1, 2, terminal, () -> true);
         tasks.remove().run();
         assertThat(terminal.completed).isTrue();
         assertThat(terminal.ids).isEmpty();
@@ -111,7 +111,7 @@ class AgentEventSubscriptionsTest {
                 throw new IOException("disconnected");
             }
         };
-        hub.subscribe(1, 0, broken);
+        hub.subscribe(1, 0, broken, () -> true);
         tasks.remove().run();
         assertThat(hub.size()).isZero();
         assertThat(broken.completed).isFalse();
@@ -136,7 +136,7 @@ class AgentEventSubscriptionsTest {
             }
         };
         try {
-            live.subscribe(1, 0, output);
+            live.subscribe(1, 0, output, () -> true);
             assertThat(entered.await(3, java.util.concurrent.TimeUnit.SECONDS)).isTrue();
             // Would deadlock if notify or close took the sending thread's lock.
             org.junit.jupiter.api.Assertions.assertTimeoutPreemptively(java.time.Duration.ofSeconds(1), () -> {
@@ -161,13 +161,67 @@ class AgentEventSubscriptionsTest {
         var bounded = new AgentEventSubscriptions(events, executor);
         var output = new RecordingOutput();
         when(events.page(1, 0, 100)).thenReturn(List.of(event(1, "RUN_COMPLETED")));
-        bounded.subscribe(1, 0, output);
+        bounded.subscribe(1, 0, output, () -> true);
         assertThat(output.ids).isEmpty();
         reject.set(false);
         bounded.catchUp();
         tasks.remove().run();
         assertThat(output.ids).containsExactly(1L);
         assertThat(bounded.size()).isZero();
+    }
+
+    @Test
+    void shouldRejectInvalidSessionBeforeCursorLookupOrSlotAllocation() {
+        assertThatThrownBy(() -> hub.subscribe(1, 0, new RecordingOutput(), () -> false))
+                .isInstanceOf(org.springframework.security.authentication.CredentialsExpiredException.class);
+        verifyNoInteractions(events);
+        assertThat(hub.size()).isZero();
+        assertThat(tasks).isEmpty();
+    }
+
+    @Test
+    void shouldStopInsideBatchWhenSessionIsRevokedAfterFirstSend() {
+        var valid = new java.util.concurrent.atomic.AtomicBoolean(true);
+        var output = new RecordingOutput() {
+            public void send(AgentRunEventService.EventView event) { ids.add(event.id()); valid.set(false); }
+        };
+        when(events.page(1, 0, 100)).thenReturn(List.of(event(1, "RUN_STARTED"), event(2, "RUN_COMPLETED")));
+        hub.subscribe(1, 0, output, valid::get);
+        tasks.remove().run();
+        assertThat(output.ids).containsExactly(1L);
+        assertThat(output.completed).isTrue();
+        assertThat(hub.size()).isZero();
+    }
+
+    @Test
+    void shouldCloseIdleRevokedConnectionAndReleaseItsSlotAtCatchup() {
+        var valid = new java.util.concurrent.atomic.AtomicBoolean(true);
+        var output = new RecordingOutput();
+        when(events.page(1, 0, 100)).thenReturn(List.of());
+        hub.subscribe(1, 0, output, valid::get);
+        tasks.remove().run();
+        valid.set(false);
+        hub.catchUp();
+        tasks.remove().run();
+        assertThat(output.completed).isTrue();
+        assertThat(output.ids).isEmpty();
+        assertThat(hub.size()).isZero();
+        verify(events, times(1)).page(1, 0, 100);
+    }
+
+    @Test
+    void shouldFailClosedWhenOngoingAuthorizationReadFails() {
+        var first = new java.util.concurrent.atomic.AtomicBoolean(true);
+        var output = new RecordingOutput();
+        hub.subscribe(1, 0, output, () -> {
+            if (first.getAndSet(false)) return true;
+            throw new IllegalStateException("authorization database unavailable");
+        });
+        tasks.remove().run();
+        assertThat(output.completed).isTrue();
+        assertThat(output.ids).isEmpty();
+        assertThat(hub.size()).isZero();
+        verify(events, never()).page(anyLong(), anyLong(), anyInt());
     }
 
     private static AgentRunEventService.EventView event(long id, String type) {

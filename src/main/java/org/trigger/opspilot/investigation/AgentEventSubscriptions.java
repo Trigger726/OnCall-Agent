@@ -16,6 +16,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BooleanSupplier;
 
 @Service
 public class AgentEventSubscriptions {
@@ -32,7 +33,7 @@ public class AgentEventSubscriptions {
         this.executor = executor;
     }
 
-    public SseEmitter open(long runId, long after) {
+    public SseEmitter open(long runId, long after, BooleanSupplier authorized) {
         var emitter = new SseEmitter(60_000L);
         subscribe(runId, after, new Output() {
             public void send(AgentRunEventService.EventView event) throws IOException {
@@ -45,17 +46,18 @@ public class AgentEventSubscriptions {
                 emitter.onTimeout(callback);
                 emitter.onError(error -> callback.run());
             }
-        });
+        }, authorized);
         return emitter;
     }
 
-    void subscribe(long runId, long after, Output output) {
+    void subscribe(long runId, long after, Output output, BooleanSupplier authorized) {
+        if (!authorized.getAsBoolean()) throw new org.springframework.security.authentication.CredentialsExpiredException("Session expired");
         // Same visibility as JSON replay; reject a cursor belonging to a different run.
         var cursorEvent = events.validateCursor(runId, after);
         if (!slots.tryAcquire()) throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE,
                 "AGENT_SUBSCRIPTIONS_FULL", "实时订阅已满，请稍后携带游标重试");
         var subscription = new Subscription(runId, after, output,
-                cursorEvent != null && TERMINAL.contains(cursorEvent.eventType()));
+                cursorEvent != null && TERMINAL.contains(cursorEvent.eventType()), authorized);
         subscriptions.add(subscription); // Register before the first database catch-up.
         output.onClose(subscription::close);
         subscription.signal();
@@ -85,6 +87,7 @@ public class AgentEventSubscriptions {
     private final class Subscription {
         private final long runId;
         private final Output output;
+        private final BooleanSupplier authorized;
         private final AtomicBoolean closed = new AtomicBoolean();
         private final AtomicBoolean scheduled = new AtomicBoolean();
         private final AtomicBoolean dirty = new AtomicBoolean();
@@ -92,11 +95,12 @@ public class AgentEventSubscriptions {
         private int sent;
         private boolean terminal;
 
-        Subscription(long runId, long cursor, Output output, boolean terminal) {
+        Subscription(long runId, long cursor, Output output, boolean terminal, BooleanSupplier authorized) {
             this.runId = runId;
             this.cursor = cursor;
             this.output = output;
             this.terminal = terminal;
+            this.authorized = authorized;
         }
 
         void signal() {
@@ -114,10 +118,12 @@ public class AgentEventSubscriptions {
             try {
                 dirty.set(false);
                 if (closed.get()) return;
+                if (!authorized.getAsBoolean()) { finish(); return; }
                 if (terminal) { finish(); return; }
                 var batch = events.page(runId, cursor, 100);
                 for (var event : batch) {
                     if (closed.get()) return;
+                    if (!authorized.getAsBoolean()) { finish(); return; }
                     output.send(event);
                     cursor = event.id();
                     sent++;

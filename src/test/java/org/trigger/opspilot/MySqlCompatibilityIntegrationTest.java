@@ -89,6 +89,7 @@ class MySqlCompatibilityIntegrationTest {
     @Autowired private com.fasterxml.jackson.databind.ObjectMapper httpMapper;
     @Autowired private org.trigger.opspilot.security.JwtProperties httpJwtProperties;
     @Autowired private org.springframework.security.crypto.password.PasswordEncoder httpPasswordEncoder;
+    @Autowired private org.trigger.opspilot.security.SessionAuthorization sessionAuthorization;
     @org.springframework.boot.test.mock.mockito.SpyBean private org.trigger.opspilot.audit.AuditService sessionAudit;
 
     private org.trigger.opspilot.security.AuthSessionHttpScenarios sessionScenario() {
@@ -126,6 +127,12 @@ class MySqlCompatibilityIntegrationTest {
     }
     @Test @Order(33) void shouldRejectBcryptByteTruncationAliasesAtLogin() throws Exception {
         try (var s = sessionScenario()) { s.rejectsBcryptTruncationAliasesAtLogin(); }
+    }
+    @Test @Order(34) void shouldFenceFinalAuthorizationAgainstConcurrentRevocationCommit() throws Exception {
+        try (var s = sessionScenario()) { s.finalAuthorizationSeesRevocationCommittedWhileWaiting(sessionAuthorization, transactionManager); }
+    }
+    @Test @Order(35) void shouldRecheckLeaseExpiryAfterFinalAuthorizationLockWait() throws Exception {
+        try (var s = sessionScenario()) { s.finalAuthorizationRechecksExpiryAfterRowLockWait(sessionAuthorization, transactionManager); }
     }
 
     @Test @Order(16)

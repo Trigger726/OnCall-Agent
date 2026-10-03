@@ -58,6 +58,56 @@ public final class AuthSessionHttpScenarios implements AutoCloseable {
         assertAudit("AUTH_SESSIONS_REVOKED");
     }
 
+    public void finalAuthorizationSeesRevocationCommittedWhileWaiting(SessionAuthorization authorization,
+            org.springframework.transaction.PlatformTransactionManager manager) throws Exception {
+        assertDeniedAfterLockWait(authorization, manager, true);
+    }
+
+    public void finalAuthorizationRechecksExpiryAfterRowLockWait(SessionAuthorization authorization,
+            org.springframework.transaction.PlatformTransactionManager manager) throws Exception {
+        assertDeniedAfterLockWait(authorization, manager, false);
+    }
+
+    private void assertDeniedAfterLockWait(SessionAuthorization authorization,
+            org.springframework.transaction.PlatformTransactionManager manager, boolean revoke) throws Exception {
+        var expires = java.time.Instant.now().plusSeconds(revoke ? 30 : 2);
+        var lease = new SessionAuthorization.Lease(userId, username, version(), expires);
+        var locked = new java.util.concurrent.CountDownLatch(1);
+        var release = new java.util.concurrent.CountDownLatch(1);
+        var checking = new java.util.concurrent.CountDownLatch(1);
+        var pool = java.util.concurrent.Executors.newFixedThreadPool(2);
+        var transaction = new org.springframework.transaction.support.TransactionTemplate(manager);
+        transaction.setTimeout(10);
+        try {
+            var holder = pool.submit(() -> transaction.execute(status -> {
+                jdbc.sql("SELECT id FROM sys_user WHERE id=:id FOR UPDATE").param("id", userId).query(Long.class).single();
+                if (revoke) jdbc.sql("UPDATE sys_user SET auth_version=auth_version+1 WHERE id=:id").param("id", userId).update();
+                locked.countDown();
+                try { assertThat(release.await(5, java.util.concurrent.TimeUnit.SECONDS)).isTrue(); }
+                catch (InterruptedException exception) { Thread.currentThread().interrupt(); throw new IllegalStateException(exception); }
+                return true;
+            }));
+            assertThat(locked.await(3, java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+            var guard = pool.submit(() -> transaction.execute(status -> {
+                checking.countDown();
+                return authorization.authorized(lease, true, true);
+            }));
+            assertThat(checking.await(3, java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+            // Prove the guard actually waits on a held row, not just an already-expired lease.
+            org.assertj.core.api.Assertions.assertThatThrownBy(() -> guard.get(150, java.util.concurrent.TimeUnit.MILLISECONDS))
+                    .isInstanceOf(java.util.concurrent.TimeoutException.class);
+            if (!revoke) while (java.time.Instant.now().isBefore(expires)) Thread.sleep(10);
+            release.countDown();
+            assertThat(holder.get(3, java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+            assertThat(guard.get(3, java.util.concurrent.TimeUnit.SECONDS)).isFalse();
+            assertThat(version()).isEqualTo(revoke ? lease.authVersion() + 1 : lease.authVersion());
+        } finally {
+            release.countDown();
+            pool.shutdownNow();
+            assertThat(pool.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+        }
+    }
+
     public void passwordChangeRevokesTokensAndRequiresNewPassword() throws Exception {
         String first = login(OLD_PASSWORD), second = login(OLD_PASSWORD);
         assertThat(first).isNotEqualTo(second);

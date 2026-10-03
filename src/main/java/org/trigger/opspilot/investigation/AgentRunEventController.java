@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.trigger.opspilot.common.ApiResponse;
 import org.trigger.opspilot.security.UserPrincipal;
+import org.trigger.opspilot.security.SessionAuthorization;
 
 import java.util.List;
 
@@ -22,15 +23,17 @@ public class AgentRunEventController {
     private final InvestigationService investigationService;
     private final AgentExecutionManager executionManager;
     private final AgentEventSubscriptions subscriptions;
+    private final SessionAuthorization authorization;
 
     public AgentRunEventController(AgentRunEventService eventService,
                                    InvestigationService investigationService,
                                    AgentExecutionManager executionManager,
-                                   AgentEventSubscriptions subscriptions) {
+                                   AgentEventSubscriptions subscriptions, SessionAuthorization authorization) {
         this.eventService = eventService;
         this.investigationService = investigationService;
         this.executionManager = executionManager;
         this.subscriptions = subscriptions;
+        this.authorization = authorization;
     }
 
     @GetMapping(value = "/{runId}/events/stream", produces = "text/event-stream")
@@ -42,8 +45,9 @@ public class AgentRunEventController {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("X-Accel-Buffering", "no");
         String cursor = after != null ? after : lastEventId;
+        var lease = authorization.current();
         try {
-            return subscriptions.open(runId, cursor == null ? 0 : Long.parseLong(cursor));
+            return subscriptions.open(runId, cursor == null ? 0 : Long.parseLong(cursor), () -> authorization.authorized(lease, false));
         } catch (NumberFormatException exception) {
             throw new org.trigger.opspilot.common.ApiException(org.springframework.http.HttpStatus.BAD_REQUEST,
                     "AGENT_CURSOR_INVALID", "事件游标必须为非负整数");

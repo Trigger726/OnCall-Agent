@@ -15,6 +15,75 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AgentExecutionManagerTest {
     @Test
+    void shouldReleaseRevokedQueuedSlotWhileAnotherWorkerRemainsBlocked() throws Exception {
+        var executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(1); executor.setMaxPoolSize(1); executor.setQueueCapacity(1); executor.initialize();
+        var manager = new AgentExecutionManager(executor, OpsPilotTracing.using(Tracer.NOOP));
+        var started = new CountDownLatch(1);
+        var release = new CountDownLatch(1);
+        var staleStarted = new CountDownLatch(1);
+        var replacementStarted = new CountDownLatch(1);
+        var valid = new java.util.concurrent.atomic.AtomicBoolean(true);
+        var denied = new java.util.concurrent.atomic.AtomicInteger();
+        try {
+            manager.submit(301, LocalDateTime.now().plusSeconds(30), () -> {
+                started.countDown();
+                try { release.await(); } catch (InterruptedException exception) { Thread.currentThread().interrupt(); }
+            }, () -> {});
+            assertThat(started.await(2, TimeUnit.SECONDS)).isTrue();
+            manager.submit(302, LocalDateTime.now().plusSeconds(30), staleStarted::countDown, () -> {}, valid::get, denied::incrementAndGet);
+            valid.set(false);
+            manager.reauthorize();
+            manager.reauthorize();
+            assertThat(denied).hasValue(1);
+            assertThat(manager.isActive(302)).isFalse();
+            manager.submit(303, LocalDateTime.now().plusSeconds(30), replacementStarted::countDown, () -> {});
+            assertThat(started.getCount()).isZero();
+            assertThat(staleStarted.getCount()).isEqualTo(1);
+            assertThat(replacementStarted.getCount()).isEqualTo(1);
+            release.countDown();
+            assertThat(replacementStarted.await(2, TimeUnit.SECONDS)).isTrue();
+            assertThat(staleStarted.await(200, TimeUnit.MILLISECONDS)).isFalse();
+        } finally {
+            release.countDown(); manager.cancel(301); manager.cancel(302); manager.cancel(303);
+            manager.shutdownDeadlineExecutor(); executor.shutdown();
+        }
+    }
+
+    @Test
+    void shouldFailClosedWithoutInterruptingActiveAuthenticatedWorker() throws Exception {
+        var executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(1); executor.setMaxPoolSize(1); executor.setQueueCapacity(0); executor.initialize();
+        var manager = new AgentExecutionManager(executor, OpsPilotTracing.using(Tracer.NOOP));
+        var started = new CountDownLatch(1);
+        var interrupted = new CountDownLatch(1);
+        var release = new CountDownLatch(1);
+        var finished = new CountDownLatch(1);
+        var checkFails = new java.util.concurrent.atomic.AtomicBoolean();
+        var denied = new java.util.concurrent.atomic.AtomicInteger();
+        try {
+            manager.submit(401, LocalDateTime.now().plusSeconds(30), () -> {
+                started.countDown();
+                try { release.await(); }
+                catch (InterruptedException exception) { Thread.currentThread().interrupt(); interrupted.countDown(); }
+                finally { finished.countDown(); }
+            }, () -> {}, () -> {
+                if (checkFails.get()) throw new IllegalStateException("authorization read unavailable");
+                return true;
+            }, denied::incrementAndGet);
+            assertThat(started.await(2, TimeUnit.SECONDS)).isTrue();
+            checkFails.set(true);
+            manager.reauthorize();
+            assertThat(interrupted.await(100, TimeUnit.MILLISECONDS)).isFalse();
+            assertThat(finished.getCount()).isEqualTo(1);
+            assertThat(manager.isActive(401)).isFalse();
+            assertThat(denied).hasValue(1);
+            release.countDown();
+            assertThat(finished.await(2, TimeUnit.SECONDS)).isTrue();
+        } finally { release.countDown(); manager.cancel(401); manager.shutdownDeadlineExecutor(); executor.shutdown(); }
+    }
+
+    @Test
     void shouldExposeSaturationAndInterruptActiveTask() throws Exception {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(1);
