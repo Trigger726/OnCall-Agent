@@ -67,7 +67,7 @@ class AssistantCrossNodeMySqlIntegrationTest {
             assertThat(node.path("baselineCapture").asBoolean()).isFalse();
             assertThat(node.path("databaseMode").asText()).isEqualTo("MYSQL_TESTCONTAINER");
             assertThat(node.path("mysqlSchema").asText()).isEqualTo(schema);
-            assertThat(node.path("cases").size()).isEqualTo(4);
+            assertThat(node.path("cases").size()).isEqualTo(6);
             assertThat(node.path("startedPids").size()).isEqualTo(2);
             assertThat(node.path("startedPids").get(0).asLong()).isNotEqualTo(node.path("startedPids").get(1).asLong());
             for (JsonNode pid : node.path("startedPids")) {
@@ -124,22 +124,26 @@ class AssistantCrossNodeMySqlIntegrationTest {
         String expected = switch (name) {
             case "shared-sql-completed-replay" -> "COMPLETED";
             case "cancel-on-B-releases-A" -> "CANCELLED";
+            case "queued-cancel-on-B-reclaims-A", "queued-cancel-on-A-reclaims-B" -> "CANCELLED";
             case "clear-on-B-fences-A" -> "SUPERSEDED";
             case "revoke-on-B-fences-A" -> "REVOKED";
             default -> throw new AssertionError("Unexpected HTTP scenario: " + name);
         };
-        try (var statement = connection.prepareStatement("SELECT status,answer_message_id FROM assistant_request WHERE session_id=?")) {
+        try (var statement = connection.prepareStatement("SELECT status,question_message_id,answer_message_id FROM assistant_request WHERE session_id=?")) {
             statement.setLong(1, session);
             try (var rows = statement.executeQuery()) {
                 assertThat(rows.next()).isTrue();
                 fact.put("status", rows.getString("status")); fact.put("answerMessageId", rows.getObject("answer_message_id", Long.class));
+                fact.put("questionMessageId", rows.getObject("question_message_id", Long.class));
                 assertThat(rows.getString("status")).isEqualTo(expected); assertThat(rows.next()).isFalse();
                 fact.put("requestRows", 1);
             }
         }
         long userRows = count(connection, "SELECT COUNT(*) FROM assistant_message WHERE session_id=? AND role='USER'", session);
         long answerRows = count(connection, "SELECT COUNT(*) FROM assistant_message WHERE session_id=? AND role='ASSISTANT'", session);
-        assertThat(userRows).isEqualTo("SUPERSEDED".equals(expected) ? 0 : 1);
+        boolean queuedCancellation = name.startsWith("queued-cancel-on-");
+        if (queuedCancellation) assertThat(fact.get("questionMessageId")).isNull();
+        assertThat(userRows).isEqualTo("SUPERSEDED".equals(expected) || queuedCancellation ? 0 : 1);
         assertThat(answerRows).isEqualTo("COMPLETED".equals(expected) ? 1 : 0);
         fact.put("userRows", userRows); fact.put("answerRows", answerRows);
         if ("COMPLETED".equals(expected)) {
@@ -155,6 +159,33 @@ class AssistantCrossNodeMySqlIntegrationTest {
         if ("CANCELLED".equals(expected)) {
             long audits = count(connection, "SELECT COUNT(*) FROM audit_log WHERE action='ASSISTANT_REQUEST_CANCEL' AND target_type='ASSISTANT_SESSION' AND target_id=?", session);
             assertThat(audits).isEqualTo(1); fact.put("cancellationAudits", audits);
+        }
+        if (queuedCancellation) {
+            List<Map<String, Object>> controls = new ArrayList<>();
+            for (String prefix : List.of("occupying", "replacement")) {
+                long controlSession = scenario.path(prefix + "SessionId").asLong();
+                long answer = scenario.path(prefix + "AnswerMessageId").asLong();
+                assertThat(controlSession).isPositive(); assertThat(answer).isPositive();
+                try (var statement = connection.prepareStatement("SELECT status,answer_message_id FROM assistant_request WHERE session_id=?")) {
+                    statement.setLong(1, controlSession);
+                    try (var rows = statement.executeQuery()) {
+                        assertThat(rows.next()).isTrue(); assertThat(rows.getString("status")).isEqualTo("COMPLETED");
+                        assertThat(rows.getLong("answer_message_id")).isEqualTo(answer); assertThat(rows.next()).isFalse();
+                    }
+                }
+                assertThat(count(connection, "SELECT COUNT(*) FROM assistant_message WHERE session_id=? AND role='USER'", controlSession)).isEqualTo(1);
+                assertThat(count(connection, "SELECT COUNT(*) FROM assistant_message WHERE session_id=? AND role='ASSISTANT'", controlSession)).isEqualTo(1);
+                try (var statement = connection.prepareStatement("SELECT content FROM assistant_message WHERE id=? AND session_id=?")) {
+                    statement.setLong(1, answer); statement.setLong(2, controlSession);
+                    try (var rows = statement.executeQuery()) {
+                        assertThat(rows.next()).isTrue(); assertThat(rows.getString(1)).isEqualTo("  双节点原生事实🙂\n下一步验证。  ");
+                        assertThat(rows.next()).isFalse();
+                    }
+                }
+                controls.add(Map.of("role", prefix, "sessionId", controlSession, "status", "COMPLETED", "requestRows", 1,
+                        "userRows", 1, "answerRows", 1, "answerMessageId", answer, "exactNativeUnicodeAnswerVerified", true));
+            }
+            fact.put("completedControls", controls);
         }
         return fact;
     }

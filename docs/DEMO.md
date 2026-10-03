@@ -1,6 +1,8 @@
 # OpsPilot 10 分钟演示脚本
 
-最新83：[报告](acceptance/V1.7-checkpoint-83.md)/[本地证据](assets/v1.7-cp83/local-proof.json)。复用原双JVM四场景，补专属MySQL容器、实际JDBC/最终SQL/双JVM日志与池关闭/零条件跳过门禁，CI增为十七作业。本地85单测、同包H2四项与63原生回归通过；新MySQL项本地条件跳过1，不算MySQL通过，自己的源CI待验。按最小改动原则不改生产Java/Vue/原44e包，旧Demo和首个门禁失败保留，没有新页面效果宣称。
+最新84：[报告](acceptance/V1.7-checkpoint-84.md)/[本地证据](assets/v1.7-cp84/local-proof.json)。保留原双JVM四项，新增A排队/B取消与B排队/A取消；保持唯一worker、单队列与20秒预算，实际503 JSON/未入库键/零副作用、取消后未放行旧模型时复用原被拒session/key、本地六项/Provider10与90单测/63原生回归通过。新六项MySQL源CI仍待验，本机条件跳过1不能签字；生产Java/Vue/原44e包、83原四项/旧Demo保留，没有新界面改版宣称。
+
+83自身70af0fb/[Run37153507039](https://github.com/Trigger726/OnCall-Agent/actions/runs/37153507039)十七success，六ZIP独立核验；原双JVM四项在真实MySQL8.4.11/专属schema执行、零跳过，最终SQL/双池关闭/独立PID端口核验与保存的83原门禁重放通过，见[83第四节](acceptance/V1.7-checkpoint-83.md)/[远端证据](assets/v1.7-cp83/remote-proof.json)。MySQL原生18/原99/H2原生63、十runner/十九完整JAR日志意外ERROR0及十三/八/六浏览器机器流程通过；两次原SIGKILL不称优雅关闭，本次未重新目视截图，旧四项不覆盖84新排队矩阵。
 
 82自身a502698/[Run37150940483](https://github.com/Trigger726/OnCall-Agent/actions/runs/37150940483)十六success，原五慢消费者/两503 JSON/模型0、未读旧TCP时自然回池59805ms/新原生答案60065ms已验证。五ZIP独立核验/CLI重放：MySQL原生18/原99/五池、H2原生63及十三/八/六浏览器机器结果通过，见[82第六节](acceptance/V1.7-checkpoint-82.md)/[远端证据](assets/v1.7-cp82/remote-proof.json)。不覆盖80/81首次失败、不认定唯一根因或由单JVM推导双JVM MySQL；以下历史‘待验’对应当时。
 

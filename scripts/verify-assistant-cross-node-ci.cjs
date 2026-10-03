@@ -6,6 +6,7 @@ const { spawn } = require('node:child_process');
 const { randomUUID, randomBytes, createHash } = require('node:crypto');
 const { setTimeout: delay } = require('node:timers/promises');
 const { requireFreePort, stopProcess, waitForHealth, redact, unexpectedLogLines } = require('./verify-oncall-browser-ci.cjs');
+const { readJsonResponse } = require('./verify-assistant-slow-consumer-ci.cjs');
 
 function mysqlSettings(env = process.env) {
   if (env.OPSPILOT_ASSISTANT_CROSS_NODE_MYSQL === undefined) {
@@ -101,7 +102,7 @@ async function verify() {
     const response = await fetch(url(node, route), { method, headers: { ...(token ? { Authorization: 'Bearer ' + token } : {}),
       ...(key ? { 'Idempotency-Key': key } : {}), ...(body ? { 'Content-Type': 'application/json' } : {}) },
       body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(12000) });
-    return { status: response.status, json: await response.json() };
+    return readJsonResponse(response, route.endsWith('/stream') ? (result.streamAdmissionResponses ??= []) : undefined, route);
   }
   async function login(node, username = 'admin') { const r = await api(node, '/auth/login', null, { username, password: 'OpsPilot@2026' }); assert.equal(r.status, 200); return r.json.data.accessToken; }
   async function session(token) { const r = await api('A', '/assistant/sessions', token, {}); assert.equal(r.status, 200); return r.json.data.session.id; }
@@ -201,8 +202,70 @@ async function verify() {
       assert.ok(done(nextStream)); assert.equal(revoked.released, false);
       result.cases.push({ name: 'revoke-on-B-fences-A', sessionId: revokeId, persistedStatus: 'REVOKED', oldTokensRejectedBothNodes: true,
         noPostRevocationPayload: true, answerRows: 0, physicalHttpClosedBeforeProviderRelease: true, sameWorkerReusedBeforeProviderRelease: true }); release(revoked);
+
+      // Keep the sole worker occupied: remote cancellation must reclaim the queue, not merely wait for the model to finish.
+      for (const [executionNode, cancellationNode] of [['A', 'B'], ['B', 'A']]) {
+        const occupyingId = await session(token), occupyingKey = randomUUID(), occupying = control('queue-occupier-' + executionNode);
+        const occupyingStream = stream(executionNode, occupyingId, token, occupyingKey, occupying);
+        await preview(occupying, occupyingStream);
+        const queuedId = await session(token), queuedKey = randomUUID(), queued = control('remote-queued-' + executionNode);
+        const queuedStream = stream(executionNode, queuedId, token, queuedKey, queued);
+        await until(async () => (await state(cancellationNode, queuedId, token, queuedKey)).json.data?.status === 'QUEUED');
+        assert.equal(queued.calls, 0); assert.deepEqual(await counts(cancellationNode, queuedId, token), { user: 0, assistant: 0 });
+        const duplicateQueued = await api(cancellationNode, route(queuedId) + '/stream', token, { content: queued.question }, queuedKey);
+        assert.equal(duplicateQueued.status, 409); assert.equal(duplicateQueued.json.error.code, 'ASSISTANT_REQUEST_IN_PROGRESS');
+        assert.equal((await cancel(cancellationNode, queuedId, other, queuedKey)).status, 404);
+
+        const replacementId = await session(token), replacementKey = randomUUID(), replacement = control('queue-replacement-' + executionNode, true);
+        const rejected = await api(executionNode, route(replacementId) + '/stream', token, { content: replacement.question }, replacementKey);
+        assert.equal(rejected.status, 503); assert.equal(rejected.json.error.code, 'ASSISTANT_QUEUE_SATURATED');
+        assert.equal(replacement.calls, 0); assert.equal((await state(cancellationNode, replacementId, token, replacementKey)).status, 404);
+        assert.deepEqual(await counts(cancellationNode, replacementId, token), { user: 0, assistant: 0 });
+        assert.equal((await cancel(cancellationNode, queuedId, token, queuedKey)).json.data.status, 'CANCELLED');
+        await queuedStream.pending; assert.equal(queuedStream.status, 200);
+        assert.ok(queuedStream.events.some(e => e.type === 'cancelled')); assert.ok(!done(queuedStream)); assert.equal(text(queuedStream), '');
+        assert.equal(queued.calls, 0); assert.equal(occupying.released, false); assert.equal(occupying.closed, false);
+        for (const node of [executionNode, cancellationNode]) {
+          assert.equal((await cancel(node, queuedId, token, queuedKey)).json.data.status, 'CANCELLED');
+          assert.equal((await state(node, queuedId, token, queuedKey)).json.data.status, 'CANCELLED');
+          assert.deepEqual(await counts(node, queuedId, token), { user: 0, assistant: 0 });
+        }
+        const cancelledRetry = await api(cancellationNode, route(queuedId) + '/stream', token, { content: queued.question }, queuedKey);
+        assert.equal(cancelledRetry.status, 409); assert.equal(cancelledRetry.json.error.code, 'ASSISTANT_REQUEST_CANCELLED');
+        const queueAudits = await api(cancellationNode, '/audit-logs?limit=500', token);
+        assert.equal(queueAudits.status, 200);
+        const cancellationAudits = queueAudits.json.data.filter(a => a.action === 'ASSISTANT_REQUEST_CANCEL'
+          && a.targetType === 'ASSISTANT_SESSION' && a.targetId === String(queuedId)).length;
+        assert.equal(cancellationAudits, 1);
+
+        // Reuse the previously rejected session/key, while the original model HTTP is still held open.
+        const replacementStream = stream(executionNode, replacementId, token, replacementKey, replacement);
+        await until(async () => (await state(cancellationNode, replacementId, token, replacementKey)).json.data?.status === 'QUEUED');
+        assert.equal(replacement.calls, 0); assert.equal(occupying.released, false); assert.equal(occupying.closed, false);
+        assert.equal((await state(cancellationNode, occupyingId, token, occupyingKey)).json.data.status, 'RUNNING');
+        assert.deepEqual(await counts(cancellationNode, replacementId, token), { user: 0, assistant: 0 });
+        release(occupying); await occupyingStream.pending; await replacementStream.pending;
+        assert.ok(done(occupyingStream)); assert.ok(done(replacementStream));
+        assert.equal(text(occupyingStream), FIRST + LAST); assert.equal(text(replacementStream), FIRST + LAST);
+        assert.equal(occupying.calls, 1); assert.equal(replacement.calls, 1); assert.equal(queued.calls, 0);
+        for (const node of [executionNode, cancellationNode]) {
+          assert.equal((await state(node, queuedId, token, queuedKey)).json.data.status, 'CANCELLED');
+          assert.deepEqual(await counts(node, queuedId, token), { user: 0, assistant: 0 });
+        }
+        result.cases.push({ name: 'queued-cancel-on-' + cancellationNode + '-reclaims-' + executionNode,
+          sessionId: queuedId, executionNode, cancellationNode, persistedStatusBothNodes: 'CANCELLED',
+          initialStatus: 'QUEUED', modelCalls: queued.calls, questionRows: 0, answerRows: 0, cancellationAudits,
+          duplicateStatus: duplicateQueued.status, otherActorStatus: 404, cancelledRetryStatus: cancelledRetry.status,
+          cancelledStreamEvent: true, tokenOrDoneSent: false, saturationStatus: rejected.status,
+          rejectedKeyStatus: 404, rejectedQuestionRows: 0, rejectedModelCalls: 0,
+          occupyingModelStillOpenBeforeReplacement: true, freedQueueSlotReusedBeforeProviderRelease: true,
+          rejectedSessionAndKeyReused: true, replacementStatusBeforeRelease: 'QUEUED',
+          occupyingSessionId: occupyingId, occupyingAnswerMessageId: done(occupyingStream).messageId,
+          replacementSessionId: replacementId, replacementAnswerMessageId: done(replacementStream).messageId,
+          occupyingAndReplacementModelCalls: 2, lateCancelledModelCalls: queued.calls });
+      }
     }
-    result.providerCalls = [...controls.values()].reduce((sum, c) => sum + c.calls, 0); assert.equal(result.providerCalls, baseline ? 3 : 6);
+    result.providerCalls = [...controls.values()].reduce((sum, c) => sum + c.calls, 0); assert.equal(result.providerCalls, baseline ? 3 : 10);
     result.status = baseline ? 'BASELINE_CAPTURED' : 'PASS';
   } catch (error) { result.status = 'FAIL'; result.failure = redact(error.stack); throw error; }
   finally {

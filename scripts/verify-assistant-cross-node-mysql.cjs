@@ -6,7 +6,8 @@ const errors = text => text.split(/\r?\n/).filter(line=>/(?:^|\s)(?:ERROR|\[ERRO
 
 const suite = 'org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest';
 const method = 'shouldVerifyNativeReplayRemoteCancelClearAndRevocationOnOwnedMySql';
-const cases = ['shared-sql-completed-replay', 'cancel-on-B-releases-A', 'clear-on-B-fences-A', 'revoke-on-B-fences-A'];
+const cases = ['shared-sql-completed-replay', 'cancel-on-B-releases-A', 'clear-on-B-fences-A', 'revoke-on-B-fences-A',
+  'queued-cancel-on-B-reclaims-A', 'queued-cancel-on-A-reclaims-B'];
 
 function verify(mavenLog, xml, audit, node, logs) {
   mavenLog = mavenLog.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g, '');
@@ -18,7 +19,7 @@ function verify(mavenLog, xml, audit, node, logs) {
   assert.deepEqual(JSON.parse(identities[0][1]), audit.database); assert.ok(xml.includes(identities[0][0].trimEnd()));
   assert.match(audit.database.schema, /^opspilot_cross_node_[0-9a-f]{12}$/);
   assert.equal(node.status, 'PASS'); assert.equal(node.baselineCapture, false); assert.equal(node.databaseMode, 'MYSQL_TESTCONTAINER');
-  assert.equal(node.mysqlSchema, audit.database.schema); assert.equal(node.providerCalls, 6);
+  assert.equal(node.mysqlSchema, audit.database.schema); assert.equal(node.providerCalls, 10);
   for (const key of ['ownedProcessesStopped', 'ownedProviderStopped']) assert.equal(node[key], true);
   assert.equal(node.unexpectedJarErrors, 0);
   assert.equal(node.startedPids.length, 2); assert.equal(new Set(node.startedPids).size, 2); assert.ok(node.startedPids.every(p=>Number.isInteger(p)&&p>0));
@@ -27,13 +28,13 @@ function verify(mavenLog, xml, audit, node, logs) {
   for (const key of ['twoIndependentJvmsSameHost', 'recordedJvmPidsVerifiedAbsent', 'fourScopedPortsVerifiedFree']) assert.equal(audit[key], true);
   assert.equal(audit.crossMachineOrDatabaseHaClaimed, false);
   assert.deepEqual(node.cases.map(c=>c.name), cases); assert.deepEqual(audit.sqlFacts.map(c=>c.name), cases);
-  assert.equal(new Set(node.cases.map(c=>c.sessionId)).size, 4);
-  for (let i = 0; i < 4; i++) {
+  assert.equal(new Set(node.cases.map(c=>c.sessionId)).size, 6);
+  for (let i = 0; i < 6; i++) {
     const scenario = node.cases[i], fact = audit.sqlFacts[i];
     assert.ok(Number.isInteger(scenario.sessionId) && scenario.sessionId > 0); assert.equal(fact.sessionId, scenario.sessionId);
     assert.equal(fact.requestRows, 1);
-    assert.equal(fact.status, ['COMPLETED', 'CANCELLED', 'SUPERSEDED', 'REVOKED'][i]);
-    assert.equal(fact.userRows, i === 2 ? 0 : 1); assert.equal(fact.answerRows, i === 0 ? 1 : 0);
+    assert.equal(fact.status, ['COMPLETED', 'CANCELLED', 'SUPERSEDED', 'REVOKED', 'CANCELLED', 'CANCELLED'][i]);
+    assert.equal(fact.userRows, i === 2 || i >= 4 ? 0 : 1); assert.equal(fact.answerRows, i === 0 ? 1 : 0);
     if (i === 0) { assert.ok(fact.answerMessageId > 0); assert.equal(fact.answerMessageId, scenario.answerMessageId); assert.equal(fact.exactNativeUnicodeAnswerVerified, true); }
     else assert.equal(fact.answerMessageId, null);
   }
@@ -46,6 +47,36 @@ function verify(mavenLog, xml, audit, node, logs) {
   for (const i of [1, 2, 3]) assert.equal(node.cases[i].physicalHttpClosedBeforeProviderRelease, true);
   for (const i of [1, 3]) assert.equal(node.cases[i].sameWorkerReusedBeforeProviderRelease, true);
   assert.equal(node.cases[3].oldTokensRejectedBothNodes, true); assert.equal(node.cases[3].noPostRevocationPayload, true);
+  const allSessions = node.cases.map(c=>c.sessionId);
+  for (const i of [4, 5]) {
+    const scenario = node.cases[i], fact = audit.sqlFacts[i];
+    assert.equal(scenario.executionNode, i === 4 ? 'A' : 'B'); assert.equal(scenario.cancellationNode, i === 4 ? 'B' : 'A');
+    assert.equal(scenario.initialStatus, 'QUEUED'); assert.equal(scenario.persistedStatusBothNodes, 'CANCELLED');
+    assert.equal(fact.questionMessageId, null);
+    for (const key of ['modelCalls', 'questionRows', 'answerRows', 'rejectedQuestionRows', 'rejectedModelCalls', 'lateCancelledModelCalls']) assert.equal(scenario[key], 0);
+    assert.equal(scenario.cancellationAudits, 1); assert.equal(fact.cancellationAudits, 1);
+    assert.equal(scenario.duplicateStatus, 409); assert.equal(scenario.otherActorStatus, 404); assert.equal(scenario.cancelledRetryStatus, 409);
+    assert.equal(scenario.saturationStatus, 503); assert.equal(scenario.rejectedKeyStatus, 404); assert.equal(scenario.tokenOrDoneSent, false);
+    for (const key of ['cancelledStreamEvent', 'occupyingModelStillOpenBeforeReplacement', 'freedQueueSlotReusedBeforeProviderRelease', 'rejectedSessionAndKeyReused']) assert.equal(scenario[key], true);
+    assert.equal(scenario.replacementStatusBeforeRelease, 'QUEUED'); assert.equal(scenario.occupyingAndReplacementModelCalls, 2);
+    assert.equal(fact.completedControls.length, 2);
+    for (const [index, prefix] of ['occupying', 'replacement'].entries()) {
+      const control = fact.completedControls[index];
+      assert.equal(control.role, prefix); assert.equal(control.sessionId, scenario[prefix + 'SessionId']);
+      assert.ok(Number.isInteger(control.sessionId) && control.sessionId > 0); allSessions.push(control.sessionId);
+      assert.equal(control.status, 'COMPLETED'); assert.equal(control.requestRows, 1); assert.equal(control.userRows, 1); assert.equal(control.answerRows, 1);
+      assert.ok(Number.isInteger(control.answerMessageId) && control.answerMessageId > 0);
+      assert.equal(control.answerMessageId, scenario[prefix + 'AnswerMessageId']); assert.equal(control.exactNativeUnicodeAnswerVerified, true);
+    }
+  }
+  assert.equal(new Set(allSessions).size, 10);
+  const admissions = node.streamAdmissionResponses;
+  assert.ok(Array.isArray(admissions));
+  assert.equal(admissions.filter(r=>r.status===503).length, 2);
+  for (const scenario of node.cases.slice(4)) {
+    const observed = admissions.filter(r=>r.route==='/assistant/sessions/' + scenario.replacementSessionId + '/stream' && r.status===503);
+    assert.equal(observed.length, 1); assert.match(observed[0].contentType, /^application\/json(?:\s*;|$)/i);
+  }
   assert.equal(logs.length, 2); assert.equal(audit.nodeConnections.length, 2);
   for (let i = 0; i < 2; i++) {
     const log = logs[i], connection = audit.nodeConnections[i];

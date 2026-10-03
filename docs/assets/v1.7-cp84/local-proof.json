@@ -1,0 +1,340 @@
+{
+  "status": "LOCAL_H2_SIX_CASES_PASS_MYSQL_SOURCE_REMOTE_PENDING",
+  "baseCommit": "70af0fb050ceb2f537dcbd72c0008eb8856b9263",
+  "sources": [
+    {
+      "file": "scripts/verify-assistant-cross-node-ci.cjs",
+      "workingCopySha256": "a835511594130ec2b8a67b4972b33c183db237642843ed5ff643cfa20331b1f0"
+    },
+    {
+      "file": "scripts/verify-assistant-cross-node-mysql.cjs",
+      "workingCopySha256": "00e9a4959a9d921b030af3b5e0c9510074243cdd2072f9fd8a939e8ea92144dc"
+    },
+    {
+      "file": "scripts/tests/assistant-cross-node-mysql.test.cjs",
+      "workingCopySha256": "90084ba939db1e0ecc67711a3537a099819ce2c22a47f946980625b6b7466b6b"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/assistant/AssistantCrossNodeMySqlIntegrationTest.java",
+      "workingCopySha256": "3c55e20611f1d24e169dadc5a4d2b04c29cf8aec1a3b25c380231d3e809541ed"
+    },
+    {
+      "file": ".github/workflows/ci.yml",
+      "workingCopySha256": "39cd3f07563a16b229c27985dfed332b2b880b6587531d43b23f0ef5fe092336"
+    }
+  ],
+  "h2": {
+    "resultFile": "target/assistant-cross-node-it/run-XCtiBZ/result.json",
+    "resultSha256": "e67a94377cb1e1ad44b079ecb2233202ad02cdcf8fa9406fcbf8280f05f2df7b",
+    "result": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "fixture": "two independent owned JVMs, shared SQL, real DashScope HTTP",
+      "databaseMode": "H2_AUTO_SERVER",
+      "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+      "applicationPorts": [
+        9965,
+        9967
+      ],
+      "managementPorts": [
+        9966,
+        9968
+      ],
+      "databaseServerPort": 9970,
+      "checkDelayMs": 100,
+      "executionBudgetSeconds": 20,
+      "tokensPersistedToEvidence": false,
+      "signingKeysPersistedToEvidence": false,
+      "userFileDatabaseModified": false,
+      "cases": [
+        {
+          "name": "shared-sql-completed-replay",
+          "sessionId": 1,
+          "answerMessageId": 2,
+          "nodes": [
+            "A",
+            "B"
+          ],
+          "originalAnswerIdPreserved": true,
+          "modelCalls": 1
+        },
+        {
+          "name": "cancel-on-B-releases-A",
+          "sessionId": 2,
+          "duplicateStatus": 409,
+          "otherActorStatus": 404,
+          "persistedStatusBothNodes": "CANCELLED",
+          "cancelledAnswers": 0,
+          "cancellationAudits": 1,
+          "physicalHttpClosedBeforeProviderRelease": true,
+          "sameWorkerReusedBeforeProviderRelease": true
+        },
+        {
+          "name": "clear-on-B-fences-A",
+          "sessionId": 4,
+          "persistedStatus": "SUPERSEDED",
+          "questionRows": 0,
+          "answerRows": 0,
+          "physicalHttpClosedBeforeProviderRelease": true
+        },
+        {
+          "name": "revoke-on-B-fences-A",
+          "sessionId": 5,
+          "persistedStatus": "REVOKED",
+          "oldTokensRejectedBothNodes": true,
+          "noPostRevocationPayload": true,
+          "answerRows": 0,
+          "physicalHttpClosedBeforeProviderRelease": true,
+          "sameWorkerReusedBeforeProviderRelease": true
+        },
+        {
+          "name": "queued-cancel-on-B-reclaims-A",
+          "sessionId": 8,
+          "executionNode": "A",
+          "cancellationNode": "B",
+          "persistedStatusBothNodes": "CANCELLED",
+          "initialStatus": "QUEUED",
+          "modelCalls": 0,
+          "questionRows": 0,
+          "answerRows": 0,
+          "cancellationAudits": 1,
+          "duplicateStatus": 409,
+          "otherActorStatus": 404,
+          "cancelledRetryStatus": 409,
+          "cancelledStreamEvent": true,
+          "tokenOrDoneSent": false,
+          "saturationStatus": 503,
+          "rejectedKeyStatus": 404,
+          "rejectedQuestionRows": 0,
+          "rejectedModelCalls": 0,
+          "occupyingModelStillOpenBeforeReplacement": true,
+          "freedQueueSlotReusedBeforeProviderRelease": true,
+          "rejectedSessionAndKeyReused": true,
+          "replacementStatusBeforeRelease": "QUEUED",
+          "occupyingSessionId": 7,
+          "occupyingAnswerMessageId": 11,
+          "replacementSessionId": 9,
+          "replacementAnswerMessageId": 13,
+          "occupyingAndReplacementModelCalls": 2,
+          "lateCancelledModelCalls": 0
+        },
+        {
+          "name": "queued-cancel-on-A-reclaims-B",
+          "sessionId": 11,
+          "executionNode": "B",
+          "cancellationNode": "A",
+          "persistedStatusBothNodes": "CANCELLED",
+          "initialStatus": "QUEUED",
+          "modelCalls": 0,
+          "questionRows": 0,
+          "answerRows": 0,
+          "cancellationAudits": 1,
+          "duplicateStatus": 409,
+          "otherActorStatus": 404,
+          "cancelledRetryStatus": 409,
+          "cancelledStreamEvent": true,
+          "tokenOrDoneSent": false,
+          "saturationStatus": 503,
+          "rejectedKeyStatus": 404,
+          "rejectedQuestionRows": 0,
+          "rejectedModelCalls": 0,
+          "occupyingModelStillOpenBeforeReplacement": true,
+          "freedQueueSlotReusedBeforeProviderRelease": true,
+          "rejectedSessionAndKeyReused": true,
+          "replacementStatusBeforeRelease": "QUEUED",
+          "occupyingSessionId": 10,
+          "occupyingAnswerMessageId": 15,
+          "replacementSessionId": 12,
+          "replacementAnswerMessageId": 17,
+          "occupyingAndReplacementModelCalls": 2,
+          "lateCancelledModelCalls": 0
+        }
+      ],
+      "startedPids": [
+        108368,
+        108096
+      ],
+      "stoppedPids": [
+        108096,
+        108368
+      ],
+      "streamAdmissionResponses": [
+        {
+          "route": "/assistant/sessions/2/stream",
+          "status": 409,
+          "contentType": "application/json;charset=UTF-8"
+        },
+        {
+          "route": "/assistant/sessions/8/stream",
+          "status": 409,
+          "contentType": "application/json;charset=UTF-8"
+        },
+        {
+          "route": "/assistant/sessions/9/stream",
+          "status": 503,
+          "contentType": "application/json;charset=UTF-8"
+        },
+        {
+          "route": "/assistant/sessions/8/stream",
+          "status": 409,
+          "contentType": "application/json;charset=UTF-8"
+        },
+        {
+          "route": "/assistant/sessions/11/stream",
+          "status": 409,
+          "contentType": "application/json;charset=UTF-8"
+        },
+        {
+          "route": "/assistant/sessions/12/stream",
+          "status": 503,
+          "contentType": "application/json;charset=UTF-8"
+        },
+        {
+          "route": "/assistant/sessions/11/stream",
+          "status": 409,
+          "contentType": "application/json;charset=UTF-8"
+        }
+      ],
+      "providerCalls": 10,
+      "ownedProcessesStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "logs": [
+      {
+        "file": "target/assistant-cross-node-it/run-XCtiBZ/jar-1.log",
+        "sha256": "7435c94b5bb5a3eed2054478a5795c7a784e68b43534d9afec823730eabbaf0d",
+        "unexpectedErrors": [],
+        "poolShutdown": false
+      },
+      {
+        "file": "target/assistant-cross-node-it/run-XCtiBZ/jar-2.log",
+        "sha256": "cc6c012bfa44b5546f80e608ac3a8475c1033ee62e3ca5fabb91f0775e7b78e4",
+        "unexpectedErrors": [],
+        "poolShutdown": false
+      }
+    ]
+  },
+  "regression": {
+    "reports": [
+      {
+        "file": "target/cp84-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantAiStreamingTest.xml",
+        "sha256": "152baaa5acb8688c53feb671bfcc522920249aa326dafd5380b69379aee3ee81",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "target/cp84-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest.xml",
+        "sha256": "dbd999dd25149653e807607ebf2fce34639a6c90d715e706133e95d5e498dd3d",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1
+      },
+      {
+        "file": "target/cp84-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest.xml",
+        "sha256": "76a57daf1783e80793103a7e2309709ab16dec3822bebc708d497a0098723434",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "target/cp84-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeHttpClientTest.xml",
+        "sha256": "e1aa96bba8965af36aa3f391e4675616e2fbfd3a9279fb6bd74c834e349edec7",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "target/cp84-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest.xml",
+        "sha256": "f464950a0768be0470b085bf148f2e15385f7c9876c7be3ddc78b87bca11488d",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "target/cp84-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeTransportTest.xml",
+        "sha256": "9d032a7e2a4d82a802a3291f54f84bebfe3a165d13787de518e1d9681a78eec3",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "target/cp84-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantStreamReaderTest.xml",
+        "sha256": "c6cb55cd4c9b8858538abaee058ac39fab530bb39719629f4438633735b88ce4",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "target/cp84-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantStreamTransportTest.xml",
+        "sha256": "f2da6aa169e01c7cdec2b800bfda3336ab2b658772f4c264cbb62f07ea18f385",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "discovered": 64,
+    "executed": 63,
+    "conditionalSkipped": 1,
+    "file": "target/cp84-native-regression/maven.log",
+    "sha256": "49fa0c98682e831c70ad98b55d1e79105c6ff00798ecdc907ef14f67df6b97d8",
+    "expectedErrors": [
+      "21:06:27.493 [boundedElastic-1] ERROR org.springframework.ai.chat.model.MessageAggregator -- Aggregation Error",
+      "21:06:27.506 [boundedElastic-1] ERROR org.springframework.ai.chat.model.MessageAggregator -- Aggregation Error"
+    ],
+    "finalCompile": {
+      "file": "target/cp84-native-regression/final-conditional-compile.log",
+      "sha256": "0dfc5a8fabcc17c5cf8f2f223cccdafec3f255a3b764cabfd84dca10373c8437",
+      "xmlFile": "target/cp84-native-regression/final-conditional.xml",
+      "xmlSha256": "f4e5c08a64f7f4f64d16618c1b7c6da28b74a780ed9a8d107cb14c86477c9e3e",
+      "discovered": 1,
+      "conditionalSkipped": 1,
+      "actualSkippedXmlRejectedByGate": true
+    }
+  },
+  "gates": {
+    "file": "target/cp84-node-gates/node-final.log",
+    "sha256": "836bd9a713b3e5ea961f5432826feb0eff81d64f36e6510bdaaed96a16060309",
+    "tests": 90,
+    "passed": 90,
+    "failed": 0,
+    "skipped": 0,
+    "archivedFourCaseMySqlCannotReplaceSixCaseAcceptance": true
+  },
+  "jar": {
+    "file": "target/opspilot-0.1.0-SNAPSHOT.jar",
+    "sha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5"
+  },
+  "historical": {
+    "directory": "target/cp84-before",
+    "fourCaseReport": "docs/acceptance/V1.7-checkpoint-83.md",
+    "fourCaseMySqlProof": "docs/assets/v1.7-cp83/remote-proof.json",
+    "oldJarPreserved": true,
+    "oldDemonstrationsPreserved": true
+  },
+  "ownedH2JvmsIndependentlyAbsent": true,
+  "scopedPorts9965Through9968And9970IndependentlyFree": true,
+  "boundaries": {
+    "productionJavaAndVueUnchanged": true,
+    "executionBudget20SecondsOneWorkerOneQueueUnchanged": true,
+    "originalFourCasesRetained": true,
+    "queuedCancellationVerifiedInBothDirectionsLocally": true,
+    "newMySqlSixCaseMatrixNotExecutedLocally": true,
+    "conditionalSkipIsNotMySqlPass": true,
+    "finalParentSourceCompiledAfterAddingNullQuestionIdAudit": true,
+    "firstNativeRegressionBeforeFinalNullQuestionIdAudit": true,
+    "windowsH2LogExitNotGracefulPoolProof": true,
+    "noGlobalDockerOrRuntimeInstallation": true,
+    "crossMachineHaPartitionsTlsProxyAndProductionCapacityNotClaimed": true,
+    "fullGoalStillActive": true
+  }
+}
