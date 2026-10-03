@@ -6,6 +6,23 @@ const { spawn } = require('node:child_process');
 const { once } = require('node:events');
 const { requireFreePort, stopProcess, waitForHealth, redact, unexpectedLogLines } = require('../../verify-oncall-browser-ci.cjs');
 
+for (const [flag, message] of [
+  ['OPSPILOT_STREAM_SESSION_BASELINE', /Stream session baseline must not replace CI acceptance/],
+  ['OPSPILOT_STREAM_SESSION_ONLY', /Stream session only mode must not replace full CI acceptance/],
+]) {
+  test(`${flag} cannot replace full CI acceptance`, async () => {
+    const child = spawn(process.execPath, [require.resolve('../../verify-oncall-browser-ci.cjs')], {
+      env: { ...process.env, CI: 'true', [flag]: '1' }, windowsHide: true,
+    });
+    let output = '';
+    child.stderr.on('data', chunk => { output += chunk; });
+    const [code] = await once(child, 'close');
+    assert.equal(code, 1);
+    assert.match(output, message);
+    assert.doesNotMatch(output, /evidenceDirectory/);
+  })
+}
+
 test('account baseline cannot replace CI acceptance or launch the archived JAR', async () => {
   const child=spawn(process.execPath,[require.resolve('../../verify-oncall-browser-ci.cjs')],{
     env:{...process.env,CI:'true',OPSPILOT_ACCOUNT_BASELINE:'1'},windowsHide:true,

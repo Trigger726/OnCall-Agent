@@ -322,7 +322,8 @@ async function followAgentRun(existingRunId?: number) {
       await subscribeAgentInvestigation(existingRunId, onEvent, controller.signal)
     } else await streamAgentInvestigation(incidentId, 'INCIDENT_WORKSPACE', onEvent, controller.signal)
   } catch (caught) {
-    if (!(caught instanceof DOMException && caught.name === 'AbortError')) {
+    if (caught instanceof DOMException && caught.name === 'AbortError') controller.abort(caught)
+    else {
       streamError = caught instanceof Error ? caught.message : 'Agent 调查失败'
     }
   } finally {

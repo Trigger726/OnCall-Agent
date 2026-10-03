@@ -1,0 +1,166 @@
+{
+  "sourceParentCommit": "c903d5989bd1420794b4a0f620ec537e0e2e8fe9",
+  "scope": "New stream-client working tree; own remote run still pending.",
+  "jarSha256": "5d6ab02739639067ec3400ae180102093efd0ace63bed3b5b477af8950697fbe",
+  "frontendTests": {
+    "executed": 84,
+    "failed": 0,
+    "skipped": 0,
+    "agentStreamTests": 25
+  },
+  "fullRegistryAudit": {
+    "vulnerabilities": 0,
+    "includesDev": true
+  },
+  "browserLifecycleTests": {
+    "executed": 15,
+    "failed": 0,
+    "skipped": 0
+  },
+  "client": {
+    "status": "PASS",
+    "baselineCapture": false,
+    "browser": "154.0.8037.93",
+    "browserPath": "Browser plugin not available; existing Playwright",
+    "viewports": [
+      "1440x1000",
+      "390x844"
+    ],
+    "fixture": "actual revoked JWT 401 held until a different account finishes real UI login in a shared-storage tab",
+    "pageErrors": [],
+    "consoleLogs": [],
+    "screenshots": [
+      "incident-agent-before-response.png",
+      "incident-agent-new-kept-desktop.png",
+      "incident-agent-new-kept-mobile.png",
+      "assistant-agent-before-response.png",
+      "assistant-agent-new-kept-desktop.png",
+      "assistant-agent-new-kept-mobile.png",
+      "assistant-chat-before-response.png",
+      "assistant-chat-new-kept-desktop.png",
+      "assistant-chat-new-kept-mobile.png"
+    ],
+    "cases": [
+      {
+        "flow": "incident-agent",
+        "actualUnauthorizedStatus": 401,
+        "realLogoutStatus": 200,
+        "oldResponseDelivery": "fulfilled",
+        "commands": 1,
+        "replacementCredentialPreserved": true,
+        "replacementServerCredentialStillValid": true,
+        "identityReloadShowsAdmin": true,
+        "oldExpiredPageShown": false,
+        "mobileWidth": 390,
+        "settledMobileDrawersChecked": false
+      },
+      {
+        "flow": "assistant-agent",
+        "actualUnauthorizedStatus": 401,
+        "realLogoutStatus": 200,
+        "oldResponseDelivery": "fulfilled",
+        "commands": 1,
+        "replacementCredentialPreserved": true,
+        "replacementServerCredentialStillValid": true,
+        "identityReloadShowsAdmin": true,
+        "oldExpiredPageShown": false,
+        "mobileWidth": 390,
+        "settledMobileDrawersChecked": true
+      },
+      {
+        "flow": "assistant-chat",
+        "actualUnauthorizedStatus": 401,
+        "realLogoutStatus": 200,
+        "oldResponseDelivery": "fulfilled",
+        "commands": 1,
+        "replacementCredentialPreserved": true,
+        "replacementServerCredentialStillValid": true,
+        "identityReloadShowsAdmin": true,
+        "oldExpiredPageShown": false,
+        "mobileWidth": 390,
+        "settledMobileDrawersChecked": true
+      }
+    ],
+    "tokensPersistedToEvidence": false,
+    "pageIdentity": true,
+    "noBlank": true,
+    "noOverlay": true,
+    "allThreeFlowsVerified": true,
+    "automaticMutationRetries": 0
+  },
+  "runner": {
+    "status": "PASS",
+    "evidenceDirectory": "target\\oncall-browser-it\\run-nSyHtd",
+    "database": "isolated unique H2 memory",
+    "url": "http://127.0.0.1:9917/on-call",
+    "jarTimezone": "UTC",
+    "scanDelayMs": 200,
+    "defaultScanDelayMs": 60000,
+    "scripts": [
+      {
+        "name": "verify-oncall-rotation-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-rotation-boundaries.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-coverage-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-handoff-http.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-handoff-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-handoff-revocation-http.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-handoff-revocation-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-runbook-trend-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-runbook-publication-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-slo-rules-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-jwt-numeric-date-http.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-stream-session-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-account-security-ui.cjs",
+        "exitCode": 0
+      }
+    ],
+    "browserCi": false,
+    "publicationBaselineCapture": false,
+    "trendBaselineCapture": false,
+    "revocationBaselineCapture": false,
+    "userFileDatabaseModified": false,
+    "originalProcessesNotStopped": true,
+    "ownedProcessStopped": true,
+    "accountBaselineCapture": false,
+    "sloBaselineCapture": false,
+    "streamSessionBaselineCapture": false,
+    "streamSessionOnly": false,
+    "unexpectedJarErrors": 0
+  }
+}

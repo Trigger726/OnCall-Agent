@@ -9,6 +9,7 @@ import ChatMessage from '@/components/ChatMessage.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
 import { api, formatTime, RequestError, type PageResponse } from '@/services/api'
 import { clearAgentInvestigationIdempotency, streamAgentInvestigation, subscribeAgentInvestigation } from '@/services/agentStream'
+import { captureStreamSession } from '@/services/streamSession'
 import type { AgentRun, AgentRunEvent } from '@/types/investigation'
 
 interface SessionSummary {
@@ -119,7 +120,8 @@ async function followAgentRun(existingRunId?: number) {
     if (existingRunId) await subscribeAgentInvestigation(existingRunId, onEvent, controller.signal)
     else await streamAgentInvestigation(incidentId, 'ONCALL_ASSISTANT', onEvent, controller.signal)
   } catch (caught) {
-    if (!(caught instanceof DOMException && caught.name === 'AbortError')) {
+    if (caught instanceof DOMException && caught.name === 'AbortError') controller.abort(caught)
+    else {
       streamError = caught instanceof Error ? caught.message : 'Agent 调查启动失败'
     }
   } finally {
@@ -235,47 +237,68 @@ async function sendMessage(content = draft.value) {
   error.value = ''
   draft.value = ''
   const sessionId = active.value.session.id
+  const version = selectionVersion
+  const controller = new AbortController()
+  abortController = controller
+  const streamSession = captureStreamSession(controller.signal)
+  const isCurrentView = () => !disposed && abortController === controller
+    && selectionVersion === version && active.value?.session.id === sessionId
   const now = new Date().toISOString()
   const userMessage: Message = { id: -Date.now(), role: 'USER', content: value, evidenceJson: null, createdAt: now }
   const assistantMessage: Message = { id: userMessage.id - 1, role: 'ASSISTANT', content: '', evidenceJson: null, createdAt: now }
   active.value.messages.push(userMessage, assistantMessage)
-  await scrollToBottom()
-
-  abortController = new AbortController()
   try {
-    const token = localStorage.getItem('opspilot_token')
+    await scrollToBottom()
+    streamSession.check()
+    const token = streamSession.token
     const response = await fetch(`/api/v1/assistant/sessions/${sessionId}/stream`, {
-      method: 'POST', signal: abortController.signal,
+      method: 'POST', signal: streamSession.signal,
       headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) },
       body: JSON.stringify({ content: value }),
     })
+    try { streamSession.check() } catch (caught) {
+      await response.body?.cancel().catch(() => {})
+      throw caught
+    }
     if (!response.ok || !response.body) {
-      if (response.status === 401) window.dispatchEvent(new Event('opspilot-auth-expired'))
+      if (response.status === 401) streamSession.expire()
       throw new RequestError('对话流连接失败', 'ASSISTANT_STREAM_FAILED', response.status)
     }
     const reader = response.body.getReader()
     const decoder = new TextDecoder()
     let buffer = ''
-    while (true) {
-      const { value: bytes, done } = await reader.read()
-      buffer += decoder.decode(bytes, { stream: !done })
-      const blocks = buffer.split(/\r?\n\r?\n/)
-      buffer = blocks.pop() ?? ''
-      for (const block of blocks) {
-        const data = block.split(/\r?\n/).filter(line => line.startsWith('data:'))
-          .map(line => line.slice(5).trim()).join('')
-        if (!data) continue
-        const event = JSON.parse(data) as StreamEvent
-        if (event.type === 'delta') assistantMessage.content += event.content
-        if (event.messageId) assistantMessage.id = event.messageId
-        if (event.evidenceJson) assistantMessage.evidenceJson = event.evidenceJson
-        if (event.type === 'error') throw new Error(event.content || '助手回答失败')
-        await scrollToBottom()
+    try {
+      while (true) {
+        const { value: bytes, done } = await streamSession.read(reader)
+        if (!isCurrentView()) throw new DOMException('会话视图已切换', 'AbortError')
+        buffer += decoder.decode(bytes, { stream: !done })
+        const blocks = buffer.split(/\r?\n\r?\n/)
+        buffer = blocks.pop() ?? ''
+        for (const block of blocks) {
+          streamSession.check()
+          if (!isCurrentView()) throw new DOMException('会话视图已切换', 'AbortError')
+          const data = block.split(/\r?\n/).filter(line => line.startsWith('data:'))
+            .map(line => line.slice(5).trim()).join('')
+          if (!data) continue
+          const event = JSON.parse(data) as StreamEvent
+          if (event.type === 'delta') assistantMessage.content += event.content
+          if (event.messageId) assistantMessage.id = event.messageId
+          if (event.evidenceJson) assistantMessage.evidenceJson = event.evidenceJson
+          if (event.type === 'error') throw new Error(event.content || '助手回答失败')
+          await scrollToBottom()
+        }
+        if (done) break
       }
-      if (done) break
+    } finally {
+      await reader.cancel().catch(() => {})
+      reader.releaseLock()
     }
+    streamSession.check()
+    if (!isCurrentView()) return
     await refreshSessions()
   } catch (caught) {
+    if (!isCurrentView()) return
+    if (localStorage.getItem('opspilot_token') !== streamSession.token) return
     if (caught instanceof DOMException && caught.name === 'AbortError') {
       if (!assistantMessage.content) assistantMessage.content = '回答已停止。'
     } else {
@@ -283,9 +306,13 @@ async function sendMessage(content = draft.value) {
       error.value = caught instanceof Error ? caught.message : '对话失败'
     }
   } finally {
-    sending.value = false
-    abortController = null
-    await scrollToBottom()
+    streamSession.dispose()
+    if (abortController === controller) {
+      const currentView = isCurrentView()
+      sending.value = false
+      abortController = null
+      if (currentView) await scrollToBottom()
+    }
   }
 }
 

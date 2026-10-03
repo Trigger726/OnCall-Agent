@@ -1,4 +1,5 @@
 import { RequestError } from '@/services/api'
+import { captureStreamSession } from '@/services/streamSession'
 import type { AgentRunEvent } from '@/types/investigation'
 
 interface StreamError {
@@ -11,7 +12,14 @@ const terminalEvents = new Set([
 ])
 
 function agentIdempotencyStorageKey(incidentId: number): string {
-  return `opspilot_agent_idempotency_${incidentId}`
+  let user: { id?: number; username?: string } | null = null
+  try { user = JSON.parse(localStorage.getItem('opspilot_user') ?? 'null') } catch { /* fail closed */ }
+  if (!user || !Number.isSafeInteger(user.id) || user.id! <= 0
+    || typeof user.username !== 'string' || !user.username) {
+    throw new RequestError('请重新登录后启动调查', 'AGENT_ACCOUNT_INVALID', 400)
+  }
+  // UI storage isolation only. The backend independently verifies the signed actor.
+  return `opspilot_agent_idempotency_${user.id}_${encodeURIComponent(user.username)}_${incidentId}`
 }
 
 export function clearAgentInvestigationIdempotency(incidentId: number): void {
@@ -69,7 +77,17 @@ async function consumeAgentEvents(
   onEvent: (event: AgentRunEvent) => void,
   signal?: AbortSignal,
 ): Promise<void> {
-  signal?.throwIfAborted()
+  const session = captureStreamSession(signal)
+  try { await consumeInSession(target, onEvent, session) }
+  finally { session.dispose() }
+}
+
+async function consumeInSession(
+  target: { incidentId: number; source: string } | { runId: number },
+  onEvent: (event: AgentRunEvent) => void,
+  session: ReturnType<typeof captureStreamSession>,
+): Promise<void> {
+  const signal = session.signal
   const start = 'incidentId' in target ? target : null
   const requestKey = start ? idempotencyKey(start.incidentId) : null
   let runId: number | null = 'runId' in target ? target.runId : null
@@ -78,10 +96,10 @@ async function consumeAgentEvents(
   let failures = 0
 
   while (!terminal) {
-    signal?.throwIfAborted()
+    session.check()
     const previousCursor = cursor
     try {
-      const token = localStorage.getItem('opspilot_token')
+      const token = session.token
       const response = await fetch(runId === null
         ? `/api/v1/incidents/${start!.incidentId}/investigations/stream?${new URLSearchParams({ source: start!.source })}`
         : `/api/v1/agent-runs/${runId}/events/stream?after=${cursor}`, {
@@ -92,8 +110,12 @@ async function consumeAgentEvents(
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
       })
+      try { session.check() } catch (error) {
+        await response.body?.cancel().catch(() => {})
+        throw error
+      }
       if (!response.ok || !response.body) {
-        if (response.status === 401) window.dispatchEvent(new Event('opspilot-auth-expired'))
+        if (response.status === 401) session.expire()
         let message = 'Agent 事件流连接失败'
         let code = 'AGENT_STREAM_FAILED'
         try {
@@ -131,9 +153,11 @@ async function consumeAgentEvents(
         }
         runId ??= payload.runId
         if (payload.id <= cursor) return
+        session.check()
         try { onEvent(payload) } catch {
           throw new RequestError('Agent 事件处理失败', 'AGENT_EVENT_HANDLER_FAILED', 400)
         }
+        session.check()
         cursor = payload.id // Advance only after the UI has accepted this event.
         if (terminalEvents.has(payload.eventType)) {
           terminal = true
@@ -146,8 +170,7 @@ async function consumeAgentEvents(
 
       try {
         while (!terminal) {
-          signal?.throwIfAborted()
-          const { value, done } = await reader.read()
+          const { value, done } = await session.read(reader)
           buffer += decoder.decode(value, { stream: !done })
           const blocks = buffer.split(/\r?\n\r?\n/)
           buffer = blocks.pop() ?? ''
@@ -164,7 +187,7 @@ async function consumeAgentEvents(
       }
       if (terminal) return
     } catch (error) {
-      signal?.throwIfAborted()
+      session.check()
       if (terminal || (error instanceof RequestError && error.status < 500 && error.status !== 429)) throw error
     }
     failures = cursor > previousCursor ? 0 : failures + 1

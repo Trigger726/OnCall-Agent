@@ -1,0 +1,274 @@
+{
+  "sourceCommit": "c903d5989bd1420794b4a0f620ec537e0e2e8fe9",
+  "runId": 37088985693,
+  "jobs": [
+    {
+      "id": 111105063923,
+      "name": "Persistent auth session revocation and JVM restart",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111105064105,
+      "name": "Alertmanager webhook integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111105064122,
+      "name": "Frontend build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111105064125,
+      "name": "Redis Streams relay integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111105064133,
+      "name": "On-call real browser integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111105064146,
+      "name": "OpsPilot service metric to Incident integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111105064154,
+      "name": "Prometheus rule to Alertmanager integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111105064170,
+      "name": "MySQL 8.4 integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111105064191,
+      "name": "Collector native alert to Incident lifecycle",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111105064192,
+      "name": "OpenTelemetry Collector and Tempo integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111105064194,
+      "name": "Native SLO rules and Alertmanager lifecycle",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111105064232,
+      "name": "Two JVM Agent SSE integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111105064245,
+      "name": "Backend tests and JAR (H2)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111105064251,
+      "name": "Follow-up notification delivery integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111106535819,
+      "name": "Container image build and smoke test",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11261995304,
+      "name": "auth-session-evidence",
+      "actualZipSha256": "5a388adcd2f9e56c123a74ca258c945c74ddff7be5be451ac3051bf8e3bf90e7",
+      "officialDigestMatches": true
+    },
+    {
+      "id": 11261536892,
+      "name": "mysql-compatibility-evidence",
+      "actualZipSha256": "3c6ffe24df0fff35fa8787e4c850c5d344abfb41ad92f640b017f49c6f136d2f",
+      "officialDigestMatches": true
+    }
+  ],
+  "agent": {
+    "status": "PASS",
+    "baselineCapture": false,
+    "tokensPersistedToEvidence": false,
+    "jarSha256": "3390e3f72a5eaa472b700b5e6c34301fa973c47c10d565f71ec09de3f2fb17d9",
+    "evidenceDirectory": "target/agent-session-it/run-4TZdOt",
+    "fixture": "owned real HTTP Prometheus response held until logout",
+    "database": "fresh runner-owned H2 memory database",
+    "userFileDatabaseModified": false,
+    "startedPid": 2734,
+    "logoutStatus": 200,
+    "revokedGetClosedBeforeProviderRelease": true,
+    "revokedPostClosedBeforeProviderRelease": true,
+    "otherAccountStreamStillOpenBeforeRelease": true,
+    "finalRunStatus": "CANCELLED",
+    "reportCreated": false,
+    "observedTerminationKind": "CANCEL",
+    "providerRequests": 2,
+    "settlementAfterReleaseMs": 38,
+    "providerReadBudgetMs": 10000,
+    "persistedEventTypes": [
+      "RUN_QUEUED",
+      "RUN_STARTED",
+      "PLAN_COMPLETED",
+      "STEP_STARTED",
+      "EVIDENCE_COLLECTED",
+      "STEP_STARTED",
+      "EVIDENCE_COLLECTED",
+      "STEP_STARTED",
+      "RUN_CANCEL_REQUESTED",
+      "RUN_CANCELLED"
+    ],
+    "runId": 1,
+    "otherAccountRemainsAuthorized": true,
+    "revokedTokenRejectedOnNextRequest": true,
+    "freshSessionCompletesAfterInterruptedRun": true,
+    "ownedProcessStopped": true,
+    "ownedProviderStopped": true,
+    "unexpectedJarErrors": 0
+  },
+  "restart": {
+    "status": "PASS",
+    "baselineCapture": false,
+    "url": "http://127.0.0.1:9933/api/v1",
+    "database": "fresh runner-owned H2 file",
+    "userFileDatabaseModified": false,
+    "originalProcessesNotStopped": true,
+    "evidenceDirectory": "target/auth-session-it/run-9ArswB",
+    "startedPids": [
+      2557,
+      2642
+    ],
+    "stoppedPids": [
+      2557,
+      2642
+    ],
+    "unexpectedJarErrors": 0,
+    "tokensPersistedToEvidence": false,
+    "logoutStatus": 200,
+    "passwordStatus": 200,
+    "oldTokensRejectedAfterFreshLogin": true,
+    "oldTokensRejectedAfterPasswordChange": true,
+    "oldTokensRejectedAfterJvmRestart": true,
+    "currentTokenSurvivesRestart": true,
+    "persistedAuthVersion": 2,
+    "unauthorizedBusinessWritesUnchanged": true,
+    "auditRows": [
+      {
+        "id": 4,
+        "actor": "系统管理员",
+        "action": "AUTH_PASSWORD_CHANGED",
+        "targetType": "USER",
+        "targetId": "1",
+        "detail": "本人修改密码并撤销全部已签发会话；必须重新登录",
+        "ipAddress": "127.0.0.1",
+        "createdAt": "2026-10-03T02:13:10.662061"
+      },
+      {
+        "id": 3,
+        "actor": "系统管理员",
+        "action": "AUTH_SESSIONS_REVOKED",
+        "targetType": "USER",
+        "targetId": "1",
+        "detail": "撤销本人全部已签发会话；必须重新登录",
+        "ipAddress": "127.0.0.1",
+        "createdAt": "2026-10-03T02:13:10.140893"
+      }
+    ],
+    "auditRowsUnchangedAfterRestart": true,
+    "ownedProcessesStopped": true
+  },
+  "mysql": {
+    "status": "PASS",
+    "suites": [
+      {
+        "name": "org.trigger.opspilot.MySqlCompatibilityIntegrationTest",
+        "tests": 35,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "executed": 88,
+    "skipped": 0,
+    "unexpectedLogLines": 0,
+    "startedPools": [
+      "HikariPool-1",
+      "HikariPool-2",
+      "HikariPool-3",
+      "HikariPool-4",
+      "HikariPool-5"
+    ],
+    "stoppedPools": [
+      "HikariPool-1",
+      "HikariPool-2",
+      "HikariPool-3",
+      "HikariPool-4",
+      "HikariPool-5"
+    ],
+    "completeMavenOutputIncludingShutdown": true
+  },
+  "fullLogScan": [
+    {
+      "path": "target\\cp67-remote-auth\\unpacked\\agent-session-it\\run-4TZdOt\\jar.log",
+      "errors": 0
+    },
+    {
+      "path": "target\\cp67-remote-auth\\unpacked\\auth-session-it\\run-9ArswB\\jar-1.log",
+      "errors": 0
+    },
+    {
+      "path": "target\\cp67-remote-auth\\unpacked\\auth-session-it\\run-9ArswB\\jar-2.log",
+      "errors": 0
+    }
+  ],
+  "scope": "This is the committed backend run, not the new uncommitted stream-client acceptance."
+}

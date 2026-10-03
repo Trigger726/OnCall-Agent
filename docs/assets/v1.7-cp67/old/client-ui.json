@@ -1,0 +1,72 @@
+{
+  "status": "BASELINE_CAPTURED",
+  "baselineCapture": true,
+  "browser": "154.0.8037.93",
+  "browserPath": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "fixture": "actual revoked JWT 401 held until a different account finishes real UI login in a shared-storage tab",
+  "pageErrors": [],
+  "consoleLogs": [
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+  ],
+  "screenshots": [
+    "incident-agent-before-response.png",
+    "incident-agent-old-expired-desktop.png",
+    "incident-agent-old-expired-mobile.png",
+    "assistant-agent-before-response.png",
+    "assistant-agent-old-expired-desktop.png",
+    "assistant-agent-old-expired-mobile.png",
+    "assistant-chat-before-response.png",
+    "assistant-chat-old-expired-desktop.png",
+    "assistant-chat-old-expired-mobile.png"
+  ],
+  "cases": [
+    {
+      "flow": "incident-agent",
+      "actualUnauthorizedStatus": 401,
+      "realLogoutStatus": 200,
+      "oldResponseDelivery": "fulfilled",
+      "commands": 1,
+      "replacementCredentialPreserved": false,
+      "replacementServerCredentialStillValid": true,
+      "identityReloadShowsAdmin": false,
+      "oldExpiredPageShown": true,
+      "mobileWidth": 390
+    },
+    {
+      "flow": "assistant-agent",
+      "actualUnauthorizedStatus": 401,
+      "realLogoutStatus": 200,
+      "oldResponseDelivery": "fulfilled",
+      "commands": 1,
+      "replacementCredentialPreserved": false,
+      "replacementServerCredentialStillValid": true,
+      "identityReloadShowsAdmin": false,
+      "oldExpiredPageShown": true,
+      "mobileWidth": 390
+    },
+    {
+      "flow": "assistant-chat",
+      "actualUnauthorizedStatus": 401,
+      "realLogoutStatus": 200,
+      "oldResponseDelivery": "fulfilled",
+      "commands": 1,
+      "replacementCredentialPreserved": false,
+      "replacementServerCredentialStillValid": true,
+      "identityReloadShowsAdmin": false,
+      "oldExpiredPageShown": true,
+      "mobileWidth": 390
+    }
+  ],
+  "tokensPersistedToEvidence": false,
+  "pageIdentity": true,
+  "noBlank": true,
+  "noOverlay": true,
+  "allThreeFlowsVerified": true,
+  "automaticMutationRetries": 0
+}

@@ -28,6 +28,7 @@ async function login(username: string, password: string) {
   localStorage.setItem('opspilot_token', response.accessToken)
   localStorage.setItem('opspilot_user', JSON.stringify(response.user))
   state.user = response.user
+  window.dispatchEvent(new Event('opspilot-auth-session-changed'))
 }
 
 async function restore() {
@@ -49,6 +50,7 @@ function logout() {
   localStorage.removeItem('opspilot_token')
   localStorage.removeItem('opspilot_user')
   state.user = null
+  window.dispatchEvent(new Event('opspilot-auth-session-changed'))
 }
 
 export const auth = {
