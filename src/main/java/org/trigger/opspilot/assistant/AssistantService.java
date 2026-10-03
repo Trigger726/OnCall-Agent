@@ -118,12 +118,20 @@ public class AssistantService {
             checkpoint.run();
             lockSession(sessionId, ownerId);
             var session = findSession(sessionId, ownerId);
+            boolean queued = false;
             if (identity != null) {
                 var entry = requests.find(sessionId, identity.keyHash(), true);
-                if (entry != null) return new PreparedMessage(0, session, List.of(), null, replay(sessionId, question, entry));
+                if (entry != null && !AssistantRequestStore.hash(question).equals(entry.contentHash())) {
+                    throw new ApiException(HttpStatus.CONFLICT, "ASSISTANT_IDEMPOTENCY_CONFLICT", "同一幂等键不能用于不同问题");
+                }
+                queued = entry != null && "QUEUED".equals(entry.status()) && identity.attemptId().equals(entry.attemptId());
+                if (entry != null && !queued) return new PreparedMessage(0, session, List.of(), null, replay(sessionId, question, entry));
             }
             long questionId = insertMessage(sessionId, "USER", question, null);
-            if (identity != null) requests.prepare(sessionId, question, questionId, identity);
+            if (identity != null) {
+                if (queued) requests.start(sessionId, questionId, identity);
+                else requests.prepare(sessionId, question, questionId, identity);
+            }
             var context = session.incidentId() == null ? null : loadIncidentContext(session.incidentId());
             checkpoint.run();
             requireAuthorization(lease, false);
@@ -170,6 +178,7 @@ public class AssistantService {
         } catch (RuntimeException | Error error) {
             if (identity != null) {
                 String status = error instanceof CredentialsExpiredException ? "REVOKED"
+                        : error instanceof ApiException api && api.code().contains("CANCELLED") ? "CANCELLED"
                         : error instanceof ApiException api && (api.status() == HttpStatus.GATEWAY_TIMEOUT || api.code().contains("TIMED_OUT")) ? "TIMED_OUT"
                         : error instanceof ApiException api && api.code().contains("SUPERSEDED") ? "SUPERSEDED" : "FAILED";
                 try { requests.stop(sessionId, identity.keyHash(), identity.attemptId(), status); }
@@ -187,11 +196,45 @@ public class AssistantService {
         return entry == null ? null : replay(sessionId, question.trim(), entry);
     }
 
+    public void enqueueRequest(long sessionId, long ownerId, String rawQuestion, SessionAuthorization.Lease lease,
+                               Runnable checkpoint, AssistantRequestStore.Identity identity) {
+        if (identity == null) return;
+        if (lease == null || lease.userId() != ownerId) throw new CredentialsExpiredException("Assistant actor mismatch");
+        String question = rawQuestion == null ? "" : rawQuestion.trim();
+        if (question.isEmpty() || question.length() > 10000) throw new ApiException(HttpStatus.BAD_REQUEST,
+                "ASSISTANT_MESSAGE_INVALID", "消息内容需为1至10000个字符");
+        transactions.executeWithoutResult(transaction -> {
+            checkpoint.run(); requireAuthorization(lease, true); checkpoint.run();
+            lockSession(sessionId, ownerId); findSession(sessionId, ownerId);
+            var entry = requests.find(sessionId, identity.keyHash(), true);
+            if (entry == null) requests.enqueue(sessionId, question, identity);
+            else replay(sessionId, question, entry); // Completed race may replay in the worker; every other duplicate conflicts.
+            checkpoint.run(); requireAuthorization(lease, false);
+        });
+    }
+
+    public AssistantRequestStore.View cancelRequest(long sessionId, long ownerId, String keyHash, SessionAuthorization.Lease lease) {
+        if (lease == null || lease.userId() != ownerId) throw new CredentialsExpiredException("Assistant actor mismatch");
+        return transactions.execute(transaction -> {
+            requireAuthorization(lease, true); lockSession(sessionId, ownerId); findSession(sessionId, ownerId);
+            var entry = requests.find(sessionId, keyHash, true);
+            if (entry == null) throw new ApiException(HttpStatus.NOT_FOUND, "ASSISTANT_REQUEST_NOT_FOUND", "请求不存在");
+            if (requests.cancel(entry)) recordAudit(ownerId, "ASSISTANT_REQUEST_CANCEL", sessionId, "本人显式取消助手请求 #" + entry.id());
+            var current = requests.find(sessionId, keyHash, true);
+            requireAuthorization(lease, false);
+            return new AssistantRequestStore.View(current.id(), current.status(), current.questionId(), current.answerId(), current.deadlineEpochMs());
+        });
+    }
+
+    AssistantExecutionManager.Reason requestStopReason(long sessionId, String keyHash, String attemptId) {
+        return keyHash == null ? null : requests.stopReason(sessionId, keyHash, attemptId);
+    }
+
     private MessageView replay(long sessionId, String question, AssistantRequestStore.Entry entry) {
         if (!AssistantRequestStore.hash(question).equals(entry.contentHash())) {
             throw new ApiException(HttpStatus.CONFLICT, "ASSISTANT_IDEMPOTENCY_CONFLICT", "同一幂等键不能用于不同问题");
         }
-        if ("RUNNING".equals(entry.status())) throw new ApiException(HttpStatus.CONFLICT,
+        if ("RUNNING".equals(entry.status()) || "QUEUED".equals(entry.status())) throw new ApiException(HttpStatus.CONFLICT,
                 "ASSISTANT_REQUEST_IN_PROGRESS", "原问题正在处理，请查询请求状态，不要换键重复发送");
         if (!"COMPLETED".equals(entry.status())) throw AssistantRequestStore.stopped(entry);
         return jdbcClient.sql("""
@@ -212,6 +255,8 @@ public class AssistantService {
     void stopRequest(long sessionId, String keyHash, String attemptId, AssistantExecutionManager.Reason reason) {
         if (keyHash == null) return;
         requests.stop(sessionId, keyHash, attemptId, reason == AssistantExecutionManager.Reason.REVOKED ? "REVOKED"
+                : reason == AssistantExecutionManager.Reason.CANCELLED ? "CANCELLED"
+                : reason == AssistantExecutionManager.Reason.SUPERSEDED ? "SUPERSEDED"
                 : reason == AssistantExecutionManager.Reason.TIMED_OUT ? "TIMED_OUT" : "FAILED");
     }
 

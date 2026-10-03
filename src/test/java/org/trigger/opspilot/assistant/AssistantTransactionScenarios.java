@@ -96,6 +96,88 @@ public final class AssistantTransactionScenarios implements AutoCloseable {
         return new AssistantRequestStore.Identity(AssistantRequestStore.keyHash(key), UUID.randomUUID().toString(), System.currentTimeMillis() + 30000);
     }
 
+    public void queuedCancellationAuditFailureRollsBackStateAndIsIdempotentAfterRepair() throws Exception {
+        String key = UUID.randomUUID().toString(), constraint = "cp72_cancel_" + UUID.randomUUID().toString().replace("-", "");
+        var identity = identity(key); var lease = authorization.capture(ownerId);
+        assistant.enqueueRequest(sessionId, ownerId, "queued atomic cancellation", lease, () -> {}, identity);
+        assertThat(assistant.requestStatus(sessionId, ownerId, identity.keyHash()).status()).isEqualTo("QUEUED");
+        assertThatThrownBy(() -> assistant.sendMessage(sessionId, ownerId, "different queued question", lease, () -> {}, identity))
+                .isInstanceOfSatisfying(ApiException.class, error -> assertThat(error.code()).isEqualTo("ASSISTANT_IDEMPOTENCY_CONFLICT"));
+        assertThat(messages("USER")).isZero();
+        final boolean mysql;
+        try (var connection = dataSource.getConnection()) { mysql = "MySQL".equals(connection.getMetaData().getDatabaseProductName()); }
+        jdbc.sql("ALTER TABLE audit_log ADD CONSTRAINT " + constraint
+                + " CHECK(action <> 'ASSISTANT_REQUEST_CANCEL' OR target_type <> 'ASSISTANT_SESSION' OR target_id <> '" + sessionId + "')").update();
+        try {
+            assertThatThrownBy(() -> assistant.cancelRequest(sessionId, ownerId, identity.keyHash(), lease))
+                    .isInstanceOfSatisfying(DataAccessException.class, error -> {
+                        assertThat(error.getMostSpecificCause()).isInstanceOf(java.sql.SQLException.class);
+                        var sql = (java.sql.SQLException) error.getMostSpecificCause();
+                        assertThat(sql.getErrorCode()).isEqualTo(mysql ? 3819 : 23513);
+                        assertThat(sql.getSQLState()).isEqualTo(mysql ? "HY000" : "23513");
+                        assertThat(sql.getMessage()).containsIgnoringCase(constraint);
+                    });
+            assertThat(assistant.requestStatus(sessionId, ownerId, identity.keyHash()).status()).isEqualTo("QUEUED");
+            assertThat(cancellations()).isZero(); assertThat(messages("USER")).isZero(); assertThat(messages("ASSISTANT")).isZero();
+        } finally { jdbc.sql("ALTER TABLE audit_log DROP " + (mysql ? "CHECK " : "CONSTRAINT ") + constraint).update(); }
+        assertThat(assistant.cancelRequest(sessionId, ownerId, identity.keyHash(), lease).status()).isEqualTo("CANCELLED");
+        assertThat(assistant.cancelRequest(sessionId, ownerId, identity.keyHash(), lease).status()).isEqualTo("CANCELLED");
+        assertThat(cancellations()).isEqualTo(1);
+        assertThatThrownBy(() -> assistant.sendMessage(sessionId, ownerId, "queued atomic cancellation", lease, () -> {}, identity))
+                .isInstanceOfSatisfying(ApiException.class, error -> assertThat(error.code()).isEqualTo("ASSISTANT_REQUEST_CANCELLED"));
+        assertThat(messages("USER")).isZero(); assertThat(messages("ASSISTANT")).isZero(); assertThat(completions()).isZero();
+    }
+
+    public void cancellationCommitWinsBeforeCompletion() throws Exception {
+        var identity = identity(UUID.randomUUID().toString()); var lease = authorization.capture(ownerId);
+        assistant.enqueueRequest(sessionId, ownerId, "cancel-first race", lease, () -> {}, identity);
+        var prepared = new CountDownLatch(1); var release = new CountDownLatch(1); var observed = new AtomicBoolean();
+        var pool = Executors.newFixedThreadPool(2);
+        try {
+            var answer = pool.submit(() -> assistant.sendMessage(sessionId, ownerId, "cancel-first race", lease, () -> {
+                if (!TransactionSynchronizationManager.isActualTransactionActive() && observed.compareAndSet(false, true)) {
+                    prepared.countDown(); await(release);
+                }
+            }, identity));
+            assertThat(prepared.await(3, TimeUnit.SECONDS)).isTrue();
+            assertThat(pool.submit(() -> assistant.cancelRequest(sessionId, ownerId, identity.keyHash(), lease)).get(3, TimeUnit.SECONDS).status()).isEqualTo("CANCELLED");
+            release.countDown();
+            assertThatThrownBy(() -> answer.get(3, TimeUnit.SECONDS)).isInstanceOfSatisfying(java.util.concurrent.ExecutionException.class,
+                    error -> assertThat(error.getCause()).isInstanceOfSatisfying(ApiException.class,
+                            api -> assertThat(api.code()).isEqualTo("ASSISTANT_REQUEST_CANCELLED")));
+            assertUncompleted(); assertThat(cancellations()).isEqualTo(1);
+            assertThat(assistant.requestStatus(sessionId, ownerId, identity.keyHash()).status()).isEqualTo("CANCELLED");
+        } finally { release.countDown(); pool.shutdown(); assertThat(pool.awaitTermination(5, TimeUnit.SECONDS)).isTrue(); }
+    }
+
+    public void completionCommitWinsBeforeCancellation() throws Exception {
+        var identity = identity(UUID.randomUUID().toString()); var lease = authorization.capture(ownerId);
+        assistant.enqueueRequest(sessionId, ownerId, "complete-first race", lease, () -> {}, identity);
+        var insideCommit = new CountDownLatch(1); var release = new CountDownLatch(1); var cancelEntered = new CountDownLatch(1);
+        var observed = new AtomicBoolean(); var pool = Executors.newFixedThreadPool(2);
+        try {
+            var answer = pool.submit(() -> assistant.sendMessage(sessionId, ownerId, "complete-first race", lease, () -> {
+                if (TransactionSynchronizationManager.isActualTransactionActive() && completions() == 1 && observed.compareAndSet(false, true)) {
+                    insideCommit.countDown(); await(release);
+                }
+            }, identity));
+            assertThat(insideCommit.await(3, TimeUnit.SECONDS)).isTrue();
+            var cancellation = pool.submit(() -> { cancelEntered.countDown(); return assistant.cancelRequest(sessionId, ownerId, identity.keyHash(), lease); });
+            assertThat(cancelEntered.await(2, TimeUnit.SECONDS)).isTrue();
+            assertThatThrownBy(() -> cancellation.get(150, TimeUnit.MILLISECONDS)).isInstanceOf(TimeoutException.class);
+            release.countDown(); var completed = answer.get(3, TimeUnit.SECONDS);
+            var unchanged = cancellation.get(3, TimeUnit.SECONDS);
+            assertThat(unchanged.status()).isEqualTo("COMPLETED"); assertThat(unchanged.answerMessageId()).isEqualTo(completed.id());
+            assertThat(messages("USER")).isEqualTo(1); assertThat(messages("ASSISTANT")).isEqualTo(1);
+            assertThat(completions()).isEqualTo(1); assertThat(cancellations()).isZero();
+        } finally { release.countDown(); pool.shutdown(); assertThat(pool.awaitTermination(5, TimeUnit.SECONDS)).isTrue(); }
+    }
+
+    private long cancellations() {
+        return jdbc.sql("SELECT COUNT(*) FROM audit_log WHERE action='ASSISTANT_REQUEST_CANCEL' AND target_type='ASSISTANT_SESSION' AND target_id=:id")
+                .param("id", String.valueOf(sessionId)).query(Long.class).single();
+    }
+
     public void completedKeyBindsQuestionAndPreservesCaseSensitiveSessionScope() {
         String key = "ScopedKey-" + UUID.randomUUID();
         var lease = authorization.capture(ownerId);

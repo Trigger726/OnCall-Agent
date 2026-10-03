@@ -1,0 +1,30 @@
+{
+  "source": "checkpoint72-first-implementation-before-admission-stop-fence",
+  "initialExecutionManagerSuite": {
+    "log": "target/cp72-before/admission-failure-counterexample.log",
+    "sha256": "342dea9c431350d60876da1a8f627b3b4950e0a76363efe570ab6bc9e074356f",
+    "found": 11,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "executed": 11,
+    "buildSuccess": true,
+    "finishedAt": "2026-10-03T16:24:53+08:00"
+  },
+  "forcedRunningCallableCounterexample": {
+    "log": "target/cp72-before/admission-running-counterexample.log",
+    "sha256": "46229f9faaad50ffd8d3d80041bb0f4d27f1c19b004b74ad1a4290c93f688949",
+    "found": 1,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "executed": 1,
+    "buildSuccess": false,
+    "finishedAt": "2026-10-03T16:26:36+08:00"
+  },
+  "expectedWorkerExecutions": 0,
+  "actualWorkerExecutions": 1,
+  "rootCause": "Future.cancel(false) cannot stop a callable already awaiting admission; releasing the gate after transaction failure let it execute",
+  "repair": "Set FAILED fence before releasing admission gate; suppress unrelated stop callback and surface original admission exception",
+  "strongScenarioIncludedInFinalUtcAndShanghai": true
+}

@@ -42,6 +42,124 @@ class AssistantSessionRevocationIntegrationTest {
     final HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build();
     static final String LATE_ANSWER = "CP68-controlled-late-answer-must-not-be-persisted-or-sent";
 
+    @Test void shouldPersistQueuedKeyAndCancelItWithoutQuestionWrites() throws Exception {
+        String token = login(), key = UUID.randomUUID().toString(), question = "cp72-queue-" + UUID.randomUUID();
+        long runningId = createSession(token), queuedId = createSession(token), freshId = createSession(token);
+        var entered = new CountDownLatch(1); var release = new CountDownLatch(1);
+        gate(question, entered, release);
+        var running = http.sendAsync(message(runningId, token, question, false), HttpResponse.BodyHandlers.ofString());
+        java.util.concurrent.CompletableFuture<HttpResponse<String>> queued = null, fresh = null;
+        try {
+            assertThat(entered.await(3, TimeUnit.SECONDS)).isTrue();
+            queued = http.sendAsync(keyedMessage(queuedId, token, "must never execute queued", false, key), HttpResponse.BodyHandlers.ofString());
+            long deadline = System.nanoTime() + Duration.ofSeconds(2).toNanos();
+            HttpResponse<String> state;
+            do { state = requestState(queuedId, token, key); if (state.statusCode() == 200) break; Thread.sleep(10); }
+            while (System.nanoTime() < deadline);
+            assertThat(state.statusCode()).isEqualTo(200);
+            assertThat(json.readTree(state.body()).path("data").path("status").asText()).isEqualTo("QUEUED");
+            assertThat(count(queuedId, "USER")).isZero();
+            var cancelled = cancelRequest(queuedId, token, key);
+            assertThat(cancelled.statusCode()).isEqualTo(200);
+            assertThat(json.readTree(cancelled.body()).path("data").path("status").asText()).isEqualTo("CANCELLED");
+            assertThat(queued.get(2, TimeUnit.SECONDS).statusCode()).isEqualTo(409);
+            assertThat(execution.queued()).isZero();
+            assertThat(cancelRequest(queuedId, token, key).statusCode()).isEqualTo(200);
+            assertThat(cancellationAudits(queuedId)).isEqualTo(1);
+            assertThat(count(queuedId, "USER")).isZero(); assertThat(count(queuedId, "ASSISTANT")).isZero();
+            assertThat(http.send(keyedMessage(queuedId, token, "must never execute queued", false, key), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(409);
+            fresh = http.sendAsync(keyedMessage(freshId, token, "replacement queue question", false, UUID.randomUUID().toString()), HttpResponse.BodyHandlers.ofString());
+            release.countDown(); assertThat(running.get(5, TimeUnit.SECONDS).statusCode()).isEqualTo(200);
+            assertThat(fresh.get(5, TimeUnit.SECONDS).statusCode()).isEqualTo(200);
+            assertThat(count(queuedId, "USER")).isZero();
+        } finally { release.countDown(); running.get(8, TimeUnit.SECONDS); if (queued != null) queued.get(8, TimeUnit.SECONDS); if (fresh != null) fresh.get(8, TimeUnit.SECONDS); }
+    }
+
+    @Test void shouldCancelRunningKeyBeforeProviderReleaseWithoutLateAnswer() throws Exception {
+        verifyExplicitCancellation(false);
+    }
+
+    @Test void shouldSendCancelledEventWithoutDoneForRunningStream() throws Exception {
+        verifyExplicitCancellation(true);
+    }
+
+    private void verifyExplicitCancellation(boolean stream) throws Exception {
+        String token = login(), key = UUID.randomUUID().toString(), question = "cp72-running-" + UUID.randomUUID();
+        long id = createSession(token);
+        var entered = new CountDownLatch(1); var release = new CountDownLatch(1);
+        gate(question, entered, release);
+        var pending = http.sendAsync(keyedMessage(id, token, question, stream, key), HttpResponse.BodyHandlers.ofString());
+        try {
+            assertThat(entered.await(3, TimeUnit.SECONDS)).isTrue();
+            String other = json.readTree(post("/api/v1/auth/login", null, Map.of("username", "auditor", "password", "OpsPilot@2026")).body()).path("data").path("accessToken").asText();
+            assertThat(cancelRequest(id, other, key).statusCode()).isEqualTo(404);
+            assertThat(json.readTree(requestState(id, token, key).body()).path("data").path("status").asText()).isEqualTo("RUNNING");
+            var cancelled = cancelRequest(id, token, key);
+            assertThat(cancelled.statusCode()).isEqualTo(200);
+            assertThat(json.readTree(cancelled.body()).path("data").path("status").asText()).isEqualTo("CANCELLED");
+            var ended = pending.get(2, TimeUnit.SECONDS);
+            assertThat(release.getCount()).isEqualTo(1);
+            if (stream) assertThat(ended.body()).contains("event:cancelled").doesNotContain("event:done", LATE_ANSWER);
+            else { assertThat(ended.statusCode()).isEqualTo(409); assertThat(ended.body()).contains("ASSISTANT_REQUEST_CANCELLED"); }
+            assertThat(cancelRequest(id, token, key).statusCode()).isEqualTo(200);
+            assertThat(cancellationAudits(id)).isEqualTo(1);
+            assertThat(count(id, "USER")).isEqualTo(1); assertThat(count(id, "ASSISTANT")).isZero(); assertThat(audits(id)).isZero();
+            release.countDown(); awaitIdle(); assertThat(count(id, "ASSISTANT")).isZero();
+            org.mockito.Mockito.verify(ai, org.mockito.Mockito.times(1)).answer(anyString(), anyString(), anyString());
+            assertThat(http.send(keyedMessage(createSession(token), token, "explicit replacement after cancel", false, UUID.randomUUID().toString()), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(200);
+        } finally { release.countDown(); pending.get(8, TimeUnit.SECONDS); }
+    }
+
+    @Test void shouldPreserveCompletedAnswerWhenCancellationArrivesLate() throws Exception {
+        String token = login(), key = UUID.randomUUID().toString(); long id = createSession(token);
+        assertThat(http.send(request("/api/v1/assistant/sessions/" + id + "/request/cancel", token)
+                .POST(HttpRequest.BodyPublishers.noBody()).build(), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(400);
+        assertThat(cancelRequest(id, token, "bad/key").statusCode()).isEqualTo(400);
+        assertThat(cancelRequest(id, token, UUID.randomUUID().toString()).statusCode()).isEqualTo(404);
+        var original = http.send(keyedMessage(id, token, "already complete", false, key), HttpResponse.BodyHandlers.ofString());
+        assertThat(original.statusCode()).isEqualTo(200);
+        assertThat(cancelRequest(id, token, key).statusCode()).isEqualTo(200);
+        assertThat(json.readTree(requestState(id, token, key).body()).path("data").path("status").asText()).isEqualTo("COMPLETED");
+        assertThat(cancellationAudits(id)).isZero(); assertThat(count(id, "ASSISTANT")).isEqualTo(1);
+        var replay = http.send(keyedMessage(id, token, "already complete", false, key), HttpResponse.BodyHandlers.ofString());
+        assertThat(json.readTree(replay.body()).path("data").path("id").asLong()).isEqualTo(json.readTree(original.body()).path("data").path("id").asLong());
+    }
+
+    @Test void shouldPersistQueuedTimeoutWithoutAcceptingQuestionOrRetryingKey() throws Exception {
+        String token = login(), key = UUID.randomUUID().toString(), question = "cp72-held-timeout-" + UUID.randomUUID();
+        long runningId = createSession(token), queuedId = createSession(token);
+        var entered = new CountDownLatch(1); var release = new CountDownLatch(1);
+        gate(question, entered, release);
+        var running = http.sendAsync(message(runningId, token, question, false), HttpResponse.BodyHandlers.ofString());
+        java.util.concurrent.CompletableFuture<HttpResponse<String>> queued = null;
+        try {
+            assertThat(entered.await(3, TimeUnit.SECONDS)).isTrue();
+            queued = http.sendAsync(keyedMessage(queuedId, token, "queued timeout never accepted", false, key), HttpResponse.BodyHandlers.ofString());
+            long end = System.nanoTime() + Duration.ofSeconds(2).toNanos(); HttpResponse<String> state;
+            do { state = requestState(queuedId, token, key); if (state.statusCode() == 200) break; Thread.sleep(10); }
+            while (System.nanoTime() < end);
+            assertThat(state.statusCode()).isEqualTo(200);
+            assertThat(json.readTree(state.body()).path("data").path("status").asText()).isEqualTo("QUEUED");
+            assertThat(queued.get(6, TimeUnit.SECONDS).statusCode()).isEqualTo(504);
+            assertThat(running.get(1, TimeUnit.SECONDS).statusCode()).isEqualTo(504);
+            assertThat(release.getCount()).isEqualTo(1);
+            assertThat(json.readTree(requestState(queuedId, token, key).body()).path("data").path("status").asText()).isEqualTo("TIMED_OUT");
+            assertThat(count(queuedId, "USER")).isZero(); assertThat(count(queuedId, "ASSISTANT")).isZero(); assertThat(audits(queuedId)).isZero();
+            assertThat(http.send(keyedMessage(queuedId, token, "queued timeout never accepted", false, key), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(409);
+            release.countDown(); awaitIdle(); assertThat(count(queuedId, "USER")).isZero();
+        } finally { release.countDown(); running.get(8, TimeUnit.SECONDS); if (queued != null) queued.get(8, TimeUnit.SECONDS); }
+    }
+
+    HttpResponse<String> cancelRequest(long id, String token, String key) throws Exception {
+        return http.send(request("/api/v1/assistant/sessions/" + id + "/request/cancel", token).header("Idempotency-Key", key)
+                .POST(HttpRequest.BodyPublishers.noBody()).build(), HttpResponse.BodyHandlers.ofString());
+    }
+
+    long cancellationAudits(long id) {
+        return jdbc.sql("SELECT COUNT(*) FROM audit_log WHERE action='ASSISTANT_REQUEST_CANCEL' AND target_type='ASSISTANT_SESSION' AND target_id=:id")
+                .param("id", Long.toString(id)).query(Long.class).single();
+    }
+
     @Test void shouldReplayCompletedKeyAcrossSyncAndStreamWithoutWrites() throws Exception {
         String token = login();
         long id = createSession(token);

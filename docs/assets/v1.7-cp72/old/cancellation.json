@@ -1,0 +1,61 @@
+{
+  "sourceCommit": "bd508bdde0fb126405a145bb820e9d0dce6aab67",
+  "protectedJar": "target/cp72-before/opspilot-cp71.jar",
+  "protectedJarSha256": "68e8dcfa798257a0cc13f44f22d7abd2bb9b3c89f590154d215a32e457b3ff1d",
+  "counterexample": {
+    "log": "target/cp72-before/cancel-baseline.log",
+    "sha256": "811941454451ed7f47edc5c518dd5b5355209b16d5f99006d8eb340420294c02",
+    "found": 4,
+    "failures": 4,
+    "errors": 0,
+    "skipped": 0,
+    "executed": 4,
+    "buildSuccess": false,
+    "finishedAt": "2026-10-03T16:17:02+08:00"
+  },
+  "nativeCancellation": {
+    "evidenceDirectory": "target/assistant-cancel-it/run-DioaLW",
+    "resultSha256": "da34fabe470841605f00e31f88a15e6374cb5965b9383e7f64f95f7221acda21",
+    "result": {
+      "status": "BASELINE_CAPTURED",
+      "baselineCapture": true,
+      "tokensPersistedToEvidence": false,
+      "jarSha256": "68e8dcfa798257a0cc13f44f22d7abd2bb9b3c89f590154d215a32e457b3ff1d",
+      "upgradeFixtureExecuted": false,
+      "fixture": "owned production HTTP adapter; explicit cancellation, lost cancel response and queued SIGKILL recovery",
+      "database": "fresh owned H2 file with WRITE_DELAY=0",
+      "userFileDatabaseModified": false,
+      "startedPids": [
+        75984
+      ],
+      "stoppedPids": [
+        75984
+      ],
+      "cases": [
+        {
+          "name": "old-cancellation-gap",
+          "queuedStateStatus": 404,
+          "queuedCancelStatus": 404,
+          "runningCancelStatus": 404,
+          "queuedQuestionExecutedAfterRelease": true,
+          "completedCancelStatus": 404
+        }
+      ],
+      "providerTransportCalls": 3,
+      "ownedProcessesStopped": true,
+      "ownedRelayStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "logs": [
+      {
+        "file": "target/assistant-cancel-it/run-DioaLW/jar-1.log",
+        "sha256": "45e3519f3f86eea1150a9d337fa8ef43aa37e47ca33508134c3e6e97ce05f839",
+        "unexpectedErrors": 0
+      }
+    ],
+    "jwtFound": false
+  },
+  "baselineLostCancelResponseExecuted": false,
+  "baselineSigkillExecuted": false
+}

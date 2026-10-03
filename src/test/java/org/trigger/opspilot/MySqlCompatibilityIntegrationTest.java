@@ -121,6 +121,15 @@ class MySqlCompatibilityIntegrationTest {
     @Test @Order(43) void shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt() throws Exception {
         try (var s = assistantScenario()) { s.concurrentKeyNeverCreatesSecondQuestionOrStopsOriginalAttempt(); }
     }
+    @Test @Order(44) void shouldRollbackAssistantCancellationWhenAuditInsertFails() throws Exception {
+        try (var s = assistantScenario()) { s.queuedCancellationAuditFailureRollsBackStateAndIsIdempotentAfterRepair(); }
+    }
+    @Test @Order(45) void shouldFenceAssistantCompletionAfterCancellationCommit() throws Exception {
+        try (var s = assistantScenario()) { s.cancellationCommitWinsBeforeCompletion(); }
+    }
+    @Test @Order(46) void shouldPreserveAssistantCompletionWhenCancellationWaitsForCommit() throws Exception {
+        try (var s = assistantScenario()) { s.completionCommitWinsBeforeCancellation(); }
+    }
 
     private org.trigger.opspilot.security.AuthSessionHttpScenarios sessionScenario() {
         return new org.trigger.opspilot.security.AuthSessionHttpScenarios(jdbcClient, httpMapper, httpPasswordEncoder, httpPort);

@@ -15,7 +15,9 @@ import java.time.Duration;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /** Bounded transport work. A stopped model call may occupy its worker until its own I/O budget ends. */
 @Component
@@ -46,9 +48,16 @@ public class AssistantExecutionManager {
     }
 
     public void submit(SessionAuthorization.Lease lease, Consumer<Work> operation, Consumer<Reason> onStop) {
-        var work = new Work(lease, onStop);
+        submit(lease, null, work -> {}, operation, () -> null, onStop);
+    }
+
+    /** Reserve actual bounded capacity before persisting admission; no worker can enter preparation before it commits. */
+    public void submit(SessionAuthorization.Lease lease, RequestKey key, Consumer<Work> admission,
+                       Consumer<Work> operation, Supplier<Reason> durableReason, Consumer<Reason> onStop) {
+        var work = new Work(lease, key, durableReason, onStop);
         work.future = new FutureTask<>(() -> {
-            try { work.check(); operation.accept(work); }
+            try { work.ready.await(); work.check(); operation.accept(work); }
+            catch (InterruptedException interrupted) { Thread.currentThread().interrupt(); work.stop(Reason.SHUTDOWN); }
             catch (CredentialsExpiredException ignored) { work.stop(Reason.REVOKED); }
             catch (RuntimeException | Error exception) {
                 if (work.reason.get() == null) {
@@ -68,16 +77,33 @@ public class AssistantExecutionManager {
             work.future.cancel(false);
             throw new ApiException(HttpStatus.SERVICE_UNAVAILABLE, "ASSISTANT_QUEUE_SATURATED", "助手队列已满，请稍后重试");
         }
+        try { admission.accept(work); }
+        catch (RuntimeException | Error error) {
+            work.reason.compareAndSet(null, Reason.FAILED); // cancel(false) does not stop a callable already inside the admission gate.
+            work.notified.set(true); // The original request receives this admission exception, not an unrelated stop callback.
+            tasks.remove(work.future, work);
+            work.future.cancel(false);
+            executor.remove(work.future);
+            throw error;
+        } finally {
+            work.admitted = true;
+            work.ready.countDown();
+            work.notifyStopped(); // A stop during the admission transaction is published only after that transaction settles.
+        }
+    }
+
+    public void cancel(long ownerId, long sessionId, String keyHash) {
+        var key = new RequestKey(sessionId, keyHash);
+        tasks.values().forEach(work -> {
+            if (work.lease.userId() == ownerId && key.equals(work.key)) work.stop(Reason.CANCELLED);
+        });
     }
 
     @Scheduled(fixedDelayString = "${opspilot.assistant.authorization-check-delay:1000}", scheduler = "agentSubscriptionScheduler")
     public void reauthorize() {
         tasks.values().forEach(work -> {
-            if (System.nanoTime() - work.deadline >= 0) { work.stop(Reason.TIMED_OUT); return; }
-            boolean authorized;
-            try { authorized = authorization.authorized(work.lease, false); }
-            catch (RuntimeException exception) { authorized = false; }
-            if (!authorized) work.stop(Reason.REVOKED);
+            try { work.check(); }
+            catch (CredentialsExpiredException | ApiException ignored) { /* The stop callback already settled the transport. */ }
         });
     }
 
@@ -91,17 +117,23 @@ public class AssistantExecutionManager {
         executor.shutdown();
     }
 
-    public enum Reason { REVOKED, TIMED_OUT, SHUTDOWN, FAILED }
+    public enum Reason { REVOKED, TIMED_OUT, CANCELLED, SUPERSEDED, SHUTDOWN, FAILED }
+    public record RequestKey(long sessionId, String keyHash) { }
 
     public final class Work {
         private final SessionAuthorization.Lease lease;
+        private final RequestKey key;
+        private final Supplier<Reason> durableReason;
         private final Consumer<Reason> onStop;
+        private final CountDownLatch ready = new CountDownLatch(1);
+        private final AtomicBoolean notified = new AtomicBoolean();
+        private volatile boolean admitted;
         private final long deadline = System.nanoTime() + timeout.toNanos();
         private final long deadlineEpochMs = System.currentTimeMillis() + timeout.toMillis();
         private final AtomicReference<Reason> reason = new AtomicReference<>();
         private FutureTask<Void> future;
-        private Work(SessionAuthorization.Lease lease, Consumer<Reason> onStop) {
-            this.lease = lease; this.onStop = onStop;
+        private Work(SessionAuthorization.Lease lease, RequestKey key, Supplier<Reason> durableReason, Consumer<Reason> onStop) {
+            this.lease = lease; this.key = key; this.durableReason = durableReason; this.onStop = onStop;
         }
         public long deadlineEpochMillis() { return deadlineEpochMs; }
         public void check() {
@@ -112,7 +144,15 @@ public class AssistantExecutionManager {
                 catch (RuntimeException exception) { valid = false; }
                 if (!valid) stop(Reason.REVOKED);
             }
+            if (reason.get() == null && admitted) {
+                try { var persisted = durableReason.get(); if (persisted != null) stop(persisted); }
+                catch (RuntimeException unavailable) { stop(Reason.FAILED); }
+            }
             if (reason.get() == Reason.REVOKED) throw new CredentialsExpiredException("Assistant session expired");
+            if (reason.get() == Reason.CANCELLED) throw new ApiException(HttpStatus.CONFLICT,
+                    "ASSISTANT_REQUEST_CANCELLED", "回答已取消，原请求不会重新执行");
+            if (reason.get() == Reason.SUPERSEDED) throw new ApiException(HttpStatus.CONFLICT,
+                    "ASSISTANT_REQUEST_SUPERSEDED", "原问题已清空，回答不会重新执行");
             if (reason.get() != null) throw new ApiException(HttpStatus.GATEWAY_TIMEOUT,
                     "ASSISTANT_EXECUTION_STOPPED", "回答已停止，请重新发送问题");
         }
@@ -120,7 +160,11 @@ public class AssistantExecutionManager {
             if (!tasks.remove(future, this) || !reason.compareAndSet(null, value)) return;
             future.cancel(false);
             executor.remove(future);
-            try { onStop.accept(value); }
+            notifyStopped();
+        }
+        private void notifyStopped() {
+            if (!admitted || reason.get() == null || !notified.compareAndSet(false, true)) return;
+            try { onStop.accept(reason.get()); }
             catch (RuntimeException ignored) { /* Cannot write to a closed transport. */ }
         }
     }

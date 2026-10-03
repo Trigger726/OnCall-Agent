@@ -1,0 +1,363 @@
+{
+  "sourceCommit": "checkpoint72-working-tree-before-upload",
+  "targetedBeforeFinalQueuedContentBinding": {
+    "log": "target/cp72-before/cancel-expanded.log",
+    "sha256": "0882a03064fe099768592b3effc18050602dff77a5374f3e9526bdae7dacd3d6",
+    "found": 63,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "executed": 63,
+    "buildSuccess": true,
+    "finishedAt": "2026-10-03T16:31:16+08:00"
+  },
+  "utc": {
+    "log": "target/cp72-before/full-utc.log",
+    "sha256": "6d282e0fbf8c679a32faeea3efddce0d0a0ddf02d7ec2fe348a39ddcee77a292",
+    "found": 459,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 106,
+    "executed": 353,
+    "buildSuccess": true,
+    "finishedAt": "2026-10-03T08:37:13Z"
+  },
+  "shanghai": {
+    "log": "target/cp72-before/full-shanghai-package.log",
+    "sha256": "d8f53252d0417534f01585d5e0cf9e4fa7a2234ea17f4da51384f37834ba6bc7",
+    "found": 459,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 106,
+    "executed": 353,
+    "buildSuccess": true,
+    "finishedAt": "2026-10-03T16:41:19+08:00"
+  },
+  "newJarSha256": "bc3fdb766cd62b76b97a64f9466f8e7111feedec5aa35569baa7b045decbfb69",
+  "nativeCancellationWithLocalUpgrade": {
+    "evidenceDirectory": "target/assistant-cancel-it/run-LjwSuU",
+    "resultSha256": "b4936ff9955210a99cbe37cc3ba7c696e52ac83113a8af741e9335def9619ea8",
+    "result": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "tokensPersistedToEvidence": false,
+      "jarSha256": "bc3fdb766cd62b76b97a64f9466f8e7111feedec5aa35569baa7b045decbfb69",
+      "upgradeFixtureExecuted": true,
+      "fixture": "owned production HTTP adapter; explicit cancellation, lost cancel response and queued SIGKILL recovery",
+      "database": "fresh owned H2 file with WRITE_DELAY=0",
+      "userFileDatabaseModified": false,
+      "startedPids": [
+        83832,
+        81032,
+        83404
+      ],
+      "stoppedPids": [
+        83832,
+        81032,
+        83404
+      ],
+      "cases": [
+        {
+          "name": "v32-to-v33-history-upgrade",
+          "completedRequestAndOriginalAnswerPreserved": true,
+          "modelReexecuted": false
+        },
+        {
+          "name": "lost-queued-cancel-and-running-cancel",
+          "cancelResponseActuallyLost": true,
+          "relayBackendStatus": 200,
+          "repeatedCancelAuditRows": 1,
+          "queuedQuestionWrites": 0,
+          "freedQueueSlotReused": true,
+          "synchronousStatusBeforeProviderRelease": 409,
+          "lateAssistantMessages": 0
+        },
+        {
+          "name": "stream-cancel",
+          "cancelledEventBeforeProviderRelease": true,
+          "doneEventSent": false,
+          "lateAssistantMessages": 0,
+          "actualWorkerSettledByFreshAnswer": true
+        },
+        {
+          "name": "queued-sigkill-recovery",
+          "statusBeforeCrash": "QUEUED",
+          "statusAfterOriginalBudget": "TIMED_OUT",
+          "questionWrites": 0,
+          "modelReexecuted": false,
+          "cancelledFactsAndSingleAuditSurviveRestart": true
+        }
+      ],
+      "upgradedArchiveSha256": "68e8dcfa798257a0cc13f44f22d7abd2bb9b3c89f590154d215a32e457b3ff1d",
+      "hardKilledPid": 81032,
+      "providerTransportCalls": 6,
+      "ownedProcessesStopped": true,
+      "ownedRelayStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "logs": [
+      {
+        "file": "target/assistant-cancel-it/run-LjwSuU/jar-1.log",
+        "sha256": "228cf88cb2cb53deef2f13f0648dc23ee4b8130131db2384803fb646d279cb9c",
+        "unexpectedErrors": 0
+      },
+      {
+        "file": "target/assistant-cancel-it/run-LjwSuU/jar-2.log",
+        "sha256": "1e92b801cc52661743d2ff1040335ab431887c61d61fc2488a9c0f3677d72474",
+        "unexpectedErrors": 0
+      },
+      {
+        "file": "target/assistant-cancel-it/run-LjwSuU/jar-3.log",
+        "sha256": "c643282930c1e2ef3a876d4391dc2edcdf1b194ecd21d3d89b95d346f7149868",
+        "unexpectedErrors": 0
+      }
+    ],
+    "jwtFound": false
+  },
+  "nativeCancellationCiBranchOnWindows": {
+    "evidenceDirectory": "target/assistant-cancel-it/run-S0RA2B",
+    "resultSha256": "14c41f0ea1939591605ad69b8b9cab55d89fe0d0a61c2b33cf9c4002f106e87b",
+    "result": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "tokensPersistedToEvidence": false,
+      "jarSha256": "bc3fdb766cd62b76b97a64f9466f8e7111feedec5aa35569baa7b045decbfb69",
+      "upgradeFixtureExecuted": false,
+      "fixture": "owned production HTTP adapter; explicit cancellation, lost cancel response and queued SIGKILL recovery",
+      "database": "fresh owned H2 file with WRITE_DELAY=0",
+      "userFileDatabaseModified": false,
+      "startedPids": [
+        82424,
+        73880
+      ],
+      "stoppedPids": [
+        82424,
+        73880
+      ],
+      "cases": [
+        {
+          "name": "lost-queued-cancel-and-running-cancel",
+          "cancelResponseActuallyLost": true,
+          "relayBackendStatus": 200,
+          "repeatedCancelAuditRows": 1,
+          "queuedQuestionWrites": 0,
+          "freedQueueSlotReused": true,
+          "synchronousStatusBeforeProviderRelease": 409,
+          "lateAssistantMessages": 0
+        },
+        {
+          "name": "stream-cancel",
+          "cancelledEventBeforeProviderRelease": true,
+          "doneEventSent": false,
+          "lateAssistantMessages": 0,
+          "actualWorkerSettledByFreshAnswer": true
+        },
+        {
+          "name": "queued-sigkill-recovery",
+          "statusBeforeCrash": "QUEUED",
+          "statusAfterOriginalBudget": "TIMED_OUT",
+          "questionWrites": 0,
+          "modelReexecuted": false,
+          "cancelledFactsAndSingleAuditSurviveRestart": true
+        }
+      ],
+      "hardKilledPid": 82424,
+      "providerTransportCalls": 6,
+      "ownedProcessesStopped": true,
+      "ownedRelayStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "logs": [
+      {
+        "file": "target/assistant-cancel-it/run-S0RA2B/jar-1.log",
+        "sha256": "0353b36370f7ac4cfb0d5d22e5ee34dfc3774ed136db7961a8f600a66cacbe72",
+        "unexpectedErrors": 0
+      },
+      {
+        "file": "target/assistant-cancel-it/run-S0RA2B/jar-2.log",
+        "sha256": "1cf040d0f6dd13d8870c49c8334d52184d72e5425e640f6aef1d2128dc6c2c2b",
+        "unexpectedErrors": 0
+      }
+    ],
+    "jwtFound": false
+  },
+  "nativeIdempotencyRegression": {
+    "evidenceDirectory": "target/assistant-idempotency-it/run-SORmIs",
+    "resultSha256": "74b4ae35028943e5d1a83b2eff42e5cd937b086428d481656427bf3588d2ccbc",
+    "result": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "tokensPersistedToEvidence": false,
+      "jarSha256": "bc3fdb766cd62b76b97a64f9466f8e7111feedec5aa35569baa7b045decbfb69",
+      "fixture": "actual production DashScope HTTP adapter, dropped completed HTTP response, independent JVMs and SIGKILL",
+      "database": "fresh owned H2 file with WRITE_DELAY=0",
+      "userFileDatabaseModified": false,
+      "startedPids": [
+        83024,
+        83792,
+        59112
+      ],
+      "stoppedPids": [
+        83024,
+        83792,
+        59112
+      ],
+      "cases": [
+        {
+          "name": "lost-completed-response-and-jvm-restart",
+          "backendStatusBeforeResponseLoss": 200,
+          "actualClientResponseLost": true,
+          "sameMessageIdAfterRestart": true,
+          "changedContentStatus": 409,
+          "requestStateAfterRestart": "COMPLETED",
+          "counts": {
+            "user": 1,
+            "assistant": 1
+          },
+          "modelCallsForQuestionIncludingRetries": 1
+        },
+        {
+          "name": "keyed-timeout",
+          "inProgressDuplicateStatus": 409,
+          "timeoutStatus": 504,
+          "stateBeforeProviderRelease": "TIMED_OUT",
+          "lateAssistantMessages": 0,
+          "lateWorkerSettledByFreshKey": true
+        },
+        {
+          "name": "sigkill-accepted-request-recovery",
+          "statusBeforeCrash": "RUNNING",
+          "currentStateAfterIndependentJvmRestart": "TIMED_OUT",
+          "sameKeyRetryStatus": 409,
+          "modelReexecuted": false,
+          "counts": {
+            "user": 1,
+            "assistant": 0
+          }
+        }
+      ],
+      "hardKilledPid": 83792,
+      "providerTransportCalls": 5,
+      "ownedProcessesStopped": true,
+      "ownedRelayStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "logs": [
+      {
+        "file": "target/assistant-idempotency-it/run-SORmIs/jar-1.log",
+        "sha256": "7b30be4ddc7ca1ebe57c7a5ed7f865e5f1073b2622c811ff5e5ef9e7ef9bbb85",
+        "unexpectedErrors": 0
+      },
+      {
+        "file": "target/assistant-idempotency-it/run-SORmIs/jar-2.log",
+        "sha256": "d1a47834b30db17813004b09e5c5939252846103bdb9f47bd73e58bd3988db87",
+        "unexpectedErrors": 0
+      },
+      {
+        "file": "target/assistant-idempotency-it/run-SORmIs/jar-3.log",
+        "sha256": "78090c92130ec4ec0191e14c9a75ca479f327dc3fb437373f2c76c2a6bf2169d",
+        "unexpectedErrors": 0
+      }
+    ],
+    "jwtFound": false
+  },
+  "nativeHttpRegression": {
+    "evidenceDirectory": "target/assistant-session-it/run-RJ0ike",
+    "resultSha256": "668c627d74195dea191fcbcd85f7957955749d154bfd6eac671d71a1ca702892",
+    "result": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "budgetBaselineCapture": false,
+      "tokensPersistedToEvidence": false,
+      "jarSha256": "bc3fdb766cd62b76b97a64f9466f8e7111feedec5aa35569baa7b045decbfb69",
+      "fixture": "actual production DashScope HTTP adapter against an owned controlled server, not model quality",
+      "database": "fresh owned H2 memory database",
+      "userFileDatabaseModified": false,
+      "cases": [
+        {
+          "name": "synchronous-logout",
+          "responseStatus": 401,
+          "lateAssistantMessages": 0,
+          "lateAnswerSent": false,
+          "closedBeforeProviderRelease": true
+        },
+        {
+          "name": "stream-logout",
+          "responseStatus": 200,
+          "lateAssistantMessages": 0,
+          "lateAnswerSent": false,
+          "closedBeforeProviderRelease": true
+        },
+        {
+          "name": "clear-messages",
+          "responseStatus": 409,
+          "lateAssistantMessages": 0,
+          "lateAnswerSent": false,
+          "closedBeforeProviderRelease": false
+        },
+        {
+          "name": "timeout",
+          "closedBeforeProviderRelease": true,
+          "explicitSafeErrorEvent": true,
+          "lateWorkerSettledByFreshStream": true,
+          "lateAssistantMessages": 0
+        },
+        {
+          "name": "mixed-capacity",
+          "responseStatus": 503,
+          "rejectedQuestionWrites": 0,
+          "queuedQuestionWritesBeforeProviderRelease": 0,
+          "simultaneousProviderCalls": 1
+        },
+        {
+          "name": "synchronous-running-and-queued-timeout",
+          "responseStatuses": [
+            504,
+            504
+          ],
+          "settledBeforeProviderRelease": true,
+          "lateAssistantMessages": 0,
+          "queuedQuestionWrites": 0,
+          "lateWorkerSettledByFreshSynchronousAnswer": true
+        }
+      ],
+      "startedPid": 80028,
+      "productionHttpAdapterPositiveControl": true,
+      "freshSessionProductionHttpAnswer": true,
+      "providerTransportCalls": 11,
+      "ownedProcessStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "logs": [
+      {
+        "file": "target/assistant-session-it/run-RJ0ike/jar.log",
+        "sha256": "5c7397dc4243802fbb223d097f9e675d00b92b2985df512fe4cbc0ce59977d32",
+        "unexpectedErrors": 0
+      }
+    ],
+    "jwtFound": false
+  },
+  "localMySqlExecuted": false,
+  "ciMySqlMinimumExecuted": 99,
+  "requiredAssistantTransactionScenarios": 11,
+  "mysqlLifecycleUnitTests": {
+    "executed": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "ciBaselineGuard": {
+    "status": "PASS",
+    "exitCode": 1,
+    "rejectedBeforeJavaStartup": true
+  },
+  "frontendAndStaticChanged": false,
+  "defaultFrontendSendsIdempotencyKey": false,
+  "explicitAssistantCancelUiDelivered": false,
+  "crossNodeImmediateWakeupVerified": false,
+  "v32ToV33MigrationInOwnedFileConfirmed": true
+}

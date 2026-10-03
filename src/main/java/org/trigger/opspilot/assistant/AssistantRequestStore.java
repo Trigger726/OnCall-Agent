@@ -10,7 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
 
-/** Durable accepted-question identity. Queue admission itself does not write a request or a USER message. */
+/** Durable keyed request lifecycle. Capacity rejection writes neither a request nor a USER message. */
 @Component
 public class AssistantRequestStore {
     private final JdbcClient jdbc;
@@ -34,7 +34,7 @@ public class AssistantRequestStore {
     Entry find(long sessionId, String keyHash, boolean lock) {
         jdbc.sql("""
                 UPDATE assistant_request SET status='TIMED_OUT',updated_at=CURRENT_TIMESTAMP
-                WHERE session_id=:session AND request_key_hash=:key AND status='RUNNING' AND deadline_epoch_ms<=:now
+                WHERE session_id=:session AND request_key_hash=:key AND status IN ('QUEUED','RUNNING') AND deadline_epoch_ms<=:now
                 """).param("session", sessionId).param("key", keyHash).param("now", System.currentTimeMillis()).update();
         return jdbc.sql("""
                 SELECT id,content_hash,attempt_id,status,question_message_id,answer_message_id,deadline_epoch_ms
@@ -53,6 +53,44 @@ public class AssistantRequestStore {
                 VALUES (:session,:key,:content,:attempt,'RUNNING',:question,:deadline)
                 """).param("session", sessionId).param("key", identity.keyHash()).param("content", hash(question))
                 .param("attempt", identity.attemptId()).param("question", questionId).param("deadline", identity.deadlineEpochMs()).update();
+    }
+
+    void enqueue(long sessionId, String question, Identity identity) {
+        jdbc.sql("""
+                INSERT INTO assistant_request(session_id,request_key_hash,content_hash,attempt_id,status,deadline_epoch_ms)
+                VALUES (:session,:key,:content,:attempt,'QUEUED',:deadline)
+                """).param("session", sessionId).param("key", identity.keyHash()).param("content", hash(question))
+                .param("attempt", identity.attemptId()).param("deadline", identity.deadlineEpochMs()).update();
+    }
+
+    void start(long sessionId, long questionId, Identity identity) {
+        int changed = jdbc.sql("""
+                UPDATE assistant_request SET status='RUNNING',question_message_id=:question,updated_at=CURRENT_TIMESTAMP
+                WHERE session_id=:session AND request_key_hash=:key AND attempt_id=:attempt AND status='QUEUED'
+                """).param("question", questionId).param("session", sessionId).param("key", identity.keyHash())
+                .param("attempt", identity.attemptId()).update();
+        if (changed != 1) throw new ApiException(HttpStatus.CONFLICT, "ASSISTANT_REQUEST_STOPPED", "原请求已停止");
+    }
+
+    boolean cancel(Entry entry) {
+        return jdbc.sql("""
+                UPDATE assistant_request SET status='CANCELLED',updated_at=CURRENT_TIMESTAMP
+                WHERE id=:id AND status IN ('QUEUED','RUNNING')
+                """).param("id", entry.id()).update() == 1;
+    }
+
+    AssistantExecutionManager.Reason stopReason(long sessionId, String keyHash, String attemptId) {
+        Entry entry = find(sessionId, keyHash, false);
+        if (entry == null) return AssistantExecutionManager.Reason.FAILED;
+        if (!attemptId.equals(entry.attemptId())) return null; // Completed replay belongs to the original attempt.
+        return switch (entry.status()) {
+            case "QUEUED", "RUNNING", "COMPLETED" -> null;
+            case "CANCELLED" -> AssistantExecutionManager.Reason.CANCELLED;
+            case "SUPERSEDED" -> AssistantExecutionManager.Reason.SUPERSEDED;
+            case "REVOKED" -> AssistantExecutionManager.Reason.REVOKED;
+            case "TIMED_OUT" -> AssistantExecutionManager.Reason.TIMED_OUT;
+            default -> AssistantExecutionManager.Reason.FAILED;
+        };
     }
 
     void requireRunning(long sessionId, Identity identity) {
@@ -75,7 +113,7 @@ public class AssistantRequestStore {
     void stop(long sessionId, String keyHash, String attemptId, String status) {
         jdbc.sql("""
                 UPDATE assistant_request SET status=:status,updated_at=CURRENT_TIMESTAMP
-                WHERE session_id=:session AND request_key_hash=:key AND attempt_id=:attempt AND status='RUNNING'
+                WHERE session_id=:session AND request_key_hash=:key AND attempt_id=:attempt AND status IN ('QUEUED','RUNNING')
                 """).param("status", status).param("session", sessionId).param("key", keyHash).param("attempt", attemptId).update();
     }
 
@@ -93,6 +131,7 @@ public class AssistantRequestStore {
 
     static ApiException stopped(Entry entry) {
         String code = "TIMED_OUT".equals(entry.status()) ? "ASSISTANT_REQUEST_TIMED_OUT"
+                : "CANCELLED".equals(entry.status()) ? "ASSISTANT_REQUEST_CANCELLED"
                 : "SUPERSEDED".equals(entry.status()) ? "ASSISTANT_REQUEST_SUPERSEDED" : "ASSISTANT_REQUEST_STOPPED";
         return new ApiException(HttpStatus.CONFLICT, code, "原请求已停止或已清空，请核对会话后使用新键提问");
     }

@@ -78,7 +78,9 @@ public class AssistantController {
                 return result;
             }
         }
-        execution.submit(lease, work -> {
+        execution.submit(lease, keyHash == null ? null : new AssistantExecutionManager.RequestKey(id, keyHash),
+                work -> service.enqueueRequest(id, ownerId, request.content(), lease, work::check,
+                        keyHash == null ? null : new AssistantRequestStore.Identity(keyHash, attemptId, work.deadlineEpochMillis())), work -> {
             try {
                 var identity = keyHash == null ? null : new AssistantRequestStore.Identity(keyHash, attemptId, work.deadlineEpochMillis());
                 var message = service.sendMessage(id, ownerId, request.content(), lease, work::check, identity);
@@ -89,7 +91,7 @@ public class AssistantController {
             } catch (Exception exception) {
                 result.setErrorResult(exception);
             }
-        }, reason -> {
+        }, () -> service.requestStopReason(id, keyHash, attemptId), reason -> {
             try { service.stopRequest(id, keyHash, attemptId, reason); }
             catch (RuntimeException ignored) { /* Safe response still stops; persisted deadline permits later reconciliation. */ }
             boolean authorized;
@@ -100,6 +102,12 @@ public class AssistantController {
             } else if (reason == AssistantExecutionManager.Reason.TIMED_OUT) {
                 result.setErrorResult(new ApiException(HttpStatus.GATEWAY_TIMEOUT,
                         "ASSISTANT_EXECUTION_TIMEOUT", "回答超时，请稍后重新发送问题"));
+            } else if (reason == AssistantExecutionManager.Reason.CANCELLED) {
+                result.setErrorResult(new ApiException(HttpStatus.CONFLICT,
+                        "ASSISTANT_REQUEST_CANCELLED", "回答已取消，原请求不会重新执行"));
+            } else if (reason == AssistantExecutionManager.Reason.SUPERSEDED) {
+                result.setErrorResult(new ApiException(HttpStatus.CONFLICT,
+                        "ASSISTANT_REQUEST_SUPERSEDED", "原问题已清空，回答不会重新执行"));
             } else {
                 result.setErrorResult(new ApiException(HttpStatus.SERVICE_UNAVAILABLE,
                         "ASSISTANT_EXECUTION_STOPPED", "回答已停止，请稍后重试"));
@@ -128,7 +136,9 @@ public class AssistantController {
                 return emitter;
             }
         }
-        execution.submit(lease, work -> {
+        execution.submit(lease, keyHash == null ? null : new AssistantExecutionManager.RequestKey(id, keyHash),
+                work -> service.enqueueRequest(id, ownerId, request.content(), lease, work::check,
+                        keyHash == null ? null : new AssistantRequestStore.Identity(keyHash, attemptId, work.deadlineEpochMillis())), work -> {
             try {
                 var identity = keyHash == null ? null : new AssistantRequestStore.Identity(keyHash, attemptId, work.deadlineEpochMillis());
                 var message = service.sendMessage(id, ownerId, request.content(), lease, work::check, identity);
@@ -146,13 +156,16 @@ public class AssistantController {
                     emitter.complete();
                 }
             }
-        }, reason -> {
+        }, () -> service.requestStopReason(id, keyHash, attemptId), reason -> {
             try {
                 try { service.stopRequest(id, keyHash, attemptId, reason); }
                 catch (RuntimeException ignored) { /* Stop transport even if the state store is unavailable. */ }
                 if (reason == AssistantExecutionManager.Reason.TIMED_OUT && authorization.authorized(lease, false)) {
                     emitter.send(SseEmitter.event().name("error")
                             .data(new StreamEvent("error", "回答超时，请稍后重新发送问题", null, null)));
+                } else if (reason == AssistantExecutionManager.Reason.CANCELLED && authorization.authorized(lease, false)) {
+                    emitter.send(SseEmitter.event().name("cancelled")
+                            .data(new StreamEvent("cancelled", "回答已取消", null, null)));
                 }
             } catch (Exception ignored) {
                 // Fail closed if authorization cannot be checked or the transport is already closed.
@@ -167,6 +180,16 @@ public class AssistantController {
         String keyHash = AssistantRequestStore.keyHash(requestKey);
         if (keyHash == null) throw new ApiException(HttpStatus.BAD_REQUEST, "ASSISTANT_IDEMPOTENCY_KEY_REQUIRED", "需要Idempotency-Key");
         return ApiResponse.ok(service.requestStatus(id, user.id(), keyHash));
+    }
+
+    @PostMapping("/sessions/{id}/request/cancel")
+    public ApiResponse<AssistantRequestStore.View> cancelRequest(@AuthenticationPrincipal UserPrincipal user,
+            @PathVariable long id, @RequestHeader(value = "Idempotency-Key", required = false) String requestKey) {
+        String keyHash = AssistantRequestStore.keyHash(requestKey);
+        if (keyHash == null) throw new ApiException(HttpStatus.BAD_REQUEST, "ASSISTANT_IDEMPOTENCY_KEY_REQUIRED", "需要Idempotency-Key");
+        var state = service.cancelRequest(id, user.id(), keyHash, authorization.current());
+        if ("CANCELLED".equals(state.status())) execution.cancel(user.id(), id, keyHash);
+        return ApiResponse.ok(state);
     }
 
     private void requireLease(SessionAuthorization.Lease lease) {

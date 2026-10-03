@@ -50,4 +50,13 @@ class AssistantTransactionIntegrationTest {
     @Test void shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt() throws Exception {
         try (var s = scenario()) { s.concurrentKeyNeverCreatesSecondQuestionOrStopsOriginalAttempt(); }
     }
+    @Test void shouldRollbackAssistantCancellationWhenAuditInsertFails() throws Exception {
+        try (var s = scenario()) { s.queuedCancellationAuditFailureRollsBackStateAndIsIdempotentAfterRepair(); }
+    }
+    @Test void shouldFenceAssistantCompletionAfterCancellationCommit() throws Exception {
+        try (var s = scenario()) { s.cancellationCommitWinsBeforeCompletion(); }
+    }
+    @Test void shouldPreserveAssistantCompletionWhenCancellationWaitsForCommit() throws Exception {
+        try (var s = scenario()) { s.completionCommitWinsBeforeCancellation(); }
+    }
 }

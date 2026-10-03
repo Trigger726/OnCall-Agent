@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-检查点71本地限定通过：[已接受助手问题持久化幂等](docs/acceptance/V1.7-checkpoint-71.md)。可选同键同步/SSE重放原答案，问题绑定/会话隔离/完成事务原子性、超时与撤销终态、清空墓碑；双时区各444发现/341执行/103条件跳过、十四门禁通过。新包真实丢响应/三个不同JVM/强制终止验证：同键模型调用4→1、USER/ASSISTANT各4→各1，崩溃后按原预算结算且不重跑；原HTTP十一调用/六场景回归通过。新提交MySQL96/远端待验，默认页面尚未发送稳定键，持久化排队/助手显式取消/UI冻结恢复仍继续，旧JAR/Demo/失败不删。
+检查点72本地限定通过：[助手排队事实与显式取消](docs/acceptance/V1.7-checkpoint-72.md)。有界容量实际接纳后持久化QUEUED；本人同键取消/一次事务审计、排队腾槽、运行中无晚回答，完成先赢保留合法历史。真实反例发现并修复接纳失败后worker继续执行；双时区各459发现/353执行/106条件跳过、十四门禁通过。新包实际丢取消响应/强制终止/重启及旧库V32→V33保持历史通过，原幂等五HTTP/撤销容量十一HTTP回归通过；新提交MySQL99/远端待验。默认页面未生成稳定键或取消按钮，UI冻结恢复/原生token流及完整目标继续，旧JAR/Demo/失败不删。
+
+71自己的bd508bd已核对[Run37108835199](https://github.com/Trigger726/OnCall-Agent/actions/runs/37108835199)十五作业success，真实MySQL96/V32/五池关闭、Linux幂等三个JVM强制终止与两ZIP源SHA/实际摘要/原门禁重放已独立核验，见[71报告](docs/acceptance/V1.7-checkpoint-71.md)。不借旧96证明72的V33/取消事务99项。
 
 70自己的5cae132已核对[Run37096366762](https://github.com/Trigger726/OnCall-Agent/actions/runs/37096366762)十五作业success，真实MySQL93零失败错误跳过/五池关闭、认证/助手两ZIP源SHA与实际摘要及Linux十一模型HTTP已独立核验，见[70报告](docs/acceptance/V1.7-checkpoint-70.md)；不借旧93证明71新增V32/三事务。
 
@@ -391,7 +393,8 @@ Runbook 页面保留原版/BM25/Hybrid 当前对照，并列出最近 12 次持�
 | GET/POST | `/api/v1/assistant/sessions` | 查询或创建持久化会话 |
 | POST | `/api/v1/assistant/sessions/{id}/messages` | 同步JSON对话；可选Idempotency-Key，完成同键同问题重放原答案 |
 | POST | `/api/v1/assistant/sessions/{id}/stream` | SSE多轮对话；与同步入口共享键/容量/预算，仍是完成后的协议分块 |
-| GET | `/api/v1/assistant/sessions/{id}/request` | 本人以Idempotency-Key读取已接受问题状态；404不证明无排队请求，不自动换键重发 |
+| GET | `/api/v1/assistant/sessions/{id}/request` | 本人以Idempotency-Key读取QUEUED/运行及终态；404不证明无接纳中请求，不自动换键重发 |
+| POST | `/api/v1/assistant/sessions/{id}/request/cancel` | 本人以原Idempotency-Key取消QUEUED/RUNNING，一次审计；完成先提交则保持原答案 |
 | GET | `/api/v1/assistant/sessions/{id}/export` | 导出 Markdown 对话记录 |
 | GET | `/api/v1/cmdb/topology` | 服务依赖拓扑 |
 | GET | `/api/v1/on-call/current` | 当前值班人 |

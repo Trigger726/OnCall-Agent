@@ -2,7 +2,9 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
-最新本地限定通过：[V1.7-checkpoint-71.md](V1.7-checkpoint-71.md)：已接受助手问题持久化幂等，可选同键原答案同步/SSE重放、完成事务原子性与清空墓碑；双时区444发现/341执行/103条件跳过、十四门禁、新包丢响应/三个JVM/强制终止和原十一模型HTTP回归通过。同键模型4→1、USER/ASSISTANT各4→各1，崩溃按原预算结算且不重跑。新提交MySQL96/远端待验；默认页面未生成稳定键，持久化排队/显式取消/UI恢复、旧Future三秒等待根因与完整目标继续。
+最新本地限定通过：[V1.7-checkpoint-72.md](V1.7-checkpoint-72.md)：实际有界接纳后QUEUED、同键显式取消/一次事务审计、排队腾槽/运行无晚回答、完成先赢保持历史；接纳失败后worker继续的真实竞态已复现修复。双时区459发现/353执行/106条件跳过、十四门禁、新包丢取消响应/强制终止/重启、V32→V33历史保持、原五及十一模型HTTP通过。新提交MySQL99/远端待验；默认页面未生成稳定键或取消按钮，UI恢复/原生token流、旧Future三秒等待根因与完整目标继续。
+
+71自己的bd508bd已核对[Run37108835199](https://github.com/Trigger726/OnCall-Agent/actions/runs/37108835199)十五作业success，真实MySQL96/V32/五池关闭、Linux幂等三JVM强制终止与两ZIP源SHA/实际摘要/原门禁重放通过，见[V1.7-checkpoint-71.md](V1.7-checkpoint-71.md)。不借旧96证明72的V33/新取消事务99项。
 
 70自己的5cae132已核对[Run37096366762](https://github.com/Trigger726/OnCall-Agent/actions/runs/37096366762)十五作业success，真实MySQL93零失败错误跳过/五池关闭及认证/助手两ZIP源SHA/实际摘要/原门禁重放通过，见[V1.7-checkpoint-70.md](V1.7-checkpoint-70.md)。不借旧93证明71的V32/新三事务。
 
