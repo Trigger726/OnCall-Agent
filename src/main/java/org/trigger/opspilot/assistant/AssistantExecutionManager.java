@@ -97,11 +97,13 @@ public class AssistantExecutionManager {
         private final SessionAuthorization.Lease lease;
         private final Consumer<Reason> onStop;
         private final long deadline = System.nanoTime() + timeout.toNanos();
+        private final long deadlineEpochMs = System.currentTimeMillis() + timeout.toMillis();
         private final AtomicReference<Reason> reason = new AtomicReference<>();
         private FutureTask<Void> future;
         private Work(SessionAuthorization.Lease lease, Consumer<Reason> onStop) {
             this.lease = lease; this.onStop = onStop;
         }
+        public long deadlineEpochMillis() { return deadlineEpochMs; }
         public void check() {
             if (reason.get() == null && System.nanoTime() - deadline >= 0) stop(Reason.TIMED_OUT);
             if (reason.get() == null) {

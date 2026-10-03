@@ -1,0 +1,71 @@
+{
+  "sourceCommit": "5cae132cbba10fbb8201d4454db2399d741867b8",
+  "protectedJar": "target/cp71-before/opspilot-cp70.jar",
+  "protectedJarSha256": "83023a7ad94123014c856271e7a2c54c2a4a09c108a1c10020567536e78213ad",
+  "counterexample": {
+    "log": "target/cp71-before/idempotency-baseline.log",
+    "sha256": "9e0d3dc20172439451ce053aec2a44a69f6b928c5803956a8fee99ac3e8cfa7c",
+    "found": 3,
+    "failures": 2,
+    "errors": 1,
+    "skipped": 0,
+    "executed": 3,
+    "buildSuccess": false,
+    "finishedAt": "2026-10-03T12:31:22+08:00"
+  },
+  "nativeHttp": {
+    "evidenceDirectory": "target/assistant-idempotency-it/run-uYIk41",
+    "resultSha256": "8a722b2c154052d6aa6c6a2cf67b15845bb8f88de5424a4c1cd2b4f23787a11f",
+    "result": {
+      "status": "BASELINE_CAPTURED",
+      "baselineCapture": true,
+      "tokensPersistedToEvidence": false,
+      "jarSha256": "83023a7ad94123014c856271e7a2c54c2a4a09c108a1c10020567536e78213ad",
+      "fixture": "actual production DashScope HTTP adapter, dropped completed HTTP response, independent JVMs and SIGKILL",
+      "database": "fresh owned H2 file with WRITE_DELAY=0",
+      "userFileDatabaseModified": false,
+      "startedPids": [
+        77196,
+        55700
+      ],
+      "stoppedPids": [
+        77196,
+        55700
+      ],
+      "cases": [
+        {
+          "name": "lost-completed-response-and-jvm-restart",
+          "backendStatusBeforeResponseLoss": 200,
+          "actualClientResponseLost": true,
+          "sameMessageIdAfterRestart": false,
+          "changedContentStatus": 200,
+          "requestStateAfterRestart": "NOT_AVAILABLE",
+          "counts": {
+            "user": 4,
+            "assistant": 4
+          },
+          "modelCallsForQuestionIncludingRetries": 4
+        }
+      ],
+      "providerTransportCalls": 5,
+      "ownedProcessesStopped": true,
+      "ownedRelayStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "logs": [
+      {
+        "file": "target/assistant-idempotency-it/run-uYIk41/jar-1.log",
+        "sha256": "0b989bf69734d0edfd4ddf81b01938a433c46e17e26634dd7983033e7d4ca678",
+        "unexpectedErrors": 0
+      },
+      {
+        "file": "target/assistant-idempotency-it/run-uYIk41/jar-2.log",
+        "sha256": "c7717b6b52e228c750693b793e2573a510a5d1ca62414b00b307fc40e1000ee3",
+        "unexpectedErrors": 0
+      }
+    ],
+    "jwtFound": false
+  },
+  "baselineSigkillExecuted": false
+}

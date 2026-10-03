@@ -10,13 +10,13 @@ function fixture() {
         ? [...requiredAccountTests, ...requiredAssistantTests].map(test => `<testcase name="${test}"/>`).join('') : ''}</testsuite>`]));
   const start = Array.from({ length: 5 }, (_, i) => `INFO HikariPool-${i + 1} - Start completed.`);
   const stop = Array.from({ length: 5 }, (_, i) => `INFO HikariPool-${i + 1} - Shutdown completed.`);
-  return { reports, log: [...start, '[INFO] Tests run: 93, Failures: 0, Errors: 0, Skipped: 0', ...stop, '[INFO] BUILD SUCCESS'].join('\n') };
+  return { reports, log: [...start, '[INFO] Tests run: 96, Failures: 0, Errors: 0, Skipped: 0', ...stop, '[INFO] BUILD SUCCESS'].join('\n') };
 }
 
-test('clean five-suite lifecycle passes with 93 executed and no skips', () => {
+test('clean five-suite lifecycle passes with 96 executed and no skips', () => {
   const { log, reports } = fixture();
   const result = verify(log, reports);
-  assert.equal(result.executed, 93);
+  assert.equal(result.executed, 96);
   assert.equal(result.stoppedPools.length, 5);
 });
 
@@ -54,7 +54,7 @@ test('missing, duplicate, unknown or reordered shutdown is rejected', () => {
 test('missing suite, wrong identity, reduced coverage, malformed counters, skips and failures fail closed', () => {
   const { log, reports } = fixture();
   const name = Object.keys(expectedSuites)[0];
-  for (const bad of ['', reports[name].replace(name, 'WrongTest'), reports[name].replace('tests="40"', 'tests="0"'),
+  for (const bad of ['', reports[name].replace(name, 'WrongTest'), reports[name].replace('tests="43"', 'tests="0"'),
     reports[name].replace('errors="0"', ''), reports[name].replace('errors="0"', 'errors="NaN"'),
     reports[name].replace('skipped="0"', 'skipped="9"'), reports[name].replace('failures="0"', 'failures="1"'),
     reports[name].replace('</testsuite>', '')]) {
@@ -83,6 +83,6 @@ test('green totals cannot replace any required assistant transaction scenario', 
 test('ANSI colors and CRLF are accepted, future added test counts are included', () => {
   const { log, reports } = fixture();
   const name = Object.keys(expectedSuites)[0];
-  reports[name] = reports[name].replace('tests="40"', 'tests="41"');
-  assert.equal(verify('\x1b[32m' + log.replaceAll('\n', '\r\n') + '\x1b[0m', reports).executed, 94);
+  reports[name] = reports[name].replace('tests="43"', 'tests="44"');
+  assert.equal(verify('\x1b[32m' + log.replaceAll('\n', '\r\n') + '\x1b[0m', reports).executed, 97);
 });

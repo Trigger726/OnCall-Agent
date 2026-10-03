@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-检查点70本地限定通过：[同步与流式共享预算报告](docs/acceptance/V1.7-checkpoint-70.md)。先复现旧同步绕过队满/超时，再接入同一个有界执行器；40定向、双时区各430发现/330执行/100条件跳过、十四MySQL门禁和新包实际HTTP十一调用/六场景通过。混合队满503/零问题写入，同步运行与排队504/晚回答零；真实MySQL93与新提交远端仍待验，完整目标继续，旧JAR/Demo/失败不删。
+检查点71本地限定通过：[已接受助手问题持久化幂等](docs/acceptance/V1.7-checkpoint-71.md)。可选同键同步/SSE重放原答案，问题绑定/会话隔离/完成事务原子性、超时与撤销终态、清空墓碑；双时区各444发现/341执行/103条件跳过、十四门禁通过。新包真实丢响应/三个不同JVM/强制终止验证：同键模型调用4→1、USER/ASSISTANT各4→各1，崩溃后按原预算结算且不重跑；原HTTP十一调用/六场景回归通过。新提交MySQL96/远端待验，默认页面尚未发送稳定键，持久化排队/助手显式取消/UI冻结恢复仍继续，旧JAR/Demo/失败不删。
+
+70自己的5cae132已核对[Run37096366762](https://github.com/Trigger726/OnCall-Agent/actions/runs/37096366762)十五作业success，真实MySQL93零失败错误跳过/五池关闭、认证/助手两ZIP源SHA与实际摘要及Linux十一模型HTTP已独立核验，见[70报告](docs/acceptance/V1.7-checkpoint-70.md)；不借旧93证明71新增V32/三事务。
 
 69自己的45247a8已核对[Run37095079404](https://github.com/Trigger726/OnCall-Agent/actions/runs/37095079404)：十三success/MySQL failure/最终容器skipped，不能标全绿。认证ZIP源SHA/摘要及Linux三结果/四停机日志通过；真实MySQL93中CHECK异常类别fixture失败，另四个助手事务执行通过；70修正为精确SQL错误/约束名并继续检查回滚，不放宽门禁。见[69报告](docs/acceptance/V1.7-checkpoint-69.md)。
 
@@ -387,7 +389,9 @@ Runbook 页面保留原版/BM25/Hybrid 当前对照，并列出最近 12 次持�
 | GET | `/api/v1/runbooks/semantic-index` | 查询当前模型的向量覆盖率和最近构建状态 |
 | POST | `/api/v1/runbooks/semantic-index/rebuild` | 管理员/运维经理幂等、原子重建向量索引 |
 | GET/POST | `/api/v1/assistant/sessions` | 查询或创建持久化会话 |
-| POST | `/api/v1/assistant/sessions/{id}/stream` | SSE 流式多轮对话 |
+| POST | `/api/v1/assistant/sessions/{id}/messages` | 同步JSON对话；可选Idempotency-Key，完成同键同问题重放原答案 |
+| POST | `/api/v1/assistant/sessions/{id}/stream` | SSE多轮对话；与同步入口共享键/容量/预算，仍是完成后的协议分块 |
+| GET | `/api/v1/assistant/sessions/{id}/request` | 本人以Idempotency-Key读取已接受问题状态；404不证明无排队请求，不自动换键重发 |
 | GET | `/api/v1/assistant/sessions/{id}/export` | 导出 Markdown 对话记录 |
 | GET | `/api/v1/cmdb/topology` | 服务依赖拓扑 |
 | GET | `/api/v1/on-call/current` | 当前值班人 |

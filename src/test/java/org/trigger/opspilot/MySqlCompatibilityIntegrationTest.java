@@ -112,6 +112,15 @@ class MySqlCompatibilityIntegrationTest {
     @Test @Order(40) void shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence() {
         try (var s = assistantScenario()) { s.expiryDuringCompletionRollsBackAnswerTitleAndAudit(); }
     }
+    @Test @Order(41) void shouldReplayCompletedAssistantKeyWithCaseSensitiveSessionScope() {
+        try (var s = assistantScenario()) { s.completedKeyBindsQuestionAndPreservesCaseSensitiveSessionScope(); }
+    }
+    @Test @Order(42) void shouldRollbackKeyedAssistantCompletionStateWithAnswerAndAudit() {
+        try (var s = assistantScenario()) { s.keyedCompletionRollsBackStateAnswerTitleAndAuditTogether(); }
+    }
+    @Test @Order(43) void shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt() throws Exception {
+        try (var s = assistantScenario()) { s.concurrentKeyNeverCreatesSecondQuestionOrStopsOriginalAttempt(); }
+    }
 
     private org.trigger.opspilot.security.AuthSessionHttpScenarios sessionScenario() {
         return new org.trigger.opspilot.security.AuthSessionHttpScenarios(jdbcClient, httpMapper, httpPasswordEncoder, httpPort);

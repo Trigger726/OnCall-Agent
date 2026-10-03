@@ -30,17 +30,19 @@ public class AssistantService {
     private final AgentRunQueryService agentRunQueryService;
     private final SessionAuthorization authorization;
     private final TransactionTemplate transactions;
+    private final AssistantRequestStore requests;
 
     public AssistantService(JdbcClient jdbcClient, ObjectMapper objectMapper,
                             Optional<AssistantAiService> aiService,
                             AgentRunQueryService agentRunQueryService,
-                            SessionAuthorization authorization, TransactionTemplate transactions) {
+                            SessionAuthorization authorization, TransactionTemplate transactions, AssistantRequestStore requests) {
         this.jdbcClient = jdbcClient;
         this.objectMapper = objectMapper;
         this.aiService = aiService;
         this.agentRunQueryService = agentRunQueryService;
         this.authorization = authorization;
         this.transactions = transactions;
+        this.requests = requests;
     }
 
     public List<SessionSummary> listSessions(long ownerId) {
@@ -96,6 +98,11 @@ public class AssistantService {
 
     public MessageView sendMessage(long sessionId, long ownerId, String rawContent,
                                    SessionAuthorization.Lease lease, Runnable checkpoint) {
+        return sendMessage(sessionId, ownerId, rawContent, lease, checkpoint, null);
+    }
+
+    public MessageView sendMessage(long sessionId, long ownerId, String rawContent,
+                                   SessionAuthorization.Lease lease, Runnable checkpoint, AssistantRequestStore.Identity identity) {
         if (lease == null || lease.userId() != ownerId) throw new CredentialsExpiredException("Assistant actor mismatch");
         String question = rawContent == null ? "" : rawContent.trim();
         if (question.isEmpty()) {
@@ -111,44 +118,105 @@ public class AssistantService {
             checkpoint.run();
             lockSession(sessionId, ownerId);
             var session = findSession(sessionId, ownerId);
+            if (identity != null) {
+                var entry = requests.find(sessionId, identity.keyHash(), true);
+                if (entry != null) return new PreparedMessage(0, session, List.of(), null, replay(sessionId, question, entry));
+            }
             long questionId = insertMessage(sessionId, "USER", question, null);
+            if (identity != null) requests.prepare(sessionId, question, questionId, identity);
             var context = session.incidentId() == null ? null : loadIncidentContext(session.incidentId());
-            return new PreparedMessage(questionId, session, recentMessages(sessionId), context);
-        });
-        checkpoint.run();
-        requireAuthorization(lease, false);
-        // Never hold the account/session row locks over an external model call.
-        Answer answer = generateAnswer(prepared.context(), prepared.history(), question, checkpoint);
-        checkpoint.run();
-        requireAuthorization(lease, false);
-        return transactions.execute(transaction -> {
             checkpoint.run();
-            requireAuthorization(lease, true); // Orders completion against committed revocation.
-            checkpoint.run();
-            lockSession(sessionId, ownerId);
-            var current = findSession(sessionId, ownerId);
-            boolean questionStillPresent = jdbcClient.sql("SELECT COUNT(*) FROM assistant_message WHERE id=:id AND session_id=:sessionId AND role='USER'")
-                    .param("id", prepared.questionId()).param("sessionId", sessionId).query(Long.class).single() == 1;
-            if (!questionStillPresent) throw new ApiException(HttpStatus.CONFLICT,
-                    "ASSISTANT_MESSAGE_SUPERSEDED", "对话已清空，请重新发送问题");
-            long messageId = insertMessage(sessionId, "ASSISTANT", answer.content(), serializeEvidence(answer.evidence()));
-            String newTitle = prepared.session().messageCount() == 0 && isDefaultTitle(current.title())
-                    ? titleFromQuestion(question) : current.title();
-            jdbcClient.sql("""
-                        UPDATE assistant_session SET title = :title, updated_at = CURRENT_TIMESTAMP WHERE id = :id
-                        """)
-                    .param("title", newTitle).param("id", sessionId).update();
-            recordAudit(ownerId, "ASSISTANT_MESSAGE", sessionId,
-                "OnCall 助手完成回答，证据引用 " + answer.evidence().size() + " 项");
-            var message = jdbcClient.sql("""
-                        SELECT id, role, content, evidence_json, created_at
-                        FROM assistant_message WHERE id = :id
-                        """)
-                    .param("id", messageId).query(AssistantService::mapMessage).single();
-            checkpoint.run(); // A stop during persistence rolls back answer, title and completion audit together.
-            requireAuthorization(lease, false); // Also fence synchronous callers whose checkpoint is a no-op.
-            return message;
+            requireAuthorization(lease, false);
+            return new PreparedMessage(questionId, session, recentMessages(sessionId), context, null);
         });
+        if (prepared.replay() != null) { checkpoint.run(); requireAuthorization(lease, false); return prepared.replay(); }
+        try {
+            checkpoint.run();
+            requireAuthorization(lease, false);
+            // Never hold the account/session row locks over an external model call.
+            Answer answer = generateAnswer(prepared.context(), prepared.history(), question, checkpoint);
+            checkpoint.run();
+            requireAuthorization(lease, false);
+            return transactions.execute(transaction -> {
+                checkpoint.run();
+                requireAuthorization(lease, true); // Orders completion against committed revocation.
+                checkpoint.run();
+                lockSession(sessionId, ownerId);
+                if (identity != null) requests.requireRunning(sessionId, identity);
+                var current = findSession(sessionId, ownerId);
+                boolean questionStillPresent = jdbcClient.sql("SELECT COUNT(*) FROM assistant_message WHERE id=:id AND session_id=:sessionId AND role='USER'")
+                        .param("id", prepared.questionId()).param("sessionId", sessionId).query(Long.class).single() == 1;
+                if (!questionStillPresent) throw new ApiException(HttpStatus.CONFLICT,
+                        "ASSISTANT_MESSAGE_SUPERSEDED", "对话已清空，请重新发送问题");
+                long messageId = insertMessage(sessionId, "ASSISTANT", answer.content(), serializeEvidence(answer.evidence()));
+                String newTitle = prepared.session().messageCount() == 0 && isDefaultTitle(current.title())
+                        ? titleFromQuestion(question) : current.title();
+                jdbcClient.sql("""
+                            UPDATE assistant_session SET title = :title, updated_at = CURRENT_TIMESTAMP WHERE id = :id
+                            """)
+                        .param("title", newTitle).param("id", sessionId).update();
+                recordAudit(ownerId, "ASSISTANT_MESSAGE", sessionId,
+                    "OnCall 助手完成回答，证据引用 " + answer.evidence().size() + " 项");
+                if (identity != null) requests.complete(sessionId, identity, messageId);
+                var message = jdbcClient.sql("""
+                            SELECT id, role, content, evidence_json, created_at
+                            FROM assistant_message WHERE id = :id
+                            """)
+                        .param("id", messageId).query(AssistantService::mapMessage).single();
+                checkpoint.run(); // A stop during persistence rolls back answer, title and completion audit together.
+                requireAuthorization(lease, false); // Also fence synchronous callers whose checkpoint is a no-op.
+                return message;
+            });
+        } catch (RuntimeException | Error error) {
+            if (identity != null) {
+                String status = error instanceof CredentialsExpiredException ? "REVOKED"
+                        : error instanceof ApiException api && (api.status() == HttpStatus.GATEWAY_TIMEOUT || api.code().contains("TIMED_OUT")) ? "TIMED_OUT"
+                        : error instanceof ApiException api && api.code().contains("SUPERSEDED") ? "SUPERSEDED" : "FAILED";
+                try { requests.stop(sessionId, identity.keyHash(), identity.attemptId(), status); }
+                catch (RuntimeException cleanup) { error.addSuppressed(cleanup); }
+            }
+            throw error;
+        }
+    }
+
+    public MessageView replay(long sessionId, long ownerId, String question, String keyHash, SessionAuthorization.Lease lease) {
+        if (lease == null || lease.userId() != ownerId) throw new CredentialsExpiredException("Assistant actor mismatch");
+        requireAuthorization(lease, false);
+        findSession(sessionId, ownerId);
+        var entry = requests.find(sessionId, keyHash, false);
+        return entry == null ? null : replay(sessionId, question.trim(), entry);
+    }
+
+    private MessageView replay(long sessionId, String question, AssistantRequestStore.Entry entry) {
+        if (!AssistantRequestStore.hash(question).equals(entry.contentHash())) {
+            throw new ApiException(HttpStatus.CONFLICT, "ASSISTANT_IDEMPOTENCY_CONFLICT", "同一幂等键不能用于不同问题");
+        }
+        if ("RUNNING".equals(entry.status())) throw new ApiException(HttpStatus.CONFLICT,
+                "ASSISTANT_REQUEST_IN_PROGRESS", "原问题正在处理，请查询请求状态，不要换键重复发送");
+        if (!"COMPLETED".equals(entry.status())) throw AssistantRequestStore.stopped(entry);
+        return jdbcClient.sql("""
+                SELECT id,role,content,evidence_json,created_at FROM assistant_message
+                WHERE id=:id AND session_id=:session AND role='ASSISTANT'
+                """).param("id", entry.answerId()).param("session", sessionId).query(AssistantService::mapMessage).optional()
+                .orElseThrow(() -> new ApiException(HttpStatus.CONFLICT, "ASSISTANT_REQUEST_SUPERSEDED", "原回答已清空，请使用新键提问"));
+    }
+
+    public AssistantRequestStore.View requestStatus(long sessionId, long ownerId, String keyHash) {
+        requireAuthorization(authorization.capture(ownerId), false);
+        findSession(sessionId, ownerId);
+        var entry = requests.find(sessionId, keyHash, false);
+        if (entry == null) throw new ApiException(HttpStatus.NOT_FOUND, "ASSISTANT_REQUEST_NOT_FOUND", "请求尚未接受或不存在");
+        return new AssistantRequestStore.View(entry.id(), entry.status(), entry.questionId(), entry.answerId(), entry.deadlineEpochMs());
+    }
+
+    void stopRequest(long sessionId, String keyHash, String attemptId, AssistantExecutionManager.Reason reason) {
+        if (keyHash == null) return;
+        requests.stop(sessionId, keyHash, attemptId, reason == AssistantExecutionManager.Reason.REVOKED ? "REVOKED"
+                : reason == AssistantExecutionManager.Reason.TIMED_OUT ? "TIMED_OUT" : "FAILED");
+    }
+
+    boolean replayedByDifferentAttempt(long sessionId, String keyHash, String attemptId) {
+        return keyHash != null && requests.replayedByDifferentAttempt(sessionId, keyHash, attemptId);
     }
 
     @Transactional
@@ -156,6 +224,7 @@ public class AssistantService {
         requireAuthorization(authorization.capture(ownerId), true);
         lockSession(sessionId, ownerId);
         findSession(sessionId, ownerId);
+        requests.supersede(sessionId);
         jdbcClient.sql("DELETE FROM assistant_message WHERE session_id = :sessionId")
                 .param("sessionId", sessionId).update();
         jdbcClient.sql("UPDATE assistant_session SET updated_at = CURRENT_TIMESTAMP WHERE id = :sessionId")
@@ -510,5 +579,5 @@ public class AssistantService {
     private record Answer(String content, List<EvidenceRef> evidence) {
     }
 
-    private record PreparedMessage(long questionId, SessionSummary session, List<MessageView> history, IncidentContext context) { }
+    private record PreparedMessage(long questionId, SessionSummary session, List<MessageView> history, IncidentContext context, MessageView replay) { }
 }

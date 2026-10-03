@@ -101,6 +101,8 @@ jobs:
         run: node scripts/verify-agent-session-ci.cjs
       - name: Verify assistant HTTP revocation, mixed capacity and running/queued budgets
         run: node scripts/verify-assistant-session-ci.cjs
+      - name: Verify assistant key recovery after dropped response, JVM restart and SIGKILL
+        run: node scripts/verify-assistant-idempotency-ci.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
@@ -112,6 +114,8 @@ jobs:
             target/agent-session-it/**/*.log
             target/assistant-session-it/**/*.json
             target/assistant-session-it/**/*.log
+            target/assistant-idempotency-it/**/*.json
+            target/assistant-idempotency-it/**/*.log
           retention-days: 30
 
   backend-h2:

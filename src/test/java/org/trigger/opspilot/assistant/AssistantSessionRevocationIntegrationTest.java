@@ -42,6 +42,157 @@ class AssistantSessionRevocationIntegrationTest {
     final HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build();
     static final String LATE_ANSWER = "CP68-controlled-late-answer-must-not-be-persisted-or-sent";
 
+    @Test void shouldReplayCompletedKeyAcrossSyncAndStreamWithoutWrites() throws Exception {
+        String token = login();
+        long id = createSession(token);
+        String key = UUID.randomUUID().toString();
+        when(ai.answer(anyString(), anyString(), anyString())).thenReturn(LATE_ANSWER);
+        var first = http.send(keyedMessage(id, token, "one durable question", false, key), HttpResponse.BodyHandlers.ofString());
+        assertThat(first.statusCode()).isEqualTo(200);
+        long answerId = json.readTree(first.body()).path("data").path("id").asLong();
+        var replay = http.send(keyedMessage(id, token, "one durable question", false, key), HttpResponse.BodyHandlers.ofString());
+        assertThat(replay.statusCode()).isEqualTo(200);
+        assertThat(json.readTree(replay.body()).path("data").path("id").asLong()).isEqualTo(answerId);
+        assertThat(replay.headers().firstValue("X-OpsPilot-Idempotent-Replay")).contains("true");
+        var stream = http.send(keyedMessage(id, token, "one durable question", true, key), HttpResponse.BodyHandlers.ofString());
+        assertThat(stream.statusCode()).isEqualTo(200);
+        assertThat(stream.body()).contains("event:done", "\"messageId\":" + answerId);
+        assertThat(count(id, "USER")).isEqualTo(1);
+        assertThat(count(id, "ASSISTANT")).isEqualTo(1);
+        assertThat(audits(id)).isEqualTo(1);
+        org.mockito.Mockito.verify(ai, org.mockito.Mockito.times(1)).answer(anyString(), anyString(), anyString());
+    }
+
+    @Test void shouldRejectReusedKeyWithDifferentQuestionWithoutWrites() throws Exception {
+        String token = login();
+        long id = createSession(token);
+        String key = UUID.randomUUID().toString();
+        assertThat(http.send(keyedMessage(id, token, "original question", false, key), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(200);
+        var conflict = http.send(keyedMessage(id, token, "different question", false, key), HttpResponse.BodyHandlers.ofString());
+        assertThat(conflict.statusCode()).isEqualTo(409);
+        assertThat(conflict.body()).contains("ASSISTANT_IDEMPOTENCY_CONFLICT");
+        assertThat(count(id, "USER")).isEqualTo(1);
+        assertThat(count(id, "ASSISTANT")).isEqualTo(1);
+        assertThat(audits(id)).isEqualTo(1);
+    }
+
+    @Test void shouldRejectDuplicateInFlightKeyWithoutCallingProvider() throws Exception {
+        String token = login();
+        long id = createSession(token);
+        String key = UUID.randomUUID().toString(), question = "in-flight-key-" + UUID.randomUUID();
+        var entered = new CountDownLatch(1);
+        var release = new CountDownLatch(1);
+        gate(question, entered, release);
+        var running = http.sendAsync(keyedMessage(id, token, question, false, key), HttpResponse.BodyHandlers.ofString());
+        java.util.concurrent.CompletableFuture<HttpResponse<String>> duplicate = null;
+        try {
+            assertThat(entered.await(3, TimeUnit.SECONDS)).isTrue();
+            duplicate = http.sendAsync(keyedMessage(id, token, question, false, key), HttpResponse.BodyHandlers.ofString());
+            var rejected = duplicate.get(2, TimeUnit.SECONDS);
+            assertThat(rejected.statusCode()).isEqualTo(409);
+            assertThat(rejected.body()).contains("ASSISTANT_REQUEST_IN_PROGRESS");
+            assertThat(count(id, "USER")).isEqualTo(1);
+            release.countDown();
+            assertThat(running.get(3, TimeUnit.SECONDS).statusCode()).isEqualTo(200);
+            assertThat(count(id, "ASSISTANT")).isEqualTo(1);
+            assertThat(audits(id)).isEqualTo(1);
+            org.mockito.Mockito.verify(ai, org.mockito.Mockito.times(1)).answer(anyString(), anyString(), anyString());
+        } finally { release.countDown(); running.get(8, TimeUnit.SECONDS); if (duplicate != null) duplicate.get(8, TimeUnit.SECONDS); }
+    }
+
+    @Test void shouldKeepClearedKeyTombstoneWithoutResurrectingMessages() throws Exception {
+        String token = login(), key = UUID.randomUUID().toString();
+        long id = createSession(token);
+        assertThat(http.send(keyedMessage(id, token, "clear keyed question", false, key), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(200);
+        assertThat(http.send(request("/api/v1/assistant/sessions/" + id + "/messages", token).DELETE().build(), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(200);
+        var state = requestState(id, token, key);
+        assertThat(state.statusCode()).isEqualTo(200);
+        var data = json.readTree(state.body()).path("data");
+        assertThat(data.path("status").asText()).isEqualTo("SUPERSEDED");
+        assertThat(data.path("questionMessageId").isNull()).isTrue();
+        assertThat(data.path("answerMessageId").isNull()).isTrue();
+        var repeat = http.send(keyedMessage(id, token, "clear keyed question", false, key), HttpResponse.BodyHandlers.ofString());
+        assertThat(repeat.statusCode()).isEqualTo(409);
+        assertThat(repeat.body()).contains("ASSISTANT_REQUEST_SUPERSEDED");
+        assertThat(count(id, "USER")).isZero(); assertThat(count(id, "ASSISTANT")).isZero();
+        assertThat(requestCount(id)).isEqualTo(1);
+    }
+
+    @Test void shouldExposeKeyedTimeoutBeforeProviderReleaseAndNeverRetryItAutomatically() throws Exception {
+        verifyStoppedKey(false);
+    }
+
+    @Test void shouldExposeRevokedKeyToFreshOwnerWithoutRevivingItsOriginalWork() throws Exception {
+        verifyStoppedKey(true);
+    }
+
+    private void verifyStoppedKey(boolean revoke) throws Exception {
+        String token = login(), key = UUID.randomUUID().toString(), question = "stopped-key-" + UUID.randomUUID();
+        long id = createSession(token);
+        var entered = new CountDownLatch(1); var release = new CountDownLatch(1);
+        gate(question, entered, release);
+        var pending = http.sendAsync(keyedMessage(id, token, question, false, key), HttpResponse.BodyHandlers.ofString());
+        try {
+            assertThat(entered.await(3, TimeUnit.SECONDS)).isTrue();
+            assertThat(json.readTree(requestState(id, token, key).body()).path("data").path("status").asText()).isEqualTo("RUNNING");
+            if (revoke) assertThat(post("/api/v1/auth/logout-all", token, Map.of()).statusCode()).isEqualTo(200);
+            assertThat(pending.get(6, TimeUnit.SECONDS).statusCode()).isEqualTo(revoke ? 401 : 504);
+            assertThat(release.getCount()).isEqualTo(1);
+            String current = revoke ? login() : token;
+            assertThat(json.readTree(requestState(id, current, key).body()).path("data").path("status").asText()).isEqualTo(revoke ? "REVOKED" : "TIMED_OUT");
+            assertThat(http.send(keyedMessage(id, current, question, false, key), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(409);
+            assertThat(count(id, "USER")).isEqualTo(1); assertThat(count(id, "ASSISTANT")).isZero(); assertThat(audits(id)).isZero();
+            release.countDown(); awaitIdle();
+            assertThat(count(id, "ASSISTANT")).isZero();
+            org.mockito.Mockito.verify(ai, org.mockito.Mockito.times(1)).answer(anyString(), anyString(), anyString());
+            assertThat(http.send(keyedMessage(id, current, "explicit new question", false, UUID.randomUUID().toString()), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(200);
+        } finally { release.countDown(); pending.get(8, TimeUnit.SECONDS); }
+    }
+
+    @Test void shouldRejectInvalidKeysAndOtherOwnersStatusWithoutWrites() throws Exception {
+        String token = login(), key = UUID.randomUUID().toString();
+        long id = createSession(token);
+        var invalid = http.send(keyedMessage(id, token, "must not write", false, "bad/key"), HttpResponse.BodyHandlers.ofString());
+        assertThat(invalid.statusCode()).isEqualTo(400);
+        assertThat(invalid.body()).contains("ASSISTANT_IDEMPOTENCY_KEY_INVALID");
+        assertThat(count(id, "USER")).isZero(); assertThat(requestCount(id)).isZero();
+        assertThat(http.send(keyedMessage(id, token, "owner question", false, key), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(200);
+        String other = json.readTree(post("/api/v1/auth/login", null, Map.of("username", "auditor", "password", "OpsPilot@2026")).body()).path("data").path("accessToken").asText();
+        assertThat(requestState(id, other, key).statusCode()).isEqualTo(404);
+        assertThat(http.send(keyedMessage(id, other, "owner question", false, key), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(404);
+        assertThat(count(id, "USER")).isEqualTo(1); assertThat(requestCount(id)).isEqualTo(1);
+    }
+
+    @Test void shouldReplayCompletedKeyWithoutTakingSaturatedCapacity() throws Exception {
+        String token = login(), key = UUID.randomUUID().toString();
+        long replayId = createSession(token), runningId = createSession(token), queuedId = createSession(token);
+        var original = http.send(keyedMessage(replayId, token, "original complete question", false, key), HttpResponse.BodyHandlers.ofString());
+        long answerId = json.readTree(original.body()).path("data").path("id").asLong();
+        String question = "replay-busy-" + UUID.randomUUID();
+        var entered = new CountDownLatch(1); var release = new CountDownLatch(1);
+        gate(question, entered, release);
+        var running = http.sendAsync(message(runningId, token, question, false), HttpResponse.BodyHandlers.ofString());
+        java.util.concurrent.CompletableFuture<HttpResponse<String>> queued = null;
+        try {
+            assertThat(entered.await(3, TimeUnit.SECONDS)).isTrue();
+            queued = http.sendAsync(message(queuedId, token, "queued busy question", true), HttpResponse.BodyHandlers.ofString());
+            long end = System.nanoTime() + Duration.ofSeconds(2).toNanos();
+            while (execution.queued() != 1 && System.nanoTime() < end) Thread.sleep(10);
+            assertThat(execution.queued()).isEqualTo(1);
+            var replay = http.sendAsync(keyedMessage(replayId, token, "original complete question", false, key), HttpResponse.BodyHandlers.ofString()).get(2, TimeUnit.SECONDS);
+            assertThat(replay.statusCode()).isEqualTo(200);
+            assertThat(json.readTree(replay.body()).path("data").path("id").asLong()).isEqualTo(answerId);
+            assertThat(count(replayId, "USER")).isEqualTo(1); assertThat(audits(replayId)).isEqualTo(1);
+            assertThat(release.getCount()).isEqualTo(1);
+        } finally { release.countDown(); running.get(8, TimeUnit.SECONDS); if (queued != null) queued.get(8, TimeUnit.SECONDS); }
+    }
+
+    HttpResponse<String> requestState(long id, String token, String key) throws Exception {
+        return http.send(request("/api/v1/assistant/sessions/" + id + "/request", token).header("Idempotency-Key", key).GET().build(), HttpResponse.BodyHandlers.ofString());
+    }
+
+    long requestCount(long id) { return jdbc.sql("SELECT COUNT(*) FROM assistant_request WHERE session_id=:id").param("id", id).query(Long.class).single(); }
+
     @Test void shouldRejectSynchronousRequestWhenStreamCapacityIsFullWithoutWrites() throws Exception {
         verifySharedCapacity(true);
     }
@@ -66,12 +217,13 @@ class AssistantSessionRevocationIntegrationTest {
             while (execution.queued() != 1 && System.nanoTime() < deadline) Thread.sleep(10);
             assertThat(execution.queued()).isEqualTo(1);
             assertThat(count(queuedId, "USER")).isZero();
-            var rejected = http.send(message(rejectedId, token, "rejected mixed question", !runningStream), HttpResponse.BodyHandlers.ofString());
+            var rejected = http.send(keyedMessage(rejectedId, token, "rejected mixed question", !runningStream, UUID.randomUUID().toString()), HttpResponse.BodyHandlers.ofString());
             assertThat(rejected.statusCode()).isEqualTo(503);
             assertThat(rejected.body()).contains("ASSISTANT_QUEUE_SATURATED");
             assertThat(count(rejectedId, "USER")).isZero();
             assertThat(count(rejectedId, "ASSISTANT")).isZero();
             assertThat(audits(rejectedId)).isZero();
+            assertThat(requestCount(rejectedId)).isZero();
             release.countDown();
             assertThat(running.get(5, TimeUnit.SECONDS).statusCode()).isEqualTo(200);
             assertThat(queuedRequest.get(5, TimeUnit.SECONDS).body()).contains("event:done");
@@ -149,7 +301,7 @@ class AssistantSessionRevocationIntegrationTest {
             return answer;
         }).when(assistant).sendMessage(org.mockito.ArgumentMatchers.eq(sessionId), org.mockito.ArgumentMatchers.eq(owner),
                 org.mockito.ArgumentMatchers.eq(question), org.mockito.ArgumentMatchers.any(org.trigger.opspilot.security.SessionAuthorization.Lease.class),
-                org.mockito.ArgumentMatchers.any(Runnable.class));
+                org.mockito.ArgumentMatchers.any(Runnable.class), org.mockito.ArgumentMatchers.nullable(AssistantRequestStore.Identity.class));
         var pending = http.sendAsync(message(sessionId, token, question, false), HttpResponse.BodyHandlers.ofString());
         try {
             assertThat(committed.await(3, TimeUnit.SECONDS)).isTrue();
@@ -389,7 +541,13 @@ class AssistantSessionRevocationIntegrationTest {
     }
 
     HttpRequest message(long id, String token, String content, boolean stream) throws Exception {
-        return request("/api/v1/assistant/sessions/" + id + (stream ? "/stream" : "/messages"), token)
+        return keyedMessage(id, token, content, stream, null);
+    }
+
+    HttpRequest keyedMessage(long id, String token, String content, boolean stream, String key) throws Exception {
+        var builder = request("/api/v1/assistant/sessions/" + id + (stream ? "/stream" : "/messages"), token);
+        if (key != null) builder.header("Idempotency-Key", key);
+        return builder
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json.writeValueAsString(Map.of("content", content)))).build();
     }

@@ -1,0 +1,213 @@
+{
+  "sourceCommit": "checkpoint71-working-tree-before-upload",
+  "targetedBeforeFinalReplayHeader": {
+    "log": "target/cp71-before/idempotency-expanded.log",
+    "sha256": "8593a1aad489c33523728a5ed7fe61ae642be3fe32a6fa4cc42a327aac7d7fb2",
+    "found": 51,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "executed": 51,
+    "buildSuccess": true,
+    "finishedAt": "2026-10-03T15:45:19+08:00"
+  },
+  "utc": {
+    "log": "target/cp71-before/full-utc-final.log",
+    "sha256": "2901a41a8a36590cddb931d2b645381250b45d9373c6177845a22b0832b5b9ec",
+    "found": 444,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 103,
+    "executed": 341,
+    "buildSuccess": true,
+    "finishedAt": "2026-10-03T07:59:06Z"
+  },
+  "shanghai": {
+    "log": "target/cp71-before/full-shanghai-package.log",
+    "sha256": "ae3646277ac0a77ae079016b8cd08740dc8caf35384ad3ac7d0f97fc6ab223ff",
+    "found": 444,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 103,
+    "executed": 341,
+    "buildSuccess": true,
+    "finishedAt": "2026-10-03T16:04:51+08:00"
+  },
+  "nativeIdempotency": {
+    "evidenceDirectory": "target/assistant-idempotency-it/run-7M2ApC",
+    "resultSha256": "b738202c3908ada56afb56cad9ff671ee025cb8ddc88a36e219f19cc80b2aed1",
+    "result": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "tokensPersistedToEvidence": false,
+      "jarSha256": "68e8dcfa798257a0cc13f44f22d7abd2bb9b3c89f590154d215a32e457b3ff1d",
+      "fixture": "actual production DashScope HTTP adapter, dropped completed HTTP response, independent JVMs and SIGKILL",
+      "database": "fresh owned H2 file with WRITE_DELAY=0",
+      "userFileDatabaseModified": false,
+      "startedPids": [
+        73144,
+        75548,
+        80960
+      ],
+      "stoppedPids": [
+        73144,
+        75548,
+        80960
+      ],
+      "cases": [
+        {
+          "name": "lost-completed-response-and-jvm-restart",
+          "backendStatusBeforeResponseLoss": 200,
+          "actualClientResponseLost": true,
+          "sameMessageIdAfterRestart": true,
+          "changedContentStatus": 409,
+          "requestStateAfterRestart": "COMPLETED",
+          "counts": {
+            "user": 1,
+            "assistant": 1
+          },
+          "modelCallsForQuestionIncludingRetries": 1
+        },
+        {
+          "name": "keyed-timeout",
+          "inProgressDuplicateStatus": 409,
+          "timeoutStatus": 504,
+          "stateBeforeProviderRelease": "TIMED_OUT",
+          "lateAssistantMessages": 0,
+          "lateWorkerSettledByFreshKey": true
+        },
+        {
+          "name": "sigkill-accepted-request-recovery",
+          "statusBeforeCrash": "RUNNING",
+          "currentStateAfterIndependentJvmRestart": "TIMED_OUT",
+          "sameKeyRetryStatus": 409,
+          "modelReexecuted": false,
+          "counts": {
+            "user": 1,
+            "assistant": 0
+          }
+        }
+      ],
+      "hardKilledPid": 75548,
+      "providerTransportCalls": 5,
+      "ownedProcessesStopped": true,
+      "ownedRelayStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "logs": [
+      {
+        "file": "target/assistant-idempotency-it/run-7M2ApC/jar-1.log",
+        "sha256": "9e33fbeeb35cdd0fbda282d8724dee08475c113fbfb3145376a485198e84303a",
+        "unexpectedErrors": 0
+      },
+      {
+        "file": "target/assistant-idempotency-it/run-7M2ApC/jar-2.log",
+        "sha256": "2230f390904fcb51d44b502091e314d8b17f18aba415a2ef71b40093a42e8c41",
+        "unexpectedErrors": 0
+      },
+      {
+        "file": "target/assistant-idempotency-it/run-7M2ApC/jar-3.log",
+        "sha256": "53ffe102dbe4e6ce7c3cfe4835be076759e0acb897b3f9a8ca7a3d242bf329d7",
+        "unexpectedErrors": 0
+      }
+    ],
+    "jwtFound": false
+  },
+  "nativeHttpRegression": {
+    "evidenceDirectory": "target/assistant-session-it/run-tGSR9P",
+    "resultSha256": "f360cd402ddb33ac3a91dc7fccb4a3ac086bc9891d5dc53425c943c9c5b59f62",
+    "result": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "budgetBaselineCapture": false,
+      "tokensPersistedToEvidence": false,
+      "jarSha256": "68e8dcfa798257a0cc13f44f22d7abd2bb9b3c89f590154d215a32e457b3ff1d",
+      "fixture": "actual production DashScope HTTP adapter against an owned controlled server, not model quality",
+      "database": "fresh owned H2 memory database",
+      "userFileDatabaseModified": false,
+      "cases": [
+        {
+          "name": "synchronous-logout",
+          "responseStatus": 401,
+          "lateAssistantMessages": 0,
+          "lateAnswerSent": false,
+          "closedBeforeProviderRelease": true
+        },
+        {
+          "name": "stream-logout",
+          "responseStatus": 200,
+          "lateAssistantMessages": 0,
+          "lateAnswerSent": false,
+          "closedBeforeProviderRelease": true
+        },
+        {
+          "name": "clear-messages",
+          "responseStatus": 409,
+          "lateAssistantMessages": 0,
+          "lateAnswerSent": false,
+          "closedBeforeProviderRelease": false
+        },
+        {
+          "name": "timeout",
+          "closedBeforeProviderRelease": true,
+          "explicitSafeErrorEvent": true,
+          "lateWorkerSettledByFreshStream": true,
+          "lateAssistantMessages": 0
+        },
+        {
+          "name": "mixed-capacity",
+          "responseStatus": 503,
+          "rejectedQuestionWrites": 0,
+          "queuedQuestionWritesBeforeProviderRelease": 0,
+          "simultaneousProviderCalls": 1
+        },
+        {
+          "name": "synchronous-running-and-queued-timeout",
+          "responseStatuses": [
+            504,
+            504
+          ],
+          "settledBeforeProviderRelease": true,
+          "lateAssistantMessages": 0,
+          "queuedQuestionWrites": 0,
+          "lateWorkerSettledByFreshSynchronousAnswer": true
+        }
+      ],
+      "startedPid": 79668,
+      "productionHttpAdapterPositiveControl": true,
+      "freshSessionProductionHttpAnswer": true,
+      "providerTransportCalls": 11,
+      "ownedProcessStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "logs": [
+      {
+        "file": "target/assistant-session-it/run-tGSR9P/jar.log",
+        "sha256": "6de5987340c1fea9faacbbe28122c0118ae7b63751d6885acd681a2e092f9c96",
+        "unexpectedErrors": 0
+      }
+    ],
+    "jwtFound": false
+  },
+  "newJarSha256": "68e8dcfa798257a0cc13f44f22d7abd2bb9b3c89f590154d215a32e457b3ff1d",
+  "localMySqlExecuted": false,
+  "ciMySqlMinimumExecuted": 96,
+  "requiredAssistantTransactionScenarios": 8,
+  "mysqlLifecycleUnitTests": {
+    "executed": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "ciBaselineGuard": {
+    "status": "PASS",
+    "exitCode": 1,
+    "rejectedBeforeJavaStartup": true
+  },
+  "frontendChanged": false,
+  "defaultFrontendSendsIdempotencyKey": false,
+  "durableQueuedState": false,
+  "explicitAssistantCancelDelivered": false
+}

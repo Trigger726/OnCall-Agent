@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -59,20 +60,38 @@ public class AssistantController {
     @PostMapping("/sessions/{id}/messages")
     public DeferredResult<ApiResponse<AssistantService.MessageView>> message(
             @AuthenticationPrincipal UserPrincipal user, @PathVariable long id,
-            @Valid @RequestBody SendMessageRequest request) {
+            @Valid @RequestBody SendMessageRequest request,
+            @RequestHeader(value = "Idempotency-Key", required = false) String requestKey,
+            jakarta.servlet.http.HttpServletResponse response) {
         var lease = authorization.current();
         long ownerId = user.id();
         service.getSession(id, ownerId);
+        String keyHash = AssistantRequestStore.keyHash(requestKey);
+        String attemptId = java.util.UUID.randomUUID().toString();
         var result = new DeferredResult<ApiResponse<AssistantService.MessageView>>(0L);
+        if (keyHash != null) {
+            var replay = service.replay(id, ownerId, request.content(), keyHash, lease);
+            if (replay != null) {
+                requireLease(lease);
+                response.setHeader("X-OpsPilot-Idempotent-Replay", "true");
+                result.setResult(ApiResponse.ok(replay));
+                return result;
+            }
+        }
         execution.submit(lease, work -> {
             try {
-                var message = service.sendMessage(id, ownerId, request.content(), lease, work::check);
+                var identity = keyHash == null ? null : new AssistantRequestStore.Identity(keyHash, attemptId, work.deadlineEpochMillis());
+                var message = service.sendMessage(id, ownerId, request.content(), lease, work::check, identity);
                 work.check(); // Never replace the original HTTP lease with a newly captured account version.
+                if (service.replayedByDifferentAttempt(id, keyHash, attemptId)) response.setHeader("X-OpsPilot-Idempotent-Replay", "true");
+                work.check();
                 result.setResult(ApiResponse.ok(message));
             } catch (Exception exception) {
                 result.setErrorResult(exception);
             }
         }, reason -> {
+            try { service.stopRequest(id, keyHash, attemptId, reason); }
+            catch (RuntimeException ignored) { /* Safe response still stops; persisted deadline permits later reconciliation. */ }
             boolean authorized;
             try { authorized = authorization.authorized(lease, false); }
             catch (RuntimeException exception) { authorized = false; }
@@ -92,26 +111,29 @@ public class AssistantController {
     @PostMapping(value = "/sessions/{id}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter stream(
             @AuthenticationPrincipal UserPrincipal user, @PathVariable long id,
-            @Valid @RequestBody SendMessageRequest request) {
+            @Valid @RequestBody SendMessageRequest request,
+            @RequestHeader(value = "Idempotency-Key", required = false) String requestKey,
+            jakarta.servlet.http.HttpServletResponse response) throws java.io.IOException {
         var lease = authorization.current();
         service.getSession(id, user.id()); // Ownership is checked before admitting any queued work.
         SseEmitter emitter = new SseEmitter(300_000L);
         long ownerId = user.id();
+        String keyHash = AssistantRequestStore.keyHash(requestKey);
+        String attemptId = java.util.UUID.randomUUID().toString();
+        if (keyHash != null) {
+            var replay = service.replay(id, ownerId, request.content(), keyHash, lease);
+            if (replay != null) {
+                response.setHeader("X-OpsPilot-Idempotent-Replay", "true");
+                sendEvents(emitter, replay, () -> requireLease(lease));
+                return emitter;
+            }
+        }
         execution.submit(lease, work -> {
             try {
-                AssistantService.MessageView message = service.sendMessage(id, ownerId, request.content(), lease, work::check);
-                work.check();
-                emitter.send(SseEmitter.event().name("meta")
-                        .data(new StreamEvent("meta", "", message.id(), message.evidenceJson())));
-                for (String chunk : chunks(message.content(), 28)) {
-                    work.check();
-                    emitter.send(SseEmitter.event().name("message")
-                            .data(new StreamEvent("delta", chunk, message.id(), null)));
-                }
-                work.check();
-                emitter.send(SseEmitter.event().name("done")
-                        .data(new StreamEvent("done", "", message.id(), message.evidenceJson())));
-                emitter.complete();
+                var identity = keyHash == null ? null : new AssistantRequestStore.Identity(keyHash, attemptId, work.deadlineEpochMillis());
+                var message = service.sendMessage(id, ownerId, request.content(), lease, work::check, identity);
+                if (service.replayedByDifferentAttempt(id, keyHash, attemptId)) response.setHeader("X-OpsPilot-Idempotent-Replay", "true");
+                sendEvents(emitter, message, work::check);
             } catch (CredentialsExpiredException exception) {
                 emitter.complete(); // Never send an answer/error payload under revoked credentials.
             } catch (Exception exception) {
@@ -126,6 +148,8 @@ public class AssistantController {
             }
         }, reason -> {
             try {
+                try { service.stopRequest(id, keyHash, attemptId, reason); }
+                catch (RuntimeException ignored) { /* Stop transport even if the state store is unavailable. */ }
                 if (reason == AssistantExecutionManager.Reason.TIMED_OUT && authorization.authorized(lease, false)) {
                     emitter.send(SseEmitter.event().name("error")
                             .data(new StreamEvent("error", "回答超时，请稍后重新发送问题", null, null)));
@@ -135,6 +159,30 @@ public class AssistantController {
             } finally { emitter.complete(); }
         });
         return emitter;
+    }
+
+    @GetMapping("/sessions/{id}/request")
+    public ApiResponse<AssistantRequestStore.View> requestStatus(@AuthenticationPrincipal UserPrincipal user,
+            @PathVariable long id, @RequestHeader(value = "Idempotency-Key", required = false) String requestKey) {
+        String keyHash = AssistantRequestStore.keyHash(requestKey);
+        if (keyHash == null) throw new ApiException(HttpStatus.BAD_REQUEST, "ASSISTANT_IDEMPOTENCY_KEY_REQUIRED", "需要Idempotency-Key");
+        return ApiResponse.ok(service.requestStatus(id, user.id(), keyHash));
+    }
+
+    private void requireLease(SessionAuthorization.Lease lease) {
+        if (!authorization.authorized(lease, false)) throw new CredentialsExpiredException("Assistant session expired");
+    }
+
+    private static void sendEvents(SseEmitter emitter, AssistantService.MessageView message, Runnable checkpoint) throws java.io.IOException {
+        checkpoint.run();
+        emitter.send(SseEmitter.event().name("meta").data(new StreamEvent("meta", "", message.id(), message.evidenceJson())));
+        for (String chunk : chunks(message.content(), 28)) {
+            checkpoint.run();
+            emitter.send(SseEmitter.event().name("message").data(new StreamEvent("delta", chunk, message.id(), null)));
+        }
+        checkpoint.run();
+        emitter.send(SseEmitter.event().name("done").data(new StreamEvent("done", "", message.id(), message.evidenceJson())));
+        emitter.complete();
     }
 
     @DeleteMapping("/sessions/{id}/messages")

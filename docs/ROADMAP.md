@@ -2,7 +2,9 @@
 
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
-当前70本地限定通过：[70报告](acceptance/V1.7-checkpoint-70.md)。旧同步绕过容量/预算已复现，同步与流式共享同一有界执行器、保留原lease与JSON契约；40定向/双时区430发现330执行100条件跳过、十四门禁和新包真实HTTP十一调用/六场景通过，混合队满503/同步运行和排队504/晚回答零。新提交MySQL93/远端待验；助手幂等/显式取消、原生token流、跨节点和其余完整路线继续，历史Demo/失败保留。
+当前71本地限定通过：[71报告](acceptance/V1.7-checkpoint-71.md)。已接受问题持久化幂等、可选同键同步/SSE重放、完成状态与回答/审计原子性；双时区444发现341执行103条件跳过/十四门禁、新包真实丢响应/三个JVM/强制终止与原HTTP十一调用回归通过。同键模型调用4→1、消息各4→各1，崩溃后按原预算结算不重跑。新提交MySQL96/远端待验；默认页面未生成稳定键，持久化排队/助手显式取消/UI冻结恢复、原生token流、跨节点和完整路线继续，历史Demo/失败保留。
+
+70自己的5cae132已核对[Run37096366762](https://github.com/Trigger726/OnCall-Agent/actions/runs/37096366762)十五作业success，真实MySQL93零失败错误跳过/五池关闭及认证/助手两ZIP源SHA/摘要/原门禁重放通过，见[70报告](acceptance/V1.7-checkpoint-70.md)。该证据不替代71新增V32与三事务的96项验收。
 
 69自己的45247a8已核对[Run37095079404](https://github.com/Trigger726/OnCall-Agent/actions/runs/37095079404)：十三success/MySQL failure/最终容器skipped，不能标全绿。认证ZIP源SHA/摘要及Linux三结果/四停机日志通过；真实MySQL93中CHECK异常类别fixture失败，另四个助手事务执行通过；70修正为精确SQL错误/约束名并继续检查回滚，不放宽门禁。见[69报告](acceptance/V1.7-checkpoint-69.md)。
 

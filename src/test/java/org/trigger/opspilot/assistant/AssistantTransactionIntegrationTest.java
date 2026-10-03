@@ -41,4 +41,13 @@ class AssistantTransactionIntegrationTest {
     @Test void shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence() {
         try (var s = scenario()) { s.expiryDuringCompletionRollsBackAnswerTitleAndAudit(); }
     }
+    @Test void shouldReplayCompletedAssistantKeyWithCaseSensitiveSessionScope() {
+        try (var s = scenario()) { s.completedKeyBindsQuestionAndPreservesCaseSensitiveSessionScope(); }
+    }
+    @Test void shouldRollbackKeyedAssistantCompletionStateWithAnswerAndAudit() {
+        try (var s = scenario()) { s.keyedCompletionRollsBackStateAnswerTitleAndAuditTogether(); }
+    }
+    @Test void shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt() throws Exception {
+        try (var s = scenario()) { s.concurrentKeyNeverCreatesSecondQuestionOrStopsOriginalAttempt(); }
+    }
 }

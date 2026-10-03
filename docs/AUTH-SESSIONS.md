@@ -12,7 +12,11 @@ V31新增sys_user.auth_version，旧账号密码/角色/状态不变。JWT必须
 
 助手准备/完成事务按账号→会话行锁排序，外部模型不持有这些行锁；已接受USER保留，撤销/到期/清空后的晚回答不补写。回答/标题/完成审计一起提交，最后仍检查原lease有效期；同步返回前另检查原lease。若回答在有效授权时已经完成、之后才撤销，不删除已合法提交的历史，只拒绝晚HTTP正文；新登录仍可正常读取历史。这些授权边界不承诺每个网络字节与撤销原子化。详情和首次失败见[68](acceptance/V1.7-checkpoint-68.md)/[69](acceptance/V1.7-checkpoint-69.md)。助手允许所有有效角色读取/回答，不把调查的ADMIN/OPS_MANAGER/ON_CALL门槛错误套给AUDITOR对话。
 
-助手同步/messages和流式/stream在同一实例内共享ASSISTANT_WORKERS=4、ASSISTANT_QUEUE_CAPACITY=16、ASSISTANT_EXECUTION_TIMEOUT=60s（含排队），不同节点不是全局一个池。先验证会话归属，队满503 ASSISTANT_QUEUE_SATURATED且该问题零写入；同步通过DeferredResult返回原ApiResponse JSON，预算到期504 ASSISTANT_EXECUTION_TIMEOUT，撤销/到期401。运行中已接受USER保留，排队超时则USER/ASSISTANT/完成审计均零并释放队列；不自动重试同一问题。MVC禁用独立等待计时器，统一依现有执行器预算/资格扫描停止。资格检查默认1秒轮询，数据库/调度拥塞可延长，非关闭SLA。流式超时仅原授权仍有效才发固定error/无done，撤销不发正文；模型I/O仍占用worker直到自身返回。详见[70](acceptance/V1.7-checkpoint-70.md)。持久化助手幂等/显式取消与跨节点矩阵继续，不将规则降级或本地受控模型当生产质量保证。
+助手同步/messages和流式/stream在同一实例内共享ASSISTANT_WORKERS=4、ASSISTANT_QUEUE_CAPACITY=16、ASSISTANT_EXECUTION_TIMEOUT=60s（含排队），不同节点不是全局一个池。先验证会话归属，队满503 ASSISTANT_QUEUE_SATURATED且该问题零写入；同步通过DeferredResult返回原ApiResponse JSON，预算到期504 ASSISTANT_EXECUTION_TIMEOUT，撤销/到期401。运行中已接受USER保留，排队超时则USER/ASSISTANT/完成审计均零并释放队列；不自动重试同一问题。MVC禁用独立等待计时器，统一依现有执行器预算/资格扫描停止。资格检查默认1秒轮询，数据库/调度拥塞可延长，非关闭SLA。流式超时仅原授权仍有效才发固定error/无done，撤销不发正文；模型I/O仍占用worker直到自身返回。详见[70](acceptance/V1.7-checkpoint-70.md)。显式取消与跨节点矩阵继续，不将规则降级或本地受控模型当生产质量保证。
+
+71增加可选助手Idempotency-Key契约（不等于Agent调查的运行键）：同步/messages与流式/stream使用同一个键，首尾空白去除后为1至128个ASCII字母、数字或._:-，大小写敏感并按会话隔离；数据库仅保存键与trim后问题的SHA256。已接受USER与RUNNING同事务，回答/标题/完成审计与COMPLETED同事务。完成后同键同问题返回原Message ID和原证据，响应头X-OpsPilot-Idempotent-Replay:true，不占模型队列；不同问题409 ASSISTANT_IDEMPOTENCY_CONFLICT，进行中409 ASSISTANT_REQUEST_IN_PROGRESS，终态409不自动重跑。完成重放仍检查原HTTP lease；清空将键改为SUPERSEDED并置空消息引用，不使旧键重新执行，删除会话才级联删除请求。
+
+GET /api/v1/assistant/sessions/{id}/request需相同Idempotency-Key头，缺失/非法400，另一账号404；本人读取id/status/questionMessageId/answerMessageId/deadlineEpochMs。状态是RUNNING/COMPLETED/FAILED/TIMED_OUT/REVOKED/SUPERSEDED；重启后查询按持久化epoch预算结算超时，预算前拒绝同键重复执行，不自动迁移模型。记录仅从worker准备事务接受问题时开始，尚未持久化QUEUED；状态404不能证明没有内存排队请求，客户端不得因此换键自动重发。不带键保留旧行为，页面本轮尚未生成稳定键或冻结恢复，因此不能声称所有对话已幂等；显式取消API/UI、主动后台回收与跨节点时钟偏移仍待验。证据见[71](acceptance/V1.7-checkpoint-71.md)。
 
 客户端流在建立时冻结原Token，仅留内存；本标签登录/退出事件和跨标签storage事件使旧连接中止，响应、每次read、事件回调及重连检查Token是否仍相同，旧401不踢新会话。流终止不向后台发送取消；真正会话撤销由后端处理。浏览器Token围栏不是JWT认证，也不宣称旧标签导航栏瞬时同步或已经显示的历史内容立即擦除；刷新后由auth/me取得当前身份。Agent恢复键按uid/username/incident命名，不含Token/口令。同一账号歧义请求重新登录后继续同键；另一账号不继承；无归属旧键保留但不自动迁移。用户信息缺失/坏格式在POST前拒绝，纯GET订阅不依赖这个UI namespace。
 
@@ -38,5 +42,7 @@ V31新增sys_user.auth_version，旧账号密码/角色/状态不变。JWT必须
 构建后运行`node scripts/verify-auth-session-ci.cjs`。它仅使用空闲回环9933/9934和自己新建的target/auth-session-it/run-*文件库；不停止其他监听者，不修改日常文件库。同文件库不同JVM检查旧Token拒绝、当前Token正对照、新旧密码、审计/时间线不变，最后关闭自己创建的进程。
 
 助手真实适配器复跑`node scripts/verify-assistant-session-ci.cjs`：只用空闲9937/9938、自有内存库与受控loopback DashScope HTTP，不接生产模型/真实密钥；先正常正文正对照，再真实logout/清空/流式超时，混合同步/流式队满与同步运行/排队超时，后继真实回答证明旧worker实际退出。旧包target/cp68-before/opspilot-cp67-client.jar配OPSPILOT_ASSISTANT_SESSION_BASELINE=1记录历史撤销反例；69旧包target/cp70-before/opspilot-cp69.jar配OPSPILOT_ASSISTANT_BUDGET_BASELINE=1记录预算缺口。两模式不能同时设置、仅BASELINE_CAPTURED，CI在启动Java前拒绝。69的行锁/实际审计INSERT失败/完成中到期矩阵在H2与既有真实MySQL兼容测试中复跑，不靠新增生产测试端点。
+
+持久化幂等另跑`node scripts/verify-assistant-idempotency-ci.cjs`：空闲9941/9942、自有H2文件库WRITE_DELAY=0、三个独立JVM与受控生产HTTP适配器，relay先收到真实后端200再截断客户端响应；新JVM同键回原答案/一次模型调用，运行超时不晚写，SIGKILL后按原预算结算且不重跑。旧70包配OPSPILOT_ASSISTANT_IDEMPOTENCY_BASELINE=1仅记录丢响应/重启重复反例（未测旧SIGKILL），CI在启动Java前拒绝旧模式。仅上传脱敏JSON/日志，不上传文件数据库或JWT。
 
 独立旧JAR放在target/cp65-before/opspilot-cp64.jar，OPSPILOT_AUTH_SESSION_BASELINE=1只记录旧接口404与旧Token仍可读，输出BASELINE_CAPTURED，绝不是PASS；CI禁止该模式。口令/Token仅驻留验证进程内存，上传证据限JSON/日志，不上传数据库。原始失败和新旧对照见[65报告](acceptance/V1.7-checkpoint-65.md)。

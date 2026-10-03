@@ -2,7 +2,9 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
-最新本地限定通过：[V1.7-checkpoint-70.md](V1.7-checkpoint-70.md)：同步与流式共享容量/含排队预算，先保留旧真实反例；40定向、双时区430发现/330执行/100条件跳过、十四门禁和新包HTTP十一调用/六场景通过，混合队满503/同步运行与排队504/晚回答零。新提交MySQL93/远端待验，首次Future三秒等待根因和完整目标仍继续。
+最新本地限定通过：[V1.7-checkpoint-71.md](V1.7-checkpoint-71.md)：已接受助手问题持久化幂等，可选同键原答案同步/SSE重放、完成事务原子性与清空墓碑；双时区444发现/341执行/103条件跳过、十四门禁、新包丢响应/三个JVM/强制终止和原十一模型HTTP回归通过。同键模型4→1、USER/ASSISTANT各4→各1，崩溃按原预算结算且不重跑。新提交MySQL96/远端待验；默认页面未生成稳定键，持久化排队/显式取消/UI恢复、旧Future三秒等待根因与完整目标继续。
+
+70自己的5cae132已核对[Run37096366762](https://github.com/Trigger726/OnCall-Agent/actions/runs/37096366762)十五作业success，真实MySQL93零失败错误跳过/五池关闭及认证/助手两ZIP源SHA/实际摘要/原门禁重放通过，见[V1.7-checkpoint-70.md](V1.7-checkpoint-70.md)。不借旧93证明71的V32/新三事务。
 
 69自己的45247a8已核对[Run37095079404](https://github.com/Trigger726/OnCall-Agent/actions/runs/37095079404)：十三success/MySQL failure/最终容器skipped，不能标全绿。认证ZIP源SHA/摘要及Linux三结果/四停机日志通过；真实MySQL93中CHECK异常类别fixture失败，另四个助手事务执行通过；70修正为精确SQL错误/约束名并继续检查回滚，不放宽门禁。见[V1.7-checkpoint-69.md](V1.7-checkpoint-69.md)。
 
