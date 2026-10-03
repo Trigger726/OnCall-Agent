@@ -7,25 +7,44 @@ const { randomUUID, randomBytes, createHash } = require('node:crypto');
 const { setTimeout: delay } = require('node:timers/promises');
 const { requireFreePort, stopProcess, waitForHealth, redact, unexpectedLogLines } = require('./verify-oncall-browser-ci.cjs');
 
+function mysqlSettings(env = process.env) {
+  if (env.OPSPILOT_ASSISTANT_CROSS_NODE_MYSQL === undefined) {
+    assert.ok(!env.OPSPILOT_CROSS_NODE_JDBC_URL && !env.OPSPILOT_CROSS_NODE_DB_USER && !env.OPSPILOT_CROSS_NODE_DB_PASSWORD,
+      'MySQL credentials require explicit owned-container mode; do not silently fall back to H2');
+    return null;
+  }
+  assert.equal(env.OPSPILOT_ASSISTANT_CROSS_NODE_MYSQL, '1', 'Invalid MySQL mode');
+  assert.notEqual(env.OPSPILOT_ASSISTANT_CROSS_NODE_BASELINE, '1', 'Archived baseline cannot replace MySQL acceptance');
+  const url = env.OPSPILOT_CROSS_NODE_JDBC_URL || '';
+  const match = url.match(/^jdbc:mysql:\/\/(?:127\.0\.0\.1|localhost):([1-9]\d{0,4})\/(opspilot_cross_node_[0-9a-f]{12})(?:\?[^\s]*)?$/);
+  assert.ok(match && Number(match[1]) <= 65535, 'Require a loopback, unique owned MySQL test schema');
+  assert.equal(env.OPSPILOT_CROSS_NODE_DB_USER, 'opspilot', 'Require the owned test user');
+  assert.equal(env.OPSPILOT_CROSS_NODE_DB_PASSWORD, 'test-password', 'Require the owned test credential');
+  return { url, schema: match[2], username: env.OPSPILOT_CROSS_NODE_DB_USER, password: env.OPSPILOT_CROSS_NODE_DB_PASSWORD };
+}
+
 async function verify() {
   const baseline = process.env.OPSPILOT_ASSISTANT_CROSS_NODE_BASELINE === '1';
   if (baseline && process.env.CI) throw new Error('Baseline capture cannot replace cross-node assistant acceptance');
+  const mysql = mysqlSettings();
   const root = path.resolve(__dirname, '..');
   const jar = path.join(root, baseline ? 'target/cp75-before/opspilot-cp74.jar' : 'target/opspilot-0.1.0-SNAPSHOT.jar');
   assert.ok(fs.existsSync(jar), 'Build or preserve the scoped JAR first');
-  for (const port of [9965, 9966, 9967, 9968, 9970]) await requireFreePort(port);
-  const parent = path.join(root, 'target/assistant-cross-node-it'); fs.mkdirSync(parent, { recursive: true });
+  for (const port of [9965, 9966, 9967, 9968, ...(mysql ? [] : [9970])]) await requireFreePort(port);
+  const parent = path.join(root, mysql ? 'target/assistant-cross-node-mysql-it' : 'target/assistant-cross-node-it'); fs.mkdirSync(parent, { recursive: true });
   const evidence = fs.mkdtempSync(path.join(parent, 'run-'));
   const database = path.join(evidence, 'database'); fs.mkdirSync(database);
-  const dbUrl = 'jdbc:h2:file:' + path.join(database, 'opspilot').replaceAll('\\', '/')
+  const dbUrl = mysql ? mysql.url : 'jdbc:h2:file:' + path.join(database, 'opspilot').replaceAll('\\', '/')
     + ';MODE=MySQL;DATABASE_TO_LOWER=TRUE;WRITE_DELAY=0;AUTO_SERVER=TRUE;AUTO_SERVER_PORT=9970';
   const secret = randomBytes(32).toString('hex');
   const FIRST = '  双节点原生事实🙂\n', LAST = '下一步验证。  ';
   const controls = new Map(), children = [], descriptors = [], logs = [];
   const result = { status: 'RUNNING', baselineCapture: baseline,
-    fixture: 'two independent owned JVMs, shared H2 automatic mixed mode, real DashScope HTTP',
+    fixture: 'two independent owned JVMs, shared SQL, real DashScope HTTP',
+    databaseMode: mysql ? 'MYSQL_TESTCONTAINER' : 'H2_AUTO_SERVER',
+    ...(mysql ? { mysqlSchema: mysql.schema, databaseIdentityAndFinalSqlRequireOwningJUnitAudit: true } : {}),
     jarSha256: createHash('sha256').update(fs.readFileSync(jar)).digest('hex'),
-    applicationPorts: [9965, 9967], managementPorts: [9966, 9968], databaseServerPort: 9970,
+    applicationPorts: [9965, 9967], managementPorts: [9966, 9968], ...(mysql ? {} : { databaseServerPort: 9970 }),
     checkDelayMs: 100, executionBudgetSeconds: 20, tokensPersistedToEvidence: false,
     signingKeysPersistedToEvidence: false, userFileDatabaseModified: false, cases: [], startedPids: [], stoppedPids: [] };
   const completion = (content, finish_reason) => JSON.stringify({ request_id: randomUUID(), output: { choices: [
@@ -60,7 +79,9 @@ async function verify() {
     const providerUrl = 'http://127.0.0.1:' + provider.address().port;
     const child = spawn(java, ['-Duser.timezone=UTC', '-Dh2.bindAddress=127.0.0.1', '-jar', jar,
       '--server.address=127.0.0.1', '--server.port=' + port, '--management.server.address=127.0.0.1', '--management.server.port=' + management,
-      '--spring.datasource.url=' + dbUrl, '--spring.datasource.username=sa', '--spring.datasource.password=', '--spring.h2.console.enabled=false',
+      '--spring.datasource.url=' + dbUrl, '--spring.datasource.username=' + (mysql ? mysql.username : 'sa'),
+      '--spring.datasource.password=' + (mysql ? mysql.password : ''),
+      '--spring.datasource.driver-class-name=' + (mysql ? 'com.mysql.cj.jdbc.Driver' : 'org.h2.Driver'), '--spring.h2.console.enabled=false',
       '--opspilot.ai.enabled=true', '--spring.ai.dashscope.api-key=cp76-controlled-not-a-real-key',
       '--spring.ai.dashscope.base-url=' + providerUrl, '--spring.ai.dashscope.chat.base-url=' + providerUrl,
       '--opspilot.assistant.workers=1', '--opspilot.assistant.queue-capacity=1', '--opspilot.assistant.execution-timeout=20s',
@@ -132,7 +153,8 @@ async function verify() {
     assert.equal(saved.json.data.answerMessageId, done(original).messageId);
     const replay = await stream('B', completedId, token, completedKey, completed).pending;
     assert.equal(replay.replayed, true); assert.equal(done(replay).messageId, done(original).messageId); assert.equal(completed.calls, 1);
-    result.cases.push({ name: 'shared-sql-completed-replay', nodes: ['A', 'B'], originalAnswerIdPreserved: true, modelCalls: completed.calls });
+    result.cases.push({ name: 'shared-sql-completed-replay', sessionId: completedId, answerMessageId: done(original).messageId,
+      nodes: ['A', 'B'], originalAnswerIdPreserved: true, modelCalls: completed.calls });
 
     const id = await session(token), key = randomUUID(), held = control('cancel-held'), running = stream('A', id, token, key, held);
     await preview(held, running); assert.deepEqual(await counts('B', id, token), { user: 1, assistant: 0 });
@@ -155,7 +177,7 @@ async function verify() {
     const audits = await api('B', '/audit-logs?limit=500', token); assert.equal(audits.status, 200);
     const auditCount = audits.json.data.filter(a => a.action === 'ASSISTANT_REQUEST_CANCEL' && a.targetType === 'ASSISTANT_SESSION' && a.targetId === String(id)).length;
     assert.equal(auditCount, 1);
-    result.cases.push({ name: 'cancel-on-B-releases-A', duplicateStatus: duplicate.status, otherActorStatus: 404,
+    result.cases.push({ name: 'cancel-on-B-releases-A', sessionId: id, duplicateStatus: duplicate.status, otherActorStatus: 404,
       persistedStatusBothNodes: 'CANCELLED', cancelledAnswers: 0, cancellationAudits: auditCount,
       physicalHttpClosedBeforeProviderRelease: beforeReleaseClosed, sameWorkerReusedBeforeProviderRelease: beforeReleaseReused });
 
@@ -165,7 +187,7 @@ async function verify() {
       await clearing.pending; await until(() => cleared.closed); assert.equal(cleared.released, false);
       assert.ok(clearing.events.some(e => e.type === 'error')); assert.ok(!done(clearing)); assert.ok(!text(clearing).includes(LAST));
       assert.equal((await state('A', clearId, token, clearKey)).json.data.status, 'SUPERSEDED'); assert.deepEqual(await counts('B', clearId, token), { user: 0, assistant: 0 });
-      result.cases.push({ name: 'clear-on-B-fences-A', persistedStatus: 'SUPERSEDED', questionRows: 0, answerRows: 0, physicalHttpClosedBeforeProviderRelease: true }); release(cleared);
+      result.cases.push({ name: 'clear-on-B-fences-A', sessionId: clearId, persistedStatus: 'SUPERSEDED', questionRows: 0, answerRows: 0, physicalHttpClosedBeforeProviderRelease: true }); release(cleared);
 
       const revokeId = await session(token), revokeKey = randomUUID(), revoked = control('revoke-held'), revoking = stream('A', revokeId, token, revokeKey, revoked);
       await preview(revoked, revoking); const before = revoking.events.length;
@@ -177,7 +199,7 @@ async function verify() {
       assert.deepEqual(await counts('A', revokeId, token), { user: 1, assistant: 0 });
       const next = control('fresh-after-remote-revoke', true), nextStream = await stream('A', await session(token), token, randomUUID(), next).pending;
       assert.ok(done(nextStream)); assert.equal(revoked.released, false);
-      result.cases.push({ name: 'revoke-on-B-fences-A', persistedStatus: 'REVOKED', oldTokensRejectedBothNodes: true,
+      result.cases.push({ name: 'revoke-on-B-fences-A', sessionId: revokeId, persistedStatus: 'REVOKED', oldTokensRejectedBothNodes: true,
         noPostRevocationPayload: true, answerRows: 0, physicalHttpClosedBeforeProviderRelease: true, sameWorkerReusedBeforeProviderRelease: true }); release(revoked);
     }
     result.providerCalls = [...controls.values()].reduce((sum, c) => sum + c.calls, 0); assert.equal(result.providerCalls, baseline ? 3 : 6);
@@ -197,4 +219,5 @@ async function verify() {
     }
   }
 }
+module.exports = { mysqlSettings };
 if (require.main === module) verify().catch(error => { console.error(redact(error.message)); process.exitCode = 1; });

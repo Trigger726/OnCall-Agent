@@ -258,6 +258,46 @@ jobs:
             target/surefire-reports/
           retention-days: 30
 
+  assistant-cross-node-mysql-integration:
+    name: Two JVM native assistant on owned MySQL 8.4
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Reject unsafe database configuration, H2 fallback and incomplete two-node evidence
+        run: node --test scripts/tests/assistant-cross-node-mysql-config.test.cjs scripts/tests/assistant-cross-node-mysql.test.cjs
+      - name: Build the real production JAR
+        run: |
+          chmod +x mvnw
+          ./mvnw -B -DskipTests package
+      - name: Run the original four native HTTP scenarios on two independent JVMs and owned MySQL
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p target/assistant-cross-node-mysql-it
+          ./mvnw -B -Duser.timezone=UTC \
+            -Dopspilot.assistant.cross-node.mysql.enabled=true \
+            -Dtest=AssistantCrossNodeMySqlIntegrationTest \
+            test 2>&1 | tee target/assistant-cross-node-mysql-it/maven.log
+      - name: Verify actual JDBC, final SQL, both node logs and no conditional skips
+        run: node scripts/verify-assistant-cross-node-mysql.cjs target/assistant-cross-node-mysql-it/maven.log target/surefire-reports target/assistant-cross-node-mysql-it/gate-result.json
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: assistant-cross-node-mysql-evidence
+          path: |
+            target/assistant-cross-node-mysql-it/
+            target/surefire-reports/
+          retention-days: 30
+
   alertmanager-integration:
     name: Alertmanager webhook integration
     runs-on: ubuntu-latest
@@ -316,7 +356,7 @@ jobs:
 
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, browser-integration, backend-h2, mysql-integration, assistant-native-mysql-integration, auth-session-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration, collector-alerting-integration]
+    needs: [frontend, browser-integration, backend-h2, mysql-integration, assistant-native-mysql-integration, assistant-cross-node-mysql-integration, auth-session-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration, collector-alerting-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

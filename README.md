@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-82补响应头/取消前后栈与稳定采样：[报告](docs/acceptance/V1.7-checkpoint-82.md)/[证据](docs/assets/v1.7-cp82/local-proof.json)。同包Linux首个反例保留；原16次内同writer跨500ms采样、六响应门禁/五边界单测，最终67项和Linux/Windows完整五项通过。两个实际503/模型0、旧TCP不读时自然回池/新原生答案已实测；生产源码/握手参数/业务上限与历史Demo不改。仅本地限定通过，自身新提交远端待验，不以此覆盖81首次失败或宣称唯一根因。
+最新83：[报告](docs/acceptance/V1.7-checkpoint-83.md)/[本地证据](docs/assets/v1.7-cp83/local-proof.json)。复用原双JVM四场景，补专属MySQL容器、实际JDBC/最终SQL/双JVM日志与池关闭/零条件跳过门禁，CI增为十七作业。本地85单测、同包H2四项与63原生回归通过；新MySQL项本地条件跳过1，不算MySQL通过，自己的源CI待验。按最小改动原则不改生产Java/Vue/原44e包，旧Demo和首个门禁失败保留，没有新页面效果宣称。
+
+82自身a502698/[Run37150940483](https://github.com/Trigger726/OnCall-Agent/actions/runs/37150940483)十六success，原五慢消费者/两503 JSON/模型0、未读旧TCP时自然回池59805ms/新原生答案60065ms已验证。五ZIP独立核验/CLI重放：MySQL原生18/原99/五池、H2原生63及十三/八/六浏览器机器结果通过，见[82第六节](docs/acceptance/V1.7-checkpoint-82.md)/[远端证据](docs/assets/v1.7-cp82/remote-proof.json)。不覆盖80/81首次失败、不认定唯一根因或由单JVM推导双JVM MySQL；以下历史‘待验’对应当时。
 
 81自身 d1600ad/[Run37148364622](https://github.com/Trigger726/OnCall-Agent/actions/runs/37148364622)已核验：十四success、认证failure、容器skipped。原四项慢消费者和同快照双writer通过，第五项拒绝探针实际调用模型、旧JSON读取超时，原失败保留；不称全绿或唯一根因已解决。MySQL原生18、原99/H2原生63及十三/八/六界面机器结果独立核验通过，见[81第六节](docs/acceptance/V1.7-checkpoint-81.md)/[五ZIP证据](docs/assets/v1.7-cp81/first-remote-proof.json)。仅测试/CI变化，原五项/预算/TCP不变，56门禁与Windows本地五项通过不能覆盖Linux失败；历史Demo、80与81首次失败和以下历史“待验”均保留。
 

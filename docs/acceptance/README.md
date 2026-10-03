@@ -1,6 +1,8 @@
 # OpsPilot 验收记录
 
-最新82：[报告](V1.7-checkpoint-82.md)/[证据](../assets/v1.7-cp82/local-proof.json)。补实际响应头和取消前后栈，在原16次采样内要求同writer跨500ms，六响应门禁/五边界单测加入后最终67项通过；同包Linux首个反例保留，最终Linux与Windows完整五项通过，实际503/模型0/自然回池和新原生答案保留。仅本地限定通过，自身新提交远端待验，不覆盖81失败、不认定其唯一根因；生产Java/Vue/TCP参数与旧Demo不改，Windows无池关闭行单列。
+最新83：[报告](V1.7-checkpoint-83.md)/[本地证据](../assets/v1.7-cp83/local-proof.json)。复用原双JVM四场景，补专属MySQL容器、实际JDBC/最终SQL/双JVM日志与池关闭/零条件跳过门禁，CI增为十七作业。本地85单测、同包H2四项与63原生回归通过；新MySQL项本地条件跳过1，不算MySQL通过，自己的源CI待验。按最小改动原则不改生产Java/Vue/原44e包，旧Demo和首个门禁失败保留，没有新页面效果宣称。
+
+82自身a502698/[Run37150940483](https://github.com/Trigger726/OnCall-Agent/actions/runs/37150940483)十六success，原五慢消费者/两503 JSON/模型0、未读旧TCP时自然回池59805ms/新原生答案60065ms已验证。五ZIP独立核验/CLI重放：MySQL原生18/原99/五池、H2原生63及十三/八/六浏览器机器结果通过，见[82第六节](V1.7-checkpoint-82.md)/[远端证据](../assets/v1.7-cp82/remote-proof.json)。不覆盖80/81首次失败、不认定唯一根因或由单JVM推导双JVM MySQL；以下历史‘待验’对应当时。
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 

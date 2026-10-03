@@ -1,0 +1,241 @@
+{
+  "status": "LOCAL_H2_AND_GATE_LIMITED_PASS_TWO_NODE_MYSQL_SOURCE_REMOTE_PENDING",
+  "baseCommit": "a5026981aa79f15f4a7756154bbc4a77b5add459",
+  "sources": [
+    {
+      "file": "scripts/verify-assistant-cross-node-ci.cjs",
+      "workingCopySha256": "28948e7fc6bb176fd729bee993e0b6ea1a617b19f7d30bfd807070ad267cd17b"
+    },
+    {
+      "file": "scripts/verify-assistant-cross-node-mysql.cjs",
+      "workingCopySha256": "6561d0a900f68a129ba442d553b204b6196762f6fa4c0b6cab318186745beb26"
+    },
+    {
+      "file": "scripts/tests/assistant-cross-node-mysql-config.test.cjs",
+      "workingCopySha256": "341409fe08aa34857633c362bba23716caf9fe932e4534efbf884108083774b0"
+    },
+    {
+      "file": "scripts/tests/assistant-cross-node-mysql.test.cjs",
+      "workingCopySha256": "a03d2bdc11c03d714a80f6c50f5d1a5bc3ef8e187f34be960c2afb2ae69fac61"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/assistant/AssistantCrossNodeMySqlIntegrationTest.java",
+      "workingCopySha256": "e7327ac576de762683f636a4c51e046958f43334fa7131a86ccf20e900bbb1bf"
+    },
+    {
+      "file": ".github/workflows/ci.yml",
+      "workingCopySha256": "e7f27a1ee524b7162ca2cf55c1ae69bb442b2bbd6cf244551b8bf834635b5ca4"
+    }
+  ],
+  "historical": {
+    "scriptFile": "target/cp83-before/cross-node-original.cjs",
+    "scriptSha256": "0ec9631162a240c5982a559d9a3679f240254f5b218dac790e1653c50848c490",
+    "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5"
+  },
+  "h2": {
+    "result": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "fixture": "two independent owned JVMs, shared SQL, real DashScope HTTP",
+      "databaseMode": "H2_AUTO_SERVER",
+      "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+      "applicationPorts": [
+        9965,
+        9967
+      ],
+      "managementPorts": [
+        9966,
+        9968
+      ],
+      "databaseServerPort": 9970,
+      "checkDelayMs": 100,
+      "executionBudgetSeconds": 20,
+      "tokensPersistedToEvidence": false,
+      "signingKeysPersistedToEvidence": false,
+      "userFileDatabaseModified": false,
+      "cases": [
+        {
+          "name": "shared-sql-completed-replay",
+          "sessionId": 1,
+          "answerMessageId": 2,
+          "nodes": [
+            "A",
+            "B"
+          ],
+          "originalAnswerIdPreserved": true,
+          "modelCalls": 1
+        },
+        {
+          "name": "cancel-on-B-releases-A",
+          "sessionId": 2,
+          "duplicateStatus": 409,
+          "otherActorStatus": 404,
+          "persistedStatusBothNodes": "CANCELLED",
+          "cancelledAnswers": 0,
+          "cancellationAudits": 1,
+          "physicalHttpClosedBeforeProviderRelease": true,
+          "sameWorkerReusedBeforeProviderRelease": true
+        },
+        {
+          "name": "clear-on-B-fences-A",
+          "sessionId": 4,
+          "persistedStatus": "SUPERSEDED",
+          "questionRows": 0,
+          "answerRows": 0,
+          "physicalHttpClosedBeforeProviderRelease": true
+        },
+        {
+          "name": "revoke-on-B-fences-A",
+          "sessionId": 5,
+          "persistedStatus": "REVOKED",
+          "oldTokensRejectedBothNodes": true,
+          "noPostRevocationPayload": true,
+          "answerRows": 0,
+          "physicalHttpClosedBeforeProviderRelease": true,
+          "sameWorkerReusedBeforeProviderRelease": true
+        }
+      ],
+      "startedPids": [
+        106848,
+        106324
+      ],
+      "stoppedPids": [
+        106324,
+        106848
+      ],
+      "providerCalls": 6,
+      "ownedProcessesStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "resultFile": "target/assistant-cross-node-it/run-GfRa68/result.json",
+    "resultSha256": "0fff059895cd34972d209bd4952b1d2a6a136296c8bfff24b7aff397fb5f767a",
+    "logs": [
+      {
+        "file": "target/assistant-cross-node-it/run-GfRa68/jar-1.log",
+        "sha256": "26c09bf754cd1a9858d35520e152d710c7199b7d8e002f0abab3af2dc3c131a3",
+        "unexpectedErrors": [],
+        "poolShutdown": false
+      },
+      {
+        "file": "target/assistant-cross-node-it/run-GfRa68/jar-2.log",
+        "sha256": "b516e59975976afd6e7187534dc138b5bf8cd3a3dc6c5bd4ecc2a85dc6b1220d",
+        "unexpectedErrors": [],
+        "poolShutdown": false
+      }
+    ],
+    "ownedPidsIndependentlyAbsent": true,
+    "ports9965Through9968And9970Free": true
+  },
+  "regression": {
+    "reports": [
+      {
+        "file": "target/cp83-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantAiStreamingTest.xml",
+        "sha256": "81798b28e33f6c67f1b9327aeea6203c00cf97e2f2a245a0a9be229cf643273b",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "target/cp83-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest.xml",
+        "sha256": "19c8da3712542b98f38430c659e259c9b1c24d119b2bc0fad5d58129b4053bea",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1
+      },
+      {
+        "file": "target/cp83-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest.xml",
+        "sha256": "153c46d3aaf23e58979931086c753daca7f3e20af34e01a9d91cf310f75d9224",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "target/cp83-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeHttpClientTest.xml",
+        "sha256": "051e92ac870ff8205683a8a13ea7613c616ff19760b07a84660c553d31e85bb0",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "target/cp83-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest.xml",
+        "sha256": "4753930292ccec0e97693e90efbc782c23bafa47b384dc9896381e5f17e92cb2",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "target/cp83-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeTransportTest.xml",
+        "sha256": "359363cec0138a41806fe71836d713cc8b6be94b96916f53b59942699cdcd596",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "target/cp83-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantStreamReaderTest.xml",
+        "sha256": "28705acd71aca9e5613f91e91a4ccdabc68e34bb35aa07a246489ef4f57f6fed",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "target/cp83-native-regression/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantStreamTransportTest.xml",
+        "sha256": "f6e24e8354cbcf0586f94f3115b97f91e13e30e60fd113cf9d9e1879dba13be5",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "discovered": 64,
+    "executed": 63,
+    "conditionalSkip": 1,
+    "unexpectedFailures": 0,
+    "fullMavenFile": "target/cp83-native-regression/maven.log",
+    "sha256": "7f5ce1dd30d84b0876f164cb569a9ac8dab8d95f84898fc69c2d1f2ab2f669e8",
+    "expectedControlledProviderErrorLines": [
+      "20:40:15.079 [boundedElastic-1] ERROR org.springframework.ai.chat.model.MessageAggregator -- Aggregation Error",
+      "20:40:15.091 [boundedElastic-1] ERROR org.springframework.ai.chat.model.MessageAggregator -- Aggregation Error"
+    ],
+    "actualConditionalSkippedXmlRejectedByMySqlGate": true
+  },
+  "gates": {
+    "file": "target/cp83-node-gates/node.log",
+    "sha256": "6eff396ccee1fe28bbf344d3c94ea5d6077ae5396f203dde7544a0d22b9caed7",
+    "tests": 85,
+    "passed": 85,
+    "failed": 0,
+    "skipped": 0
+  },
+  "preservedNegative": {
+    "file": "target/cp83-before/gate-first-failure.log",
+    "sha256": "0d7c2efe1fdd31128fd25fa61b9df0f46ce7470df08ead4903ad80b7e6155e91",
+    "tests": 18,
+    "passed": 17,
+    "failed": 1,
+    "firstGateSourceSha256": "bcda391d00dd1a831b20062f87230e2f38568d0309ad323106046a477f81a940"
+  },
+  "jar": {
+    "file": "target/opspilot-0.1.0-SNAPSHOT.jar",
+    "sha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5"
+  },
+  "boundaries": {
+    "twoNodeMySqlNotExecutedLocally": true,
+    "noGlobalDockerOrRuntimeInstallation": true,
+    "syntheticGatesAreNotProductMySqlProof": true,
+    "originalFourHttpCasesBudgetsAndWorkerLimitsUnchanged": true,
+    "productionJavaVueAndOldJarUnchanged": true,
+    "newCiSeventeenthGateNotExecutedYet": true,
+    "crossMachineDatabaseHaTlsProxyAndProductionCapacityNotClaimed": true,
+    "crossNodeQueuedCancellationMatrixStillPending": true,
+    "windowsH2LogExitNotGracefulPoolProof": true,
+    "oldDemosAndFailureEvidencePreserved": true
+  }
+}
