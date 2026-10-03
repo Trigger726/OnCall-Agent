@@ -2,7 +2,6 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
-const net = require('node:net');
 const { StringDecoder } = require('node:string_decoder');
 const { spawn, execFileSync } = require('node:child_process');
 const { randomUUID, createHash } = require('node:crypto');
@@ -23,6 +22,11 @@ async function verify() {
     modelWorkers: 1, modelQueueCapacity: 1, outputWriters: 2, outputQueueCapacity: 1,
     maximumCharactersBeforeRelease: 99907, maximumNativeFramesBeforeRelease: 9991,
     tokensPersistedToEvidence: false, userFileDatabaseModified: false, cases: [], startedPids: [], stoppedPids: [] };
+  const executable = name => process.env.JAVA_HOME ? path.join(process.env.JAVA_HOME, 'bin', name + (process.platform === 'win32' ? '.exe' : '')) : name;
+  const fixtureClasses = path.join(evidence, 'tcp-client-classes'); fs.mkdirSync(fixtureClasses);
+  // Compile before opening the provider or starting any owned process, so a missing JDK cannot leak a listener.
+  execFileSync(executable('javac'), ['--release', '17', '-d', fixtureClasses,
+    path.join(root, 'scripts/fixtures/AssistantSlowTcpClient.java')], { timeout: 15000, windowsHide: true });
   const frame = (content, finish_reason = 'null') => 'data:' + JSON.stringify({ request_id: randomUUID(), output: {
     choices: [{ finish_reason, message: { role: 'assistant', content } }] }, usage: { input_tokens: 1, output_tokens: 1, total_tokens: 2 } }) + '\n\n';
   function release(c) {
@@ -45,7 +49,6 @@ async function verify() {
     });
   });
   await new Promise((resolve, reject) => { provider.once('error', reject); provider.listen(0, '127.0.0.1', resolve); });
-  const executable = name => process.env.JAVA_HOME ? path.join(process.env.JAVA_HOME, 'bin', name + (process.platform === 'win32' ? '.exe' : '')) : name;
   let child;
   const interrupt = () => { sockets.forEach(s => s.socket.destroy()); if (child?.exitCode === null && child.signalCode === null) child.kill('SIGTERM'); };
   process.once('SIGINT', interrupt); process.once('SIGTERM', interrupt);
@@ -104,15 +107,32 @@ async function verify() {
     // Do not misattribute a previous client's blocked thread to the newly paused socket.
     const previous = new Set(sections(threads()).filter(outputBlocked).map(section => section.match(/^"([^"]+)"/)[1]));
     const id = await session(token), key = randomUUID(), c = control(name), body = JSON.stringify({ content: c.question });
-    const socket = net.createConnection({ host: '127.0.0.1', port: 9971 });
-    const s = { socket, id, key, c, paused: false, closed: false, raw: '', decoder: new StringDecoder('utf8') }; sockets.push(s);
-    socket.on('error', () => {}); socket.once('close', () => { s.closed = true; });
-    await new Promise(resolve => socket.once('connect', resolve));
-    socket.on('data', chunk => { s.raw += s.decoder.write(chunk); if (s.raw.includes('event:token')) { socket.pause(); s.paused = true; } });
-    socket.write('POST /api/v1/assistant/sessions/' + id + '/stream HTTP/1.1\r\nHost: 127.0.0.1:9971\r\nAuthorization: Bearer ' + token
+    const client = spawn(executable('java'), ['-cp', fixtureClasses, 'AssistantSlowTcpClient'], { stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true });
+    const s = { client, id, key, c, paused: false, closed: false, raw: '', decoder: new StringDecoder('utf8'), stderr: '' };
+    s.socket = { destroy: () => client.kill('SIGTERM'), resume: () => client.stdin.write('RESUME\n') }; sockets.push(s);
+    let lines = '';
+    client.stdout.on('data', chunk => {
+      lines += chunk.toString('utf8');
+      for (let newline; (newline = lines.indexOf('\n')) !== -1;) {
+        const line = lines.slice(0, newline).replace(/\r$/, ''); lines = lines.slice(newline + 1);
+        if (line.startsWith('BUFFER ')) s.receiveBufferBytes = Number(line.slice(7));
+        else if (line.startsWith('PAUSED ')) { s.raw += s.decoder.write(Buffer.from(line.slice(7), 'base64')); s.paused = true; }
+        else if (line.startsWith('DRAINED ')) { s.raw += s.decoder.write(Buffer.from(line.slice(8), 'base64')); s.drained = true; }
+        else s.protocolError = 'Unexpected TCP fixture output';
+      }
+    });
+    client.stderr.on('data', chunk => { s.stderr += redact(chunk.toString('utf8')); });
+    client.stdin.on('error', error => { s.protocolError = 'TCP fixture input closed: ' + error.code; });
+    client.once('error', error => { s.launchError = error.message; });
+    client.once('close', code => { s.exitCode = code; s.closed = true; });
+    const request = 'POST /api/v1/assistant/sessions/' + id + '/stream HTTP/1.1\r\nHost: 127.0.0.1:9971\r\nAuthorization: Bearer ' + token
       + '\r\nIdempotency-Key: ' + key + '\r\nAccept: text/event-stream, application/json\r\nContent-Type: application/json\r\nContent-Length: '
-      + Buffer.byteLength(body) + '\r\nConnection: close\r\n\r\n' + body);
-    await until(() => s.paused && c.entered); assert.equal(c.native, true); assert.equal(c.incremental, true);
+      + Buffer.byteLength(body) + '\r\nConnection: close\r\n\r\n' + body;
+    client.stdin.write(Buffer.from(request).toString('base64') + '\n');
+    await until(() => s.paused && c.entered);
+    assert.ok(s.receiveBufferBytes > 0 && s.receiveBufferBytes <= 16384, 'An actually constrained client receive window is required');
+    assert.equal(s.protocolError, undefined); assert.equal(c.native, true); assert.equal(c.incremental, true);
+    result.tcpClients ??= []; result.tcpClients.push({ case: name, pid: client.pid, receiveBufferBytes: s.receiveBufferBytes, receiveBufferSetBeforeConnect: true });
     const block = frame('\u0001'.repeat(9) + 'X'); let sent = 0;
     while (sent < 9990 && !c.closed) {
       const writable = c.response.write(block); sent++;
@@ -150,8 +170,9 @@ async function verify() {
     assert.equal(audit.json.data.filter(a => a.action === 'ASSISTANT_REQUEST_CANCEL' && a.targetId === String(s.id)).length, 1);
   }
   async function drain(s) {
-    s.socket.removeAllListeners('data'); s.socket.on('data', chunk => { s.raw += s.decoder.write(chunk); }); s.paused = false; s.socket.resume();
-    await until(() => s.closed); assert.ok(!s.raw.includes('event:done'));
+    s.paused = false; s.socket.resume();
+    await until(() => s.closed, 12000); assert.equal(s.exitCode, 0, s.stderr); assert.equal(s.drained, true);
+    assert.equal(s.protocolError, undefined); assert.ok(!s.raw.includes('event:done'));
   }
   try {
     await start(45); let token = await login();
@@ -202,7 +223,10 @@ async function verify() {
     result.status = 'PASS';
   } catch (e) { result.status = 'FAIL'; result.failure = redact(e.stack); throw e; }
   finally {
-    process.off('SIGINT', interrupt); process.off('SIGTERM', interrupt); sockets.forEach(s => s.socket.destroy()); controls.forEach(release);
+    process.off('SIGINT', interrupt); process.off('SIGTERM', interrupt); controls.forEach(release);
+    for (const s of sockets) await stopProcess(s.client);
+    result.ownedTcpClientsStopped = sockets.every(s => s.client.exitCode !== null || s.client.signalCode !== null);
+    result.providerFrames = [...controls.values()].map(c => ({ question: c.question, calls: c.calls, framesWritten: c.framesWritten, charactersWritten: c.charactersWritten }));
     await stop(); result.ownedProcessesStopped = true; provider.closeAllConnections(); await new Promise(resolve => provider.close(resolve)); result.ownedProviderStopped = true;
     descriptors.forEach(fd => fs.closeSync(fd)); result.unexpectedJarErrors = 0;
     for (const file of logs) { const text = redact(fs.readFileSync(file, 'utf8')); fs.writeFileSync(file, text); result.unexpectedJarErrors += unexpectedLogLines(text); }

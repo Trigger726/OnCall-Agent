@@ -1,0 +1,142 @@
+{
+  "status": "FAIL",
+  "baselineCapture": false,
+  "url": "http://127.0.0.1:9955/assistant",
+  "browserReason": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "flow": "send -> native preview before model completion -> committed answer or explicit terminal",
+  "fixture": "controlled real HTTP DashScope provider; not model quality or production capacity",
+  "jarSha256": "2edc4b414ada8e5ee13b1baf24ada61d1bcc39419c73d9d609b3e89620e0674b",
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "cases": [
+    {
+      "name": "preview-before-final-commit",
+      "native": true,
+      "incremental": true,
+      "previewVisibleBeforeProviderRelease": true,
+      "databaseAnswersBeforeRelease": 0,
+      "finalAnswers": 1,
+      "modelCalls": 1
+    },
+    {
+      "name": "explicit-cancel-after-preview",
+      "status": "CANCELLED",
+      "cancelledAnswers": 0,
+      "originalKeyUsed": true,
+      "workerReusedBeforeOldProviderRelease": true,
+      "nativeHttpConnectionClosedBeforeProviderRelease": true
+    },
+    {
+      "name": "truncated-preview",
+      "status": "FAILED",
+      "partialAnswersCommitted": 0,
+      "modelCalls": 1
+    },
+    {
+      "name": "idle-after-preview",
+      "status": "TIMED_OUT",
+      "executionBudgetSeconds": 12,
+      "partialAnswersCommitted": 0,
+      "nativeHttpConnectionClosedBeforeProviderRelease": true
+    },
+    {
+      "name": "disconnect-after-preview-manual-query",
+      "status": "COMPLETED",
+      "originalAnswerIdPreserved": true,
+      "streamPosts": 1,
+      "modelCalls": 1
+    }
+  ],
+  "screenshots": [
+    "native-preview-desktop.png",
+    "native-preview-mobile.png",
+    "native-completed-mobile.png",
+    "native-cancelled-mobile.png",
+    "native-failed-mobile.png",
+    "native-timeout-mobile.png",
+    "native-recovered-desktop.png",
+    "output-saturated-desktop.png",
+    "output-saturated-mobile.png"
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 503 ()"
+  ],
+  "consoleErrorDetails": [
+    {
+      "text": "Failed to load resource: the server responded with a status of 503 ()",
+      "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/stream"
+    }
+  ],
+  "startedPid": 4744,
+  "failure": "apiRequestContext.post: Timeout 20000ms exceeded.\nCall log:\n  - → POST http://127.0.0.1:9955/api/v1/assistant/sessions/7/stream\n    - user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36\n    - accept: text/event-stream, application/json\n    - accept-encoding: gzip,deflate,br\n    - Authorization: Bearer [REDACTED]\n    - Idempotency-Key: a46f918d-50ff-4dd5-9768-8d6b8bc3ed00\n    - content-type: application/json\n    - content-length: 69\n  - ← 200\n    - x-content-type-options: nosniff\n    - x-xss-protection: 0\n    - cache-control: no-cache, no-store, max-age=0, must-revalidate\n    - pragma: no-cache\n    - expires: 0\n    - x-frame-options: SAMEORIGIN\n    - vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers\n    - content-type: text/event-stream;charset=UTF-8\n    - transfer-encoding: chunked\n    - date: Sat, 03 Oct 2026 16:42:36 GMT\n    - keep-alive: timeout=60\n    - connection: keep-alive\n",
+  "failureStack": "apiRequestContext.post: Timeout 20000ms exceeded.\nCall log:\n  - → POST http://127.0.0.1:9955/api/v1/assistant/sessions/7/stream\n    - user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36\n    - accept: text/event-stream, application/json\n    - accept-encoding: gzip,deflate,br\n    - Authorization: Bearer [REDACTED]\n    - Idempotency-Key: a46f918d-50ff-4dd5-9768-8d6b8bc3ed00\n    - content-type: application/json\n    - content-length: 69\n  - ← 200\n    - x-content-type-options: nosniff\n    - x-xss-protection: 0\n    - cache-control: no-cache, no-store, max-age=0, must-revalidate\n    - pragma: no-cache\n    - expires: 0\n    - x-frame-options: SAMEORIGIN\n    - vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers\n    - content-type: text/event-stream;charset=UTF-8\n    - transfer-encoding: chunked\n    - date: Sat, 03 Oct 2026 16:42:36 GMT\n    - keep-alive: timeout=60\n    - connection: keep-alive\n\n    at hold (/home/runner/work/OnCall-Agent/OnCall-Agent/scripts/verify-assistant-native-ui-ci.cjs:198:62)\n    at verify (/home/runner/work/OnCall-Agent/OnCall-Agent/scripts/verify-assistant-native-ui-ci.cjs:201:21)",
+  "providerRequests": [
+    {
+      "question": "cp75-first-preview-3b356f4f-a590-40f5-be9b-c9dcd85f82fd",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp75-cancel-preview-0e9c18b4-2456-4ecd-8d8c-65d43775fbef",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp75-fresh-before-old-release-b519854b-e331-4728-91a1-3d89df673afe",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp75-truncated-preview-89a41010-0b17-42ae-adb4-17c26e0d5a79",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp75-idle-timeout-389dfb87-b722-4ca5-b439-e1edcbe49c12",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp75-disconnect-preview-2e35a076-b7b0-4dd3-bab0-e43d0e0e1599",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp77-output-held-85001a55-722e-4a2c-8a24-9ddca2672429",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp77-output-queued-35eca36e-019a-44bf-9f1d-6ed1134ae41a",
+      "calls": 0
+    },
+    {
+      "question": "cp77-output-rejected-43881f5c-9ae8-4b5a-a594-88fcee6053f9",
+      "calls": 0
+    }
+  ],
+  "streamPosts": 7,
+  "explicitCancelPosts": 1,
+  "ownedProcessStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}

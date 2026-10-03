@@ -17,7 +17,7 @@ async function verify() {
   const evidence = fs.mkdtempSync(path.join(parent, 'run-'));
   const { chromium } = require(process.env.OPSPILOT_PLAYWRIGHT_MODULE || path.join(root, 'scripts/browser/node_modules/playwright'));
   const base = 'http://127.0.0.1:9955', FIRST = '  已知事实：受控原生片段🙂\n', LAST = '下一步：核对指标与变更。  ';
-  const controls = new Map(), posts = [], cancellations = [];
+  const controls = new Map(), posts = [], cancellations = [], heldStreams = [];
   const result = { status: 'RUNNING', baselineCapture: baseline, url: base + '/assistant',
     browserReason: 'Browser plugin not available; existing Playwright', viewports: ['1440x1000', '390x844'],
     flow: 'send -> native preview before model completion -> committed answer or explicit terminal',
@@ -195,8 +195,20 @@ async function verify() {
       const heldId1 = (await api('/assistant/sessions', 'POST', {})).session.id;
       const heldId2 = (await api('/assistant/sessions', 'POST', {})).session.id;
       const heldKey1 = randomUUID(), heldKey2 = randomUUID();
-      const hold = (sessionId, key, item) => context.request.post(base + '/api/v1/assistant/sessions/' + sessionId + '/stream', {
-        headers: { Authorization: 'Bearer ' + token, 'Idempotency-Key': key, Accept: 'text/event-stream, application/json' }, data: { content: item.question }, timeout: 20000 });
+      const hold = async (sessionId, key, item) => {
+        const held = { sessionId, responseStatus: null, body: '', ended: false }; heldStreams.push(held);
+        const response = await fetch(base + '/api/v1/assistant/sessions/' + sessionId + '/stream', {
+          method: 'POST', headers: { Authorization: 'Bearer ' + token, 'Idempotency-Key': key,
+            Accept: 'text/event-stream, application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: item.question }), signal: AbortSignal.timeout(20000) });
+        held.responseStatus = response.status;
+        const decoder = new TextDecoder();
+        for await (const chunk of response.body) {
+          held.body += decoder.decode(chunk, { stream: true });
+          assert.ok(held.body.length < 32768, 'Capacity fixture must not produce an unbounded body');
+        }
+        held.body += decoder.decode(); held.ended = true; return held;
+      };
       const hold1 = hold(heldId1, heldKey1, held1); hold1.catch(() => {}); await until(() => held1.entered);
       const hold2 = hold(heldId2, heldKey2, held2); hold2.catch(() => {});
       await until(async () => {
@@ -225,7 +237,11 @@ async function verify() {
       await snapshot('output-saturated-desktop'); await page.setViewportSize({ width: 390, height: 844 }); await snapshot('output-saturated-mobile');
       await api('/assistant/sessions/' + heldId2 + '/request/cancel', 'POST', undefined, heldKey2);
       await api('/assistant/sessions/' + heldId1 + '/request/cancel', 'POST', undefined, heldKey1);
-      assert.equal((await hold1).status(), 200); assert.equal((await hold2).status(), 200); await until(() => held1.transportClosed === true);
+      for (const held of [await hold1, await hold2]) {
+        assert.equal(held.responseStatus, 200); assert.equal(held.ended, true);
+        assert.ok(held.body.includes('event:cancelled')); assert.ok(!held.body.includes('event:done'));
+      }
+      await until(() => held1.transportClosed === true);
       assert.equal(held2.calls, 0); assert.equal(held1.gated, true); finish(held1); finish(held2);
       const missingResponse = page.waitForResponse(response => response.url() === base + '/api/v1/assistant/sessions/' + rejectedId + '/request'
         && response.request().method() === 'GET');
@@ -257,6 +273,8 @@ async function verify() {
     result.status = baseline ? 'BASELINE_CAPTURED' : 'PASS';
   } catch (error) { result.status = 'FAIL'; result.failure = redact(error.message); result.failureStack = redact(error.stack ?? ''); throw error; }
   finally {
+    result.fixtureHeldStreams = heldStreams.map(({ sessionId, responseStatus, body, ended }) => ({ sessionId, responseStatus, ended,
+      cancelledEvent: body.includes('event:cancelled'), doneEvent: body.includes('event:done'), observedBytes: Buffer.byteLength(body) }));
     result.providerRequests = [...controls.values()].map(({ question, calls, native, incremental, transportClosed }) => ({ question, calls, native, incremental, transportClosed }));
     result.streamPosts = posts.length; result.explicitCancelPosts = cancellations.length;
     process.off('SIGINT', interrupt); process.off('SIGTERM', interrupt); controls.forEach(finish);

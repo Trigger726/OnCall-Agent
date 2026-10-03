@@ -1,0 +1,196 @@
+{
+  "status": "SOURCE_COMMIT_REMOTE_FAILED_NOT_ACCEPTED",
+  "run": {
+    "id": 37137614558,
+    "headSha": "79d4a8bcc340bb968720ba604c069d8517f6d8a4",
+    "status": "completed",
+    "conclusion": "failure",
+    "url": "https://github.com/Trigger726/OnCall-Agent/actions/runs/37137614558"
+  },
+  "jobs": [
+    {
+      "id": 111245235137,
+      "name": "Redis Streams relay integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111245235223,
+      "name": "Alertmanager webhook integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111245235226,
+      "name": "MySQL 8.4 integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111245235231,
+      "name": "Follow-up notification delivery integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111245235241,
+      "name": "Prometheus rule to Alertmanager integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111245235242,
+      "name": "Backend tests and JAR (H2)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111245235254,
+      "name": "Native SLO rules and Alertmanager lifecycle",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111245235266,
+      "name": "Frontend build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111245235272,
+      "name": "Two JVM Agent SSE integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111245235297,
+      "name": "OpsPilot service metric to Incident integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111245235311,
+      "name": "Persistent auth session revocation and JVM restart",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 111245235319,
+      "name": "Collector native alert to Incident lifecycle",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111245235326,
+      "name": "On-call real browser integration",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 111245235327,
+      "name": "OpenTelemetry Collector and Tempo integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111246705144,
+      "name": "Container image build and smoke test",
+      "status": "completed",
+      "conclusion": "skipped"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11279555902,
+      "name": "mysql-compatibility-evidence",
+      "bytes": 61262,
+      "officialDigest": "sha256:8e19a25a2e82d0b659a21230c344cdd2e72266b036f3d51f3989484730200462",
+      "sourceHeadSha": "79d4a8bcc340bb968720ba604c069d8517f6d8a4",
+      "downloadDigestVerified": true
+    },
+    {
+      "id": 11279226345,
+      "name": "auth-session-evidence",
+      "bytes": 44865,
+      "officialDigest": "sha256:2cf7cad2feb1a74a6a8e4382ba52a9d10c031c02a48a1e1949e0881fe795177a",
+      "sourceHeadSha": "79d4a8bcc340bb968720ba604c069d8517f6d8a4",
+      "downloadDigestVerified": true
+    },
+    {
+      "id": 11279166744,
+      "name": "assistant-native-contract-evidence",
+      "bytes": 48787,
+      "officialDigest": "sha256:527a261b2d1927fe079243a6320929786bcb3bdfad9a4d283db0886f20a4f8a7",
+      "sourceHeadSha": "79d4a8bcc340bb968720ba604c069d8517f6d8a4",
+      "downloadDigestVerified": true
+    },
+    {
+      "id": 11279026946,
+      "name": "oncall-browser-evidence",
+      "bytes": 7206918,
+      "officialDigest": "sha256:990ae8e52a1ac1d4a4eae50c69bbba1832301c58ebc029a44f873f2eeacac0ce",
+      "sourceHeadSha": "79d4a8bcc340bb968720ba604c069d8517f6d8a4",
+      "downloadDigestVerified": true
+    }
+  ],
+  "failures": [
+    {
+      "job": "Persistent auth session revocation and JVM restart",
+      "runner": "run-GsWDEL",
+      "reason": "Actual blocked OUTPUT thread missing; Linux final dump shows output waiting in pending.poll and model worker in reader.poll. No slow-consumer business case accepted.",
+      "result": "first-remote-failure/slow-result.json",
+      "threads": "first-remote-failure/slow-threads.txt",
+      "productionLogUnexpectedErrors": 0
+    },
+    {
+      "job": "On-call real browser integration",
+      "runner": "run-KUo2Jf",
+      "reason": "Playwright APIRequestContext buffered queued fixture stream exceeded unchanged 20000ms; first five native UI cases and 503 screen observed. No sixth-case acceptance.",
+      "result": "first-remote-failure/native-ui-result.json",
+      "productionLogUnexpectedErrors": 0,
+      "rootCauseFullyProven": false
+    }
+  ],
+  "verifiedNarrowPasses": {
+    "native": {
+      "xmlClasses": 7,
+      "executed": 62,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    "backendJobLog": {
+      "UTC": {
+        "discovered": 521,
+        "executed": 415,
+        "conditionalSkipped": 106,
+        "failures": 0,
+        "errors": 0
+      },
+      "AsiaShanghai": {
+        "discovered": 521,
+        "executed": 415,
+        "conditionalSkipped": 106,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    "mysql": {
+      "originalVerifierReplayed": true,
+      "executed": 99,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "orderedCleanPools": 5
+    },
+    "authRegressionRunners": 6,
+    "slowConsumerAcceptedCases": 0,
+    "nativeUiAcceptedCases": 5
+  },
+  "limits": [
+    "Run overall failure; 12 success, 2 failure, container skipped do not constitute 15 success.",
+    "No root-cause claim about Playwright queued stream based only on timeout; new observer must require cancelled event AND EOF, same deadline.",
+    "Client buffer adjustment does not change production source, model/output pools, or frame/character limits.",
+    "Native AI MySQL HTTP, output natural timeout, production capacity and full project goal remain unproven."
+  ]
+}
