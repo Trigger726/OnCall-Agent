@@ -41,7 +41,9 @@ class AssistantNativeStreamHttpTest {
         server.start();
         try {
             var api = DashScopeApi.builder().baseUrl("http://127.0.0.1:" + server.getAddress().getPort())
-                    .apiKey("cp74-controlled-not-a-real-key").build();
+                    .apiKey("cp74-controlled-not-a-real-key")
+                    .webClientBuilder(org.springframework.web.reactive.function.client.WebClient.builder()
+                            .filter(AssistantNativeTransport.cancellationFilter())).build();
             var model = DashScopeChatModel.builder().dashScopeApi(api).build();
             var ai = new AssistantAiService(ChatClient.builder(model));
             assertThat(ai.streamAnswer("已有事实", "", "只读建议").collectList().block(Duration.ofSeconds(5)))

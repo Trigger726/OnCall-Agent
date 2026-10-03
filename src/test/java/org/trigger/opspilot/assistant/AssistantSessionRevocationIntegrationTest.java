@@ -105,7 +105,8 @@ class AssistantSessionRevocationIntegrationTest {
             assertThat(cancellationAudits(id)).isEqualTo(1);
             assertThat(count(id, "USER")).isEqualTo(1); assertThat(count(id, "ASSISTANT")).isZero(); assertThat(audits(id)).isZero();
             release.countDown(); awaitIdle(); assertThat(count(id, "ASSISTANT")).isZero();
-            org.mockito.Mockito.verify(ai, org.mockito.Mockito.times(1)).answer(anyString(), anyString(), anyString());
+            if (stream) org.mockito.Mockito.verify(ai, org.mockito.Mockito.times(1)).streamAnswer(anyString(), anyString(), anyString());
+            else org.mockito.Mockito.verify(ai, org.mockito.Mockito.times(1)).answer(anyString(), anyString(), anyString());
             assertThat(http.send(keyedMessage(createSession(token), token, "explicit replacement after cancel", false, UUID.randomUUID().toString()), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(200);
         } finally { release.countDown(); pending.get(8, TimeUnit.SECONDS); }
     }
@@ -636,6 +637,15 @@ class AssistantSessionRevocationIntegrationTest {
     }
 
     void gate(String question, CountDownLatch entered, CountDownLatch release) {
+        when(ai.streamAnswer(anyString(), anyString(), anyString())).thenAnswer(call -> {
+            if (!question.equals(call.getArgument(2))) return reactor.core.publisher.Flux.just("controlled fresh answer");
+            return reactor.core.publisher.Flux.defer(() -> {
+                entered.countDown();
+                return reactor.core.publisher.Flux.interval(Duration.ofMillis(10))
+                        .filter(tick -> release.getCount() == 0).next().timeout(Duration.ofSeconds(10))
+                        .map(tick -> LATE_ANSWER).flux();
+            });
+        });
         when(ai.answer(anyString(), anyString(), anyString())).thenAnswer(call -> {
             if (!question.equals(call.getArgument(2))) return null;
             entered.countDown();

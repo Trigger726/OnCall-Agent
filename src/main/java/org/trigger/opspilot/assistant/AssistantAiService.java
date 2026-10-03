@@ -32,7 +32,7 @@ public class AssistantAiService {
             options.setEnableThinking(false);
             options.setInternalToolExecutionEnabled(false);
             var state = new StreamState();
-            return prompt(operationalContext, recentConversation, question).options(options)
+            return AssistantNativeTransport.cancellable(prompt(operationalContext, recentConversation, question).options(options)
                     .stream().chatResponse()
                     .<String>handle((response, sink) -> {
                         String content = state.accept(response);
@@ -41,7 +41,7 @@ public class AssistantAiService {
                     .concatWith(Flux.defer(() -> {
                         state.requireComplete();
                         return Flux.empty();
-                    }));
+                    })));
         });
     }
 

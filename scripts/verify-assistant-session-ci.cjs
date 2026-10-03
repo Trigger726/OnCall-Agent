@@ -26,15 +26,13 @@ async function verify() {
     fixture: 'actual production DashScope HTTP adapter against an owned controlled server, not model quality',
     database: 'fresh owned H2 memory database', userFileDatabaseModified: false, cases: [] };
   const held = new Set();
+  const nativeResponses = new WeakSet();
   let holding = false, calls = 0;
   function reply(response) {
-    if (response.destroyed) return;
-    response.writeHead(200, { 'Content-Type': 'application/json' });
-    response.end(JSON.stringify({ request_id: randomUUID(), output: { choices: [
-      { finish_reason: 'stop', message: { role: 'assistant', content: sentinel } }
-    ] }, usage: { input_tokens: 10, output_tokens: 10, total_tokens: 20 } }));
+    require('./assistant-provider-fixture.cjs').reply(response, sentinel, nativeResponses.has(response));
   }
   const provider = http.createServer((request, response) => {
+    if (request.headers['x-dashscope-sse'] === 'enable') nativeResponses.add(response);
     if (request.method !== 'POST' || request.url !== '/api/v1/services/aigc/text-generation/generation') {
       response.writeHead(404); response.end(); return;
     }
@@ -88,7 +86,8 @@ async function verify() {
   const route = (id, stream = false) => '/assistant/sessions/' + id + (stream ? '/stream' : '/messages');
   function streamedText(body) {
     return body.split(/\r?\n/).filter(line => line.startsWith('data:'))
-      .map(line => JSON.parse(line.slice(5)).content || '').join('');
+      .map(line => JSON.parse(line.slice(5))).filter(event => ['delta', 'token'].includes(event.type))
+      .map(event => event.content || '').join('');
   }
   async function answerCount(id, token) {
     const response = await request('/assistant/sessions/' + id, token);
@@ -116,22 +115,28 @@ async function verify() {
       const action = name === 'clear-messages'
         ? await request(route(id), token, undefined, 'DELETE') : await request('/auth/logout-all', token, {});
       assert.equal(action.status, 200);
-      if (!baseline && name !== 'clear-messages') { await waitFor(() => settled, 3000); assert.equal(held.size, 1); }
-      release();
+      if (!baseline && name !== 'clear-messages') {
+        await waitFor(() => settled, 3000);
+        if (stream) await waitFor(() => held.size === 0, 3000);
+        else assert.equal(held.size, 1); // Synchronous calls retain their own provider I/O budget.
+      }
+      if (!stream || baseline) release();
       const response = await pending;
       const text = stream ? streamedText(response.text) : response.text;
       const current = name === 'clear-messages' ? token : await login();
       if (!baseline && stream) {
+        holding = false; // Do not release the old response; its physical connection must already be closed.
         const fresh = await request(route(await session(current), true), current, { content: 'stream settlement positive control' });
         assert.ok(fresh.text.includes('event:done')); assert.equal(streamedText(fresh.text), sentinel);
-        // One worker: fresh stream completion proves the released old model/worker actually returned.
+        release(); // Fresh work completed on the same worker before this explicit release.
       }
       const count = await answerCount(id, current);
       assert.equal(count, baseline ? 1 : 0);
       assert.equal(text.includes(sentinel), baseline);
       if (!stream) assert.equal(response.status, baseline ? 200 : name === 'clear-messages' ? 409 : 401);
       result.cases.push({ name, responseStatus: response.status, lateAssistantMessages: count,
-        lateAnswerSent: text.includes(sentinel), closedBeforeProviderRelease: !baseline && name !== 'clear-messages' });
+        lateAnswerSent: text.includes(sentinel), closedBeforeProviderRelease: !baseline && name !== 'clear-messages',
+        ...(stream && !baseline ? { nativeHttpConnectionClosedBeforeProviderRelease: true, workerReusedBeforeProviderRelease: true } : {}) });
     }
     if (!baseline && !budgetBaseline) {
       token = await login();
@@ -142,11 +147,14 @@ async function verify() {
       const response = await pending;
       assert.ok(response.text.includes('event:error') && response.text.includes('回答超时'));
       assert.ok(!response.text.includes('event:done') && !streamedText(response.text).includes(sentinel));
-      assert.equal(held.size, 1); release();
+      await waitFor(() => held.size === 0, 3000);
+      holding = false;
       const fresh = await request(route(await session(token), true), token, { content: 'fresh-session positive control' });
       assert.equal(fresh.status, 200); assert.ok(fresh.text.includes('event:done')); assert.equal(streamedText(fresh.text), sentinel);
+      release();
       assert.equal(await answerCount(id, token), 0);
       result.cases.push({ name: 'timeout', closedBeforeProviderRelease: true, explicitSafeErrorEvent: true,
+        nativeHttpConnectionClosedBeforeProviderRelease: true, workerReusedBeforeProviderRelease: true,
         lateWorkerSettledByFreshStream: true, lateAssistantMessages: 0 });
       result.freshSessionProductionHttpAnswer = true;
     }

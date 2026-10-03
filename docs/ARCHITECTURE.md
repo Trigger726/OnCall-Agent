@@ -1,10 +1,18 @@
 # OpsPilot 架构设计
 
-## CP74底层原生模型流（尚未接默认端点）
+## CP75默认助手原生流与提交围栏
+
+默认POST /assistant/sessions/{id}/stream已调用原生streamAnswer，在原有有界worker内逐片段消费；空闲100ms检查原授权/原预算/持久化停止状态。generation/token只能带null答案ID及证据，前端标注“片段尚未保存”且不提供复制；只有正常STOP、有效原问题/账号租约及最终SQL事务提交后，done才发布正数答案ID。答案、标题、审计、请求COMPLETED仍原子提交。已完成幂等键回放原答案，不重新调模型；同步/messages及AI关闭的规则模式保持原路径。
+
+浏览器断开不是显式取消，后台仍在原授权/预算内运行；刷新只能手动GET恢复。取消/超时/撤销/清空/失败会取消订阅和原HTTP响应体，临时片段不能落库。模型EOF/length/晚错误不拼规则降级。停止回调独占停止事件，防止worker抢先关闭SSE而丢掉error。
+
+DashScope SDK内层窗口可能延迟原HTTP释放，故以每订阅独立Reactor Context信号约束实际exchange/body，非助手调用不修改。助手原生流使用单个独立JDK客户端：Future先直接取消再取消物理交换，避免Reactor3.6.0把JDK包装取消误报为丢失错误；真实Provider失败原样传播，没有全局忽略异常或自动重试。该专属客户端采用JDK默认TLS/代理，自定义SSL bundle/连接器、跨节点实时取消及慢消费者容量仍需独立验证。证据与失败保留见[75报告](acceptance/V1.7-checkpoint-75.md)。
+
+## CP74历史阶段：底层原生模型流（当时尚未接默认端点）
 
 AssistantAiService.streamAnswer提供每次订阅独立状态的冷Flux，真实DashScope请求显式增量输出，关闭thinking与SDK内部工具执行；使用chatResponse保留finishReason，锁定SDK把线协议stop转为STOP。只接受单一生成、正常STOP和至少一个非空白片段；精确保留片段空白/Unicode，限制总输出10万UTF-16字符和1万响应帧；EOF、length、工具调用、晚错误或STOP后内容均失败，不自动重试、不拼规则降级。调用者取消会向上游传播，但该适配器自身不负责HTTP会话授权、任务预算或SQL提交。
 
-当前Controller仍调用完整answer路径，SQL事务、幂等、显式取消与前端正数答案ID协议未改。下一阶段需在有界worker内把订阅的取消/空闲预算与原工作租约连接，区分临时片段和已提交messageId，只有完整模型终态且原授权/请求有效才执行原最终事务；不能把取消冷订阅单测当成端点/跨节点取消已交付。证据与未验边界见[74报告](acceptance/V1.7-checkpoint-74.md)。
+CP74当时Controller仍调用完整answer路径，SQL事务、幂等、显式取消与前端正数答案ID协议未改。CP75另接入默认端点，不能把74取消冷订阅单测当成端点/跨节点取消已交付。历史证据与未验边界见[74报告](acceptance/V1.7-checkpoint-74.md)。
 
 ## CP73助手页面原请求意图
 
@@ -385,6 +393,6 @@ checkpoint63通过独立可选覆盖补Collector原生告警→受控Incident：
 3. 将数据范围权限细化到部门、系统和资源负责人。
 4. 增加系统级并发压测、真实 socket 断流恢复，以及外部 Provider 组合故障注入。
 5. 为多实例事件广播和任务协调接入消息组件。
-6. 将对话 SSE 从完整回答分块升级为模型 Provider 原生 token 流。
+6. 默认助手原生流已在75本地接入；继续自身Linux/Java17/MySQL、跨节点原生取消、慢消费者和生产容量验证。
 7. 在已完成 MTTA/MTTM/MTTR、行动项逾期治理、精确指纹复发、Prometheus 事件型服务 SLO 和 Alertmanager 入站生命周期之上，检查点55补真实检索完整独立复核子集趋势；继续获取长期真实样本，建设跨 Incident 语义相似/依赖共因聚类，并以真实生产 recording rules、长期窗口、出站通知和送达回执验证 SLO。
 8. 从真实但脱敏的历史 Incident/查询流量持续扩充已实现的双评分 qrels，加入第三方仲裁、超过两名标注人的一致性和分层抽样；将现有保留任务扩展到备份/导出副本和面向单条数据的受控删除，再以 NDCG/Recall 验证真实 Embedding 与 cross-encoder rerank 是否稳定优于 BM25/RRF，决定是否引入 ANN/OpenSearch/Milvus。

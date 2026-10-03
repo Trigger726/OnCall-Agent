@@ -73,6 +73,8 @@ jobs:
         run: node scripts/verify-oncall-browser-ci.cjs
       - name: Verify assistant keyed UI cancellation, response loss, queue and timeout
         run: node scripts/verify-assistant-request-ui-ci.cjs
+      - name: Verify default assistant native previews, final commit and recovery
+        run: node scripts/verify-assistant-native-ui-ci.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
@@ -82,6 +84,9 @@ jobs:
             target/assistant-request-ui-it/**/*.json
             target/assistant-request-ui-it/**/*.log
             target/assistant-request-ui-it/**/*.png
+            target/assistant-native-ui-it/**/*.json
+            target/assistant-native-ui-it/**/*.log
+            target/assistant-native-ui-it/**/*.png
           retention-days: 30
 
   auth-session-integration:
@@ -145,9 +150,13 @@ jobs:
         run: |
           set -o pipefail
           mkdir -p target/assistant-native-it
-          ./mvnw -B -Duser.timezone=UTC -Dtest=AssistantAiStreamingTest,AssistantNativeStreamHttpTest test 2>&1 | tee target/assistant-native-it/maven.log
+          ./mvnw -B -Duser.timezone=UTC -Dtest=AssistantAiStreamingTest,AssistantNativeStreamHttpTest,AssistantStreamReaderTest,AssistantNativeEndpointIntegrationTest,AssistantNativeTransportTest,AssistantNativeHttpClientTest test 2>&1 | tee target/assistant-native-it/maven.log
           cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantAiStreamingTest.xml target/assistant-native-it/
           cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest.xml target/assistant-native-it/
+          cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantStreamReaderTest.xml target/assistant-native-it/
+          cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest.xml target/assistant-native-it/
+          cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeTransportTest.xml target/assistant-native-it/
+          cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeHttpClientTest.xml target/assistant-native-it/
       - name: Test and package (UTC)
         run: ./mvnw -B -Duser.timezone=UTC package
       - name: Regression tests (Asia/Shanghai)

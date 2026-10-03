@@ -26,14 +26,12 @@ async function verify() {
   const sentinel = 'CP72-controlled-HTTP-answer';
   let holding = false, calls = 0, relayStatus;
   const held = new Set(), children = [], descriptors = [], logFiles = [];
+  const nativeResponses = new WeakSet();
   function reply(response) {
-    if (response.destroyed) return;
-    response.writeHead(200, { 'Content-Type': 'application/json' });
-    response.end(JSON.stringify({ request_id: randomUUID(), output: { choices: [
-      { finish_reason: 'stop', message: { role: 'assistant', content: sentinel } }
-    ] }, usage: { input_tokens: 10, output_tokens: 10, total_tokens: 20 } }));
+    require('./assistant-provider-fixture.cjs').reply(response, sentinel, nativeResponses.has(response));
   }
   const provider = http.createServer((request, response) => {
+    if (request.headers['x-dashscope-sse'] === 'enable') nativeResponses.add(response);
     if (request.method !== 'POST' || request.url !== '/api/v1/services/aigc/text-generation/generation') {
       response.writeHead(404); response.end(); return;
     }
@@ -163,10 +161,13 @@ async function verify() {
       const stream = request(route(streamId, true), token, { content: 'held stream cancellation' }, streamKey);
       await waitFor(() => held.size === 1); assert.equal((await cancel(streamId, token, streamKey)).json.data.status, 'CANCELLED');
       const ended = await stream; assert.ok(ended.text.includes('event:cancelled')); assert.ok(!ended.text.includes('event:done')); assert.ok(!ended.text.includes(sentinel));
-      assert.equal(held.size, 1); release();
+      await waitFor(() => held.size === 0);
+      holding = false; // Native cancellation must close the HTTP connection without releasing the old provider.
       assert.equal((await request(route(await session(token)), token, { content: 'actual worker settlement after stream cancel' }, randomUUID())).status, 200);
+      release();
       assert.deepEqual(await counts(streamId, token), { user: 1, assistant: 0 }); assert.equal(await cancellationAudits(streamId, token), 1);
-      result.cases.push({ name: 'stream-cancel', cancelledEventBeforeProviderRelease: true, doneEventSent: false, lateAssistantMessages: 0, actualWorkerSettledByFreshAnswer: true });
+      result.cases.push({ name: 'stream-cancel', cancelledEventBeforeProviderRelease: true, doneEventSent: false, lateAssistantMessages: 0,
+        nativeHttpConnectionClosedBeforeProviderRelease: true, workerReusedBeforeProviderRelease: true, actualWorkerSettledByFreshAnswer: true });
 
       const crashRunningId = await session(token), crashQueuedId = await session(token), crashRunningKey = randomUUID(), crashQueuedKey = randomUUID();
       holding = true;

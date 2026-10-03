@@ -9,7 +9,7 @@ export interface AssistantRequestView {
   id: number; status: AssistantStatus; questionMessageId: number | null; answerMessageId: number | null; deadlineEpochMs: number
 }
 export interface AssistantStreamEvent {
-  type: 'meta' | 'delta' | 'done' | 'error' | 'cancelled'; content: string; messageId: number | null; evidenceJson: string | null
+  type: 'meta' | 'delta' | 'generation' | 'token' | 'done' | 'error' | 'cancelled'; content: string; messageId: number | null; evidenceJson: string | null
 }
 const positive = (value: unknown): value is number => Number.isSafeInteger(value) && Number(value) > 0
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
@@ -119,6 +119,7 @@ export async function streamAssistantRequest(intent: AssistantIntent, onEvent: (
     }
     const reader = response.body.getReader(), decoder = new TextDecoder()
     let buffer = '', messageId: number | null = null
+    let protocol: 'unknown' | 'legacy' | 'native' = 'unknown', tokens = 0
     try {
       while (true) {
         const { value, done } = await lease.read(reader); check()
@@ -129,11 +130,27 @@ export async function streamAssistantRequest(intent: AssistantIntent, onEvent: (
           const data = frame.split(/\r?\n/).filter(line => line.startsWith('data:')).map(line => line.slice(5).trimStart()).join('\n')
           if (!data) continue
           const event = JSON.parse(data) as AssistantStreamEvent
-          if (!['meta', 'delta', 'done', 'error', 'cancelled'].includes(event?.type) || typeof event.content !== 'string'
+          if (!['meta', 'delta', 'generation', 'token', 'done', 'error', 'cancelled'].includes(event?.type) || typeof event.content !== 'string'
             || !(event.evidenceJson === null || typeof event.evidenceJson === 'string')
             || (['meta', 'delta', 'done'].includes(event.type) ? !positive(event.messageId) : event.messageId !== null)
             || (messageId !== null && event.messageId !== null && messageId !== event.messageId)) {
             throw new RequestError('回答流状态不一致，请查询原请求', 'ASSISTANT_INVALID_STREAM', 0)
+          }
+          if (event.type === 'generation') {
+            if (protocol !== 'unknown' || event.content !== 'NATIVE' || event.evidenceJson !== null) {
+              throw new RequestError('原生回答预览协议无法确认', 'ASSISTANT_INVALID_STREAM', 0)
+            }
+            protocol = 'native'
+          } else if (event.type === 'token') {
+            if (protocol !== 'native' || !event.content.length || event.evidenceJson !== null) {
+              throw new RequestError('原生回答片段协议无法确认', 'ASSISTANT_INVALID_STREAM', 0)
+            }
+            tokens++
+          } else if (event.type === 'meta' || event.type === 'delta') {
+            if (protocol === 'native') throw new RequestError('不能混用预览与已保存回答', 'ASSISTANT_INVALID_STREAM', 0)
+            protocol = 'legacy'
+          } else if (event.type === 'done' && protocol === 'native' && tokens === 0) {
+            throw new RequestError('原生回答缺少片段，请查询原请求', 'ASSISTANT_INVALID_STREAM', 0)
           }
           messageId ??= event.messageId; check()
           if (event.type === 'error') throw new RequestError(event.content || '回答停止，请查询原请求', 'ASSISTANT_STREAM_TERMINAL_ERROR', 200)

@@ -125,6 +125,7 @@ public class AssistantController {
         var lease = authorization.current();
         service.getSession(id, user.id()); // Ownership is checked before admitting any queued work.
         SseEmitter emitter = new SseEmitter(300_000L);
+        var transport = new StreamTransport(emitter);
         long ownerId = user.id();
         String keyHash = AssistantRequestStore.keyHash(requestKey);
         String attemptId = java.util.UUID.randomUUID().toString();
@@ -141,19 +142,19 @@ public class AssistantController {
                         keyHash == null ? null : new AssistantRequestStore.Identity(keyHash, attemptId, work.deadlineEpochMillis())), work -> {
             try {
                 var identity = keyHash == null ? null : new AssistantRequestStore.Identity(keyHash, attemptId, work.deadlineEpochMillis());
-                var message = service.sendMessage(id, ownerId, request.content(), lease, work::check, identity);
+                var message = service.streamMessage(id, ownerId, request.content(), lease, work::check, identity,
+                        chunk -> transport.delta(chunk, work::check));
                 if (service.replayedByDifferentAttempt(id, keyHash, attemptId)) response.setHeader("X-OpsPilot-Idempotent-Replay", "true");
-                sendEvents(emitter, message, work::check);
+                transport.completed(message, work::check);
             } catch (CredentialsExpiredException exception) {
-                emitter.complete(); // Never send an answer/error payload under revoked credentials.
+                transport.stopped(null, null); // Never send an answer/error payload under revoked credentials.
             } catch (Exception exception) {
                 try {
                     work.check();
-                    emitter.send(SseEmitter.event().name("error")
-                            .data(new StreamEvent("error", "回答未完成，请稍后重试", null, null)));
-                    emitter.complete();
+                    transport.stopped("error", "回答未完成，请稍后重试");
                 } catch (Exception stopped) {
-                    emitter.complete();
+                    // A concurrent stop callback may still be checking authorization/persisting its reason.
+                    // It owns the terminal event; closing here can race it and silently drop error/cancelled.
                 }
             }
         }, () -> service.requestStopReason(id, keyHash, attemptId), reason -> {
@@ -161,15 +162,16 @@ public class AssistantController {
                 try { service.stopRequest(id, keyHash, attemptId, reason); }
                 catch (RuntimeException ignored) { /* Stop transport even if the state store is unavailable. */ }
                 if (reason == AssistantExecutionManager.Reason.TIMED_OUT && authorization.authorized(lease, false)) {
-                    emitter.send(SseEmitter.event().name("error")
-                            .data(new StreamEvent("error", "回答超时，请稍后重新发送问题", null, null)));
+                    transport.stopped("error", "回答超时，请稍后重新发送问题");
                 } else if (reason == AssistantExecutionManager.Reason.CANCELLED && authorization.authorized(lease, false)) {
-                    emitter.send(SseEmitter.event().name("cancelled")
-                            .data(new StreamEvent("cancelled", "回答已取消", null, null)));
+                    transport.stopped("cancelled", "回答已取消");
+                } else if ((reason == AssistantExecutionManager.Reason.FAILED || reason == AssistantExecutionManager.Reason.SUPERSEDED)
+                        && authorization.authorized(lease, false)) {
+                    transport.stopped("error", "回答未完成，请稍后重试");
                 }
             } catch (Exception ignored) {
                 // Fail closed if authorization cannot be checked or the transport is already closed.
-            } finally { emitter.complete(); }
+            } finally { transport.stopped(null, null); }
         });
         return emitter;
     }
@@ -194,6 +196,57 @@ public class AssistantController {
 
     private void requireLease(SessionAuthorization.Lease lease) {
         if (!authorization.authorized(lease, false)) throw new CredentialsExpiredException("Assistant session expired");
+    }
+
+    /** A disconnected browser does not cancel the durable request or cause another model call. */
+    private static final class StreamTransport {
+        private final SseEmitter emitter;
+        private boolean open = true;
+        private boolean preview;
+
+        private StreamTransport(SseEmitter emitter) {
+            this.emitter = emitter;
+            emitter.onCompletion(this::disconnect);
+            emitter.onTimeout(this::disconnect);
+            emitter.onError(error -> disconnect());
+        }
+
+        private synchronized void disconnect() { open = false; }
+
+        private synchronized void delta(String chunk, Runnable checkpoint) {
+            checkpoint.run();
+            boolean first = !preview;
+            preview = true;
+            if (!open) return;
+            try {
+                if (first) emitter.send(SseEmitter.event().name("generation")
+                        .data(new StreamEvent("generation", "NATIVE", null, null)));
+                checkpoint.run();
+                emitter.send(SseEmitter.event().name("token").data(new StreamEvent("token", chunk, null, null)));
+            } catch (java.io.IOException | IllegalStateException disconnected) {
+                open = false;
+            }
+        }
+
+        private synchronized void completed(AssistantService.MessageView message, Runnable checkpoint) throws java.io.IOException {
+            checkpoint.run();
+            if (!open) return;
+            if (preview) {
+                emitter.send(SseEmitter.event().name("done").data(new StreamEvent("done", "", message.id(), message.evidenceJson())));
+                emitter.complete();
+            } else sendEvents(emitter, message, checkpoint);
+            open = false;
+        }
+
+        private synchronized void stopped(String type, String content) {
+            if (!open) return;
+            open = false;
+            try {
+                if (type != null) emitter.send(SseEmitter.event().name(type).data(new StreamEvent(type, content, null, null)));
+            } catch (java.io.IOException | IllegalStateException ignored) {
+                // The caller cannot infer cancellation from a closed browser transport.
+            } finally { emitter.complete(); }
+        }
     }
 
     private static void sendEvents(SseEmitter emitter, AssistantService.MessageView message, Runnable checkpoint) throws java.io.IOException {

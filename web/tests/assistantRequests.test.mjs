@@ -21,6 +21,16 @@ beforeEach(() => {
   localStorage.setItem('opspilot_token', 'original-token')
   localStorage.setItem('opspilot_user', JSON.stringify({ id: 2, username: 'zhangwei' }))
 })
+
+test('native generation and token previews have no durable ID until committed done', async () => {
+  const intent = api.freezeAssistantIntent(1, '原生问题'), seen = []
+  mock.method(globalThis, 'fetch', async () => sse(frame('generation', null, 'NATIVE')
+    + frame('token', null, '第一段中文🙂') + frame('token', null, ' 第二段 ') + frame('done', 42)))
+  assert.equal(await api.streamAssistantRequest(intent, event => seen.push(event)), 'done')
+  assert.deepEqual(seen.map(event => event.messageId), [null, null, null, 42])
+  assert.equal(seen[1].content + seen[2].content, '第一段中文🙂 第二段 ')
+  assert.ok(api.readAssistantIntent(1), 'Committed answer must still be reconciled with SQL')
+})
 test('freezes and persists the original question before POST; refresh uses the same key and cannot overwrite', () => {
   const frozen = api.freezeAssistantIntent(1, '  原问题  ')
   assert.ok(Object.isFrozen(frozen)); assert.equal(frozen.content, '原问题')
@@ -28,6 +38,42 @@ test('freezes and persists the original question before POST; refresh uses the s
   assert.throws(() => api.freezeAssistantIntent(1, '另一问题'), /不会覆盖/)
   assert.equal(sessionStorage.data.size, 1)
   assert.ok(!sessionStorage.getItem(key).includes('original-token'))
+})
+
+test('native previews reject premature IDs, missing generation, mixed protocols and empty completion', async () => {
+  const generation = frame('generation', null, 'NATIVE')
+  for (const text of [frame('token', null, 'first') + frame('done'), frame('generation', 42, 'NATIVE'),
+    generation + frame('token', 42, 'first'), generation + frame('done'), generation + generation,
+    generation + frame('delta', 42, 'committed'), frame('meta') + generation,
+    generation + frame('token', null, '') + frame('done'), generation + frame('token', null, 'first') + frame('done', null)]) {
+    const intent = api.freezeAssistantIntent(1, '原问题')
+    const fetcher = mock.method(globalThis, 'fetch', async () => sse(text))
+    await assert.rejects(api.streamAssistantRequest(intent, () => {}), { code: 'ASSISTANT_INVALID_STREAM' })
+    assert.equal(fetcher.mock.callCount(), 1); assert.deepEqual(api.readAssistantIntent(1), intent)
+    api.clearAssistantIntent(intent); fetcher.mock.restore()
+  }
+})
+
+test('native EOF and terminal error never turn partial output into a saved answer or retry', async () => {
+  for (const terminal of ['', frame('error', null, '回答超时')]) {
+    const intent = api.freezeAssistantIntent(1, '原问题'), seen = []
+    const fetcher = mock.method(globalThis, 'fetch', async () => sse(frame('generation', null, 'NATIVE') + frame('token', null, '片段') + terminal))
+    await assert.rejects(api.streamAssistantRequest(intent, event => seen.push(event)),
+      { code: terminal ? 'ASSISTANT_STREAM_TERMINAL_ERROR' : 'ASSISTANT_STREAM_INCOMPLETE' })
+    assert.equal(fetcher.mock.callCount(), 1); assert.ok(seen.every(event => event.messageId === null))
+    assert.deepEqual(api.readAssistantIntent(1), intent); api.clearAssistantIntent(intent); fetcher.mock.restore()
+  }
+})
+
+test('native cancellation after one-byte UTF-8 previews retains the frozen intent for SQL reconciliation', async () => {
+  const intent = api.freezeAssistantIntent(1, '原问题'), seen = []
+  const bytes = new TextEncoder().encode((frame('generation', null, 'NATIVE') + frame('token', null, '  中文🙂\n')
+    + frame('cancelled', null, '回答已取消')).replaceAll('\n', '\r\n'))
+  mock.method(globalThis, 'fetch', async () => new Response(new ReadableStream({ start(c) { for (const b of bytes) c.enqueue(new Uint8Array([b])); c.close() } }),
+    { headers: { 'Content-Type': 'text/event-stream' } }))
+  assert.equal(await api.streamAssistantRequest(intent, event => seen.push(event)), 'cancelled')
+  assert.equal(seen[1].content, '  中文🙂\n'); assert.ok(seen.every(event => event.messageId === null))
+  assert.deepEqual(api.readAssistantIntent(1), intent)
 })
 test('account and session namespaces isolate pending intents; a refreshed token for the same owner may query', async () => {
   const original = api.freezeAssistantIntent(1, '原问题')

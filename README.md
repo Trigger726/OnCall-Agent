@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-74底层原生流适配器阶段本地通过：[报告](docs/acceptance/V1.7-checkpoint-74.md)。17项纯契约/真实DashScope HTTP验证片段先到、正常终态与有界输出，原助手71项、双时区各476发现/370执行/106条件跳过、前端103/生命周期17及新包八实页兼容流程通过。默认Controller/页面尚未切换，不宣称原生流端点交付；首失败/旧JAR/Demo保留，自身新增CI工件待核验，整体目标继续。
+75默认助手原生流本地限定通过：[报告](docs/acceptance/V1.7-checkpoint-75.md)。真实模型结束前可见临时片段，只有SQL提交后发布答案ID；取消/超时实际关闭原HTTP，worker可复用，截断不保存半个答案、不混规则降级。54项原生契约、双时区各513发现/407执行/106条件跳过、前端107、生命周期17及六组真实runner通过，完整JAR日志无意外ERROR；新旧25图和失败保留。本轮自身Linux/Java17/真实MySQL及远端工件仍待CI，不借74绿灯外推，整体目标继续。
+
+历史74底层适配器的[Run37117383000](https://github.com/Trigger726/OnCall-Agent/actions/runs/37117383000)十五作业success，新增原生工件17项的源SHA/官方摘要/实际ZIP/XML/故障注入日志已独立核验，其他工件尚未独立重放，见[74报告](docs/acceptance/V1.7-checkpoint-74.md)。当时默认端点尚未接入，75另行补齐。以下历史检查点的“当前/尚未”等边界均对应当时，不替代75的新证据。
 
 73助手界面本地与自身远端限定通过：[报告](docs/acceptance/V1.7-checkpoint-73.md)。79e4d5e的[Run37114973597](https://github.com/Trigger726/OnCall-Agent/actions/runs/37114973597)十五作业success，三ZIP源SHA/摘要、原MySQL门禁99/五池关闭、Linux八界面流程/原十三页面/五认证runner与完整日志已独立核验。冻结原键/问题、显式取消、手动恢复、真实503和晚200身份围栏成立；前端103/生命周期17/audit0及新旧Demo保留。默认对话仍完整回答后分块，原生token流/生产规模与整体目标继续。
 

@@ -103,6 +103,19 @@ public class AssistantService {
 
     public MessageView sendMessage(long sessionId, long ownerId, String rawContent,
                                    SessionAuthorization.Lease lease, Runnable checkpoint, AssistantRequestStore.Identity identity) {
+        return generateMessage(sessionId, ownerId, rawContent, lease, checkpoint, identity, null);
+    }
+
+    public MessageView streamMessage(long sessionId, long ownerId, String rawContent,
+                                     SessionAuthorization.Lease lease, Runnable checkpoint, AssistantRequestStore.Identity identity,
+                                     java.util.function.Consumer<String> onDelta) {
+        return generateMessage(sessionId, ownerId, rawContent, lease, checkpoint, identity,
+                java.util.Objects.requireNonNull(onDelta));
+    }
+
+    private MessageView generateMessage(long sessionId, long ownerId, String rawContent,
+                                        SessionAuthorization.Lease lease, Runnable checkpoint, AssistantRequestStore.Identity identity,
+                                        java.util.function.Consumer<String> onDelta) {
         if (lease == null || lease.userId() != ownerId) throw new CredentialsExpiredException("Assistant actor mismatch");
         String question = rawContent == null ? "" : rawContent.trim();
         if (question.isEmpty()) {
@@ -142,7 +155,11 @@ public class AssistantService {
             checkpoint.run();
             requireAuthorization(lease, false);
             // Never hold the account/session row locks over an external model call.
-            Answer answer = generateAnswer(prepared.context(), prepared.history(), question, checkpoint);
+            Answer answer = onDelta == null || aiService.isEmpty()
+                    ? generateAnswer(prepared.context(), prepared.history(), question, checkpoint)
+                    : new Answer(AssistantStreamReader.read(aiService.get().streamAnswer(contextText(prepared.context()),
+                            conversationText(prepared.history()), question), checkpoint, onDelta),
+                            prepared.context() == null ? List.of() : collectEvidence(prepared.context()));
             checkpoint.run();
             requireAuthorization(lease, false);
             return transactions.execute(transaction -> {

@@ -21,7 +21,7 @@ interface SessionSummary {
   id: number; title: string; incidentId: number | null; incidentCode: string | null; incidentTitle: string | null
   incidentSeverity: string | null; incidentStatus: string | null; messageCount: number; lastMessage: string | null; updatedAt: string
 }
-interface Message { id: number; role: 'USER' | 'ASSISTANT'; content: string; evidenceJson: string | null; createdAt: string }
+interface Message { id: number; role: 'USER' | 'ASSISTANT'; content: string; evidenceJson: string | null; createdAt: string; provisional?: boolean }
 interface ContextItem { code: string; type: string; title: string; time: string }
 interface IncidentContext {
   id: number; incidentCode: string; title: string; description: string; severity: string; status: string; resourceName: string
@@ -297,7 +297,9 @@ async function sendFrozenRequest(intent: Readonly<AssistantIntent>) {
     await streamAssistantRequest(intent, event => {
       streamSession.check()
       if (!isCurrentView()) throw new DOMException('会话视图已切换', 'AbortError')
-      if (event.type === 'delta') assistantMessage.content += event.content
+      if (event.type === 'generation') assistantMessage.provisional = true
+      if (event.type === 'delta' || event.type === 'token') assistantMessage.content += event.content
+      if (event.type === 'done') assistantMessage.provisional = false
       if (event.messageId) assistantMessage.id = event.messageId
       if (event.evidenceJson) assistantMessage.evidenceJson = event.evidenceJson
       void scrollToBottom()
@@ -523,13 +525,14 @@ onBeforeUnmount(() => {
               <span v-if="message.role === 'ASSISTANT'" class="assistant-message-avatar"><Bot :size="17" /></span>
               <div class="assistant-message-body">
                 <header><strong>{{ message.role === 'USER' ? '你' : 'OnCall 助手' }}</strong><time>{{ formatTime(message.createdAt, true) }}</time></header>
+                <small v-if="message.provisional" class="assistant-preview-label" role="status">模型实时生成 · 片段尚未保存</small>
                 <ChatMessage v-if="message.content" :content="message.content" />
                 <div v-else class="assistant-generating"><i /><i /><i /></div>
                 <div v-if="evidence(message).length" class="assistant-evidence">
                   <span><FileText :size="13" />证据引用</span>
                   <em v-for="item in evidence(message)" :key="item.ref">{{ item.ref }}</em>
                 </div>
-                <button v-if="message.content" class="assistant-copy" :title="copiedId === message.id ? '已复制' : '复制回答'" @click="copyMessage(message)"><Check v-if="copiedId === message.id" :size="14" /><Copy v-else :size="14" /></button>
+                <button v-if="message.content && !message.provisional" class="assistant-copy" :title="copiedId === message.id ? '已复制' : '复制回答'" @click="copyMessage(message)"><Check v-if="copiedId === message.id" :size="14" /><Copy v-else :size="14" /></button>
               </div>
             </article>
           </div>
