@@ -4,7 +4,7 @@
 
 V31新增sys_user.auth_version，旧账号密码/角色/状态不变。JWT必须包含匹配当前数据库版本的精确非负整数sv，旧无sv Token需重新登录。升级前安排重新登录窗口，全节点升级后才开放改密/撤销；不可混用不校验sv的旧节点。
 
-65只提供本人API；66新增/account/security本人页面。67的原流身份围栏/旧401不清新登录已经获得3b6247b自身十五远端作业/十三实页脚本证据；68的助手在途回答/流式有界队列与预算已有40e0c2f自身十五作业、真实HTTP适配器和MySQL88一般回归/五池关闭证明。本轮69另外发现并补最后提交/同步返回授权空窗，新增五个共用事务场景，必须单独等待新提交的MySQL与远端结果。不是管理员替别人改密或单设备会话管理；普通退出仍只清本地Token，全部会话撤销需在安全页确认。仍不原子撤回所有已发送字节或全部后台功能，不宣称瞬时取消。
+65只提供本人API；66新增/account/security本人页面。67的原流身份围栏/旧401不清新登录已经获得3b6247b自身十五远端作业/十三实页脚本证据；68的助手在途回答/流式有界队列与预算已有40e0c2f自身十五作业、真实HTTP适配器和MySQL88一般回归/五池关闭证明。69补最后提交/同步返回授权空窗，自身45247a8远端认证/助手HTTP通过，但MySQL93中CHECK异常分类fixture失败，不能标完整通过；70修正精确SQL错误断言并统一同步容量/预算，新MySQL仍需独立验证。不是管理员替别人改密或单设备会话管理；普通退出仍只清本地Token，全部会话撤销需在安全页确认。仍不原子撤回所有已发送字节或全部后台功能，不宣称瞬时取消。
 
 调查发送/工具前后核对原uid/username/sv/exp及当前角色；只保存无原Token的授权快照。GET空闲连接按现有补读周期检查（默认5秒），生产异步任务默认1秒资格扫描，拥塞/数据库等待可延长，非跨实例瞬时广播保证。停用/到期/版本不符关闭读取；仍ACTIVE但降为AUDITOR可继续读，不能启动/继续调查。最终报告/提案事务持有账号行锁，在等待后重新核对到期，与账号撤销事务排序。
 
@@ -12,7 +12,7 @@ V31新增sys_user.auth_version，旧账号密码/角色/状态不变。JWT必须
 
 助手准备/完成事务按账号→会话行锁排序，外部模型不持有这些行锁；已接受USER保留，撤销/到期/清空后的晚回答不补写。回答/标题/完成审计一起提交，最后仍检查原lease有效期；同步返回前另检查原lease。若回答在有效授权时已经完成、之后才撤销，不删除已合法提交的历史，只拒绝晚HTTP正文；新登录仍可正常读取历史。这些授权边界不承诺每个网络字节与撤销原子化。详情和首次失败见[68](acceptance/V1.7-checkpoint-68.md)/[69](acceptance/V1.7-checkpoint-69.md)。助手允许所有有效角色读取/回答，不把调查的ADMIN/OPS_MANAGER/ON_CALL门槛错误套给AUDITOR对话。
 
-助手stream默认ASSISTANT_WORKERS=4、ASSISTANT_QUEUE_CAPACITY=16、ASSISTANT_EXECUTION_TIMEOUT=60s（含排队），队满503 ASSISTANT_QUEUE_SATURATED且该问题零写入。资格检查默认1秒轮询，数据库/调度拥塞可延长，非关闭SLA。超时仅原授权仍有效才发固定error/无done，撤销不发正文；模型I/O仍占用worker直到自身返回。同步/messages尚未纳入该有界流池/超时；持久化助手幂等/显式取消与跨节点矩阵继续，不将规则降级或本地受控模型当生产质量保证。
+助手同步/messages和流式/stream在同一实例内共享ASSISTANT_WORKERS=4、ASSISTANT_QUEUE_CAPACITY=16、ASSISTANT_EXECUTION_TIMEOUT=60s（含排队），不同节点不是全局一个池。先验证会话归属，队满503 ASSISTANT_QUEUE_SATURATED且该问题零写入；同步通过DeferredResult返回原ApiResponse JSON，预算到期504 ASSISTANT_EXECUTION_TIMEOUT，撤销/到期401。运行中已接受USER保留，排队超时则USER/ASSISTANT/完成审计均零并释放队列；不自动重试同一问题。MVC禁用独立等待计时器，统一依现有执行器预算/资格扫描停止。资格检查默认1秒轮询，数据库/调度拥塞可延长，非关闭SLA。流式超时仅原授权仍有效才发固定error/无done，撤销不发正文；模型I/O仍占用worker直到自身返回。详见[70](acceptance/V1.7-checkpoint-70.md)。持久化助手幂等/显式取消与跨节点矩阵继续，不将规则降级或本地受控模型当生产质量保证。
 
 客户端流在建立时冻结原Token，仅留内存；本标签登录/退出事件和跨标签storage事件使旧连接中止，响应、每次read、事件回调及重连检查Token是否仍相同，旧401不踢新会话。流终止不向后台发送取消；真正会话撤销由后端处理。浏览器Token围栏不是JWT认证，也不宣称旧标签导航栏瞬时同步或已经显示的历史内容立即擦除；刷新后由auth/me取得当前身份。Agent恢复键按uid/username/incident命名，不含Token/口令。同一账号歧义请求重新登录后继续同键；另一账号不继承；无归属旧键保留但不自动迁移。用户信息缺失/坏格式在POST前拒绝，纯GET订阅不依赖这个UI namespace。
 
@@ -37,6 +37,6 @@ V31新增sys_user.auth_version，旧账号密码/角色/状态不变。JWT必须
 
 构建后运行`node scripts/verify-auth-session-ci.cjs`。它仅使用空闲回环9933/9934和自己新建的target/auth-session-it/run-*文件库；不停止其他监听者，不修改日常文件库。同文件库不同JVM检查旧Token拒绝、当前Token正对照、新旧密码、审计/时间线不变，最后关闭自己创建的进程。
 
-助手真实适配器复跑`node scripts/verify-assistant-session-ci.cjs`：只用空闲9937/9938、自有内存库与受控loopback DashScope HTTP，不接生产模型/真实密钥；先正常正文正对照，再真实logout/清空/超时与新流完成。旧包target/cp68-before/opspilot-cp67-client.jar，OPSPILOT_ASSISTANT_SESSION_BASELINE=1仅记录旧反例，CI拒绝。69的行锁/实际审计INSERT失败/完成中到期矩阵在H2与既有真实MySQL兼容测试中复跑，不靠新增生产测试端点。
+助手真实适配器复跑`node scripts/verify-assistant-session-ci.cjs`：只用空闲9937/9938、自有内存库与受控loopback DashScope HTTP，不接生产模型/真实密钥；先正常正文正对照，再真实logout/清空/流式超时，混合同步/流式队满与同步运行/排队超时，后继真实回答证明旧worker实际退出。旧包target/cp68-before/opspilot-cp67-client.jar配OPSPILOT_ASSISTANT_SESSION_BASELINE=1记录历史撤销反例；69旧包target/cp70-before/opspilot-cp69.jar配OPSPILOT_ASSISTANT_BUDGET_BASELINE=1记录预算缺口。两模式不能同时设置、仅BASELINE_CAPTURED，CI在启动Java前拒绝。69的行锁/实际审计INSERT失败/完成中到期矩阵在H2与既有真实MySQL兼容测试中复跑，不靠新增生产测试端点。
 
 独立旧JAR放在target/cp65-before/opspilot-cp64.jar，OPSPILOT_AUTH_SESSION_BASELINE=1只记录旧接口404与旧Token仍可读，输出BASELINE_CAPTURED，绝不是PASS；CI禁止该模式。口令/Token仅驻留验证进程内存，上传证据限JSON/日志，不上传数据库。原始失败和新旧对照见[65报告](acceptance/V1.7-checkpoint-65.md)。

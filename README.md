@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-检查点69本地限定通过：[完成事务与同步返回授权报告](docs/acceptance/V1.7-checkpoint-69.md)。新增三条旧反例，两晚HTTP200→401/合法历史保留，完成中到期回答/标题/审计一起回滚；37定向、双时区各427发现/327执行/100条件跳过、十四MySQL门禁及新JAR实际HTTP七次回归通过。新提交真实MySQL93/五事务与远端待验，完整目标继续，旧JAR/Demo/失败不删。
+检查点70本地限定通过：[同步与流式共享预算报告](docs/acceptance/V1.7-checkpoint-70.md)。先复现旧同步绕过队满/超时，再接入同一个有界执行器；40定向、双时区各430发现/330执行/100条件跳过、十四MySQL门禁和新包实际HTTP十一调用/六场景通过。混合队满503/零问题写入，同步运行与排队504/晚回答零；真实MySQL93与新提交远端仍待验，完整目标继续，旧JAR/Demo/失败不删。
+
+69自己的45247a8已核对[Run37095079404](https://github.com/Trigger726/OnCall-Agent/actions/runs/37095079404)：十三success/MySQL failure/最终容器skipped，不能标全绿。认证ZIP源SHA/摘要及Linux三结果/四停机日志通过；真实MySQL93中CHECK异常类别fixture失败，另四个助手事务执行通过；70修正为精确SQL错误/约束名并继续检查回滚，不放宽门禁。见[69报告](docs/acceptance/V1.7-checkpoint-69.md)。
 
 68自己的40e0c2f已补[Run37092997128](https://github.com/Trigger726/OnCall-Agent/actions/runs/37092997128)十五作业success；认证/助手实际生产HTTP七次/四份JAR日志、MySQL88一般兼容回归/五池关闭与两ZIP源SHA摘要及精确原门禁重放已核验。后来发现的更晚提交/同步返回空窗由69另列，旧Demo/首连接Future三秒超时仍保留，不借旧绿灯外推新五事务矩阵。见[68报告](docs/acceptance/V1.7-checkpoint-68.md)。
 

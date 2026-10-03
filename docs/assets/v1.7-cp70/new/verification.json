@@ -1,0 +1,105 @@
+{
+  "sourceCommit": "checkpoint70-working-tree-before-upload",
+  "targeted": {
+    "log": "target/cp70-before/sync-budget-targeted-verified.log",
+    "sha256": "f33b29fbd08914efc0631b0e8480311b25a20c4b3e18d809e4494ceb23377047",
+    "found": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "executed": 40
+  },
+  "utc": {
+    "log": "target/cp70-before/full-utc-final.log",
+    "sha256": "1b77f5608e35a17c2b7353c46f83348df063c0d357da839ca882af350722b10d",
+    "found": 430,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 100,
+    "executed": 330
+  },
+  "shanghai": {
+    "log": "target/cp70-before/full-shanghai-package.log",
+    "sha256": "5bfd1b888fa595e8139ed0bc37690fa3460b92c977d39e5954d4f834702d5b05",
+    "found": 430,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 100,
+    "executed": 330
+  },
+  "nativeHttpRegression": {
+    "status": "PASS",
+    "baselineCapture": false,
+    "budgetBaselineCapture": false,
+    "tokensPersistedToEvidence": false,
+    "jarSha256": "83023a7ad94123014c856271e7a2c54c2a4a09c108a1c10020567536e78213ad",
+    "fixture": "actual production DashScope HTTP adapter against an owned controlled server, not model quality",
+    "database": "fresh owned H2 memory database",
+    "userFileDatabaseModified": false,
+    "cases": [
+      {
+        "name": "synchronous-logout",
+        "responseStatus": 401,
+        "lateAssistantMessages": 0,
+        "lateAnswerSent": false,
+        "closedBeforeProviderRelease": true
+      },
+      {
+        "name": "stream-logout",
+        "responseStatus": 200,
+        "lateAssistantMessages": 0,
+        "lateAnswerSent": false,
+        "closedBeforeProviderRelease": true
+      },
+      {
+        "name": "clear-messages",
+        "responseStatus": 409,
+        "lateAssistantMessages": 0,
+        "lateAnswerSent": false,
+        "closedBeforeProviderRelease": false
+      },
+      {
+        "name": "timeout",
+        "closedBeforeProviderRelease": true,
+        "explicitSafeErrorEvent": true,
+        "lateWorkerSettledByFreshStream": true,
+        "lateAssistantMessages": 0
+      },
+      {
+        "name": "mixed-capacity",
+        "responseStatus": 503,
+        "rejectedQuestionWrites": 0,
+        "queuedQuestionWritesBeforeProviderRelease": 0,
+        "simultaneousProviderCalls": 1
+      },
+      {
+        "name": "synchronous-running-and-queued-timeout",
+        "responseStatuses": [
+          504,
+          504
+        ],
+        "settledBeforeProviderRelease": true,
+        "lateAssistantMessages": 0,
+        "queuedQuestionWrites": 0,
+        "lateWorkerSettledByFreshSynchronousAnswer": true
+      }
+    ],
+    "startedPid": 72824,
+    "productionHttpAdapterPositiveControl": true,
+    "freshSessionProductionHttpAnswer": true,
+    "providerTransportCalls": 11,
+    "ownedProcessStopped": true,
+    "ownedProviderStopped": true,
+    "unexpectedJarErrors": 0
+  },
+  "mysqlGateUnitTests": 14,
+  "mysqlGateFailures": 0,
+  "localNewMySqlMatrixActuallyExecuted": false,
+  "minimumRemoteMySqlTests": 93,
+  "requiredAssistantTransactionCases": 5,
+  "driverCheckViolationAssertionIsExact": true,
+  "bothBaselineModesRejectedBeforeJavaLaunchInCi": true,
+  "unchangedFrontendSourcesAndStaticAssets": true,
+  "oldDemosAndFailureArtifactsRetained": true,
+  "firstCp68SaturationTimeoutRootCauseProven": false
+}

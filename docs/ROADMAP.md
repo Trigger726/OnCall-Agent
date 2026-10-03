@@ -2,7 +2,9 @@
 
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
-当前69本地限定通过：[69报告](acceptance/V1.7-checkpoint-69.md)。三条实际反例推动完成事务末尾/同步Controller返回前再次核对原lease，合法历史保留；五个共用H2/MySQL故障矩阵、37定向/双时区427/327/100、十四门禁及生产HTTP适配器七次回归通过。本提交新MySQL93/远端待验，助手同步路径统一容量/预算、幂等取消、跨节点和其余完整路线继续，历史Demo/失败保留。
+当前70本地限定通过：[70报告](acceptance/V1.7-checkpoint-70.md)。旧同步绕过容量/预算已复现，同步与流式共享同一有界执行器、保留原lease与JSON契约；40定向/双时区430发现330执行100条件跳过、十四门禁和新包真实HTTP十一调用/六场景通过，混合队满503/同步运行和排队504/晚回答零。新提交MySQL93/远端待验；助手幂等/显式取消、原生token流、跨节点和其余完整路线继续，历史Demo/失败保留。
+
+69自己的45247a8已核对[Run37095079404](https://github.com/Trigger726/OnCall-Agent/actions/runs/37095079404)：十三success/MySQL failure/最终容器skipped，不能标全绿。认证ZIP源SHA/摘要及Linux三结果/四停机日志通过；真实MySQL93中CHECK异常类别fixture失败，另四个助手事务执行通过；70修正为精确SQL错误/约束名并继续检查回滚，不放宽门禁。见[69报告](acceptance/V1.7-checkpoint-69.md)。
 
 68自己的40e0c2f已补[Run37092997128](https://github.com/Trigger726/OnCall-Agent/actions/runs/37092997128)十五作业success；认证/助手实际生产HTTP七次/四份JAR日志、MySQL88一般兼容回归/五池关闭与两ZIP源SHA摘要及精确原门禁重放已核验。后来发现的更晚提交/同步返回空窗由69另列，旧Demo/首连接Future三秒超时仍保留，不借旧绿灯外推新五事务矩阵。见[68报告](acceptance/V1.7-checkpoint-68.md)。
 

@@ -155,10 +155,14 @@ class OpsPilotApiIntegrationTest {
                 .andReturn().getResponse().getContentAsString();
         long sessionId = objectMapper.readTree(created).path("data").path("session").path("id").asLong();
 
-        mockMvc.perform(post("/api/v1/assistant/sessions/{id}/messages", sessionId)
+        MvcResult messageResult = mockMvc.perform(post("/api/v1/assistant/sessions/{id}/messages", sessionId)
                         .header("Authorization", "Bearer " + adminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"content\":\"最可能的根因是什么？\"}"))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.request().asyncStarted())
+                .andReturn();
+        messageResult.getAsyncResult(3_000L);
+        mockMvc.perform(asyncDispatch(messageResult))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.role").value("ASSISTANT"))
                 .andExpect(jsonPath("$.data.content").value(org.hamcrest.Matchers.containsString("当前研判")))
@@ -193,6 +197,12 @@ class OpsPilotApiIntegrationTest {
         String auditorToken = login("auditor", "OpsPilot@2026");
         mockMvc.perform(get("/api/v1/assistant/sessions/{id}", sessionId)
                         .header("Authorization", "Bearer " + auditorToken))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error.code").value("ASSISTANT_SESSION_NOT_FOUND"));
+        mockMvc.perform(post("/api/v1/assistant/sessions/{id}/messages", sessionId)
+                        .header("Authorization", "Bearer " + auditorToken)
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"content\":\"must not enter worker\"}"))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.request().asyncNotStarted())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error.code").value("ASSISTANT_SESSION_NOT_FOUND"));
     }
@@ -252,10 +262,14 @@ class OpsPilotApiIntegrationTest {
                 .andReturn().getResponse().getContentAsString();
         long sessionId = objectMapper.readTree(session).path("data").path("session").path("id").asLong();
 
-        mockMvc.perform(post("/api/v1/assistant/sessions/{id}/messages", sessionId)
+        MvcResult messageResult = mockMvc.perform(post("/api/v1/assistant/sessions/{id}/messages", sessionId)
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"content\":\"展示 Agent 调查过程\"}"))
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.request().asyncStarted())
+                .andReturn();
+        messageResult.getAsyncResult(3_000L);
+        mockMvc.perform(asyncDispatch(messageResult))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.content").value(org.hamcrest.Matchers.containsString("执行轨迹")))
                 .andExpect(jsonPath("$.data.evidenceJson").value(

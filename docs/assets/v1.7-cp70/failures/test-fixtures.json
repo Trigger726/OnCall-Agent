@@ -1,0 +1,21 @@
+{
+  "fullUtcBeforeAsyncDispatch": {
+    "log": "target/cp70-before/full-utc.log",
+    "sha256": "6a8807e7ace7a31cf0c95c2df8a7330650796c61c540f38c62de13f13cf5773d",
+    "found": 430,
+    "executed": 330,
+    "failures": 2,
+    "errors": 0,
+    "skipped": 100,
+    "reason": "Two MockMvc JSON assertions preceded async dispatch; original content assertions retained in repair"
+  },
+  "targetedWithMockMvcZeroDefaultWait": {
+    "log": "target/cp70-before/sync-budget-targeted-final.log",
+    "sha256": "566efc54f69f2501598bc266dc389db5fad8e288312a00f5d6052d77f451c646",
+    "executed": 40,
+    "failures": 0,
+    "errors": 1,
+    "skipped": 0,
+    "reason": "MockMvc inherited zero wait from disabled independent MVC timeout; explicit 3000ms test wait before async dispatch"
+  }
+}

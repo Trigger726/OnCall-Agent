@@ -42,6 +42,87 @@ class AssistantSessionRevocationIntegrationTest {
     final HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build();
     static final String LATE_ANSWER = "CP68-controlled-late-answer-must-not-be-persisted-or-sent";
 
+    @Test void shouldRejectSynchronousRequestWhenStreamCapacityIsFullWithoutWrites() throws Exception {
+        verifySharedCapacity(true);
+    }
+
+    @Test void shouldIncludeSynchronousWorkInStreamCapacityAndAllowReplacement() throws Exception {
+        verifySharedCapacity(false);
+    }
+
+    private void verifySharedCapacity(boolean runningStream) throws Exception {
+        String token = login();
+        long runningId = createSession(token), queuedId = createSession(token), rejectedId = createSession(token);
+        String question = "mixed-capacity-" + UUID.randomUUID();
+        var entered = new CountDownLatch(1);
+        var release = new CountDownLatch(1);
+        gate(question, entered, release);
+        var running = http.sendAsync(message(runningId, token, question, runningStream), HttpResponse.BodyHandlers.ofString());
+        java.util.concurrent.CompletableFuture<HttpResponse<String>> queuedRequest = null;
+        try {
+            assertThat(entered.await(3, TimeUnit.SECONDS)).isTrue();
+            queuedRequest = http.sendAsync(message(queuedId, token, "queued mixed question", true), HttpResponse.BodyHandlers.ofString());
+            long deadline = System.nanoTime() + Duration.ofSeconds(2).toNanos();
+            while (execution.queued() != 1 && System.nanoTime() < deadline) Thread.sleep(10);
+            assertThat(execution.queued()).isEqualTo(1);
+            assertThat(count(queuedId, "USER")).isZero();
+            var rejected = http.send(message(rejectedId, token, "rejected mixed question", !runningStream), HttpResponse.BodyHandlers.ofString());
+            assertThat(rejected.statusCode()).isEqualTo(503);
+            assertThat(rejected.body()).contains("ASSISTANT_QUEUE_SATURATED");
+            assertThat(count(rejectedId, "USER")).isZero();
+            assertThat(count(rejectedId, "ASSISTANT")).isZero();
+            assertThat(audits(rejectedId)).isZero();
+            release.countDown();
+            assertThat(running.get(5, TimeUnit.SECONDS).statusCode()).isEqualTo(200);
+            assertThat(queuedRequest.get(5, TimeUnit.SECONDS).body()).contains("event:done");
+            var fresh = http.send(message(rejectedId, token, "replacement mixed question", false), HttpResponse.BodyHandlers.ofString());
+            assertThat(fresh.statusCode()).isEqualTo(200);
+            assertThat(count(rejectedId, "USER")).isEqualTo(1);
+            assertThat(count(rejectedId, "ASSISTANT")).isEqualTo(1);
+            assertThat(audits(rejectedId)).isEqualTo(1);
+        } finally {
+            release.countDown(); running.get(8, TimeUnit.SECONDS);
+            if (queuedRequest != null) queuedRequest.get(8, TimeUnit.SECONDS);
+        }
+    }
+
+    @Test void shouldTimeoutRunningAndQueuedSynchronousRequestsBeforeProviderRelease() throws Exception {
+        String token = login();
+        long runningId = createSession(token), queuedId = createSession(token);
+        String question = "sync-timeout-" + UUID.randomUUID();
+        var entered = new CountDownLatch(1);
+        var release = new CountDownLatch(1);
+        gate(question, entered, release);
+        var running = http.sendAsync(message(runningId, token, question, false), HttpResponse.BodyHandlers.ofString());
+        java.util.concurrent.CompletableFuture<HttpResponse<String>> queuedRequest = null;
+        try {
+            assertThat(entered.await(3, TimeUnit.SECONDS)).isTrue();
+            queuedRequest = http.sendAsync(message(queuedId, token, "queued timeout question", false), HttpResponse.BodyHandlers.ofString());
+            var response = running.get(6, TimeUnit.SECONDS);
+            var queuedResponse = queuedRequest.get(2, TimeUnit.SECONDS);
+            assertThat(response.statusCode()).isEqualTo(504);
+            assertThat(queuedResponse.statusCode()).isEqualTo(504);
+            assertThat(response.body()).contains("ASSISTANT_EXECUTION_TIMEOUT").doesNotContain(LATE_ANSWER);
+            assertThat(queuedResponse.body()).contains("ASSISTANT_EXECUTION_TIMEOUT").doesNotContain(LATE_ANSWER);
+            assertThat(release.getCount()).isEqualTo(1);
+            assertThat(count(queuedId, "USER")).isZero();
+            assertThat(count(queuedId, "ASSISTANT")).isZero();
+            assertThat(audits(queuedId)).isZero();
+            assertThat(execution.queued()).isZero();
+            release.countDown(); awaitIdle();
+            assertThat(count(runningId, "USER")).isEqualTo(1);
+            assertThat(count(runningId, "ASSISTANT")).isZero();
+            assertThat(audits(runningId)).isZero();
+            var fresh = http.send(message(queuedId, token, "fresh after budget", false), HttpResponse.BodyHandlers.ofString());
+            assertThat(fresh.statusCode()).isEqualTo(200);
+            assertThat(count(queuedId, "USER")).isEqualTo(1);
+            assertThat(count(queuedId, "ASSISTANT")).isEqualTo(1);
+        } finally {
+            release.countDown(); running.get(8, TimeUnit.SECONDS);
+            if (queuedRequest != null) queuedRequest.get(8, TimeUnit.SECONDS);
+        }
+    }
+
     @Test void shouldNotSendCommittedAnswerAfterLogoutCompletesBeforeControllerReturns() throws Exception {
         verifySynchronousReturnFence(true);
     }
@@ -66,7 +147,9 @@ class AssistantSessionRevocationIntegrationTest {
             committed.countDown();
             assertThat(returnToController.await(5, TimeUnit.SECONDS)).isTrue();
             return answer;
-        }).when(assistant).sendMessage(sessionId, owner, question);
+        }).when(assistant).sendMessage(org.mockito.ArgumentMatchers.eq(sessionId), org.mockito.ArgumentMatchers.eq(owner),
+                org.mockito.ArgumentMatchers.eq(question), org.mockito.ArgumentMatchers.any(org.trigger.opspilot.security.SessionAuthorization.Lease.class),
+                org.mockito.ArgumentMatchers.any(Runnable.class));
         var pending = http.sendAsync(message(sessionId, token, question, false), HttpResponse.BodyHandlers.ofString());
         try {
             assertThat(committed.await(3, TimeUnit.SECONDS)).isTrue();

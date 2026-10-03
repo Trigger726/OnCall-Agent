@@ -9,16 +9,19 @@ const { requireFreePort, stopProcess, waitForHealth, redact, unexpectedLogLines 
 
 async function verify() {
   const baseline = process.env.OPSPILOT_ASSISTANT_SESSION_BASELINE === '1';
-  if (baseline && process.env.CI) throw new Error('Baseline capture cannot replace assistant acceptance');
+  const budgetBaseline = process.env.OPSPILOT_ASSISTANT_BUDGET_BASELINE === '1';
+  if ((baseline || budgetBaseline) && process.env.CI) throw new Error('Baseline capture cannot replace assistant acceptance');
+  if (baseline && budgetBaseline) throw new Error('Choose one preserved baseline');
   const root = path.resolve(__dirname, '..');
-  const jar = path.join(root, 'target', baseline ? 'cp68-before/opspilot-cp67-client.jar' : 'opspilot-0.1.0-SNAPSHOT.jar');
+  const jar = path.join(root, 'target', baseline ? 'cp68-before/opspilot-cp67-client.jar'
+    : budgetBaseline ? 'cp70-before/opspilot-cp69.jar' : 'opspilot-0.1.0-SNAPSHOT.jar');
   assert.ok(fs.existsSync(jar), 'Build or preserve the scoped JAR first');
   await requireFreePort(9937); await requireFreePort(9938);
   const parent = path.join(root, 'target', 'assistant-session-it');
   fs.mkdirSync(parent, { recursive: true });
   const evidence = fs.mkdtempSync(path.join(parent, 'run-'));
   const sentinel = 'CP68-controlled-HTTP-answer-must-not-cross-original-session';
-  const result = { status: 'RUNNING', baselineCapture: baseline, tokensPersistedToEvidence: false,
+  const result = { status: 'RUNNING', baselineCapture: baseline || budgetBaseline, budgetBaselineCapture: budgetBaseline, tokensPersistedToEvidence: false,
     jarSha256: createHash('sha256').update(fs.readFileSync(jar)).digest('hex'),
     fixture: 'actual production DashScope HTTP adapter against an owned controlled server, not model quality',
     database: 'fresh owned H2 memory database', userFileDatabaseModified: false, cases: [] };
@@ -92,13 +95,18 @@ async function verify() {
     assert.equal(response.status, 200);
     return response.json.data.messages.filter(message => message.role === 'ASSISTANT').length;
   }
+  async function questionCount(id, token) {
+    const response = await request('/assistant/sessions/' + id, token);
+    assert.equal(response.status, 200);
+    return response.json.data.messages.filter(message => message.role === 'USER').length;
+  }
   try {
     await waitForHealth('http://127.0.0.1:9938/actuator/health', child);
     let token = await login();
     const positive = await request(route(await session(token)), token, { content: 'controlled adapter positive control' });
     assert.equal(positive.status, 200); assert.equal(positive.json.data.content, sentinel); assert.equal(calls, 1);
     result.productionHttpAdapterPositiveControl = true;
-    for (const name of ['synchronous-logout', 'stream-logout', 'clear-messages']) {
+    for (const name of budgetBaseline ? [] : ['synchronous-logout', 'stream-logout', 'clear-messages']) {
       token = await login();
       const id = await session(token), stream = name === 'stream-logout';
       holding = true;
@@ -108,7 +116,7 @@ async function verify() {
       const action = name === 'clear-messages'
         ? await request(route(id), token, undefined, 'DELETE') : await request('/auth/logout-all', token, {});
       assert.equal(action.status, 200);
-      if (!baseline && stream) { await waitFor(() => settled, 3000); assert.equal(held.size, 1); }
+      if (!baseline && name !== 'clear-messages') { await waitFor(() => settled, 3000); assert.equal(held.size, 1); }
       release();
       const response = await pending;
       const text = stream ? streamedText(response.text) : response.text;
@@ -123,9 +131,9 @@ async function verify() {
       assert.equal(text.includes(sentinel), baseline);
       if (!stream) assert.equal(response.status, baseline ? 200 : name === 'clear-messages' ? 409 : 401);
       result.cases.push({ name, responseStatus: response.status, lateAssistantMessages: count,
-        lateAnswerSent: text.includes(sentinel), closedBeforeProviderRelease: !baseline && stream });
+        lateAnswerSent: text.includes(sentinel), closedBeforeProviderRelease: !baseline && name !== 'clear-messages' });
     }
-    if (!baseline) {
+    if (!baseline && !budgetBaseline) {
       token = await login();
       const id = await session(token);
       holding = true;
@@ -142,9 +150,71 @@ async function verify() {
         lateWorkerSettledByFreshStream: true, lateAssistantMessages: 0 });
       result.freshSessionProductionHttpAnswer = true;
     }
-    assert.equal(calls, baseline ? 4 : 7, 'Every expected model call must use the actual HTTP adapter exactly once');
+    if (!baseline) {
+      token = await login();
+      const runningId = await session(token), queuedId = await session(token), rejectedId = await session(token);
+      holding = true;
+      const running = request(route(runningId), token, { content: 'shared budget running sync' });
+      await waitFor(() => held.size === 1);
+      const queued = request(route(queuedId, true), token, { content: 'shared budget queued stream' });
+      // No production test endpoint exposes queue admission; this ordering delay is not a latency assertion.
+      await delay(300);
+      const rejected = request(route(rejectedId), token, { content: 'shared budget rejected sync' });
+      if (budgetBaseline) {
+        await waitFor(() => held.size === 3);
+        assert.equal(await questionCount(rejectedId, token), 1);
+        release();
+        const rejectedResponse = await rejected;
+        assert.equal(rejectedResponse.status, 200); assert.equal(rejectedResponse.json.data.content, sentinel);
+        result.cases.push({ name: 'mixed-capacity', responseStatus: 200, rejectedQuestionWrites: 1, simultaneousProviderCalls: 3 });
+      } else {
+        const rejectedResponse = await rejected;
+        assert.equal(rejectedResponse.status, 503); assert.equal(rejectedResponse.json.error.code, 'ASSISTANT_QUEUE_SATURATED');
+        assert.equal(held.size, 1); assert.equal(await questionCount(rejectedId, token), 0);
+        assert.equal(await questionCount(queuedId, token), 0); assert.equal(await answerCount(rejectedId, token), 0);
+        result.cases.push({ name: 'mixed-capacity', responseStatus: 503, rejectedQuestionWrites: 0,
+          queuedQuestionWritesBeforeProviderRelease: 0, simultaneousProviderCalls: 1 });
+        release();
+      }
+      assert.equal((await running).status, 200);
+      const queuedResponse = await queued; assert.ok(queuedResponse.text.includes('event:done'));
+      assert.equal(streamedText(queuedResponse.text), sentinel);
+
+      const timedId = await session(token), queuedTimedId = await session(token);
+      holding = true;
+      let timedSettled = false, queuedTimedSettled = false;
+      const timed = request(route(timedId), token, { content: 'sync budget timeout' }).then(value => { timedSettled = true; return value; });
+      await waitFor(() => held.size === 1);
+      const queuedTimed = request(route(queuedTimedId), token, { content: 'queued sync budget timeout' })
+        .then(value => { queuedTimedSettled = true; return value; });
+      if (budgetBaseline) {
+        await waitFor(() => held.size === 2); await delay(5500);
+        assert.equal(timedSettled, false); assert.equal(queuedTimedSettled, false);
+        release();
+        assert.equal((await timed).status, 200); assert.equal((await queuedTimed).status, 200);
+        assert.equal(await answerCount(timedId, token), 1); assert.equal(await answerCount(queuedTimedId, token), 1);
+        result.cases.push({ name: 'synchronous-running-and-queued-timeout', responseStatuses: [200, 200],
+          settledBeforeProviderRelease: false, lateAssistantMessages: 2 });
+      } else {
+        const responses = await Promise.all([timed, queuedTimed]);
+        for (const response of responses) {
+          assert.equal(response.status, 504); assert.equal(response.json.error.code, 'ASSISTANT_EXECUTION_TIMEOUT');
+          assert.ok(!response.text.includes(sentinel));
+        }
+        assert.equal(held.size, 1); assert.equal(await questionCount(timedId, token), 1);
+        assert.equal(await questionCount(queuedTimedId, token), 0); release();
+        // Same one-worker pool: completion proves the late timed-out HTTP call really returned.
+        const fresh = await request(route(await session(token)), token, { content: 'sync budget settlement positive control' });
+        assert.equal(fresh.status, 200); assert.equal(fresh.json.data.content, sentinel);
+        assert.equal(await answerCount(timedId, token), 0); assert.equal(await answerCount(queuedTimedId, token), 0);
+        result.cases.push({ name: 'synchronous-running-and-queued-timeout', responseStatuses: [504, 504],
+          settledBeforeProviderRelease: true, lateAssistantMessages: 0, queuedQuestionWrites: 0,
+          lateWorkerSettledByFreshSynchronousAnswer: true });
+      }
+    }
+    assert.equal(calls, baseline ? 4 : budgetBaseline ? 6 : 11, 'Every expected model call must use the actual HTTP adapter exactly once');
     result.providerTransportCalls = calls;
-    result.status = baseline ? 'BASELINE_CAPTURED' : 'PASS';
+    result.status = baseline || budgetBaseline ? 'BASELINE_CAPTURED' : 'PASS';
   } catch (error) { result.status = 'FAIL'; result.failure = redact(error.message); throw error; }
   finally {
     process.off('SIGINT', interrupt); process.off('SIGTERM', interrupt); release();

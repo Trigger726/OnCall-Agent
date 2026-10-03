@@ -99,7 +99,7 @@ jobs:
         run: node scripts/verify-auth-session-ci.cjs
       - name: Verify existing Agent streams and late real HTTP Provider results
         run: node scripts/verify-agent-session-ci.cjs
-      - name: Verify late assistant HTTP answers, revocation, clear and deadline
+      - name: Verify assistant HTTP revocation, mixed capacity and running/queued budgets
         run: node scripts/verify-assistant-session-ci.cjs
       - uses: actions/upload-artifact@v5
         if: always()

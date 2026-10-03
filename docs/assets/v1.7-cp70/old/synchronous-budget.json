@@ -1,0 +1,49 @@
+{
+  "sourceCommit": "45247a8ff72788ac4baf94f8b6e2adc4bbc1b745",
+  "protectedJar": "target/cp70-before/opspilot-cp69.jar",
+  "protectedJarSha256": "1a28cdf37b55743ba3070411ac17eb69c3b0e1882c360f7406e604472957856a",
+  "httpTestBaseline": {
+    "log": "target/cp70-before/sync-budget-baseline.log",
+    "sha256": "ec9e99cee273cf0470f92744224d76a370b71f4f43384740956d21bfafaaab53",
+    "executed": 3,
+    "failures": 2,
+    "errors": 1,
+    "skipped": 0,
+    "firstSaturatedSynchronousStatus": 200,
+    "reverseStreamQueuedCount": 0,
+    "synchronousResponseFutureTimedOutBeforeProviderRelease": true
+  },
+  "nativeProductionHttpBaseline": {
+    "status": "BASELINE_CAPTURED",
+    "baselineCapture": true,
+    "budgetBaselineCapture": true,
+    "tokensPersistedToEvidence": false,
+    "jarSha256": "1a28cdf37b55743ba3070411ac17eb69c3b0e1882c360f7406e604472957856a",
+    "fixture": "actual production DashScope HTTP adapter against an owned controlled server, not model quality",
+    "database": "fresh owned H2 memory database",
+    "userFileDatabaseModified": false,
+    "cases": [
+      {
+        "name": "mixed-capacity",
+        "responseStatus": 200,
+        "rejectedQuestionWrites": 1,
+        "simultaneousProviderCalls": 3
+      },
+      {
+        "name": "synchronous-running-and-queued-timeout",
+        "responseStatuses": [
+          200,
+          200
+        ],
+        "settledBeforeProviderRelease": false,
+        "lateAssistantMessages": 2
+      }
+    ],
+    "startedPid": 76080,
+    "productionHttpAdapterPositiveControl": true,
+    "providerTransportCalls": 6,
+    "ownedProcessStopped": true,
+    "ownedProviderStopped": true,
+    "unexpectedJarErrors": 0
+  }
+}

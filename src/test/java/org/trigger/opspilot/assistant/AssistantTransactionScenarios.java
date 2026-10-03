@@ -1,6 +1,6 @@
 package org.trigger.opspilot.assistant;
 
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -49,17 +49,24 @@ public final class AssistantTransactionScenarios implements AutoCloseable {
 
     public void auditInsertFailureRollsBackAnswerAndTitle() throws Exception {
         String constraint = "cp69_audit_" + UUID.randomUUID().toString().replace("-", "");
+        final boolean mysql;
+        try (var connection = dataSource.getConnection()) {
+            mysql = "MySQL".equals(connection.getMetaData().getDatabaseProductName());
+        }
         jdbc.sql("ALTER TABLE audit_log ADD CONSTRAINT " + constraint
                 + " CHECK(action <> 'ASSISTANT_MESSAGE' OR target_type <> 'ASSISTANT_SESSION' OR target_id <> '" + sessionId + "')").update();
         try {
             assertThatThrownBy(() -> assistant.sendMessage(sessionId, ownerId, "atomic audit failure fixture"))
-                    .isInstanceOf(DataIntegrityViolationException.class);
+                    .isInstanceOfSatisfying(DataAccessException.class, error -> {
+                        assertThat(error.getMostSpecificCause()).isInstanceOf(java.sql.SQLException.class);
+                        var sql = (java.sql.SQLException) error.getMostSpecificCause();
+                        assertThat(sql.getErrorCode()).isEqualTo(mysql ? 3819 : 23513);
+                        assertThat(sql.getSQLState()).isEqualTo(mysql ? "HY000" : "23513");
+                        assertThat(sql.getMessage()).containsIgnoringCase(constraint);
+                    });
             assertUncompleted();
         } finally {
-            try (var connection = dataSource.getConnection()) {
-                boolean mysql = "MySQL".equals(connection.getMetaData().getDatabaseProductName());
-                jdbc.sql("ALTER TABLE audit_log DROP " + (mysql ? "CHECK " : "CONSTRAINT ") + constraint).update();
-            }
+            jdbc.sql("ALTER TABLE audit_log DROP " + (mysql ? "CHECK " : "CONSTRAINT ") + constraint).update();
         }
         var fresh = assistant.sendMessage(sessionId, ownerId, "valid after constraint removal");
         assertThat(fresh.role()).isEqualTo("ASSISTANT");

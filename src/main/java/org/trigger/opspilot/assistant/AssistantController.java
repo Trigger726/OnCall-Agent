@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import org.springframework.web.context.request.async.DeferredResult;
+import org.springframework.http.HttpStatus;
+import org.trigger.opspilot.common.ApiException;
 import org.trigger.opspilot.common.ApiResponse;
 import org.trigger.opspilot.security.UserPrincipal;
 import org.trigger.opspilot.security.SessionAuthorization;
@@ -54,13 +57,36 @@ public class AssistantController {
     }
 
     @PostMapping("/sessions/{id}/messages")
-    public ApiResponse<AssistantService.MessageView> message(
+    public DeferredResult<ApiResponse<AssistantService.MessageView>> message(
             @AuthenticationPrincipal UserPrincipal user, @PathVariable long id,
             @Valid @RequestBody SendMessageRequest request) {
         var lease = authorization.current();
-        var message = service.sendMessage(id, user.id(), request.content());
-        if (!authorization.authorized(lease, false)) throw new CredentialsExpiredException("Assistant session expired");
-        return ApiResponse.ok(message);
+        long ownerId = user.id();
+        service.getSession(id, ownerId);
+        var result = new DeferredResult<ApiResponse<AssistantService.MessageView>>(0L);
+        execution.submit(lease, work -> {
+            try {
+                var message = service.sendMessage(id, ownerId, request.content(), lease, work::check);
+                work.check(); // Never replace the original HTTP lease with a newly captured account version.
+                result.setResult(ApiResponse.ok(message));
+            } catch (Exception exception) {
+                result.setErrorResult(exception);
+            }
+        }, reason -> {
+            boolean authorized;
+            try { authorized = authorization.authorized(lease, false); }
+            catch (RuntimeException exception) { authorized = false; }
+            if (!authorized || reason == AssistantExecutionManager.Reason.REVOKED) {
+                result.setErrorResult(new CredentialsExpiredException("Assistant session expired"));
+            } else if (reason == AssistantExecutionManager.Reason.TIMED_OUT) {
+                result.setErrorResult(new ApiException(HttpStatus.GATEWAY_TIMEOUT,
+                        "ASSISTANT_EXECUTION_TIMEOUT", "回答超时，请稍后重新发送问题"));
+            } else {
+                result.setErrorResult(new ApiException(HttpStatus.SERVICE_UNAVAILABLE,
+                        "ASSISTANT_EXECUTION_STOPPED", "回答已停止，请稍后重试"));
+            }
+        });
+        return result;
     }
 
     @PostMapping(value = "/sessions/{id}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
