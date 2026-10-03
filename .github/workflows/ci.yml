@@ -217,6 +217,43 @@ jobs:
             target/surefire-reports/
             target/mysql-it/
 
+  assistant-native-mysql-integration:
+    name: Native assistant HTTP on MySQL 8.4
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Reject H2 fallback, missing native cases and incomplete shutdown evidence
+        run: node --test scripts/tests/assistant-native-mysql.test.cjs
+      - name: Run the same native HTTP scenarios with real MySQL and AI enabled
+        shell: bash
+        run: |
+          set -o pipefail
+          chmod +x mvnw
+          mkdir -p target/assistant-native-mysql-it
+          ./mvnw -B -Duser.timezone=UTC \
+            -Dopspilot.assistant.native.mysql.enabled=true \
+            -Dtest=AssistantNativeEndpointIntegrationTest \
+            test 2>&1 | tee target/assistant-native-mysql-it/maven.log
+      - name: Verify per-execution JDBC identity, native cases and full shutdown
+        run: node scripts/verify-assistant-native-mysql.cjs
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: assistant-native-mysql-evidence
+          path: |
+            target/assistant-native-mysql-it/
+            target/surefire-reports/
+          retention-days: 30
+
   alertmanager-integration:
     name: Alertmanager webhook integration
     runs-on: ubuntu-latest
@@ -275,7 +312,7 @@ jobs:
 
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, browser-integration, backend-h2, mysql-integration, auth-session-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration, collector-alerting-integration]
+    needs: [frontend, browser-integration, backend-h2, mysql-integration, assistant-native-mysql-integration, auth-session-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration, collector-alerting-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

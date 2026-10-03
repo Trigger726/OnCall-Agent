@@ -2,6 +2,8 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
+最新80：[报告](V1.7-checkpoint-80.md)。同类真实原生HTTP新增MySQL入口/逐执行JDBC证明/独立CI，18次H2与新门禁15项通过，真实H2成功日志被拒绝；MySQL仍待自身源执行，原99门禁不代替它。79自身eccb641/Run37144759553十五作业success，四ZIP、十七完整JAR日志、十三八六页面与慢TCP五项已核验，[79第六节](V1.7-checkpoint-79.md)/[远端机器证据](../assets/v1.7-cp79/remote-proof.json)。以下历史“待验”保留当时事实。
+
 79轮转刷新验收本地限定通过：[报告](V1.7-checkpoint-79.md)、[证据](../assets/v1.7-cp79/local-proof.json)。受控真实台账响应导致鼠标按下期间按钮位移3268px、click0/表单0；只改测试等待后续实际roster响应，保留200ms延迟/按压和原断言。最终十三/八/六页及三完整停机日志零意外ERROR，自身Linux待验；不声称远端唯一根因或生产UI布局已修复，全部失败/旧Demo保留。
 
 78默认五项本地与自身Linux限定通过，但整轮CI失败：[报告](V1.7-checkpoint-78.md)、[远端证据](../assets/v1.7-cp78/first-remote-proof.json)。119cee1/Run37142602799十三success、轮转浏览器failure、容器skipped；四ZIP源SHA/摘要、Linux三JVM/五客户端/十二HTTP、十五完整JAR日志意外ERROR=0、原生62/MySQL原99门禁已独立核验。writer60.224秒池空闲、新原生答案60.424秒提交时旧TCP未读/Provider未放行。失败保留，不声称整轮通过或绝对TTL。

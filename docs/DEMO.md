@@ -1,5 +1,7 @@
 # OpsPilot 10 分钟演示脚本
 
+80新增的是测试/CI而非新生产页面：[验收报告](acceptance/V1.7-checkpoint-80.md)。本地18次H2、15项防假绿门禁通过，真实MySQL原生HTTP待自身CI。79自身Linux十五作业成功、十三/八/六界面机器证据已核验，见[79第六节](acceptance/V1.7-checkpoint-79.md)，原桌面/手机Demo、受控漏点击图和所有历史失败保留；不把测试同步修正宣称为产品布局改善。
+
 ## CP79：刷新完成与按钮可见不是同一状态
 
 [受控漏点击](assets/v1.7-cp79/before/missed-click.png)/[诊断](assets/v1.7-cp79/before/layout-probe-result.json)保存真实slots响应在200ms鼠标按压期间插入台账，按钮位移3268px、click0/确认0/班次未取消。验收脚本改为等后续实际roster响应完成，原十三页和业务断言未删；[最终桌面确认](assets/v1.7-cp79/after/cancel-confirmation-desktop.png)/[手机取消台账](assets/v1.7-cp79/after/cancelled-ledger-mobile.png)同44e包已验，助手八/六页面保留。只本地限定通过、自身Linux待验；生产UI未改，78远端没有完整事件轨迹，不说唯一根因已证实，见[79报告](acceptance/V1.7-checkpoint-79.md)。

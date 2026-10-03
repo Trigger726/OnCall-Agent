@@ -1,5 +1,7 @@
 # OpsPilot 面试讲解与追问
 
+CP80可讲验收设计，不可提前讲MySQL已通过：“同一套真实登录/servlet/SSE/SQL场景在不同数据库运行，每次检查实际JDBC产品与版本，H2成功、跳过或旧XML不能冒充MySQL证据。”新增18次原生HTTP/逐次标记/停机门禁，15项门禁夹具和真实H2拒绝已验，真实MySQL待自身CI，见[80报告](acceptance/V1.7-checkpoint-80.md)。79自身eccb641/Run37144759553十五作业成功、四ZIP及十三/八/六页面/五慢TCP已独立核验，[79第六节](acceptance/V1.7-checkpoint-79.md)追加闭环，以下历史“待验”对应当时。
+
 CP79可讲测试工程边界：“按钮可见不等于异步跨面板刷新完成”。本地普通十三页通过不能覆盖远端失败；受控真实响应在鼠标按压期间插入台账，目标位移3268px、click0/确认0，进一步用真实后续roster响应屏障修正验收，保留200ms延迟/按压、后台填补/路由和全部原断言。最终十三/八/六页本地通过，自身Linux待验。生产页面未改，远端原失败无完整事件轨迹，不宣称唯一根因或用户布局问题已修复，见[79报告](acceptance/V1.7-checkpoint-79.md)。
 
 CP78补充工程追问：“模型worker释放后，输出容量什么时候回来？”用完全暂停的真实TCP、1 writer/0输出队列，先证明取消200、模型HTTP关闭、同worker同步新答案，但新流仍503且问题0/模型0；不RESUME、不关旧客户端或放行Provider，实测writer约60秒回到池空闲、约60秒替代原生答案完成。时间是采样观测区间，不是精确socket-close时刻，也不是trickle/TLS/代理下绝对TTL。默认自动化保留原四项并新增第五项，Windows与119cee1自身Linux通过；该轮CI十三success、轮转浏览器failure、容器skipped，失败另存，不能称整轮通过。生产源码未改，见[78报告](acceptance/V1.7-checkpoint-78.md)。

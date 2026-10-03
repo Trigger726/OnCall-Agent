@@ -4,15 +4,25 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpServer;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.RepeatedTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.MySQLContainer;
+
+import javax.sql.DataSource;
 
 import java.io.ByteArrayOutputStream;
 import java.net.InetSocketAddress;
@@ -49,7 +59,37 @@ class AssistantNativeEndpointIntegrationTest {
     static final HttpServer PROVIDER = provider();
     @LocalServerPort int port;
     @Autowired JdbcClient jdbc;
+    @Autowired DataSource dataSource;
+    @Autowired Environment environment;
     final HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build();
+
+    // The same real HTTP scenarios run on either database; MySQL must never silently fall back to H2.
+    @BeforeEach void requireSelectedDatabase(TestInfo test) throws Exception {
+        boolean mysql = environment.getProperty("opspilot.assistant.native.mysql.enabled", Boolean.class, false);
+        try (var connection = dataSource.getConnection()) {
+            var metadata = connection.getMetaData();
+            assertThat(metadata.getDatabaseProductName()).isEqualTo(mysql ? "MySQL" : "H2");
+            if (mysql) assertThat(metadata.getDatabaseProductVersion()).startsWith("8.4.");
+            System.out.println("CP80_NATIVE_DATABASE " + JSON.writeValueAsString(Map.of(
+                    "product", metadata.getDatabaseProductName(), "version", metadata.getDatabaseProductVersion(),
+                    "case", test.getTestMethod().orElseThrow().getName())));
+        }
+    }
+
+    // Spring owns startup and shutdown; do not stop MySQL in @AfterAll before its Hikari pool closes.
+    @TestConfiguration(proxyBeanMethods = false)
+    @ConditionalOnProperty(name = "opspilot.assistant.native.mysql.enabled", havingValue = "true")
+    static class NativeMySql {
+        @Bean
+        @ServiceConnection
+        MySQLContainer<?> mysql() {
+            return new MySQLContainer<>("mysql:8.4")
+                    .withDatabaseName("opspilot_native_test")
+                    .withUsername("opspilot")
+                    .withPassword("opspilot-native-test")
+                    .withCommand("--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci");
+        }
+    }
 
     @DynamicPropertySource static void modelProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.ai.dashscope.base-url", () -> "http://127.0.0.1:" + PROVIDER.getAddress().getPort());
@@ -130,6 +170,61 @@ class AssistantNativeEndpointIntegrationTest {
         } finally { control.release.countDown(); pending.get(10, TimeUnit.SECONDS); }
     }
 
+    @Test void shouldRejectNativeQueueSaturationBeforeAdmissionAndReuseCancelledSlot() throws Exception {
+        String token = login(), runningKey = UUID.randomUUID().toString(), queuedKey = UUID.randomUUID().toString();
+        long runningId = session(token), queuedId = session(token), rejectedId = session(token);
+        var running = new Control(); var queued = new Control(); var rejected = new Control();
+        CONTROLS.put(running.question, running); CONTROLS.put(queued.question, queued); CONTROLS.put(rejected.question, rejected);
+        var events = new LinkedBlockingQueue<JsonNode>();
+        var first = http.sendAsync(post("/assistant/sessions/" + runningId + "/stream", token,
+                Map.of("content", running.question), runningKey), info -> new ObservedBody(events));
+        CompletableFuture<HttpResponse<String>> second = null, retry = null;
+        try {
+            awaitPreview(events);
+            second = http.sendAsync(post("/assistant/sessions/" + queuedId + "/stream", token,
+                    Map.of("content", queued.question), queuedKey), HttpResponse.BodyHandlers.ofString());
+            awaitQueued(queuedId); assertThat(queued.calls).hasValue(0); assertThat(count(queuedId, "USER")).isZero();
+            String rejectedKey = UUID.randomUUID().toString();
+            var refusal = http.send(post("/assistant/sessions/" + rejectedId + "/stream", token,
+                    Map.of("content", rejected.question), rejectedKey), HttpResponse.BodyHandlers.ofString());
+            assertThat(refusal.statusCode()).isEqualTo(503);
+            assertThat(JSON.readTree(refusal.body()).path("error").path("code").asText()).isEqualTo("ASSISTANT_QUEUE_SATURATED");
+            assertThat(count(rejectedId, "USER")).isZero(); assertThat(count(rejectedId, "ASSISTANT")).isZero(); assertThat(rejected.calls).hasValue(0);
+            var lookup = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/api/v1/assistant/sessions/" + rejectedId + "/request"))
+                    .timeout(Duration.ofSeconds(5)).header("Authorization", "Bearer " + token).header("Idempotency-Key", rejectedKey).GET().build();
+            assertThat(http.send(lookup, HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(404);
+            assertThat(http.send(post("/assistant/sessions/" + queuedId + "/request/cancel", token, null, queuedKey), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(200);
+            assertThat(second.get(3, TimeUnit.SECONDS).body()).contains("event:cancelled").doesNotContain("event:done");
+            assertThat(requestState(queuedId, token, queuedKey).path("status").asText()).isEqualTo("CANCELLED");
+            assertThat(count(queuedId, "USER")).isZero(); assertThat(count(queuedId, "ASSISTANT")).isZero(); assertThat(queued.calls).hasValue(0);
+            rejected.release.countDown();
+            retry = http.sendAsync(post("/assistant/sessions/" + rejectedId + "/stream", token,
+                    Map.of("content", rejected.question), rejectedKey), HttpResponse.BodyHandlers.ofString());
+            awaitQueued(rejectedId); assertThat(rejected.calls).hasValue(0); assertThat(count(rejectedId, "USER")).isZero();
+            assertThat(http.send(post("/assistant/sessions/" + runningId + "/request/cancel", token, null, runningKey), HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(200);
+            assertThat(first.get(3, TimeUnit.SECONDS).body()).contains("event:cancelled").doesNotContain("event:done");
+            var recovered = retry.get(4, TimeUnit.SECONDS);
+            assertThat(recovered.statusCode()).isEqualTo(200); assertThat(recovered.body()).contains("event:token", "event:done");
+            assertThat(running.release.getCount()).isEqualTo(1); assertThat(running.calls).hasValue(1); assertThat(rejected.calls).hasValue(1);
+            assertThat(count(runningId, "ASSISTANT")).isZero(); assertThat(count(rejectedId, "USER")).isEqualTo(1); assertThat(count(rejectedId, "ASSISTANT")).isEqualTo(1);
+            assertThat(requestState(rejectedId, token, rejectedKey).path("answerMessageId").asLong()).isPositive();
+        } finally {
+            running.release.countDown(); queued.release.countDown(); rejected.release.countDown(); first.get(10, TimeUnit.SECONDS);
+            if (second != null) second.get(10, TimeUnit.SECONDS);
+            if (retry != null) retry.get(10, TimeUnit.SECONDS);
+        }
+    }
+
+    private void awaitQueued(long id) throws Exception {
+        long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(3);
+        do {
+            if (jdbc.sql("SELECT COUNT(*) FROM assistant_request WHERE session_id=:id AND status='QUEUED'")
+                    .param("id", id).query(Long.class).single() == 1) return;
+            Thread.sleep(20);
+        } while (System.nanoTime() < deadline);
+        assertThat(jdbc.sql("SELECT status FROM assistant_request WHERE session_id=:id").param("id", id).query(String.class).optional()).contains("QUEUED");
+    }
+
     @RepeatedTest(10) void shouldFailOnNativeEofRatherThanAppendRuleFallback() throws Exception {
         String token = login(), key = UUID.randomUUID().toString(); long id = session(token);
         var control = new Control(); control.truncated = true; CONTROLS.put(control.question, control);
@@ -208,7 +303,7 @@ class AssistantNativeEndpointIntegrationTest {
         boolean constraintAdded = false;
         try {
             awaitPreview(events);
-            // Scoped isolated H2 failure AFTER the preview; answer/title/completion must roll back together.
+            // Scoped isolated database failure AFTER the preview; answer/title/completion must roll back together.
             jdbc.sql("ALTER TABLE audit_log ADD CONSTRAINT cp75_native_audit_failure CHECK (action <> 'ASSISTANT_MESSAGE' OR target_id <> '" + id + "')").update();
             constraintAdded = true; control.release.countDown();
             assertThat(pending.get(4, TimeUnit.SECONDS).body()).contains("event:error").doesNotContain("event:done");
