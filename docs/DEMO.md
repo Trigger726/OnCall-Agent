@@ -1,10 +1,14 @@
 # OpsPilot 10 分钟演示脚本
 
+## CP77：先展示未修复的真实资源缺陷
+
+只读展示[慢读反例](assets/v1.7-cp77/baseline-proof.json)和[实际阻塞栈](assets/v1.7-cp77/baseline-worker.txt)：正常SSE首token后暂停TCP读取，源输出仍在既有字符/帧上限内；取消事实已CANCELLED/答案0，但取消API、原模型连接、原唯一worker仍占用，恢复读后才释放。首轮夹具同步探针误要求SSE头的错误另保留，不当产品失败。生产修复尚未完成，不演示成“新增已交付能力”，不借76十五CI冒充慢读通过。复跑调查仅用自有9971/9972/独立内存库和target/cp77-before保留包，`node scripts/probe-assistant-slow-consumer.cjs`会在CI明确拒绝。
+
 ## CP76：跨节点共享取消事实不等于释放执行资源
 
 先只读展示[新旧对照证据](assets/v1.7-cp76/local-proof.json)，旧74的B取消已让A/B均为CANCELLED、答案0，但旧模型未放行时A原HTTP和worker仍占用；75原生包两次相同夹具均先关闭HTTP并复用worker。另展示B清空后SUPERSEDED/消息0、B撤销后两节点旧401/A无新增payload以及B完成回放不多调模型。
 
-真实复跑仅限自有隔离环境：先构建当前JAR，再执行 `node scripts/verify-assistant-cross-node-ci.cjs`，使用空闲9965/9966/9967/9968/9970、两个自有JVM及新建共享H2文件。仅本地旧74对照可设置OPSPILOT_ASSISTANT_CROSS_NODE_BASELINE=1；运行后清除此开关，CI会拒绝基线模式。脚本仅停止自己启动的进程，不碰日常9900库，不上传数据库/签名密钥/Token。四场景本地已验、当前新增CI待自身提交验证；不把本机共享SQL夸成跨机器HA或全局队列容量，见[76报告](acceptance/V1.7-checkpoint-76.md)。历史UI Demo不覆盖，本轮没有页面改版。
+真实复跑仅限自有隔离环境：先构建当前JAR，再执行 `node scripts/verify-assistant-cross-node-ci.cjs`，使用空闲9965/9966/9967/9968/9970、两个自有JVM及新建共享H2文件。仅本地旧74对照可设置OPSPILOT_ASSISTANT_CROSS_NODE_BASELINE=1；运行后清除此开关，CI会拒绝基线模式。脚本仅停止自己启动的进程，不碰日常9900库，不上传数据库/签名密钥/Token。四场景本地及6082012自身十五CI/三ZIP独立验证已过；不把正常读响应、本机共享SQL夸成慢客户端释放、跨机器HA或全局容量，见[76报告](acceptance/V1.7-checkpoint-76.md)。历史UI Demo不覆盖，本轮没有页面改版。
 
 ## CP75：真实提前片段，不等于已保存答案
 

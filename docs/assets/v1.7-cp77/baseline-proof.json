@@ -1,0 +1,65 @@
+{
+  "status": "BASELINE_CAPTURED_NOT_FIXED",
+  "productionSourceCommit": "60820121accc223be19d49e7b58505fadfc8ebc6",
+  "productionSourceChanged": false,
+  "runnerSha256": "8a84041865145b6a0aca008d4463ffdc8f6970c392babbe73848c5999455a252",
+  "result": {
+    "status": "BASELINE_CAPTURED",
+    "jarSha256": "735d0f2d45e90cefab372dcfb13aa7c8e5b5624a82ca9b091393163171c27151",
+    "ownedPid": 93568,
+    "browserSocketPaused": true,
+    "outputCharacters": 99907,
+    "nativeFramesBeforeRelease": 9991,
+    "tokensPersisted": false,
+    "userFileDatabaseModified": false,
+    "providerFramesWritten": 9990,
+    "assistantWorkerBlockedInTomcatWrite": true,
+    "cancelReturnedBeforeSocketResume": false,
+    "modelHttpClosedBeforeSocketResume": false,
+    "newWorkEnteredBeforeSocketResume": false,
+    "persistedStatusBeforeSocketResume": "CANCELLED",
+    "oldProviderReleasedBeforeObservation": false,
+    "cancelledAnswerRows": 0,
+    "ownedProcessStopped": true,
+    "ownedProviderStopped": true,
+    "unexpectedJarErrors": 0
+  },
+  "files": [
+    {
+      "path": "target/assistant-slow-consumer-it/probe-lLV5cp/result.json",
+      "sha256": "48e642ad5e21761a0a72da30a0c60cb68ef7f6af8719c549edd4f4b88fc4dbd6"
+    },
+    {
+      "path": "target/assistant-slow-consumer-it/probe-lLV5cp/jar.log",
+      "sha256": "2ff842d9aba7253b9e855197a6a47c90aa717e8033e40595088b4826006bc10a"
+    },
+    {
+      "path": "target/assistant-slow-consumer-it/probe-lLV5cp/paused-thread.txt",
+      "sha256": "4fed355ebec3ac5472779921b35273ed22b17a6bee9aacc5fd5b5e8748379de1"
+    },
+    {
+      "path": "target/cp77-before/slow-probe-second.log",
+      "sha256": "904a967fa50384523df3044c78b55a5d31284a60521af6593687757d7fa5562d"
+    },
+    {
+      "path": "target/cp77-before/slow-probe-first.log",
+      "sha256": "c16be38dcd286c5a3ccc2ef3e671e2d3631928db251d9575beb3279a8efabda0"
+    },
+    {
+      "path": "target/assistant-slow-consumer-it/probe-UvfxBc/paused-thread.txt",
+      "sha256": "02f0db65e5ee4a0fae9d2fccc30645f383455cc8810b3dd92aec9bdacd6e5bfd"
+    }
+  ],
+  "firstProbe": {
+    "status": "FIXTURE_ERROR",
+    "cause": "Fresh synchronous /messages probe incorrectly required the native SSE request header; callback assertion exited before result.json",
+    "notProductFailure": true
+  },
+  "limits": [
+    "Investigation probe is explicitly rejected in CI",
+    "Current production bug is reproduced, not fixed",
+    "Cancellation scenario only; no slow-reader deadline/revocation/saturated-writer regression yet",
+    "No UI redesign, no real model quality or remote-provider billing claim",
+    "No credentials, raw database or JAR committed"
+  ]
+}

@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-76新增双节点助手四场景本地两次通过：[报告](docs/acceptance/V1.7-checkpoint-76.md)。两个独立JVM共享新建SQL文件库，A执行、B回放/取消/清空/撤销；新原生流在旧模型未放行时已关闭实际HTTP并复用原worker，旧74对照两项均未释放。重复请求409、他人404、单次审计及不落半答案同时验证。新增CI门禁待本次提交自身远端验收，不外推跨机器、MySQL原生HTTP、数据库HA或全局容量，历史Demo保留。
+77已完整复现慢TCP消费者缺陷：[反例报告](docs/acceptance/V1.7-checkpoint-77.md)。SQL虽已CANCELLED，暂停读响应仍使worker/模型HTTP/取消API卡住；生产修复尚未交付，不用既有绿灯掩盖。第一轮夹具错误、真实Tomcat阻塞栈和完整反例均保留，下一步优先有界输出隔离与停止/超时/授权回归，完整目标继续。
+
+76双节点助手四场景本地两次与自身远端限定通过：[报告](docs/acceptance/V1.7-checkpoint-76.md)。6082012的[Run37131134785](https://github.com/Trigger726/OnCall-Agent/actions/runs/37131134785)十五作业success，三ZIP源SHA/实际摘要、Linux四跨节点场景/六runner/十一完整JAR日志、原生54和真实MySQL99/五池门禁已独立核验。两个独立JVM共享新建SQL文件库，A执行、B回放/取消/清空/撤销；正常读取时原生流先关闭实际HTTP并复用worker，旧74两项均未释放。重复409/他人404/单次审计与不落半答案成立，不外推77慢读边界、跨机器、MySQL原生HTTP或数据库HA，历史Demo保留。
 
 75默认助手原生流本地与自身远端限定通过：[报告](docs/acceptance/V1.7-checkpoint-75.md)。55d80e5的[Run37128573740](https://github.com/Trigger726/OnCall-Agent/actions/runs/37128573740)十五作业success，四ZIP源SHA/官方摘要/实际下载及原门禁重放已核验；54原生契约、双时区各513发现/407执行/106条件跳过、真实MySQL99/五池关闭、Linux原十三页面/八助手UI/五原生UI和五认证runner已验。真实模型结束前可见临时片段，SQL提交后才发布答案ID；取消/超时关闭原HTTP、worker可复用，截断不保存半个答案。前端107/生命周期17、新旧27图与失败保留。原生MySQL HTTP矩阵、跨节点、慢消费者/生产容量和整体目标继续。
 

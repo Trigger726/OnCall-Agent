@@ -2,7 +2,9 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
-76双节点助手停止围栏本地限定通过：[报告](V1.7-checkpoint-76.md)。两个独立JVM/同一新建H2 SQL/真实模型HTTP，四场景两次PASS；A执行时B取消/清空/撤销，实际HTTP与原worker不依赖旧Provider放行，旧74反例保留。增加CI门禁但自身提交远端待验，不借75全绿，不外推MySQL原生HTTP、跨机器HA或生产容量。
+77慢TCP消费者缺陷已完整复现但尚未修复：[报告](V1.7-checkpoint-77.md)。暂停读响应时SQL已CANCELLED，取消API/原模型HTTP/唯一worker仍卡住；实际Tomcat线程栈/首夹具错误/完整负对照均保留，调查probe不得冒充CI验收。下一步生产修复与独立停止/预算/授权/有界容量回归，整体目标继续。
+
+76双节点助手停止围栏本地与自身远端限定通过：[报告](V1.7-checkpoint-76.md)。6082012的[Run37131134785](https://github.com/Trigger726/OnCall-Agent/actions/runs/37131134785)十五作业success，三ZIP源SHA/摘要、原生54/真实MySQL99及五池、六runner/十一JAR日志已独立核验。新四场景在正常读响应时释放HTTP/原worker，旧74反例保留；不外推77慢读缺陷、MySQL原生HTTP、跨机器HA或生产容量。
 
 75默认助手原生流本地与自身远端限定通过：[报告](V1.7-checkpoint-75.md)。55d80e5的[Run37128573740](https://github.com/Trigger726/OnCall-Agent/actions/runs/37128573740)十五作业success，四ZIP源SHA/官方摘要/实际下载及原门禁重放已核验；54原生契约、双时区各513发现/407执行/106条件跳过、真实MySQL99/五池关闭、Linux原十三页面/八助手UI/五原生UI和五认证runner已验。真实模型结束前可见临时片段，SQL提交后才发布答案ID；取消/超时关闭原HTTP、worker可复用，截断不保存半个答案。前端107/生命周期17、新旧27图与失败保留。原生MySQL HTTP矩阵、跨节点、慢消费者/生产容量和整体目标继续。
 

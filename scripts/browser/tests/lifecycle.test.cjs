@@ -16,6 +16,16 @@ test('cross-node assistant baseline cannot replace acceptance or launch an archi
   assert.doesNotMatch(output, /evidenceDirectory/);
 });
 
+test('slow-consumer investigation probe cannot replace acceptance or launch a baseline JAR in CI', async () => {
+  const child = spawn(process.execPath, [require.resolve('../../probe-assistant-slow-consumer.cjs')], {
+    env: { ...process.env, CI: 'true' }, windowsHide: true,
+  });
+  let output = ''; child.stderr.on('data', chunk => { output += chunk; });
+  const [code] = await once(child, 'close'); assert.equal(code, 1);
+  assert.match(output, /Investigation probe cannot replace slow-consumer acceptance/);
+  assert.doesNotMatch(output, /evidenceDirectory/);
+});
+
 test('assistant UI baseline cannot replace acceptance or launch an archived JAR in CI', async () => {
   const child = spawn(process.execPath, [require.resolve('../../verify-assistant-request-ui-ci.cjs')], {
     env: { ...process.env, CI: 'true', OPSPILOT_ASSISTANT_UI_BASELINE: '1' }, windowsHide: true,

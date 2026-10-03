@@ -2,7 +2,9 @@
 
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
-76新增双节点助手四场景本地两次通过：[报告](acceptance/V1.7-checkpoint-76.md)。A执行、B完成回放/取消/清空/撤销，真实HTTP释放与原单worker复用均在旧Provider未放行时断言；旧74反例保留。新增CI门禁待自身提交远端验收。本机两个JVM共用H2 SQL，不宣称跨机器网络分区、MySQL原生HTTP矩阵、数据库HA、全局队列容量或生产吞吐；慢消费者与完整路线继续。
+77新增实际慢TCP消费者反例：[报告](acceptance/V1.7-checkpoint-77.md)。SQL已CANCELLED但暂停读响应时取消API/原模型HTTP/唯一worker都未释放，恢复TCP读后才释放。生产尚未修复；下一步优先独立有界写资源和可检查的交接，补取消/超时/撤销/容量拒绝及原UI回归，不靠扩模型池或提前Provider放行。历史Demo/首次夹具错误/实际栈保留，整体目标active。
+
+76双节点助手四场景本地两次与6082012自身远端限定通过：[报告](acceptance/V1.7-checkpoint-76.md)。[Run37131134785](https://github.com/Trigger726/OnCall-Agent/actions/runs/37131134785)十五作业success，三工件源SHA/摘要、原生54/真实MySQL99及五池关闭、Linux六runner/十一完整JAR日志与新跨节点四场景已独立核验。正常读取客户端下A执行、B回放/取消/清空/撤销，实际HTTP释放与原worker复用均在旧Provider未放行时断言；旧74反例保留。本机共享H2 SQL不证明跨机器网络分区/MySQL原生HTTP/数据库HA/生产容量；77另复现慢读取边界，完整路线继续。
 
 75默认助手原生流本地与自身远端限定通过：[报告](acceptance/V1.7-checkpoint-75.md)。55d80e5的[Run37128573740](https://github.com/Trigger726/OnCall-Agent/actions/runs/37128573740)十五作业success，四ZIP源SHA/官方摘要/实际下载及原门禁重放已核验；54原生契约、双时区各513发现/407执行/106条件跳过、真实MySQL99/五池关闭、Linux原十三页面/八助手UI/五原生UI和五认证runner已验。真实模型结束前可见临时片段，SQL提交后才发布答案ID；取消/超时关闭原HTTP、worker可复用，截断不保存半个答案。前端107/生命周期17、新旧27图与失败保留。原生MySQL HTTP矩阵、跨节点、慢消费者/生产容量和整体目标继续。
 
