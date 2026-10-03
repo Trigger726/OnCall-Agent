@@ -1,0 +1,524 @@
+{
+  "sourceCommit": "390dd7cad5d2596b7968709f061623458aaf8ae2",
+  "runId": 37111174821,
+  "verificationDate": "2026-10-03",
+  "jobs": [
+    {
+      "id": 111169223667,
+      "name": "Backend tests and JAR (H2)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111169223727,
+      "name": "Frontend build",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111169223738,
+      "name": "Alertmanager webhook integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111169223752,
+      "name": "Prometheus rule to Alertmanager integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111169223764,
+      "name": "Persistent auth session revocation and JVM restart",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111169223767,
+      "name": "Two JVM Agent SSE integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111169223779,
+      "name": "On-call real browser integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111169223793,
+      "name": "MySQL 8.4 integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111169223796,
+      "name": "Redis Streams relay integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111169223801,
+      "name": "Follow-up notification delivery integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111169223847,
+      "name": "Native SLO rules and Alertmanager lifecycle",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111169223854,
+      "name": "OpenTelemetry Collector and Tempo integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111169223862,
+      "name": "OpsPilot service metric to Incident integration",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111169223869,
+      "name": "Collector native alert to Incident lifecycle",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 111170466901,
+      "name": "Container image build and smoke test",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11270092125,
+      "name": "auth-session-evidence",
+      "officialDigest": "sha256:365d35bc44afbb1c916a1c17b5671ebb5b90e6b0968c36c2f5886fb48c5ce369",
+      "actualZipSha256": "365d35bc44afbb1c916a1c17b5671ebb5b90e6b0968c36c2f5886fb48c5ce369",
+      "workflow_run": {
+        "id": 37111174821,
+        "repository_id": 1265067261,
+        "head_repository_id": 1265067261,
+        "head_branch": "feat/opspilot-v1",
+        "head_sha": "390dd7cad5d2596b7968709f061623458aaf8ae2"
+      }
+    },
+    {
+      "id": 11269423291,
+      "name": "mysql-compatibility-evidence",
+      "officialDigest": "sha256:86c2c2687fa940714cbe552413b768d3e6b7357415bd7a7b262da267dd667bfa",
+      "actualZipSha256": "86c2c2687fa940714cbe552413b768d3e6b7357415bd7a7b262da267dd667bfa",
+      "workflow_run": {
+        "id": 37111174821,
+        "repository_id": 1265067261,
+        "head_repository_id": 1265067261,
+        "head_branch": "feat/opspilot-v1",
+        "head_sha": "390dd7cad5d2596b7968709f061623458aaf8ae2"
+      }
+    }
+  ],
+  "independent": {
+    "mysql": {
+      "status": "PASS",
+      "suites": [
+        {
+          "name": "org.trigger.opspilot.MySqlCompatibilityIntegrationTest",
+          "tests": 46,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest",
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "executed": 99,
+      "skipped": 0,
+      "unexpectedLogLines": 0,
+      "startedPools": [
+        "HikariPool-1",
+        "HikariPool-2",
+        "HikariPool-3",
+        "HikariPool-4",
+        "HikariPool-5"
+      ],
+      "stoppedPools": [
+        "HikariPool-1",
+        "HikariPool-2",
+        "HikariPool-3",
+        "HikariPool-4",
+        "HikariPool-5"
+      ],
+      "completeMavenOutputIncludingShutdown": true
+    },
+    "proofs": [
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\agent-session-it\\run-tnz8Iq\\result.json",
+        "result": {
+          "status": "PASS",
+          "baselineCapture": false,
+          "tokensPersistedToEvidence": false,
+          "jarSha256": "ef60204241aa349b3d385ae2dbae537ce523962a55ca8202186e2958f2cbfcc0",
+          "evidenceDirectory": "target/agent-session-it/run-tnz8Iq",
+          "fixture": "owned real HTTP Prometheus response held until logout",
+          "database": "fresh runner-owned H2 memory database",
+          "userFileDatabaseModified": false,
+          "startedPid": 2723,
+          "logoutStatus": 200,
+          "revokedGetClosedBeforeProviderRelease": true,
+          "revokedPostClosedBeforeProviderRelease": true,
+          "otherAccountStreamStillOpenBeforeRelease": true,
+          "finalRunStatus": "CANCELLED",
+          "reportCreated": false,
+          "observedTerminationKind": "CANCEL",
+          "providerRequests": 2,
+          "settlementAfterReleaseMs": 35,
+          "providerReadBudgetMs": 10000,
+          "persistedEventTypes": [
+            "RUN_QUEUED",
+            "RUN_STARTED",
+            "PLAN_COMPLETED",
+            "STEP_STARTED",
+            "EVIDENCE_COLLECTED",
+            "STEP_STARTED",
+            "EVIDENCE_COLLECTED",
+            "STEP_STARTED",
+            "RUN_CANCEL_REQUESTED",
+            "RUN_CANCELLED"
+          ],
+          "runId": 1,
+          "otherAccountRemainsAuthorized": true,
+          "revokedTokenRejectedOnNextRequest": true,
+          "freshSessionCompletesAfterInterruptedRun": true,
+          "ownedProcessStopped": true,
+          "ownedProviderStopped": true,
+          "unexpectedJarErrors": 0
+        }
+      },
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\assistant-cancel-it\\run-XdyvIi\\result.json",
+        "result": {
+          "status": "PASS",
+          "baselineCapture": false,
+          "tokensPersistedToEvidence": false,
+          "jarSha256": "ef60204241aa349b3d385ae2dbae537ce523962a55ca8202186e2958f2cbfcc0",
+          "upgradeFixtureExecuted": false,
+          "fixture": "owned production HTTP adapter; explicit cancellation, lost cancel response and queued SIGKILL recovery",
+          "database": "fresh owned H2 file with WRITE_DELAY=0",
+          "userFileDatabaseModified": false,
+          "startedPids": [
+            3210,
+            3292
+          ],
+          "stoppedPids": [
+            3210,
+            3292
+          ],
+          "cases": [
+            {
+              "name": "lost-queued-cancel-and-running-cancel",
+              "cancelResponseActuallyLost": true,
+              "relayBackendStatus": 200,
+              "repeatedCancelAuditRows": 1,
+              "queuedQuestionWrites": 0,
+              "freedQueueSlotReused": true,
+              "synchronousStatusBeforeProviderRelease": 409,
+              "lateAssistantMessages": 0
+            },
+            {
+              "name": "stream-cancel",
+              "cancelledEventBeforeProviderRelease": true,
+              "doneEventSent": false,
+              "lateAssistantMessages": 0,
+              "actualWorkerSettledByFreshAnswer": true
+            },
+            {
+              "name": "queued-sigkill-recovery",
+              "statusBeforeCrash": "QUEUED",
+              "statusAfterOriginalBudget": "TIMED_OUT",
+              "questionWrites": 0,
+              "modelReexecuted": false,
+              "cancelledFactsAndSingleAuditSurviveRestart": true
+            }
+          ],
+          "hardKilledPid": 3210,
+          "providerTransportCalls": 6,
+          "ownedProcessesStopped": true,
+          "ownedRelayStopped": true,
+          "ownedProviderStopped": true,
+          "unexpectedJarErrors": 0
+        }
+      },
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\assistant-idempotency-it\\run-JHzr29\\result.json",
+        "result": {
+          "status": "PASS",
+          "baselineCapture": false,
+          "tokensPersistedToEvidence": false,
+          "jarSha256": "ef60204241aa349b3d385ae2dbae537ce523962a55ca8202186e2958f2cbfcc0",
+          "fixture": "actual production DashScope HTTP adapter, dropped completed HTTP response, independent JVMs and SIGKILL",
+          "database": "fresh owned H2 file with WRITE_DELAY=0",
+          "userFileDatabaseModified": false,
+          "startedPids": [
+            2950,
+            3040,
+            3118
+          ],
+          "stoppedPids": [
+            2950,
+            3040,
+            3118
+          ],
+          "cases": [
+            {
+              "name": "lost-completed-response-and-jvm-restart",
+              "backendStatusBeforeResponseLoss": 200,
+              "actualClientResponseLost": true,
+              "sameMessageIdAfterRestart": true,
+              "changedContentStatus": 409,
+              "requestStateAfterRestart": "COMPLETED",
+              "counts": {
+                "user": 1,
+                "assistant": 1
+              },
+              "modelCallsForQuestionIncludingRetries": 1
+            },
+            {
+              "name": "keyed-timeout",
+              "inProgressDuplicateStatus": 409,
+              "timeoutStatus": 504,
+              "stateBeforeProviderRelease": "TIMED_OUT",
+              "lateAssistantMessages": 0,
+              "lateWorkerSettledByFreshKey": true
+            },
+            {
+              "name": "sigkill-accepted-request-recovery",
+              "statusBeforeCrash": "RUNNING",
+              "currentStateAfterIndependentJvmRestart": "TIMED_OUT",
+              "sameKeyRetryStatus": 409,
+              "modelReexecuted": false,
+              "counts": {
+                "user": 1,
+                "assistant": 0
+              }
+            }
+          ],
+          "hardKilledPid": 3040,
+          "providerTransportCalls": 5,
+          "ownedProcessesStopped": true,
+          "ownedRelayStopped": true,
+          "ownedProviderStopped": true,
+          "unexpectedJarErrors": 0
+        }
+      },
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\assistant-session-it\\run-XEkmuc\\result.json",
+        "result": {
+          "status": "PASS",
+          "baselineCapture": false,
+          "budgetBaselineCapture": false,
+          "tokensPersistedToEvidence": false,
+          "jarSha256": "ef60204241aa349b3d385ae2dbae537ce523962a55ca8202186e2958f2cbfcc0",
+          "fixture": "actual production DashScope HTTP adapter against an owned controlled server, not model quality",
+          "database": "fresh owned H2 memory database",
+          "userFileDatabaseModified": false,
+          "cases": [
+            {
+              "name": "synchronous-logout",
+              "responseStatus": 401,
+              "lateAssistantMessages": 0,
+              "lateAnswerSent": false,
+              "closedBeforeProviderRelease": true
+            },
+            {
+              "name": "stream-logout",
+              "responseStatus": 200,
+              "lateAssistantMessages": 0,
+              "lateAnswerSent": false,
+              "closedBeforeProviderRelease": true
+            },
+            {
+              "name": "clear-messages",
+              "responseStatus": 409,
+              "lateAssistantMessages": 0,
+              "lateAnswerSent": false,
+              "closedBeforeProviderRelease": false
+            },
+            {
+              "name": "timeout",
+              "closedBeforeProviderRelease": true,
+              "explicitSafeErrorEvent": true,
+              "lateWorkerSettledByFreshStream": true,
+              "lateAssistantMessages": 0
+            },
+            {
+              "name": "mixed-capacity",
+              "responseStatus": 503,
+              "rejectedQuestionWrites": 0,
+              "queuedQuestionWritesBeforeProviderRelease": 0,
+              "simultaneousProviderCalls": 1
+            },
+            {
+              "name": "synchronous-running-and-queued-timeout",
+              "responseStatuses": [
+                504,
+                504
+              ],
+              "settledBeforeProviderRelease": true,
+              "lateAssistantMessages": 0,
+              "queuedQuestionWrites": 0,
+              "lateWorkerSettledByFreshSynchronousAnswer": true
+            }
+          ],
+          "startedPid": 2844,
+          "productionHttpAdapterPositiveControl": true,
+          "freshSessionProductionHttpAnswer": true,
+          "providerTransportCalls": 11,
+          "ownedProcessStopped": true,
+          "ownedProviderStopped": true,
+          "unexpectedJarErrors": 0
+        }
+      },
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\auth-session-it\\run-O1tk9e\\result.json",
+        "result": {
+          "status": "PASS",
+          "baselineCapture": false,
+          "url": "http://127.0.0.1:9933/api/v1",
+          "database": "fresh runner-owned H2 file",
+          "userFileDatabaseModified": false,
+          "originalProcessesNotStopped": true,
+          "evidenceDirectory": "target/auth-session-it/run-O1tk9e",
+          "startedPids": [
+            2538,
+            2625
+          ],
+          "stoppedPids": [
+            2538,
+            2625
+          ],
+          "unexpectedJarErrors": 0,
+          "tokensPersistedToEvidence": false,
+          "logoutStatus": 200,
+          "passwordStatus": 200,
+          "oldTokensRejectedAfterFreshLogin": true,
+          "oldTokensRejectedAfterPasswordChange": true,
+          "oldTokensRejectedAfterJvmRestart": true,
+          "currentTokenSurvivesRestart": true,
+          "persistedAuthVersion": 2,
+          "unauthorizedBusinessWritesUnchanged": true,
+          "auditRows": [
+            {
+              "id": 4,
+              "actor": "系统管理员",
+              "action": "AUTH_PASSWORD_CHANGED",
+              "targetType": "USER",
+              "targetId": "1",
+              "detail": "本人修改密码并撤销全部已签发会话；必须重新登录",
+              "ipAddress": "127.0.0.1",
+              "createdAt": "2026-10-03T08:53:33.874211"
+            },
+            {
+              "id": 3,
+              "actor": "系统管理员",
+              "action": "AUTH_SESSIONS_REVOKED",
+              "targetType": "USER",
+              "targetId": "1",
+              "detail": "撤销本人全部已签发会话；必须重新登录",
+              "ipAddress": "127.0.0.1",
+              "createdAt": "2026-10-03T08:53:33.360142"
+            }
+          ],
+          "auditRowsUnchangedAfterRestart": true,
+          "ownedProcessesStopped": true
+        }
+      }
+    ],
+    "logs": [
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\agent-session-it\\run-tnz8Iq\\jar.log",
+        "sha256": "bcfd9b01cbeb46b3a679e100bccd06ad902903e7fa0f5b952045849fdfc8cee6",
+        "unexpected": [],
+        "jwt": false
+      },
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\assistant-cancel-it\\run-XdyvIi\\jar-1.log",
+        "sha256": "ce8d2d5bb7577266414c35b140dad1bc115e1d84b1c3838b95a98197d7adf6b5",
+        "unexpected": [],
+        "jwt": false
+      },
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\assistant-cancel-it\\run-XdyvIi\\jar-2.log",
+        "sha256": "dc1091f620a02275864e616d8929e8922b7a6a7f3d74c5ff73df6c02ea3b1fc3",
+        "unexpected": [],
+        "jwt": false
+      },
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\assistant-idempotency-it\\run-JHzr29\\jar-1.log",
+        "sha256": "54cd2c2415d343572f11bc0fcd6c88d95d282e327eaeb1d340e983fbf6bcf6b8",
+        "unexpected": [],
+        "jwt": false
+      },
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\assistant-idempotency-it\\run-JHzr29\\jar-2.log",
+        "sha256": "f6d980b222079565b7febe3b15bbcc5a16ee2a92b5fbb5eb9206091ba718506c",
+        "unexpected": [],
+        "jwt": false
+      },
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\assistant-idempotency-it\\run-JHzr29\\jar-3.log",
+        "sha256": "76239bbadf08aa9b2aee2e0615b2ad00e84b64bffeda2b8052b0c55af279cb0e",
+        "unexpected": [],
+        "jwt": false
+      },
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\assistant-session-it\\run-XEkmuc\\jar.log",
+        "sha256": "1230e237797a96390d187c4a7ec744325c439628af9d4c3690f7f18ce851e8af",
+        "unexpected": [],
+        "jwt": false
+      },
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\auth-session-it\\run-O1tk9e\\jar-1.log",
+        "sha256": "8aab19d13574051b843f697e6accd6e9e9c0c2843df602363d4a71577c354ad0",
+        "unexpected": [],
+        "jwt": false
+      },
+      {
+        "file": "target\\cp72-remote-auth\\unpacked\\auth-session-it\\run-O1tk9e\\jar-2.log",
+        "sha256": "e90beb7d4e842348cdeb2f96963a7fe43051c5c0f73c6b8b5393963c79f7276c",
+        "unexpected": [],
+        "jwt": false
+      }
+    ]
+  }
+}

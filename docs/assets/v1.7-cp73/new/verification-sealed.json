@@ -1,0 +1,243 @@
+{
+  "source": "working-tree CP73 sealed before upload",
+  "baseCommit": "390dd7cad5d2596b7968709f061623458aaf8ae2",
+  "jarSha256": "5c34bc4220214283493b690a5e1354596f9be09daec19e74f96006e39cf1dba8",
+  "frontend": {
+    "executed": 103,
+    "failed": 0,
+    "skipped": 0,
+    "logSha256": "6eaf1b490524cd102b15bedefd091ea03bbbde292a83415bc1a1cf97995430fa"
+  },
+  "build": {
+    "finishedAt": "2026-10-03T17:49:35+08:00",
+    "logSha256": "50e14b635cc714c474b18b14de32c7b347da7ef87715bb0d28353e464931bbcd"
+  },
+  "assistant": {
+    "status": "PASS",
+    "baselineCapture": false,
+    "url": "http://127.0.0.1:9945/assistant",
+    "browserReason": "Browser plugin not available; existing Playwright",
+    "viewports": [
+      "1440x1000",
+      "390x844"
+    ],
+    "jarSha256": "5c34bc4220214283493b690a5e1354596f9be09daec19e74f96006e39cf1dba8",
+    "fixture": "owned production HTTP adapter and real browser controls, not model quality",
+    "tokensPersistedToEvidence": false,
+    "userFileDatabaseModified": false,
+    "cases": [
+      {
+        "name": "explicit-running-cancel",
+        "originalKeyUsed": true,
+        "serverState": "CANCELLED",
+        "lateAnswers": 0,
+        "actualWorkerSettledByFreshAnswer": true
+      },
+      {
+        "name": "lost-completed-response-refresh-query",
+        "actualCompletedResponseLost": true,
+        "originalAnswerIdPreserved": true,
+        "streamPostsIncludingRecovery": 1,
+        "modelCallsIncludingRecovery": 1
+      },
+      {
+        "name": "lost-cancel-response",
+        "backendCancelResponseActuallyLost": true,
+        "noFalseCancelledBeforeQuery": true,
+        "queriedServerState": "CANCELLED",
+        "cancelAuditRows": 1,
+        "lateAnswers": 0
+      },
+      {
+        "name": "not-admitted-manual-retry",
+        "serverLookupStatus": 404,
+        "noAutomaticPost": true,
+        "exactOriginalKeyAndContent": true,
+        "actualModelCalls": 1
+      },
+      {
+        "name": "queued-ui-cancel",
+        "queriedStateBeforeCancel": "QUEUED",
+        "questionAndAnswerRows": 0,
+        "modelCallsForQueuedQuestion": 0
+      },
+      {
+        "name": "real-capacity-feedback",
+        "serverCapacity": "one worker and one queue slot",
+        "actualRejectedStatus": 503,
+        "actualJsonErrorResponse": true,
+        "rejectedQuestionRows": 0,
+        "noAutomaticPost": true,
+        "lookupStatus": 404,
+        "manualRecoveryWithOriginalKeyAndQuestion": true
+      },
+      {
+        "name": "real-budget-timeout",
+        "serverBudgetSeconds": 30,
+        "queriedTerminal": "TIMED_OUT",
+        "originalRequestNotRerun": true,
+        "lateAnswers": 0,
+        "actualWorkerSettledByFreshAnswer": true
+      },
+      {
+        "name": "late-successful-clear-after-account-change",
+        "actualOldClearStatus": 200,
+        "actualOldLogoutStatus": 200,
+        "replacementTokenPreserved": true,
+        "replacementServerStatus": 200,
+        "oldPrivateMessagesNotReintroduced": true
+      }
+    ],
+    "screenshots": [
+      "waiting-desktop.png",
+      "cancelled-desktop.png",
+      "cancelled-mobile.png",
+      "recovery-desktop.png",
+      "recovered-completed-desktop.png",
+      "queued-desktop.png",
+      "saturated-desktop.png",
+      "timed-out-mobile.png"
+    ],
+    "pageErrors": [],
+    "consoleErrors": [
+      "Failed to load resource: net::ERR_FAILED",
+      "Failed to load resource: net::ERR_FAILED",
+      "Failed to load resource: net::ERR_FAILED",
+      "Failed to load resource: net::ERR_FAILED",
+      "Failed to load resource: the server responded with a status of 404 ()",
+      "Failed to load resource: the server responded with a status of 503 ()",
+      "Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "startedPid": 92984,
+    "unexpectedConsoleErrors": [],
+    "providerTransportCalls": 12,
+    "streamResponseStatuses": [
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      },
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      },
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      },
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      },
+      {
+        "status": 503,
+        "contentType": "application/json;charset=UTF-8"
+      },
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      },
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      },
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      }
+    ],
+    "ownedProcessStopped": true,
+    "ownedProviderStopped": true,
+    "unexpectedJarErrors": 0
+  },
+  "existing": {
+    "status": "PASS",
+    "evidenceDirectory": "target\\oncall-browser-it\\run-zBOXDj",
+    "database": "isolated unique H2 memory",
+    "url": "http://127.0.0.1:9917/on-call",
+    "jarTimezone": "UTC",
+    "scanDelayMs": 200,
+    "defaultScanDelayMs": 60000,
+    "scripts": [
+      {
+        "name": "verify-oncall-rotation-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-rotation-boundaries.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-coverage-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-handoff-http.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-handoff-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-handoff-revocation-http.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-handoff-revocation-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-runbook-trend-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-runbook-publication-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-slo-rules-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-jwt-numeric-date-http.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-stream-session-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-account-security-ui.cjs",
+        "exitCode": 0
+      }
+    ],
+    "browserCi": false,
+    "publicationBaselineCapture": false,
+    "trendBaselineCapture": false,
+    "revocationBaselineCapture": false,
+    "userFileDatabaseModified": false,
+    "originalProcessesNotStopped": true,
+    "ownedProcessStopped": true,
+    "accountBaselineCapture": false,
+    "sloBaselineCapture": false,
+    "streamSessionBaselineCapture": false,
+    "streamSessionOnly": false,
+    "unexpectedJarErrors": 0
+  },
+  "logs": [
+    {
+      "file": "target/assistant-request-ui-it/run-6EktuL/jar.log",
+      "sha256": "f476d16bc1565d721726ca61f04c5f96fb84dd395d23de3ac003fde53184be61",
+      "unexpected": 0,
+      "jwt": false
+    },
+    {
+      "file": "target/oncall-browser-it/run-zBOXDj/jar.log",
+      "sha256": "9c6fc2509e86dee205a0e7ea834a9fdd32c9e327a36bf942b984dbe7340cc875",
+      "unexpected": 0,
+      "jwt": false
+    }
+  ],
+  "backendProductionCodeChanged": false,
+  "backendFullSuiteRerunThisCheckpoint": false
+}

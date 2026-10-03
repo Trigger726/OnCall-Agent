@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-检查点72本地限定通过：[助手排队事实与显式取消](docs/acceptance/V1.7-checkpoint-72.md)。有界容量实际接纳后持久化QUEUED；本人同键取消/一次事务审计、排队腾槽、运行中无晚回答，完成先赢保留合法历史。真实反例发现并修复接纳失败后worker继续执行；双时区各459发现/353执行/106条件跳过、十四门禁通过。新包实际丢取消响应/强制终止/重启及旧库V32→V33保持历史通过，原幂等五HTTP/撤销容量十一HTTP回归通过；新提交MySQL99/远端待验。默认页面未生成稳定键或取消按钮，UI冻结恢复/原生token流及完整目标继续，旧JAR/Demo/失败不删。
+73助手界面本地限定通过：[报告](docs/acceptance/V1.7-checkpoint-73.md)。冻结原键/问题、显式取消、刷新查询/同键继续，断线不假报成功；真实Accept协商500首失败修复为503/JSON。前端103/生命周期17/audit0、封板新包真实八流程/十二模型HTTP、原十三实页/三旧401与晚200身份围栏、桌面与390px新旧Demo已验。自身新增Linux界面门禁待上传后独立核验，原生token流/生产规模与完整目标继续。
+
+72后端限定验收已闭环：390dd7c的[Run37111174821](https://github.com/Trigger726/OnCall-Agent/actions/runs/37111174821)十五作业success，真实MySQL99/V33/五池关闭、Linux取消/丢响应/排队SIGKILL及两ZIP源SHA/摘要/原门禁重放已独立核验，见[72报告](docs/acceptance/V1.7-checkpoint-72.md)。该提交没有默认页面稳定键/取消按钮；73另补界面，旧JAR/Demo/失败保留，整体目标继续。
 
 71自己的bd508bd已核对[Run37108835199](https://github.com/Trigger726/OnCall-Agent/actions/runs/37108835199)十五作业success，真实MySQL96/V32/五池关闭、Linux幂等三个JVM强制终止与两ZIP源SHA/实际摘要/原门禁重放已独立核验，见[71报告](docs/acceptance/V1.7-checkpoint-71.md)。不借旧96证明72的V33/取消事务99项。
 

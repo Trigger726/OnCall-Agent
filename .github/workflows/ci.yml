@@ -71,11 +71,17 @@ jobs:
           npm test --prefix scripts/browser
       - name: Verify desktop/mobile interaction against owned isolated JAR
         run: node scripts/verify-oncall-browser-ci.cjs
+      - name: Verify assistant keyed UI cancellation, response loss, queue and timeout
+        run: node scripts/verify-assistant-request-ui-ci.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: oncall-browser-evidence
-          path: target/oncall-browser-it/
+          path: |
+            target/oncall-browser-it/
+            target/assistant-request-ui-it/**/*.json
+            target/assistant-request-ui-it/**/*.log
+            target/assistant-request-ui-it/**/*.png
           retention-days: 30
 
   auth-session-integration:

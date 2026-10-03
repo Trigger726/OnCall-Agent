@@ -6,6 +6,16 @@ const { spawn } = require('node:child_process');
 const { once } = require('node:events');
 const { requireFreePort, stopProcess, waitForHealth, redact, unexpectedLogLines } = require('../../verify-oncall-browser-ci.cjs');
 
+test('assistant UI baseline cannot replace acceptance or launch an archived JAR in CI', async () => {
+  const child = spawn(process.execPath, [require.resolve('../../verify-assistant-request-ui-ci.cjs')], {
+    env: { ...process.env, CI: 'true', OPSPILOT_ASSISTANT_UI_BASELINE: '1' }, windowsHide: true,
+  });
+  let output = ''; child.stderr.on('data', chunk => { output += chunk; });
+  const [code] = await once(child, 'close'); assert.equal(code, 1);
+  assert.match(output, /Baseline capture cannot replace assistant UI acceptance/);
+  assert.doesNotMatch(output, /evidenceDirectory/);
+});
+
 test('assistant baseline cannot replace CI acceptance or launch the archived JAR', async () => {
   const child = spawn(process.execPath, [require.resolve('../../verify-assistant-session-ci.cjs')], {
     env: { ...process.env, CI: 'true', OPSPILOT_ASSISTANT_SESSION_BASELINE: '1' }, windowsHide: true,

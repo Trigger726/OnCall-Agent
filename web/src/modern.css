@@ -561,6 +561,14 @@ button:active:not(:disabled) { transform: scale(0.98); }
 .assistant-message.user .assistant-copy { display: none; }
 
 .assistant-composer-wrap { padding: 8px 24px 15px; background: linear-gradient(to bottom, rgba(255,255,255,0), #fff 14px); }
+.assistant-request-status { width: min(800px, 100%); margin: 0 auto 10px; padding: 12px; display: flex; gap: 12px; flex-wrap: wrap; border: 1px solid #cddff0; border-radius: 8px; background: #f4f9fe; }
+.assistant-request-status > div:first-child { min-width: 0; flex: 1 1 260px; display: grid; gap: 5px; }
+.assistant-request-status strong { font-size: 12px; color: #1c578d; }
+.assistant-request-status span, .assistant-request-status small { font-size: 11px; line-height: 1.6; overflow-wrap: anywhere; color: #596776; }
+.assistant-request-status small { max-height: 54px; overflow-y: auto; }
+.assistant-request-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+.assistant-request-actions button { min-height: 34px; display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border: 1px solid #bccfe0; border-radius: 6px; background: #fff; font-size: 11px; }
+.assistant-request-actions button:disabled { opacity: .5; cursor: not-allowed; }
 .assistant-composer { width: min(800px, 100%); min-height: 52px; margin: 0 auto; padding: 7px 7px 7px 16px; display: flex; align-items: flex-end; gap: 8px; border: 1px solid #d8d8dc; border-radius: 8px; background: #fff; box-shadow: 0 5px 22px rgba(0,0,0,.075); }
 .assistant-composer:focus-within { border-color: #8cbcec; box-shadow: 0 5px 24px rgba(0,113,227,.1), 0 0 0 3px rgba(0,113,227,.08); }
 .assistant-composer textarea { min-width: 0; min-height: 36px; max-height: 130px; padding: 9px 0; flex: 1; resize: none; border: 0; outline: 0; background: transparent; font-size: 12px; line-height: 1.5; }

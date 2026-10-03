@@ -1,0 +1,147 @@
+[
+  {
+    "run": "run-0ziV1b",
+    "result": {
+      "status": "FAIL",
+      "baselineCapture": true,
+      "url": "http://127.0.0.1:9945/assistant",
+      "browserReason": "Browser plugin not available; existing Playwright",
+      "viewports": [
+        "1440x1000",
+        "390x844"
+      ],
+      "jarSha256": "bc3fdb766cd62b76b97a64f9466f8e7111feedec5aa35569baa7b045decbfb69",
+      "fixture": "owned production HTTP adapter and real browser controls, not model quality",
+      "tokensPersistedToEvidence": false,
+      "userFileDatabaseModified": false,
+      "cases": [],
+      "screenshots": [
+        "waiting-desktop.png",
+        "local-stop-desktop.png"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "startedPid": 83796,
+      "failure": "The expression evaluated to a falsy value:\n\n  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))\n",
+      "ownedProcessStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "logSha256": "a1b064292e9bbd2e7ebcb99015f989b89bc289bed3f519d92535dd5792103b98"
+  },
+  {
+    "run": "run-e1NAyO",
+    "result": {
+      "status": "FAIL",
+      "baselineCapture": true,
+      "url": "http://127.0.0.1:9945/assistant",
+      "browserReason": "Browser plugin not available; existing Playwright",
+      "viewports": [
+        "1440x1000",
+        "390x844"
+      ],
+      "jarSha256": "bc3fdb766cd62b76b97a64f9466f8e7111feedec5aa35569baa7b045decbfb69",
+      "fixture": "owned production HTTP adapter and real browser controls, not model quality",
+      "tokensPersistedToEvidence": false,
+      "userFileDatabaseModified": false,
+      "cases": [],
+      "screenshots": [
+        "waiting-desktop.png",
+        "local-stop-desktop.png",
+        "local-stop-mobile.png"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "startedPid": 83376,
+      "layoutFindings": [
+        {
+          "name": "local-stop-mobile",
+          "width": 390,
+          "scrollWidth": 447
+        }
+      ],
+      "failure": "locator.waitFor: Error: strict mode violation: getByText('CP73-controlled-HTTP-answer', { exact: true }) resolved to 2 elements:\n    1) <span>CP73-controlled-HTTP-answer</span> aka getByRole('button', { name: 'held UI cancellation CP73-' })\n    2) <p>…</p> aka getByRole('paragraph').filter({ hasText: 'CP73-controlled-HTTP-answer' })\n\nCall log:\n\u001b[2m  - waiting for getByText('CP73-controlled-HTTP-answer', { exact: true }) to be visible\u001b[22m\n",
+      "ownedProcessStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "logSha256": "2a3da330ee34bc974cc0453fca226339a9f52c5b2e3baefc5cde9e5fec8f3de2"
+  },
+  {
+    "run": "run-vy4Bn5",
+    "result": {
+      "status": "FAIL",
+      "baselineCapture": false,
+      "url": "http://127.0.0.1:9945/assistant",
+      "browserReason": "Browser plugin not available; existing Playwright",
+      "viewports": [
+        "1440x1000",
+        "390x844"
+      ],
+      "jarSha256": "d5f6fc30ab7acdb59e5c7def0eaaa1bff421e5ba1fb223bf1a3c01eaf272b8ba",
+      "fixture": "owned production HTTP adapter and real browser controls, not model quality",
+      "tokensPersistedToEvidence": false,
+      "userFileDatabaseModified": false,
+      "cases": [
+        {
+          "name": "explicit-running-cancel",
+          "originalKeyUsed": true,
+          "serverState": "CANCELLED",
+          "lateAnswers": 0,
+          "actualWorkerSettledByFreshAnswer": true
+        },
+        {
+          "name": "lost-completed-response-refresh-query",
+          "actualCompletedResponseLost": true,
+          "originalAnswerIdPreserved": true,
+          "streamPostsIncludingRecovery": 1,
+          "modelCallsIncludingRecovery": 1
+        },
+        {
+          "name": "lost-cancel-response",
+          "backendCancelResponseActuallyLost": true,
+          "noFalseCancelledBeforeQuery": true,
+          "queriedServerState": "CANCELLED",
+          "cancelAuditRows": 1,
+          "lateAnswers": 0
+        },
+        {
+          "name": "not-admitted-manual-retry",
+          "serverLookupStatus": 404,
+          "noAutomaticPost": true,
+          "exactOriginalKeyAndContent": true,
+          "actualModelCalls": 1
+        },
+        {
+          "name": "queued-ui-cancel",
+          "queriedStateBeforeCancel": "QUEUED",
+          "questionAndAnswerRows": 0,
+          "modelCallsForQueuedQuestion": 0
+        }
+      ],
+      "screenshots": [
+        "waiting-desktop.png",
+        "cancelled-desktop.png",
+        "cancelled-mobile.png",
+        "recovery-desktop.png",
+        "recovered-completed-desktop.png",
+        "queued-desktop.png"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: the server responded with a status of 404 ()",
+        "Failed to load resource: the server responded with a status of 500 ()"
+      ],
+      "startedPid": 82352,
+      "failure": "Owned JAR reported unexpected errors including shutdown",
+      "ownedProcessStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 1
+    },
+    "logSha256": "5bd9eaa51a946c119158b8321a70680aaf5eaec7d36ccf5fafa606e4cc9ee8ab"
+  }
+]

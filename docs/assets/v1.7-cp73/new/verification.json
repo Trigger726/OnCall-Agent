@@ -1,0 +1,315 @@
+{
+  "baseCommit": "390dd7cad5d2596b7968709f061623458aaf8ae2",
+  "source": "working-tree CP73 before upload",
+  "frontend": {
+    "executed": 103,
+    "failed": 0,
+    "skipped": 0
+  },
+  "lifecycle": {
+    "executed": 17,
+    "failed": 0,
+    "skipped": 0
+  },
+  "auditVulnerabilities": 0,
+  "backendProductionCodeChanged": false,
+  "backendFullSuiteRerunThisCheckpoint": false,
+  "jarSha256": "6c14ba8616c09d8c15395bb323951821792b2a719820a13093d0a3253a9f3e20",
+  "assistant": {
+    "status": "PASS",
+    "baselineCapture": false,
+    "url": "http://127.0.0.1:9945/assistant",
+    "browserReason": "Browser plugin not available; existing Playwright",
+    "viewports": [
+      "1440x1000",
+      "390x844"
+    ],
+    "jarSha256": "6c14ba8616c09d8c15395bb323951821792b2a719820a13093d0a3253a9f3e20",
+    "fixture": "owned production HTTP adapter and real browser controls, not model quality",
+    "tokensPersistedToEvidence": false,
+    "userFileDatabaseModified": false,
+    "cases": [
+      {
+        "name": "explicit-running-cancel",
+        "originalKeyUsed": true,
+        "serverState": "CANCELLED",
+        "lateAnswers": 0,
+        "actualWorkerSettledByFreshAnswer": true
+      },
+      {
+        "name": "lost-completed-response-refresh-query",
+        "actualCompletedResponseLost": true,
+        "originalAnswerIdPreserved": true,
+        "streamPostsIncludingRecovery": 1,
+        "modelCallsIncludingRecovery": 1
+      },
+      {
+        "name": "lost-cancel-response",
+        "backendCancelResponseActuallyLost": true,
+        "noFalseCancelledBeforeQuery": true,
+        "queriedServerState": "CANCELLED",
+        "cancelAuditRows": 1,
+        "lateAnswers": 0
+      },
+      {
+        "name": "not-admitted-manual-retry",
+        "serverLookupStatus": 404,
+        "noAutomaticPost": true,
+        "exactOriginalKeyAndContent": true,
+        "actualModelCalls": 1
+      },
+      {
+        "name": "queued-ui-cancel",
+        "queriedStateBeforeCancel": "QUEUED",
+        "questionAndAnswerRows": 0,
+        "modelCallsForQueuedQuestion": 0
+      },
+      {
+        "name": "real-capacity-feedback",
+        "serverCapacity": "one worker and one queue slot",
+        "actualRejectedStatus": 503,
+        "actualJsonErrorResponse": true,
+        "rejectedQuestionRows": 0,
+        "noAutomaticPost": true,
+        "lookupStatus": 404,
+        "manualRecoveryWithOriginalKeyAndQuestion": true
+      },
+      {
+        "name": "real-budget-timeout",
+        "serverBudgetSeconds": 30,
+        "queriedTerminal": "TIMED_OUT",
+        "originalRequestNotRerun": true,
+        "lateAnswers": 0,
+        "actualWorkerSettledByFreshAnswer": true
+      }
+    ],
+    "screenshots": [
+      "waiting-desktop.png",
+      "cancelled-desktop.png",
+      "cancelled-mobile.png",
+      "recovery-desktop.png",
+      "recovered-completed-desktop.png",
+      "queued-desktop.png",
+      "saturated-desktop.png",
+      "timed-out-mobile.png"
+    ],
+    "pageErrors": [],
+    "consoleErrors": [
+      "Failed to load resource: net::ERR_FAILED",
+      "Failed to load resource: net::ERR_FAILED",
+      "Failed to load resource: net::ERR_FAILED",
+      "Failed to load resource: net::ERR_FAILED",
+      "Failed to load resource: the server responded with a status of 404 ()",
+      "Failed to load resource: the server responded with a status of 503 ()",
+      "Failed to load resource: the server responded with a status of 404 ()"
+    ],
+    "startedPid": 88988,
+    "unexpectedConsoleErrors": [],
+    "providerTransportCalls": 12,
+    "streamResponseStatuses": [
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      },
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      },
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      },
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      },
+      {
+        "status": 503,
+        "contentType": "application/json;charset=UTF-8"
+      },
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      },
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      },
+      {
+        "status": 200,
+        "contentType": "text/event-stream;charset=UTF-8"
+      }
+    ],
+    "ownedProcessStopped": true,
+    "ownedProviderStopped": true,
+    "unexpectedJarErrors": 0
+  },
+  "existing": {
+    "status": "PASS",
+    "evidenceDirectory": "target\\oncall-browser-it\\run-rg7GHD",
+    "database": "isolated unique H2 memory",
+    "url": "http://127.0.0.1:9917/on-call",
+    "jarTimezone": "UTC",
+    "scanDelayMs": 200,
+    "defaultScanDelayMs": 60000,
+    "scripts": [
+      {
+        "name": "verify-oncall-rotation-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-rotation-boundaries.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-coverage-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-handoff-http.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-handoff-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-handoff-revocation-http.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-oncall-handoff-revocation-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-runbook-trend-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-runbook-publication-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-slo-rules-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-jwt-numeric-date-http.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-stream-session-ui.cjs",
+        "exitCode": 0
+      },
+      {
+        "name": "verify-account-security-ui.cjs",
+        "exitCode": 0
+      }
+    ],
+    "browserCi": false,
+    "publicationBaselineCapture": false,
+    "trendBaselineCapture": false,
+    "revocationBaselineCapture": false,
+    "userFileDatabaseModified": false,
+    "originalProcessesNotStopped": true,
+    "ownedProcessStopped": true,
+    "accountBaselineCapture": false,
+    "sloBaselineCapture": false,
+    "streamSessionBaselineCapture": false,
+    "streamSessionOnly": false,
+    "unexpectedJarErrors": 0
+  },
+  "stream": {
+    "status": "PASS",
+    "baselineCapture": false,
+    "browser": "154.0.8037.93",
+    "browserPath": "Browser plugin not available; existing Playwright",
+    "viewports": [
+      "1440x1000",
+      "390x844"
+    ],
+    "fixture": "actual revoked JWT 401 held until a different account finishes real UI login in a shared-storage tab",
+    "pageErrors": [],
+    "consoleLogs": [],
+    "screenshots": [
+      "incident-agent-before-response.png",
+      "incident-agent-new-kept-desktop.png",
+      "incident-agent-new-kept-mobile.png",
+      "assistant-agent-before-response.png",
+      "assistant-agent-new-kept-desktop.png",
+      "assistant-agent-new-kept-mobile.png",
+      "assistant-chat-before-response.png",
+      "assistant-chat-new-kept-desktop.png",
+      "assistant-chat-new-kept-mobile.png"
+    ],
+    "cases": [
+      {
+        "flow": "incident-agent",
+        "actualUnauthorizedStatus": 401,
+        "realLogoutStatus": 200,
+        "oldResponseDelivery": "fulfilled",
+        "commands": 1,
+        "replacementCredentialPreserved": true,
+        "replacementServerCredentialStillValid": true,
+        "identityReloadShowsAdmin": true,
+        "oldExpiredPageShown": false,
+        "mobileWidth": 390,
+        "settledMobileDrawersChecked": false
+      },
+      {
+        "flow": "assistant-agent",
+        "actualUnauthorizedStatus": 401,
+        "realLogoutStatus": 200,
+        "oldResponseDelivery": "fulfilled",
+        "commands": 1,
+        "replacementCredentialPreserved": true,
+        "replacementServerCredentialStillValid": true,
+        "identityReloadShowsAdmin": true,
+        "oldExpiredPageShown": false,
+        "mobileWidth": 390,
+        "settledMobileDrawersChecked": true
+      },
+      {
+        "flow": "assistant-chat",
+        "actualUnauthorizedStatus": 401,
+        "realLogoutStatus": 200,
+        "oldResponseDelivery": "fulfilled",
+        "commands": 1,
+        "replacementCredentialPreserved": true,
+        "replacementServerCredentialStillValid": true,
+        "identityReloadShowsAdmin": true,
+        "oldExpiredPageShown": false,
+        "mobileWidth": 390,
+        "settledMobileDrawersChecked": true
+      }
+    ],
+    "tokensPersistedToEvidence": false,
+    "pageIdentity": true,
+    "noBlank": true,
+    "noOverlay": true,
+    "allThreeFlowsVerified": true,
+    "automaticMutationRetries": 0
+  },
+  "logs": [
+    {
+      "file": "target/assistant-request-ui-it/run-Z3NBMj/jar.log",
+      "sha256": "fc78695a3b61a4a6b9198df79d13f308b5ac9d81c0d1a2fd397ea6a5987b21d1",
+      "unexpected": 0,
+      "jwt": false
+    },
+    {
+      "file": "target/oncall-browser-it/run-rg7GHD/jar.log",
+      "sha256": "140ccaf5bfcf9c953e9ce5ead821bca27779ff1a9a2ae48cc6c5e3bbc9ce7933",
+      "unexpected": 0,
+      "jwt": false
+    }
+  ],
+  "unitCounterexample": {
+    "expected": "text/event-stream, application/json",
+    "actual": "text/event-stream",
+    "failed": 1,
+    "sha256": "b278d4df0e0a30e1ae6c51b9cb198809e30e5f04e9d6f5170011faadbf44021f"
+  },
+  "frontendLogSha256": "87dad70d175469e20467e0bec285f9a99f438c176dd69f8c410e3a54bf1dd7f5",
+  "buildLogSha256": "a2e5359a598b4fc25cadc8c1a9070d326d5ac24f1da0b8435969ef492e17b9ab"
+}
