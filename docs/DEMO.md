@@ -1,10 +1,16 @@
 # OpsPilot 10 分钟演示脚本
 
+## CP78：模型释放与输出槽位恢复不是同一时刻
+
+先读[五项本地证据](assets/v1.7-cp78/local-proof.json)/[写线程前后栈](assets/v1.7-cp78/strict-writer-before-after-excerpt.txt)，展示旧TCP完全不读、Provider不放行时，取消200/模型连接关闭/同步新答案先完成，但原生新流因唯一输出槽仍占用而503。约60秒后writer自然回到池空闲，约60秒替代原生流保存唯一答案；最后才清理旧客户端。不说所有连接都60秒关闭。
+
+当前 `node scripts/verify-assistant-slow-consumer-ci.cjs`默认执行原四项加新第五项，空闲9971/9972、三个自有JVM与新建内存库、五TCP客户端/十二模型HTTP。无需调查环境开关，旧调查probe仍被CI拒绝。78只本地限定通过，自身Linux新门禁待验；77的8a0714f十五绿灯不证明新第五项。报告、原结果和全部旧Demo另存，生产代码未改。
+
 ## CP77：真实慢读反例与有界输出修复对照
 
 先只读展示[原反例](assets/v1.7-cp77/baseline-proof.json)/[原worker写阻塞栈](assets/v1.7-cp77/baseline-worker.txt)，再对照[新writer与worker栈](assets/v1.7-cp77/after-writer-and-worker.txt)/[三次独立测试证据](assets/v1.7-cp77/local-proof.json)：同样暂停真实TCP且未放行旧Provider，原包SQL已CANCELLED但取消API/模型HTTP/唯一worker仍卡住；新包先返回取消200、关闭实际模型HTTP并复用原单worker。真正写阻塞仍在有限输出writer，满则接纳前503、问题0，并不宣称取消即时释放所有网络资源。
 
-页面演示保留[实时临时片段桌面](assets/v1.7-cp77/after/native-ui/native-preview-desktop.png)/[手机](assets/v1.7-cp77/after/native-ui/native-preview-mobile.png)及[实际输出容量503桌面](assets/v1.7-cp77/after/native-ui/output-saturated-desktop.png)/[手机](assets/v1.7-cp77/after/native-ui/output-saturated-mobile.png)。六场景验证无半答案、原键手动恢复、不自动重提；三次页面夹具失败另保留，历史75全部Demo不覆盖，本轮没有UI样式改版。复跑新包使用空闲9971/9972/独立内存库执行 `node scripts/verify-assistant-slow-consumer-ci.cjs`；旧包调查 `node scripts/probe-assistant-slow-consumer.cjs` 仍被CI拒绝，不可取代门禁。仅本地限定通过，自身远端待验。
+页面演示保留[实时临时片段桌面](assets/v1.7-cp77/after/native-ui/native-preview-desktop.png)/[手机](assets/v1.7-cp77/after/native-ui/native-preview-mobile.png)及本地原503图。8a0714f自身十五CI通过，Linux六原生场景/九图、原十三/八页面另核验；[远端503桌面](assets/v1.7-cp77/third-remote/output-saturated-desktop.png)/[手机](assets/v1.7-cp77/third-remote/output-saturated-mobile.png)另存。无半答案、手动原键恢复、不自动重提及真实503成立，两次远端失败、三次本地页面夹具失败和历史75图都保留；本轮无UI改版。当前runner已增加78第五项，77源的远端四项结论不可外推新增门禁。
 
 ## CP76：跨节点共享取消事实不等于释放执行资源
 

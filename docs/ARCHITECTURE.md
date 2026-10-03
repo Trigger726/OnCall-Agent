@@ -1,10 +1,14 @@
 # OpsPilot 架构设计
 
-## CP77慢消费者资源隔离（本地限定通过，远端待验）
+## CP78停止后的输出容量自然回收
+
+默认真实TCP门禁保留77四项，新增第三自有JVM的1 writer/0队列场景。取消先关闭模型HTTP、原worker完成新同步问题；唯一输出仍卡Tomcat写时新流503问题0/模型0。完全不RESUME/不关旧客户端、不放行Provider，80秒monotonic界限内要求同名writer退出Transport.run并回到ThreadPoolExecutor.getTask，再由新原生流完整提交唯一答案。Windows同44e包三次首次池空闲约60秒、替代答案约60秒；采样决定观测精度，不是精确socket-close时间或所有连接TTL。新默认五项自身Linux待验，见[78报告](acceptance/V1.7-checkpoint-78.md)。生产socket/timeout/线程池默认未改。
+
+## CP77慢消费者资源隔离（本地与自身远端限定通过）
 
 原包在暂停TCP且输出未超既有上限时，使模型worker持有transport锁阻塞Tomcat写出，SQL已CANCELLED但取消HTTP/模型HTTP/worker尚未释放；[反例](assets/v1.7-cp77/baseline-proof.json)保留。新AssistantStreamTransport只把阻塞写入移到默认4 writer/16待执行transport，每个transport一槽交接；容量先于业务接纳预留，满时503/ASSISTANT_STREAM_SATURATED，问题0。原model worker等待ACK时每100ms仍检查原租约/预算/SQL停止，Work未提前移除、没有queue-and-forget或扩大模型池。停止短锁只更新终态，不做网络IO；SQL答案先完整提交再发送done，断线仍不取消持久化任务。原键已提交回放异步发送，每帧检查原租约，拒绝也关闭writer。
 
-四实际暂停TCP场景三次本地通过，[新实际writer/worker栈](assets/v1.7-cp77/after-writer-and-worker.txt)将真正Tomcat写阻塞与可检查Future等待区分。已卡住的有限writer仍可能等TCP推进、socket/container写超时或关闭，不能保证取消瞬间释放输出槽；满时继续拒绝新流但同步路径可用。已缓冲字节不可撤回。当前JAR依赖目录列Tomcat10.1.16/Spring MVC6.1.1，Tomcat协议字节码默认connectionTimeout为60000ms，当前YAML没有覆盖；NIO无推进写等待使用writeTimeout，有实际推进可重置，因此不是整条连接的绝对TTL。实际部署覆盖、TLS/代理与到时关闭边界尚未测量，见[77限定范围](acceptance/V1.7-checkpoint-77.md)，不把配置/源码推断当运行时超时实测。
+8a0714f自身十五CI/四ZIP独立核验通过，Linux四项/九HTTP要求新writer实际Tomcat阻塞，饱和时同时两个阻塞，原worker仍可检查围栏；[远端栈](assets/v1.7-cp77/third-remote/slow-writer-worker-excerpt.txt)与两次失败保留。有限writer仍等TCP推进、socket/container超时或关闭，不保证取消瞬间释放；满时拒绝新流但同步可用，已缓冲字节不可撤回。本地44e包内实际Tomcat10.1.16嵌套JAR摘要0e10a073e143b338ddb3d57dfabb62169f61b3f3127733df8111a635b3fb799f、协议字节码默认connectionTimeout60000ms，YAML无覆盖；NIO写有推进可重置，不是整条连接TTL。自然回收Windows运行证据另见78，新Linux第五项及部署/TLS/代理仍待验，不混同配置推断与直接证据。
 
 ## CP76双节点助手停止围栏
 

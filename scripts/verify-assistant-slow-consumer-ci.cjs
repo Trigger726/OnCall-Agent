@@ -63,7 +63,7 @@ async function verify() {
   let child;
   const interrupt = () => { sockets.forEach(s => s.socket.destroy()); if (child?.exitCode === null && child.signalCode === null) child.kill('SIGTERM'); };
   process.once('SIGINT', interrupt); process.once('SIGTERM', interrupt);
-  async function start(seconds) {
+  async function start(seconds, outputWriters = 2, outputQueue = 1) {
     const file = path.join(evidence, 'jar-' + (logs.length + 1) + '.log'), fd = fs.openSync(file, 'w'); logs.push(file); descriptors.push(fd);
     const providerUrl = 'http://127.0.0.1:' + provider.address().port;
     child = spawn(executable('java'), ['-Duser.timezone=UTC', '-jar', jar,
@@ -73,7 +73,7 @@ async function verify() {
       '--opspilot.ai.enabled=true', '--spring.ai.dashscope.api-key=cp77-not-a-real-key',
       '--spring.ai.dashscope.base-url=' + providerUrl, '--spring.ai.dashscope.chat.base-url=' + providerUrl,
       '--opspilot.assistant.workers=1', '--opspilot.assistant.queue-capacity=1', '--opspilot.assistant.execution-timeout=' + seconds + 's',
-      '--opspilot.assistant.stream-writers=2', '--opspilot.assistant.stream-queue-capacity=1',
+      '--opspilot.assistant.stream-writers=' + outputWriters, '--opspilot.assistant.stream-queue-capacity=' + outputQueue,
       '--opspilot.assistant.authorization-check-delay=100', '--opspilot.agent.recovery.enabled=false',
       '--opspilot.oncall.rotation.enabled=false', '--opspilot.oncall.escalation.enabled=false'],
       { cwd: root, stdio: ['ignore', fd, fd], windowsHide: true });
@@ -170,6 +170,7 @@ async function verify() {
     }
     fs.writeFileSync(path.join(evidence, name + '-threads.txt'), redact(dump));
     assert.ok(output, 'An actual blocked OUTPUT thread is required; a fast socket is not a passing slow-consumer test');
+    s.blockedObservedAt = performance.now();
     result.blockedOutputs ??= []; result.blockedOutputs.push({ case: name, thread: output.match(/^"([^"]+)"/)[1], previouslyBlockedThreads: [...previous],
       newlyBlockedThreadRequired: true, modelWorkerDirectServletWrite: false });
     assert.equal(c.released, false); assert.equal(s.paused, true); return s;
@@ -233,7 +234,48 @@ async function verify() {
     await drain(timed); assert.ok(timed.raw.includes('event:error') && timed.raw.includes('回答超时')); release(timed.c);
     result.cases.push({ name: 'timeout-slow-client', originalBudgetSeconds: 12, persistedStatus: 'TIMED_OUT', answerRows: 0,
       modelHttpClosedBeforeSocketResume: true, sameWorkerCompletedNativeAnswerBeforeSocketResume: true, timeoutEventAfterWriterReleased: true });
-    result.providerCalls = [...controls.values()].reduce((n, c) => n + c.calls, 0); assert.equal(result.providerCalls, 9);
+    {
+      // Keep all four earlier cases intact; independently verify the stopped output writer's natural recovery.
+      await stop(); await requireFreePort(9971); await requireFreePort(9972);
+      await start(45, 1, 0); token = await login();
+      const held = await paused(token, 'natural-output-timeout'); await cancel(held, token);
+      const rejected = control('natural-timeout-rejected'), rejectedId = await session(token), rejectedKey = randomUUID();
+      const refusal = await api(route(rejectedId) + '/stream', token, { content: rejected.question }, rejectedKey);
+      assert.equal(refusal.status, 503); assert.equal(refusal.json.error.code, 'ASSISTANT_STREAM_SATURATED');
+      assert.equal((await state(rejectedId, rejectedKey, token)).status, 404);
+      assert.deepEqual(await counts(rejectedId, token), { user: 0, assistant: 0 }); assert.equal(rejected.calls, 0);
+      const sync = control('natural-timeout-sync-before-recovery', true), syncId = await session(token);
+      assert.equal((await api(route(syncId) + '/messages', token, { content: sync.question }, randomUUID())).status, 200);
+      assert.equal(sync.calls, 1); assert.deepEqual(await counts(syncId, token), { user: 1, assistant: 1 });
+      const observation = { deadlineMs: 80000, outputWriters: 1, outputQueueCapacity: 0,
+        cancelStatus: 200, modelHttpClosedBeforeSocketResume: true, synchronousWorkerCompletedBeforeOutputRecovery: true,
+        rejectedStatus: 503, rejectedKeyStatus: 404, socketResumed: false, providerReleased: false, samples: [] };
+      result.outputTimeoutObservation = observation;
+      const deadline = held.blockedObservedAt + observation.deadlineMs;
+      let recovered = false;
+      do {
+        assert.equal(held.paused, true); assert.equal(held.closed, false); assert.equal(held.c.released, false);
+        const dump = threads(), writer = sections(dump).find(section => section.startsWith('"opspilot-assistant-output-1"')) || '';
+        recovered = /ThreadPoolExecutor\.getTask/.test(writer) && !/AssistantStreamTransport\$Transport\.run/.test(writer);
+        observation.samples.push({ millisecondsAfterBlockedObservation: Math.round(performance.now() - held.blockedObservedAt),
+          actualTomcatWriteBlocked: outputBlocked(writer), outputWorkerIdle: recovered });
+        if (recovered) { fs.writeFileSync(path.join(evidence, 'natural-output-recovered-threads.txt'), redact(dump)); break; }
+        await delay(1000);
+      } while (performance.now() < deadline);
+      assert.ok(recovered, 'Cancelled output writer did not return to the bounded pool before the observation deadline');
+      observation.writerIdleObservedMs = observation.samples.at(-1).millisecondsAfterBlockedObservation;
+      assert.ok(observation.writerIdleObservedMs <= observation.deadlineMs, 'Output recovery observed after the strict monotonic deadline');
+      await freshNative(token, 'native-after-natural-output-recovery');
+      assert.equal(held.paused, true); assert.equal(held.closed, false); assert.equal(held.c.released, false);
+      assert.deepEqual(await counts(held.id, token), { user: 1, assistant: 0 });
+      observation.nativeAnswerCompletedBeforeSocketResume = true;
+      observation.nativeAnswerCompletedMs = Math.round(performance.now() - held.blockedObservedAt);
+      result.cases.push({ name: 'natural-output-timeout-recovery', cancelledAnswerRows: 0,
+        writerRecoveredWithoutSocketResumeOrProviderRelease: true, outputCapacityReusedByNativeAnswer: true,
+        writerIdleObservedMs: observation.writerIdleObservedMs, nativeAnswerCompletedMs: observation.nativeAnswerCompletedMs,
+        absoluteConnectionTtlClaimed: false });
+    }
+    result.providerCalls = [...controls.values()].reduce((n, c) => n + c.calls, 0); assert.equal(result.providerCalls, 12);
     result.providerFrames = [...controls.values()].map(c => ({ question: c.question, calls: c.calls, framesWritten: c.framesWritten, charactersWritten: c.charactersWritten }));
     result.status = 'PASS';
   } catch (e) { result.status = 'FAIL'; result.failure = redact(e.stack); throw e; }

@@ -1,6 +1,8 @@
 # OpsPilot 面试讲解与追问
 
-CP77可讲本地已验证的修复案例：“数据库CANCELLED不等于资源已释放，模型worker释放也不等于输出writer已释放”。真实暂停TCP在既有帧/字符上限内复现原锁阻塞，保留原包反例；新增独立有界写池/单槽交接，原worker等待ACK时每100ms仍检查原预算/租约/SQL停止，不提前移除Work、不扩大模型池。四场景三次证明未resume/未放行旧Provider时取消200、实际模型HTTP关闭、原worker完成新问题；写资源仍被慢连接占住时先拒绝新流503而不落问题，同步仍可用。原键回放拒绝导致idle writer的首次实现失败与页面夹具失败均保留，不包装成一遍成功。双时区/原UI/跨节点/幂等回归通过，但自身远端、原生AI MySQL HTTP矩阵/代理TLS/生产容量尚未验，不写整体完成，见[77报告](acceptance/V1.7-checkpoint-77.md)。
+CP78补充工程追问：“模型worker释放后，输出容量什么时候回来？”用完全暂停的真实TCP、1 writer/0输出队列，先证明取消200、模型HTTP关闭、同worker同步新答案，但新流仍503且问题0/模型0；不RESUME、不关旧客户端或放行Provider，实测writer约60秒回到池空闲、约60秒替代原生答案完成。时间是采样观测区间，不是精确socket-close时刻，也不是trickle/TLS/代理下绝对TTL。默认自动化保留原四项并新增第五项，Windows完整通过、自身Linux待验，生产源码未改，见[78报告](acceptance/V1.7-checkpoint-78.md)。
+
+CP77可讲本地与自身远端已验证的修复：“数据库CANCELLED不等于资源已释放，worker释放也不等于writer释放”。原包真实暂停TCP复现锁阻塞；新有界写池/单槽交接让原worker等待ACK仍每100ms检查原预算/租约/SQL停止，不提前移除Work或扩大模型池。8a0714f自身十五CI、四ZIP源SHA/摘要及Linux四实际慢写场景/九HTTP已核验，取消/撤销/超时在未RESUME/未放行旧Provider时关闭HTTP并复用原worker，满输出503问题0、同步仍可用。两次自身远端失败、回放writer泄漏的首实现失败及页面夹具失败均保留，不包装成一次成功。原生AI MySQL HTTP、代理TLS、生产容量与78第五项不由该源绿灯推出，见[77报告](acceptance/V1.7-checkpoint-77.md)。
 
 CP76补充工程追问：“请求在A执行，取消打到B，B没有A的Future怎么办？”先用两个独立JVM和同一新建SQL库验证现有持久化状态/周期授权检查，不先造分布式协调组件。旧74虽然两节点CANCELLED且不落答案，实际HTTP/worker仍等待模型返回；75原生包在旧Provider未放行时先关闭原连接并完成新问题。四场景本地两次及6082012自身十五CI/三ZIP独立核验通过，回放只一次模型调用、重复409/他人404/取消审计1、清空及撤销无晚答案。必须说明正常读响应、本机共享H2、100ms周期观察，不覆盖77慢客户端阻塞/跨机器网络分区/MySQL原生HTTP/全局容量，见[76报告](acceptance/V1.7-checkpoint-76.md)。
 

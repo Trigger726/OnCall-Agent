@@ -6,9 +6,11 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-77最新远端状态：12fdf8a的Run37139048940终态failure，十三成功/慢TCP失败/容器跳过；页面六原生场景及两个占位流cancelled+EOF已远端通过，但小接收缓冲仍未形成真实Tomcat写阻塞。两次失败及源SHA/ZIP摘要另存，不称整体通过。新增Linux客户端握手MSS控制，WSL两协议单测与Windows四应用场景通过，新源码Linux应用复验待跑。见[77阶段十一至十二](docs/acceptance/V1.7-checkpoint-77.md)；客户端socket探测、本地与历史证据不代替产品自身远端门禁。
+78自然输出容量回收本地限定通过：[报告](docs/acceptance/V1.7-checkpoint-78.md)、[证据](docs/assets/v1.7-cp78/local-proof.json)。默认新增第五项、原四场景保留；旧TCP不读/Provider不放行时，writer约60秒池空闲、新原生答案约60秒提交，三JVM/五客户端/十二模型HTTP、完整日志意外ERROR=0。生产源码未改，新默认门禁自身Linux CI待验，不是所有连接绝对TTL或生产容量保证。
 
-77慢消费者修复本地限定通过，自身远端待验：[报告](docs/acceptance/V1.7-checkpoint-77.md)、[耐久证据](docs/assets/v1.7-cp77/local-proof.json)。独立有界输出池/单槽交接隔离真实Tomcat写阻塞；暂停TCP时取消/撤销/原预算超时先关闭实际模型HTTP并复用唯一worker，四场景三次通过，输出满503接纳前问题0/模型0。原生页面六场景/九图、原十三页面/八助手UI、跨节点四场景及幂等/取消/预算回归通过，双时区各521发现/415执行/106条件跳过、原生62/前端107/生命周期20零失败。有限writer仍等待TCP或容器写超时，已缓冲字节不能撤回；旧反例、首次实现失败和三次页面夹具失败保留，不外推整体完成、生产容量或新CI绿灯。
+77自身远端限定通过：8a0714f的[Run37140503864](https://github.com/Trigger726/OnCall-Agent/actions/runs/37140503864)十五作业success，四ZIP源SHA/实际摘要、Linux四真实慢写场景/九HTTP/十六完整JAR日志、原生62、MySQL99/五池原门禁重放、十三/八/六页面流程已独立核验，见[报告阶段十三](docs/acceptance/V1.7-checkpoint-77.md)、[远端证据](docs/assets/v1.7-cp77/remote-proof.json)。两次自身远端失败、原包负对照及所有旧Demo保留，此源不覆盖78第五项或原生AI MySQL HTTP。
+
+77初次本地范围（自身远端闭环见上）：[报告](docs/acceptance/V1.7-checkpoint-77.md)、[耐久证据](docs/assets/v1.7-cp77/local-proof.json)。有界输出池/单槽交接隔离真实Tomcat写阻塞，取消/撤销/原预算超时先关闭实际模型HTTP并复用唯一worker，满输出503接纳前问题0/模型0。原生六页面/九图、十三/八UI、跨节点四项及幂等/取消/预算回归通过，双时区521发现/415执行/106条件跳过、原生62/前端107/生命周期20零失败。有限writer仍等TCP或容器超时，已缓冲字节不能撤回；初次实现/页面夹具失败保留，不外推整体完成或生产容量。
 
 76双节点助手四场景本地两次与自身远端限定通过：[报告](docs/acceptance/V1.7-checkpoint-76.md)。6082012的[Run37131134785](https://github.com/Trigger726/OnCall-Agent/actions/runs/37131134785)十五作业success，三ZIP源SHA/实际摘要、Linux四跨节点场景/六runner/十一完整JAR日志、原生54和真实MySQL99/五池门禁已独立核验。两个独立JVM共享新建SQL文件库，A执行、B回放/取消/清空/撤销；正常读取时原生流先关闭实际HTTP并复用worker，旧74两项均未释放。重复409/他人404/单次审计与不落半答案成立，不外推77慢读边界、跨机器、MySQL原生HTTP或数据库HA，历史Demo保留。
 

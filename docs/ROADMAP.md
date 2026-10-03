@@ -2,9 +2,11 @@
 
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
-77最新：自己的12fdf8a/Run37139048940十三成功/慢TCP失败/容器跳过，整体failure。页面六原生场景及两占位流cancelled+EOF通过，但实际接收缓冲1152仍未形成Tomcat写阻塞，两轮失败/ZIP摘要均保留。Linux自有客户端握手MSS控制与两协议测试已新增，Windows四应用场景通过，新源码自身Linux应用待验，详见[阶段十一至十二](acceptance/V1.7-checkpoint-77.md)。不把独立socket探测或本地PASS当整体远端完成。
+78自然输出回收门禁本地限定通过：[报告](acceptance/V1.7-checkpoint-78.md)。保留原四项、默认新增第五项，不读旧socket/不放行旧Provider时约60秒writer池空闲、约60秒新原生答案提交。三次同包观测，最终五项/三JVM/五客户端/十二HTTP/完整日志意外ERROR=0；新默认源自身Linux待验，不借77四项绿灯。原生AI MySQL HTTP、trickle/TLS/代理与跨机器/生产容量继续。
 
-77慢消费者有界输出修复本地限定通过：[报告](acceptance/V1.7-checkpoint-77.md)、[原反例与修复证据](assets/v1.7-cp77/local-proof.json)。四实际暂停TCP场景三次通过，原模型HTTP/唯一worker在旧Provider未放行且TCP未resume时释放；满输出503接纳前不落问题。原生页面六场景/九图、原十三/八UI及跨节点/幂等/取消/预算回归通过，双时区各521发现/415执行/106条件跳过、原生62/前端107/生命周期20零失败。自身新CI尚待验，writer仍可能等容器写超时、不保证绝对连接TTL；原生AI MySQL HTTP矩阵、跨机器故障/生产容量继续，不借旧CI或删除历史失败。
+77自身远端限定通过：8a0714f/Run37140503864十五作业success，四ZIP源SHA/摘要、Linux四慢TCP实际栈/九HTTP/十六完整JAR日志、七原生XML62、MySQL99/五池原门禁重放、十三/八/六页面已核验，[阶段十三](acceptance/V1.7-checkpoint-77.md)。两次自身失败与全部历史Demo保留，不外推78第五项。
+
+77初次本地范围（自身远端闭环见上）：[报告](acceptance/V1.7-checkpoint-77.md)、[原反例与修复证据](assets/v1.7-cp77/local-proof.json)。四真暂停TCP场景三次通过，原模型HTTP/唯一worker在未RESUME/未放行旧Provider时释放，满输出503接纳前无问题。原生六页面/九图、十三/八UI及跨节点/幂等/取消/预算回归通过，双时区521发现/415执行/106条件跳过、原生62/前端107/生命周期20零失败；有限writer仍可能等容器写超时，不保证绝对TTL，历史失败保留。
 
 76双节点助手四场景本地两次与6082012自身远端限定通过：[报告](acceptance/V1.7-checkpoint-76.md)。[Run37131134785](https://github.com/Trigger726/OnCall-Agent/actions/runs/37131134785)十五作业success，三工件源SHA/摘要、原生54/真实MySQL99及五池关闭、Linux六runner/十一完整JAR日志与新跨节点四场景已独立核验。正常读取客户端下A执行、B回放/取消/清空/撤销，实际HTTP释放与原worker复用均在旧Provider未放行时断言；旧74反例保留。本机共享H2 SQL不证明跨机器网络分区/MySQL原生HTTP/数据库HA/生产容量；77另复现慢读取边界，完整路线继续。
 
