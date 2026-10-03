@@ -126,6 +126,8 @@ jobs:
         run: node --test scripts/tests/assistant-stream-admission-response.test.cjs
       - name: Verify paused TCP writes, model release and natural output capacity recovery
         run: node scripts/verify-assistant-slow-consumer-ci.cjs
+      - name: Verify actual bilateral swap HTTP, actor consent and cancelled coverage history
+        run: node scripts/verify-oncall-swap-http-ci.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
@@ -146,6 +148,8 @@ jobs:
             target/assistant-slow-consumer-it/**/*.json
             target/assistant-slow-consumer-it/**/*.log
             target/assistant-slow-consumer-it/**/*.txt
+            target/oncall-swap-http-it/**/*.json
+            target/oncall-swap-http-it/**/*.log
           retention-days: 30
 
   backend-h2:
@@ -298,6 +302,40 @@ jobs:
             target/surefire-reports/
           retention-days: 30
 
+  oncall-swap-mysql-integration:
+    name: Bilateral on-call shift swaps on MySQL 8.4
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Reject H2, skipped cases, partial rollback coverage and incomplete shutdown
+        run: node --test scripts/tests/oncall-swap-mysql.test.cjs
+      - name: Verify both override writes, participant consent and concurrent decisions on owned MySQL
+        shell: bash
+        run: |
+          set -o pipefail
+          chmod +x mvnw
+          mkdir -p target/oncall-swap-mysql-it
+          ./mvnw -B -Duser.timezone=UTC -Dopspilot.oncall.swap.mysql.enabled=true -Dtest=MySqlOnCallSwapIntegrationTest test 2>&1 | tee target/oncall-swap-mysql-it/maven.log
+      - name: Verify per-test JDBC identity and full pool shutdown
+        run: node scripts/verify-oncall-swap-mysql.cjs
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: oncall-swap-mysql-evidence
+          path: |
+            target/oncall-swap-mysql-it/
+            target/surefire-reports/
+          retention-days: 30
+
   alertmanager-integration:
     name: Alertmanager webhook integration
     runs-on: ubuntu-latest
@@ -356,7 +394,7 @@ jobs:
 
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, browser-integration, backend-h2, mysql-integration, assistant-native-mysql-integration, assistant-cross-node-mysql-integration, auth-session-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration, collector-alerting-integration]
+    needs: [frontend, browser-integration, backend-h2, mysql-integration, assistant-native-mysql-integration, assistant-cross-node-mysql-integration, oncall-swap-mysql-integration, auth-session-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration, collector-alerting-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

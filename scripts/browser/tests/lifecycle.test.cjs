@@ -6,6 +6,16 @@ const { spawn } = require('node:child_process');
 const { once } = require('node:events');
 const { requireFreePort, stopProcess, waitForHealth, redact, unexpectedLogLines } = require('../../verify-oncall-browser-ci.cjs');
 
+test('archived swap comparison cannot replace acceptance or launch an old JAR in CI', async () => {
+  const child = spawn(process.execPath, [require.resolve('../../verify-oncall-swap-http-ci.cjs')], {
+    env: { ...process.env, CI: 'true', OPSPILOT_SWAP_UPGRADE: '1' }, windowsHide: true,
+  });
+  let output = ''; child.stderr.on('data', chunk => { output += chunk; });
+  const [code] = await once(child, 'close'); assert.equal(code, 1);
+  assert.match(output, /Archived swap comparison cannot replace CI acceptance/);
+  assert.doesNotMatch(output, /evidenceDirectory|occupied/);
+});
+
 test('cross-node assistant baseline cannot replace acceptance or launch an archived JAR in CI', async () => {
   const child = spawn(process.execPath, [require.resolve('../../verify-assistant-cross-node-ci.cjs')], {
     env: { ...process.env, CI: 'true', OPSPILOT_ASSISTANT_CROSS_NODE_BASELINE: '1' }, windowsHide: true,

@@ -1,5 +1,11 @@
 # OpsPilot 架构设计
 
+## CP85参与者确认的双向原子换班
+
+V34独立换班台账冻结两个普通源班次、双方、时段及版本。按计划ID/用户ID规范顺序加行锁，接受时重查双方最新资格、两源/计划/开始时间/重叠，复用原roster.create在同一READ_COMMITTED事务内生成两条覆盖、决定及审计。第二覆盖或最终审计失败全部回滚；本人申请、指定对方确认，ADMIN不代替参与者。原班次和轮转不变，重复原键/决定仅回执，不复活已取消覆盖。GET历史ACCEPTED不是当前责任，coverage为准；拒绝/撤回可结束源已失效的待办。
+
+同/跨计划、回滚、反向竞争、台账截断和HTTP权限等17共享场景在H2已验；双时区各433实际执行/100Node与旧404→同库V34新包真实HTTP对照通过，新MySQL17项/十八作业源CI待验。后端契约见[ONCALL_SWAPS](ONCALL_SWAPS.md)、[85证据范围](acceptance/V1.7-checkpoint-85.md)。页面/通知/开放认领/已开始部分时段/成对撤销未完成，不宣称完整产品。84自身双JVM六项MySQL/十七CI与六ZIP独立重放已闭环，见[84第四节](acceptance/V1.7-checkpoint-84.md)，不替代此轮新事务。
+
 ## CP78停止后的输出容量自然回收
 
 默认真实TCP门禁保留77四项，新增第三自有JVM的1 writer/0队列场景。取消先关闭模型HTTP、原worker完成新同步问题；唯一输出仍卡Tomcat写时新流503问题0/模型0。完全不RESUME/不关旧客户端、不放行Provider，80秒monotonic界限内要求同名writer退出Transport.run并回到ThreadPoolExecutor.getTask，再由新原生流完整提交唯一答案。Windows同44e包三次约60秒；119cee1自身Linux五项通过，首次池空闲60.224秒、新答案60.424秒，采样不是精确socket-close时间或所有连接TTL。该源整轮CI因轮转浏览器失败，见[78报告](acceptance/V1.7-checkpoint-78.md)。生产socket/timeout/线程池默认未改。
@@ -407,6 +413,6 @@ checkpoint63通过独立可选覆盖补Collector原生告警→受控Incident：
 3. 将数据范围权限细化到部门、系统和资源负责人。
 4. 增加系统级并发压测、真实 socket 断流恢复，以及外部 Provider 组合故障注入。
 5. 为多实例事件广播和任务协调接入消息组件。
-6. 默认助手原生MySQL单JVM HTTP18、82原五慢消费者与83自己的70af0fb/Run37153507039十七CI/真实MySQL8.4.11双JVM原四项已独立核验，原失败保留；84继续补两方向排队取消/真实503和未放行占用模型时复用被拒原session/key，原预算/worker/队列不改，H2六项与90单测通过，新六项MySQL源CI仍待验。独立父测试保留JDBC/最终SQL/双节点连接/完整双池关闭门禁，新增四条完成正对照和两条取消请求null问题ID审计。继续跨机器、DB HA/分区、TLS/代理/trickle与生产容量，不把模型释放等同输出writer即时释放；[84范围](acceptance/V1.7-checkpoint-84.md)/[83远端](acceptance/V1.7-checkpoint-83.md)。
+6. 默认助手原生MySQL单JVM HTTP18、82原五慢消费者与84自己的3abb34c9/Run37154511110十七CI/真实MySQL8.4.11双JVM六项已独立核验，原失败保留；84新增两方向排队取消/真实503和未放行占用模型时复用被拒原session/key，原预算/worker/队列不改。独立父测试保留JDBC/最终SQL/双节点连接/完整双池关闭门禁，并查四条完成正对照和两条取消请求null问题ID审计。继续跨机器、DB HA/分区、TLS/代理/trickle与生产容量，不把模型释放等同输出writer即时释放；[84自身闭环](acceptance/V1.7-checkpoint-84.md)/[83远端](acceptance/V1.7-checkpoint-83.md)。
 7. 在已完成 MTTA/MTTM/MTTR、行动项逾期治理、精确指纹复发、Prometheus 事件型服务 SLO 和 Alertmanager 入站生命周期之上，检查点55补真实检索完整独立复核子集趋势；继续获取长期真实样本，建设跨 Incident 语义相似/依赖共因聚类，并以真实生产 recording rules、长期窗口、出站通知和送达回执验证 SLO。
 8. 从真实但脱敏的历史 Incident/查询流量持续扩充已实现的双评分 qrels，加入第三方仲裁、超过两名标注人的一致性和分层抽样；将现有保留任务扩展到备份/导出副本和面向单条数据的受控删除，再以 NDCG/Recall 验证真实 Embedding 与 cross-encoder rerank 是否稳定优于 BM25/RRF，决定是否引入 ANN/OpenSearch/Milvus。

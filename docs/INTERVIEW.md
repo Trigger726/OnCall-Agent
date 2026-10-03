@@ -1,6 +1,8 @@
 # OpsPilot 面试讲解与追问
 
-最新84：[报告](acceptance/V1.7-checkpoint-84.md)/[本地证据](assets/v1.7-cp84/local-proof.json)。保留原双JVM四项，新增A排队/B取消与B排队/A取消；保持唯一worker、单队列与20秒预算，实际503 JSON/未入库键/零副作用、取消后未放行旧模型时复用原被拒session/key、本地六项/Provider10与90单测/63原生回归通过。新六项MySQL源CI仍待验，本机条件跳过1不能签字；生产Java/Vue/原44e包、83原四项/旧Demo保留，没有新界面改版宣称。
+最新85：[双向换班后端报告](acceptance/V1.7-checkpoint-85.md)/[本地证据](assets/v1.7-cp85/local-proof.json)。两个未来完整普通班次可同/跨计划互换，本人申请、指定对方确认后原子生成两覆盖/审计，管理员无参与者豁免，保留原班次；17共享场景/双时区各433实际执行/100脚本单测与旧404→同库V34真实HTTP对照通过。自己的新MySQL17项/十八作业源CI待验，本机条件跳过不能签字；页面、通知、开放认领、已开始/部分时段互换及成对原子撤销未交付，旧Demo/失败保留。
+
+84自身3abb34c9/[Run37154511110](https://github.com/Trigger726/OnCall-Agent/actions/runs/37154511110)十七success，六ZIP来源/实际摘要核验、真实MySQL8.4.11独占schema双JVM六项/Provider10及最终SQL/双池关闭/原门禁重放通过，见[84第四节](acceptance/V1.7-checkpoint-84.md)/[远端证据](assets/v1.7-cp84/remote-proof.json)。原生MySQL18/原99/H2原生63、十runner/十九完整JAR日志/十三八六浏览器机器结果已核验；不覆盖85新换班事务、跨机器或生产规模。
 
 83自身70af0fb/[Run37153507039](https://github.com/Trigger726/OnCall-Agent/actions/runs/37153507039)十七success，六ZIP独立核验；原双JVM四项在真实MySQL8.4.11/专属schema执行、零跳过，最终SQL/双池关闭/独立PID端口核验与保存的83原门禁重放通过，见[83第四节](acceptance/V1.7-checkpoint-83.md)/[远端证据](assets/v1.7-cp83/remote-proof.json)。MySQL原生18/原99/H2原生63、十runner/十九完整JAR日志意外ERROR0及十三/八/六浏览器机器流程通过；两次原SIGKILL不称优雅关闭，本次未重新目视截图，旧四项不覆盖84新排队矩阵。
 
