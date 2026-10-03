@@ -122,6 +122,8 @@ jobs:
         run: python3 scripts/fixtures/test_assistant_slow_tcp_client.py
       - name: Verify bounded simultaneous output-stack observation
         run: node --test scripts/tests/assistant-output-observation.test.cjs
+      - name: Reject held SSE before JSON parsing and preserve admission headers
+        run: node --test scripts/tests/assistant-stream-admission-response.test.cjs
       - name: Verify paused TCP writes, model release and natural output capacity recovery
         run: node scripts/verify-assistant-slow-consumer-ci.cjs
       - uses: actions/upload-artifact@v5

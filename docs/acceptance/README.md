@@ -1,8 +1,10 @@
 # OpsPilot 验收记录
 
+最新82：[报告](V1.7-checkpoint-82.md)/[证据](../assets/v1.7-cp82/local-proof.json)。补实际响应头和取消前后栈，在原16次采样内要求同writer跨500ms，六响应门禁/五边界单测加入后最终67项通过；同包Linux首个反例保留，最终Linux与Windows完整五项通过，实际503/模型0/自然回池和新原生答案保留。仅本地限定通过，自身新提交远端待验，不覆盖81失败、不认定其唯一根因；生产Java/Vue/TCP参数与旧Demo不改，Windows无池关闭行单列。
+
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
-最新81：[报告](V1.7-checkpoint-81.md)/[本地证据](../assets/v1.7-cp81/local-proof.json)。同一真实栈双writer的4秒有界观察、断言前保存失败诊断与七拒绝单测已补；原五项/56门禁最终源通过，自身Linux待验。中间主机警告/Windows无池关闭行分开报告，不宣称优雅停机或80唯一根因。80自身3de2fd5/Run37146650606的MySQL8.4.11原生18、原99/H2原生63及十三八六页面机器结果通过，五ZIP独立核验，但整轮十四success/认证failure/容器skipped，[80第六节](V1.7-checkpoint-80.md)/[首次远端证据](../assets/v1.7-cp80/first-remote-proof.json)保留。所有旧Demo与以下历史“待验”对应当时事实。
+81自身远端：[报告第六节](V1.7-checkpoint-81.md)/[五ZIP远端证据](../assets/v1.7-cp81/first-remote-proof.json)/[本地证据](../assets/v1.7-cp81/local-proof.json)。自身d1600ad/Run37148364622十四success、认证failure、容器skipped；Linux原四项与同快照双writer通过，第五项拒绝探针模型1/旧JSON读取超时，失败保留且不宣称唯一根因。MySQL原生18、原99/H2原生63及十三/八/六页面机器结果已独立核验，没有新截图目视。Windows最终五项/56门禁不能覆盖该Linux失败；旧Demo、80/81原始失败与以下历史“待验”均保留。
 
 79轮转刷新验收本地限定通过：[报告](V1.7-checkpoint-79.md)、[证据](../assets/v1.7-cp79/local-proof.json)。受控真实台账响应导致鼠标按下期间按钮位移3268px、click0/表单0；只改测试等待后续实际roster响应，保留200ms延迟/按压和原断言。最终十三/八/六页及三完整停机日志零意外ERROR，自身Linux待验；不声称远端唯一根因或生产UI布局已修复，全部失败/旧Demo保留。
 

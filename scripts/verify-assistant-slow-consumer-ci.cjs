@@ -12,6 +12,23 @@ const sections = dump => dump.split(/\r?\n\r?\n/);
 const outputBlocked = section => section.startsWith('"opspilot-assistant-output-') && /NioSocketWrapper\.doWrite/.test(section);
 const blockedOutputThreads = dump => [...new Set(sections(dump).filter(outputBlocked).map(section => section.match(/^"([^"]+)"/)[1]))];
 
+function settledWriterSample(candidate, name, now) {
+  if (!name) return { candidate: undefined, settled: false };
+  const next = candidate?.name === name ? candidate : { name, observedAt: now };
+  return { candidate: next, settled: now - next.observedAt >= 500 };
+}
+
+// A refused stream is JSON. Retain its headers before reading; an admitted held SSE body must fail immediately, not mask admission as a JSON timeout.
+async function readJsonResponse(response, observations, route) {
+  const contentType = response.headers.get('content-type');
+  observations?.push({ route, status: response.status, contentType });
+  if (!/^application\/json(?:\s*;|$)/i.test(contentType || '')) {
+    await response.body?.cancel();
+    throw new Error('Expected JSON response, received HTTP ' + response.status + ' Content-Type ' + contentType);
+  }
+  return { status: response.status, json: await response.json() };
+}
+
 // Require both writers in ONE actual snapshot, never accumulate separate observations into a passing pair.
 async function observeSaturation(capture, budgetMs = 4000) {
   assert.ok(Number.isInteger(budgetMs) && budgetMs > 0 && budgetMs <= 4000);
@@ -106,7 +123,7 @@ async function verify() {
     const response = await fetch(base + route, { method, headers: { ...(token ? { Authorization: 'Bearer ' + token } : {}),
       ...(body ? { 'Content-Type': 'application/json' } : {}), ...(key ? { 'Idempotency-Key': key } : {}), Accept: 'text/event-stream, application/json' },
       body: body ? JSON.stringify(body) : undefined, signal: AbortSignal.timeout(12000) });
-    return { status: response.status, json: await response.json() };
+    return readJsonResponse(response, route.endsWith('/stream') ? (result.streamAdmissionResponses ??= []) : undefined, route);
   }
   async function login() { const r = await api('/auth/login', null, { username: 'admin', password: 'OpsPilot@2026' }); assert.equal(r.status, 200); return r.json.data.accessToken; }
   async function session(token) { const r = await api('/assistant/sessions', token, {}); assert.equal(r.status, 200); return r.json.data.session.id; }
@@ -176,18 +193,26 @@ async function verify() {
       if (sent % 100 === 0) await delay(1);
     }
     c.framesWritten = sent + 1; c.charactersWritten = 7 + sent * 10;
-    let dump = '', output;
+    let dump = '', output, candidate, settled = false;
+    const samples = [];
     for (let i = 0; i < 16; i++) {
       dump = threads(); const threadSections = sections(dump);
       output = threadSections.find(section => outputBlocked(section) && !previous.has(section.match(/^"([^"]+)"/)[1]));
+      const now = performance.now(), name = output?.match(/^"([^"]+)"/)[1];
+      samples.push({ milliseconds: Math.round(now), thread: name || null });
+      ({ candidate, settled } = settledWriterSample(candidate, name, now));
       if (output) {
         const worker = threadSections.find(section => section.startsWith('"opspilot-assistant-1"')) || '';
-        assert.ok(!/org\.apache\.tomcat\.util\.net\./.test(worker), 'Model worker must not write the servlet socket'); break;
+        assert.ok(!/org\.apache\.tomcat\.util\.net\./.test(worker), 'Model worker must not write the servlet socket');
+        // A first write stack can precede delayed ACK progress. Require the same writer in successive snapshots, within the original 16-capture limit.
+        if (settled) break;
       }
       await delay(500);
     }
     fs.writeFileSync(path.join(evidence, name + '-threads.txt'), redact(dump));
+    result.blockedOutputSetupObservations ??= []; result.blockedOutputSetupObservations.push({ case: name, samples, minimumSnapshotSpanMs: 500 });
     assert.ok(output, 'An actual blocked OUTPUT thread is required; a fast socket is not a passing slow-consumer test');
+    assert.equal(settled, true, 'A transient first write stack is not a settled slow-client setup');
     s.blockedObservedAt = performance.now();
     result.blockedOutputs ??= []; result.blockedOutputs.push({ case: name, thread: output.match(/^"([^"]+)"/)[1], previouslyBlockedThreads: [...previous],
       newlyBlockedThreadRequired: true, modelWorkerDirectServletWrite: false });
@@ -266,9 +291,29 @@ async function verify() {
       // Keep all four earlier cases intact; independently verify the stopped output writer's natural recovery.
       await stop(); await requireFreePort(9971); await requireFreePort(9972);
       await start(45, 1, 0); token = await login();
-      const held = await paused(token, 'natural-output-timeout'); await cancel(held, token);
+      const held = await paused(token, 'natural-output-timeout');
+      const setup = result.naturalOutputSetup = { samples: [] };
+      function captureNaturalStage(stage) {
+        const dump = threads(), writer = sections(dump).find(section => section.startsWith('"opspilot-assistant-output-1"')) || '';
+        fs.writeFileSync(path.join(evidence, 'natural-' + stage + '-threads.txt'), redact(dump));
+        setup.samples.push({ stage, millisecondsAfterBlockedObservation: Math.round(performance.now() - held.blockedObservedAt),
+          actualTomcatWriteBlocked: outputBlocked(writer),
+          outputWorkerIdle: /ThreadPoolExecutor\.getTask/.test(writer) && !/AssistantStreamTransport\$Transport\.run/.test(writer),
+          clientPaused: held.paused, clientExited: held.closed, providerReleased: held.c.released });
+      }
+      captureNaturalStage('before-cancel'); await cancel(held, token); captureNaturalStage('after-cancel');
       const rejected = control('natural-timeout-rejected'), rejectedId = await session(token), rejectedKey = randomUUID();
-      const refusal = await api(route(rejectedId) + '/stream', token, { content: rejected.question }, rejectedKey);
+      captureNaturalStage('before-probe');
+      let refusal;
+      try { refusal = await api(route(rejectedId) + '/stream', token, { content: rejected.question }, rejectedKey); }
+      catch (error) {
+        try {
+          const request = await state(rejectedId, rejectedKey, token);
+          setup.rejectedKeyHttpStatus = request.status; setup.rejectedRequestStatus = request.json.data?.status;
+          setup.rejectedMessageRows = await counts(rejectedId, token);
+        } catch (diagnosticError) { setup.diagnosticFailure = redact(diagnosticError.message); }
+        throw error;
+      } finally { setup.rejectedModelCalls = rejected.calls; captureNaturalStage('after-probe'); }
       assert.equal(refusal.status, 503); assert.equal(refusal.json.error.code, 'ASSISTANT_STREAM_SATURATED');
       assert.equal((await state(rejectedId, rejectedKey, token)).status, 404);
       assert.deepEqual(await counts(rejectedId, token), { user: 0, assistant: 0 }); assert.equal(rejected.calls, 0);
@@ -320,5 +365,5 @@ async function verify() {
     if (result.status === 'FAIL') throw new Error(result.failure);
   }
 }
-module.exports = { blockedOutputThreads, observeSaturation };
+module.exports = { blockedOutputThreads, observeSaturation, readJsonResponse, settledWriterSample };
 if (require.main === module) verify().catch(e => { console.error(redact(e.message)); process.exitCode = 1; });

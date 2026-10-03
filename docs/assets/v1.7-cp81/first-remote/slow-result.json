@@ -1,0 +1,233 @@
+{
+  "status": "FAIL",
+  "baselineCapture": false,
+  "fixture": "owned real native model HTTP and paused TCP SSE clients; actual Tomcat write stacks required",
+  "jarSha256": "1f5728cc81c97711ef72d63b8e802385ea6041edbb16c828dce11e7496c26f5c",
+  "modelWorkers": 1,
+  "modelQueueCapacity": 1,
+  "outputWriters": 2,
+  "outputQueueCapacity": 1,
+  "maximumCharactersBeforeRelease": 99907,
+  "maximumNativeFramesBeforeRelease": 9991,
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "cases": [
+    {
+      "name": "cancel-slow-client",
+      "cancelStatus": 200,
+      "requestStatus": "CANCELLED",
+      "cancelledAnswerRows": 0,
+      "cancellationAudits": 1,
+      "modelHttpClosedBeforeSocketResume": true,
+      "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+      "providerReleased": false
+    },
+    {
+      "name": "bounded-output-saturation",
+      "blockedWriters": 2,
+      "queuedTransport": 1,
+      "rejectedStatus": 503,
+      "rejectionCode": "ASSISTANT_STREAM_SATURATED",
+      "rejectedQuestionRows": 0,
+      "rejectedModelCalls": 0,
+      "rejectedKeyStatus": 404,
+      "queuedRequestCancelledAndModelHttpClosedBeforeWriterAvailable": true,
+      "synchronousWorkerStillUsable": true
+    },
+    {
+      "name": "revoke-slow-client",
+      "persistedStatus": "REVOKED",
+      "oldTokenStatus": 401,
+      "answerRows": 0,
+      "modelHttpClosedBeforeSocketResume": true,
+      "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+      "noRevokedTerminalPayload": true,
+      "alreadyBufferedBytesRecallClaimed": false
+    },
+    {
+      "name": "timeout-slow-client",
+      "originalBudgetSeconds": 12,
+      "persistedStatus": "TIMED_OUT",
+      "answerRows": 0,
+      "modelHttpClosedBeforeSocketResume": true,
+      "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+      "timeoutEventAfterWriterReleased": true
+    }
+  ],
+  "startedPids": [
+    3390,
+    3669,
+    3826
+  ],
+  "stoppedPids": [
+    3390,
+    3669,
+    3826
+  ],
+  "tcpClientImplementation": "Linux per-client receive buffer and advertised MSS",
+  "tcpClients": [
+    {
+      "case": "cancel",
+      "pid": 3487,
+      "receiveBufferBytes": 2304,
+      "receiveBufferSetBeforeConnect": true,
+      "maximumSegmentBytes": 244,
+      "maximumSegmentSetBeforeConnect": true
+    },
+    {
+      "case": "saturation",
+      "pid": 3556,
+      "receiveBufferBytes": 2304,
+      "receiveBufferSetBeforeConnect": true,
+      "maximumSegmentBytes": 244,
+      "maximumSegmentSetBeforeConnect": true
+    },
+    {
+      "case": "revoke",
+      "pid": 3637,
+      "receiveBufferBytes": 2304,
+      "receiveBufferSetBeforeConnect": true,
+      "maximumSegmentBytes": 244,
+      "maximumSegmentSetBeforeConnect": true
+    },
+    {
+      "case": "timeout",
+      "pid": 3763,
+      "receiveBufferBytes": 2304,
+      "receiveBufferSetBeforeConnect": true,
+      "maximumSegmentBytes": 244,
+      "maximumSegmentSetBeforeConnect": true
+    },
+    {
+      "case": "natural-output-timeout",
+      "pid": 3924,
+      "receiveBufferBytes": 2304,
+      "receiveBufferSetBeforeConnect": true,
+      "maximumSegmentBytes": 244,
+      "maximumSegmentSetBeforeConnect": true
+    }
+  ],
+  "blockedOutputs": [
+    {
+      "case": "cancel",
+      "thread": "opspilot-assistant-output-1",
+      "previouslyBlockedThreads": [],
+      "newlyBlockedThreadRequired": true,
+      "modelWorkerDirectServletWrite": false
+    },
+    {
+      "case": "saturation",
+      "thread": "opspilot-assistant-output-2",
+      "previouslyBlockedThreads": [
+        "opspilot-assistant-output-1"
+      ],
+      "newlyBlockedThreadRequired": true,
+      "modelWorkerDirectServletWrite": false
+    },
+    {
+      "case": "revoke",
+      "thread": "opspilot-assistant-output-1",
+      "previouslyBlockedThreads": [],
+      "newlyBlockedThreadRequired": true,
+      "modelWorkerDirectServletWrite": false
+    },
+    {
+      "case": "timeout",
+      "thread": "opspilot-assistant-output-1",
+      "previouslyBlockedThreads": [],
+      "newlyBlockedThreadRequired": true,
+      "modelWorkerDirectServletWrite": false
+    },
+    {
+      "case": "natural-output-timeout",
+      "thread": "opspilot-assistant-output-1",
+      "previouslyBlockedThreads": [],
+      "newlyBlockedThreadRequired": true,
+      "modelWorkerDirectServletWrite": false
+    }
+  ],
+  "outputSaturationObservation": {
+    "satisfied": true,
+    "deadlineMs": 4000,
+    "elapsedMs": 88.5422839999992,
+    "samples": [
+      {
+        "milliseconds": 89,
+        "blockedThreads": [
+          "opspilot-assistant-output-1",
+          "opspilot-assistant-output-2"
+        ]
+      }
+    ],
+    "queuedStreamSettled": false,
+    "firstPaused": true,
+    "firstClientExited": false,
+    "secondPaused": true,
+    "secondClientExited": false
+  },
+  "failure": "TimeoutError: The operation was aborted due to timeout\n    at new DOMException (node:internal/per_context/domexception:76:18)\n    at Timeout._onTimeout (node:internal/abort_controller:155:9)\n    at listOnTimeout (node:internal/timers:585:17)\n    at process.processTimers (node:internal/timers:521:7)",
+  "ownedTcpClientsStopped": true,
+  "providerFrames": [
+    {
+      "question": "cp77-cancel-d4e28fb7-9f5e-433e-9ca3-4a7ac9c924ce",
+      "calls": 1,
+      "framesWritten": 9991,
+      "charactersWritten": 99907
+    },
+    {
+      "question": "cp77-fresh-before-resume-5beb2ff3-12ed-4666-8f97-47d19ff5398c",
+      "calls": 1
+    },
+    {
+      "question": "cp77-saturation-41fffc50-921e-4099-b1a2-a89ce03d57d2",
+      "calls": 1,
+      "framesWritten": 9991,
+      "charactersWritten": 99907
+    },
+    {
+      "question": "cp77-queued-output-098c3338-aed6-43c9-911c-5a9dde6063c1",
+      "calls": 1
+    },
+    {
+      "question": "cp77-rejected-output-3826a1f1-51ed-4a13-b641-5d65fd73a530",
+      "calls": 0
+    },
+    {
+      "question": "cp77-sync-control-during-output-saturation-88ad44f6-04ea-4d15-a55a-01d9df4968c6",
+      "calls": 1
+    },
+    {
+      "question": "cp77-revoke-46704b3b-058d-406f-8a40-268103bf82c4",
+      "calls": 1,
+      "framesWritten": 9991,
+      "charactersWritten": 99907
+    },
+    {
+      "question": "cp77-fresh-after-revoke-before-resume-6bdb98a2-ab79-4561-a1e2-9b343f4c75eb",
+      "calls": 1
+    },
+    {
+      "question": "cp77-timeout-0ce6d438-31ce-4bf5-9cf4-90101a54ac61",
+      "calls": 1,
+      "framesWritten": 9991,
+      "charactersWritten": 99907
+    },
+    {
+      "question": "cp77-fresh-after-timeout-before-resume-a3dc0ec7-b4ea-43a7-9840-113d5a21611b",
+      "calls": 1
+    },
+    {
+      "question": "cp77-natural-output-timeout-d84471c0-5668-4f66-bd90-ce89f759aa9a",
+      "calls": 1,
+      "framesWritten": 9991,
+      "charactersWritten": 99907
+    },
+    {
+      "question": "cp77-natural-timeout-rejected-0d08b9a3-a72e-4b95-8eb8-40fc0705b6e6",
+      "calls": 1
+    }
+  ],
+  "ownedProcessesStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}

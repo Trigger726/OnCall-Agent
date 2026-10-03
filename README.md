@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-81慢消费者同快照观察/失败证据本地限定通过：[报告](docs/acceptance/V1.7-checkpoint-81.md)、[证据](docs/assets/v1.7-cp81/local-proof.json)。原五项/预算/实际TCP不变，4秒内要求同份真实栈双writer，最后栈先存再断言；56门禁和最终五场景通过，自身Linux待验，不声称80原失败根因已证实或Windows优雅停机。80自己的3de2fd5/[Run37146650606](https://github.com/Trigger726/OnCall-Agent/actions/runs/37146650606)真实MySQL8.4.11/原生18已独立重放通过，但整轮十四success/认证failure/容器skipped，见[80远端证据](docs/assets/v1.7-cp80/first-remote-proof.json)。仅测试/CI变化、旧Demo/首次失败保留；下列历史“待验”对应当时。
+82补响应头/取消前后栈与稳定采样：[报告](docs/acceptance/V1.7-checkpoint-82.md)/[证据](docs/assets/v1.7-cp82/local-proof.json)。同包Linux首个反例保留；原16次内同writer跨500ms采样、六响应门禁/五边界单测，最终67项和Linux/Windows完整五项通过。两个实际503/模型0、旧TCP不读时自然回池/新原生答案已实测；生产源码/握手参数/业务上限与历史Demo不改。仅本地限定通过，自身新提交远端待验，不以此覆盖81首次失败或宣称唯一根因。
+
+81自身 d1600ad/[Run37148364622](https://github.com/Trigger726/OnCall-Agent/actions/runs/37148364622)已核验：十四success、认证failure、容器skipped。原四项慢消费者和同快照双writer通过，第五项拒绝探针实际调用模型、旧JSON读取超时，原失败保留；不称全绿或唯一根因已解决。MySQL原生18、原99/H2原生63及十三/八/六界面机器结果独立核验通过，见[81第六节](docs/acceptance/V1.7-checkpoint-81.md)/[五ZIP证据](docs/assets/v1.7-cp81/first-remote-proof.json)。仅测试/CI变化，原五项/预算/TCP不变，56门禁与Windows本地五项通过不能覆盖Linux失败；历史Demo、80与81首次失败和以下历史“待验”均保留。
 
 79轮转刷新验收本地限定通过：[报告](docs/acceptance/V1.7-checkpoint-79.md)、[证据](docs/assets/v1.7-cp79/local-proof.json)。真实响应在鼠标按压期间插入台账可令按钮位移3268px、click事件0/确认表单0；只改测试等待实际后续roster响应，保留200ms延迟/按压、全部原断言。最终原十三页/助手八/原生六页、三完整停机日志意外ERROR=0通过；自身Linux待验，不断言78远端唯一根因或产品布局缺陷已修复，旧Demo/失败保留。
 

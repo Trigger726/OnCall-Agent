@@ -1,6 +1,8 @@
 # OpsPilot 10 分钟演示脚本
 
-81新增的是测试/CI诊断而非新生产页面：[报告](acceptance/V1.7-checkpoint-81.md)。保留原单快照同包正对照，再比最终源的真实双writer/未settle队列/五项通过；56门禁已验，自身Linux待验，不能用它覆盖80首次失败或宣称页面效果改善。80自己的真实MySQL8.4.11原生18已独立重放，但整轮十四success/认证failure/容器skipped，见[80第六节](acceptance/V1.7-checkpoint-80.md)。原桌面/手机Demo、受控漏点击图、全部失败与原始文件保留。
+最新82：[报告](acceptance/V1.7-checkpoint-82.md)/[证据](assets/v1.7-cp82/local-proof.json)。补实际响应头和取消前后栈，在原16次采样内要求同writer跨500ms，六响应门禁/五边界单测加入后最终67项通过；同包Linux首个反例保留，最终Linux与Windows完整五项通过，实际503/模型0/自然回池和新原生答案保留。仅本地限定通过，自身新提交远端待验，不覆盖81失败、不认定其唯一根因；生产Java/Vue/TCP参数与旧Demo不改，Windows无池关闭行单列。
+
+81新增测试/CI诊断而非生产页面效果。自身Linux已结束，原四项与同快照检查通过、第五项失败，见[81第六节](acceptance/V1.7-checkpoint-81.md)/[五ZIP证据](assets/v1.7-cp81/first-remote-proof.json)；保留原单快照、Windows最终五项正对照，不覆盖Linux失败，不称整轮全绿。原桌面/手机Demo、受控漏点击图、80/81全部失败与原始文件保留；十三/八/六新远端结果仅机器核验，没有新截图目视。
 
 ## CP79：刷新完成与按钮可见不是同一状态
 

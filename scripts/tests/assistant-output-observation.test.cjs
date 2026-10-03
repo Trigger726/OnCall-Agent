@@ -1,6 +1,6 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { blockedOutputThreads, observeSaturation } = require('../verify-assistant-slow-consumer-ci.cjs');
+const { blockedOutputThreads, observeSaturation, settledWriterSample } = require('../verify-assistant-slow-consumer-ci.cjs');
 
 const writer = (name, frame = 'NioSocketWrapper.doWrite') => `"${name}" #1 daemon\n\tat org.apache.tomcat.util.net.${frame}(NioEndpoint.java:1395)`;
 const first = writer('opspilot-assistant-output-1'), second = writer('opspilot-assistant-output-2');
@@ -58,4 +58,34 @@ test('invalid or expanded observation budgets cannot weaken the fixed bound', as
   for (const budget of [0, -1, 4001, NaN, Infinity, 1.5, '4000']) {
     await assert.rejects(observeSaturation(() => pair, budget));
   }
+});
+
+test('the first writer snapshot never counts as settled', () => {
+  assert.deepEqual(settledWriterSample(undefined, 'output-1', 1000), { candidate: { name: 'output-1', observedAt: 1000 }, settled: false });
+});
+
+test('the same writer needs at least 500ms of successive samples', () => {
+  const first = settledWriterSample(undefined, 'output-1', 1000);
+  assert.equal(settledWriterSample(first.candidate, 'output-1', 1499).settled, false);
+  assert.equal(settledWriterSample(first.candidate, 'output-1', 1500).settled, true);
+});
+
+test('an idle or missing snapshot resets the candidate instead of bridging the gap', () => {
+  const first = settledWriterSample(undefined, 'output-1', 1000);
+  const idle = settledWriterSample(first.candidate, undefined, 1300);
+  assert.deepEqual(idle, { candidate: undefined, settled: false });
+  assert.equal(settledWriterSample(idle.candidate, 'output-1', 1600).settled, false);
+});
+
+test('alternating writers cannot add their sampled durations together', () => {
+  let candidate;
+  for (const [name, now] of [['output-1', 1000], ['output-2', 1400], ['output-1', 1800], ['output-2', 2200]]) {
+    const result = settledWriterSample(candidate, name, now); candidate = result.candidate; assert.equal(result.settled, false);
+  }
+});
+
+test('a late idle sample cannot inherit a formerly settled writer', () => {
+  const first = settledWriterSample(undefined, 'output-1', 1000);
+  const settled = settledWriterSample(first.candidate, 'output-1', 1600); assert.equal(settled.settled, true);
+  assert.equal(settledWriterSample(settled.candidate, null, 3000).settled, false);
 });

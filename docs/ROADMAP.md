@@ -1,8 +1,10 @@
 # OpsPilot 高价值迭代路线
 
+最新82：[报告](acceptance/V1.7-checkpoint-82.md)/[证据](assets/v1.7-cp82/local-proof.json)。补实际响应头和取消前后栈，在原16次采样内要求同writer跨500ms，六响应门禁/五边界单测加入后最终67项通过；同包Linux首个反例保留，最终Linux与Windows完整五项通过，实际503/模型0/自然回池和新原生答案保留。仅本地限定通过，自身新提交远端待验，不覆盖81失败、不认定其唯一根因；生产Java/Vue/TCP参数与旧Demo不改，Windows无池关闭行单列。
+
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
-81先补80失败诊断与严格同快照观察：[报告](acceptance/V1.7-checkpoint-81.md)。4秒内必须同一真实栈双writer，失败最后栈/采样先保存；56门禁/最终五项本地通过，自身Linux待验，原预算/模型池/TCP配置和旧Demo不变，不借本地正对照认定原远端唯一根因。80自己的MySQL8.4.11/同类九场景18执行/逐次JDBC/完整关闭门禁已通过并独立重放，五ZIP/原99与H2原生63核验，但整轮十四success/认证failure/容器skipped，[80第六节](acceptance/V1.7-checkpoint-80.md)保留失败。继续双JVM/跨机器MySQL、TLS/代理/trickle和生产容量，整体active。
+81自身 d1600ad/[Run37148364622](https://github.com/Trigger726/OnCall-Agent/actions/runs/37148364622)已核验：十四success、认证failure、容器skipped。原四项慢消费者和同快照双writer通过，第五项拒绝探针实际调用模型、旧JSON读取超时，原失败保留；不称全绿或唯一根因已解决。MySQL原生18、原99/H2原生63及十三/八/六界面机器结果独立核验通过，见[81第六节](acceptance/V1.7-checkpoint-81.md)/[五ZIP证据](assets/v1.7-cp81/first-remote-proof.json)。先补取消前后/响应头的时序诊断，保留第五项强断言和预算；继续双JVM/跨机器MySQL、TLS/代理/trickle及生产容量，整体active。
 
 79先处理78浏览器失败：[报告](acceptance/V1.7-checkpoint-79.md)。受控响应插入台账期间真实鼠标漏点击已复现；测试等待后续实际roster刷新而非仅按钮可见，默认延迟/按压断言与原十三页完整保留。最终十三/八/六页及三完整停机日志零意外ERROR，本地限定通过、自身Linux待验；生产源码不改，MySQL原生HTTP仍是后续未完成项。
 
