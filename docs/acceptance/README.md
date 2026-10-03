@@ -2,7 +2,7 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
-最新80：[报告](V1.7-checkpoint-80.md)。同类真实原生HTTP新增MySQL入口/逐执行JDBC证明/独立CI，18次H2与新门禁15项通过，真实H2成功日志被拒绝；MySQL仍待自身源执行，原99门禁不代替它。79自身eccb641/Run37144759553十五作业success，四ZIP、十七完整JAR日志、十三八六页面与慢TCP五项已核验，[79第六节](V1.7-checkpoint-79.md)/[远端机器证据](../assets/v1.7-cp79/remote-proof.json)。以下历史“待验”保留当时事实。
+最新81：[报告](V1.7-checkpoint-81.md)/[本地证据](../assets/v1.7-cp81/local-proof.json)。同一真实栈双writer的4秒有界观察、断言前保存失败诊断与七拒绝单测已补；原五项/56门禁最终源通过，自身Linux待验。中间主机警告/Windows无池关闭行分开报告，不宣称优雅停机或80唯一根因。80自身3de2fd5/Run37146650606的MySQL8.4.11原生18、原99/H2原生63及十三八六页面机器结果通过，五ZIP独立核验，但整轮十四success/认证failure/容器skipped，[80第六节](V1.7-checkpoint-80.md)/[首次远端证据](../assets/v1.7-cp80/first-remote-proof.json)保留。所有旧Demo与以下历史“待验”对应当时事实。
 
 79轮转刷新验收本地限定通过：[报告](V1.7-checkpoint-79.md)、[证据](../assets/v1.7-cp79/local-proof.json)。受控真实台账响应导致鼠标按下期间按钮位移3268px、click0/表单0；只改测试等待后续实际roster响应，保留200ms延迟/按压和原断言。最终十三/八/六页及三完整停机日志零意外ERROR，自身Linux待验；不声称远端唯一根因或生产UI布局已修复，全部失败/旧Demo保留。
 

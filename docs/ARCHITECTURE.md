@@ -407,6 +407,6 @@ checkpoint63通过独立可选覆盖补Collector原生告警→受控Incident：
 3. 将数据范围权限细化到部门、系统和资源负责人。
 4. 增加系统级并发压测、真实 socket 断流恢复，以及外部 Provider 组合故障注入。
 5. 为多实例事件广播和任务协调接入消息组件。
-6. 默认助手原生流及75自身Linux/Java17、既有MySQL99已验；继续原生AI预览的MySQL HTTP矩阵、跨节点原生取消、慢消费者和生产容量验证。
+6. 默认助手原生流及75自身Linux/Java17、既有MySQL99已验；80自身MySQL8.4.11同类原生HTTP18/逐次JDBC/完整关闭已独立核验，但整轮认证慢消费者失败。81只补同真实栈双writer的4秒有界观察与断言前证据，原五项/预算/输出池不变，本地限定通过、自身Linux待验；继续双JVM/跨机器MySQL原生取消、TLS/代理/trickle和生产容量验证，不把模型释放等同输出writer即时释放。
 7. 在已完成 MTTA/MTTM/MTTR、行动项逾期治理、精确指纹复发、Prometheus 事件型服务 SLO 和 Alertmanager 入站生命周期之上，检查点55补真实检索完整独立复核子集趋势；继续获取长期真实样本，建设跨 Incident 语义相似/依赖共因聚类，并以真实生产 recording rules、长期窗口、出站通知和送达回执验证 SLO。
 8. 从真实但脱敏的历史 Incident/查询流量持续扩充已实现的双评分 qrels，加入第三方仲裁、超过两名标注人的一致性和分层抽样；将现有保留任务扩展到备份/导出副本和面向单条数据的受控删除，再以 NDCG/Recall 验证真实 Embedding 与 cross-encoder rerank 是否稳定优于 BM25/RRF，决定是否引入 ANN/OpenSearch/Milvus。

@@ -2,7 +2,7 @@
 
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
-80推进原生AI MySQL HTTP：[报告](acceptance/V1.7-checkpoint-80.md)。相同真实HTTP九场景18执行、逐次JDBC产品验证、独立CI和拒绝H2假绿门禁已实现；本地H2/门禁通过，真实MySQL仍待自身提交执行，不借原99或合成夹具证明。79自身eccb641/Run37144759553十五作业成功、四ZIP/十七JAR日志/十三八六页面与五慢TCP已独立核验，[79第六节](acceptance/V1.7-checkpoint-79.md)闭环；生产布局不改，历史失败/旧Demo保留，整体继续。
+81先补80失败诊断与严格同快照观察：[报告](acceptance/V1.7-checkpoint-81.md)。4秒内必须同一真实栈双writer，失败最后栈/采样先保存；56门禁/最终五项本地通过，自身Linux待验，原预算/模型池/TCP配置和旧Demo不变，不借本地正对照认定原远端唯一根因。80自己的MySQL8.4.11/同类九场景18执行/逐次JDBC/完整关闭门禁已通过并独立重放，五ZIP/原99与H2原生63核验，但整轮十四success/认证failure/容器skipped，[80第六节](acceptance/V1.7-checkpoint-80.md)保留失败。继续双JVM/跨机器MySQL、TLS/代理/trickle和生产容量，整体active。
 
 79先处理78浏览器失败：[报告](acceptance/V1.7-checkpoint-79.md)。受控响应插入台账期间真实鼠标漏点击已复现；测试等待后续实际roster刷新而非仅按钮可见，默认延迟/按压断言与原十三页完整保留。最终十三/八/六页及三完整停机日志零意外ERROR，本地限定通过、自身Linux待验；生产源码不改，MySQL原生HTTP仍是后续未完成项。
 

@@ -1,0 +1,96 @@
+{
+  "status": "FAIL",
+  "baselineCapture": false,
+  "fixture": "owned real native model HTTP and paused TCP SSE clients; actual Tomcat write stacks required",
+  "jarSha256": "0db7a755ad574737966d1821cd7d26800ffb5bd5f5792838cfadd482e2efa249",
+  "modelWorkers": 1,
+  "modelQueueCapacity": 1,
+  "outputWriters": 2,
+  "outputQueueCapacity": 1,
+  "maximumCharactersBeforeRelease": 99907,
+  "maximumNativeFramesBeforeRelease": 9991,
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "cases": [
+    {
+      "name": "cancel-slow-client",
+      "cancelStatus": 200,
+      "requestStatus": "CANCELLED",
+      "cancelledAnswerRows": 0,
+      "cancellationAudits": 1,
+      "modelHttpClosedBeforeSocketResume": true,
+      "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+      "providerReleased": false
+    }
+  ],
+  "startedPids": [
+    3379
+  ],
+  "stoppedPids": [
+    3379
+  ],
+  "tcpClientImplementation": "Linux per-client receive buffer and advertised MSS",
+  "tcpClients": [
+    {
+      "case": "cancel",
+      "pid": 3475,
+      "receiveBufferBytes": 2304,
+      "receiveBufferSetBeforeConnect": true,
+      "maximumSegmentBytes": 244,
+      "maximumSegmentSetBeforeConnect": true
+    },
+    {
+      "case": "saturation",
+      "pid": 3542,
+      "receiveBufferBytes": 2304,
+      "receiveBufferSetBeforeConnect": true,
+      "maximumSegmentBytes": 244,
+      "maximumSegmentSetBeforeConnect": true
+    }
+  ],
+  "blockedOutputs": [
+    {
+      "case": "cancel",
+      "thread": "opspilot-assistant-output-1",
+      "previouslyBlockedThreads": [],
+      "newlyBlockedThreadRequired": true,
+      "modelWorkerDirectServletWrite": false
+    },
+    {
+      "case": "saturation",
+      "thread": "opspilot-assistant-output-2",
+      "previouslyBlockedThreads": [
+        "opspilot-assistant-output-1"
+      ],
+      "newlyBlockedThreadRequired": true,
+      "modelWorkerDirectServletWrite": false
+    }
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n1 !== 2\n\n    at verify (/home/runner/work/OnCall-Agent/OnCall-Agent/scripts/verify-assistant-slow-consumer-ci.cjs:204:45)",
+  "ownedTcpClientsStopped": true,
+  "providerFrames": [
+    {
+      "question": "cp77-cancel-3134bdf4-e8aa-46a8-a13f-4934df52e33b",
+      "calls": 1,
+      "framesWritten": 9991,
+      "charactersWritten": 99907
+    },
+    {
+      "question": "cp77-fresh-before-resume-32eb36a7-61dd-459d-a2da-3554fde85301",
+      "calls": 1
+    },
+    {
+      "question": "cp77-saturation-be1285ce-c75a-4cd5-8bfc-f8574334df39",
+      "calls": 1,
+      "framesWritten": 9991,
+      "charactersWritten": 99907
+    },
+    {
+      "question": "cp77-queued-output-82075c7c-0a71-41c7-b1d1-d8289be20694",
+      "calls": 1
+    }
+  ],
+  "ownedProcessesStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}

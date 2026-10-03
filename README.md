@@ -6,7 +6,7 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-80 原生助手 MySQL HTTP 验收入口已实现，本地 H2 18次/门禁15项通过，实际H2证据被MySQL门禁拒绝；真实MySQL尚待自身CI，见[80报告](docs/acceptance/V1.7-checkpoint-80.md)。仅改测试/CI、原MySQL99与所有旧Demo保留。79自身eccb641/[CI](https://github.com/Trigger726/OnCall-Agent/actions/runs/37144759553)十五作业success，四ZIP/十七完整JAR日志/十三八六页面及慢TCP五项已独立核验，见[79远端证据](docs/assets/v1.7-cp79/remote-proof.json)；下列历史“待验”对应当时。
+81慢消费者同快照观察/失败证据本地限定通过：[报告](docs/acceptance/V1.7-checkpoint-81.md)、[证据](docs/assets/v1.7-cp81/local-proof.json)。原五项/预算/实际TCP不变，4秒内要求同份真实栈双writer，最后栈先存再断言；56门禁和最终五场景通过，自身Linux待验，不声称80原失败根因已证实或Windows优雅停机。80自己的3de2fd5/[Run37146650606](https://github.com/Trigger726/OnCall-Agent/actions/runs/37146650606)真实MySQL8.4.11/原生18已独立重放通过，但整轮十四success/认证failure/容器skipped，见[80远端证据](docs/assets/v1.7-cp80/first-remote-proof.json)。仅测试/CI变化、旧Demo/首次失败保留；下列历史“待验”对应当时。
 
 79轮转刷新验收本地限定通过：[报告](docs/acceptance/V1.7-checkpoint-79.md)、[证据](docs/assets/v1.7-cp79/local-proof.json)。真实响应在鼠标按压期间插入台账可令按钮位移3268px、click事件0/确认表单0；只改测试等待实际后续roster响应，保留200ms延迟/按压、全部原断言。最终原十三页/助手八/原生六页、三完整停机日志意外ERROR=0通过；自身Linux待验，不断言78远端唯一根因或产品布局缺陷已修复，旧Demo/失败保留。
 

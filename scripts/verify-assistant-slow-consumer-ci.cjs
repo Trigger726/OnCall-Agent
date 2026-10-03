@@ -8,6 +8,26 @@ const { randomUUID, createHash } = require('node:crypto');
 const { setTimeout: delay } = require('node:timers/promises');
 const { requireFreePort, waitForHealth, stopProcess, redact, unexpectedLogLines } = require('./verify-oncall-browser-ci.cjs');
 
+const sections = dump => dump.split(/\r?\n\r?\n/);
+const outputBlocked = section => section.startsWith('"opspilot-assistant-output-') && /NioSocketWrapper\.doWrite/.test(section);
+const blockedOutputThreads = dump => [...new Set(sections(dump).filter(outputBlocked).map(section => section.match(/^"([^"]+)"/)[1]))];
+
+// Require both writers in ONE actual snapshot, never accumulate separate observations into a passing pair.
+async function observeSaturation(capture, budgetMs = 4000) {
+  assert.ok(Number.isInteger(budgetMs) && budgetMs > 0 && budgetMs <= 4000);
+  const started = performance.now(), samples = [];
+  let dump = '', satisfied = false, elapsedMs = 0;
+  do {
+    dump = capture(); elapsedMs = performance.now() - started;
+    const blockedThreads = blockedOutputThreads(dump);
+    samples.push({ milliseconds: Math.round(elapsedMs), blockedThreads });
+    satisfied = blockedThreads.length === 2 && elapsedMs <= budgetMs;
+    if (satisfied || elapsedMs >= budgetMs) break;
+    await delay(Math.min(25, budgetMs - elapsedMs));
+  } while (performance.now() - started < budgetMs);
+  return { dump, satisfied, deadlineMs: budgetMs, elapsedMs, samples };
+}
+
 async function verify() {
   if (process.env.OPSPILOT_ASSISTANT_SLOW_CONSUMER_BASELINE) throw new Error('Baseline capture cannot replace slow-consumer acceptance');
   const root = path.resolve(__dirname, '..'), jar = path.join(root, 'target/opspilot-0.1.0-SNAPSHOT.jar');
@@ -96,8 +116,6 @@ async function verify() {
   async function until(predicate, ms = 4000) { const deadline = Date.now() + ms; do { if (await predicate()) return; await delay(25); } while (Date.now() < deadline); assert.fail('Controlled slow-consumer condition did not settle'); }
   function control(name, released = false) { const c = { question: 'cp77-' + name + '-' + randomUUID(), released, calls: 0, closed: false }; controls.set(c.question, c); return c; }
   const threads = () => execFileSync(executable('jcmd'), [String(child.pid), 'Thread.print'], { encoding: 'utf8', timeout: 4000, windowsHide: true });
-  const sections = dump => dump.split(/\r?\n\r?\n/);
-  const outputBlocked = section => section.startsWith('"opspilot-assistant-output-') && /NioSocketWrapper\.doWrite/.test(section);
   function stream(id, token, key, c) {
     const pending = (async () => {
       const response = await fetch(base + route(id) + '/stream', { method: 'POST', headers: { Authorization: 'Bearer ' + token,
@@ -199,10 +217,20 @@ async function verify() {
 
     const second = await paused(token, 'saturation'); await cancel(second, token);
     const queued = control('queued-output'), queuedId = await session(token), queuedKey = randomUUID(), queuedStream = stream(queuedId, token, queuedKey, queued);
+    let queuedStreamSettled = false; queuedStream.then(() => { queuedStreamSettled = true; }, () => { queuedStreamSettled = true; });
     await until(() => queued.entered); assert.equal((await api(route(queuedId) + '/request/cancel', token, undefined, queuedKey, 'POST')).json.data.status, 'CANCELLED');
     await until(() => queued.closed); assert.equal(queued.released, false);
-    const saturatedDump = threads(); assert.equal(sections(saturatedDump).filter(outputBlocked).length, 2);
-    fs.writeFileSync(path.join(evidence, 'saturated-output-threads.txt'), redact(saturatedDump));
+    const observation = await observeSaturation(() => {
+      assert.equal(first.paused, true); assert.equal(first.closed, false); assert.equal(first.c.released, false);
+      assert.equal(second.paused, true); assert.equal(second.closed, false); assert.equal(second.c.released, false);
+      return threads();
+    });
+    // Preserve the last real stack and observations BEFORE assertions, including a failed saturation setup.
+    fs.writeFileSync(path.join(evidence, 'saturated-output-threads.txt'), redact(observation.dump));
+    result.outputSaturationObservation = { ...observation, dump: undefined, queuedStreamSettled,
+      firstPaused: first.paused, firstClientExited: first.closed, secondPaused: second.paused, secondClientExited: second.closed };
+    assert.equal(observation.satisfied, true, 'Two actual output writers did not block simultaneously within the fixed 4s observation bound');
+    assert.equal(blockedOutputThreads(observation.dump).length, 2); assert.equal(queuedStreamSettled, false);
     const rejected = control('rejected-output'), rejectedId = await session(token), rejectedKey = randomUUID();
     const rejectedResponse = await api(route(rejectedId) + '/stream', token, { content: rejected.question }, rejectedKey);
     assert.equal(rejectedResponse.status, 503); assert.equal(rejectedResponse.json.error.code, 'ASSISTANT_STREAM_SATURATED');
@@ -292,4 +320,5 @@ async function verify() {
     if (result.status === 'FAIL') throw new Error(result.failure);
   }
 }
+module.exports = { blockedOutputThreads, observeSaturation };
 if (require.main === module) verify().catch(e => { console.error(redact(e.message)); process.exitCode = 1; });

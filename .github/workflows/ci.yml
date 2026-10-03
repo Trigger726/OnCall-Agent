@@ -120,6 +120,8 @@ jobs:
         run: node scripts/verify-assistant-cross-node-ci.cjs
       - name: Verify owned Linux TCP client framing and explicit resume barrier
         run: python3 scripts/fixtures/test_assistant_slow_tcp_client.py
+      - name: Verify bounded simultaneous output-stack observation
+        run: node --test scripts/tests/assistant-output-observation.test.cjs
       - name: Verify paused TCP writes, model release and natural output capacity recovery
         run: node scripts/verify-assistant-slow-consumer-ci.cjs
       - uses: actions/upload-artifact@v5

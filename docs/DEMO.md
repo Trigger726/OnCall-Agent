@@ -1,6 +1,6 @@
 # OpsPilot 10 分钟演示脚本
 
-80新增的是测试/CI而非新生产页面：[验收报告](acceptance/V1.7-checkpoint-80.md)。本地18次H2、15项防假绿门禁通过，真实MySQL原生HTTP待自身CI。79自身Linux十五作业成功、十三/八/六界面机器证据已核验，见[79第六节](acceptance/V1.7-checkpoint-79.md)，原桌面/手机Demo、受控漏点击图和所有历史失败保留；不把测试同步修正宣称为产品布局改善。
+81新增的是测试/CI诊断而非新生产页面：[报告](acceptance/V1.7-checkpoint-81.md)。保留原单快照同包正对照，再比最终源的真实双writer/未settle队列/五项通过；56门禁已验，自身Linux待验，不能用它覆盖80首次失败或宣称页面效果改善。80自己的真实MySQL8.4.11原生18已独立重放，但整轮十四success/认证failure/容器skipped，见[80第六节](acceptance/V1.7-checkpoint-80.md)。原桌面/手机Demo、受控漏点击图、全部失败与原始文件保留。
 
 ## CP79：刷新完成与按钮可见不是同一状态
 
