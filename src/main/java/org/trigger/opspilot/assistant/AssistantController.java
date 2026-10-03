@@ -1,6 +1,5 @@
 package org.trigger.opspilot.assistant;
 
-import jakarta.annotation.PreDestroy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -18,21 +17,23 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.trigger.opspilot.common.ApiResponse;
 import org.trigger.opspilot.security.UserPrincipal;
+import org.trigger.opspilot.security.SessionAuthorization;
+import org.springframework.security.authentication.CredentialsExpiredException;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/api/v1/assistant")
 public class AssistantController {
     private final AssistantService service;
-    private final ExecutorService streamExecutor = Executors.newCachedThreadPool();
+    private final SessionAuthorization authorization;
+    private final AssistantExecutionManager execution;
 
-    public AssistantController(AssistantService service) {
+    public AssistantController(AssistantService service, SessionAuthorization authorization, AssistantExecutionManager execution) {
         this.service = service;
+        this.authorization = authorization;
+        this.execution = execution;
     }
 
     @GetMapping("/sessions")
@@ -63,29 +64,46 @@ public class AssistantController {
     public SseEmitter stream(
             @AuthenticationPrincipal UserPrincipal user, @PathVariable long id,
             @Valid @RequestBody SendMessageRequest request) {
+        var lease = authorization.current();
+        service.getSession(id, user.id()); // Ownership is checked before admitting any queued work.
         SseEmitter emitter = new SseEmitter(300_000L);
         long ownerId = user.id();
-        streamExecutor.execute(() -> {
+        execution.submit(lease, work -> {
             try {
-                AssistantService.MessageView message = service.sendMessage(id, ownerId, request.content());
+                AssistantService.MessageView message = service.sendMessage(id, ownerId, request.content(), lease, work::check);
+                work.check();
                 emitter.send(SseEmitter.event().name("meta")
                         .data(new StreamEvent("meta", "", message.id(), message.evidenceJson())));
                 for (String chunk : chunks(message.content(), 28)) {
+                    work.check();
                     emitter.send(SseEmitter.event().name("message")
                             .data(new StreamEvent("delta", chunk, message.id(), null)));
                 }
+                work.check();
                 emitter.send(SseEmitter.event().name("done")
                         .data(new StreamEvent("done", "", message.id(), message.evidenceJson())));
                 emitter.complete();
+            } catch (CredentialsExpiredException exception) {
+                emitter.complete(); // Never send an answer/error payload under revoked credentials.
             } catch (Exception exception) {
                 try {
+                    work.check();
                     emitter.send(SseEmitter.event().name("error")
-                            .data(new StreamEvent("error", exception.getMessage(), null, null)));
+                            .data(new StreamEvent("error", "回答未完成，请稍后重试", null, null)));
                     emitter.complete();
-                } catch (IOException ioException) {
-                    emitter.completeWithError(ioException);
+                } catch (Exception stopped) {
+                    emitter.complete();
                 }
             }
+        }, reason -> {
+            try {
+                if (reason == AssistantExecutionManager.Reason.TIMED_OUT && authorization.authorized(lease, false)) {
+                    emitter.send(SseEmitter.event().name("error")
+                            .data(new StreamEvent("error", "回答超时，请稍后重新发送问题", null, null)));
+                }
+            } catch (Exception ignored) {
+                // Fail closed if authorization cannot be checked or the transport is already closed.
+            } finally { emitter.complete(); }
         });
         return emitter;
     }
@@ -109,11 +127,6 @@ public class AssistantController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=opspilot-conversation-" + id + ".md")
                 .contentType(MediaType.parseMediaType("text/markdown;charset=UTF-8"))
                 .body(markdown.getBytes(StandardCharsets.UTF_8));
-    }
-
-    @PreDestroy
-    void shutdownExecutor() {
-        streamExecutor.shutdownNow();
     }
 
     private static List<String> chunks(String content, int chunkSize) {

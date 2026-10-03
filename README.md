@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-检查点67后端远端/客户端本地限定通过：c903d59的[Run37088985693](https://github.com/Trigger726/OnCall-Agent/actions/runs/37088985693)十五作业success，真实MySQL88零跳过/五池关闭、认证/MySQL/Trace三ZIP源SHA摘要与定向重放已核验。双时区394发现/299执行/95条件跳过；本轮新增流式身份围栏、按账号幂等键、旧401不退出新登录，前端84/audit0、十五生命周期测试及十三真实页面脚本通过，保留三个入口新旧桌面/390px对照。新客户端提交远端待验，既有跨节点撤销/助手服务端在途功能与63ce9f4 Trace正对照失败根因继续，见[67阶段报告](docs/acceptance/V1.7-checkpoint-67.md)，不标整体完成。
+检查点68本地限定通过：[助手在途回答/队列与预算报告](docs/acceptance/V1.7-checkpoint-68.md)。真实旧JAR晚回答写入/发回，新JAR原会话撤销后401或提前关闭、清空409、超时安全error/无done；生产HTTP适配器受控正对照7次通过。双时区各408发现/313执行/95条件跳过，16生命周期测试通过，本提交远端/新MySQL待验；首次连接三秒超时根因未证明，失败和旧Demo保留，不标整体100%。
+
+67已补客户端自身远端验收：3b6247b的[Run37090872485](https://github.com/Trigger726/OnCall-Agent/actions/runs/37090872485)十五作业completed/success，浏览器ZIP源提交/官方digest与实际SHA256相符，Linux十三脚本退出码0、三入口真实logout/旧401/新admin凭证保留与服务端200已独立核对；九PNG实际存在，本次工件重放未重新目视截图。c903d59后端真实MySQL88/五池关闭及三工件定向重放原结论保留，跨节点、Trace偶发控制失败与完整目标仍继续。见[67报告](docs/acceptance/V1.7-checkpoint-67.md)。
 
 检查点66限定通过：7705b8d的[Run37058813999](https://github.com/Trigger726/OnCall-Agent/actions/runs/37058813999)十五作业success，真实MySQL86零跳过/五池关闭、四ZIP源SHA/摘要与重放已核验；新增本人账号安全页、改密/确认退出全部会话与明确重登；修复错误当前密码误退出和旧401踢新身份，刷新入口/数据鉴权正反对照通过。前端72/全树audit0、双时区375发现282执行93条件跳过、十二实页脚本/同库跨JVM通过，真实提交后丢响应不重试、新凭证能恢复。新旧桌面/390px和失败证据保留，见[66报告](docs/acceptance/V1.7-checkpoint-66.md)。既有SSE/任务再授权及完整目标继续。
 

@@ -99,6 +99,8 @@ jobs:
         run: node scripts/verify-auth-session-ci.cjs
       - name: Verify existing Agent streams and late real HTTP Provider results
         run: node scripts/verify-agent-session-ci.cjs
+      - name: Verify late assistant HTTP answers, revocation, clear and deadline
+        run: node scripts/verify-assistant-session-ci.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
@@ -108,6 +110,8 @@ jobs:
             target/auth-session-it/**/*.log
             target/agent-session-it/**/*.json
             target/agent-session-it/**/*.log
+            target/assistant-session-it/**/*.json
+            target/assistant-session-it/**/*.log
           retention-days: 30
 
   backend-h2:

@@ -1,0 +1,47 @@
+{
+  "sourceCommit": "working-tree-before-upload",
+  "status": "PASS",
+  "baselineCapture": false,
+  "tokensPersistedToEvidence": false,
+  "jarSha256": "1e70cfa938558bcc9e5ab9a95d3d775f395aa980518b4d331c41a47a618c4be7",
+  "fixture": "actual production DashScope HTTP adapter against an owned controlled server, not model quality",
+  "database": "fresh owned H2 memory database",
+  "userFileDatabaseModified": false,
+  "cases": [
+    {
+      "name": "synchronous-logout",
+      "responseStatus": 401,
+      "lateAssistantMessages": 0,
+      "lateAnswerSent": false,
+      "closedBeforeProviderRelease": false
+    },
+    {
+      "name": "stream-logout",
+      "responseStatus": 200,
+      "lateAssistantMessages": 0,
+      "lateAnswerSent": false,
+      "closedBeforeProviderRelease": true
+    },
+    {
+      "name": "clear-messages",
+      "responseStatus": 409,
+      "lateAssistantMessages": 0,
+      "lateAnswerSent": false,
+      "closedBeforeProviderRelease": false
+    },
+    {
+      "name": "timeout",
+      "closedBeforeProviderRelease": true,
+      "explicitSafeErrorEvent": true,
+      "lateWorkerSettledByFreshStream": true,
+      "lateAssistantMessages": 0
+    }
+  ],
+  "startedPid": 44220,
+  "productionHttpAdapterPositiveControl": true,
+  "freshSessionProductionHttpAnswer": true,
+  "providerTransportCalls": 7,
+  "ownedProcessStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}

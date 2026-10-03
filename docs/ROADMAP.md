@@ -2,7 +2,9 @@
 
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
-当前67后端远端/客户端本地限定通过：c903d59的[Run37088985693](https://github.com/Trigger726/OnCall-Agent/actions/runs/37088985693)十五作业success，真实MySQL88零跳过/五池关闭，认证/MySQL/Trace三ZIP源SHA摘要与定向重放通过；原GET/POST/任务再授权、协作式取消无报告和新会话再完成已验。前端新增原会话围栏/账号隔离幂等键，84测试/audit0、十五生命周期测试/十三真实页面脚本与三个入口新旧桌面/390px通过；新客户端远端待验，见[67报告](acceptance/V1.7-checkpoint-67.md)。跨节点撤销矩阵/助手服务端其他在途功能、63ce9f4 Trace独立正对照404根因、生产容量及完整目标仍继续。
+当前68本地限定通过：[68报告](acceptance/V1.7-checkpoint-68.md)。助手原会话授权/清空删除围栏、流式有界队列503/包含排队的预算与安全错误，旧新JAR真实生产HTTP适配器对照已验；双时区408/313/95、16生命周期通过。本提交远端/新MySQL、首次三秒关闭等待超时根因、助手同步路径统一容量与幂等取消等继续，旧Demo/失败保留。
+
+67已补客户端自身远端验收：3b6247b的[Run37090872485](https://github.com/Trigger726/OnCall-Agent/actions/runs/37090872485)十五作业completed/success，浏览器ZIP源提交/官方digest与实际SHA256相符，Linux十三脚本退出码0、三入口真实logout/旧401/新admin凭证保留与服务端200已独立核对；九PNG实际存在，本次工件重放未重新目视截图。c903d59后端真实MySQL88/五池关闭及三工件定向重放原结论保留，跨节点、Trace偶发控制失败与完整目标仍继续。见[67报告](acceptance/V1.7-checkpoint-67.md)。
 
 当前66限定通过：7705b8d的[Run37058813999](https://github.com/Trigger726/OnCall-Agent/actions/runs/37058813999)十五作业success，真实MySQL86零跳过/五池关闭、四ZIP源SHA/摘要与重放已核验；本人安全页/错误当前密码保登录/旧401不踢新身份/深链刷新、真实已提交改密后丢响应不重试并新凭证恢复，前端72/audit0、双时区375/282/93、十二实页脚本/跨JVM通过，见[66报告](acceptance/V1.7-checkpoint-66.md)。新旧Demo/历史失败保留，66使用自身远端证据，不借65绿灯。下一步流式fetch晚响应、既有SSE与后台任务再授权；MFA/节流/坏卷/生产规模与其余完整路线均保留。
 

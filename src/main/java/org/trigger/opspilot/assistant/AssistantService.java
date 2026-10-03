@@ -4,10 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.trigger.opspilot.common.ApiException;
 import org.trigger.opspilot.investigation.AgentRunQueryService;
+import org.trigger.opspilot.security.SessionAuthorization;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,14 +28,19 @@ public class AssistantService {
     private final ObjectMapper objectMapper;
     private final Optional<AssistantAiService> aiService;
     private final AgentRunQueryService agentRunQueryService;
+    private final SessionAuthorization authorization;
+    private final TransactionTemplate transactions;
 
     public AssistantService(JdbcClient jdbcClient, ObjectMapper objectMapper,
                             Optional<AssistantAiService> aiService,
-                            AgentRunQueryService agentRunQueryService) {
+                            AgentRunQueryService agentRunQueryService,
+                            SessionAuthorization authorization, TransactionTemplate transactions) {
         this.jdbcClient = jdbcClient;
         this.objectMapper = objectMapper;
         this.aiService = aiService;
         this.agentRunQueryService = agentRunQueryService;
+        this.authorization = authorization;
+        this.transactions = transactions;
     }
 
     public List<SessionSummary> listSessions(long ownerId) {
@@ -52,6 +61,7 @@ public class AssistantService {
 
     @Transactional
     public SessionDetail createSession(long ownerId, Long incidentId, String requestedTitle) {
+        requireAuthorization(authorization.capture(ownerId), true);
         IncidentContext context = incidentId == null ? null : loadIncidentContext(incidentId);
         String title = normalizeTitle(requestedTitle, context);
         jdbcClient.sql("""
@@ -81,7 +91,12 @@ public class AssistantService {
     }
 
     public MessageView sendMessage(long sessionId, long ownerId, String rawContent) {
-        SessionSummary session = findSession(sessionId, ownerId);
+        return sendMessage(sessionId, ownerId, rawContent, authorization.capture(ownerId), () -> {});
+    }
+
+    public MessageView sendMessage(long sessionId, long ownerId, String rawContent,
+                                   SessionAuthorization.Lease lease, Runnable checkpoint) {
+        if (lease == null || lease.userId() != ownerId) throw new CredentialsExpiredException("Assistant actor mismatch");
         String question = rawContent == null ? "" : rawContent.trim();
         if (question.isEmpty()) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "ASSISTANT_MESSAGE_EMPTY", "消息内容不能为空");
@@ -90,29 +105,55 @@ public class AssistantService {
             throw new ApiException(HttpStatus.BAD_REQUEST, "ASSISTANT_MESSAGE_TOO_LONG", "单条消息不能超过 10000 字");
         }
 
-        insertMessage(sessionId, "USER", question, null);
-        List<MessageView> history = recentMessages(sessionId);
-        IncidentContext context = session.incidentId() == null ? null : loadIncidentContext(session.incidentId());
-        Answer answer = generateAnswer(context, history, question);
-        long messageId = insertMessage(sessionId, "ASSISTANT", answer.content(), serializeEvidence(answer.evidence()));
-
-        String newTitle = session.messageCount() == 0 && isDefaultTitle(session.title())
-                ? titleFromQuestion(question) : session.title();
-        jdbcClient.sql("""
+        var prepared = transactions.execute(transaction -> {
+            checkpoint.run();
+            requireAuthorization(lease, true);
+            checkpoint.run();
+            lockSession(sessionId, ownerId);
+            var session = findSession(sessionId, ownerId);
+            long questionId = insertMessage(sessionId, "USER", question, null);
+            var context = session.incidentId() == null ? null : loadIncidentContext(session.incidentId());
+            return new PreparedMessage(questionId, session, recentMessages(sessionId), context);
+        });
+        checkpoint.run();
+        requireAuthorization(lease, false);
+        // Never hold the account/session row locks over an external model call.
+        Answer answer = generateAnswer(prepared.context(), prepared.history(), question, checkpoint);
+        checkpoint.run();
+        requireAuthorization(lease, false);
+        return transactions.execute(transaction -> {
+            checkpoint.run();
+            requireAuthorization(lease, true); // Orders completion against committed revocation.
+            checkpoint.run();
+            lockSession(sessionId, ownerId);
+            var current = findSession(sessionId, ownerId);
+            boolean questionStillPresent = jdbcClient.sql("SELECT COUNT(*) FROM assistant_message WHERE id=:id AND session_id=:sessionId AND role='USER'")
+                    .param("id", prepared.questionId()).param("sessionId", sessionId).query(Long.class).single() == 1;
+            if (!questionStillPresent) throw new ApiException(HttpStatus.CONFLICT,
+                    "ASSISTANT_MESSAGE_SUPERSEDED", "对话已清空，请重新发送问题");
+            long messageId = insertMessage(sessionId, "ASSISTANT", answer.content(), serializeEvidence(answer.evidence()));
+            String newTitle = prepared.session().messageCount() == 0 && isDefaultTitle(current.title())
+                    ? titleFromQuestion(question) : current.title();
+            jdbcClient.sql("""
                         UPDATE assistant_session SET title = :title, updated_at = CURRENT_TIMESTAMP WHERE id = :id
                         """)
-                .param("title", newTitle).param("id", sessionId).update();
-        recordAudit(ownerId, "ASSISTANT_MESSAGE", sessionId,
+                    .param("title", newTitle).param("id", sessionId).update();
+            recordAudit(ownerId, "ASSISTANT_MESSAGE", sessionId,
                 "OnCall 助手完成回答，证据引用 " + answer.evidence().size() + " 项");
-        return jdbcClient.sql("""
+            var message = jdbcClient.sql("""
                         SELECT id, role, content, evidence_json, created_at
                         FROM assistant_message WHERE id = :id
                         """)
-                .param("id", messageId).query(AssistantService::mapMessage).single();
+                    .param("id", messageId).query(AssistantService::mapMessage).single();
+            checkpoint.run(); // A stop during persistence rolls back answer, title and completion audit together.
+            return message;
+        });
     }
 
     @Transactional
     public void clearMessages(long sessionId, long ownerId) {
+        requireAuthorization(authorization.capture(ownerId), true);
+        lockSession(sessionId, ownerId);
         findSession(sessionId, ownerId);
         jdbcClient.sql("DELETE FROM assistant_message WHERE session_id = :sessionId")
                 .param("sessionId", sessionId).update();
@@ -123,6 +164,8 @@ public class AssistantService {
 
     @Transactional
     public void deleteSession(long sessionId, long ownerId) {
+        requireAuthorization(authorization.capture(ownerId), true);
+        lockSession(sessionId, ownerId);
         findSession(sessionId, ownerId);
         jdbcClient.sql("DELETE FROM assistant_session WHERE id = :sessionId")
                 .param("sessionId", sessionId).update();
@@ -144,7 +187,7 @@ public class AssistantService {
         return markdown.toString();
     }
 
-    private Answer generateAnswer(IncidentContext context, List<MessageView> history, String question) {
+    private Answer generateAnswer(IncidentContext context, List<MessageView> history, String question, Runnable checkpoint) {
         List<EvidenceRef> evidence = context == null ? List.of() : collectEvidence(context);
         if (aiService.isPresent()) {
             try {
@@ -156,6 +199,7 @@ public class AssistantService {
                 // The deterministic evidence mode remains available when the provider is unavailable.
             }
         }
+        checkpoint.run(); // A late failed model must not start fallback database work after shutdown/revocation.
         return new Answer(ruleBasedAnswer(context, question), evidence);
     }
 
@@ -311,14 +355,26 @@ public class AssistantService {
     }
 
     private long insertMessage(long sessionId, String role, String content, String evidenceJson) {
+        var key = new GeneratedKeyHolder();
         jdbcClient.sql("""
                         INSERT INTO assistant_message(session_id, role, content, evidence_json)
                         VALUES (:sessionId, :role, :content, :evidenceJson)
                         """)
                 .param("sessionId", sessionId).param("role", role)
-                .param("content", content).param("evidenceJson", evidenceJson).update();
-        return jdbcClient.sql("SELECT id FROM assistant_message WHERE session_id = :sessionId ORDER BY id DESC LIMIT 1")
-                .param("sessionId", sessionId).query(Long.class).single();
+                .param("content", content).param("evidenceJson", evidenceJson).update(key, "id");
+        return java.util.Objects.requireNonNull(key.getKey(), "Assistant message key required").longValue();
+    }
+
+    private void requireAuthorization(SessionAuthorization.Lease lease, boolean lock) {
+        if (!authorization.authorized(lease, false, lock)) {
+            throw new CredentialsExpiredException("Assistant session expired");
+        }
+    }
+
+    private void lockSession(long sessionId, long ownerId) {
+        jdbcClient.sql("SELECT id FROM assistant_session WHERE id=:id AND owner_user_id=:owner AND status='ACTIVE' FOR UPDATE")
+                .param("id", sessionId).param("owner", ownerId).query(Long.class).optional()
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "ASSISTANT_SESSION_NOT_FOUND", "会话不存在或无权访问"));
     }
 
     private void recordAudit(long ownerId, String action, long sessionId, String detail) {
@@ -452,4 +508,6 @@ public class AssistantService {
 
     private record Answer(String content, List<EvidenceRef> evidence) {
     }
+
+    private record PreparedMessage(long questionId, SessionSummary session, List<MessageView> history, IncidentContext context) { }
 }

@@ -82,6 +82,10 @@ opspilot:
       delay: ${AGENT_RECOVERY_DELAY:5000}
       initial-delay: ${AGENT_RECOVERY_INITIAL_DELAY:5000}
       batch-size: ${AGENT_RECOVERY_BATCH_SIZE:100}
+  assistant:
+    workers: ${ASSISTANT_WORKERS:4}
+    queue-capacity: ${ASSISTANT_QUEUE_CAPACITY:16}
+    execution-timeout: ${ASSISTANT_EXECUTION_TIMEOUT:60s}
   ai:
     enabled: ${AI_ENABLED:false}
   alertmanager:
