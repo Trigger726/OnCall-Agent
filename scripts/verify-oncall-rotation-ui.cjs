@@ -111,11 +111,34 @@ assert.notEqual(new URL(root).port, '9900', 'Do not target the daily demo listen
     await panel.locator('.rotation-editor').scrollIntoViewIfNeeded();
     await screenshot('opspilot-cp46-version-conflict.png');
     await panel.getByRole('button',{name:'关闭确认',exact:true}).click();
+    // The state button can appear before slots finish loading. Their insertion moves the roster
+    // during a mouse press; wait for the subsequent real roster refresh, not button visibility.
+    const delayedSlots = [];
+    const slotsRoute = `**/api/v1/on-call/rotations/${id}/slots?*`;
+    await page.route(slotsRoute, async route => {
+      const response = await route.fetch({timeout:10000});
+      assert.equal(response.status(),200);
+      delayedSlots.push({status:response.status(),delayMs:200});
+      await page.waitForTimeout(200); // Controlled network fixture, not the synchronization barrier.
+      await route.fulfill({response});
+    });
+    const rosterRefreshed = page.waitForResponse(response =>
+      new URL(response.url()).pathname === '/api/v1/on-call/roster'
+      && new URL(response.url()).search.length > 0 && response.request().method() === 'GET', {timeout:10000});
     await panel.getByRole('button',{name:'刷新轮转',exact:true}).click();
+    const refreshedRoster = await rosterRefreshed;
+    assert.equal(refreshedRoster.status(),200);
+    await refreshedRoster.finished();
+    await page.unroute(slotsRoute);
+    assert.deepEqual(delayedSlots,[{status:200,delayMs:200}]);
+    await panel.locator('.rotation-slot').first().waitFor();
     await panel.getByRole('button',{name:'暂停续排',exact:true}).waitFor();
     assert.equal((await api(`/on-call/rotations/${id}`)).version,2);
     // Release the manual shift in the preserved single-shift UI; wait for the real background job, not POST /scan.
-    await rosterPanel.locator('.roster-row').filter({hasText:'CP46 手工占用首班'}).getByRole('button',{name:'取消班次',exact:true}).click();
+    await rosterPanel.locator('.roster-row').filter({hasText:'CP46 手工占用首班'}).getByRole('button',{name:'取消班次',exact:true}).click({delay:200});
+    await rosterPanel.getByLabel('取消原因',{exact:true}).waitFor({state:'visible',timeout:5000});
+    await rosterPanel.getByLabel('取消原因',{exact:true}).scrollIntoViewIfNeeded();
+    await screenshot('cp79-cancel-confirmation-desktop.png');
     await rosterPanel.getByLabel('取消原因',{exact:true}).fill('CP46 释放首班由后台补齐');
     await rosterPanel.getByRole('button',{name:'确认取消班次',exact:true}).click();
     for(let attempt=0;attempt<50;attempt++) {
@@ -183,6 +206,7 @@ assert.notEqual(new URL(root).port, '9900', 'Do not target the daily demo listen
     assert.deepEqual(expected409.map(item=>item.path),['/api/v1/on-call/rotations',`/api/v1/on-call/rotations/${id}/state`]);
     const result={browser:`Chromium/Chrome ${browser.version()} via Playwright`,browserPath:'Browser plugin not available',url:root+'/on-call',viewports:['1440x1000','390x844'],browserTimezone:'Asia/Shanghai',jarTimezone:'UTC',database:'isolated H2 memory',userFileDatabaseModified:false,
       rotationId:id,members:rotation.members,anchorPreserved:true,createdFromUI:true,manualConflictVisible:true,duplicateCreateRejected:true,pausedPersisted:true,existingShiftsPreservedDuringPause:true,staleVersionRejectedAndBlocked:true,
+      refreshSettledBeforeCancel:true,delayedRealSlotsResponse:delayedSlots,cancelMousePressMs:200,cancelConfirmationOpened:true,
       realBackgroundFilled:true,noManualScanBeforeBackground:true,currentOwnerAfterRefresh:'张伟',incident:{id:incident.incidentId,recipient:routed.recipient,status:routed.status},cancelledSlotRetained:true,manualScanCreatedZero:true,readonlyVerified:true,
       historicalShiftsPreserved:history.shifts.length,pageIdentity:true,noBlank:true,noOverlay:true,mobileDocumentWidth:390,consoleLogs:logs,pageErrors:errors,expected409,screenshots};
     fs.writeFileSync(out+'opspilot-cp46-browser-result.json',JSON.stringify(result,null,2));

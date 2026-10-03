@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-78自然输出容量回收本地限定通过：[报告](docs/acceptance/V1.7-checkpoint-78.md)、[证据](docs/assets/v1.7-cp78/local-proof.json)。默认新增第五项、原四场景保留；旧TCP不读/Provider不放行时，writer约60秒池空闲、新原生答案约60秒提交，三JVM/五客户端/十二模型HTTP、完整日志意外ERROR=0。生产源码未改，新默认门禁自身Linux CI待验，不是所有连接绝对TTL或生产容量保证。
+79轮转刷新验收本地限定通过：[报告](docs/acceptance/V1.7-checkpoint-79.md)、[证据](docs/assets/v1.7-cp79/local-proof.json)。真实响应在鼠标按压期间插入台账可令按钮位移3268px、click事件0/确认表单0；只改测试等待实际后续roster响应，保留200ms延迟/按压、全部原断言。最终原十三页/助手八/原生六页、三完整停机日志意外ERROR=0通过；自身Linux待验，不断言78远端唯一根因或产品布局缺陷已修复，旧Demo/失败保留。
+
+78自然输出容量回收本地与自身Linux限定通过，但整轮CI失败：[报告](docs/acceptance/V1.7-checkpoint-78.md)、[远端证据](docs/assets/v1.7-cp78/first-remote-proof.json)。119cee1/Run37142602799十三作业success、轮转浏览器failure、容器skipped；默认五项/三JVM/五客户端/十二HTTP通过，旧TCP不读、Provider不放行时Linuxwriter60.224秒池空闲，新原生答案60.424秒提交。四ZIP源SHA/摘要、十五完整JAR日志意外ERROR=0、原生62和MySQL原99门禁已核验；本轮助手UI未执行，失败保留。不是绝对TTL或生产容量保证。
 
 77自身远端限定通过：8a0714f的[Run37140503864](https://github.com/Trigger726/OnCall-Agent/actions/runs/37140503864)十五作业success，四ZIP源SHA/实际摘要、Linux四真实慢写场景/九HTTP/十六完整JAR日志、原生62、MySQL99/五池原门禁重放、十三/八/六页面流程已独立核验，见[报告阶段十三](docs/acceptance/V1.7-checkpoint-77.md)、[远端证据](docs/assets/v1.7-cp77/remote-proof.json)。两次自身远端失败、原包负对照及所有旧Demo保留，此源不覆盖78第五项或原生AI MySQL HTTP。
 

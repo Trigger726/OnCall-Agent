@@ -2,7 +2,9 @@
 
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
-78自然输出回收门禁本地限定通过：[报告](acceptance/V1.7-checkpoint-78.md)。保留原四项、默认新增第五项，不读旧socket/不放行旧Provider时约60秒writer池空闲、约60秒新原生答案提交。三次同包观测，最终五项/三JVM/五客户端/十二HTTP/完整日志意外ERROR=0；新默认源自身Linux待验，不借77四项绿灯。原生AI MySQL HTTP、trickle/TLS/代理与跨机器/生产容量继续。
+79先处理78浏览器失败：[报告](acceptance/V1.7-checkpoint-79.md)。受控响应插入台账期间真实鼠标漏点击已复现；测试等待后续实际roster刷新而非仅按钮可见，默认延迟/按压断言与原十三页完整保留。最终十三/八/六页及三完整停机日志零意外ERROR，本地限定通过、自身Linux待验；生产源码不改，MySQL原生HTTP仍是后续未完成项。
+
+78默认五项本地与自身Linux限定通过，但整轮CI失败：[报告](acceptance/V1.7-checkpoint-78.md)。119cee1/Run37142602799十三success、轮转浏览器failure、容器skipped，四ZIP源SHA/摘要独立核验；Linux三JVM/五客户端/十二HTTP与60.224秒writer池空闲/60.424秒新原生答案提交通过，旧TCP/Provider未放行。失败保存，先调查刷新点击时序；原生AI MySQL HTTP、trickle/TLS/代理与跨机器/生产容量继续。
 
 77自身远端限定通过：8a0714f/Run37140503864十五作业success，四ZIP源SHA/摘要、Linux四慢TCP实际栈/九HTTP/十六完整JAR日志、七原生XML62、MySQL99/五池原门禁重放、十三/八/六页面已核验，[阶段十三](acceptance/V1.7-checkpoint-77.md)。两次自身失败与全部历史Demo保留，不外推78第五项。
 

@@ -1,0 +1,1003 @@
+{
+  "checkpoint": 79,
+  "status": "LOCAL_LIMITED_PASS_SOURCE_REMOTE_PENDING",
+  "productionModified": false,
+  "baselineSourceCommit": "119cee1fb489704b0d9e13474be2df73171494fe",
+  "sources": [
+    {
+      "path": "scripts/verify-oncall-rotation-ui.cjs",
+      "sha256": "2703fad3d12aae959ef96e75172aa697620382d88de3a353ac4523db38cbdb90"
+    },
+    {
+      "path": "target/cp79-before/rotation-ui-original.cjs",
+      "sha256": "2640d3b242b902010abf1802dc521c997c00884a7eae3ac07b22e24021a73ebd"
+    },
+    {
+      "path": "target/cp79-before/rotation-ui-layout-probe.cjs",
+      "sha256": "8c90aba13b5e964e4b97959620846d454f70081fa709d0f63c8eb32f3bee7016"
+    },
+    {
+      "path": "target/cp79-before/probe-runner.cjs",
+      "sha256": "4b1d7ac245ae59f003d36b7b27852403e7d0ac1507712c73c2efefb22c76e538"
+    },
+    {
+      "path": "target/opspilot-0.1.0-SNAPSHOT.jar",
+      "sha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5"
+    }
+  ],
+  "baselineNormalPass": {
+    "path": "target\\oncall-browser-it\\run-Hyp2Fu\\runner-result.json",
+    "result": {
+      "status": "PASS",
+      "evidenceDirectory": "target\\oncall-browser-it\\run-Hyp2Fu",
+      "database": "isolated unique H2 memory",
+      "url": "http://127.0.0.1:9917/on-call",
+      "jarTimezone": "UTC",
+      "scanDelayMs": 200,
+      "defaultScanDelayMs": 60000,
+      "scripts": [
+        {
+          "name": "verify-oncall-rotation-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-rotation-boundaries.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-coverage-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-http.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-revocation-http.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-revocation-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-runbook-trend-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-runbook-publication-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-slo-rules-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-jwt-numeric-date-http.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-stream-session-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-account-security-ui.cjs",
+          "exitCode": 0
+        }
+      ],
+      "browserCi": false,
+      "publicationBaselineCapture": false,
+      "trendBaselineCapture": false,
+      "revocationBaselineCapture": false,
+      "userFileDatabaseModified": false,
+      "originalProcessesNotStopped": true,
+      "ownedProcessStopped": true,
+      "accountBaselineCapture": false,
+      "sloBaselineCapture": false,
+      "streamSessionBaselineCapture": false,
+      "streamSessionOnly": false,
+      "unexpectedJarErrors": 0
+    }
+  },
+  "invalidFirstProbe": {
+    "path": "target\\cp79-before\\probe-J09H9J\\runner-result.json",
+    "result": {
+      "status": "REPRODUCED_FAILURE",
+      "evidenceDirectory": "D:\\Codex\\国网\\央国企求职\\OpsPilot\\target\\cp79-before\\probe-J09H9J",
+      "ownedPid": 104336,
+      "testExit": 1,
+      "ownedProcessStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "businessProofAccepted": false,
+    "reason": "APIResponse.finished is not a function; raw historical status REPRODUCED_FAILURE is not business evidence."
+  },
+  "controlledNegative": {
+    "runner": {
+      "path": "target\\cp79-before\\probe-yrNIz7\\runner-result.json",
+      "result": {
+        "status": "REPRODUCED_MISSED_CLICK",
+        "evidenceDirectory": "D:\\Codex\\国网\\央国企求职\\OpsPilot\\target\\cp79-before\\probe-yrNIz7",
+        "ownedPid": 88244,
+        "testExit": 1,
+        "ownedProcessStopped": true,
+        "unexpectedJarErrors": 0
+      }
+    },
+    "diagnostic": {
+      "path": "target\\cp79-before\\probe-yrNIz7\\rotation-ui-wZj4PD\\layout-probe-result.json",
+      "result": {
+        "fixture": "owned real slots response held until pointerdown; ordinary 200ms mouse press",
+        "targetBefore": {
+          "x": 1312.984375,
+          "y": 876.84375,
+          "width": 78.015625,
+          "height": 38
+        },
+        "targetAfter": {
+          "x": 1312.984375,
+          "y": 4144.84375,
+          "width": 78.015625,
+          "height": 38
+        },
+        "cancelClickEvents": 0,
+        "confirmationForms": 0,
+        "manualShiftCancelled": null,
+        "pageErrors": [],
+        "productionSourceModified": false
+      }
+    },
+    "rootCauseOfRemoteFailureEstablished": false
+  },
+  "firstCorrectedRun": {
+    "path": "target\\oncall-browser-it\\run-6OHWwj\\runner-result.json",
+    "result": {
+      "status": "PASS",
+      "evidenceDirectory": "target\\oncall-browser-it\\run-6OHWwj",
+      "database": "isolated unique H2 memory",
+      "url": "http://127.0.0.1:9917/on-call",
+      "jarTimezone": "UTC",
+      "scanDelayMs": 200,
+      "defaultScanDelayMs": 60000,
+      "scripts": [
+        {
+          "name": "verify-oncall-rotation-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-rotation-boundaries.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-coverage-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-http.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-revocation-http.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-revocation-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-runbook-trend-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-runbook-publication-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-slo-rules-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-jwt-numeric-date-http.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-stream-session-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-account-security-ui.cjs",
+          "exitCode": 0
+        }
+      ],
+      "browserCi": false,
+      "publicationBaselineCapture": false,
+      "trendBaselineCapture": false,
+      "revocationBaselineCapture": false,
+      "userFileDatabaseModified": false,
+      "originalProcessesNotStopped": true,
+      "ownedProcessStopped": true,
+      "accountBaselineCapture": false,
+      "sloBaselineCapture": false,
+      "streamSessionBaselineCapture": false,
+      "streamSessionOnly": false,
+      "unexpectedJarErrors": 0
+    }
+  },
+  "firstCorrectedSourceSha256": "cd35cecf7cf72b285fb4fc9b707694949535c289e4e2629175ffaf901a2b0356",
+  "finalRun": {
+    "path": "target\\oncall-browser-it\\run-F8mG4v\\runner-result.json",
+    "result": {
+      "status": "PASS",
+      "evidenceDirectory": "target\\oncall-browser-it\\run-F8mG4v",
+      "database": "isolated unique H2 memory",
+      "url": "http://127.0.0.1:9917/on-call",
+      "jarTimezone": "UTC",
+      "scanDelayMs": 200,
+      "defaultScanDelayMs": 60000,
+      "scripts": [
+        {
+          "name": "verify-oncall-rotation-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-rotation-boundaries.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-coverage-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-http.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-revocation-http.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-oncall-handoff-revocation-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-runbook-trend-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-runbook-publication-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-slo-rules-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-jwt-numeric-date-http.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-stream-session-ui.cjs",
+          "exitCode": 0
+        },
+        {
+          "name": "verify-account-security-ui.cjs",
+          "exitCode": 0
+        }
+      ],
+      "browserCi": false,
+      "publicationBaselineCapture": false,
+      "trendBaselineCapture": false,
+      "revocationBaselineCapture": false,
+      "userFileDatabaseModified": false,
+      "originalProcessesNotStopped": true,
+      "ownedProcessStopped": true,
+      "accountBaselineCapture": false,
+      "sloBaselineCapture": false,
+      "streamSessionBaselineCapture": false,
+      "streamSessionOnly": false,
+      "unexpectedJarErrors": 0
+    }
+  },
+  "rotation": {
+    "path": "target\\oncall-browser-it\\run-F8mG4v\\rotation-ui-FRRwqY\\opspilot-cp46-browser-result.json",
+    "result": {
+      "browser": "Chromium/Chrome 154.0.8037.93 via Playwright",
+      "browserPath": "Browser plugin not available",
+      "url": "http://127.0.0.1:9917/on-call",
+      "viewports": [
+        "1440x1000",
+        "390x844"
+      ],
+      "browserTimezone": "Asia/Shanghai",
+      "jarTimezone": "UTC",
+      "database": "isolated H2 memory",
+      "userFileDatabaseModified": false,
+      "rotationId": 1,
+      "members": [
+        2,
+        3
+      ],
+      "anchorPreserved": true,
+      "createdFromUI": true,
+      "manualConflictVisible": true,
+      "duplicateCreateRejected": true,
+      "pausedPersisted": true,
+      "existingShiftsPreservedDuringPause": true,
+      "staleVersionRejectedAndBlocked": true,
+      "refreshSettledBeforeCancel": true,
+      "delayedRealSlotsResponse": [
+        {
+          "status": 200,
+          "delayMs": 200
+        }
+      ],
+      "cancelMousePressMs": 200,
+      "cancelConfirmationOpened": true,
+      "realBackgroundFilled": true,
+      "noManualScanBeforeBackground": true,
+      "currentOwnerAfterRefresh": "张伟",
+      "incident": {
+        "id": 3,
+        "recipient": "zhangwei",
+        "status": "ROUTED"
+      },
+      "cancelledSlotRetained": true,
+      "manualScanCreatedZero": true,
+      "readonlyVerified": true,
+      "historicalShiftsPreserved": 2,
+      "pageIdentity": true,
+      "noBlank": true,
+      "noOverlay": true,
+      "mobileDocumentWidth": 390,
+      "consoleLogs": [
+        "Failed to load resource: the server responded with a status of 409 ()",
+        "Failed to load resource: the server responded with a status of 409 ()"
+      ],
+      "pageErrors": [],
+      "expected409": [
+        {
+          "status": 409,
+          "path": "/api/v1/on-call/rotations"
+        },
+        {
+          "status": 409,
+          "path": "/api/v1/on-call/rotations/1/state"
+        }
+      ],
+      "screenshots": [
+        "opspilot-cp46-empty.png",
+        "opspilot-cp46-desktop-blocked.png",
+        "opspilot-cp46-version-conflict.png",
+        "cp79-cancel-confirmation-desktop.png",
+        "opspilot-cp46-desktop-cancelled.png",
+        "opspilot-cp46-mobile-summary.png",
+        "opspilot-cp46-mobile-form.png",
+        "opspilot-cp46-mobile-ledger.png"
+      ]
+    }
+  },
+  "assistantRequestUi": {
+    "path": "target\\assistant-request-ui-it\\run-gAr9zO\\result.json",
+    "result": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "url": "http://127.0.0.1:9945/assistant",
+      "browserReason": "Browser plugin not available; existing Playwright",
+      "viewports": [
+        "1440x1000",
+        "390x844"
+      ],
+      "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+      "fixture": "owned production HTTP adapter and real browser controls, not model quality",
+      "tokensPersistedToEvidence": false,
+      "userFileDatabaseModified": false,
+      "cases": [
+        {
+          "name": "explicit-running-cancel",
+          "originalKeyUsed": true,
+          "serverState": "CANCELLED",
+          "lateAnswers": 0,
+          "actualWorkerSettledByFreshAnswer": true
+        },
+        {
+          "name": "lost-completed-response-refresh-query",
+          "actualCompletedResponseLost": true,
+          "originalAnswerIdPreserved": true,
+          "streamPostsIncludingRecovery": 1,
+          "modelCallsIncludingRecovery": 1
+        },
+        {
+          "name": "lost-cancel-response",
+          "backendCancelResponseActuallyLost": true,
+          "noFalseCancelledBeforeQuery": true,
+          "queriedServerState": "CANCELLED",
+          "cancelAuditRows": 1,
+          "lateAnswers": 0
+        },
+        {
+          "name": "not-admitted-manual-retry",
+          "serverLookupStatus": 404,
+          "noAutomaticPost": true,
+          "exactOriginalKeyAndContent": true,
+          "actualModelCalls": 1
+        },
+        {
+          "name": "queued-ui-cancel",
+          "queriedStateBeforeCancel": "QUEUED",
+          "questionAndAnswerRows": 0,
+          "modelCallsForQueuedQuestion": 0
+        },
+        {
+          "name": "real-capacity-feedback",
+          "serverCapacity": "one worker and one queue slot",
+          "actualRejectedStatus": 503,
+          "actualJsonErrorResponse": true,
+          "rejectedQuestionRows": 0,
+          "noAutomaticPost": true,
+          "lookupStatus": 404,
+          "manualRecoveryWithOriginalKeyAndQuestion": true
+        },
+        {
+          "name": "real-budget-timeout",
+          "serverBudgetSeconds": 30,
+          "queriedTerminal": "TIMED_OUT",
+          "originalRequestNotRerun": true,
+          "lateAnswers": 0,
+          "actualWorkerSettledByFreshAnswer": true
+        },
+        {
+          "name": "late-successful-clear-after-account-change",
+          "actualOldClearStatus": 200,
+          "actualOldLogoutStatus": 200,
+          "replacementTokenPreserved": true,
+          "replacementServerStatus": 200,
+          "oldPrivateMessagesNotReintroduced": true
+        }
+      ],
+      "screenshots": [
+        "waiting-desktop.png",
+        "cancelled-desktop.png",
+        "cancelled-mobile.png",
+        "recovery-desktop.png",
+        "recovered-completed-desktop.png",
+        "queued-desktop.png",
+        "saturated-desktop.png",
+        "timed-out-mobile.png"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: the server responded with a status of 404 ()",
+        "Failed to load resource: the server responded with a status of 503 ()",
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "startedPid": 72768,
+      "unexpectedConsoleErrors": [],
+      "providerTransportCalls": 10,
+      "streamResponseStatuses": [
+        {
+          "status": 200,
+          "contentType": "text/event-stream;charset=UTF-8"
+        },
+        {
+          "status": 200,
+          "contentType": "text/event-stream;charset=UTF-8"
+        },
+        {
+          "status": 503,
+          "contentType": "application/json;charset=UTF-8"
+        },
+        {
+          "status": 200,
+          "contentType": "text/event-stream;charset=UTF-8"
+        },
+        {
+          "status": 200,
+          "contentType": "text/event-stream;charset=UTF-8"
+        },
+        {
+          "status": 200,
+          "contentType": "text/event-stream;charset=UTF-8"
+        }
+      ],
+      "ownedProcessStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    }
+  },
+  "assistantNativeUi": {
+    "path": "target\\assistant-native-ui-it\\run-6t6Xmz\\result.json",
+    "result": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "url": "http://127.0.0.1:9955/assistant",
+      "browserReason": "Browser plugin not available; existing Playwright",
+      "viewports": [
+        "1440x1000",
+        "390x844"
+      ],
+      "flow": "send -> native preview before model completion -> committed answer or explicit terminal",
+      "fixture": "controlled real HTTP DashScope provider; not model quality or production capacity",
+      "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+      "tokensPersistedToEvidence": false,
+      "userFileDatabaseModified": false,
+      "cases": [
+        {
+          "name": "preview-before-final-commit",
+          "native": true,
+          "incremental": true,
+          "previewVisibleBeforeProviderRelease": true,
+          "databaseAnswersBeforeRelease": 0,
+          "finalAnswers": 1,
+          "modelCalls": 1
+        },
+        {
+          "name": "explicit-cancel-after-preview",
+          "status": "CANCELLED",
+          "cancelledAnswers": 0,
+          "originalKeyUsed": true,
+          "workerReusedBeforeOldProviderRelease": true,
+          "nativeHttpConnectionClosedBeforeProviderRelease": true
+        },
+        {
+          "name": "truncated-preview",
+          "status": "FAILED",
+          "partialAnswersCommitted": 0,
+          "modelCalls": 1
+        },
+        {
+          "name": "idle-after-preview",
+          "status": "TIMED_OUT",
+          "executionBudgetSeconds": 12,
+          "partialAnswersCommitted": 0,
+          "nativeHttpConnectionClosedBeforeProviderRelease": true
+        },
+        {
+          "name": "disconnect-after-preview-manual-query",
+          "status": "COMPLETED",
+          "originalAnswerIdPreserved": true,
+          "streamPosts": 1,
+          "modelCalls": 1
+        },
+        {
+          "name": "output-capacity-503-and-fixed-key-manual-recovery",
+          "actualErrorCode": "ASSISTANT_STREAM_SATURATED",
+          "errorMessageVisible": true,
+          "rejectedQuestionRows": 0,
+          "rejectedModelCalls": 0,
+          "rejectedKeyStatus": 404,
+          "noAutomaticRetry": true,
+          "sameKeyAndQuestionOnManualRetry": true,
+          "recoveredAnswerRows": 1,
+          "fixtureCancelPosts": 2
+        }
+      ],
+      "screenshots": [
+        "native-preview-desktop.png",
+        "native-preview-mobile.png",
+        "native-completed-mobile.png",
+        "native-cancelled-mobile.png",
+        "native-failed-mobile.png",
+        "native-timeout-mobile.png",
+        "native-recovered-desktop.png",
+        "output-saturated-desktop.png",
+        "output-saturated-mobile.png"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 503 ()",
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "consoleErrorDetails": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 ()",
+          "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/stream"
+        },
+        {
+          "text": "Failed to load resource: the server responded with a status of 404 ()",
+          "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/request"
+        }
+      ],
+      "startedPid": 89112,
+      "expectedConsoleErrors": [
+        {
+          "text": "Failed to load resource: the server responded with a status of 503 ()",
+          "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/stream",
+          "response": {
+            "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/stream",
+            "status": 503,
+            "code": "ASSISTANT_STREAM_SATURATED"
+          }
+        },
+        {
+          "text": "Failed to load resource: the server responded with a status of 404 ()",
+          "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/request",
+          "response": {
+            "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/request",
+            "status": 404,
+            "code": "ASSISTANT_REQUEST_NOT_FOUND"
+          }
+        }
+      ],
+      "unexpectedConsoleErrors": [],
+      "providerRequests": [
+        {
+          "question": "cp75-first-preview-aad9b67a-33cd-406e-904a-67f063dcc46f",
+          "calls": 1,
+          "native": true,
+          "incremental": true,
+          "transportClosed": true
+        },
+        {
+          "question": "cp75-cancel-preview-8cf75972-fcb6-4c64-bad4-9fb418421fc3",
+          "calls": 1,
+          "native": true,
+          "incremental": true,
+          "transportClosed": true
+        },
+        {
+          "question": "cp75-fresh-before-old-release-d4a47b6d-eb82-4480-b5d2-518ead9e64cb",
+          "calls": 1,
+          "native": true,
+          "incremental": true,
+          "transportClosed": true
+        },
+        {
+          "question": "cp75-truncated-preview-6ec0dfa4-be13-4bc5-8811-c864c5adaf0e",
+          "calls": 1,
+          "native": true,
+          "incremental": true,
+          "transportClosed": true
+        },
+        {
+          "question": "cp75-idle-timeout-cbd8a6c8-491e-40d6-b5af-4328efe0b49b",
+          "calls": 1,
+          "native": true,
+          "incremental": true,
+          "transportClosed": true
+        },
+        {
+          "question": "cp75-disconnect-preview-7ca90b42-27bb-4f1d-8cb8-41e547733fcd",
+          "calls": 1,
+          "native": true,
+          "incremental": true,
+          "transportClosed": true
+        },
+        {
+          "question": "cp77-output-held-1145d50f-5ae1-4b13-908f-b50941671eea",
+          "calls": 1,
+          "native": true,
+          "incremental": true,
+          "transportClosed": true
+        },
+        {
+          "question": "cp77-output-queued-8b4a9b5a-9a59-450d-83ab-2af5fd967fe2",
+          "calls": 0
+        },
+        {
+          "question": "cp77-output-rejected-955f48b6-b21e-4e24-9796-377eea5d17c3",
+          "calls": 1,
+          "native": true,
+          "incremental": true,
+          "transportClosed": true
+        }
+      ],
+      "streamPosts": 8,
+      "explicitCancelPosts": 1,
+      "fixtureHeldStreams": [
+        {
+          "sessionId": 6,
+          "responseStatus": 200,
+          "ended": true,
+          "cancelledEvent": true,
+          "doneEvent": false,
+          "observedBytes": 343
+        },
+        {
+          "sessionId": 7,
+          "responseStatus": 200,
+          "ended": true,
+          "cancelledEvent": true,
+          "doneEvent": false,
+          "observedBytes": 108
+        }
+      ],
+      "ownedProcessStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    }
+  },
+  "lifecycle": {
+    "executed": 20,
+    "failed": 0,
+    "skipped": 0
+  },
+  "metadata": [
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\account-security-Kmgjie\\result.json",
+      "sha256": "090f3206096ce7a6364ec548152479a4bf374e9ea4ef764232dc0ea0b4cb7058"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\coverage-ui-NlWsUA\\opspilot-cp48-coverage-result.json",
+      "sha256": "1f8e89fc9b406dd4022e72755552dc32c74f96e9847780fde0aa09b79ee5f361"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\handoff-http-GAIeoG\\result.json",
+      "sha256": "6895e807cf921b1ec96b3323266c9c35f35394039dbf53f43c011f053fa93c82"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\handoff-revocation-jnQpyv\\result.json",
+      "sha256": "e483e3dee1ca7eeda423ef9eaec3f03951390c45255239ce7b5bdd74d832c62d"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\handoff-ui-eSuzTL\\result.json",
+      "sha256": "d9486fe780862dad5d8ff4b11972e1f3f8151272347ca17529e1f7623b516147"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\jar.log",
+      "sha256": "967ceaf6d529f68c0d5fe76c821c064d5f4c3f55e86f62441621569bd4fbe5bc",
+      "unexpected": 0
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\jwt-date-http-GZpkRh\\result.json",
+      "sha256": "334bbe8f7ed1efddb68a34cfcd9ea20e2ab96853d8aab32fc3480e41ed58de6f"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\revocation-ui-Jtlfco\\result.json",
+      "sha256": "8d1aa2a18e130b3b06e39e291f2142040c3ef228d55638d6836619e578606ff3"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\rotation-boundaries-CXrAlm\\opspilot-cp46-boundary-result.json",
+      "sha256": "1fb8273c0c193891dc30f846d97dda786a75f5c9b0ba007d4dde8dfb2d09cff6"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\rotation-ui-UhwD1H\\opspilot-cp46-browser-result.json",
+      "sha256": "6c7722cb75df1a01878b105ef72cde45fd86010813200462f3d02f7b55746f9c"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\runbook-publication-WBKZ5m\\result.json",
+      "sha256": "a07af6a581529a809457e7fa0a02c07ac498d025a9d91d0742f54e8a6930474e"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\runbook-trend-UOqu2M\\result.json",
+      "sha256": "8e2441051fba3e49b2bf716b0e1ae85f208154c6a92ea96c5786fe4e3bcc9abf"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\runner-result.json",
+      "sha256": "331581f4f94cf568137c16708f96c66bebfb7e306455fc19e84998c0e9680201"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\slo-rules-ui-t4rF9X\\result.json",
+      "sha256": "51f83dc9e2e66d9262b604187319a8f76d775b9185e915e4e8e8c5e9e05dd275"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-Hyp2Fu\\stream-session-SWxHOm\\result.json",
+      "sha256": "458771eb59be1d6b3cab63aca1d523688c589e13289cc913d936cf1509240653"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\account-security-iVBjlA\\result.json",
+      "sha256": "090f3206096ce7a6364ec548152479a4bf374e9ea4ef764232dc0ea0b4cb7058"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\coverage-ui-8Tel3k\\opspilot-cp48-coverage-result.json",
+      "sha256": "1f8e89fc9b406dd4022e72755552dc32c74f96e9847780fde0aa09b79ee5f361"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\handoff-http-uCfKYe\\result.json",
+      "sha256": "5cb6bb6da5f1ddc54e4ade43a8d9f014cc81c79a053148f290f7ef70ddb08fae"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\handoff-revocation-vmyRZi\\result.json",
+      "sha256": "e483e3dee1ca7eeda423ef9eaec3f03951390c45255239ce7b5bdd74d832c62d"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\handoff-ui-5B3NGL\\result.json",
+      "sha256": "993ca9950ab962d64fdab04c54a18d69d9fdf2f067c06194ec8618d5a6d00ef8"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\jar.log",
+      "sha256": "10da46eb1342a39e7657286516c1e7f5b1546232edfa7319a9b764e2f062b5bd",
+      "unexpected": 0
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\jwt-date-http-TT5RMq\\result.json",
+      "sha256": "334bbe8f7ed1efddb68a34cfcd9ea20e2ab96853d8aab32fc3480e41ed58de6f"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\revocation-ui-dsDXX6\\result.json",
+      "sha256": "8d1aa2a18e130b3b06e39e291f2142040c3ef228d55638d6836619e578606ff3"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\rotation-boundaries-iaktNA\\opspilot-cp46-boundary-result.json",
+      "sha256": "1fb8273c0c193891dc30f846d97dda786a75f5c9b0ba007d4dde8dfb2d09cff6"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\rotation-ui-v5RtdH\\opspilot-cp46-browser-result.json",
+      "sha256": "01c41d297e98c033582f2d37adcb5b5040670a516066f9da707e92bac0486dae"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\runbook-publication-FTNMwG\\result.json",
+      "sha256": "a07af6a581529a809457e7fa0a02c07ac498d025a9d91d0742f54e8a6930474e"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\runbook-trend-kx1AMb\\result.json",
+      "sha256": "8e2441051fba3e49b2bf716b0e1ae85f208154c6a92ea96c5786fe4e3bcc9abf"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\runner-result.json",
+      "sha256": "f5059c18042537e8913b2c6f91db8f21417e77131fa01b9dbe2a76db688deec4"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\slo-rules-ui-MDeWfH\\result.json",
+      "sha256": "51f83dc9e2e66d9262b604187319a8f76d775b9185e915e4e8e8c5e9e05dd275"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-6OHWwj\\stream-session-6XaWRH\\result.json",
+      "sha256": "458771eb59be1d6b3cab63aca1d523688c589e13289cc913d936cf1509240653"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\account-security-q68J9M\\result.json",
+      "sha256": "090f3206096ce7a6364ec548152479a4bf374e9ea4ef764232dc0ea0b4cb7058"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\coverage-ui-pYDgxp\\opspilot-cp48-coverage-result.json",
+      "sha256": "1f8e89fc9b406dd4022e72755552dc32c74f96e9847780fde0aa09b79ee5f361"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\handoff-http-1lRI3U\\result.json",
+      "sha256": "9910be5661045c2d376652fdf4028fba3a97e23e5fffd6d815be728cb27fe308"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\handoff-revocation-0yNMpr\\result.json",
+      "sha256": "e483e3dee1ca7eeda423ef9eaec3f03951390c45255239ce7b5bdd74d832c62d"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\handoff-ui-V0dYFZ\\result.json",
+      "sha256": "d3e5d5229ec2a86aacb01cdcb307bfe447c5338d3b437d20b25a27ef489862ad"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\jar.log",
+      "sha256": "3bfbacf4fcc4aadd771b48a9ccd1d5ba0e4f469081f40beddcb7e21079ee40ac",
+      "unexpected": 0
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\jwt-date-http-8d0D8p\\result.json",
+      "sha256": "334bbe8f7ed1efddb68a34cfcd9ea20e2ab96853d8aab32fc3480e41ed58de6f"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\revocation-ui-klAJBt\\result.json",
+      "sha256": "8d1aa2a18e130b3b06e39e291f2142040c3ef228d55638d6836619e578606ff3"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\rotation-boundaries-xyTxfr\\opspilot-cp46-boundary-result.json",
+      "sha256": "1fb8273c0c193891dc30f846d97dda786a75f5c9b0ba007d4dde8dfb2d09cff6"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\rotation-ui-FRRwqY\\cp79-cancel-confirmation-desktop.png",
+      "sha256": "260682ad980952a76523baa0df5f56af4fd9ca6842ad0b3e5c5ba2349b93e50e"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\rotation-ui-FRRwqY\\opspilot-cp46-browser-result.json",
+      "sha256": "483b3f750f497929c0938287aba3c8a045063f0d3a19ee35f885c8db8f32793c"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\rotation-ui-FRRwqY\\opspilot-cp46-mobile-ledger.png",
+      "sha256": "a342ffba810c2afbe937602b105e4b02fa544ba26daafdc757d27f50251332e7"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\runbook-publication-IIpS0i\\result.json",
+      "sha256": "a07af6a581529a809457e7fa0a02c07ac498d025a9d91d0742f54e8a6930474e"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\runbook-trend-mqjLok\\result.json",
+      "sha256": "8e2441051fba3e49b2bf716b0e1ae85f208154c6a92ea96c5786fe4e3bcc9abf"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\runner-result.json",
+      "sha256": "e394589146d9bf3658f54668509ebc9728110cd6a3d1e00f799a8d0c67d4e99a"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\slo-rules-ui-IvQq3r\\result.json",
+      "sha256": "51f83dc9e2e66d9262b604187319a8f76d775b9185e915e4e8e8c5e9e05dd275"
+    },
+    {
+      "path": "target\\oncall-browser-it\\run-F8mG4v\\stream-session-3gTcnH\\result.json",
+      "sha256": "458771eb59be1d6b3cab63aca1d523688c589e13289cc913d936cf1509240653"
+    },
+    {
+      "path": "target\\assistant-request-ui-it\\run-gAr9zO\\jar.log",
+      "sha256": "a5d34a967449453a354b5621d26b67f41b95c8c683714dab5c97f8d23a4713eb",
+      "unexpected": 0
+    },
+    {
+      "path": "target\\assistant-request-ui-it\\run-gAr9zO\\result.json",
+      "sha256": "87b4c920db45930155012774f8debef833b344e6a16e9660ab083f06208259a8"
+    },
+    {
+      "path": "target\\assistant-native-ui-it\\run-6t6Xmz\\jar.log",
+      "sha256": "68c1533f2597c1916794987665ec5f1100f4b4a7e5ca826d3129a51b51e4896c",
+      "unexpected": 0
+    },
+    {
+      "path": "target\\assistant-native-ui-it\\run-6t6Xmz\\result.json",
+      "sha256": "839b6e165215ff92f0260781691624a9f9def268a094168256d24e42c6c93d79"
+    },
+    {
+      "path": "target\\cp79-before\\probe-J09H9J\\jar.log",
+      "sha256": "996be680cea1ba6c2fce223906db6187b318199feb898a7a7a33cea159e374ad",
+      "unexpected": 0
+    },
+    {
+      "path": "target\\cp79-before\\probe-J09H9J\\runner-result.json",
+      "sha256": "5c2090b967657ebea3478434303c0b931757d6c7a4fe0452e74fefdc66c824e8"
+    },
+    {
+      "path": "target\\cp79-before\\probe-yrNIz7\\jar.log",
+      "sha256": "a89908fbf621d91eaaf2aa0971befc5c9310b71bab3ee147e52ae05163decc4e",
+      "unexpected": 0
+    },
+    {
+      "path": "target\\cp79-before\\probe-yrNIz7\\rotation-ui-wZj4PD\\layout-probe-after-click.png",
+      "sha256": "5ed0072e991a9026503a1a4bf6033000146dbdcb7ead36dabf5d5ea77a7762b1"
+    },
+    {
+      "path": "target\\cp79-before\\probe-yrNIz7\\rotation-ui-wZj4PD\\layout-probe-result.json",
+      "sha256": "d4ae37332cc2e9191c800f48791acf0813d48bd872f993b49105e00e5b39a16f"
+    },
+    {
+      "path": "target\\cp79-before\\probe-yrNIz7\\runner-result.json",
+      "sha256": "b2fcc291d7cc05096975f51f4b745a771629de21cbc18a50369e84d840e2ec37"
+    }
+  ],
+  "qa": {
+    "url": "http://127.0.0.1:9917/on-call",
+    "viewports": [
+      "1440x1000",
+      "390x844"
+    ],
+    "browser": "Chrome 154.0.8037.93 / existing Playwright",
+    "browserPlugin": "Absent; no browser skill listed",
+    "identity": true,
+    "notBlank": true,
+    "noOverlay": true,
+    "rotationPageErrors": [],
+    "rotationExpectedResponses": [
+      {
+        "status": 409,
+        "path": "/api/v1/on-call/rotations"
+      },
+      {
+        "status": 409,
+        "path": "/api/v1/on-call/rotations/1/state"
+      }
+    ],
+    "rotationUnexpectedConsoleErrors": 0,
+    "visualInspected": [
+      "before/missed-click.png",
+      "after/cancel-confirmation-desktop.png",
+      "after/cancelled-ledger-mobile.png"
+    ],
+    "interaction": "refresh -> completed real roster GET -> 200ms cancel press -> visible confirmation -> real cancel -> background fills -> current owner Zhang Wei -> real Incident route; later generated cancellation not revived"
+  },
+  "limits": [
+    "Only browser acceptance synchronization changed; production UI layout jumps not fixed.",
+    "Remote first failure may share the demonstrated mechanism but lacks full DOM/input trace.",
+    "Native AI HTTP on real MySQL not yet implemented/executed.",
+    "Own changed source Linux CI pending push, not covered by CP78 authentication success."
+  ]
+}

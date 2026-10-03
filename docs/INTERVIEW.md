@@ -1,6 +1,8 @@
 # OpsPilot 面试讲解与追问
 
-CP78补充工程追问：“模型worker释放后，输出容量什么时候回来？”用完全暂停的真实TCP、1 writer/0输出队列，先证明取消200、模型HTTP关闭、同worker同步新答案，但新流仍503且问题0/模型0；不RESUME、不关旧客户端或放行Provider，实测writer约60秒回到池空闲、约60秒替代原生答案完成。时间是采样观测区间，不是精确socket-close时刻，也不是trickle/TLS/代理下绝对TTL。默认自动化保留原四项并新增第五项，Windows完整通过、自身Linux待验，生产源码未改，见[78报告](acceptance/V1.7-checkpoint-78.md)。
+CP79可讲测试工程边界：“按钮可见不等于异步跨面板刷新完成”。本地普通十三页通过不能覆盖远端失败；受控真实响应在鼠标按压期间插入台账，目标位移3268px、click0/确认0，进一步用真实后续roster响应屏障修正验收，保留200ms延迟/按压、后台填补/路由和全部原断言。最终十三/八/六页本地通过，自身Linux待验。生产页面未改，远端原失败无完整事件轨迹，不宣称唯一根因或用户布局问题已修复，见[79报告](acceptance/V1.7-checkpoint-79.md)。
+
+CP78补充工程追问：“模型worker释放后，输出容量什么时候回来？”用完全暂停的真实TCP、1 writer/0输出队列，先证明取消200、模型HTTP关闭、同worker同步新答案，但新流仍503且问题0/模型0；不RESUME、不关旧客户端或放行Provider，实测writer约60秒回到池空闲、约60秒替代原生答案完成。时间是采样观测区间，不是精确socket-close时刻，也不是trickle/TLS/代理下绝对TTL。默认自动化保留原四项并新增第五项，Windows与119cee1自身Linux通过；该轮CI十三success、轮转浏览器failure、容器skipped，失败另存，不能称整轮通过。生产源码未改，见[78报告](acceptance/V1.7-checkpoint-78.md)。
 
 CP77可讲本地与自身远端已验证的修复：“数据库CANCELLED不等于资源已释放，worker释放也不等于writer释放”。原包真实暂停TCP复现锁阻塞；新有界写池/单槽交接让原worker等待ACK仍每100ms检查原预算/租约/SQL停止，不提前移除Work或扩大模型池。8a0714f自身十五CI、四ZIP源SHA/摘要及Linux四实际慢写场景/九HTTP已核验，取消/撤销/超时在未RESUME/未放行旧Provider时关闭HTTP并复用原worker，满输出503问题0、同步仍可用。两次自身远端失败、回放writer泄漏的首实现失败及页面夹具失败均保留，不包装成一次成功。原生AI MySQL HTTP、代理TLS、生产容量与78第五项不由该源绿灯推出，见[77报告](acceptance/V1.7-checkpoint-77.md)。
 

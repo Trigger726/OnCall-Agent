@@ -1,10 +1,14 @@
 # OpsPilot 10 分钟演示脚本
 
+## CP79：刷新完成与按钮可见不是同一状态
+
+[受控漏点击](assets/v1.7-cp79/before/missed-click.png)/[诊断](assets/v1.7-cp79/before/layout-probe-result.json)保存真实slots响应在200ms鼠标按压期间插入台账，按钮位移3268px、click0/确认0/班次未取消。验收脚本改为等后续实际roster响应完成，原十三页和业务断言未删；[最终桌面确认](assets/v1.7-cp79/after/cancel-confirmation-desktop.png)/[手机取消台账](assets/v1.7-cp79/after/cancelled-ledger-mobile.png)同44e包已验，助手八/六页面保留。只本地限定通过、自身Linux待验；生产UI未改，78远端没有完整事件轨迹，不说唯一根因已证实，见[79报告](acceptance/V1.7-checkpoint-79.md)。
+
 ## CP78：模型释放与输出槽位恢复不是同一时刻
 
 先读[五项本地证据](assets/v1.7-cp78/local-proof.json)/[写线程前后栈](assets/v1.7-cp78/strict-writer-before-after-excerpt.txt)，展示旧TCP完全不读、Provider不放行时，取消200/模型连接关闭/同步新答案先完成，但原生新流因唯一输出槽仍占用而503。约60秒后writer自然回到池空闲，约60秒替代原生流保存唯一答案；最后才清理旧客户端。不说所有连接都60秒关闭。
 
-当前 `node scripts/verify-assistant-slow-consumer-ci.cjs`默认执行原四项加新第五项，空闲9971/9972、三个自有JVM与新建内存库、五TCP客户端/十二模型HTTP。无需调查环境开关，旧调查probe仍被CI拒绝。78只本地限定通过，自身Linux新门禁待验；77的8a0714f十五绿灯不证明新第五项。报告、原结果和全部旧Demo另存，生产代码未改。
+当前 `node scripts/verify-assistant-slow-consumer-ci.cjs`默认执行原四项加新第五项，空闲9971/9972、三个自有JVM与新建内存库、五TCP客户端/十二模型HTTP。无需调查环境开关，旧调查probe仍被CI拒绝。119cee1自身Linux五项已通过，[源证据](assets/v1.7-cp78/first-remote-proof.json)/[完整结果](assets/v1.7-cp78/first-remote/slow-result.json)另存；该轮CI十三success、轮转浏览器failure、容器skipped，不演示为全绿。失败、原结果和全部旧Demo保留，生产代码未改。
 
 ## CP77：真实慢读反例与有界输出修复对照
 

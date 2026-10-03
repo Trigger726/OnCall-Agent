@@ -1,0 +1,513 @@
+{
+  "status": "PASS",
+  "baselineCapture": false,
+  "fixture": "owned real native model HTTP and paused TCP SSE clients; actual Tomcat write stacks required",
+  "jarSha256": "0357a805463cd2ff8d52208aeb163f99b7722905823109509777a388d1f1dcc5",
+  "modelWorkers": 1,
+  "modelQueueCapacity": 1,
+  "outputWriters": 2,
+  "outputQueueCapacity": 1,
+  "maximumCharactersBeforeRelease": 99907,
+  "maximumNativeFramesBeforeRelease": 9991,
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "cases": [
+    {
+      "name": "cancel-slow-client",
+      "cancelStatus": 200,
+      "requestStatus": "CANCELLED",
+      "cancelledAnswerRows": 0,
+      "cancellationAudits": 1,
+      "modelHttpClosedBeforeSocketResume": true,
+      "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+      "providerReleased": false
+    },
+    {
+      "name": "bounded-output-saturation",
+      "blockedWriters": 2,
+      "queuedTransport": 1,
+      "rejectedStatus": 503,
+      "rejectionCode": "ASSISTANT_STREAM_SATURATED",
+      "rejectedQuestionRows": 0,
+      "rejectedModelCalls": 0,
+      "rejectedKeyStatus": 404,
+      "queuedRequestCancelledAndModelHttpClosedBeforeWriterAvailable": true,
+      "synchronousWorkerStillUsable": true
+    },
+    {
+      "name": "revoke-slow-client",
+      "persistedStatus": "REVOKED",
+      "oldTokenStatus": 401,
+      "answerRows": 0,
+      "modelHttpClosedBeforeSocketResume": true,
+      "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+      "noRevokedTerminalPayload": true,
+      "alreadyBufferedBytesRecallClaimed": false
+    },
+    {
+      "name": "timeout-slow-client",
+      "originalBudgetSeconds": 12,
+      "persistedStatus": "TIMED_OUT",
+      "answerRows": 0,
+      "modelHttpClosedBeforeSocketResume": true,
+      "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+      "timeoutEventAfterWriterReleased": true
+    },
+    {
+      "name": "natural-output-timeout-recovery",
+      "cancelledAnswerRows": 0,
+      "writerRecoveredWithoutSocketResumeOrProviderRelease": true,
+      "outputCapacityReusedByNativeAnswer": true,
+      "writerIdleObservedMs": 60224,
+      "nativeAnswerCompletedMs": 60424,
+      "absoluteConnectionTtlClaimed": false
+    }
+  ],
+  "startedPids": [
+    3621,
+    3926,
+    4070
+  ],
+  "stoppedPids": [
+    3621,
+    3926,
+    4070
+  ],
+  "tcpClientImplementation": "Linux per-client receive buffer and advertised MSS",
+  "tcpClients": [
+    {
+      "case": "cancel",
+      "pid": 3723,
+      "receiveBufferBytes": 2304,
+      "receiveBufferSetBeforeConnect": true,
+      "maximumSegmentBytes": 244,
+      "maximumSegmentSetBeforeConnect": true
+    },
+    {
+      "case": "saturation",
+      "pid": 3794,
+      "receiveBufferBytes": 2304,
+      "receiveBufferSetBeforeConnect": true,
+      "maximumSegmentBytes": 244,
+      "maximumSegmentSetBeforeConnect": true
+    },
+    {
+      "case": "revoke",
+      "pid": 3877,
+      "receiveBufferBytes": 2304,
+      "receiveBufferSetBeforeConnect": true,
+      "maximumSegmentBytes": 244,
+      "maximumSegmentSetBeforeConnect": true
+    },
+    {
+      "case": "timeout",
+      "pid": 4027,
+      "receiveBufferBytes": 2304,
+      "receiveBufferSetBeforeConnect": true,
+      "maximumSegmentBytes": 244,
+      "maximumSegmentSetBeforeConnect": true
+    },
+    {
+      "case": "natural-output-timeout",
+      "pid": 4167,
+      "receiveBufferBytes": 2304,
+      "receiveBufferSetBeforeConnect": true,
+      "maximumSegmentBytes": 244,
+      "maximumSegmentSetBeforeConnect": true
+    }
+  ],
+  "blockedOutputs": [
+    {
+      "case": "cancel",
+      "thread": "opspilot-assistant-output-1",
+      "previouslyBlockedThreads": [],
+      "newlyBlockedThreadRequired": true,
+      "modelWorkerDirectServletWrite": false
+    },
+    {
+      "case": "saturation",
+      "thread": "opspilot-assistant-output-2",
+      "previouslyBlockedThreads": [
+        "opspilot-assistant-output-1"
+      ],
+      "newlyBlockedThreadRequired": true,
+      "modelWorkerDirectServletWrite": false
+    },
+    {
+      "case": "revoke",
+      "thread": "opspilot-assistant-output-1",
+      "previouslyBlockedThreads": [],
+      "newlyBlockedThreadRequired": true,
+      "modelWorkerDirectServletWrite": false
+    },
+    {
+      "case": "timeout",
+      "thread": "opspilot-assistant-output-1",
+      "previouslyBlockedThreads": [],
+      "newlyBlockedThreadRequired": true,
+      "modelWorkerDirectServletWrite": false
+    },
+    {
+      "case": "natural-output-timeout",
+      "thread": "opspilot-assistant-output-1",
+      "previouslyBlockedThreads": [],
+      "newlyBlockedThreadRequired": true,
+      "modelWorkerDirectServletWrite": false
+    }
+  ],
+  "outputTimeoutObservation": {
+    "deadlineMs": 80000,
+    "outputWriters": 1,
+    "outputQueueCapacity": 0,
+    "cancelStatus": 200,
+    "modelHttpClosedBeforeSocketResume": true,
+    "synchronousWorkerCompletedBeforeOutputRecovery": true,
+    "rejectedStatus": 503,
+    "rejectedKeyStatus": 404,
+    "socketResumed": false,
+    "providerReleased": false,
+    "samples": [
+      {
+        "millisecondsAfterBlockedObservation": 618,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 1755,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 2897,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 4041,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 5186,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 6332,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 7488,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 8636,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 9780,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 10926,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 12080,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 13226,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 14371,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 15509,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 16663,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 17812,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 18956,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 20104,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 21254,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 22386,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 23528,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 24678,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 25822,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 26961,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 28099,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 29241,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 30387,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 31536,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 32682,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 33833,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 34985,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 36135,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 37289,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 38444,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 39586,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 40738,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 41883,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 43028,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 44174,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 45324,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 46467,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 47620,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 48763,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 49915,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 51065,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 52217,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 53360,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 54502,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 55640,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 56783,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 57933,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 59080,
+        "actualTomcatWriteBlocked": true,
+        "outputWorkerIdle": false
+      },
+      {
+        "millisecondsAfterBlockedObservation": 60224,
+        "actualTomcatWriteBlocked": false,
+        "outputWorkerIdle": true
+      }
+    ],
+    "writerIdleObservedMs": 60224,
+    "nativeAnswerCompletedBeforeSocketResume": true,
+    "nativeAnswerCompletedMs": 60424
+  },
+  "providerCalls": 12,
+  "providerFrames": [
+    {
+      "question": "cp77-cancel-7b6039db-ef70-4560-9c80-ca44dd4a1e72",
+      "calls": 1,
+      "framesWritten": 9991,
+      "charactersWritten": 99907
+    },
+    {
+      "question": "cp77-fresh-before-resume-9978bc20-357b-44e1-8c8c-36bd5e0db724",
+      "calls": 1
+    },
+    {
+      "question": "cp77-saturation-5901d8b7-f741-4216-a873-f1ceed43196c",
+      "calls": 1,
+      "framesWritten": 9991,
+      "charactersWritten": 99907
+    },
+    {
+      "question": "cp77-queued-output-0ab152b7-dea9-4c84-96ad-d9484bdd2924",
+      "calls": 1
+    },
+    {
+      "question": "cp77-rejected-output-6f34a9ba-4a91-4262-b4fd-5d06ea79f41a",
+      "calls": 0
+    },
+    {
+      "question": "cp77-sync-control-during-output-saturation-0b947e93-4e7c-4319-b1a7-70ea61982225",
+      "calls": 1
+    },
+    {
+      "question": "cp77-revoke-346ad586-4f1b-45c8-ae6e-f909a7d55883",
+      "calls": 1,
+      "framesWritten": 9991,
+      "charactersWritten": 99907
+    },
+    {
+      "question": "cp77-fresh-after-revoke-before-resume-bed9437b-c341-4da6-baee-dc90beff3930",
+      "calls": 1
+    },
+    {
+      "question": "cp77-timeout-ec9c04d2-a2fb-423c-9446-5045af5557db",
+      "calls": 1,
+      "framesWritten": 9991,
+      "charactersWritten": 99907
+    },
+    {
+      "question": "cp77-fresh-after-timeout-before-resume-0503f530-0dab-485c-a834-5a2a4dc1792c",
+      "calls": 1
+    },
+    {
+      "question": "cp77-natural-output-timeout-407a1d72-33d3-4f2c-86b8-7f97d286e58c",
+      "calls": 1,
+      "framesWritten": 9991,
+      "charactersWritten": 99907
+    },
+    {
+      "question": "cp77-natural-timeout-rejected-214aea98-84c6-49f1-90f7-fe6823b3884f",
+      "calls": 0
+    },
+    {
+      "question": "cp77-natural-timeout-sync-before-recovery-b8335c01-096f-426a-96cd-0b069b45cd34",
+      "calls": 1
+    },
+    {
+      "question": "cp77-native-after-natural-output-recovery-89c5064b-67db-40ea-92f0-a5dd5e29e3f6",
+      "calls": 1
+    }
+  ],
+  "ownedTcpClientsStopped": true,
+  "ownedProcessesStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}
