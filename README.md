@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-检查点68本地限定通过：[助手在途回答/队列与预算报告](docs/acceptance/V1.7-checkpoint-68.md)。真实旧JAR晚回答写入/发回，新JAR原会话撤销后401或提前关闭、清空409、超时安全error/无done；生产HTTP适配器受控正对照7次通过。双时区各408发现/313执行/95条件跳过，16生命周期测试通过，本提交远端/新MySQL待验；首次连接三秒超时根因未证明，失败和旧Demo保留，不标整体100%。
+检查点69本地限定通过：[完成事务与同步返回授权报告](docs/acceptance/V1.7-checkpoint-69.md)。新增三条旧反例，两晚HTTP200→401/合法历史保留，完成中到期回答/标题/审计一起回滚；37定向、双时区各427发现/327执行/100条件跳过、十四MySQL门禁及新JAR实际HTTP七次回归通过。新提交真实MySQL93/五事务与远端待验，完整目标继续，旧JAR/Demo/失败不删。
+
+68自己的40e0c2f已补[Run37092997128](https://github.com/Trigger726/OnCall-Agent/actions/runs/37092997128)十五作业success；认证/助手实际生产HTTP七次/四份JAR日志、MySQL88一般兼容回归/五池关闭与两ZIP源SHA摘要及精确原门禁重放已核验。后来发现的更晚提交/同步返回空窗由69另列，旧Demo/首连接Future三秒超时仍保留，不借旧绿灯外推新五事务矩阵。见[68报告](docs/acceptance/V1.7-checkpoint-68.md)。
 
 67已补客户端自身远端验收：3b6247b的[Run37090872485](https://github.com/Trigger726/OnCall-Agent/actions/runs/37090872485)十五作业completed/success，浏览器ZIP源提交/官方digest与实际SHA256相符，Linux十三脚本退出码0、三入口真实logout/旧401/新admin凭证保留与服务端200已独立核对；九PNG实际存在，本次工件重放未重新目视截图。c903d59后端真实MySQL88/五池关闭及三工件定向重放原结论保留，跨节点、Trace偶发控制失败与完整目标仍继续。见[67报告](docs/acceptance/V1.7-checkpoint-67.md)。
 

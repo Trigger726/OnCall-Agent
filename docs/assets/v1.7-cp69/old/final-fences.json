@@ -1,0 +1,31 @@
+{
+  "sourceCommit": "40e0c2fa617ae1fe705652b67391495d918356f6",
+  "preservedJarSha256": "1e70cfa938558bcc9e5ab9a95d3d775f395aa980518b4d331c41a47a618c4be7",
+  "log": "target/cp69-before/final-fence-verified-baseline.log",
+  "sha256": "e9cd786627e146c046fccf94bcf5d0c2af5dd8df28e7613b9ff492e526d20645",
+  "found": 3,
+  "failures": 3,
+  "errors": 0,
+  "skipped": 0,
+  "executed": 3,
+  "cases": [
+    {
+      "name": "post-commit logout before synchronous controller return",
+      "actualHttpStatus": 200,
+      "expectedHttpStatus": 401,
+      "committedBeforeLogoutAssistantAndAudit": 1
+    },
+    {
+      "name": "post-commit expiry before synchronous controller return",
+      "actualHttpStatus": 200,
+      "expectedHttpStatus": 401,
+      "committedWhileValidAssistantAndAudit": 1
+    },
+    {
+      "name": "expiry after completion SQL before transaction commit",
+      "credentialExpiryDidNotThrow": true,
+      "completionSqlWasObservedWithinTransaction": true,
+      "postExpiryCountsSeparatelyReadInBaseline": false
+    }
+  ]
+}

@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const expectedSuites = {
-  'org.trigger.opspilot.MySqlCompatibilityIntegrationTest': 35,
+  'org.trigger.opspilot.MySqlCompatibilityIntegrationTest': 40,
   'org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest': 8,
   'org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest': 10,
   'org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest': 8,
@@ -23,6 +23,13 @@ const requiredAccountTests = [
   'shouldFenceFinalAuthorizationAgainstConcurrentRevocationCommit',
   'shouldRecheckLeaseExpiryAfterFinalAuthorizationLockWait',
 ];
+const requiredAssistantTests = [
+  'shouldRollbackAssistantAnswerWhenCompletionAuditInsertFails',
+  'shouldRollbackAssistantCompletionWhenFinalStopCheckFails',
+  'shouldFenceAssistantFinalCommitAgainstConcurrentRevocation',
+  'shouldRecheckAssistantLeaseExpiryAfterFinalLockWait',
+  'shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence',
+];
 
 function suiteResult(xml, name, minimum) {
   const header = xml.match(/<testsuite\b([^>]*)>/);
@@ -41,6 +48,11 @@ function suiteResult(xml, name, minimum) {
     for (const required of requiredAccountTests) {
       if (!new RegExp(`<testcase\\b[^>]*\\bname="${required}"`).test(xml)) {
         throw new Error(`Missing real account HTTP case: ${required}`);
+      }
+    }
+    for (const required of requiredAssistantTests) {
+      if (!new RegExp(`<testcase\\b[^>]*\\bname="${required}"`).test(xml)) {
+        throw new Error(`Missing real assistant transaction case: ${required}`);
       }
     }
   }
@@ -88,7 +100,7 @@ function main() {
   process.stdout.write(JSON.stringify(result) + '\n');
 }
 
-module.exports = { expectedSuites, requiredAccountTests, suiteResult, verify };
+module.exports = { expectedSuites, requiredAccountTests, requiredAssistantTests, suiteResult, verify };
 if (require.main === module) {
   try { main(); }
   catch (error) { console.error(`MySQL lifecycle gate failed: ${error.message}`); process.exitCode = 1; }

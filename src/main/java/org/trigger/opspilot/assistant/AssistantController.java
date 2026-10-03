@@ -57,7 +57,10 @@ public class AssistantController {
     public ApiResponse<AssistantService.MessageView> message(
             @AuthenticationPrincipal UserPrincipal user, @PathVariable long id,
             @Valid @RequestBody SendMessageRequest request) {
-        return ApiResponse.ok(service.sendMessage(id, user.id(), request.content()));
+        var lease = authorization.current();
+        var message = service.sendMessage(id, user.id(), request.content());
+        if (!authorization.authorized(lease, false)) throw new CredentialsExpiredException("Assistant session expired");
+        return ApiResponse.ok(message);
     }
 
     @PostMapping(value = "/sessions/{id}/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)

@@ -1,0 +1,85 @@
+{
+  "sourceCommit": "checkpoint69-working-tree-before-upload",
+  "targeted": {
+    "log": "target/cp69-before/final-fence-first-fix.log",
+    "sha256": "b8b0fe9518c8e0a791c2f33b683287082b2abe6e89173279fcdda9cc9b77a41f",
+    "found": 37,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "executed": 37
+  },
+  "utc": {
+    "log": "target/cp69-before/full-utc-final.log",
+    "sha256": "fee838c272c5a54f9be532f71bb5c65cb074e27e19766d63e3d5e9b8d6531af0",
+    "found": 427,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 100,
+    "executed": 327
+  },
+  "shanghai": {
+    "log": "target/cp69-before/full-shanghai-package-final.log",
+    "sha256": "b3a81d29ddfdca6324b5d54f7a6b68b811514f44f6939ab4533c9dd30281eaeb",
+    "found": 427,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 100,
+    "executed": 327
+  },
+  "nativeHttpRegression": {
+    "status": "PASS",
+    "baselineCapture": false,
+    "tokensPersistedToEvidence": false,
+    "jarSha256": "1a28cdf37b55743ba3070411ac17eb69c3b0e1882c360f7406e604472957856a",
+    "fixture": "actual production DashScope HTTP adapter against an owned controlled server, not model quality",
+    "database": "fresh owned H2 memory database",
+    "userFileDatabaseModified": false,
+    "cases": [
+      {
+        "name": "synchronous-logout",
+        "responseStatus": 401,
+        "lateAssistantMessages": 0,
+        "lateAnswerSent": false,
+        "closedBeforeProviderRelease": false
+      },
+      {
+        "name": "stream-logout",
+        "responseStatus": 200,
+        "lateAssistantMessages": 0,
+        "lateAnswerSent": false,
+        "closedBeforeProviderRelease": true
+      },
+      {
+        "name": "clear-messages",
+        "responseStatus": 409,
+        "lateAssistantMessages": 0,
+        "lateAnswerSent": false,
+        "closedBeforeProviderRelease": false
+      },
+      {
+        "name": "timeout",
+        "closedBeforeProviderRelease": true,
+        "explicitSafeErrorEvent": true,
+        "lateWorkerSettledByFreshStream": true,
+        "lateAssistantMessages": 0
+      }
+    ],
+    "startedPid": 68856,
+    "productionHttpAdapterPositiveControl": true,
+    "freshSessionProductionHttpAnswer": true,
+    "providerTransportCalls": 7,
+    "ownedProcessStopped": true,
+    "ownedProviderStopped": true,
+    "unexpectedJarErrors": 0
+  },
+  "fiveSharedAssistantTransactionCasesAddedToH2AndMySql": true,
+  "localNewMySqlMatrixActuallyExecuted": false,
+  "minimumRemoteMySqlTests": 93,
+  "requiredAccountHttpCases": 20,
+  "requiredAssistantTransactionCases": 5,
+  "mysqlGateUnitTests": 14,
+  "mysqlGateFailures": 0,
+  "unchangedFrontendSourcesAndStaticAssets": true,
+  "firstCp68SaturationTimeoutRootCauseProven": false
+}

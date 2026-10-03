@@ -2,6 +2,7 @@ package org.trigger.opspilot.assistant;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,10 +36,57 @@ class AssistantSessionRevocationIntegrationTest {
     @Autowired ObjectMapper json;
     @Autowired JdbcClient jdbc;
     @MockBean AssistantAiService ai;
+    @org.springframework.boot.test.mock.mockito.SpyBean AssistantService assistant;
     @Autowired AssistantExecutionManager execution;
     @Autowired org.trigger.opspilot.security.JwtProperties jwtProperties;
     final HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build();
     static final String LATE_ANSWER = "CP68-controlled-late-answer-must-not-be-persisted-or-sent";
+
+    @Test void shouldNotSendCommittedAnswerAfterLogoutCompletesBeforeControllerReturns() throws Exception {
+        verifySynchronousReturnFence(true);
+    }
+    @Test void shouldNotSendCommittedAnswerAfterLeaseExpiresBeforeControllerReturns() throws Exception {
+        verifySynchronousReturnFence(false);
+    }
+    private void verifySynchronousReturnFence(boolean revoke) throws Exception {
+        String normal = login();
+        long sessionId = createSession(normal);
+        var identity = com.auth0.jwt.JWT.decode(normal);
+        long owner = identity.getClaim("uid").asLong();
+        var expiry = java.time.Instant.now().plusSeconds(2);
+        String token = revoke ? normal : com.auth0.jwt.JWT.create().withIssuer("opspilot").withSubject(identity.getSubject())
+                .withClaim("uid", owner).withClaim("sv", identity.getClaim("sv").asLong()).withExpiresAt(expiry)
+                .sign(com.auth0.jwt.algorithms.Algorithm.HMAC256(jwtProperties.jwtSecret()));
+        String question = "return-guard-" + UUID.randomUUID();
+        var committed = new CountDownLatch(1);
+        var returnToController = new CountDownLatch(1);
+        when(ai.answer(anyString(), anyString(), anyString())).thenReturn(LATE_ANSWER);
+        org.mockito.Mockito.doAnswer(invocation -> {
+            var answer = invocation.callRealMethod();
+            committed.countDown();
+            assertThat(returnToController.await(5, TimeUnit.SECONDS)).isTrue();
+            return answer;
+        }).when(assistant).sendMessage(sessionId, owner, question);
+        var pending = http.sendAsync(message(sessionId, token, question, false), HttpResponse.BodyHandlers.ofString());
+        try {
+            assertThat(committed.await(3, TimeUnit.SECONDS)).isTrue();
+            assertThat(count(sessionId, "ASSISTANT")).isEqualTo(1);
+            assertThat(audits(sessionId)).isEqualTo(1);
+            if (revoke) assertThat(post("/api/v1/auth/logout-all", normal, Map.of()).statusCode()).isEqualTo(200);
+            else while (java.time.Instant.now().isBefore(expiry)) Thread.sleep(10);
+            returnToController.countDown();
+            var response = pending.get(3, TimeUnit.SECONDS);
+            assertThat(response.statusCode()).isEqualTo(401);
+            assertThat(response.body()).doesNotContain(LATE_ANSWER);
+            // It completed under valid authority before revocation: retain history for a new valid login.
+            assertThat(count(sessionId, "ASSISTANT")).isEqualTo(1);
+            assertThat(audits(sessionId)).isEqualTo(1);
+            String fresh = login();
+            var history = http.send(request("/api/v1/assistant/sessions/" + sessionId, fresh).GET().build(), HttpResponse.BodyHandlers.ofString());
+            assertThat(history.statusCode()).isEqualTo(200);
+            assertThat(history.body()).contains(LATE_ANSWER);
+        } finally { returnToController.countDown(); pending.get(8, TimeUnit.SECONDS); }
+    }
 
     @Test
     void shouldRejectLateSynchronousAnswerAfterCommittedLogoutAndAllowFreshLogin() throws Exception {
@@ -149,7 +197,7 @@ class AssistantSessionRevocationIntegrationTest {
         } finally { release.countDown(); pending.get(8, TimeUnit.SECONDS); }
     }
 
-    @Test
+    @RepeatedTest(8)
     void shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot() throws Exception {
         String token = login();
         long runningId = createSession(token), queuedId = createSession(token), rejectedId = createSession(token);

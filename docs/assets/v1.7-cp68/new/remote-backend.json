@@ -1,0 +1,210 @@
+{
+  "sourceCommit": "40e0c2fa617ae1fe705652b67391495d918356f6",
+  "runId": 37092997128,
+  "successfulJobs": 15,
+  "authenticationArtifact": {
+    "id": 11263781523,
+    "officialAndActualZipSha256": "17e35c9b51edf978a75d62a93b6757d1282400a01491dcdbcf8359e41ec34ed4",
+    "independentlyScannedJarLogs": 4,
+    "unexpectedFullLogLines": 0,
+    "assistant": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "tokensPersistedToEvidence": false,
+      "jarSha256": "f0997785e6b2d9afb0a73faef27e034988ad39a1bb253ed114b5bae129edf4bf",
+      "fixture": "actual production DashScope HTTP adapter against an owned controlled server, not model quality",
+      "database": "fresh owned H2 memory database",
+      "userFileDatabaseModified": false,
+      "cases": [
+        {
+          "name": "synchronous-logout",
+          "responseStatus": 401,
+          "lateAssistantMessages": 0,
+          "lateAnswerSent": false,
+          "closedBeforeProviderRelease": false
+        },
+        {
+          "name": "stream-logout",
+          "responseStatus": 200,
+          "lateAssistantMessages": 0,
+          "lateAnswerSent": false,
+          "closedBeforeProviderRelease": true
+        },
+        {
+          "name": "clear-messages",
+          "responseStatus": 409,
+          "lateAssistantMessages": 0,
+          "lateAnswerSent": false,
+          "closedBeforeProviderRelease": false
+        },
+        {
+          "name": "timeout",
+          "closedBeforeProviderRelease": true,
+          "explicitSafeErrorEvent": true,
+          "lateWorkerSettledByFreshStream": true,
+          "lateAssistantMessages": 0
+        }
+      ],
+      "startedPid": 2815,
+      "productionHttpAdapterPositiveControl": true,
+      "freshSessionProductionHttpAnswer": true,
+      "providerTransportCalls": 7,
+      "ownedProcessStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "agent": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "tokensPersistedToEvidence": false,
+      "jarSha256": "f0997785e6b2d9afb0a73faef27e034988ad39a1bb253ed114b5bae129edf4bf",
+      "evidenceDirectory": "target/agent-session-it/run-lAFwJc",
+      "fixture": "owned real HTTP Prometheus response held until logout",
+      "database": "fresh runner-owned H2 memory database",
+      "userFileDatabaseModified": false,
+      "startedPid": 2710,
+      "logoutStatus": 200,
+      "revokedGetClosedBeforeProviderRelease": true,
+      "revokedPostClosedBeforeProviderRelease": true,
+      "otherAccountStreamStillOpenBeforeRelease": true,
+      "finalRunStatus": "CANCELLED",
+      "reportCreated": false,
+      "observedTerminationKind": "CANCEL",
+      "providerRequests": 2,
+      "settlementAfterReleaseMs": 31,
+      "providerReadBudgetMs": 10000,
+      "persistedEventTypes": [
+        "RUN_QUEUED",
+        "RUN_STARTED",
+        "PLAN_COMPLETED",
+        "STEP_STARTED",
+        "EVIDENCE_COLLECTED",
+        "STEP_STARTED",
+        "EVIDENCE_COLLECTED",
+        "STEP_STARTED",
+        "RUN_CANCEL_REQUESTED",
+        "RUN_CANCELLED"
+      ],
+      "runId": 1,
+      "otherAccountRemainsAuthorized": true,
+      "revokedTokenRejectedOnNextRequest": true,
+      "freshSessionCompletesAfterInterruptedRun": true,
+      "ownedProcessStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "auth": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "url": "http://127.0.0.1:9933/api/v1",
+      "database": "fresh runner-owned H2 file",
+      "userFileDatabaseModified": false,
+      "originalProcessesNotStopped": true,
+      "evidenceDirectory": "target/auth-session-it/run-gBZdPb",
+      "startedPids": [
+        2533,
+        2618
+      ],
+      "stoppedPids": [
+        2533,
+        2618
+      ],
+      "unexpectedJarErrors": 0,
+      "tokensPersistedToEvidence": false,
+      "logoutStatus": 200,
+      "passwordStatus": 200,
+      "oldTokensRejectedAfterFreshLogin": true,
+      "oldTokensRejectedAfterPasswordChange": true,
+      "oldTokensRejectedAfterJvmRestart": true,
+      "currentTokenSurvivesRestart": true,
+      "persistedAuthVersion": 2,
+      "unauthorizedBusinessWritesUnchanged": true,
+      "auditRows": [
+        {
+          "id": 4,
+          "actor": "系统管理员",
+          "action": "AUTH_PASSWORD_CHANGED",
+          "targetType": "USER",
+          "targetId": "1",
+          "detail": "本人修改密码并撤销全部已签发会话；必须重新登录",
+          "ipAddress": "127.0.0.1",
+          "createdAt": "2026-10-03T03:23:27.456132"
+        },
+        {
+          "id": 3,
+          "actor": "系统管理员",
+          "action": "AUTH_SESSIONS_REVOKED",
+          "targetType": "USER",
+          "targetId": "1",
+          "detail": "撤销本人全部已签发会话；必须重新登录",
+          "ipAddress": "127.0.0.1",
+          "createdAt": "2026-10-03T03:23:26.960438"
+        }
+      ],
+      "auditRowsUnchangedAfterRestart": true,
+      "ownedProcessesStopped": true
+    }
+  },
+  "mysqlArtifact": {
+    "id": 11263031702,
+    "officialAndActualZipSha256": "b5461f1457f4e5a5738bf594344019fe031645a8ed20508db8a76618bfcd820f",
+    "replayedWithExactSourceCommitGate": true,
+    "newCheckpoint69AssistantMatrixIncluded": false,
+    "status": "PASS",
+    "suites": [
+      {
+        "name": "org.trigger.opspilot.MySqlCompatibilityIntegrationTest",
+        "tests": 35,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "executed": 88,
+    "skipped": 0,
+    "unexpectedLogLines": 0,
+    "startedPools": [
+      "HikariPool-1",
+      "HikariPool-2",
+      "HikariPool-3",
+      "HikariPool-4",
+      "HikariPool-5"
+    ],
+    "stoppedPools": [
+      "HikariPool-1",
+      "HikariPool-2",
+      "HikariPool-3",
+      "HikariPool-4",
+      "HikariPool-5"
+    ],
+    "completeMavenOutputIncludingShutdown": true
+  }
+}

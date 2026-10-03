@@ -91,6 +91,27 @@ class MySqlCompatibilityIntegrationTest {
     @Autowired private org.springframework.security.crypto.password.PasswordEncoder httpPasswordEncoder;
     @Autowired private org.trigger.opspilot.security.SessionAuthorization sessionAuthorization;
     @org.springframework.boot.test.mock.mockito.SpyBean private org.trigger.opspilot.audit.AuditService sessionAudit;
+    @Autowired private org.trigger.opspilot.assistant.AssistantService assistantService;
+
+    private org.trigger.opspilot.assistant.AssistantTransactionScenarios assistantScenario() {
+        return new org.trigger.opspilot.assistant.AssistantTransactionScenarios(
+                jdbcClient, assistantService, sessionAuthorization, transactionManager, dataSource);
+    }
+    @Test @Order(36) void shouldRollbackAssistantAnswerWhenCompletionAuditInsertFails() throws Exception {
+        try (var s = assistantScenario()) { s.auditInsertFailureRollsBackAnswerAndTitle(); }
+    }
+    @Test @Order(37) void shouldRollbackAssistantCompletionWhenFinalStopCheckFails() {
+        try (var s = assistantScenario()) { s.finalStopRollsBackAnswerTitleAndAlreadyInsertedAudit(); }
+    }
+    @Test @Order(38) void shouldFenceAssistantFinalCommitAgainstConcurrentRevocation() throws Exception {
+        try (var s = assistantScenario()) { s.finalAccountLockWaitSeesCommittedRevocation(); }
+    }
+    @Test @Order(39) void shouldRecheckAssistantLeaseExpiryAfterFinalLockWait() throws Exception {
+        try (var s = assistantScenario()) { s.finalAccountLockWaitRechecksExpiry(); }
+    }
+    @Test @Order(40) void shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence() {
+        try (var s = assistantScenario()) { s.expiryDuringCompletionRollsBackAnswerTitleAndAudit(); }
+    }
 
     private org.trigger.opspilot.security.AuthSessionHttpScenarios sessionScenario() {
         return new org.trigger.opspilot.security.AuthSessionHttpScenarios(jdbcClient, httpMapper, httpPasswordEncoder, httpPort);

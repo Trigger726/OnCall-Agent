@@ -146,6 +146,7 @@ public class AssistantService {
                         """)
                     .param("id", messageId).query(AssistantService::mapMessage).single();
             checkpoint.run(); // A stop during persistence rolls back answer, title and completion audit together.
+            requireAuthorization(lease, false); // Also fence synchronous callers whose checkpoint is a no-op.
             return message;
         });
     }

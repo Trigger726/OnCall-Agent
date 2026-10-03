@@ -2,7 +2,9 @@
 
 本目录用于保存 OpsPilot 的阶段性验收报告。项目按“完成一组改动、形成一组证据、写入一份报告”的节奏持续迭代，报告中的结论只覆盖已经获得直接证据的范围。
 
-最新本地限定验收：[V1.7-checkpoint-68.md](V1.7-checkpoint-68.md)：助手原会话/清空删除围栏、有界流队列503/预算与安全关闭，旧新JAR真实HTTP适配器正对照通过；双时区408发现/313执行/95条件跳过、16生命周期通过。本次提交远端/新MySQL待验，首次连接三秒超时根因未证明，旧Demo/失败和完整目标保留。
+最新本地限定验收：[V1.7-checkpoint-69.md](V1.7-checkpoint-69.md)：晚同步返回/最后提交授权空窗三反例已补，合法历史保留/到期事务回滚；五共用事务矩阵、37定向、双时区427发现/327执行/100条件跳过、十四门禁、新JAR真实适配器七次回归通过。本提交新MySQL93/远端待验，首次Future三秒等待根因和完整目标仍继续。
+
+68自己的40e0c2f已补[Run37092997128](https://github.com/Trigger726/OnCall-Agent/actions/runs/37092997128)十五作业success；认证/助手实际生产HTTP七次/四份JAR日志、MySQL88一般兼容回归/五池关闭与两ZIP源SHA摘要及精确原门禁重放已核验。后来发现的更晚提交/同步返回空窗由69另列，旧Demo/首连接Future三秒超时仍保留，不借旧绿灯外推新五事务矩阵。见[V1.7-checkpoint-68.md](V1.7-checkpoint-68.md)。
 
 67已补客户端自身远端验收：3b6247b的[Run37090872485](https://github.com/Trigger726/OnCall-Agent/actions/runs/37090872485)十五作业completed/success，浏览器ZIP源提交/官方digest与实际SHA256相符，Linux十三脚本退出码0、三入口真实logout/旧401/新admin凭证保留与服务端200已独立核对；九PNG实际存在，本次工件重放未重新目视截图。c903d59后端真实MySQL88/五池关闭及三工件定向重放原结论保留，跨节点、Trace偶发控制失败与完整目标仍继续。见[V1.7-checkpoint-67.md](V1.7-checkpoint-67.md)。
 
