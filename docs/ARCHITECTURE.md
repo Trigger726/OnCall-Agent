@@ -1,5 +1,11 @@
 # OpsPilot 架构设计
 
+## CP74底层原生模型流（尚未接默认端点）
+
+AssistantAiService.streamAnswer提供每次订阅独立状态的冷Flux，真实DashScope请求显式增量输出，关闭thinking与SDK内部工具执行；使用chatResponse保留finishReason，锁定SDK把线协议stop转为STOP。只接受单一生成、正常STOP和至少一个非空白片段；精确保留片段空白/Unicode，限制总输出10万UTF-16字符和1万响应帧；EOF、length、工具调用、晚错误或STOP后内容均失败，不自动重试、不拼规则降级。调用者取消会向上游传播，但该适配器自身不负责HTTP会话授权、任务预算或SQL提交。
+
+当前Controller仍调用完整answer路径，SQL事务、幂等、显式取消与前端正数答案ID协议未改。下一阶段需在有界worker内把订阅的取消/空闲预算与原工作租约连接，区分临时片段和已提交messageId，只有完整模型终态且原授权/请求有效才执行原最终事务；不能把取消冷订阅单测当成端点/跨节点取消已交付。证据与未验边界见[74报告](acceptance/V1.7-checkpoint-74.md)。
+
 ## CP73助手页面原请求意图
 
 助手对话首POST前冻结本人id/username、sessionId、UUID请求键与原问题；只保存在按账号及会话隔离的sessionStorage，不存Token。存储失败不发送，刷新只恢复本地意图，不自动POST。每次网络生命周期捕获原Token，响应头、JSON解码、SSE读取与UI落定均检查身份；账号变化清空当前页面数据但保留原账号本地意图，必须刷新重新加载。

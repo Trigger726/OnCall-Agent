@@ -141,10 +141,23 @@ jobs:
           cache: maven
       - name: Enable Maven wrapper
         run: chmod +x mvnw
+      - name: Verify assistant native incremental HTTP contract
+        run: |
+          set -o pipefail
+          mkdir -p target/assistant-native-it
+          ./mvnw -B -Duser.timezone=UTC -Dtest=AssistantAiStreamingTest,AssistantNativeStreamHttpTest test 2>&1 | tee target/assistant-native-it/maven.log
+          cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantAiStreamingTest.xml target/assistant-native-it/
+          cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest.xml target/assistant-native-it/
       - name: Test and package (UTC)
         run: ./mvnw -B -Duser.timezone=UTC package
       - name: Regression tests (Asia/Shanghai)
         run: ./mvnw -B -Duser.timezone=Asia/Shanghai test
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: assistant-native-contract-evidence
+          path: target/assistant-native-it/
+          retention-days: 30
 
   mysql-integration:
     name: MySQL 8.4 integration

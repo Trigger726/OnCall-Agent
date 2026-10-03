@@ -1,0 +1,413 @@
+{
+  "baselineSource": "79e4d5e3109b7ce18233a58e627598923cf7e6b7",
+  "overallGoalComplete": false,
+  "delivery": "Native Provider adapter tested; default endpoint and UI deliberately not switched",
+  "full": [
+    {
+      "file": "target/cp74-verify/backend-utc.log",
+      "sha256": "66ae65708e32d8cd5f397b4a46008a3901b05a9be7953d035a0cf7debbef1242",
+      "found": 476,
+      "executed": 370,
+      "failures": 0,
+      "errors": 0,
+      "conditionalSkipped": 106,
+      "buildSuccess": true,
+      "expectedNegativeTestErrorLines": [
+        "2026-10-03T10:29:50.948Z ERROR 85012 --- [opspilot] [oundedElastic-1] o.s.ai.chat.model.MessageAggregator      : Aggregation Error",
+        "2026-10-03T10:29:50.980Z ERROR 85012 --- [opspilot] [oundedElastic-1] o.s.ai.chat.model.MessageAggregator      : Aggregation Error",
+        "2026-10-03T10:30:31.047Z ERROR 85012 --- [opspilot] [           main] o.t.o.common.GlobalExceptionHandler      : Unhandled request error"
+      ],
+      "unexpectedLifecycleFailure": false,
+      "jwt": false
+    },
+    {
+      "file": "target/cp74-verify/backend-shanghai.log",
+      "sha256": "0685a4e6ea855f5ad7a106b8d2af9b7979add0572245bed1947fec98b2f5cf1f",
+      "found": 476,
+      "executed": 370,
+      "failures": 0,
+      "errors": 0,
+      "conditionalSkipped": 106,
+      "buildSuccess": true,
+      "expectedNegativeTestErrorLines": [
+        "2026-10-03T18:33:13.553+08:00 ERROR 86360 --- [opspilot] [oundedElastic-1] o.s.ai.chat.model.MessageAggregator      : Aggregation Error",
+        "2026-10-03T18:33:13.583+08:00 ERROR 86360 --- [opspilot] [oundedElastic-1] o.s.ai.chat.model.MessageAggregator      : Aggregation Error",
+        "2026-10-03T18:33:54.095+08:00 ERROR 86360 --- [opspilot] [           main] o.t.o.common.GlobalExceptionHandler      : Unhandled request error"
+      ],
+      "unexpectedLifecycleFailure": false,
+      "jwt": false
+    }
+  ],
+  "reports": [
+    {
+      "file": "target/cp74-verify/native-unit-utc.xml",
+      "sha256": "7627b24d9b0dfbc16c32cc7069384d753405cf64ab0524d41d19484eab551ddb",
+      "name": "org.trigger.opspilot.assistant.AssistantAiStreamingTest",
+      "tests": 13,
+      "testNames": [
+        "shouldBoundResponseCountIncludingEmptyFramesAndCancelSource",
+        "shouldCancelIdleUpstreamWithoutClaimingNormalCompletion",
+        "shouldPreserveExactIncrementalWhitespaceAndUnicodeWithEmptyStopFrame",
+        "shouldAcceptExactCharacterBoundaryAndRejectOverflowBeforeDelivery",
+        "shouldKeepValidationStateIsolatedForEachColdSubscription",
+        "shouldPropagateLateProviderFailureWithoutRetryOrFallbackEvenAfterStop",
+        "shouldRejectEmptyOrWhitespaceOnlyAnswerEvenWithStop",
+        "shouldAcceptExactResponseCountBoundary",
+        "shouldRejectUnknownFilteredOrToolTerminalWithoutEmittingItsContent",
+        "shouldRejectActualToolCallPayloadAndDisableSdkToolExecutionInPrompt",
+        "shouldRejectEmptyStreamAndNonterminalEof",
+        "shouldNotMergeMultipleAlternativeGenerations",
+        "shouldRejectMoreContentOrDuplicateTerminalAfterStop"
+      ]
+    },
+    {
+      "file": "target/cp74-verify/native-http-utc.xml",
+      "sha256": "60a2a2e88e54f8fd2419eca58b3c07b2b372747bf3053b373c04b81f4916a960",
+      "name": "org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest",
+      "tests": 4,
+      "testNames": [
+        "shouldRejectRealHttpEofWithoutStopRatherThanAcceptingPartialAnswer",
+        "shouldRequestNativeIncrementalProtocolRatherThanACompleteJsonAnswer",
+        "shouldRejectRealHttpLengthTerminationWithoutRetryOrRuleFallback",
+        "shouldDeliverFirstRealHttpDeltaBeforeProviderCanFinish"
+      ]
+    }
+  ],
+  "source": [
+    {
+      "file": "src/main/java/org/trigger/opspilot/assistant/AssistantAiService.java",
+      "sha256": "c64dc7ad392e6fb5746f3ae59ca36687dbe8d28ab0b46acc3910ad755f8d2411"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/assistant/AssistantAiStreamingTest.java",
+      "sha256": "acaad632f6b12b981c80cced5eeaec16b93730f425ce0aadbe031ae96e604ad5"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/assistant/AssistantNativeStreamHttpTest.java",
+      "sha256": "1a98407f8438fefae67c75d36dfad4a440e41690610a081100f349ad02f0ff3c"
+    }
+  ],
+  "jarSha256": "6141613a3bb0b447cb0d39438b135c560a6c11be7b2ddeb192a7b9c6479a80c1",
+  "oldJarSha256": "5c34bc4220214283493b690a5e1354596f9be09daec19e74f96006e39cf1dba8",
+  "frontend": {
+    "tests": 103,
+    "pass": 103,
+    "fail": 0,
+    "skipped": 0
+  },
+  "browserLifecycle": {
+    "tests": 17,
+    "pass": 17,
+    "fail": 0,
+    "skipped": 0
+  },
+  "logs": [
+    {
+      "file": "target/cp74-before/native-protocol-counterexample.log",
+      "sha256": "917556e0488d1f065198d2804ecbe7449904e4ab0b99f853108759b5f3c030a2",
+      "bytes": 4968,
+      "testSummary": [
+        "1",
+        "1",
+        "0",
+        "0"
+      ],
+      "buildSuccess": false,
+      "loggerErrorLines": [],
+      "jwt": false
+    },
+    {
+      "file": "target/cp74-before/AssistantNativeStreamHttpTest-counterexample.java",
+      "sha256": "c80f18fcbc0ce124f9a25ff009b4822f2171881e90b95b0fedcdc8b27c99500f",
+      "bytes": 2583,
+      "buildSuccess": false,
+      "loggerErrorLines": [],
+      "jwt": false
+    },
+    {
+      "file": "target/cp74-before/native-http-first.log",
+      "sha256": "3d505e51cdec2a5e8e8063517eb09c5fe5c4a49126609401524b184b41d414b1",
+      "bytes": 10970,
+      "testSummary": [
+        "4",
+        "1",
+        "1",
+        "0"
+      ],
+      "buildSuccess": false,
+      "loggerErrorLines": [],
+      "jwt": false
+    },
+    {
+      "file": "target/cp74-before/native-contract.log",
+      "sha256": "35e107e3e7af608d52f7ea38e9c55cc9e0da9f4ca1cd020ad6cbe74d3d4509ca",
+      "bytes": 6277,
+      "buildSuccess": false,
+      "loggerErrorLines": [
+        "[ERROR] COMPILATION ERROR : "
+      ],
+      "jwt": false
+    },
+    {
+      "file": "target/cp74-before/native-contract-fixed.log",
+      "sha256": "527dca7b8d1a141df240483393159b8cd8242c35a1bb1bab98675e0bc02ea269",
+      "bytes": 20372,
+      "testSummary": [
+        "15",
+        "0",
+        "0",
+        "0"
+      ],
+      "buildSuccess": true,
+      "loggerErrorLines": [
+        "18:25:52.140 [boundedElastic-1] ERROR org.springframework.ai.chat.model.MessageAggregator -- Aggregation Error",
+        "18:25:52.148 [boundedElastic-1] ERROR org.springframework.ai.chat.model.MessageAggregator -- Aggregation Error"
+      ],
+      "jwt": false
+    },
+    {
+      "file": "target/cp74-before/assistant-regression-utc.log",
+      "sha256": "0a8866de91e14019fd27f62df1dcdb6ea5bc4e3dad9884e0f5454fa26bf26eb6",
+      "bytes": 49674,
+      "testSummary": [
+        "71",
+        "0",
+        "0",
+        "0"
+      ],
+      "buildSuccess": true,
+      "loggerErrorLines": [
+        "10:27:22.719 [boundedElastic-1] ERROR org.springframework.ai.chat.model.MessageAggregator -- Aggregation Error",
+        "10:27:22.731 [boundedElastic-1] ERROR org.springframework.ai.chat.model.MessageAggregator -- Aggregation Error"
+      ],
+      "jwt": false
+    },
+    {
+      "file": "target/cp74-verify/backend-utc.log",
+      "sha256": "66ae65708e32d8cd5f397b4a46008a3901b05a9be7953d035a0cf7debbef1242",
+      "bytes": 589603,
+      "testSummary": [
+        "476",
+        "0",
+        "0",
+        "106"
+      ],
+      "buildSuccess": true,
+      "loggerErrorLines": [
+        "2026-10-03T10:29:50.948Z ERROR 85012 --- [opspilot] [oundedElastic-1] o.s.ai.chat.model.MessageAggregator      : Aggregation Error",
+        "2026-10-03T10:29:50.980Z ERROR 85012 --- [opspilot] [oundedElastic-1] o.s.ai.chat.model.MessageAggregator      : Aggregation Error",
+        "2026-10-03T10:30:31.047Z ERROR 85012 --- [opspilot] [           main] o.t.o.common.GlobalExceptionHandler      : Unhandled request error"
+      ],
+      "jwt": false
+    },
+    {
+      "file": "target/cp74-verify/frontend.log",
+      "sha256": "dbc1040d59024782fe615f90fb3b755cd2a56b68ba9386a9e04960cfb5242fa4",
+      "bytes": 9957,
+      "buildSuccess": false,
+      "loggerErrorLines": [],
+      "jwt": false
+    },
+    {
+      "file": "target/cp74-verify/lifecycle.log",
+      "sha256": "e2658b692fdd3728bab8b9833281ba82940b05b6e370c71f07d3332b7ff596d7",
+      "bytes": 1602,
+      "buildSuccess": false,
+      "loggerErrorLines": [],
+      "jwt": false
+    }
+  ],
+  "defaultUiCompatibility": {
+    "file": "target/assistant-request-ui-it/run-rDaPNz/result.json",
+    "result": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "url": "http://127.0.0.1:9945/assistant",
+      "browserReason": "Browser plugin not available; existing Playwright",
+      "viewports": [
+        "1440x1000",
+        "390x844"
+      ],
+      "jarSha256": "6141613a3bb0b447cb0d39438b135c560a6c11be7b2ddeb192a7b9c6479a80c1",
+      "fixture": "owned production HTTP adapter and real browser controls, not model quality",
+      "tokensPersistedToEvidence": false,
+      "userFileDatabaseModified": false,
+      "cases": [
+        {
+          "name": "explicit-running-cancel",
+          "originalKeyUsed": true,
+          "serverState": "CANCELLED",
+          "lateAnswers": 0,
+          "actualWorkerSettledByFreshAnswer": true
+        },
+        {
+          "name": "lost-completed-response-refresh-query",
+          "actualCompletedResponseLost": true,
+          "originalAnswerIdPreserved": true,
+          "streamPostsIncludingRecovery": 1,
+          "modelCallsIncludingRecovery": 1
+        },
+        {
+          "name": "lost-cancel-response",
+          "backendCancelResponseActuallyLost": true,
+          "noFalseCancelledBeforeQuery": true,
+          "queriedServerState": "CANCELLED",
+          "cancelAuditRows": 1,
+          "lateAnswers": 0
+        },
+        {
+          "name": "not-admitted-manual-retry",
+          "serverLookupStatus": 404,
+          "noAutomaticPost": true,
+          "exactOriginalKeyAndContent": true,
+          "actualModelCalls": 1
+        },
+        {
+          "name": "queued-ui-cancel",
+          "queriedStateBeforeCancel": "QUEUED",
+          "questionAndAnswerRows": 0,
+          "modelCallsForQueuedQuestion": 0
+        },
+        {
+          "name": "real-capacity-feedback",
+          "serverCapacity": "one worker and one queue slot",
+          "actualRejectedStatus": 503,
+          "actualJsonErrorResponse": true,
+          "rejectedQuestionRows": 0,
+          "noAutomaticPost": true,
+          "lookupStatus": 404,
+          "manualRecoveryWithOriginalKeyAndQuestion": true
+        },
+        {
+          "name": "real-budget-timeout",
+          "serverBudgetSeconds": 30,
+          "queriedTerminal": "TIMED_OUT",
+          "originalRequestNotRerun": true,
+          "lateAnswers": 0,
+          "actualWorkerSettledByFreshAnswer": true
+        },
+        {
+          "name": "late-successful-clear-after-account-change",
+          "actualOldClearStatus": 200,
+          "actualOldLogoutStatus": 200,
+          "replacementTokenPreserved": true,
+          "replacementServerStatus": 200,
+          "oldPrivateMessagesNotReintroduced": true
+        }
+      ],
+      "screenshots": [
+        "waiting-desktop.png",
+        "cancelled-desktop.png",
+        "cancelled-mobile.png",
+        "recovery-desktop.png",
+        "recovered-completed-desktop.png",
+        "queued-desktop.png",
+        "saturated-desktop.png",
+        "timed-out-mobile.png"
+      ],
+      "pageErrors": [],
+      "consoleErrors": [
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: the server responded with a status of 404 ()",
+        "Failed to load resource: the server responded with a status of 503 ()",
+        "Failed to load resource: the server responded with a status of 404 ()"
+      ],
+      "startedPid": 89164,
+      "unexpectedConsoleErrors": [],
+      "providerTransportCalls": 12,
+      "streamResponseStatuses": [
+        {
+          "status": 200,
+          "contentType": "text/event-stream;charset=UTF-8"
+        },
+        {
+          "status": 200,
+          "contentType": "text/event-stream;charset=UTF-8"
+        },
+        {
+          "status": 200,
+          "contentType": "text/event-stream;charset=UTF-8"
+        },
+        {
+          "status": 200,
+          "contentType": "text/event-stream;charset=UTF-8"
+        },
+        {
+          "status": 503,
+          "contentType": "application/json;charset=UTF-8"
+        },
+        {
+          "status": 200,
+          "contentType": "text/event-stream;charset=UTF-8"
+        },
+        {
+          "status": 200,
+          "contentType": "text/event-stream;charset=UTF-8"
+        },
+        {
+          "status": 200,
+          "contentType": "text/event-stream;charset=UTF-8"
+        }
+      ],
+      "ownedProcessStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "log": {
+      "file": "target/assistant-request-ui-it/run-rDaPNz/jar.log",
+      "sha256": "1eef1ea68382551bac00ada8447675cf38cad4f83f8ca00d3ae7d4dd64d2e0e0",
+      "unexpectedErrors": 0,
+      "jwt": false
+    },
+    "screenshots": [
+      {
+        "file": "target/assistant-request-ui-it/run-rDaPNz/waiting-desktop.png",
+        "sha256": "223544d152329e8c60a40a2b7257eab387d203123a932855fff8fcde2f5ec4dc"
+      },
+      {
+        "file": "target/assistant-request-ui-it/run-rDaPNz/cancelled-desktop.png",
+        "sha256": "f4f8e6ecf05696ee082fee7cf1f3829247e4616bf4c7b364b0b28adea1b383dc"
+      },
+      {
+        "file": "target/assistant-request-ui-it/run-rDaPNz/cancelled-mobile.png",
+        "sha256": "30d94a632cdc85b28a0e06d24483e45c95b4e862df466eb8c2dcef2e18f81074"
+      },
+      {
+        "file": "target/assistant-request-ui-it/run-rDaPNz/recovery-desktop.png",
+        "sha256": "8157d28b8aef95053d08274febf6e2ed88cf0a5965d79082d75da230b144a55f"
+      },
+      {
+        "file": "target/assistant-request-ui-it/run-rDaPNz/recovered-completed-desktop.png",
+        "sha256": "db0662b75f49f8217b5ec2bf5462b2e6467bf2e21f2003e253e065d5bc6a60ed"
+      },
+      {
+        "file": "target/assistant-request-ui-it/run-rDaPNz/queued-desktop.png",
+        "sha256": "f829f0218ff32c5087c6593c7636961d27a6a38a1720d27f4ac1f73f18684ff2"
+      },
+      {
+        "file": "target/assistant-request-ui-it/run-rDaPNz/saturated-desktop.png",
+        "sha256": "97d8d4df0568135b765c83a168019fcf41e23ca7208f2622d61335f4bb043f7f"
+      },
+      {
+        "file": "target/assistant-request-ui-it/run-rDaPNz/timed-out-mobile.png",
+        "sha256": "721b5be26393471619a5b6c15126503055c168edccd29b105c0f8a5b8030a296"
+      }
+    ]
+  },
+  "visuallyInspected": [
+    "default-cancelled-mobile.png",
+    "default-recovered-completed-desktop.png"
+  ],
+  "otherScreenshots": "existence and digests checked only",
+  "ownRemote": "pending after upload; do not reuse CP73 CI",
+  "limitations": [
+    "No native default endpoint/UI yet",
+    "Native Work deadline/revocation/cancellation subscription integration and SQL completion fence not yet tested",
+    "Controlled HTTP and mock protocol, not model quality",
+    "Local Docker not running; 106 conditional integrations skipped",
+    "Two injected model-error logs plus one existing handler-error negative test are retained in each full Maven run"
+  ]
+}
