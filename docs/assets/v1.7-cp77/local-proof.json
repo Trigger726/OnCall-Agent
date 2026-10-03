@@ -1,0 +1,1577 @@
+{
+  "files": [
+    {
+      "path": "target/cp77-before/backend-utc-first.log",
+      "bytes": 605895,
+      "sha256": "ac027029843f641f1ed5565f33994d164b97df263b287d09659f6ab26adae80f"
+    },
+    {
+      "path": "target/cp77-before/backend-shanghai-first.log",
+      "bytes": 619900,
+      "sha256": "98ca36cfd60d19b7e12a3d67293d898dfe20fb5afec647e49e2964e4da41630b"
+    },
+    {
+      "path": "target/cp77-before/transport-contract-first.log",
+      "bytes": 23006,
+      "sha256": "31b61c464267506913aa50f376b8e5f62ccbd971a2571d3f7321bd8a8cf94c93"
+    },
+    {
+      "path": "target/cp77-before/transport-contract-second.log",
+      "bytes": 21057,
+      "sha256": "71337e1345deb84a9d6b2b410eaf9a237f8c9f162295c0d0fb81eb202fb428d3"
+    },
+    {
+      "path": "scripts/verify-assistant-slow-consumer-ci.cjs",
+      "bytes": 19035,
+      "sha256": "dc505a4b981c31e997ad96e3ae33dbdd315eb9afec2114fabf4a38604fe382b5"
+    },
+    {
+      "path": "scripts/verify-assistant-native-ui-ci.cjs",
+      "bytes": 23737,
+      "sha256": "4adf79cd4f5c98383857266196d5e72f8c3aeb491503a3d8432e0ea1b05a055b"
+    },
+    {
+      "path": "src/main/java/org/trigger/opspilot/assistant/AssistantController.java",
+      "bytes": 13805,
+      "sha256": "2733f4a8fe8f85fa3ac3fb3d0a6242c15edbf2ca84415529d9c18f268461ed9e"
+    },
+    {
+      "path": "src/main/java/org/trigger/opspilot/assistant/AssistantStreamTransport.java",
+      "bytes": 8964,
+      "sha256": "297ccd1ff8b7b1db75a529754b639de89898248fba59c8ccd0eef774b6ef5757"
+    },
+    {
+      "path": "src/main/resources/application.yml",
+      "bytes": 6097,
+      "sha256": "9f0f2e8e3c24b93c98e613167b2df27230bf33cae845ae5e591ccf68302942aa"
+    },
+    {
+      "path": "src/test/java/org/trigger/opspilot/assistant/AssistantStreamTransportTest.java",
+      "bytes": 9591,
+      "sha256": "2e91b1b7c8bd8e37c86d1995a8370e8b3fb5b4c9bea02fcfce2ed0863f5e8fc3"
+    }
+  ],
+  "runs": [
+    {
+      "result": {
+        "status": "PASS",
+        "baselineCapture": false,
+        "fixture": "owned real native model HTTP and paused TCP SSE clients; actual Tomcat write stacks required",
+        "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+        "modelWorkers": 1,
+        "modelQueueCapacity": 1,
+        "outputWriters": 2,
+        "outputQueueCapacity": 1,
+        "maximumCharactersBeforeRelease": 99907,
+        "maximumNativeFramesBeforeRelease": 9991,
+        "tokensPersistedToEvidence": false,
+        "userFileDatabaseModified": false,
+        "cases": [
+          {
+            "name": "cancel-slow-client",
+            "cancelStatus": 200,
+            "requestStatus": "CANCELLED",
+            "cancelledAnswerRows": 0,
+            "cancellationAudits": 1,
+            "modelHttpClosedBeforeSocketResume": true,
+            "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+            "providerReleased": false
+          },
+          {
+            "name": "bounded-output-saturation",
+            "blockedWriters": 2,
+            "queuedTransport": 1,
+            "rejectedStatus": 503,
+            "rejectionCode": "ASSISTANT_STREAM_SATURATED",
+            "rejectedQuestionRows": 0,
+            "rejectedModelCalls": 0,
+            "rejectedKeyStatus": 404,
+            "queuedRequestCancelledAndModelHttpClosedBeforeWriterAvailable": true,
+            "synchronousWorkerStillUsable": true
+          },
+          {
+            "name": "revoke-slow-client",
+            "persistedStatus": "REVOKED",
+            "oldTokenStatus": 401,
+            "answerRows": 0,
+            "modelHttpClosedBeforeSocketResume": true,
+            "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+            "noRevokedTerminalPayload": true,
+            "alreadyBufferedBytesRecallClaimed": false
+          },
+          {
+            "name": "timeout-slow-client",
+            "originalBudgetSeconds": 12,
+            "persistedStatus": "TIMED_OUT",
+            "answerRows": 0,
+            "modelHttpClosedBeforeSocketResume": true,
+            "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+            "timeoutEventAfterWriterReleased": true
+          }
+        ],
+        "startedPids": [
+          102784,
+          80840
+        ],
+        "stoppedPids": [
+          102784,
+          80840
+        ],
+        "providerCalls": 9,
+        "providerFrames": [
+          {
+            "question": "cp77-cancel-49515687-e6c6-459a-b85a-2dca2a831bca",
+            "calls": 1,
+            "framesWritten": 9991,
+            "charactersWritten": 99907
+          },
+          {
+            "question": "cp77-fresh-before-resume-4549cd59-f485-48f8-b6e1-34fd39a38457",
+            "calls": 1
+          },
+          {
+            "question": "cp77-saturation-a2d07c61-ab45-4f58-b9c5-6049b5e42205",
+            "calls": 1,
+            "framesWritten": 9991,
+            "charactersWritten": 99907
+          },
+          {
+            "question": "cp77-queued-output-4896aff2-30ab-4d15-80ad-4c8b4c4dbbba",
+            "calls": 1
+          },
+          {
+            "question": "cp77-rejected-output-f2919706-013a-4e58-a75e-199876f96730",
+            "calls": 0
+          },
+          {
+            "question": "cp77-sync-control-during-output-saturation-3cbb328e-5e56-4250-ba9b-caaf731b8563",
+            "calls": 1
+          },
+          {
+            "question": "cp77-revoke-d391341f-df38-4a64-af82-ba1f79bcace9",
+            "calls": 1,
+            "framesWritten": 9991,
+            "charactersWritten": 99907
+          },
+          {
+            "question": "cp77-fresh-after-revoke-before-resume-3fb20b1e-e2b9-4c27-bc48-911fe10ae4d3",
+            "calls": 1
+          },
+          {
+            "question": "cp77-timeout-206f79f2-d85f-468b-97f9-2ff903392287",
+            "calls": 1,
+            "framesWritten": 9991,
+            "charactersWritten": 99907
+          },
+          {
+            "question": "cp77-fresh-after-timeout-before-resume-09717a7f-7d68-4b00-9743-c4e96a967fea",
+            "calls": 1
+          }
+        ],
+        "ownedProcessesStopped": true,
+        "ownedProviderStopped": true,
+        "unexpectedJarErrors": 0
+      },
+      "files": [
+        {
+          "path": "target/assistant-slow-consumer-it/run-ph54sj/cancel-threads.txt",
+          "bytes": 78985,
+          "sha256": "9c23930948e3ebd1211e92e470633df9b57ad0a91e6ed1b4fc25d0e2c84db157"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-ph54sj/jar-1.log",
+          "bytes": 15086,
+          "sha256": "4a27a30fe3c1a8e1afc817d514e2311311c5686fb63197216514c4a096179ceb"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-ph54sj/jar-2.log",
+          "bytes": 15012,
+          "sha256": "e435322178c0a6b724956d5f8829eb31593314100da883381791a641cbee0e73"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-ph54sj/result.json",
+          "bytes": 3498,
+          "sha256": "ea4e167097331289a42a2e2a599436a42925217112fd3bdf65e4eb8556eba10e"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-ph54sj/revoke-threads.txt",
+          "bytes": 81812,
+          "sha256": "8ecbc6cbbbf1f6b5ce70bc41fec23e06910fd55a9957a158d4d5e8b4cf973e59"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-ph54sj/saturation-threads.txt",
+          "bytes": 82438,
+          "sha256": "6c148f907344511a80276aeb2b6e5dbd68428c103614bd1093530d7c6123e9de"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-ph54sj/timeout-threads.txt",
+          "bytes": 80349,
+          "sha256": "fe3d4371f9af5bb930be973288f0ea970ceaa960582ccfe8998dfc5b9f3383d3"
+        }
+      ],
+      "directory": "target/assistant-slow-consumer-it/run-ph54sj"
+    },
+    {
+      "result": {
+        "status": "PASS",
+        "baselineCapture": false,
+        "fixture": "owned real native model HTTP and paused TCP SSE clients; actual Tomcat write stacks required",
+        "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+        "modelWorkers": 1,
+        "modelQueueCapacity": 1,
+        "outputWriters": 2,
+        "outputQueueCapacity": 1,
+        "maximumCharactersBeforeRelease": 99907,
+        "maximumNativeFramesBeforeRelease": 9991,
+        "tokensPersistedToEvidence": false,
+        "userFileDatabaseModified": false,
+        "cases": [
+          {
+            "name": "cancel-slow-client",
+            "cancelStatus": 200,
+            "requestStatus": "CANCELLED",
+            "cancelledAnswerRows": 0,
+            "cancellationAudits": 1,
+            "modelHttpClosedBeforeSocketResume": true,
+            "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+            "providerReleased": false
+          },
+          {
+            "name": "bounded-output-saturation",
+            "blockedWriters": 2,
+            "queuedTransport": 1,
+            "rejectedStatus": 503,
+            "rejectionCode": "ASSISTANT_STREAM_SATURATED",
+            "rejectedQuestionRows": 0,
+            "rejectedModelCalls": 0,
+            "rejectedKeyStatus": 404,
+            "queuedRequestCancelledAndModelHttpClosedBeforeWriterAvailable": true,
+            "synchronousWorkerStillUsable": true
+          },
+          {
+            "name": "revoke-slow-client",
+            "persistedStatus": "REVOKED",
+            "oldTokenStatus": 401,
+            "answerRows": 0,
+            "modelHttpClosedBeforeSocketResume": true,
+            "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+            "noRevokedTerminalPayload": true,
+            "alreadyBufferedBytesRecallClaimed": false
+          },
+          {
+            "name": "timeout-slow-client",
+            "originalBudgetSeconds": 12,
+            "persistedStatus": "TIMED_OUT",
+            "answerRows": 0,
+            "modelHttpClosedBeforeSocketResume": true,
+            "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+            "timeoutEventAfterWriterReleased": true
+          }
+        ],
+        "startedPids": [
+          103188,
+          80856
+        ],
+        "stoppedPids": [
+          103188,
+          80856
+        ],
+        "providerCalls": 9,
+        "providerFrames": [
+          {
+            "question": "cp77-cancel-63e13105-d162-4d4f-920c-044419dbb132",
+            "calls": 1,
+            "framesWritten": 9991,
+            "charactersWritten": 99907
+          },
+          {
+            "question": "cp77-fresh-before-resume-3883646c-6a54-4257-9751-96213b93922e",
+            "calls": 1
+          },
+          {
+            "question": "cp77-saturation-2941f13c-a57d-4306-ba63-f7571816cf99",
+            "calls": 1,
+            "framesWritten": 9991,
+            "charactersWritten": 99907
+          },
+          {
+            "question": "cp77-queued-output-18b6f6b2-4ad1-4b93-af72-4123a4c26c60",
+            "calls": 1
+          },
+          {
+            "question": "cp77-rejected-output-419d3adc-3527-4a0f-8f90-cc7dbb9e51a1",
+            "calls": 0
+          },
+          {
+            "question": "cp77-sync-control-during-output-saturation-39564394-6f12-4f0c-bbb6-0a5e595ad361",
+            "calls": 1
+          },
+          {
+            "question": "cp77-revoke-b96502d5-eef2-4126-87b2-4357d598c71f",
+            "calls": 1,
+            "framesWritten": 9991,
+            "charactersWritten": 99907
+          },
+          {
+            "question": "cp77-fresh-after-revoke-before-resume-d05c6330-5811-4dad-8b2f-3614dea34eec",
+            "calls": 1
+          },
+          {
+            "question": "cp77-timeout-42c98821-5672-4cc4-ba73-46c639f3c14a",
+            "calls": 1,
+            "framesWritten": 9991,
+            "charactersWritten": 99907
+          },
+          {
+            "question": "cp77-fresh-after-timeout-before-resume-0a701b17-426c-4e74-9693-16ed31a8799c",
+            "calls": 1
+          }
+        ],
+        "ownedProcessesStopped": true,
+        "ownedProviderStopped": true,
+        "unexpectedJarErrors": 0
+      },
+      "files": [
+        {
+          "path": "target/assistant-slow-consumer-it/run-DHrHNL/cancel-threads.txt",
+          "bytes": 77700,
+          "sha256": "e97ea8ef82f3a1627f94b86e2f881236ed9a4fe9b8309d0ad78150364adfd9e2"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-DHrHNL/jar-1.log",
+          "bytes": 15087,
+          "sha256": "d4441ca81765fd53074aa8a7463ff8e594306ecd6a8ef09cda26a1ef961ea930"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-DHrHNL/jar-2.log",
+          "bytes": 15012,
+          "sha256": "a098c99eaea94ff8da28149c2b16f02772b878b2cedfca158ba104453af9e575"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-DHrHNL/result.json",
+          "bytes": 3498,
+          "sha256": "12e7e96015b9df0d76a7b736318cee968140ac9731ed879ffd27da1995b4a892"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-DHrHNL/revoke-threads.txt",
+          "bytes": 81627,
+          "sha256": "3b82ef7d6493e72631efc2c94913d6227d27b0e68ec3c3c5f10acaabba27b73e"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-DHrHNL/saturation-threads.txt",
+          "bytes": 82474,
+          "sha256": "adf599bf5f323c07499a05cd5f1cbac5405da2cac3dcf4e35c193543e58b1f93"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-DHrHNL/timeout-threads.txt",
+          "bytes": 77670,
+          "sha256": "d2006a6de7a9a42462aa92e65efd7666d1e3418edcab12577f11ee1cfd6041e7"
+        }
+      ],
+      "directory": "target/assistant-slow-consumer-it/run-DHrHNL"
+    },
+    {
+      "result": {
+        "status": "PASS",
+        "baselineCapture": false,
+        "fixture": "owned real native model HTTP and paused TCP SSE clients; actual Tomcat write stacks required",
+        "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+        "modelWorkers": 1,
+        "modelQueueCapacity": 1,
+        "outputWriters": 2,
+        "outputQueueCapacity": 1,
+        "maximumCharactersBeforeRelease": 99907,
+        "maximumNativeFramesBeforeRelease": 9991,
+        "tokensPersistedToEvidence": false,
+        "userFileDatabaseModified": false,
+        "cases": [
+          {
+            "name": "cancel-slow-client",
+            "cancelStatus": 200,
+            "requestStatus": "CANCELLED",
+            "cancelledAnswerRows": 0,
+            "cancellationAudits": 1,
+            "modelHttpClosedBeforeSocketResume": true,
+            "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+            "providerReleased": false
+          },
+          {
+            "name": "bounded-output-saturation",
+            "blockedWriters": 2,
+            "queuedTransport": 1,
+            "rejectedStatus": 503,
+            "rejectionCode": "ASSISTANT_STREAM_SATURATED",
+            "rejectedQuestionRows": 0,
+            "rejectedModelCalls": 0,
+            "rejectedKeyStatus": 404,
+            "queuedRequestCancelledAndModelHttpClosedBeforeWriterAvailable": true,
+            "synchronousWorkerStillUsable": true
+          },
+          {
+            "name": "revoke-slow-client",
+            "persistedStatus": "REVOKED",
+            "oldTokenStatus": 401,
+            "answerRows": 0,
+            "modelHttpClosedBeforeSocketResume": true,
+            "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+            "noRevokedTerminalPayload": true,
+            "alreadyBufferedBytesRecallClaimed": false
+          },
+          {
+            "name": "timeout-slow-client",
+            "originalBudgetSeconds": 12,
+            "persistedStatus": "TIMED_OUT",
+            "answerRows": 0,
+            "modelHttpClosedBeforeSocketResume": true,
+            "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+            "timeoutEventAfterWriterReleased": true
+          }
+        ],
+        "startedPids": [
+          98384,
+          93700
+        ],
+        "stoppedPids": [
+          98384,
+          93700
+        ],
+        "blockedOutputs": [
+          {
+            "case": "cancel",
+            "thread": "opspilot-assistant-output-1",
+            "previouslyBlockedThreads": [],
+            "newlyBlockedThreadRequired": true,
+            "modelWorkerDirectServletWrite": false
+          },
+          {
+            "case": "saturation",
+            "thread": "opspilot-assistant-output-2",
+            "previouslyBlockedThreads": [
+              "opspilot-assistant-output-1"
+            ],
+            "newlyBlockedThreadRequired": true,
+            "modelWorkerDirectServletWrite": false
+          },
+          {
+            "case": "revoke",
+            "thread": "opspilot-assistant-output-1",
+            "previouslyBlockedThreads": [],
+            "newlyBlockedThreadRequired": true,
+            "modelWorkerDirectServletWrite": false
+          },
+          {
+            "case": "timeout",
+            "thread": "opspilot-assistant-output-1",
+            "previouslyBlockedThreads": [],
+            "newlyBlockedThreadRequired": true,
+            "modelWorkerDirectServletWrite": false
+          }
+        ],
+        "providerCalls": 9,
+        "providerFrames": [
+          {
+            "question": "cp77-cancel-08d4edda-0b7c-49a8-90b7-5d286739db3b",
+            "calls": 1,
+            "framesWritten": 9991,
+            "charactersWritten": 99907
+          },
+          {
+            "question": "cp77-fresh-before-resume-b14c68dc-5d14-4f11-82e8-39e59a53df7d",
+            "calls": 1
+          },
+          {
+            "question": "cp77-saturation-323a39c1-d596-4f6a-bc54-1b534faac486",
+            "calls": 1,
+            "framesWritten": 9991,
+            "charactersWritten": 99907
+          },
+          {
+            "question": "cp77-queued-output-d8a6abf2-f81c-44dd-ad6e-58bf2f1785ae",
+            "calls": 1
+          },
+          {
+            "question": "cp77-rejected-output-aa5c2979-b04e-451a-8c78-1907e75db311",
+            "calls": 0
+          },
+          {
+            "question": "cp77-sync-control-during-output-saturation-246d337a-3d97-484f-b964-41c71e3509aa",
+            "calls": 1
+          },
+          {
+            "question": "cp77-revoke-056f50a8-3c0a-469b-81ec-d67ccba33b88",
+            "calls": 1,
+            "framesWritten": 9991,
+            "charactersWritten": 99907
+          },
+          {
+            "question": "cp77-fresh-after-revoke-before-resume-dd3ffa74-169f-420d-b0f7-a2832dbb0e04",
+            "calls": 1
+          },
+          {
+            "question": "cp77-timeout-07131bec-b540-4d51-8dee-3febda4d831e",
+            "calls": 1,
+            "framesWritten": 9991,
+            "charactersWritten": 99907
+          },
+          {
+            "question": "cp77-fresh-after-timeout-before-resume-52dd3cef-e9b7-48bb-a95e-ec39c6794588",
+            "calls": 1
+          }
+        ],
+        "ownedProcessesStopped": true,
+        "ownedProviderStopped": true,
+        "unexpectedJarErrors": 0
+      },
+      "files": [
+        {
+          "path": "target/assistant-slow-consumer-it/run-CnjYEe/cancel-threads.txt",
+          "bytes": 77716,
+          "sha256": "b06601ad6a3c01192674954159dce24d4425cdb7a4b57c1d02c758b758a82903"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-CnjYEe/jar-1.log",
+          "bytes": 15011,
+          "sha256": "9e19da804867c81232bc4ea0f3ec8849570710ba7a30e091663ba9a6aaa731b6"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-CnjYEe/jar-2.log",
+          "bytes": 15012,
+          "sha256": "162c5607d744f945ffb787e372ba9508a997f663479fe6261c27b1e01e608705"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-CnjYEe/result.json",
+          "bytes": 4408,
+          "sha256": "fb4cf4e00631bb470d4b13bb14c5c4da67d00a90b139e13db68dc06f602541e0"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-CnjYEe/revoke-threads.txt",
+          "bytes": 82325,
+          "sha256": "90b044d66ac2e82b839d61bdab7de05e5f2cf236caa707f94de4cd042612a3df"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-CnjYEe/saturated-output-threads.txt",
+          "bytes": 79923,
+          "sha256": "ede143579b2db1bb3ab9115a46e6d5cb89cc22f3388bbcac562c4e721f522a6f"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-CnjYEe/saturation-threads.txt",
+          "bytes": 82514,
+          "sha256": "64f87c908e18dd01ddbf0203eb9c6301bd6493345438aae35bb2b91e5d75a265"
+        },
+        {
+          "path": "target/assistant-slow-consumer-it/run-CnjYEe/timeout-threads.txt",
+          "bytes": 79060,
+          "sha256": "e9a79af1620d732b3ba6c8ec88b7d331ddaadf98414b5280ce0c0014a5372058"
+        }
+      ],
+      "directory": "target/assistant-slow-consumer-it/run-CnjYEe"
+    },
+    {
+      "result": {
+        "status": "PASS",
+        "baselineCapture": false,
+        "url": "http://127.0.0.1:9955/assistant",
+        "browserReason": "Browser plugin not available; existing Playwright",
+        "viewports": [
+          "1440x1000",
+          "390x844"
+        ],
+        "flow": "send -> native preview before model completion -> committed answer or explicit terminal",
+        "fixture": "controlled real HTTP DashScope provider; not model quality or production capacity",
+        "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+        "tokensPersistedToEvidence": false,
+        "userFileDatabaseModified": false,
+        "cases": [
+          {
+            "name": "preview-before-final-commit",
+            "native": true,
+            "incremental": true,
+            "previewVisibleBeforeProviderRelease": true,
+            "databaseAnswersBeforeRelease": 0,
+            "finalAnswers": 1,
+            "modelCalls": 1
+          },
+          {
+            "name": "explicit-cancel-after-preview",
+            "status": "CANCELLED",
+            "cancelledAnswers": 0,
+            "originalKeyUsed": true,
+            "workerReusedBeforeOldProviderRelease": true,
+            "nativeHttpConnectionClosedBeforeProviderRelease": true
+          },
+          {
+            "name": "truncated-preview",
+            "status": "FAILED",
+            "partialAnswersCommitted": 0,
+            "modelCalls": 1
+          },
+          {
+            "name": "idle-after-preview",
+            "status": "TIMED_OUT",
+            "executionBudgetSeconds": 12,
+            "partialAnswersCommitted": 0,
+            "nativeHttpConnectionClosedBeforeProviderRelease": true
+          },
+          {
+            "name": "disconnect-after-preview-manual-query",
+            "status": "COMPLETED",
+            "originalAnswerIdPreserved": true,
+            "streamPosts": 1,
+            "modelCalls": 1
+          },
+          {
+            "name": "output-capacity-503-and-fixed-key-manual-recovery",
+            "actualErrorCode": "ASSISTANT_STREAM_SATURATED",
+            "errorMessageVisible": true,
+            "rejectedQuestionRows": 0,
+            "rejectedModelCalls": 0,
+            "rejectedKeyStatus": 404,
+            "noAutomaticRetry": true,
+            "sameKeyAndQuestionOnManualRetry": true,
+            "recoveredAnswerRows": 1,
+            "fixtureCancelPosts": 2
+          }
+        ],
+        "screenshots": [
+          "native-preview-desktop.png",
+          "native-preview-mobile.png",
+          "native-completed-mobile.png",
+          "native-cancelled-mobile.png",
+          "native-failed-mobile.png",
+          "native-timeout-mobile.png",
+          "native-recovered-desktop.png",
+          "output-saturated-desktop.png",
+          "output-saturated-mobile.png"
+        ],
+        "pageErrors": [],
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 503 ()",
+          "Failed to load resource: the server responded with a status of 404 ()"
+        ],
+        "consoleErrorDetails": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 ()",
+            "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/stream"
+          },
+          {
+            "text": "Failed to load resource: the server responded with a status of 404 ()",
+            "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/request"
+          }
+        ],
+        "startedPid": 103060,
+        "expectedConsoleErrors": [
+          {
+            "text": "Failed to load resource: the server responded with a status of 503 ()",
+            "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/stream",
+            "response": {
+              "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/stream",
+              "status": 503,
+              "code": "ASSISTANT_STREAM_SATURATED"
+            }
+          },
+          {
+            "text": "Failed to load resource: the server responded with a status of 404 ()",
+            "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/request",
+            "response": {
+              "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/request",
+              "status": 404,
+              "code": "ASSISTANT_REQUEST_NOT_FOUND"
+            }
+          }
+        ],
+        "unexpectedConsoleErrors": [],
+        "providerRequests": [
+          {
+            "question": "cp75-first-preview-9f543695-f122-49be-ba5a-0e45e6e4d883",
+            "calls": 1,
+            "native": true,
+            "incremental": true,
+            "transportClosed": true
+          },
+          {
+            "question": "cp75-cancel-preview-31a3b454-3487-431d-a155-00a2bbfe5849",
+            "calls": 1,
+            "native": true,
+            "incremental": true,
+            "transportClosed": true
+          },
+          {
+            "question": "cp75-fresh-before-old-release-1be06339-4b0c-4d17-8e65-18e094c13362",
+            "calls": 1,
+            "native": true,
+            "incremental": true,
+            "transportClosed": true
+          },
+          {
+            "question": "cp75-truncated-preview-b0eeaaf8-39a9-4ac9-b8ea-7f0c1a543493",
+            "calls": 1,
+            "native": true,
+            "incremental": true,
+            "transportClosed": true
+          },
+          {
+            "question": "cp75-idle-timeout-97eed195-a97c-451e-b86f-52a2d5b62c4f",
+            "calls": 1,
+            "native": true,
+            "incremental": true,
+            "transportClosed": true
+          },
+          {
+            "question": "cp75-disconnect-preview-887c8fcb-373c-483f-8a5c-235d870c6985",
+            "calls": 1,
+            "native": true,
+            "incremental": true,
+            "transportClosed": true
+          },
+          {
+            "question": "cp77-output-held-18597c1c-14c3-47d8-8795-41e24953f97c",
+            "calls": 1,
+            "native": true,
+            "incremental": true,
+            "transportClosed": true
+          },
+          {
+            "question": "cp77-output-queued-c0945883-e8cf-4c84-878b-1583fd419a7a",
+            "calls": 0
+          },
+          {
+            "question": "cp77-output-rejected-a19f998b-2700-4719-9308-2ffd2d482c42",
+            "calls": 1,
+            "native": true,
+            "incremental": true,
+            "transportClosed": true
+          }
+        ],
+        "streamPosts": 8,
+        "explicitCancelPosts": 1,
+        "ownedProcessStopped": true,
+        "ownedProviderStopped": true,
+        "unexpectedJarErrors": 0
+      },
+      "files": [
+        {
+          "path": "target/assistant-native-ui-it/run-Qq6VVI/jar.log",
+          "bytes": 15089,
+          "sha256": "c22212ee30838be301ca51c02fb0a45d4b385d491fe8ea9bdfbf5dc277ba6056"
+        },
+        {
+          "path": "target/assistant-native-ui-it/run-Qq6VVI/native-cancelled-mobile.png",
+          "bytes": 35087,
+          "sha256": "de310a1e62deaef01e97ddd967d5c63913862f3c04fa924226c39f3ac35ba1a4"
+        },
+        {
+          "path": "target/assistant-native-ui-it/run-Qq6VVI/native-completed-mobile.png",
+          "bytes": 41534,
+          "sha256": "dc87de0839bf5d39f2c516288398413481ae425ccdadbdcc5387f576e65323a0"
+        },
+        {
+          "path": "target/assistant-native-ui-it/run-Qq6VVI/native-failed-mobile.png",
+          "bytes": 34444,
+          "sha256": "2f55cd443cc13d6970e78e6b78bb5225e861d692d10fb360b8f720a1d7f7bac0"
+        },
+        {
+          "path": "target/assistant-native-ui-it/run-Qq6VVI/native-preview-desktop.png",
+          "bytes": 92730,
+          "sha256": "ffb4d28e4b47480423da94899918959080f6e5e1671559af0bffc32d737e3f25"
+        },
+        {
+          "path": "target/assistant-native-ui-it/run-Qq6VVI/native-preview-mobile.png",
+          "bytes": 41697,
+          "sha256": "35b2b21daf027c120f9ef28f7e54f89b6cd69b0ed7de761ac8b46f55007bf1e0"
+        },
+        {
+          "path": "target/assistant-native-ui-it/run-Qq6VVI/native-recovered-desktop.png",
+          "bytes": 116227,
+          "sha256": "223548ce970571b4967928aa2e15bfc64e65873a138e738fe63b603f37ac1ef9"
+        },
+        {
+          "path": "target/assistant-native-ui-it/run-Qq6VVI/native-timeout-mobile.png",
+          "bytes": 33174,
+          "sha256": "aa5ec8bd3fe90dabe254192d34d604302679c04b7faf818ddadce5634d473f33"
+        },
+        {
+          "path": "target/assistant-native-ui-it/run-Qq6VVI/output-saturated-desktop.png",
+          "bytes": 133537,
+          "sha256": "ee697b3a38f2c3f39872d3da5869a2f87cf1be37bc7f08677dd4287ef0ad5829"
+        },
+        {
+          "path": "target/assistant-native-ui-it/run-Qq6VVI/output-saturated-mobile.png",
+          "bytes": 47557,
+          "sha256": "ad03cb60c180841fcfe9d12ae153877ba127d6cba06b059163bbba7b0407b4d9"
+        },
+        {
+          "path": "target/assistant-native-ui-it/run-Qq6VVI/result.json",
+          "bytes": 5515,
+          "sha256": "c6d199e3090f0fbc62fa6739df858f8781fdc56ff87cc8ee7ff925e57e05981b"
+        }
+      ],
+      "directory": "target/assistant-native-ui-it/run-Qq6VVI"
+    },
+    {
+      "result": {
+        "status": "PASS",
+        "baselineCapture": false,
+        "fixture": "two independent owned JVMs, shared H2 automatic mixed mode, real DashScope HTTP",
+        "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+        "applicationPorts": [
+          9965,
+          9967
+        ],
+        "managementPorts": [
+          9966,
+          9968
+        ],
+        "databaseServerPort": 9970,
+        "checkDelayMs": 100,
+        "executionBudgetSeconds": 20,
+        "tokensPersistedToEvidence": false,
+        "signingKeysPersistedToEvidence": false,
+        "userFileDatabaseModified": false,
+        "cases": [
+          {
+            "name": "shared-sql-completed-replay",
+            "nodes": [
+              "A",
+              "B"
+            ],
+            "originalAnswerIdPreserved": true,
+            "modelCalls": 1
+          },
+          {
+            "name": "cancel-on-B-releases-A",
+            "duplicateStatus": 409,
+            "otherActorStatus": 404,
+            "persistedStatusBothNodes": "CANCELLED",
+            "cancelledAnswers": 0,
+            "cancellationAudits": 1,
+            "physicalHttpClosedBeforeProviderRelease": true,
+            "sameWorkerReusedBeforeProviderRelease": true
+          },
+          {
+            "name": "clear-on-B-fences-A",
+            "persistedStatus": "SUPERSEDED",
+            "questionRows": 0,
+            "answerRows": 0,
+            "physicalHttpClosedBeforeProviderRelease": true
+          },
+          {
+            "name": "revoke-on-B-fences-A",
+            "persistedStatus": "REVOKED",
+            "oldTokensRejectedBothNodes": true,
+            "noPostRevocationPayload": true,
+            "answerRows": 0,
+            "physicalHttpClosedBeforeProviderRelease": true,
+            "sameWorkerReusedBeforeProviderRelease": true
+          }
+        ],
+        "startedPids": [
+          83252,
+          103776
+        ],
+        "stoppedPids": [
+          103776,
+          83252
+        ],
+        "providerCalls": 6,
+        "ownedProcessesStopped": true,
+        "ownedProviderStopped": true,
+        "unexpectedJarErrors": 0
+      },
+      "files": [
+        {
+          "path": "target/assistant-cross-node-it/run-v0HfZD/jar-1.log",
+          "bytes": 15136,
+          "sha256": "8a6ba175392229a76976cc1d806678cea92264c6efc3229cb3a47f0dd9f5553a"
+        },
+        {
+          "path": "target/assistant-cross-node-it/run-v0HfZD/jar-2.log",
+          "bytes": 8526,
+          "sha256": "98917aa48caeb46bce9a3c458b07de4c2b246226cb658414eef4c675e3685f7f"
+        },
+        {
+          "path": "target/assistant-cross-node-it/run-v0HfZD/result.json",
+          "bytes": 1740,
+          "sha256": "5c6da80fe1d8eccebdfcdca00104491961c9e4feaa6121baed19b0883f135b5a"
+        }
+      ],
+      "directory": "target/assistant-cross-node-it/run-v0HfZD"
+    },
+    {
+      "result": {
+        "status": "PASS",
+        "baselineCapture": false,
+        "url": "http://127.0.0.1:9945/assistant",
+        "browserReason": "Browser plugin not available; existing Playwright",
+        "viewports": [
+          "1440x1000",
+          "390x844"
+        ],
+        "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+        "fixture": "owned production HTTP adapter and real browser controls, not model quality",
+        "tokensPersistedToEvidence": false,
+        "userFileDatabaseModified": false,
+        "cases": [
+          {
+            "name": "explicit-running-cancel",
+            "originalKeyUsed": true,
+            "serverState": "CANCELLED",
+            "lateAnswers": 0,
+            "actualWorkerSettledByFreshAnswer": true
+          },
+          {
+            "name": "lost-completed-response-refresh-query",
+            "actualCompletedResponseLost": true,
+            "originalAnswerIdPreserved": true,
+            "streamPostsIncludingRecovery": 1,
+            "modelCallsIncludingRecovery": 1
+          },
+          {
+            "name": "lost-cancel-response",
+            "backendCancelResponseActuallyLost": true,
+            "noFalseCancelledBeforeQuery": true,
+            "queriedServerState": "CANCELLED",
+            "cancelAuditRows": 1,
+            "lateAnswers": 0
+          },
+          {
+            "name": "not-admitted-manual-retry",
+            "serverLookupStatus": 404,
+            "noAutomaticPost": true,
+            "exactOriginalKeyAndContent": true,
+            "actualModelCalls": 1
+          },
+          {
+            "name": "queued-ui-cancel",
+            "queriedStateBeforeCancel": "QUEUED",
+            "questionAndAnswerRows": 0,
+            "modelCallsForQueuedQuestion": 0
+          },
+          {
+            "name": "real-capacity-feedback",
+            "serverCapacity": "one worker and one queue slot",
+            "actualRejectedStatus": 503,
+            "actualJsonErrorResponse": true,
+            "rejectedQuestionRows": 0,
+            "noAutomaticPost": true,
+            "lookupStatus": 404,
+            "manualRecoveryWithOriginalKeyAndQuestion": true
+          },
+          {
+            "name": "real-budget-timeout",
+            "serverBudgetSeconds": 30,
+            "queriedTerminal": "TIMED_OUT",
+            "originalRequestNotRerun": true,
+            "lateAnswers": 0,
+            "actualWorkerSettledByFreshAnswer": true
+          },
+          {
+            "name": "late-successful-clear-after-account-change",
+            "actualOldClearStatus": 200,
+            "actualOldLogoutStatus": 200,
+            "replacementTokenPreserved": true,
+            "replacementServerStatus": 200,
+            "oldPrivateMessagesNotReintroduced": true
+          }
+        ],
+        "screenshots": [
+          "waiting-desktop.png",
+          "cancelled-desktop.png",
+          "cancelled-mobile.png",
+          "recovery-desktop.png",
+          "recovered-completed-desktop.png",
+          "queued-desktop.png",
+          "saturated-desktop.png",
+          "timed-out-mobile.png"
+        ],
+        "pageErrors": [],
+        "consoleErrors": [
+          "Failed to load resource: net::ERR_FAILED",
+          "Failed to load resource: net::ERR_FAILED",
+          "Failed to load resource: net::ERR_FAILED",
+          "Failed to load resource: net::ERR_FAILED",
+          "Failed to load resource: the server responded with a status of 404 ()",
+          "Failed to load resource: the server responded with a status of 503 ()",
+          "Failed to load resource: the server responded with a status of 404 ()"
+        ],
+        "startedPid": 101896,
+        "unexpectedConsoleErrors": [],
+        "providerTransportCalls": 10,
+        "streamResponseStatuses": [
+          {
+            "status": 200,
+            "contentType": "text/event-stream;charset=UTF-8"
+          },
+          {
+            "status": 200,
+            "contentType": "text/event-stream;charset=UTF-8"
+          },
+          {
+            "status": 503,
+            "contentType": "application/json;charset=UTF-8"
+          },
+          {
+            "status": 200,
+            "contentType": "text/event-stream;charset=UTF-8"
+          },
+          {
+            "status": 200,
+            "contentType": "text/event-stream;charset=UTF-8"
+          },
+          {
+            "status": 200,
+            "contentType": "text/event-stream;charset=UTF-8"
+          }
+        ],
+        "ownedProcessStopped": true,
+        "ownedProviderStopped": true,
+        "unexpectedJarErrors": 0
+      },
+      "files": [
+        {
+          "path": "target/assistant-request-ui-it/run-EiH10K/cancelled-desktop.png",
+          "bytes": 78758,
+          "sha256": "dbff5f8e1bdad8f4becdf34fff6376d30676992a3bc25417172e526978e9eddb"
+        },
+        {
+          "path": "target/assistant-request-ui-it/run-EiH10K/cancelled-mobile.png",
+          "bytes": 27984,
+          "sha256": "30d94a632cdc85b28a0e06d24483e45c95b4e862df466eb8c2dcef2e18f81074"
+        },
+        {
+          "path": "target/assistant-request-ui-it/run-EiH10K/jar.log",
+          "bytes": 15096,
+          "sha256": "b241c1a0fee4e27764414e2ebe0ac969004aab44efed8abc74e24ebd032ad737"
+        },
+        {
+          "path": "target/assistant-request-ui-it/run-EiH10K/queued-desktop.png",
+          "bytes": 117448,
+          "sha256": "2d8bf17ac80d0d5322365e3ba66d9dbd8d92c0bbf5b0e7f837e63190c497c817"
+        },
+        {
+          "path": "target/assistant-request-ui-it/run-EiH10K/recovered-completed-desktop.png",
+          "bytes": 92691,
+          "sha256": "aeb5421d8ffd77b63cee784dfb1c626c34bd85d754d69ac1995c20b3b5a071ab"
+        },
+        {
+          "path": "target/assistant-request-ui-it/run-EiH10K/recovery-desktop.png",
+          "bytes": 93938,
+          "sha256": "8a50d67bae83e60e21502779821bbad1fd2557eab95180598efac92de6ea1844"
+        },
+        {
+          "path": "target/assistant-request-ui-it/run-EiH10K/result.json",
+          "bytes": 3800,
+          "sha256": "506e10411735380b407224a26a575615566ea826c98e7ec5b9e0db4011657560"
+        },
+        {
+          "path": "target/assistant-request-ui-it/run-EiH10K/saturated-desktop.png",
+          "bytes": 127904,
+          "sha256": "ff7300c4243355d3a928102e19460b50ab9217ba85dec2e01b37a47bab7befe0"
+        },
+        {
+          "path": "target/assistant-request-ui-it/run-EiH10K/timed-out-mobile.png",
+          "bytes": 26829,
+          "sha256": "721b5be26393471619a5b6c15126503055c168edccd29b105c0f8a5b8030a296"
+        },
+        {
+          "path": "target/assistant-request-ui-it/run-EiH10K/waiting-desktop.png",
+          "bytes": 81112,
+          "sha256": "39aaea954281dd25b7e0938e2f3a84fc075c71ea43afe988069bf6c05313368d"
+        }
+      ],
+      "directory": "target/assistant-request-ui-it/run-EiH10K"
+    },
+    {
+      "result": {
+        "status": "PASS",
+        "evidenceDirectory": "target\\oncall-browser-it\\run-1kXdhr",
+        "database": "isolated unique H2 memory",
+        "url": "http://127.0.0.1:9917/on-call",
+        "jarTimezone": "UTC",
+        "scanDelayMs": 200,
+        "defaultScanDelayMs": 60000,
+        "scripts": [
+          {
+            "name": "verify-oncall-rotation-ui.cjs",
+            "exitCode": 0
+          },
+          {
+            "name": "verify-oncall-rotation-boundaries.cjs",
+            "exitCode": 0
+          },
+          {
+            "name": "verify-oncall-coverage-ui.cjs",
+            "exitCode": 0
+          },
+          {
+            "name": "verify-oncall-handoff-http.cjs",
+            "exitCode": 0
+          },
+          {
+            "name": "verify-oncall-handoff-ui.cjs",
+            "exitCode": 0
+          },
+          {
+            "name": "verify-oncall-handoff-revocation-http.cjs",
+            "exitCode": 0
+          },
+          {
+            "name": "verify-oncall-handoff-revocation-ui.cjs",
+            "exitCode": 0
+          },
+          {
+            "name": "verify-runbook-trend-ui.cjs",
+            "exitCode": 0
+          },
+          {
+            "name": "verify-runbook-publication-ui.cjs",
+            "exitCode": 0
+          },
+          {
+            "name": "verify-slo-rules-ui.cjs",
+            "exitCode": 0
+          },
+          {
+            "name": "verify-jwt-numeric-date-http.cjs",
+            "exitCode": 0
+          },
+          {
+            "name": "verify-stream-session-ui.cjs",
+            "exitCode": 0
+          },
+          {
+            "name": "verify-account-security-ui.cjs",
+            "exitCode": 0
+          }
+        ],
+        "browserCi": false,
+        "publicationBaselineCapture": false,
+        "trendBaselineCapture": false,
+        "revocationBaselineCapture": false,
+        "userFileDatabaseModified": false,
+        "originalProcessesNotStopped": true,
+        "ownedProcessStopped": true,
+        "accountBaselineCapture": false,
+        "sloBaselineCapture": false,
+        "streamSessionBaselineCapture": false,
+        "streamSessionOnly": false,
+        "unexpectedJarErrors": 0
+      },
+      "files": [
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/jar.log",
+          "bytes": 15087,
+          "sha256": "eb03ae7550ffc240749033b94251d6afbec44206fd1614bd1de615980f4c8b93"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/runner-result.json",
+          "bytes": 1740,
+          "sha256": "6a97dae543adb987d800a3504ff106ba93d6a37a6d3a7734cc34119081a5f474"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/verify-account-security-ui.cjs.log",
+          "bytes": 1275,
+          "sha256": "998605fc5da4174b8349c17895d9aac415402aeb18d3ec49960d5f52fe48b66f"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/verify-jwt-numeric-date-http.cjs.log",
+          "bytes": 887,
+          "sha256": "d97b4ad5a3711e8463fdaa1672893592a50b06213a711f5e7c42ad10f71f9a75"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/verify-oncall-coverage-ui.cjs.log",
+          "bytes": 825,
+          "sha256": "40240a7d781f8151d2c1f6dd46613e68aba5c3b48e25e4b9d2617e40122b85e7"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/verify-oncall-handoff-http.cjs.log",
+          "bytes": 554,
+          "sha256": "5c8f0f8fc538e70eed8547fc775c49ab0e6f8303f6095a29eb80d13799384fcd"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/verify-oncall-handoff-revocation-http.cjs.log",
+          "bytes": 593,
+          "sha256": "b0442e7ca0d0d143832b30f90c86c74dba1241304b24375d41ae6c04bbdc127a"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/verify-oncall-handoff-revocation-ui.cjs.log",
+          "bytes": 1477,
+          "sha256": "19c4b51cc9682ecd435fff6af61c971a5402a64c532441ae66e3ca0bf1481884"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/verify-oncall-handoff-ui.cjs.log",
+          "bytes": 1435,
+          "sha256": "5a3753decbaa51416c265ddb93b0111da6a1cae2468721733c1364b02b78819f"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/verify-oncall-rotation-boundaries.cjs.log",
+          "bytes": 838,
+          "sha256": "06438e59008c4b7214b2831b0bf16e84a84f3626bb17c664bf6ae659b7f3f12c"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/verify-oncall-rotation-ui.cjs.log",
+          "bytes": 1566,
+          "sha256": "d0d01ce7a2408326dcf8395edb07e896b59313ae01d6157a764c41c21289ee33"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/verify-runbook-publication-ui.cjs.log",
+          "bytes": 1031,
+          "sha256": "6b3677c33aecd4c5bea8ee0a608c0bf59d05cbcd90e788744f418af8b6670c58"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/verify-runbook-trend-ui.cjs.log",
+          "bytes": 948,
+          "sha256": "dbf879b5842370e931151223b6cae29b5232a2dd4f7d9a1e9d31bd55eddaa546"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/verify-slo-rules-ui.cjs.log",
+          "bytes": 848,
+          "sha256": "e759d154dece8025d7eba691bc584af49ba253fc1836f1194180dd309517050e"
+        },
+        {
+          "path": "target/oncall-browser-it/run-1kXdhr/verify-stream-session-ui.cjs.log",
+          "bytes": 1796,
+          "sha256": "43850a5b652b7838eef82c4b9f5dd4abddc27a9a98b4ed534dbddfc544e90506"
+        }
+      ],
+      "directory": "target/oncall-browser-it/run-1kXdhr"
+    },
+    {
+      "result": {
+        "status": "PASS",
+        "baselineCapture": false,
+        "tokensPersistedToEvidence": false,
+        "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+        "upgradeFixtureExecuted": true,
+        "fixture": "owned production HTTP adapter; explicit cancellation, lost cancel response and queued SIGKILL recovery",
+        "database": "fresh owned H2 file with WRITE_DELAY=0",
+        "userFileDatabaseModified": false,
+        "startedPids": [
+          100468,
+          100532,
+          103704
+        ],
+        "stoppedPids": [
+          100468,
+          100532,
+          103704
+        ],
+        "cases": [
+          {
+            "name": "v32-to-v33-history-upgrade",
+            "completedRequestAndOriginalAnswerPreserved": true,
+            "modelReexecuted": false
+          },
+          {
+            "name": "lost-queued-cancel-and-running-cancel",
+            "cancelResponseActuallyLost": true,
+            "relayBackendStatus": 200,
+            "repeatedCancelAuditRows": 1,
+            "queuedQuestionWrites": 0,
+            "freedQueueSlotReused": true,
+            "synchronousStatusBeforeProviderRelease": 409,
+            "lateAssistantMessages": 0
+          },
+          {
+            "name": "stream-cancel",
+            "cancelledEventBeforeProviderRelease": true,
+            "doneEventSent": false,
+            "lateAssistantMessages": 0,
+            "nativeHttpConnectionClosedBeforeProviderRelease": true,
+            "workerReusedBeforeProviderRelease": true,
+            "actualWorkerSettledByFreshAnswer": true
+          },
+          {
+            "name": "queued-sigkill-recovery",
+            "statusBeforeCrash": "QUEUED",
+            "statusAfterOriginalBudget": "TIMED_OUT",
+            "questionWrites": 0,
+            "modelReexecuted": false,
+            "cancelledFactsAndSingleAuditSurviveRestart": true
+          }
+        ],
+        "upgradedArchiveSha256": "68e8dcfa798257a0cc13f44f22d7abd2bb9b3c89f590154d215a32e457b3ff1d",
+        "hardKilledPid": 100532,
+        "providerTransportCalls": 6,
+        "ownedProcessesStopped": true,
+        "ownedRelayStopped": true,
+        "ownedProviderStopped": true,
+        "unexpectedJarErrors": 0
+      },
+      "files": [
+        {
+          "path": "target/assistant-cancel-it/run-FWo3vD/jar-1.log",
+          "bytes": 14871,
+          "sha256": "fe52daf910c776d4acfbd223104cd486ac992d0203f10bc775712c9f6056f727"
+        },
+        {
+          "path": "target/assistant-cancel-it/run-FWo3vD/jar-2.log",
+          "bytes": 8739,
+          "sha256": "9bf1ba0a194e671c5fdce95f70e7e3093e51bfc38da1b6f039d26f836f61966b"
+        },
+        {
+          "path": "target/assistant-cancel-it/run-FWo3vD/jar-3.log",
+          "bytes": 8506,
+          "sha256": "a3e447001f5adbd05633069631b3ca38b42d34ff27e08de905050f73fdaefdbd"
+        },
+        {
+          "path": "target/assistant-cancel-it/run-FWo3vD/result.json",
+          "bytes": 1880,
+          "sha256": "1fe1324f5b457e2a436a4b2584751fd9b4d8761d31578755519aed1fdcc8b4ab"
+        }
+      ],
+      "directory": "target/assistant-cancel-it/run-FWo3vD"
+    },
+    {
+      "result": {
+        "status": "PASS",
+        "baselineCapture": false,
+        "tokensPersistedToEvidence": false,
+        "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+        "fixture": "actual production DashScope HTTP adapter, dropped completed HTTP response, independent JVMs and SIGKILL",
+        "database": "fresh owned H2 file with WRITE_DELAY=0",
+        "userFileDatabaseModified": false,
+        "startedPids": [
+          81828,
+          101176,
+          79592
+        ],
+        "stoppedPids": [
+          81828,
+          101176,
+          79592
+        ],
+        "cases": [
+          {
+            "name": "lost-completed-response-and-jvm-restart",
+            "backendStatusBeforeResponseLoss": 200,
+            "actualClientResponseLost": true,
+            "sameMessageIdAfterRestart": true,
+            "changedContentStatus": 409,
+            "requestStateAfterRestart": "COMPLETED",
+            "counts": {
+              "user": 1,
+              "assistant": 1
+            },
+            "modelCallsForQuestionIncludingRetries": 1
+          },
+          {
+            "name": "keyed-timeout",
+            "inProgressDuplicateStatus": 409,
+            "timeoutStatus": 504,
+            "stateBeforeProviderRelease": "TIMED_OUT",
+            "lateAssistantMessages": 0,
+            "lateWorkerSettledByFreshKey": true
+          },
+          {
+            "name": "sigkill-accepted-request-recovery",
+            "statusBeforeCrash": "RUNNING",
+            "currentStateAfterIndependentJvmRestart": "TIMED_OUT",
+            "sameKeyRetryStatus": 409,
+            "modelReexecuted": false,
+            "counts": {
+              "user": 1,
+              "assistant": 0
+            }
+          }
+        ],
+        "hardKilledPid": 101176,
+        "providerTransportCalls": 5,
+        "ownedProcessesStopped": true,
+        "ownedRelayStopped": true,
+        "ownedProviderStopped": true,
+        "unexpectedJarErrors": 0
+      },
+      "files": [
+        {
+          "path": "target/assistant-idempotency-it/run-Fzn1HZ/jar-1.log",
+          "bytes": 14991,
+          "sha256": "0f364f5fd07b9071812393b345f3a048cd7a7e614ab0efde382038d7470d8568"
+        },
+        {
+          "path": "target/assistant-idempotency-it/run-Fzn1HZ/jar-2.log",
+          "bytes": 8518,
+          "sha256": "20427c5568f8ac382b4560def5df16fda8ef6045eba91b8f802dd6786eba85e3"
+        },
+        {
+          "path": "target/assistant-idempotency-it/run-Fzn1HZ/jar-3.log",
+          "bytes": 8477,
+          "sha256": "8d6be01f4b8748a6c17f7e89f29ee80cf4c681869b23c1cdcb9077f31c60e7eb"
+        },
+        {
+          "path": "target/assistant-idempotency-it/run-Fzn1HZ/result.json",
+          "bytes": 1625,
+          "sha256": "9e8ed620d4f80d4c8b141a42a47b117b373788f50438ee5955e9b4ecc3a6d442"
+        }
+      ],
+      "directory": "target/assistant-idempotency-it/run-Fzn1HZ"
+    },
+    {
+      "result": {
+        "status": "PASS",
+        "baselineCapture": false,
+        "budgetBaselineCapture": false,
+        "tokensPersistedToEvidence": false,
+        "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+        "fixture": "actual production DashScope HTTP adapter against an owned controlled server, not model quality",
+        "database": "fresh owned H2 memory database",
+        "userFileDatabaseModified": false,
+        "cases": [
+          {
+            "name": "synchronous-logout",
+            "responseStatus": 401,
+            "lateAssistantMessages": 0,
+            "lateAnswerSent": false,
+            "closedBeforeProviderRelease": true
+          },
+          {
+            "name": "stream-logout",
+            "responseStatus": 200,
+            "lateAssistantMessages": 0,
+            "lateAnswerSent": false,
+            "closedBeforeProviderRelease": true,
+            "nativeHttpConnectionClosedBeforeProviderRelease": true,
+            "workerReusedBeforeProviderRelease": true
+          },
+          {
+            "name": "clear-messages",
+            "responseStatus": 409,
+            "lateAssistantMessages": 0,
+            "lateAnswerSent": false,
+            "closedBeforeProviderRelease": false
+          },
+          {
+            "name": "timeout",
+            "closedBeforeProviderRelease": true,
+            "explicitSafeErrorEvent": true,
+            "nativeHttpConnectionClosedBeforeProviderRelease": true,
+            "workerReusedBeforeProviderRelease": true,
+            "lateWorkerSettledByFreshStream": true,
+            "lateAssistantMessages": 0
+          },
+          {
+            "name": "mixed-capacity",
+            "responseStatus": 503,
+            "rejectedQuestionWrites": 0,
+            "queuedQuestionWritesBeforeProviderRelease": 0,
+            "simultaneousProviderCalls": 1
+          },
+          {
+            "name": "synchronous-running-and-queued-timeout",
+            "responseStatuses": [
+              504,
+              504
+            ],
+            "settledBeforeProviderRelease": true,
+            "lateAssistantMessages": 0,
+            "queuedQuestionWrites": 0,
+            "lateWorkerSettledByFreshSynchronousAnswer": true
+          }
+        ],
+        "startedPid": 100368,
+        "productionHttpAdapterPositiveControl": true,
+        "freshSessionProductionHttpAnswer": true,
+        "providerTransportCalls": 11,
+        "ownedProcessStopped": true,
+        "ownedProviderStopped": true,
+        "unexpectedJarErrors": 0
+      },
+      "files": [
+        {
+          "path": "target/assistant-session-it/run-nExFfm/jar.log",
+          "bytes": 15097,
+          "sha256": "7e7444102fac0a1f37d6ea975668babb73fec0f0afff338e58275b81728e5076"
+        },
+        {
+          "path": "target/assistant-session-it/run-nExFfm/result.json",
+          "bytes": 2124,
+          "sha256": "e95a225bd7bea7bce28df951099b496fa6e777775724d5c46b0d511ae8fc0c29"
+        }
+      ],
+      "directory": "target/assistant-session-it/run-nExFfm"
+    }
+  ],
+  "status": "LOCAL_LIMITED_PASS_REMOTE_PENDING",
+  "sourceParent": "d6f9cd71b6b916588fbc62c8dae0e7d3c529a0fe",
+  "baseline": {
+    "jarSha256": "735d0f2d45e90cefab372dcfb13aa7c8e5b5624a82ca9b091393163171c27151",
+    "proof": "baseline-proof.json",
+    "status": "BASELINE_CAPTURED_NOT_FIXED"
+  },
+  "productionJarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+  "backend": {
+    "independentlyAggregatedXml": true,
+    "UTC": {
+      "directory": "target/cp77-before/surefire-utc-first",
+      "files": 74,
+      "discovered": 521,
+      "executed": 415,
+      "conditionalSkipped": 106,
+      "failures": 0,
+      "errors": 0
+    },
+    "AsiaShanghai": {
+      "directory": "target/cp77-before/surefire-shanghai-first",
+      "files": 74,
+      "discovered": 521,
+      "executed": 415,
+      "conditionalSkipped": 106,
+      "failures": 0,
+      "errors": 0
+    },
+    "nativeContracts": {
+      "classes": 7,
+      "executed": 62,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    "firstTargeted": {
+      "tests": 32,
+      "failures": 1,
+      "errors": 0,
+      "failingTest": "rejectedReplayLeaseShouldCloseItsWriterWithoutLeakingAnIdleReservation",
+      "preservedLog": "target/cp77-before/transport-contract-first.log"
+    },
+    "correctedTargeted": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "fullLogFaultInjection": {
+      "controlledMessageAggregatorBlocks": 2,
+      "controlledProviderUnavailableBlocks": 1,
+      "ignoredGlobally": false
+    }
+  },
+  "frontend": {
+    "tests": 107,
+    "failures": 0,
+    "skipped": 0
+  },
+  "lifecycle": {
+    "tests": 20,
+    "failures": 0,
+    "skipped": 0
+  },
+  "environment": {
+    "os": "Windows",
+    "java": "21.0.2",
+    "node": "24.16.0",
+    "chrome": "154.0.8037.93",
+    "browser": "Browser plugin not available; existing Playwright 1.63",
+    "viewports": [
+      "1440x1000",
+      "390x844"
+    ],
+    "persistentUserDatabaseModified": false,
+    "secretsOrDatabasesUploaded": false
+  },
+  "limits": [
+    "Finite output writers remain blocked until TCP progress, socket/container timeout or close; model worker and original HTTP release are separately proven.",
+    "Tomcat per-write no-progress timeout is not an absolute connection lifetime; trickle traffic can renew it. Default dependencies/config inspected, actual timeout boundary not measured in this gate.",
+    "Already buffered preview bytes cannot be recalled.",
+    "Local shared H2 and controlled provider do not prove cross-machine HA, native AI MySQL HTTP matrix, real model accuracy, production capacity or TLS/proxy behavior.",
+    "Own new source CI not yet run; previous d6f9cd7 success does not validate this fix."
+  ]
+}

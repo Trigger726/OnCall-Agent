@@ -1,8 +1,10 @@
 # OpsPilot 架构设计
 
-## CP77已证实的慢消费者资源缺陷（尚未修复）
+## CP77慢消费者资源隔离（本地限定通过，远端待验）
 
-暂停真实TCP读取且输出未超过10万字符/1万帧时，原模型worker会在SseEmitter→Tomcat NioSocketWrapper.doWrite阻塞，仍持有StreamTransport监视器。取消事务已CANCELLED却使执行取消线程等同一锁，原订阅finally尚未执行、实际模型HTTP未关闭、新任务不能复用唯一worker。恢复TCP读后才释放，见[77反例](acceptance/V1.7-checkpoint-77.md)。76正常读取的跨节点验收不覆盖此路径。下一步是独立有界输出与可检查等待、非阻塞停止状态，仍保持原租约/预算/最终事务及断线不取消持久化请求；生产代码当前未改，不宣称已解决。
+原包在暂停TCP且输出未超既有上限时，使模型worker持有transport锁阻塞Tomcat写出，SQL已CANCELLED但取消HTTP/模型HTTP/worker尚未释放；[反例](assets/v1.7-cp77/baseline-proof.json)保留。新AssistantStreamTransport只把阻塞写入移到默认4 writer/16待执行transport，每个transport一槽交接；容量先于业务接纳预留，满时503/ASSISTANT_STREAM_SATURATED，问题0。原model worker等待ACK时每100ms仍检查原租约/预算/SQL停止，Work未提前移除、没有queue-and-forget或扩大模型池。停止短锁只更新终态，不做网络IO；SQL答案先完整提交再发送done，断线仍不取消持久化任务。原键已提交回放异步发送，每帧检查原租约，拒绝也关闭writer。
+
+四实际暂停TCP场景三次本地通过，[新实际writer/worker栈](assets/v1.7-cp77/after-writer-and-worker.txt)将真正Tomcat写阻塞与可检查Future等待区分。已卡住的有限writer仍可能等TCP推进、socket/container写超时或关闭，不能保证取消瞬间释放输出槽；满时继续拒绝新流但同步路径可用。已缓冲字节不可撤回。当前JAR依赖目录列Tomcat10.1.16/Spring MVC6.1.1，Tomcat协议字节码默认connectionTimeout为60000ms，当前YAML没有覆盖；NIO无推进写等待使用writeTimeout，有实际推进可重置，因此不是整条连接的绝对TTL。实际部署覆盖、TLS/代理与到时关闭边界尚未测量，见[77限定范围](acceptance/V1.7-checkpoint-77.md)，不把配置/源码推断当运行时超时实测。
 
 ## CP76双节点助手停止围栏
 

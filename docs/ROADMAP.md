@@ -2,7 +2,7 @@
 
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
-77新增实际慢TCP消费者反例：[报告](acceptance/V1.7-checkpoint-77.md)。SQL已CANCELLED但暂停读响应时取消API/原模型HTTP/唯一worker都未释放，恢复TCP读后才释放。生产尚未修复；下一步优先独立有界写资源和可检查的交接，补取消/超时/撤销/容量拒绝及原UI回归，不靠扩模型池或提前Provider放行。历史Demo/首次夹具错误/实际栈保留，整体目标active。
+77慢消费者有界输出修复本地限定通过：[报告](acceptance/V1.7-checkpoint-77.md)、[原反例与修复证据](assets/v1.7-cp77/local-proof.json)。四实际暂停TCP场景三次通过，原模型HTTP/唯一worker在旧Provider未放行且TCP未resume时释放；满输出503接纳前不落问题。原生页面六场景/九图、原十三/八UI及跨节点/幂等/取消/预算回归通过，双时区各521发现/415执行/106条件跳过、原生62/前端107/生命周期20零失败。自身新CI尚待验，writer仍可能等容器写超时、不保证绝对连接TTL；原生AI MySQL HTTP矩阵、跨机器故障/生产容量继续，不借旧CI或删除历史失败。
 
 76双节点助手四场景本地两次与6082012自身远端限定通过：[报告](acceptance/V1.7-checkpoint-76.md)。[Run37131134785](https://github.com/Trigger726/OnCall-Agent/actions/runs/37131134785)十五作业success，三工件源SHA/摘要、原生54/真实MySQL99及五池关闭、Linux六runner/十一完整JAR日志与新跨节点四场景已独立核验。正常读取客户端下A执行、B回放/取消/清空/撤销，实际HTTP释放与原worker复用均在旧Provider未放行时断言；旧74反例保留。本机共享H2 SQL不证明跨机器网络分区/MySQL原生HTTP/数据库HA/生产容量；77另复现慢读取边界，完整路线继续。
 

@@ -92,7 +92,7 @@ jobs:
   auth-session-integration:
     name: Persistent auth session revocation and JVM restart
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-java@v5
@@ -118,6 +118,8 @@ jobs:
         run: node scripts/verify-assistant-cancel-ci.cjs
       - name: Verify cross-node native assistant cancellation and authorization fences
         run: node scripts/verify-assistant-cross-node-ci.cjs
+      - name: Verify actual paused TCP writes, bounded output capacity and model worker release
+        run: node scripts/verify-assistant-slow-consumer-ci.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
@@ -135,6 +137,9 @@ jobs:
             target/assistant-cancel-it/**/*.log
             target/assistant-cross-node-it/**/*.json
             target/assistant-cross-node-it/**/*.log
+            target/assistant-slow-consumer-it/**/*.json
+            target/assistant-slow-consumer-it/**/*.log
+            target/assistant-slow-consumer-it/**/*.txt
           retention-days: 30
 
   backend-h2:
@@ -154,13 +159,14 @@ jobs:
         run: |
           set -o pipefail
           mkdir -p target/assistant-native-it
-          ./mvnw -B -Duser.timezone=UTC -Dtest=AssistantAiStreamingTest,AssistantNativeStreamHttpTest,AssistantStreamReaderTest,AssistantNativeEndpointIntegrationTest,AssistantNativeTransportTest,AssistantNativeHttpClientTest test 2>&1 | tee target/assistant-native-it/maven.log
+          ./mvnw -B -Duser.timezone=UTC -Dtest=AssistantAiStreamingTest,AssistantNativeStreamHttpTest,AssistantStreamReaderTest,AssistantNativeEndpointIntegrationTest,AssistantNativeTransportTest,AssistantNativeHttpClientTest,AssistantStreamTransportTest test 2>&1 | tee target/assistant-native-it/maven.log
           cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantAiStreamingTest.xml target/assistant-native-it/
           cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest.xml target/assistant-native-it/
           cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantStreamReaderTest.xml target/assistant-native-it/
           cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest.xml target/assistant-native-it/
           cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeTransportTest.xml target/assistant-native-it/
           cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeHttpClientTest.xml target/assistant-native-it/
+          cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantStreamTransportTest.xml target/assistant-native-it/
       - name: Test and package (UTC)
         run: ./mvnw -B -Duser.timezone=UTC package
       - name: Regression tests (Asia/Shanghai)

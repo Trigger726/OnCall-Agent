@@ -1,0 +1,69 @@
+{
+  "status": "PASS",
+  "baselineCapture": false,
+  "fixture": "two independent owned JVMs, shared H2 automatic mixed mode, real DashScope HTTP",
+  "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+  "applicationPorts": [
+    9965,
+    9967
+  ],
+  "managementPorts": [
+    9966,
+    9968
+  ],
+  "databaseServerPort": 9970,
+  "checkDelayMs": 100,
+  "executionBudgetSeconds": 20,
+  "tokensPersistedToEvidence": false,
+  "signingKeysPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "cases": [
+    {
+      "name": "shared-sql-completed-replay",
+      "nodes": [
+        "A",
+        "B"
+      ],
+      "originalAnswerIdPreserved": true,
+      "modelCalls": 1
+    },
+    {
+      "name": "cancel-on-B-releases-A",
+      "duplicateStatus": 409,
+      "otherActorStatus": 404,
+      "persistedStatusBothNodes": "CANCELLED",
+      "cancelledAnswers": 0,
+      "cancellationAudits": 1,
+      "physicalHttpClosedBeforeProviderRelease": true,
+      "sameWorkerReusedBeforeProviderRelease": true
+    },
+    {
+      "name": "clear-on-B-fences-A",
+      "persistedStatus": "SUPERSEDED",
+      "questionRows": 0,
+      "answerRows": 0,
+      "physicalHttpClosedBeforeProviderRelease": true
+    },
+    {
+      "name": "revoke-on-B-fences-A",
+      "persistedStatus": "REVOKED",
+      "oldTokensRejectedBothNodes": true,
+      "noPostRevocationPayload": true,
+      "answerRows": 0,
+      "physicalHttpClosedBeforeProviderRelease": true,
+      "sameWorkerReusedBeforeProviderRelease": true
+    }
+  ],
+  "startedPids": [
+    83252,
+    103776
+  ],
+  "stoppedPids": [
+    103776,
+    83252
+  ],
+  "providerCalls": 6,
+  "ownedProcessesStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}

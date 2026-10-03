@@ -33,11 +33,14 @@ public class AssistantController {
     private final AssistantService service;
     private final SessionAuthorization authorization;
     private final AssistantExecutionManager execution;
+    private final AssistantStreamTransport transports;
 
-    public AssistantController(AssistantService service, SessionAuthorization authorization, AssistantExecutionManager execution) {
+    public AssistantController(AssistantService service, SessionAuthorization authorization, AssistantExecutionManager execution,
+                               AssistantStreamTransport transports) {
         this.service = service;
         this.authorization = authorization;
         this.execution = execution;
+        this.transports = transports;
     }
 
     @GetMapping("/sessions")
@@ -125,7 +128,6 @@ public class AssistantController {
         var lease = authorization.current();
         service.getSession(id, user.id()); // Ownership is checked before admitting any queued work.
         SseEmitter emitter = new SseEmitter(300_000L);
-        var transport = new StreamTransport(emitter);
         long ownerId = user.id();
         String keyHash = AssistantRequestStore.keyHash(requestKey);
         String attemptId = java.util.UUID.randomUUID().toString();
@@ -133,10 +135,12 @@ public class AssistantController {
             var replay = service.replay(id, ownerId, request.content(), keyHash, lease);
             if (replay != null) {
                 response.setHeader("X-OpsPilot-Idempotent-Replay", "true");
-                sendEvents(emitter, replay, () -> requireLease(lease));
+                transports.open(emitter, () -> requireLease(lease)).replay(replay, () -> requireLease(lease));
                 return emitter;
             }
         }
+        var transport = transports.open(emitter, () -> requireLease(lease));
+        try {
         execution.submit(lease, keyHash == null ? null : new AssistantExecutionManager.RequestKey(id, keyHash),
                 work -> service.enqueueRequest(id, ownerId, request.content(), lease, work::check,
                         keyHash == null ? null : new AssistantRequestStore.Identity(keyHash, attemptId, work.deadlineEpochMillis())), work -> {
@@ -173,6 +177,10 @@ public class AssistantController {
                 // Fail closed if authorization cannot be checked or the transport is already closed.
             } finally { transport.stopped(null, null); }
         });
+        } catch (RuntimeException | Error admissionFailure) {
+            transport.disconnect();
+            throw admissionFailure;
+        }
         return emitter;
     }
 
@@ -198,69 +206,6 @@ public class AssistantController {
         if (!authorization.authorized(lease, false)) throw new CredentialsExpiredException("Assistant session expired");
     }
 
-    /** A disconnected browser does not cancel the durable request or cause another model call. */
-    private static final class StreamTransport {
-        private final SseEmitter emitter;
-        private boolean open = true;
-        private boolean preview;
-
-        private StreamTransport(SseEmitter emitter) {
-            this.emitter = emitter;
-            emitter.onCompletion(this::disconnect);
-            emitter.onTimeout(this::disconnect);
-            emitter.onError(error -> disconnect());
-        }
-
-        private synchronized void disconnect() { open = false; }
-
-        private synchronized void delta(String chunk, Runnable checkpoint) {
-            checkpoint.run();
-            boolean first = !preview;
-            preview = true;
-            if (!open) return;
-            try {
-                if (first) emitter.send(SseEmitter.event().name("generation")
-                        .data(new StreamEvent("generation", "NATIVE", null, null)));
-                checkpoint.run();
-                emitter.send(SseEmitter.event().name("token").data(new StreamEvent("token", chunk, null, null)));
-            } catch (java.io.IOException | IllegalStateException disconnected) {
-                open = false;
-            }
-        }
-
-        private synchronized void completed(AssistantService.MessageView message, Runnable checkpoint) throws java.io.IOException {
-            checkpoint.run();
-            if (!open) return;
-            if (preview) {
-                emitter.send(SseEmitter.event().name("done").data(new StreamEvent("done", "", message.id(), message.evidenceJson())));
-                emitter.complete();
-            } else sendEvents(emitter, message, checkpoint);
-            open = false;
-        }
-
-        private synchronized void stopped(String type, String content) {
-            if (!open) return;
-            open = false;
-            try {
-                if (type != null) emitter.send(SseEmitter.event().name(type).data(new StreamEvent(type, content, null, null)));
-            } catch (java.io.IOException | IllegalStateException ignored) {
-                // The caller cannot infer cancellation from a closed browser transport.
-            } finally { emitter.complete(); }
-        }
-    }
-
-    private static void sendEvents(SseEmitter emitter, AssistantService.MessageView message, Runnable checkpoint) throws java.io.IOException {
-        checkpoint.run();
-        emitter.send(SseEmitter.event().name("meta").data(new StreamEvent("meta", "", message.id(), message.evidenceJson())));
-        for (String chunk : chunks(message.content(), 28)) {
-            checkpoint.run();
-            emitter.send(SseEmitter.event().name("message").data(new StreamEvent("delta", chunk, message.id(), null)));
-        }
-        checkpoint.run();
-        emitter.send(SseEmitter.event().name("done").data(new StreamEvent("done", "", message.id(), message.evidenceJson())));
-        emitter.complete();
-    }
-
     @DeleteMapping("/sessions/{id}/messages")
     public ApiResponse<Void> clear(@AuthenticationPrincipal UserPrincipal user, @PathVariable long id) {
         service.clearMessages(id, user.id());
@@ -280,15 +225,6 @@ public class AssistantController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=opspilot-conversation-" + id + ".md")
                 .contentType(MediaType.parseMediaType("text/markdown;charset=UTF-8"))
                 .body(markdown.getBytes(StandardCharsets.UTF_8));
-    }
-
-    private static List<String> chunks(String content, int chunkSize) {
-        if (content == null || content.isEmpty()) return List.of();
-        java.util.ArrayList<String> result = new java.util.ArrayList<>();
-        for (int start = 0; start < content.length(); start += chunkSize) {
-            result.add(content.substring(start, Math.min(content.length(), start + chunkSize)));
-        }
-        return result;
     }
 
     public record CreateSessionRequest(Long incidentId, @Size(max = 160) String title) {

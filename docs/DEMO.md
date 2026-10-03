@@ -1,8 +1,10 @@
 # OpsPilot 10 分钟演示脚本
 
-## CP77：先展示未修复的真实资源缺陷
+## CP77：真实慢读反例与有界输出修复对照
 
-只读展示[慢读反例](assets/v1.7-cp77/baseline-proof.json)和[实际阻塞栈](assets/v1.7-cp77/baseline-worker.txt)：正常SSE首token后暂停TCP读取，源输出仍在既有字符/帧上限内；取消事实已CANCELLED/答案0，但取消API、原模型连接、原唯一worker仍占用，恢复读后才释放。首轮夹具同步探针误要求SSE头的错误另保留，不当产品失败。生产修复尚未完成，不演示成“新增已交付能力”，不借76十五CI冒充慢读通过。复跑调查仅用自有9971/9972/独立内存库和target/cp77-before保留包，`node scripts/probe-assistant-slow-consumer.cjs`会在CI明确拒绝。
+先只读展示[原反例](assets/v1.7-cp77/baseline-proof.json)/[原worker写阻塞栈](assets/v1.7-cp77/baseline-worker.txt)，再对照[新writer与worker栈](assets/v1.7-cp77/after-writer-and-worker.txt)/[三次独立测试证据](assets/v1.7-cp77/local-proof.json)：同样暂停真实TCP且未放行旧Provider，原包SQL已CANCELLED但取消API/模型HTTP/唯一worker仍卡住；新包先返回取消200、关闭实际模型HTTP并复用原单worker。真正写阻塞仍在有限输出writer，满则接纳前503、问题0，并不宣称取消即时释放所有网络资源。
+
+页面演示保留[实时临时片段桌面](assets/v1.7-cp77/after/native-ui/native-preview-desktop.png)/[手机](assets/v1.7-cp77/after/native-ui/native-preview-mobile.png)及[实际输出容量503桌面](assets/v1.7-cp77/after/native-ui/output-saturated-desktop.png)/[手机](assets/v1.7-cp77/after/native-ui/output-saturated-mobile.png)。六场景验证无半答案、原键手动恢复、不自动重提；三次页面夹具失败另保留，历史75全部Demo不覆盖，本轮没有UI样式改版。复跑新包使用空闲9971/9972/独立内存库执行 `node scripts/verify-assistant-slow-consumer-ci.cjs`；旧包调查 `node scripts/probe-assistant-slow-consumer.cjs` 仍被CI拒绝，不可取代门禁。仅本地限定通过，自身远端待验。
 
 ## CP76：跨节点共享取消事实不等于释放执行资源
 

@@ -26,6 +26,16 @@ test('slow-consumer investigation probe cannot replace acceptance or launch a ba
   assert.doesNotMatch(output, /evidenceDirectory/);
 });
 
+test('slow-consumer acceptance rejects baseline mode before ports or JAR access', async () => {
+  const child = spawn(process.execPath, [require.resolve('../../verify-assistant-slow-consumer-ci.cjs')], {
+    env: { ...process.env, CI: 'true', OPSPILOT_ASSISTANT_SLOW_CONSUMER_BASELINE: '1' }, windowsHide: true,
+  });
+  let output = ''; child.stderr.on('data', chunk => { output += chunk; });
+  const [code] = await once(child, 'close'); assert.equal(code, 1);
+  assert.match(output, /Baseline capture cannot replace slow-consumer acceptance/);
+  assert.doesNotMatch(output, /evidenceDirectory|Build the scoped production JAR|occupied/);
+});
+
 test('assistant UI baseline cannot replace acceptance or launch an archived JAR in CI', async () => {
   const child = spawn(process.execPath, [require.resolve('../../verify-assistant-request-ui-ci.cjs')], {
     env: { ...process.env, CI: 'true', OPSPILOT_ASSISTANT_UI_BASELINE: '1' }, windowsHide: true,
