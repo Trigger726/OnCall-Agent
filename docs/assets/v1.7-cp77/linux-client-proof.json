@@ -1,0 +1,237 @@
+{
+  "status": "WINDOWS_APPLICATION_PASS_LINUX_CLIENT_PROTOCOL_PASS_REMOTE_APPLICATION_PENDING",
+  "productionJarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+  "productionSourceUnchangedSince": "79d4a8bcc340bb968720ba604c069d8517f6d8a4",
+  "runtimeWindowsSourceHashes": [
+    {
+      "path": "scripts/verify-assistant-slow-consumer-ci.cjs",
+      "sha256": "313a8bf74ce6961499ee77d7069bf85015634110c8cc218f271de125cbb29c02"
+    },
+    {
+      "path": "scripts/fixtures/assistant_slow_tcp_client.py",
+      "sha256": "35b59e7cd08ae4b3c32dfe324774cc82ccae1acd70c9c169ae61e58674216f7e"
+    },
+    {
+      "path": "scripts/fixtures/test_assistant_slow_tcp_client.py",
+      "sha256": "8d84e7944f941607bf214f0bdcaf1d4e238826439e1015b8bc9da551b5fc5acc"
+    }
+  ],
+  "sourceHashScope": "Working-copy bytes; Git may normalize line endings on Linux.",
+  "windowsRun": {
+    "evidenceDirectory": "target/assistant-slow-consumer-it/run-ZpFX4w",
+    "result": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "fixture": "owned real native model HTTP and paused TCP SSE clients; actual Tomcat write stacks required",
+      "jarSha256": "44e43661b7882332990eb9a13e9c8549fdbd307854f9008596f3efa7d3b1cdc5",
+      "modelWorkers": 1,
+      "modelQueueCapacity": 1,
+      "outputWriters": 2,
+      "outputQueueCapacity": 1,
+      "maximumCharactersBeforeRelease": 99907,
+      "maximumNativeFramesBeforeRelease": 9991,
+      "tokensPersistedToEvidence": false,
+      "userFileDatabaseModified": false,
+      "cases": [
+        {
+          "name": "cancel-slow-client",
+          "cancelStatus": 200,
+          "requestStatus": "CANCELLED",
+          "cancelledAnswerRows": 0,
+          "cancellationAudits": 1,
+          "modelHttpClosedBeforeSocketResume": true,
+          "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+          "providerReleased": false
+        },
+        {
+          "name": "bounded-output-saturation",
+          "blockedWriters": 2,
+          "queuedTransport": 1,
+          "rejectedStatus": 503,
+          "rejectionCode": "ASSISTANT_STREAM_SATURATED",
+          "rejectedQuestionRows": 0,
+          "rejectedModelCalls": 0,
+          "rejectedKeyStatus": 404,
+          "queuedRequestCancelledAndModelHttpClosedBeforeWriterAvailable": true,
+          "synchronousWorkerStillUsable": true
+        },
+        {
+          "name": "revoke-slow-client",
+          "persistedStatus": "REVOKED",
+          "oldTokenStatus": 401,
+          "answerRows": 0,
+          "modelHttpClosedBeforeSocketResume": true,
+          "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+          "noRevokedTerminalPayload": true,
+          "alreadyBufferedBytesRecallClaimed": false
+        },
+        {
+          "name": "timeout-slow-client",
+          "originalBudgetSeconds": 12,
+          "persistedStatus": "TIMED_OUT",
+          "answerRows": 0,
+          "modelHttpClosedBeforeSocketResume": true,
+          "sameWorkerCompletedNativeAnswerBeforeSocketResume": true,
+          "timeoutEventAfterWriterReleased": true
+        }
+      ],
+      "startedPids": [
+        102860,
+        94104
+      ],
+      "stoppedPids": [
+        102860,
+        94104
+      ],
+      "tcpClientImplementation": "JDK per-client receive buffer",
+      "tcpClients": [
+        {
+          "case": "cancel",
+          "pid": 77920,
+          "receiveBufferBytes": 1024,
+          "receiveBufferSetBeforeConnect": true
+        },
+        {
+          "case": "saturation",
+          "pid": 100504,
+          "receiveBufferBytes": 1024,
+          "receiveBufferSetBeforeConnect": true
+        },
+        {
+          "case": "revoke",
+          "pid": 91764,
+          "receiveBufferBytes": 1024,
+          "receiveBufferSetBeforeConnect": true
+        },
+        {
+          "case": "timeout",
+          "pid": 83012,
+          "receiveBufferBytes": 1024,
+          "receiveBufferSetBeforeConnect": true
+        }
+      ],
+      "blockedOutputs": [
+        {
+          "case": "cancel",
+          "thread": "opspilot-assistant-output-1",
+          "previouslyBlockedThreads": [],
+          "newlyBlockedThreadRequired": true,
+          "modelWorkerDirectServletWrite": false
+        },
+        {
+          "case": "saturation",
+          "thread": "opspilot-assistant-output-2",
+          "previouslyBlockedThreads": [
+            "opspilot-assistant-output-1"
+          ],
+          "newlyBlockedThreadRequired": true,
+          "modelWorkerDirectServletWrite": false
+        },
+        {
+          "case": "revoke",
+          "thread": "opspilot-assistant-output-1",
+          "previouslyBlockedThreads": [],
+          "newlyBlockedThreadRequired": true,
+          "modelWorkerDirectServletWrite": false
+        },
+        {
+          "case": "timeout",
+          "thread": "opspilot-assistant-output-1",
+          "previouslyBlockedThreads": [],
+          "newlyBlockedThreadRequired": true,
+          "modelWorkerDirectServletWrite": false
+        }
+      ],
+      "providerCalls": 9,
+      "providerFrames": [
+        {
+          "question": "cp77-cancel-09cace76-5eee-4365-b2be-3afd0388adb0",
+          "calls": 1,
+          "framesWritten": 9991,
+          "charactersWritten": 99907
+        },
+        {
+          "question": "cp77-fresh-before-resume-db2ec894-f2a5-4860-8c69-ed81bbbf55f1",
+          "calls": 1
+        },
+        {
+          "question": "cp77-saturation-81050abc-d5ed-431b-83fb-6133f032e9c9",
+          "calls": 1,
+          "framesWritten": 9991,
+          "charactersWritten": 99907
+        },
+        {
+          "question": "cp77-queued-output-1031cebc-ea64-4aad-a156-8459255f02d8",
+          "calls": 1
+        },
+        {
+          "question": "cp77-rejected-output-73bc837a-32bd-457a-9efa-21a10f157d85",
+          "calls": 0
+        },
+        {
+          "question": "cp77-sync-control-during-output-saturation-9e7db996-59fb-4c43-96ad-d5148182980c",
+          "calls": 1
+        },
+        {
+          "question": "cp77-revoke-cbde2c2c-37c2-4e51-86e4-e2771547c5e8",
+          "calls": 1,
+          "framesWritten": 9991,
+          "charactersWritten": 99907
+        },
+        {
+          "question": "cp77-fresh-after-revoke-before-resume-45dbc436-3834-4258-bbd9-52eeee408b3e",
+          "calls": 1
+        },
+        {
+          "question": "cp77-timeout-71cf4291-a2c5-444d-a0d8-7a18e247ec18",
+          "calls": 1,
+          "framesWritten": 9991,
+          "charactersWritten": 99907
+        },
+        {
+          "question": "cp77-fresh-after-timeout-before-resume-838c40c1-1d9d-4670-b7b9-cab4ff8b3329",
+          "calls": 1
+        }
+      ],
+      "ownedTcpClientsStopped": true,
+      "ownedProcessesStopped": true,
+      "ownedProviderStopped": true,
+      "unexpectedJarErrors": 0
+    }
+  },
+  "linuxClientProtocol": {
+    "environment": "owned Ubuntu-24.04 WSL, python3; no Java/Node Linux application run",
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "firstAttempt": {
+      "tests": 2,
+      "errors": 2,
+      "reason": "Base64 validation rejected the stdin line newline before connecting; corrected by strip()",
+      "ownedHungTestProcess": 312,
+      "ownedProcessStopped": true
+    },
+    "checks": [
+      "Actual receive buffer and negotiated MSS observed",
+      "First event marker across reads",
+      "Socket EOF does not bypass RESUME",
+      "Response bytes retained across pause/resume",
+      "EOF before first token fails",
+      "Credential fixture value absent from diagnostics"
+    ]
+  },
+  "linuxSocketProbe": {
+    "actualReceiveBuffer": 2304,
+    "actualMss": 244,
+    "serverDefaultSendBuffer": 25600,
+    "blockedBeforeBytes": 7168,
+    "changes": "Only client SO_RCVBUF and TCP_MAXSEG before connect; no global sysctl/server setting changes",
+    "scope": "Owned socket probe, not production acceptance; CI environment may differ."
+  },
+  "limits": [
+    "Existing production cap 99907 characters / 9991 frames unchanged.",
+    "No output pool expansion, server socket buffer changes, global network changes or relaxed actual-stack assertion.",
+    "Linux per-client handshake changes require their own remote production application evidence.",
+    "Windows JDK path remains unchanged and independently passed."
+  ]
+}

@@ -2,7 +2,7 @@
 
 路线按“真实业务价值、面试可讲性、可验证性”排序。每一项完成前不在简历中宣称。
 
-77最新：自己的79d4a8b/Run37137614558因未形成Linux真实慢写阻塞及页面排队占位流timeout而整体failure（十二成功/两失败/容器跳过）。原失败/栈/ZIP摘要已保留，接收窗口与可观察HTTP夹具本地复验通过，新Linux CI待跑，详见[阶段九至十](acceptance/V1.7-checkpoint-77.md)。不把调整客户端或WindowsPASS当整体远端完成。
+77最新：自己的12fdf8a/Run37139048940十三成功/慢TCP失败/容器跳过，整体failure。页面六原生场景及两占位流cancelled+EOF通过，但实际接收缓冲1152仍未形成Tomcat写阻塞，两轮失败/ZIP摘要均保留。Linux自有客户端握手MSS控制与两协议测试已新增，Windows四应用场景通过，新源码自身Linux应用待验，详见[阶段十一至十二](acceptance/V1.7-checkpoint-77.md)。不把独立socket探测或本地PASS当整体远端完成。
 
 77慢消费者有界输出修复本地限定通过：[报告](acceptance/V1.7-checkpoint-77.md)、[原反例与修复证据](assets/v1.7-cp77/local-proof.json)。四实际暂停TCP场景三次通过，原模型HTTP/唯一worker在旧Provider未放行且TCP未resume时释放；满输出503接纳前不落问题。原生页面六场景/九图、原十三/八UI及跨节点/幂等/取消/预算回归通过，双时区各521发现/415执行/106条件跳过、原生62/前端107/生命周期20零失败。自身新CI尚待验，writer仍可能等容器写超时、不保证绝对连接TTL；原生AI MySQL HTTP矩阵、跨机器故障/生产容量继续，不借旧CI或删除历史失败。
 

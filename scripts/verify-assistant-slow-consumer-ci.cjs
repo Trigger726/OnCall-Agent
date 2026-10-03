@@ -23,10 +23,21 @@ async function verify() {
     maximumCharactersBeforeRelease: 99907, maximumNativeFramesBeforeRelease: 9991,
     tokensPersistedToEvidence: false, userFileDatabaseModified: false, cases: [], startedPids: [], stoppedPids: [] };
   const executable = name => process.env.JAVA_HOME ? path.join(process.env.JAVA_HOME, 'bin', name + (process.platform === 'win32' ? '.exe' : '')) : name;
-  const fixtureClasses = path.join(evidence, 'tcp-client-classes'); fs.mkdirSync(fixtureClasses);
-  // Compile before opening the provider or starting any owned process, so a missing JDK cannot leak a listener.
-  execFileSync(executable('javac'), ['--release', '17', '-d', fixtureClasses,
-    path.join(root, 'scripts/fixtures/AssistantSlowTcpClient.java')], { timeout: 15000, windowsHide: true });
+  let clientExecutable, clientArguments;
+  if (process.platform === 'linux') {
+    // Receive buffer alone did not create Linux backpressure within the existing production output limits.
+    // A small MSS is advertised by this owned client before connect; no server or global network settings change.
+    clientExecutable = 'python3'; clientArguments = [path.join(root, 'scripts/fixtures/assistant_slow_tcp_client.py')];
+    execFileSync(clientExecutable, ['-c', 'import socket; assert hasattr(socket, "TCP_MAXSEG")'], { timeout: 15000 });
+    result.tcpClientImplementation = 'Linux per-client receive buffer and advertised MSS';
+  } else {
+    const fixtureClasses = path.join(evidence, 'tcp-client-classes'); fs.mkdirSync(fixtureClasses);
+    // Check dependencies before opening the provider or starting any owned process.
+    execFileSync(executable('javac'), ['--release', '17', '-d', fixtureClasses,
+      path.join(root, 'scripts/fixtures/AssistantSlowTcpClient.java')], { timeout: 15000, windowsHide: true });
+    clientExecutable = executable('java'); clientArguments = ['-cp', fixtureClasses, 'AssistantSlowTcpClient'];
+    result.tcpClientImplementation = 'JDK per-client receive buffer';
+  }
   const frame = (content, finish_reason = 'null') => 'data:' + JSON.stringify({ request_id: randomUUID(), output: {
     choices: [{ finish_reason, message: { role: 'assistant', content } }] }, usage: { input_tokens: 1, output_tokens: 1, total_tokens: 2 } }) + '\n\n';
   function release(c) {
@@ -107,7 +118,7 @@ async function verify() {
     // Do not misattribute a previous client's blocked thread to the newly paused socket.
     const previous = new Set(sections(threads()).filter(outputBlocked).map(section => section.match(/^"([^"]+)"/)[1]));
     const id = await session(token), key = randomUUID(), c = control(name), body = JSON.stringify({ content: c.question });
-    const client = spawn(executable('java'), ['-cp', fixtureClasses, 'AssistantSlowTcpClient'], { stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true });
+    const client = spawn(clientExecutable, clientArguments, { stdio: ['pipe', 'pipe', 'pipe'], windowsHide: true });
     const s = { client, id, key, c, paused: false, closed: false, raw: '', decoder: new StringDecoder('utf8'), stderr: '' };
     s.socket = { destroy: () => client.kill('SIGTERM'), resume: () => client.stdin.write('RESUME\n') }; sockets.push(s);
     let lines = '';
@@ -116,6 +127,7 @@ async function verify() {
       for (let newline; (newline = lines.indexOf('\n')) !== -1;) {
         const line = lines.slice(0, newline).replace(/\r$/, ''); lines = lines.slice(newline + 1);
         if (line.startsWith('BUFFER ')) s.receiveBufferBytes = Number(line.slice(7));
+        else if (line.startsWith('MSS ')) s.maximumSegmentBytes = Number(line.slice(4));
         else if (line.startsWith('PAUSED ')) { s.raw += s.decoder.write(Buffer.from(line.slice(7), 'base64')); s.paused = true; }
         else if (line.startsWith('DRAINED ')) { s.raw += s.decoder.write(Buffer.from(line.slice(8), 'base64')); s.drained = true; }
         else s.protocolError = 'Unexpected TCP fixture output';
@@ -131,8 +143,11 @@ async function verify() {
     client.stdin.write(Buffer.from(request).toString('base64') + '\n');
     await until(() => s.paused && c.entered);
     assert.ok(s.receiveBufferBytes > 0 && s.receiveBufferBytes <= 16384, 'An actually constrained client receive window is required');
+    if (process.platform === 'linux') assert.ok(s.maximumSegmentBytes > 0 && s.maximumSegmentBytes <= 256,
+      'The Linux client must observe the actual small MSS negotiated before connect');
     assert.equal(s.protocolError, undefined); assert.equal(c.native, true); assert.equal(c.incremental, true);
-    result.tcpClients ??= []; result.tcpClients.push({ case: name, pid: client.pid, receiveBufferBytes: s.receiveBufferBytes, receiveBufferSetBeforeConnect: true });
+    result.tcpClients ??= []; result.tcpClients.push({ case: name, pid: client.pid, receiveBufferBytes: s.receiveBufferBytes, receiveBufferSetBeforeConnect: true,
+      ...(process.platform === 'linux' ? { maximumSegmentBytes: s.maximumSegmentBytes, maximumSegmentSetBeforeConnect: true } : {}) });
     const block = frame('\u0001'.repeat(9) + 'X'); let sent = 0;
     while (sent < 9990 && !c.closed) {
       const writable = c.response.write(block); sent++;

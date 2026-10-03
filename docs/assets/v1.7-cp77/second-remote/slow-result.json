@@ -1,0 +1,42 @@
+{
+  "status": "FAIL",
+  "baselineCapture": false,
+  "fixture": "owned real native model HTTP and paused TCP SSE clients; actual Tomcat write stacks required",
+  "jarSha256": "fef06654a08e4f6c82cefb69256ec5b751e6307ca98320379c5d96aea4cde4ae",
+  "modelWorkers": 1,
+  "modelQueueCapacity": 1,
+  "outputWriters": 2,
+  "outputQueueCapacity": 1,
+  "maximumCharactersBeforeRelease": 99907,
+  "maximumNativeFramesBeforeRelease": 9991,
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "cases": [],
+  "startedPids": [
+    3689
+  ],
+  "stoppedPids": [
+    3689
+  ],
+  "tcpClients": [
+    {
+      "case": "cancel",
+      "pid": 3785,
+      "receiveBufferBytes": 1152,
+      "receiveBufferSetBeforeConnect": true
+    }
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: An actual blocked OUTPUT thread is required; a fast socket is not a passing slow-consumer test\n    at paused (/home/runner/work/OnCall-Agent/OnCall-Agent/scripts/verify-assistant-slow-consumer-ci.cjs:157:12)\n    at async verify (/home/runner/work/OnCall-Agent/OnCall-Agent/scripts/verify-assistant-slow-consumer-ci.cjs:179:19)",
+  "ownedTcpClientsStopped": true,
+  "providerFrames": [
+    {
+      "question": "cp77-cancel-fc43799a-686d-4763-a207-90c981b800f5",
+      "calls": 1,
+      "framesWritten": 9991,
+      "charactersWritten": 99907
+    }
+  ],
+  "ownedProcessesStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}
