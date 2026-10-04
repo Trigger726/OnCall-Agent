@@ -1,0 +1,3356 @@
+{
+  "status": "LOCAL_BACKEND_SCOPE_PASS_OWN_MYSQL_AND_RETENTION_UI_PENDING",
+  "baseHead": "6f8f47ae73616547203de72ca509b0b4419de784",
+  "notificationRetentionEnabledByDefault": false,
+  "actualMysqlNotExecutedLocally": true,
+  "newRetentionUiNotImplementedOrVerified": true,
+  "sourceHashBasis": "SHA256 of working files; not Git LF-normalized blobs",
+  "productionJar": {
+    "file": "target/opspilot-0.1.0-SNAPSHOT.jar",
+    "sha256": "061e900680d8ecf744fcfbe32251e8930c3560ef77c7af6da0070c7668e2a04b",
+    "bytes": 81481534
+  },
+  "preserved88Jar": {
+    "file": "target/cp89-before/opspilot-cp88.jar",
+    "sha256": "dcc575a3a2495edc2dd5cfeea8e05ce456da29b8ec8dd0752b5af02a44adce8b",
+    "bytes": 81479901
+  },
+  "firstFailure": {
+    "maven": {
+      "file": "target/cp89-backend/first-red.log",
+      "sha256": "88e8fbdb869a47257fd7e72ee4b4dacd30cd5908abc9c510dbaf83e34fd23743",
+      "bytes": 19054
+    },
+    "xml": {
+      "file": "target/cp89-backend/first-red.xml",
+      "sha256": "90bf971dd0b9202c6ef4e676d18ab5e1c75a9179d80ab82839ac9dcde84c183d",
+      "bytes": 68320,
+      "name": "org.trigger.opspilot.oncall.OnCallSwapNotificationIntegrationTest",
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "shouldRejectNewManualRetryAfterPayloadRetentionWithoutChangingHistory"
+      ]
+    },
+    "semanticFailure": "Expired notification was accepted for a new manual retry by old delivery/retry implementation with V36 fixture"
+  },
+  "targeted": {
+    "maven": {
+      "file": "target/cp89-backend/targeted-matrix.log",
+      "sha256": "9288eefdbdb9b855b196305d5ed904a06bb42ae2becbb545faef95a7318a1e09",
+      "bytes": 38373
+    },
+    "executed": 44,
+    "notification": 27,
+    "originalSwap": 17,
+    "skipped": 0
+  },
+  "regression": [
+    {
+      "zone": "utc",
+      "discovered": 612,
+      "executed": 461,
+      "skipped": 151,
+      "failures": 0,
+      "errors": 0,
+      "freshXmlCount": 80,
+      "allOwn88SuiteCaseNamesPreserved": true,
+      "actualLocalNotificationDatabase": "H2",
+      "notificationCases27ZeroSkip": true,
+      "migration36ObservedPerNotificationCase": true,
+      "notificationPoolOrderedShutdown": true,
+      "fullMaven": {
+        "file": "target/cp89-backend/utc-package.log",
+        "sha256": "e12d400f4afff6be802c4b50bea435a3e3e4c1b21dcfbe0436183b499f3d261e",
+        "bytes": 705694
+      },
+      "suites": [
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.alert.AlertmanagerRejectionLifecycleIntegrationTest.xml",
+          "sha256": "99f9d460ca34e51962f869017de3af2be7231f71c9508ea33e4ce3c26eee773a",
+          "bytes": 69684,
+          "name": "org.trigger.opspilot.alert.AlertmanagerRejectionLifecycleIntegrationTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldClaimDueRejectionOnlyOnceAcrossConcurrentWorkers",
+            "shouldKeepOriginalErrorAlignedWithImmutableReplayPayload",
+            "shouldExhaustAutomaticAttemptsButAllowManualReplayAfterFix",
+            "shouldPurgeOnlyExpiredUnleasedPayloadAndReviveOnRedelivery",
+            "shouldApplyJitterWithinExponentialAndMaximumBounds",
+            "shouldBoundAutomaticReplayAndNotResetAttemptsOnDuplicateDelivery"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.alert.AlertmanagerWebhookDisabledIntegrationTest.xml",
+          "sha256": "5432c0c34e04d00b0e04e99b8c43c1ce37b82c5c07649622ad3c3a2aa75697ce",
+          "bytes": 66081,
+          "name": "org.trigger.opspilot.alert.AlertmanagerWebhookDisabledIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRefuseWebhookWhenSecretIsNotConfigured"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.alert.AlertmanagerWebhookIntegrationTest.xml",
+          "sha256": "67cf866dd5e8a2499c8d5e8f673aac35bf7131e033085c604ccb0b8df5ba238b",
+          "bytes": 67783,
+          "name": "org.trigger.opspilot.alert.AlertmanagerWebhookIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPersistDeduplicateAndRedactRejectedDeliveryWithReadOnlyAuditAccess",
+            "shouldAcceptValidAlertAndIsolatePermanentBadItem",
+            "shouldMakeRetryIdempotentAndRecordResolvedTransitionOnce",
+            "shouldReplayOnceAfterCmdbFixAcrossConcurrentRequests",
+            "shouldRequireDedicatedWebhookCredentialAndBoundBatchSize"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.analytics.IncidentAnalyticsIntegrationTest.xml",
+          "sha256": "07f492dc0d8deae6c1c2f22b8d5379256888488947d833e73d5f9caca8bf41a5",
+          "bytes": 66385,
+          "name": "org.trigger.opspilot.analytics.IncidentAnalyticsIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldSplitMetricsByOwningServiceWithoutInventingMissingMilestones",
+            "shouldExposeConfiguredSloWithoutInventingMeasurementsWhenPrometheusIsDisabled",
+            "shouldExposeHonestMilestoneDenominatorsMedianAndDrilldown"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantAiStreamingTest.xml",
+          "sha256": "077047e0d182f36d1009cc174fbd6fc4e404cc319fa0a61daac9e63fb443095f",
+          "bytes": 76558,
+          "name": "org.trigger.opspilot.assistant.AssistantAiStreamingTest",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldBoundResponseCountIncludingEmptyFramesAndCancelSource",
+            "shouldCancelIdleUpstreamWithoutClaimingNormalCompletion",
+            "shouldPreserveExactIncrementalWhitespaceAndUnicodeWithEmptyStopFrame",
+            "shouldAcceptExactCharacterBoundaryAndRejectOverflowBeforeDelivery",
+            "shouldKeepValidationStateIsolatedForEachColdSubscription",
+            "shouldPropagateLateProviderFailureWithoutRetryOrFallbackEvenAfterStop",
+            "shouldRejectEmptyOrWhitespaceOnlyAnswerEvenWithStop",
+            "shouldAcceptExactResponseCountBoundary",
+            "shouldRejectUnknownFilteredOrToolTerminalWithoutEmittingItsContent",
+            "shouldRejectActualToolCallPayloadAndDisableSdkToolExecutionInPrompt",
+            "shouldRejectEmptyStreamAndNonterminalEof",
+            "shouldNotMergeMultipleAlternativeGenerations",
+            "shouldRejectMoreContentOrDuplicateTerminalAfterStop"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest.xml",
+          "sha256": "73cf26175d6025af28fbf9f7805d5ae33d71c816495c93a6675fb58dfd4619fc",
+          "bytes": 53553,
+          "name": "org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 1,
+          "cases": [
+            "shouldVerifyNativeReplayRemoteCancelClearAndRevocationOnOwnedMySql"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantExecutionManagerTest.xml",
+          "sha256": "23f6a6a0f43f526b17c6ce028aed7a2b9f78b588b5687af638929f4c3e73266e",
+          "bytes": 55298,
+          "name": "org.trigger.opspilot.assistant.AssistantExecutionManagerTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPlaceEnvironmentOverridesUnderTheExecutionManagersConfigurationPrefix",
+            "shouldRejectFullQueueAndRemoveRevokedQueuedWorkWithoutInterruptingRunningProvider",
+            "shouldFailClosedWhenAuthorizationLookupFails",
+            "shouldIncludeQueueTimeInBudgetAndStopLateWorkerBeforeAnyMoreAuthorizationQueries",
+            "shouldNeverExecuteWorkerAfterAdmissionTransactionFails",
+            "shouldCloseTransportWhenWorkerFailsUnexpectedly",
+            "shouldRejectInvalidExecutionLimits",
+            "shouldGateWorkerAndPublishCancellationOnceAfterAdmissionSettles",
+            "shouldRejectCapacityBeforeCallingAdmission",
+            "shouldObserveDurableCancellationWithoutInterruptingModel",
+            "shouldStopOnShutdownWithoutInterruptingWorkerOrTouchingAuthorizationAfterward"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest.xml",
+          "sha256": "99a8563f78b28dbd75a03f8753ba41c8a31fae70eb81fd8e3d6dcc138ebb7550",
+          "bytes": 75024,
+          "name": "org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "browserDisconnectShouldContinueOriginalDurableRequestWithoutAnotherPost",
+            "shouldTimeoutAnIdleProviderAfterPreviewWithoutCommittingPartialAnswer",
+            "shouldStopRevokedNativePreviewWithoutLateAnswerOrErrorPayload",
+            "shouldNotResurrectClearedNativePreviewWhenModelCompletesLate",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldRejectNativeQueueSaturationBeforeAdmissionAndReuseCancelledSlot",
+            "nativeDoneMustNotEscapeAFailedFinalAuditTransaction",
+            "shouldDeliverRealNativeTokenBeforeCompletionAndCommitExactAnswer",
+            "shouldCancelAfterPreviewAndReuseWorkerBeforeOldProviderIsReleased"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeHttpClientTest.xml",
+          "sha256": "cd79f41594350f420c5b414266e4674a86a13d357dcfc48885c01d226e2bce8e",
+          "bytes": 54385,
+          "name": "org.trigger.opspilot.assistant.AssistantNativeHttpClientTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "cancellationSettlesSubscriberBeforeJdkWrappedCancellationArrives",
+            "successIsExactAndCancellingOneExchangeCannotCancelAnother",
+            "clientDelegatesBothAsyncOverloadsSyncAndConfiguration",
+            "ordinaryProviderFailureIsPropagatedWithoutBeingReclassifiedOrIgnored",
+            "lateSuccessCannotReplaceCancellationEvenWhenUnderlyingFutureCannotBeCancelled"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest.xml",
+          "sha256": "130f0c222bf0751c1c4e17ba8513cc564162df85eb9e6facdff6a0ab7953500e",
+          "bytes": 54208,
+          "name": "org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRejectRealHttpEofWithoutStopRatherThanAcceptingPartialAnswer",
+            "shouldRequestNativeIncrementalProtocolRatherThanACompleteJsonAnswer",
+            "shouldRejectRealHttpLengthTerminationWithoutRetryOrRuleFallback",
+            "shouldDeliverFirstRealHttpDeltaBeforeProviderCanFinish"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeTransportTest.xml",
+          "sha256": "e65976a3cedb9f62e25ee8d342f8cc27aad56820ee21394fdbcde082835178f7",
+          "bytes": 54805,
+          "name": "org.trigger.opspilot.assistant.AssistantNativeTransportTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "requestsWithoutAssistantScopeKeepTheirResponseUnmodified",
+            "cancellationBeforeHeadersClosesRetainedPendingExchange",
+            "scopedNonNativeRequestsKeepTheirResponseUnmodified",
+            "cancellationClosesBodyEvenWhenIntermediatePublisherRetainsItsUpstream",
+            "validationFailureAlsoClosesRetainedBodyWithoutRetry",
+            "eachColdSubscriptionHasItsOwnCancellationSignal",
+            "originalConnectorIsPreservedOutsideNativeAssistantScope",
+            "onlyNativeContextSelectsDedicatedConnector"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantSessionRevocationIntegrationTest.xml",
+          "sha256": "eeaafd2b231d18b987d9ac33dc1b5e19049868de88aa2562bd860bffca09798d",
+          "bytes": 74817,
+          "name": "org.trigger.opspilot.assistant.AssistantSessionRevocationIntegrationTest",
+          "tests": 32,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRejectSynchronousRequestWhenStreamCapacityIsFullWithoutWrites",
+            "shouldReplayCompletedKeyAcrossSyncAndStreamWithoutWrites",
+            "shouldNotResurrectDeletedSessionWhenLateProviderReturns",
+            "shouldPersistQueuedKeyAndCancelItWithoutQuestionWrites",
+            "shouldKeepClearedKeyTombstoneWithoutResurrectingMessages",
+            "shouldRejectInvalidKeysAndOtherOwnersStatusWithoutWrites",
+            "shouldRejectDuplicateInFlightKeyWithoutCallingProvider",
+            "shouldPreserveCompletedAnswerWhenCancellationArrivesLate",
+            "shouldCloseExpiredStreamBeforeProviderReleaseWithoutPersistingItsAnswer",
+            "shouldExposeKeyedTimeoutBeforeProviderReleaseAndNeverRetryItAutomatically",
+            "shouldNotSendCommittedAnswerAfterLogoutCompletesBeforeControllerReturns",
+            "shouldIncludeSynchronousWorkInStreamCapacityAndAllowReplacement",
+            "shouldReplayCompletedKeyWithoutTakingSaturatedCapacity",
+            "shouldDiscardLateStreamAnswerAfterCommittedLogoutAndAllowFreshLogin",
+            "shouldReturnSafeTimeoutBeforeProviderReleaseAndDiscardItsLateAnswer",
+            "shouldCancelRunningKeyBeforeProviderReleaseWithoutLateAnswer",
+            "shouldTimeoutRunningAndQueuedSynchronousRequestsBeforeProviderRelease",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectReusedKeyWithDifferentQuestionWithoutWrites",
+            "shouldPersistQueuedTimeoutWithoutAcceptingQuestionOrRetryingKey",
+            "shouldSendCancelledEventWithoutDoneForRunningStream",
+            "shouldNotResurrectClearedMessagesWhenLateProviderReturns",
+            "shouldRejectLateSynchronousAnswerAfterCommittedLogoutAndAllowFreshLogin",
+            "shouldNotSendCommittedAnswerAfterLeaseExpiresBeforeControllerReturns",
+            "shouldExposeRevokedKeyToFreshOwnerWithoutRevivingItsOriginalWork"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantStreamReaderTest.xml",
+          "sha256": "bf9115f1e1437ac5e08d7751a25452aa07f41e5da8b0abd1a616302a22451a7e",
+          "bytes": 54538,
+          "name": "org.trigger.opspilot.assistant.AssistantStreamReaderTest",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "previewCallbackFailureCancelsTheProvider",
+            "upstreamFailureCannotReturnAnAnswer",
+            "idleProviderStillChecksStopAndCancelsSubscription",
+            "stoppedBeforeStartNeverSubscribes",
+            "preservesExactFragmentsAndRequestsOnlyOneAtATime",
+            "sizeLimitIsCheckedBeforePublishingAnOversizedFragment",
+            "emptyOrWhitespaceOnlyCannotCommit"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantStreamTransportTest.xml",
+          "sha256": "505d796a0d6632b587fd769357620815a007f86010d6f0960c9d6515e5acfe65",
+          "bytes": 54918,
+          "name": "org.trigger.opspilot.assistant.AssistantStreamTransportTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPreserveNativeOrderAndPublishOnlyTheCommittedAnswerId",
+            "disconnectedBrowserShouldNotCancelTheDurableWorkerOrSkipItsCheckpoints",
+            "rejectedReplayLeaseShouldCloseItsWriterWithoutLeakingAnIdleReservation",
+            "shouldCheckOriginalFencesWhileWriteIsBlockedAndStopWithoutWaitingForItsLock",
+            "shouldBoundReservedWritersAndRejectBeforeAnyModelAdmission",
+            "terminalEventMustRecheckOriginalLeaseRatherThanReuseAnEarlierAuthorizationResult",
+            "shouldRemoveAnAbortedReservationFromTheBoundedWriterQueue",
+            "shouldRejectUnboundedConfigurationAndExposeScopedEnvironmentOverrides"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest.xml",
+          "sha256": "5f051d83c2df2a57a7f056016e11730a3c39eef6a8b5b8309433b1921716af0f",
+          "bytes": 68907,
+          "name": "org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRollbackKeyedAssistantCompletionStateWithAnswerAndAudit",
+            "shouldRollbackAssistantCancellationWhenAuditInsertFails",
+            "shouldRecheckAssistantLeaseExpiryAfterFinalLockWait",
+            "shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence",
+            "shouldFenceAssistantCompletionAfterCancellationCommit",
+            "shouldRollbackAssistantAnswerWhenCompletionAuditInsertFails",
+            "shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt",
+            "shouldFenceAssistantFinalCommitAgainstConcurrentRevocation",
+            "shouldReplayCompletedAssistantKeyWithCaseSensitiveSessionScope",
+            "shouldPreserveAssistantCompletionWhenCancellationWaitsForCommit",
+            "shouldRollbackAssistantCompletionWhenFinalStopCheckFails"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.common.GlobalExceptionHandlerDisconnectTest.xml",
+          "sha256": "aae60c8f0d97fc37c5685b34006d4f2ce9245d5824fd9b8659034e1c9b47acd2",
+          "bytes": 65462,
+          "name": "org.trigger.opspilot.common.GlobalExceptionHandlerDisconnectTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldResolveTheSpecificContainerExceptionBeforeTheGenericHandler",
+            "shouldLeaveAnAlreadyCommittedResponseUnchanged",
+            "shouldNotWriteAnotherBodyToADisconnectedSocketOrReportSuccess",
+            "shouldNotHideOutboundProviderIOFailuresBasedOnTheirMessage"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.distributed.DistributedAgentEventsIntegrationTest.xml",
+          "sha256": "7073e96a5b52d2a7130c6aa9586eccef505006b34a10d297090e95efa922dc1f",
+          "bytes": 54361,
+          "name": "org.trigger.opspilot.distributed.DistributedAgentEventsIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 3,
+          "cases": [
+            "shouldCompleteDuringRedisOutageAndDrainOutboxAfterRecovery",
+            "shouldBroadcastCommittedEventsAcrossTwoJvmsAndResumeOnTheOtherNode",
+            "shouldSettleExpiredRunAfterExecutingJvmCrashes"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.incident.IncidentStatusTest.xml",
+          "sha256": "78ef07ba00ef06db1de5a0b1de726a4fcbb862ff0a5b488839b3f1cd5b0658df",
+          "bytes": 53649,
+          "name": "org.trigger.opspilot.incident.IncidentStatusTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldAllowOnlyExplicitStateTransitions"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentEventReceiverTest.xml",
+          "sha256": "3b5010db9cc2577d986709fab20388d7c20960b1855b2e6914afaeb5c472d491",
+          "bytes": 56494,
+          "name": "org.trigger.opspilot.investigation.AgentEventReceiverTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[1]",
+            "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[2]",
+            "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[3]",
+            "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[4]",
+            "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[5]",
+            "shouldNotRewindUnchangedTailOrCheckTailDuringActiveReads",
+            "shouldPreserveCursorWhenTailInspectionFails",
+            "shouldRewindAfterObservingEmptyOrMissingStream"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentEventStreamIntegrationTest.xml",
+          "sha256": "6d60dd7cda4ad170501bd4fbde6a6faf85dd0952ed906606b4292b0140b56b46",
+          "bytes": 66986,
+          "name": "org.trigger.opspilot.investigation.AgentEventStreamIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldResumeViaHeaderAndCloseWhenTerminalAlreadyConsumed",
+            "shouldCatchUpActiveSubscriptionWithoutRedisAndHonorQueryCursor",
+            "shouldWriteSecurityHeadersBeforeSseWorkStartsAndRetainStreamCachePolicy",
+            "shouldProtectEndpointAndRejectForeignOrInvalidCursors",
+            "shouldAllowRecoveryHeadersAcrossConfiguredOrigin"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentEventSubscriptionsTest.xml",
+          "sha256": "a67de3dd72af7c0d702506bbd6938e189373f5e6de3997ad900f76b3a0d19fee",
+          "bytes": 55357,
+          "name": "org.trigger.opspilot.investigation.AgentEventSubscriptionsTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRejectInvalidSessionBeforeCursorLookupOrSlotAllocation",
+            "shouldRecoverWithoutNotificationsAndReleaseDisconnectedSlots",
+            "shouldFailClosedWhenOngoingAuthorizationReadFails",
+            "shouldMergeRegistrationReplayAndConcurrentDuplicateNotifications",
+            "shouldKeepNotificationThreadResponsiveWhileOutputIsBlocked",
+            "shouldRetryRejectedWorkerWithoutSendingOnNotificationThread",
+            "shouldCloseAlreadyConsumedTerminalAndIsolateBrokenOutput",
+            "shouldStopInsideBatchWhenSessionIsRevokedAfterFirstSend",
+            "shouldBoundConnectionsAndRejectBeforeSchedulingMoreWork",
+            "shouldCloseAtStreamBudgetAndPermitCursorResume",
+            "shouldCloseIdleRevokedConnectionAndReleaseItsSlotAtCatchup"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentEventTransactionIntegrationTest.xml",
+          "sha256": "e0fc6e3dc8f28e623ec7e3d16195caacc9b0d939362b1bcd3ed198c65717b99f",
+          "bytes": 70863,
+          "name": "org.trigger.opspilot.investigation.AgentEventTransactionIntegrationTest",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPurgeOnlyExpiredDeliveredRowsInBoundedBatches",
+            "shouldRejectOutboxOperationsInsideCallerTransaction",
+            "shouldKeepCommittedEventsAndNotifyLaterSubscribersWhenOneSinkFails",
+            "shouldPublishOnlyAfterOuterCommitAndReplayTheSameEvent",
+            "shouldReclaimExpiredLeaseAndFenceOldOwner",
+            "shouldNotPublishOrConsumeSequenceWhenOuterTransactionRollsBack",
+            "shouldFinishInvestigationWhenEveryLiveDeliveryFails"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentExecutionManagerTest.xml",
+          "sha256": "b11cdcc4a9fbacb1794a26752fd757234544c0a292611917e8046297cfae2d71",
+          "bytes": 54191,
+          "name": "org.trigger.opspilot.investigation.AgentExecutionManagerTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldFailClosedWithoutInterruptingActiveAuthenticatedWorker",
+            "shouldRejectBeyondRunningAndQueuedCapacityWithoutStartingRejectedTask",
+            "shouldExposeSaturationAndInterruptActiveTask",
+            "shouldReleaseRevokedQueuedSlotWhileAnotherWorkerRemainsBlocked"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentRunCancellationIntegrationTest.xml",
+          "sha256": "88b3baadc9244b76107507bb17084ea3283cdbaff68e6258665d537cd50dcdf8",
+          "bytes": 65504,
+          "name": "org.trigger.opspilot.investigation.AgentRunCancellationIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldFinishAsCancelledWhenToolReturnsAfterCancellationRequest"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentRunRecoveryIntegrationTest.xml",
+          "sha256": "f1d11a372b83f926b064be4088a5b13eb1045d28343cb7ab379ac6a78c6c01c0",
+          "bytes": 65483,
+          "name": "org.trigger.opspilot.investigation.AgentRunRecoveryIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldSettleExpiredRunningTaskOnceAndFenceLateToolResult"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentSessionRevocationIntegrationTest.xml",
+          "sha256": "6cf063c4a752403d07a48b0aff2e549d348d8a2129b00b21121fe246cadbe7f1",
+          "bytes": 70166,
+          "name": "org.trigger.opspilot.investigation.AgentSessionRevocationIntegrationTest",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRefuseFinalReportCommitWhenSessionIsRevokedAfterLastCheckpoint",
+            "shouldPersistCancellationWhenToolReturnsWithInterruptFlag",
+            "shouldCloseIdleSubscriptionAfterPasswordChangeAndKeepOtherAccountValid",
+            "shouldStopExistingHttpSubscriptionAfterCommittedLogoutWithoutLeakingNewEvent",
+            "shouldCloseAlreadyEstablishedSubscriptionWhenSignedTokenExpires",
+            "shouldCancelQueuedInvestigationAfterRoleDowngradeButKeepAuthorizedRead",
+            "shouldNotStartQueuedRunAfterItsCapturedSessionIsRevoked",
+            "shouldDiscardLateToolResultAfterRealPostStreamSessionIsRevoked",
+            "shouldCloseIdleSubscriptionWhenAccountIsDisabled"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.investigation.InvestigationControllerDisconnectTest.xml",
+          "sha256": "befb40cb5dc65d61e215c694386b56cf1e35e7036a17925d1694c4f14de7bdf3",
+          "bytes": 53716,
+          "name": "org.trigger.opspilot.investigation.InvestigationControllerDisconnectTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldIsolateClientDisconnectFromBackgroundEventPublishing"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.investigation.RedisRelayIntegrationTest.xml",
+          "sha256": "b999512a120eb0f4a2aefa0dc8465d57790ba3172a564e26e3876ca6f366c794",
+          "bytes": 54598,
+          "name": "org.trigger.opspilot.investigation.RedisRelayIntegrationTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 4,
+          "cases": [
+            "shouldRetryRedisFailureAndPreserveEventIdentityAcrossDuplicateDelivery",
+            "shouldBoundRecoveryReadsAndAvoidReplayingAnUnchangedTrimmedTail",
+            "shouldRecoverRegressedReusedAndMissingStreamWithoutRestartingReceiver",
+            "shouldBroadcastWithIndependentCursorsAndRetryListenerFailure"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.MySqlCompatibilityIntegrationTest.xml",
+          "sha256": "4b733b2b89d553ab06c03f9741d0e1e705d46d53bc44bdb2b23c9045d19cc5a7",
+          "bytes": 64973,
+          "name": "org.trigger.opspilot.MySqlCompatibilityIntegrationTest",
+          "tests": 46,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 46,
+          "cases": [
+            "shouldApplyAllMigrationsAndRunIdempotentInvestigationOnMySql",
+            "shouldPromoteOneProblemAcrossTwoRepeatableReadTransactions",
+            "shouldClaimOutboxOnceAcrossConcurrentRelays",
+            "shouldSettleExpiredRunOnceAcrossConcurrentMySqlReconcilers",
+            "shouldPreserveAutomaticReplayBudgetAndPurgePayloadOnMySql",
+            "shouldKeepDraftFollowUpsOutOfMySqlEscalationAndNotification",
+            "shouldReadBoundedEvaluationHistoryOnMySql",
+            "shouldRouteOneUnacknowledgedIncidentStepAcrossConcurrentMySqlScans",
+            "shouldSerializeRosterWritesAndKeepCancelledHistoryOnMySql",
+            "shouldAggregatePersistedRetrievalCohortsOnMySql",
+            "shouldKeepUnapprovedRunbooksOutOfRetrievalOnMySql",
+            "shouldFenceAndReplayRunbookPublicationOnMySql",
+            "shouldBindImportIdentityAndCurrentManagerRoleOnMySql",
+            "shouldSerializeIndependentPublicationTransactionsOnMySql",
+            "shouldRollbackRunbookPublicationAndAuditOnMySql",
+            "shouldRejectDisabledReadsAndLogin",
+            "shouldRejectDisabledWriteWithoutAuditOrTimeline",
+            "shouldRejectOldJwtAfterAccountRemoval",
+            "shouldReloadCurrentRoleButKeepActiveAuthentication",
+            "shouldUseRealServletRequestForAuthenticatedHttpWrite",
+            "shouldRejectOldJwtWhenUsernameIsRecreated",
+            "shouldRejectMalformedSignedIdentityWithoutBusinessWrites",
+            "shouldRejectOutOfRangeJwtDatesWithoutServerErrors",
+            "shouldRevokeAllIssuedTokensWithoutFreshLoginRevivingThem",
+            "shouldChangePasswordAndRevokeTokensAtomically",
+            "shouldRejectInvalidPasswordChangesWithoutWrites",
+            "shouldFenceConcurrentLogoutRequests",
+            "shouldOnlyRevokeAuthenticatedActorsOwnSessions",
+            "shouldRejectLegacyAndMalformedSessionVersions",
+            "shouldSupportUnicodeWithoutAllowingUnchangedPassword",
+            "shouldRejectSessionVersionExhaustionWithoutWrapping",
+            "shouldRollbackPasswordAndVersionWhenAuditFails",
+            "shouldRejectBcryptByteTruncationAliasesAtLogin",
+            "shouldFenceFinalAuthorizationAgainstConcurrentRevocationCommit",
+            "shouldRecheckLeaseExpiryAfterFinalAuthorizationLockWait",
+            "shouldRollbackAssistantAnswerWhenCompletionAuditInsertFails",
+            "shouldRollbackAssistantCompletionWhenFinalStopCheckFails",
+            "shouldFenceAssistantFinalCommitAgainstConcurrentRevocation",
+            "shouldRecheckAssistantLeaseExpiryAfterFinalLockWait",
+            "shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence",
+            "shouldReplayCompletedAssistantKeyWithCaseSensitiveSessionScope",
+            "shouldRollbackKeyedAssistantCompletionStateWithAnswerAndAudit",
+            "shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt",
+            "shouldRollbackAssistantCancellationWhenAuditInsertFails",
+            "shouldFenceAssistantCompletionAfterCancellationCommit",
+            "shouldPreserveAssistantCompletionWhenCancellationWaitsForCommit"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.observability.LogRedactorTest.xml",
+          "sha256": "0ef84ca7cb60bd5b588449b210cbf33417937f97fb2aa5412858d3c68a811eeb",
+          "bytes": 53678,
+          "name": "org.trigger.opspilot.observability.LogRedactorTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRedactSecretsAndPersonalIdentifiersFromMessagesAndMetadata"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.observability.logs.LogsProviderRouterTest.xml",
+          "sha256": "2acfdfcbcf1d7f417eca1b89a964616d09c4c359e5853a7c2b807cc4fee0c49b",
+          "bytes": 53695,
+          "name": "org.trigger.opspilot.observability.logs.LogsProviderRouterTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldFallBackAndPreserveExternalProviderFailureAsWarning"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.observability.logs.LokiLogsProviderContractTest.xml",
+          "sha256": "5e63cb1e7d1f2aa3cf60a2554aaf20746187adecfb147f8a51c2e4c9b099dfd3",
+          "bytes": 53718,
+          "name": "org.trigger.opspilot.observability.logs.LokiLogsProviderContractTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldCallRangeQueryMapStructuredLogAndRedactBeforeReturningEvidence"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.observability.metrics.PrometheusMetricsProviderContractTest.xml",
+          "sha256": "61ed8ef56833f9650ff990e6277de776f1a59e6ae4ecbf881571718ff76d032f",
+          "bytes": 53734,
+          "name": "org.trigger.opspilot.observability.metrics.PrometheusMetricsProviderContractTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldCallInstantQueryAndMapVectorResponseToProviderContract"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.observability.ProviderGuardTest.xml",
+          "sha256": "0460eef638e223296300564cf1ed6f140dc7e55a7b81579c1a740ff19b572461",
+          "bytes": 53670,
+          "name": "org.trigger.opspilot.observability.ProviderGuardTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRetryOpenCircuitAndRecoverThroughHalfOpenProbe"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.observability.tracing.AgentTraceIntegrationTest.xml",
+          "sha256": "4883763335886081b70711dcad95cf062f3841717358b518eda42063beb21fbf",
+          "bytes": 65661,
+          "name": "org.trigger.opspilot.observability.tracing.AgentTraceIntegrationTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldAttachCreatedAlertAndIncidentIdentifiersToRequestTrace",
+            "shouldKeepHttpParentAcrossExecutorAndCreateToolAndProviderChildren"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.observability.tracing.HttpTracePropagationIntegrationTest.xml",
+          "sha256": "4b11bda1f90ed6bd6f9db80710628e423daceb5f439f3347ff76f6b2cfc688ef",
+          "bytes": 65604,
+          "name": "org.trigger.opspilot.observability.tracing.HttpTracePropagationIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPropagateW3cTraceContextToPrometheusAndLoki"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.observability.tracing.OpenTelemetryBridgeTest.xml",
+          "sha256": "dd257a29e2b0c51f94667f1a3ad51bdc5fd1c0270c20d959e7290d32f0d471b3",
+          "bytes": 53770,
+          "name": "org.trigger.opspilot.observability.tracing.OpenTelemetryBridgeTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldExportCapturedAsyncHierarchyThroughRealOtelBridge"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.observability.tracing.OpsPilotTracingTest.xml",
+          "sha256": "4ae5f5bc75f92367969b25671c69dcc00dcefd0324795479592a555a258022df",
+          "bytes": 54221,
+          "name": "org.trigger.opspilot.observability.tracing.OpsPilotTracingTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldTraceAlertResultWithoutTaggingPayloadText",
+            "shouldRunCapturedTaskWithoutAParentSpan",
+            "shouldPreserveTraceHierarchyAcrossCapturedThreadAndTagBusinessIdentifiers",
+            "shouldMarkFailedProviderSpan"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.IncidentEscalationIntegrationTest.xml",
+          "sha256": "dfb76ae275d1c4f6e517afcd0e7d2c3f42c092bc83b34a15837a2089dffe4ec9",
+          "bytes": 67024,
+          "name": "org.trigger.opspilot.oncall.IncidentEscalationIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRouteFirstStepAsPartOfNewAlertTransaction",
+            "shouldRouteOverrideThenStopAfterAcknowledgement",
+            "shouldExposeHistoryButRestrictManualScan",
+            "shouldExecuteEachStepOnceAcrossConcurrentScans",
+            "shouldRecordMissingShiftWithoutClaimingDeliveryAndThenRouteLaterSteps"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest.xml",
+          "sha256": "b57eba89fa15d6cea12b6f16374c5ff4cb8728f438fe4e782430d56f028ff4b5",
+          "bytes": 55725,
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 8,
+          "cases": [
+            "shouldMatchCurrentSelectionAndExcludeCancelledCoverage",
+            "shouldRevealLegacySameLayerOverlapAndUseExactRoutingTieBreaks",
+            "shouldAllowAuthenticatedReadOnlyApiAndValidateWindowsWithoutWrites",
+            "shouldPartitionGapsOverridesAndHalfOpenHandoffsWithoutDoubleCounting",
+            "shouldRecomputeCoverageFromCurrentAccountStatusAndRole",
+            "shouldRejectDenseInputRatherThanReturnTruncatedHealthyCoverage",
+            "shouldFallbackFromIneligibleOverrideAndReportUnavailableGapsAndInactivePlans",
+            "shouldNotForecastUnmaterializedOrPausedRotations"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest.xml",
+          "sha256": "45745433fe7cfa4e97d0795af047a1442bfdf8efa61dc0bdf48d3016d4c331e2",
+          "bytes": 60685,
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest",
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 27,
+          "cases": [
+            "shouldRevokeCoverageOnceWithoutRewritingAcceptedConsentOrSource",
+            "shouldAcceptExactlyOnceAndPreserveSourceAndCoverageHistory",
+            "shouldSerializeDifferentManagerRevocationsWithoutDoubleAudits",
+            "shouldAllowOnlyOneWinnerBetweenAcceptAndWithdraw",
+            "shouldSerializeConcurrentRequestRetriesAndAcceptRetries",
+            "shouldObserveSourceCancellationCommittedBeforeScheduleLock",
+            "shouldSerializeConcurrentSameKeyRevocationWithOnlyOneChange",
+            "shouldExposeListTruncationInsteadOfSilentlyDroppingRequests",
+            "shouldRejectInvalidListFiltersInsteadOfSilentlyBroadeningTheQuery",
+            "shouldRejectChangedPayloadForSameKeyAndInvalidWindows",
+            "shouldRejectInvalidRevocationAndStaleVersionsBeforeMutation",
+            "shouldRefuseNewRevocationAfterEndButAcknowledgePreviouslyCommittedCommand",
+            "shouldRejectInactivePlanOrRequesterAndAllowTargetRejection",
+            "shouldExposeExternalCancellationWithoutInventingARevocationRecord",
+            "shouldRollbackCancellationLedgerAndBothAuditsTogether",
+            "shouldNotPromiseOriginalCoverageWhenOriginalShiftWasAlsoCancelled",
+            "shouldRollBackOverrideDecisionAndAuditsTogether",
+            "shouldRestrictRevocationToCurrentActiveManagersIncludingOldJwt",
+            "shouldEnforceParticipantIdentityEvenForAdminsAndFreshRoles",
+            "shouldRejectNewOverrideAndLegacyOrdinaryOverlapWithoutPartialWrites",
+            "shouldRejectExpiredRequestsWithoutMutatingTheirHistory",
+            "shouldRejectReusedRevocationKeyAndDifferentIntentAfterCancellation",
+            "shouldRejectSourceCancellationAndStillAllowWithdrawal",
+            "shouldNotAcceptTwoDifferentRequestsForTheSameSourceWindow",
+            "shouldClampOngoingCoverageAfterActualLockWaitAndRouteOnlyNewIncidents",
+            "shouldFilterParticipantsAndStatusBeforeTheListLimit",
+            "shouldEnforceHttpRolesAndParticipantIdentity"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest.xml",
+          "sha256": "89fbe28827d20e5b2fc4a92d540c42efc3e58c714da994a342e3973f4b088264",
+          "bytes": 56258,
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 10,
+          "cases": [
+            "shouldSerializeConcurrentScansAndConcurrentRotationCreation",
+            "shouldRequireManagementRolesForWritesAndAuditTheHttpActor",
+            "shouldExposeBoundedSlotWindowAndStopWhenScheduleIsDisabled",
+            "shouldRecordUnavailableMemberWithoutSilentlyChangingTheMemberOrder",
+            "shouldRespectManualConflictAndRetryWithoutRevivingCancelledGeneratedShift",
+            "shouldRollBackOneFailedRotationAndContinueOtherRotations",
+            "shouldGenerateStableRoundRobinAndRouteTheActualFirstOwner",
+            "shouldReportMemberRevocationAfterGenerationWithoutReassigningHistoricalFacts",
+            "shouldKeepOverridePriorityAndPauseOnlyFutureGeneration",
+            "shouldRejectInvalidRulesAndKeepHistoricalDemoUntouched"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest.xml",
+          "sha256": "f1b2cd20d8aab81340538ba36a851d2098308eb8dd4aa4f0286f06f9c5cdf2dd",
+          "bytes": 55618,
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 8,
+          "cases": [
+            "shouldObserveNewOverrideDuringScan",
+            "shouldObserveDisabledScheduleDuringScan",
+            "shouldObserveDisabledUserDuringScan",
+            "shouldObserveChangedRoleDuringScan",
+            "shouldObserveCommittedCancellationDuringScan",
+            "shouldObserveCommittedCancellationDuringAlertIntake",
+            "shouldObserveDisabledPolicyDuringScan",
+            "shouldRollBackIntakeAndItsRoutedFactsTogether"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallSwapIntegrationTest.xml",
+          "sha256": "c836b036f8ea5a97f55b339c0b893ed5b43844ad3d34c51ba6c7aa842e82272d",
+          "bytes": 58180,
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallSwapIntegrationTest",
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 17,
+          "cases": [
+            "shouldFilterParticipantAndEitherScheduleBeforeLimitAndExposeTruncation",
+            "shouldHaveOneWinnerBetweenAcceptanceAndWithdrawal",
+            "shouldRejectEitherInactiveScheduleAndStillAllowTargetRejection",
+            "shouldRejectExistingOverridesAndLegacyOrdinaryOverlapWithoutHalfSwap",
+            "shouldRecheckBothParticipantsAndPermitRejectionWhenRequesterIsDisabled",
+            "shouldSerializeReverseCrossScheduleRequestsWithoutDeadlockOrDoubleExchange",
+            "shouldRejectEitherStaleSourceAndStillAllowWithdrawal",
+            "shouldRequireActualParticipantsEvenForAdministrators",
+            "shouldExchangeBothFutureShiftsAtomicallyAndPreserveOrdinaryHistory",
+            "shouldSerializeConcurrentSameKeyRequestsAndAcceptRetries",
+            "shouldEnforceHttpRolesParticipantAndExplicitVersions",
+            "shouldRejectStartedShiftsAndOverrideSources",
+            "shouldExchangeAcrossSchedulesWithoutChangingEitherRotation",
+            "shouldAcknowledgeAcceptedHistoryWithoutRevivingCancelledCoverage",
+            "shouldRollbackBothOverridesDecisionAndAuditsWhenFinalAuditFails",
+            "shouldRollbackBothOverridesWhenSecondCreationAuditFails",
+            "shouldRejectSelfExchangeInvalidKeysAndChangedIdempotentPayload"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationIntegrationTest.xml",
+          "sha256": "acba35e3e9dd93009c6afcceb9d54c690e9f139c965325abd2f9c17fdcad778d",
+          "bytes": 61656,
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationIntegrationTest",
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 27,
+          "cases": [
+            "shouldRollbackRequestAuditAndNotificationTogether",
+            "shouldRollbackBothOverridesAndNotificationRowsWhenEnqueueFails",
+            "shouldSkipIneligibleRecipientWithoutExposingPayload",
+            "shouldRejectRetryForForeignSwapIneligibleActorOrSupersededEvent",
+            "shouldEraseExpiredLeaseWithoutHttpAndFenceItsLateReceipt",
+            "shouldSkipSupersededRequestButNotifyBothParticipantsOfRejection",
+            "shouldRollbackManualRetryWhenAuditFails",
+            "shouldCleanWithSendingDisabledWithoutOccupyingSharedScheduler",
+            "shouldSerializeConcurrentDispatchersWithoutDuplicateLiveClaim",
+            "shouldKeepFrozenPayloadAndStableKeyAcrossRealTransientRetry",
+            "shouldSerializeConcurrentCleanupWithoutDoubleErasureOrAuditChanges",
+            "shouldEraseDeliveredPayloadButPreserveTechnicalReceiptAndOriginalRetryAcknowledgement",
+            "shouldEnforceAuthenticatedHttpRolesAndExplicitRetryVersion",
+            "shouldAllowOptOutButNeverReviveErasedPayloadAfterDisablingRetention",
+            "shouldRejectRedirectAndPermanentFailureWithoutForwardingCredential",
+            "shouldPreventExternalDeliveryFromInsideBusinessTransactionAndPreserveDisabledHistory",
+            "shouldEnqueueRequestAndBothDecisionRecipientsOnceWithoutDecidingFromReceipt",
+            "shouldDeferErasureWhileValidLeaseIsInFlightThenPreserveItsReceipt",
+            "shouldRunOneUnqueuedWorkerWithoutBlockingSharedSchedulerTicks",
+            "shouldFreezeDatabaseDeadlineAcrossRetryAndRejectUnsafeRetentionConfiguration",
+            "shouldManuallyRetryOriginalVersionAndAcknowledgeLostReceiptWithoutNewAudit",
+            "shouldFenceExpiredOldReceiptAndReuseSameFrozenKey",
+            "shouldSkipStartedCancelledOrCoveredRequestSourcesBeforeSending",
+            "shouldStopReclaimingExhaustedExpiredLeaseWithoutAnotherHttp",
+            "shouldBlockExpiredClaimsBeforeBoundedCleanupAndKeepNotificationHistory",
+            "shouldRejectNewManualRetryAfterPayloadRetentionWithoutChangingHistory",
+            "shouldBoundAttemptsAndNotPersistSensitiveReceiverBody"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallCoverageIntegrationTest.xml",
+          "sha256": "33881d7c1d1bcf89d55b98d45cb8ffa64bafbdcfaffbc8df581acef9a796c785",
+          "bytes": 67502,
+          "name": "org.trigger.opspilot.oncall.OnCallCoverageIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldMatchCurrentSelectionAndExcludeCancelledCoverage",
+            "shouldRevealLegacySameLayerOverlapAndUseExactRoutingTieBreaks",
+            "shouldAllowAuthenticatedReadOnlyApiAndValidateWindowsWithoutWrites",
+            "shouldPartitionGapsOverridesAndHalfOpenHandoffsWithoutDoubleCounting",
+            "shouldRecomputeCoverageFromCurrentAccountStatusAndRole",
+            "shouldRejectDenseInputRatherThanReturnTruncatedHealthyCoverage",
+            "shouldFallbackFromIneligibleOverrideAndReportUnavailableGapsAndInactivePlans",
+            "shouldNotForecastUnmaterializedOrPausedRotations"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallHandoffIntegrationTest.xml",
+          "sha256": "a319a7172f1f7f8226358fcbb7900f002d6566d042dca8fe54d0273003c9e453",
+          "bytes": 70548,
+          "name": "org.trigger.opspilot.oncall.OnCallHandoffIntegrationTest",
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRevokeCoverageOnceWithoutRewritingAcceptedConsentOrSource",
+            "shouldAcceptExactlyOnceAndPreserveSourceAndCoverageHistory",
+            "shouldSerializeDifferentManagerRevocationsWithoutDoubleAudits",
+            "shouldAllowOnlyOneWinnerBetweenAcceptAndWithdraw",
+            "shouldSerializeConcurrentRequestRetriesAndAcceptRetries",
+            "shouldObserveSourceCancellationCommittedBeforeScheduleLock",
+            "shouldSerializeConcurrentSameKeyRevocationWithOnlyOneChange",
+            "shouldExposeListTruncationInsteadOfSilentlyDroppingRequests",
+            "shouldRejectInvalidListFiltersInsteadOfSilentlyBroadeningTheQuery",
+            "shouldRejectChangedPayloadForSameKeyAndInvalidWindows",
+            "shouldRejectInvalidRevocationAndStaleVersionsBeforeMutation",
+            "shouldRefuseNewRevocationAfterEndButAcknowledgePreviouslyCommittedCommand",
+            "shouldRejectInactivePlanOrRequesterAndAllowTargetRejection",
+            "shouldExposeExternalCancellationWithoutInventingARevocationRecord",
+            "shouldRollbackCancellationLedgerAndBothAuditsTogether",
+            "shouldNotPromiseOriginalCoverageWhenOriginalShiftWasAlsoCancelled",
+            "shouldRollBackOverrideDecisionAndAuditsTogether",
+            "shouldRestrictRevocationToCurrentActiveManagersIncludingOldJwt",
+            "shouldEnforceParticipantIdentityEvenForAdminsAndFreshRoles",
+            "shouldRejectNewOverrideAndLegacyOrdinaryOverlapWithoutPartialWrites",
+            "shouldRejectExpiredRequestsWithoutMutatingTheirHistory",
+            "shouldRejectReusedRevocationKeyAndDifferentIntentAfterCancellation",
+            "shouldRejectSourceCancellationAndStillAllowWithdrawal",
+            "shouldNotAcceptTwoDifferentRequestsForTheSameSourceWindow",
+            "shouldClampOngoingCoverageAfterActualLockWaitAndRouteOnlyNewIncidents",
+            "shouldFilterParticipantsAndStatusBeforeTheListLimit",
+            "shouldEnforceHttpRolesAndParticipantIdentity"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallRosterIntegrationTest.xml",
+          "sha256": "a35029e2eca9800b1d56926cb7454ea35e82efedb7f5d6eef39a355525e13b8a",
+          "bytes": 67105,
+          "name": "org.trigger.opspilot.oncall.OnCallRosterIntegrationTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRejectSameLayerOverlapButAllowAdjacentHandoffsAndReplacement",
+            "shouldUseHalfOpenQueryWindowsAndMakeTruncationExplicit",
+            "shouldEnforceRolesAndKeepAnAuditedCancellationHistory",
+            "shouldSerializeConcurrentOverlappingCreates",
+            "shouldResumeBaseRoutingAfterAnOverrideIsCancelled",
+            "shouldRejectInvalidWindowsUsersAndStaleCancellationWithoutExtraAudit"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallRotationIntegrationTest.xml",
+          "sha256": "bbd97cb2ec3b3dd44914f17d9dabd70e44e009455f077e27b69d4db8e1e01247",
+          "bytes": 82250,
+          "name": "org.trigger.opspilot.oncall.OnCallRotationIntegrationTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldSerializeConcurrentScansAndConcurrentRotationCreation",
+            "shouldRequireManagementRolesForWritesAndAuditTheHttpActor",
+            "shouldExposeBoundedSlotWindowAndStopWhenScheduleIsDisabled",
+            "shouldRecordUnavailableMemberWithoutSilentlyChangingTheMemberOrder",
+            "shouldRespectManualConflictAndRetryWithoutRevivingCancelledGeneratedShift",
+            "shouldRollBackOneFailedRotationAndContinueOtherRotations",
+            "shouldGenerateStableRoundRobinAndRouteTheActualFirstOwner",
+            "shouldReportMemberRevocationAfterGenerationWithoutReassigningHistoricalFacts",
+            "shouldKeepOverridePriorityAndPauseOnlyFutureGeneration",
+            "shouldRejectInvalidRulesAndKeepHistoricalDemoUntouched"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallRotationJobIntegrationTest.xml",
+          "sha256": "614cc4391fed537a61e49f8708d8ff9737fc348458daab99f11c8a2bc42727c5",
+          "bytes": 65937,
+          "name": "org.trigger.opspilot.oncall.OnCallRotationJobIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldGenerateTheBlockedSlotThroughTheRealSchedulerAfterConflictIsRemoved"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallRoutingSnapshotIntegrationTest.xml",
+          "sha256": "525d2eb26fb54e930ca4ed0054eafb6a6228d067fafb37ac9ba78456155aa5b7",
+          "bytes": 67011,
+          "name": "org.trigger.opspilot.oncall.OnCallRoutingSnapshotIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldObserveNewOverrideDuringScan",
+            "shouldObserveDisabledScheduleDuringScan",
+            "shouldObserveDisabledUserDuringScan",
+            "shouldObserveChangedRoleDuringScan",
+            "shouldObserveCommittedCancellationDuringScan",
+            "shouldObserveCommittedCancellationDuringAlertIntake",
+            "shouldObserveDisabledPolicyDuringScan",
+            "shouldRollBackIntakeAndItsRoutedFactsTogether"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallSwapIntegrationTest.xml",
+          "sha256": "bec631a78a9168e417479efe4b3add58ff0861f0095a43c0d38afac4823a7056",
+          "bytes": 72636,
+          "name": "org.trigger.opspilot.oncall.OnCallSwapIntegrationTest",
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldFilterParticipantAndEitherScheduleBeforeLimitAndExposeTruncation",
+            "shouldHaveOneWinnerBetweenAcceptanceAndWithdrawal",
+            "shouldRejectEitherInactiveScheduleAndStillAllowTargetRejection",
+            "shouldRejectExistingOverridesAndLegacyOrdinaryOverlapWithoutHalfSwap",
+            "shouldRecheckBothParticipantsAndPermitRejectionWhenRequesterIsDisabled",
+            "shouldSerializeReverseCrossScheduleRequestsWithoutDeadlockOrDoubleExchange",
+            "shouldRejectEitherStaleSourceAndStillAllowWithdrawal",
+            "shouldRequireActualParticipantsEvenForAdministrators",
+            "shouldExchangeBothFutureShiftsAtomicallyAndPreserveOrdinaryHistory",
+            "shouldSerializeConcurrentSameKeyRequestsAndAcceptRetries",
+            "shouldEnforceHttpRolesParticipantAndExplicitVersions",
+            "shouldRejectStartedShiftsAndOverrideSources",
+            "shouldExchangeAcrossSchedulesWithoutChangingEitherRotation",
+            "shouldAcknowledgeAcceptedHistoryWithoutRevivingCancelledCoverage",
+            "shouldRollbackBothOverridesDecisionAndAuditsWhenFinalAuditFails",
+            "shouldRollbackBothOverridesWhenSecondCreationAuditFails",
+            "shouldRejectSelfExchangeInvalidKeysAndChangedIdempotentPayload"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallSwapNotificationIntegrationTest.xml",
+          "sha256": "e2b743958c398fc83207d726a3f2647e5e5ac110a48ff0e45fa612d7d2ab853b",
+          "bytes": 78330,
+          "name": "org.trigger.opspilot.oncall.OnCallSwapNotificationIntegrationTest",
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRollbackRequestAuditAndNotificationTogether",
+            "shouldRollbackBothOverridesAndNotificationRowsWhenEnqueueFails",
+            "shouldSkipIneligibleRecipientWithoutExposingPayload",
+            "shouldRejectRetryForForeignSwapIneligibleActorOrSupersededEvent",
+            "shouldEraseExpiredLeaseWithoutHttpAndFenceItsLateReceipt",
+            "shouldSkipSupersededRequestButNotifyBothParticipantsOfRejection",
+            "shouldRollbackManualRetryWhenAuditFails",
+            "shouldCleanWithSendingDisabledWithoutOccupyingSharedScheduler",
+            "shouldSerializeConcurrentDispatchersWithoutDuplicateLiveClaim",
+            "shouldKeepFrozenPayloadAndStableKeyAcrossRealTransientRetry",
+            "shouldSerializeConcurrentCleanupWithoutDoubleErasureOrAuditChanges",
+            "shouldEraseDeliveredPayloadButPreserveTechnicalReceiptAndOriginalRetryAcknowledgement",
+            "shouldEnforceAuthenticatedHttpRolesAndExplicitRetryVersion",
+            "shouldAllowOptOutButNeverReviveErasedPayloadAfterDisablingRetention",
+            "shouldRejectRedirectAndPermanentFailureWithoutForwardingCredential",
+            "shouldPreventExternalDeliveryFromInsideBusinessTransactionAndPreserveDisabledHistory",
+            "shouldEnqueueRequestAndBothDecisionRecipientsOnceWithoutDecidingFromReceipt",
+            "shouldDeferErasureWhileValidLeaseIsInFlightThenPreserveItsReceipt",
+            "shouldRunOneUnqueuedWorkerWithoutBlockingSharedSchedulerTicks",
+            "shouldFreezeDatabaseDeadlineAcrossRetryAndRejectUnsafeRetentionConfiguration",
+            "shouldManuallyRetryOriginalVersionAndAcknowledgeLostReceiptWithoutNewAudit",
+            "shouldFenceExpiredOldReceiptAndReuseSameFrozenKey",
+            "shouldSkipStartedCancelledOrCoveredRequestSourcesBeforeSending",
+            "shouldStopReclaimingExhaustedExpiredLeaseWithoutAnotherHttp",
+            "shouldBlockExpiredClaimsBeforeBoundedCleanupAndKeepNotificationHistory",
+            "shouldRejectNewManualRetryAfterPayloadRetentionWithoutChangingHistory",
+            "shouldBoundAttemptsAndNotPersistSensitiveReceiverBody"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallSwapNotificationMigrationTest.xml",
+          "sha256": "38536fd20947ae8ae85ca6fda12f76e5512f9bf9a489a43aa516a79ba80a4ce2",
+          "bytes": 63239,
+          "name": "org.trigger.opspilot.oncall.OnCallSwapNotificationMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldFreezeLegacyDeadlineWithoutErasingV35PayloadOrTechnicalHistory"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.OpsPilotApiIntegrationTest.xml",
+          "sha256": "b3e529d0b5dcb9eb23afa3516f367e5a835a940587531cdc1ea1e77cda7e3320",
+          "bytes": 70661,
+          "name": "org.trigger.opspilot.OpsPilotApiIntegrationTest",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldReturnStructuredUnauthorizedResponse",
+            "shouldPersistInspectableAgentInvestigationTrace",
+            "shouldStreamAndReplayPersistedAgentRunEvents",
+            "shouldRequireIndependentVersionedReviewForHighRiskProposal",
+            "shouldDedupeFingerprintAndAttachBothEventsToOneIncident",
+            "shouldAuthenticateAndLoadCoreOperationalViews",
+            "shouldPersistRunCancellationTimeoutAndQueueRejection",
+            "shouldPersistIncidentAwareAssistantConversationAndIsolateUsers",
+            "shouldEnforceRoleAndOptimisticIncidentTransition"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.postmortem.FollowUpNotificationIntegrationTest.xml",
+          "sha256": "fc64e88bd467957fca612d610e9edcd37e7c7553dcdba0e786627803f648a408",
+          "bytes": 69980,
+          "name": "org.trigger.opspilot.postmortem.FollowUpNotificationIntegrationTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "deliversOnceWithStableKeyRetriesTransientFailureAndSkipsResolvedEscalation",
+            "shouldNeverSendHistoricalDraftNotificationAndAllowRetryAfterPublication"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.postmortem.FollowUpOperationsIntegrationTest.xml",
+          "sha256": "d2ada8d8c00d80f61d6142f8d93d5409db859d8623e7664dfd3c03ba3a5c9450",
+          "bytes": 70117,
+          "name": "org.trigger.opspilot.postmortem.FollowUpOperationsIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldCreateOneEscalationAndResolveItWhenOwnerCompletesFollowUp",
+            "shouldNotEscalateOrCompleteDraftActionUntilPostmortemIsPublished",
+            "shouldKeepOwnerAcknowledgementSeparateFromDeliveryAndCompletion"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.postmortem.PostmortemIntegrationTest.xml",
+          "sha256": "453e0ac453332118f6c955518f4f8447038bb8f5293ec5d55424cca76ba295e0",
+          "bytes": 69454,
+          "name": "org.trigger.opspilot.postmortem.PostmortemIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldCreateReviewPublishAndCompleteEvidenceBackedPostmortem"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.problem.ProblemCreationConcurrencyIntegrationTest.xml",
+          "sha256": "e80f9ce23a3d98f7c88fe25efe5be705ae4a17abec01af7981d4e1c29ce4e53b",
+          "bytes": 68981,
+          "name": "org.trigger.opspilot.problem.ProblemCreationConcurrencyIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldCreateOneProblemWhenSameCandidateIsPromotedConcurrently"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.problem.ProblemManagementIntegrationTest.xml",
+          "sha256": "0ae52ab0b90dc421c231da50f7ce38a0e04233e821b343ba17109b02ce6344dd",
+          "bytes": 69814,
+          "name": "org.trigger.opspilot.problem.ProblemManagementIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldServeEverySpaRouteThroughOneUnambiguousForwarder",
+            "shouldTurnExactCrossIncidentRecurrenceIntoAuditedProblemLifecycle",
+            "shouldPromoteMaximumLengthEvidenceWithoutLosingOriginalTitles"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.runbook.Bm25RetrieverTest.xml",
+          "sha256": "823ebe9316f0806fc226ba215e94c41c425cfb1398dad7d08a2fed1a4250b4e8",
+          "bytes": 53870,
+          "name": "org.trigger.opspilot.runbook.Bm25RetrieverTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldSplitLongMarkdownIntoBoundedOverlappingChunks",
+            "shouldTokenizeChineseBigramsAndRankTheRelevantChunk"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.runbook.ReciprocalRankFusionTest.xml",
+          "sha256": "324561bfc7095ac88547d88805caf755c931922e3cff93404a29ea744bc240f1",
+          "bytes": 53874,
+          "name": "org.trigger.opspilot.runbook.ReciprocalRankFusionTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldBreakEqualFusionScoresByStableChunkId",
+            "shouldFuseRanksWithoutMixingRawScoreScales"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookHybridRetrievalIntegrationTest.xml",
+          "sha256": "736ddbbd06a3df061d07035162d7c72e1ca035318fc1116fb3e09e0c7856a038",
+          "bytes": 69524,
+          "name": "org.trigger.opspilot.runbook.RunbookHybridRetrievalIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldBuildIdempotentIndexFuseRankingsEvaluateAndPreserveOldIndexOnFailure"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookJudgmentAgreementTest.xml",
+          "sha256": "0226f5c5236450fe1148e92f096c38d00fdc041ec80659a58671c45772e05d66",
+          "bytes": 54034,
+          "name": "org.trigger.opspilot.runbook.RunbookJudgmentAgreementTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldReportEmptyAgreementDataset",
+            "shouldCalculateLinearWeightedKappaForOrdinalGrades",
+            "shouldReturnUndefinedKappaWithoutLabelVariation"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookKnowledgeIntegrationTest.xml",
+          "sha256": "5c84ec639a0f1fb65f0d5283c2eed8dd44338339e805ed5f280c087595e04c95",
+          "bytes": 70076,
+          "name": "org.trigger.opspilot.runbook.RunbookKnowledgeIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldExtractAndIndexPdfText",
+            "shouldKeepEvaluationHistoryVersionedAndBounded",
+            "shouldSearchMigratedRunbooksAndPersistDeterministicEvaluation",
+            "shouldCreateImmutableMarkdownVersionsAndEnforceDocumentAcl",
+            "shouldRejectUnsupportedRunbookFileType"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookPublicationConcurrencyTest.xml",
+          "sha256": "8f5e4acc64fede0c3121299d266092d9fce96c223c39f8ad9ecb57d39c1a2d54",
+          "bytes": 69047,
+          "name": "org.trigger.opspilot.runbook.RunbookPublicationConcurrencyTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRollbackSupersedePublicationAndAuditTogether",
+            "shouldSerializeTwoIndependentReviewerTransactions"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookPublicationIntegrationTest.xml",
+          "sha256": "e36a3a012fe30fd888ab63b0988f4f4b24d46422d0797cdc0c024b1c655f00bd",
+          "bytes": 71412,
+          "name": "org.trigger.opspilot.runbook.RunbookPublicationIntegrationTest",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldFencePublicationAgainstNewerApprovedBaselineAndReplayExactDecision",
+            "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[1]",
+            "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[2]",
+            "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[3]",
+            "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[4]",
+            "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[5]",
+            "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[6]",
+            "shouldEnforceHttpRolesIndependentReviewerAndCurrentDatabaseRole",
+            "shouldKeepUnapprovedVersionsOutOfConsoleAgentAndHistory",
+            "shouldDeduplicateOnlyIdenticalSubmissionAndCheckCurrentRole",
+            "shouldFilterQueueBeforeLimitAndExposeTruncationWithoutContent",
+            "shouldValidateAndFreezeHttpDecisionIdentityBeforeRedaction"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookPublicationMigrationTest.xml",
+          "sha256": "825b74cf674452e642a35bcd8a9b3a752bf9207c92c82238a3e516a05af69851",
+          "bytes": 63236,
+          "name": "org.trigger.opspilot.runbook.RunbookPublicationMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPreservePublishedV29ContentAndHistory"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookRelevanceFeedbackIntegrationTest.xml",
+          "sha256": "68c03e4b517c1030f39211a30dba15bd16cda991695c6aafb5a4f2af93d3c94d",
+          "bytes": 69569,
+          "name": "org.trigger.opspilot.runbook.RunbookRelevanceFeedbackIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldCaptureSearchEnforceIndependentReviewAndPromoteOnlyPositiveJudgments"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookRetrievalLifecycleIntegrationTest.xml",
+          "sha256": "3a2a113b7e0f882108704bff4c4be809a9ef3d4a402fdcd6419c5671c0a48f4e",
+          "bytes": 69550,
+          "name": "org.trigger.opspilot.runbook.RunbookRetrievalLifecycleIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRedactPurgeAuditAndPreservePromotedQrel"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookRetrievalTrendIntegrationTest.xml",
+          "sha256": "d353afa5041571f39aa1c77c43817e977db48b9d27eacaba0cef5e330bb682d8",
+          "bytes": 70055,
+          "name": "org.trigger.opspilot.runbook.RunbookRetrievalTrendIntegrationTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldKeepQualityCardinalityAfterRealRetentionAndAssignLateReviewsToQueryDate",
+            "shouldPersistDistinctDocumentsNotChunkCountAndNotTrackOfflineSearch",
+            "shouldSeparateCompletePartialPurgedEmptyAndSourceEngineKCohorts",
+            "shouldRestrictAggregateEndpointAndExposeNoQueryOrActorText"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookReturnedCountMigrationTest.xml",
+          "sha256": "f324900075d71af14d9c5217fdf80247b2133c93d01790bc519514aaa4fb6f13",
+          "bytes": 63015,
+          "name": "org.trigger.opspilot.runbook.RunbookReturnedCountMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldBackfillOnlyRecoverableActiveV28SnapshotsWithoutRewritingThem"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.security.AccountStatusHttpIntegrationTest.xml",
+          "sha256": "014ec616bccfd2ee3ba209beb617815eae25e6ec4731f667755996457aab8613",
+          "bytes": 79913,
+          "name": "org.trigger.opspilot.security.AccountStatusHttpIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldReloadCurrentRoleButKeepActiveAuthentication",
+            "shouldRejectDisabledWriteWithoutAuditOrTimeline",
+            "shouldRejectMalformedSignedIdentityWithoutBusinessWrites",
+            "shouldRejectOldJwtWhenUsernameIsRecreated",
+            "shouldRejectOldJwtAfterAccountRemoval",
+            "shouldRejectOutOfRangeJwtDatesWithoutServerErrors",
+            "shouldRejectDisabledReadsAndLogin",
+            "shouldUseRealServletRequestForAuthenticatedHttpWrite"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.security.AuthSessionHttpIntegrationTest.xml",
+          "sha256": "0889fc5857bb9895bb07956fbbb3872189f1ba461934da5cb92d0b56c78727d9",
+          "bytes": 75060,
+          "name": "org.trigger.opspilot.security.AuthSessionHttpIntegrationTest",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldOnlyRevokeAuthenticatedActorsOwnSessions",
+            "shouldRejectBcryptByteTruncationAliasesAtLogin",
+            "shouldFenceConcurrentLogoutRequests",
+            "shouldSupportUnicodeWithoutAllowingUnchangedPassword",
+            "shouldRejectLegacyAndMalformedSessionVersions",
+            "shouldRollbackPasswordAndVersionWhenAuditFails",
+            "shouldRejectInvalidPasswordChangesWithoutWrites",
+            "shouldRejectSessionVersionExhaustionWithoutWrapping",
+            "shouldRevokeAllIssuedTokensWithoutFreshLoginRevivingThem",
+            "shouldRecheckLeaseExpiryAfterFinalAuthorizationLockWait",
+            "shouldChangePasswordAndRevokeTokensAtomically",
+            "shouldServeAccountSpaDeepLinkButKeepApiProtected",
+            "shouldFenceFinalAuthorizationAgainstConcurrentRevocationCommit"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.security.AuthSessionMigrationTest.xml",
+          "sha256": "7ca2621582508197df608300f1a0e4f8527213a3c8f8cf03bba5ba8ee20269ac",
+          "bytes": 64419,
+          "name": "org.trigger.opspilot.security.AuthSessionMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPreserveV30AccountsAndOnlyInitializeRevocationVersion"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.security.JwtServiceIdentityTest.xml",
+          "sha256": "57298e7001e520acc0049bb4d20d2133e4b31f54240d0a4c92da1f2461091cb5",
+          "bytes": 62159,
+          "name": "org.trigger.opspilot.security.JwtServiceIdentityTest",
+          "tests": 56,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPreserveExactIssuedSessionVersion(long)[1]",
+            "shouldPreserveExactIssuedSessionVersion(long)[2]",
+            "shouldPreserveExactIssuedSessionVersion(long)[3]",
+            "shouldPreserveExactIssuedSessionVersion(long)[4]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[1]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[2]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[3]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[4]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[5]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[6]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[7]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[8]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[1]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[2]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[3]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[4]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[5]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[6]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[7]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[8]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[9]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[10]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[11]",
+            "shouldRequireRealIntegralExpiry(String)[1]",
+            "shouldRequireRealIntegralExpiry(String)[2]",
+            "shouldRequireRealIntegralExpiry(String)[3]",
+            "shouldRequireRealIntegralExpiry(String)[4]",
+            "shouldRequireRealIntegralExpiry(String)[5]",
+            "shouldRequireRealIntegralExpiry(String)[6]",
+            "shouldRequireRealIntegralExpiry(String)[7]",
+            "shouldRequireRealIntegralExpiry(String)[8]",
+            "shouldRequireRealIntegralExpiry(String)[9]",
+            "shouldRequireRealIntegralExpiry(String)[10]",
+            "shouldPreserveExactIssuedLongIdentity(long)[1]",
+            "shouldPreserveExactIssuedLongIdentity(long)[2]",
+            "shouldPreserveExactIssuedLongIdentity(long)[3]",
+            "shouldPreserveExactIssuedLongIdentity(long)[4]",
+            "shouldUseUnicodeCharactersRatherThanUtf16UnitsForSubjectLimit",
+            "shouldIssueDistinctIdentifiersForIndependentLogins",
+            "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[1]",
+            "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[2]",
+            "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[3]",
+            "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[4]",
+            "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[5]",
+            "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[6]",
+            "shouldRejectOversizedSubjectExpiredWrongIssuerAndWrongSignature",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[1]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[2]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[3]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[4]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[5]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[6]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[7]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[8]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[9]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[10]"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.security.ManagementPortIsolationIntegrationTest.xml",
+          "sha256": "36f5a9adfe8c68043e5039e6c9f28cc95643071589a6afd0c66470473bdf1e8a",
+          "bytes": 73550,
+          "name": "org.trigger.opspilot.security.ManagementPortIsolationIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldServeMetricsOnlyOnSeparateManagementListener"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.slo.PrometheusSloClientContractTest.xml",
+          "sha256": "566379ac43bd83a18c4bf3c845e704dcc141fc5789644eca43b65874fcb38fe5",
+          "bytes": 53887,
+          "name": "org.trigger.opspilot.slo.PrometheusSloClientContractTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldQuerySingleScalarAtRequestedEvaluationTime",
+            "shouldRejectAmbiguousMultiSeriesVector"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.slo.ServiceSloIntegrationTest.xml",
+          "sha256": "872a8578552c567c3926eba78db91c815136185bfefcd63efb5e3b0e5b4655e7",
+          "bytes": 72076,
+          "name": "org.trigger.opspilot.slo.ServiceSloIntegrationTest",
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRefuseToCalculateFromZeroDenominatorOrContradictoryCounts",
+            "shouldExportDeterministicVersionBoundRulesWithoutQueryingOrWriting",
+            "shouldRequireManagerAndOptimisticVersionWhenUpdatingObjective",
+            "shouldRequireCurrentActiveManagementRoleForExport",
+            "shouldPreservePositiveFractionalEventsUntilBurnRateDecision",
+            "shouldCalculateRealEventRatioAndErrorBudget",
+            "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[1]",
+            "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[2]",
+            "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[3]",
+            "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[4]",
+            "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[5]",
+            "shouldRejectStaleDisabledMissingOrInvalidRuleExport",
+            "shouldChangeAlertDecisionWithTheCapturedObjectivePeriod(int, String, String)[1]",
+            "shouldChangeAlertDecisionWithTheCapturedObjectivePeriod(int, String, String)[2]",
+            "shouldRejectQueryThatDoesNotUseConfiguredWindow"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/utc-xml/TEST-org.trigger.opspilot.slo.SloBurnRateCalculatorTest.xml",
+          "sha256": "277c843a748b144a9db14280966703327bb0286a765d5e0cf27622f88663639d",
+          "bytes": 54187,
+          "name": "org.trigger.opspilot.slo.SloBurnRateCalculatorTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPrioritizeFastPageWhenBothWindowsBurnAboveFourteenPointFour",
+            "shouldExposeMissingOrContradictoryWindowInsteadOfCalculating",
+            "shouldRequireBothFastPageWindowsToExceedThreshold",
+            "shouldDistinguishSlowPageAndTicketPolicies"
+          ]
+        }
+      ]
+    },
+    {
+      "zone": "shanghai",
+      "discovered": 612,
+      "executed": 461,
+      "skipped": 151,
+      "failures": 0,
+      "errors": 0,
+      "freshXmlCount": 80,
+      "allOwn88SuiteCaseNamesPreserved": true,
+      "actualLocalNotificationDatabase": "H2",
+      "notificationCases27ZeroSkip": true,
+      "migration36ObservedPerNotificationCase": true,
+      "notificationPoolOrderedShutdown": true,
+      "fullMaven": {
+        "file": "target/cp89-backend/shanghai.log",
+        "sha256": "c90c8b0e1d3d9718103faf4103c0ec6bfc46df4f0f3dd1b95f191b7e534e4523",
+        "bytes": 719484
+      },
+      "suites": [
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.alert.AlertmanagerRejectionLifecycleIntegrationTest.xml",
+          "sha256": "baae129e48d72133c05bbfb61c1a931837a414ed6f5ea3b343e8fbda4dacb851",
+          "bytes": 70099,
+          "name": "org.trigger.opspilot.alert.AlertmanagerRejectionLifecycleIntegrationTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldClaimDueRejectionOnlyOnceAcrossConcurrentWorkers",
+            "shouldKeepOriginalErrorAlignedWithImmutableReplayPayload",
+            "shouldExhaustAutomaticAttemptsButAllowManualReplayAfterFix",
+            "shouldPurgeOnlyExpiredUnleasedPayloadAndReviveOnRedelivery",
+            "shouldApplyJitterWithinExponentialAndMaximumBounds",
+            "shouldBoundAutomaticReplayAndNotResetAttemptsOnDuplicateDelivery"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.alert.AlertmanagerWebhookDisabledIntegrationTest.xml",
+          "sha256": "368689cfe03d9d8ac96eae2083cb7e1314bdb7557257d2bcdd49e61e0722d511",
+          "bytes": 66452,
+          "name": "org.trigger.opspilot.alert.AlertmanagerWebhookDisabledIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRefuseWebhookWhenSecretIsNotConfigured"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.alert.AlertmanagerWebhookIntegrationTest.xml",
+          "sha256": "226e9259ac70a57124e80d523bcbbf7e5f80d2dbf6014f3d853c3fe9faa472be",
+          "bytes": 68184,
+          "name": "org.trigger.opspilot.alert.AlertmanagerWebhookIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPersistDeduplicateAndRedactRejectedDeliveryWithReadOnlyAuditAccess",
+            "shouldAcceptValidAlertAndIsolatePermanentBadItem",
+            "shouldMakeRetryIdempotentAndRecordResolvedTransitionOnce",
+            "shouldReplayOnceAfterCmdbFixAcrossConcurrentRequests",
+            "shouldRequireDedicatedWebhookCredentialAndBoundBatchSize"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.analytics.IncidentAnalyticsIntegrationTest.xml",
+          "sha256": "6ea41e664ad64d14f07b7099330a2e5dd23ded342fad483a2dc5ec6af86e0467",
+          "bytes": 66758,
+          "name": "org.trigger.opspilot.analytics.IncidentAnalyticsIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldSplitMetricsByOwningServiceWithoutInventingMissingMilestones",
+            "shouldExposeConfiguredSloWithoutInventingMeasurementsWhenPrometheusIsDisabled",
+            "shouldExposeHonestMilestoneDenominatorsMedianAndDrilldown"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantAiStreamingTest.xml",
+          "sha256": "223cd5c011967a2622b0098b64306dddbcb1e9d78b2344fae90136ed97d116d0",
+          "bytes": 76580,
+          "name": "org.trigger.opspilot.assistant.AssistantAiStreamingTest",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldBoundResponseCountIncludingEmptyFramesAndCancelSource",
+            "shouldCancelIdleUpstreamWithoutClaimingNormalCompletion",
+            "shouldPreserveExactIncrementalWhitespaceAndUnicodeWithEmptyStopFrame",
+            "shouldAcceptExactCharacterBoundaryAndRejectOverflowBeforeDelivery",
+            "shouldKeepValidationStateIsolatedForEachColdSubscription",
+            "shouldPropagateLateProviderFailureWithoutRetryOrFallbackEvenAfterStop",
+            "shouldRejectEmptyOrWhitespaceOnlyAnswerEvenWithStop",
+            "shouldAcceptExactResponseCountBoundary",
+            "shouldRejectUnknownFilteredOrToolTerminalWithoutEmittingItsContent",
+            "shouldRejectActualToolCallPayloadAndDisableSdkToolExecutionInPrompt",
+            "shouldRejectEmptyStreamAndNonterminalEof",
+            "shouldNotMergeMultipleAlternativeGenerations",
+            "shouldRejectMoreContentOrDuplicateTerminalAfterStop"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest.xml",
+          "sha256": "74950452d9a0e6bcdc8715a475ae731fbacfb0420ab195f256ad61de6f517774",
+          "bytes": 53566,
+          "name": "org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 1,
+          "cases": [
+            "shouldVerifyNativeReplayRemoteCancelClearAndRevocationOnOwnedMySql"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantExecutionManagerTest.xml",
+          "sha256": "c084a0d72d747372eb0b8bf34430120693eb0bea949ce4cc1a1e93262e8cef70",
+          "bytes": 55313,
+          "name": "org.trigger.opspilot.assistant.AssistantExecutionManagerTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPlaceEnvironmentOverridesUnderTheExecutionManagersConfigurationPrefix",
+            "shouldRejectFullQueueAndRemoveRevokedQueuedWorkWithoutInterruptingRunningProvider",
+            "shouldFailClosedWhenAuthorizationLookupFails",
+            "shouldIncludeQueueTimeInBudgetAndStopLateWorkerBeforeAnyMoreAuthorizationQueries",
+            "shouldNeverExecuteWorkerAfterAdmissionTransactionFails",
+            "shouldCloseTransportWhenWorkerFailsUnexpectedly",
+            "shouldRejectInvalidExecutionLimits",
+            "shouldGateWorkerAndPublishCancellationOnceAfterAdmissionSettles",
+            "shouldRejectCapacityBeforeCallingAdmission",
+            "shouldObserveDurableCancellationWithoutInterruptingModel",
+            "shouldStopOnShutdownWithoutInterruptingWorkerOrTouchingAuthorizationAfterward"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest.xml",
+          "sha256": "7cbb5fe2b24ae13a4ff63cb1601b7e45da9be5fe3f5819fb8c95a8253df010a0",
+          "bytes": 75472,
+          "name": "org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "browserDisconnectShouldContinueOriginalDurableRequestWithoutAnotherPost",
+            "shouldTimeoutAnIdleProviderAfterPreviewWithoutCommittingPartialAnswer",
+            "shouldStopRevokedNativePreviewWithoutLateAnswerOrErrorPayload",
+            "shouldNotResurrectClearedNativePreviewWhenModelCompletesLate",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+            "shouldRejectNativeQueueSaturationBeforeAdmissionAndReuseCancelledSlot",
+            "nativeDoneMustNotEscapeAFailedFinalAuditTransaction",
+            "shouldDeliverRealNativeTokenBeforeCompletionAndCommitExactAnswer",
+            "shouldCancelAfterPreviewAndReuseWorkerBeforeOldProviderIsReleased"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeHttpClientTest.xml",
+          "sha256": "c0990bdb42c0c6f306204ca9d66e06e9bf9e349f97071af237f9dc4b2dbd1b81",
+          "bytes": 54396,
+          "name": "org.trigger.opspilot.assistant.AssistantNativeHttpClientTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "cancellationSettlesSubscriberBeforeJdkWrappedCancellationArrives",
+            "successIsExactAndCancellingOneExchangeCannotCancelAnother",
+            "clientDelegatesBothAsyncOverloadsSyncAndConfiguration",
+            "ordinaryProviderFailureIsPropagatedWithoutBeingReclassifiedOrIgnored",
+            "lateSuccessCannotReplaceCancellationEvenWhenUnderlyingFutureCannotBeCancelled"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest.xml",
+          "sha256": "aefa28183e408df5af5db0656fc11f16b60e0db7082440685163aee5b815a56e",
+          "bytes": 54219,
+          "name": "org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRejectRealHttpEofWithoutStopRatherThanAcceptingPartialAnswer",
+            "shouldRequestNativeIncrementalProtocolRatherThanACompleteJsonAnswer",
+            "shouldRejectRealHttpLengthTerminationWithoutRetryOrRuleFallback",
+            "shouldDeliverFirstRealHttpDeltaBeforeProviderCanFinish"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeTransportTest.xml",
+          "sha256": "2759af3c3fee8c5329656e9e811ea51de6e22987a128e3f7a45c7fd82253609d",
+          "bytes": 54814,
+          "name": "org.trigger.opspilot.assistant.AssistantNativeTransportTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "requestsWithoutAssistantScopeKeepTheirResponseUnmodified",
+            "cancellationBeforeHeadersClosesRetainedPendingExchange",
+            "scopedNonNativeRequestsKeepTheirResponseUnmodified",
+            "cancellationClosesBodyEvenWhenIntermediatePublisherRetainsItsUpstream",
+            "validationFailureAlsoClosesRetainedBodyWithoutRetry",
+            "eachColdSubscriptionHasItsOwnCancellationSignal",
+            "originalConnectorIsPreservedOutsideNativeAssistantScope",
+            "onlyNativeContextSelectsDedicatedConnector"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantSessionRevocationIntegrationTest.xml",
+          "sha256": "0786248afaf7690ca21550fb7f0b909dcc19210fdff80a867686fc84464c1f4b",
+          "bytes": 75278,
+          "name": "org.trigger.opspilot.assistant.AssistantSessionRevocationIntegrationTest",
+          "tests": 32,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRejectSynchronousRequestWhenStreamCapacityIsFullWithoutWrites",
+            "shouldReplayCompletedKeyAcrossSyncAndStreamWithoutWrites",
+            "shouldNotResurrectDeletedSessionWhenLateProviderReturns",
+            "shouldPersistQueuedKeyAndCancelItWithoutQuestionWrites",
+            "shouldKeepClearedKeyTombstoneWithoutResurrectingMessages",
+            "shouldRejectInvalidKeysAndOtherOwnersStatusWithoutWrites",
+            "shouldRejectDuplicateInFlightKeyWithoutCallingProvider",
+            "shouldPreserveCompletedAnswerWhenCancellationArrivesLate",
+            "shouldCloseExpiredStreamBeforeProviderReleaseWithoutPersistingItsAnswer",
+            "shouldExposeKeyedTimeoutBeforeProviderReleaseAndNeverRetryItAutomatically",
+            "shouldNotSendCommittedAnswerAfterLogoutCompletesBeforeControllerReturns",
+            "shouldIncludeSynchronousWorkInStreamCapacityAndAllowReplacement",
+            "shouldReplayCompletedKeyWithoutTakingSaturatedCapacity",
+            "shouldDiscardLateStreamAnswerAfterCommittedLogoutAndAllowFreshLogin",
+            "shouldReturnSafeTimeoutBeforeProviderReleaseAndDiscardItsLateAnswer",
+            "shouldCancelRunningKeyBeforeProviderReleaseWithoutLateAnswer",
+            "shouldTimeoutRunningAndQueuedSynchronousRequestsBeforeProviderRelease",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+            "shouldRejectReusedKeyWithDifferentQuestionWithoutWrites",
+            "shouldPersistQueuedTimeoutWithoutAcceptingQuestionOrRetryingKey",
+            "shouldSendCancelledEventWithoutDoneForRunningStream",
+            "shouldNotResurrectClearedMessagesWhenLateProviderReturns",
+            "shouldRejectLateSynchronousAnswerAfterCommittedLogoutAndAllowFreshLogin",
+            "shouldNotSendCommittedAnswerAfterLeaseExpiresBeforeControllerReturns",
+            "shouldExposeRevokedKeyToFreshOwnerWithoutRevivingItsOriginalWork"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantStreamReaderTest.xml",
+          "sha256": "5babbc8be0572285e0e462a6517bfd7d472506ead5b63eb3d3bd19782640fb77",
+          "bytes": 54545,
+          "name": "org.trigger.opspilot.assistant.AssistantStreamReaderTest",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "previewCallbackFailureCancelsTheProvider",
+            "upstreamFailureCannotReturnAnAnswer",
+            "idleProviderStillChecksStopAndCancelsSubscription",
+            "stoppedBeforeStartNeverSubscribes",
+            "preservesExactFragmentsAndRequestsOnlyOneAtATime",
+            "sizeLimitIsCheckedBeforePublishingAnOversizedFragment",
+            "emptyOrWhitespaceOnlyCannotCommit"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantStreamTransportTest.xml",
+          "sha256": "dbf3b10a4c89347081b6be004b31b7d47cb2bb863f96524e9e2dd845bfa995db",
+          "bytes": 54929,
+          "name": "org.trigger.opspilot.assistant.AssistantStreamTransportTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPreserveNativeOrderAndPublishOnlyTheCommittedAnswerId",
+            "disconnectedBrowserShouldNotCancelTheDurableWorkerOrSkipItsCheckpoints",
+            "rejectedReplayLeaseShouldCloseItsWriterWithoutLeakingAnIdleReservation",
+            "shouldCheckOriginalFencesWhileWriteIsBlockedAndStopWithoutWaitingForItsLock",
+            "shouldBoundReservedWritersAndRejectBeforeAnyModelAdmission",
+            "terminalEventMustRecheckOriginalLeaseRatherThanReuseAnEarlierAuthorizationResult",
+            "shouldRemoveAnAbortedReservationFromTheBoundedWriterQueue",
+            "shouldRejectUnboundedConfigurationAndExposeScopedEnvironmentOverrides"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest.xml",
+          "sha256": "c1716f01c0cc48f65b365b1388957bc078ec422324e966aa56151e8788b7968b",
+          "bytes": 69302,
+          "name": "org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRollbackKeyedAssistantCompletionStateWithAnswerAndAudit",
+            "shouldRollbackAssistantCancellationWhenAuditInsertFails",
+            "shouldRecheckAssistantLeaseExpiryAfterFinalLockWait",
+            "shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence",
+            "shouldFenceAssistantCompletionAfterCancellationCommit",
+            "shouldRollbackAssistantAnswerWhenCompletionAuditInsertFails",
+            "shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt",
+            "shouldFenceAssistantFinalCommitAgainstConcurrentRevocation",
+            "shouldReplayCompletedAssistantKeyWithCaseSensitiveSessionScope",
+            "shouldPreserveAssistantCompletionWhenCancellationWaitsForCommit",
+            "shouldRollbackAssistantCompletionWhenFinalStopCheckFails"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.common.GlobalExceptionHandlerDisconnectTest.xml",
+          "sha256": "27326009b3683c0a2a99b4008191f726b2d185ada9729242df744c026743464f",
+          "bytes": 65497,
+          "name": "org.trigger.opspilot.common.GlobalExceptionHandlerDisconnectTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldResolveTheSpecificContainerExceptionBeforeTheGenericHandler",
+            "shouldLeaveAnAlreadyCommittedResponseUnchanged",
+            "shouldNotWriteAnotherBodyToADisconnectedSocketOrReportSuccess",
+            "shouldNotHideOutboundProviderIOFailuresBasedOnTheirMessage"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.distributed.DistributedAgentEventsIntegrationTest.xml",
+          "sha256": "94e3981f8b8788d1ce25832f501b1d5a7add7a3583161c5a5b39717f17d63fcc",
+          "bytes": 54372,
+          "name": "org.trigger.opspilot.distributed.DistributedAgentEventsIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 3,
+          "cases": [
+            "shouldCompleteDuringRedisOutageAndDrainOutboxAfterRecovery",
+            "shouldBroadcastCommittedEventsAcrossTwoJvmsAndResumeOnTheOtherNode",
+            "shouldSettleExpiredRunAfterExecutingJvmCrashes"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.incident.IncidentStatusTest.xml",
+          "sha256": "6c6a38bc8b8a285b53b91665ab62ad3525acfba738bd46ae4f8df096e08bcb46",
+          "bytes": 53660,
+          "name": "org.trigger.opspilot.incident.IncidentStatusTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldAllowOnlyExplicitStateTransitions"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentEventReceiverTest.xml",
+          "sha256": "5bb98db2c590a6aa7396916e2d6d70c21d7ae431d0a2de1189bd479b00b768e1",
+          "bytes": 56550,
+          "name": "org.trigger.opspilot.investigation.AgentEventReceiverTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[1]",
+            "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[2]",
+            "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[3]",
+            "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[4]",
+            "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[5]",
+            "shouldNotRewindUnchangedTailOrCheckTailDuringActiveReads",
+            "shouldPreserveCursorWhenTailInspectionFails",
+            "shouldRewindAfterObservingEmptyOrMissingStream"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentEventStreamIntegrationTest.xml",
+          "sha256": "345c758be4d80f200bf7985eacf916d70d948fe93377e8bd783a4a41d70a6957",
+          "bytes": 67358,
+          "name": "org.trigger.opspilot.investigation.AgentEventStreamIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldResumeViaHeaderAndCloseWhenTerminalAlreadyConsumed",
+            "shouldCatchUpActiveSubscriptionWithoutRedisAndHonorQueryCursor",
+            "shouldWriteSecurityHeadersBeforeSseWorkStartsAndRetainStreamCachePolicy",
+            "shouldProtectEndpointAndRejectForeignOrInvalidCursors",
+            "shouldAllowRecoveryHeadersAcrossConfiguredOrigin"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentEventSubscriptionsTest.xml",
+          "sha256": "5d97a24cd2d7c7b5fcb76f079ddc2bb2fe89af7195599121eec3467d5148d6c6",
+          "bytes": 55370,
+          "name": "org.trigger.opspilot.investigation.AgentEventSubscriptionsTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRejectInvalidSessionBeforeCursorLookupOrSlotAllocation",
+            "shouldRecoverWithoutNotificationsAndReleaseDisconnectedSlots",
+            "shouldFailClosedWhenOngoingAuthorizationReadFails",
+            "shouldMergeRegistrationReplayAndConcurrentDuplicateNotifications",
+            "shouldKeepNotificationThreadResponsiveWhileOutputIsBlocked",
+            "shouldRetryRejectedWorkerWithoutSendingOnNotificationThread",
+            "shouldCloseAlreadyConsumedTerminalAndIsolateBrokenOutput",
+            "shouldStopInsideBatchWhenSessionIsRevokedAfterFirstSend",
+            "shouldBoundConnectionsAndRejectBeforeSchedulingMoreWork",
+            "shouldCloseAtStreamBudgetAndPermitCursorResume",
+            "shouldCloseIdleRevokedConnectionAndReleaseItsSlotAtCatchup"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentEventTransactionIntegrationTest.xml",
+          "sha256": "267eaea3b1252142215c497223bcb5bfedbfc3c6313d6e36338630eba8a45924",
+          "bytes": 71333,
+          "name": "org.trigger.opspilot.investigation.AgentEventTransactionIntegrationTest",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPurgeOnlyExpiredDeliveredRowsInBoundedBatches",
+            "shouldRejectOutboxOperationsInsideCallerTransaction",
+            "shouldKeepCommittedEventsAndNotifyLaterSubscribersWhenOneSinkFails",
+            "shouldPublishOnlyAfterOuterCommitAndReplayTheSameEvent",
+            "shouldReclaimExpiredLeaseAndFenceOldOwner",
+            "shouldNotPublishOrConsumeSequenceWhenOuterTransactionRollsBack",
+            "shouldFinishInvestigationWhenEveryLiveDeliveryFails"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentExecutionManagerTest.xml",
+          "sha256": "d7200b3fcb31a82e96c138042f0b06580e0e1b2426559d026ce3d1bcf41129bd",
+          "bytes": 54204,
+          "name": "org.trigger.opspilot.investigation.AgentExecutionManagerTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldFailClosedWithoutInterruptingActiveAuthenticatedWorker",
+            "shouldRejectBeyondRunningAndQueuedCapacityWithoutStartingRejectedTask",
+            "shouldExposeSaturationAndInterruptActiveTask",
+            "shouldReleaseRevokedQueuedSlotWhileAnotherWorkerRemainsBlocked"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentRunCancellationIntegrationTest.xml",
+          "sha256": "182a36a6fdf731acf300340f9688f5c93c52c41e822a50407bbbf3df7e84436c",
+          "bytes": 65854,
+          "name": "org.trigger.opspilot.investigation.AgentRunCancellationIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldFinishAsCancelledWhenToolReturnsAfterCancellationRequest"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentRunRecoveryIntegrationTest.xml",
+          "sha256": "41bd4e4a1c0b60e64b69cc7fcb65d72c154b8cd61ed06cdf4d16bf1b42c0c176",
+          "bytes": 65828,
+          "name": "org.trigger.opspilot.investigation.AgentRunRecoveryIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldSettleExpiredRunningTaskOnceAndFenceLateToolResult"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentSessionRevocationIntegrationTest.xml",
+          "sha256": "97605e82d0b5528dbcb9ff344a80ddcf89f83aecb6eefe06c7e9ae218df133b3",
+          "bytes": 70619,
+          "name": "org.trigger.opspilot.investigation.AgentSessionRevocationIntegrationTest",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRefuseFinalReportCommitWhenSessionIsRevokedAfterLastCheckpoint",
+            "shouldPersistCancellationWhenToolReturnsWithInterruptFlag",
+            "shouldCloseIdleSubscriptionAfterPasswordChangeAndKeepOtherAccountValid",
+            "shouldStopExistingHttpSubscriptionAfterCommittedLogoutWithoutLeakingNewEvent",
+            "shouldCloseAlreadyEstablishedSubscriptionWhenSignedTokenExpires",
+            "shouldCancelQueuedInvestigationAfterRoleDowngradeButKeepAuthorizedRead",
+            "shouldNotStartQueuedRunAfterItsCapturedSessionIsRevoked",
+            "shouldDiscardLateToolResultAfterRealPostStreamSessionIsRevoked",
+            "shouldCloseIdleSubscriptionWhenAccountIsDisabled"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.InvestigationControllerDisconnectTest.xml",
+          "sha256": "07d893d99697904229b0182db96d1756fb1d4d955105ed6aacaca7c912c8ef09",
+          "bytes": 53727,
+          "name": "org.trigger.opspilot.investigation.InvestigationControllerDisconnectTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldIsolateClientDisconnectFromBackgroundEventPublishing"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.RedisRelayIntegrationTest.xml",
+          "sha256": "4b14f156fdc499f1bf93d280108a32c461a9ec471ed8484827b0207a9b4fab36",
+          "bytes": 54609,
+          "name": "org.trigger.opspilot.investigation.RedisRelayIntegrationTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 4,
+          "cases": [
+            "shouldRetryRedisFailureAndPreserveEventIdentityAcrossDuplicateDelivery",
+            "shouldBoundRecoveryReadsAndAvoidReplayingAnUnchangedTrimmedTail",
+            "shouldRecoverRegressedReusedAndMissingStreamWithoutRestartingReceiver",
+            "shouldBroadcastWithIndependentCursorsAndRetryListenerFailure"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.MySqlCompatibilityIntegrationTest.xml",
+          "sha256": "f2a854a8e15f8fb66b90f02bd6fd84459e1601fcdafa40d7107f9eee07de8ebf",
+          "bytes": 64984,
+          "name": "org.trigger.opspilot.MySqlCompatibilityIntegrationTest",
+          "tests": 46,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 46,
+          "cases": [
+            "shouldApplyAllMigrationsAndRunIdempotentInvestigationOnMySql",
+            "shouldPromoteOneProblemAcrossTwoRepeatableReadTransactions",
+            "shouldClaimOutboxOnceAcrossConcurrentRelays",
+            "shouldSettleExpiredRunOnceAcrossConcurrentMySqlReconcilers",
+            "shouldPreserveAutomaticReplayBudgetAndPurgePayloadOnMySql",
+            "shouldKeepDraftFollowUpsOutOfMySqlEscalationAndNotification",
+            "shouldReadBoundedEvaluationHistoryOnMySql",
+            "shouldRouteOneUnacknowledgedIncidentStepAcrossConcurrentMySqlScans",
+            "shouldSerializeRosterWritesAndKeepCancelledHistoryOnMySql",
+            "shouldAggregatePersistedRetrievalCohortsOnMySql",
+            "shouldKeepUnapprovedRunbooksOutOfRetrievalOnMySql",
+            "shouldFenceAndReplayRunbookPublicationOnMySql",
+            "shouldBindImportIdentityAndCurrentManagerRoleOnMySql",
+            "shouldSerializeIndependentPublicationTransactionsOnMySql",
+            "shouldRollbackRunbookPublicationAndAuditOnMySql",
+            "shouldRejectDisabledReadsAndLogin",
+            "shouldRejectDisabledWriteWithoutAuditOrTimeline",
+            "shouldRejectOldJwtAfterAccountRemoval",
+            "shouldReloadCurrentRoleButKeepActiveAuthentication",
+            "shouldUseRealServletRequestForAuthenticatedHttpWrite",
+            "shouldRejectOldJwtWhenUsernameIsRecreated",
+            "shouldRejectMalformedSignedIdentityWithoutBusinessWrites",
+            "shouldRejectOutOfRangeJwtDatesWithoutServerErrors",
+            "shouldRevokeAllIssuedTokensWithoutFreshLoginRevivingThem",
+            "shouldChangePasswordAndRevokeTokensAtomically",
+            "shouldRejectInvalidPasswordChangesWithoutWrites",
+            "shouldFenceConcurrentLogoutRequests",
+            "shouldOnlyRevokeAuthenticatedActorsOwnSessions",
+            "shouldRejectLegacyAndMalformedSessionVersions",
+            "shouldSupportUnicodeWithoutAllowingUnchangedPassword",
+            "shouldRejectSessionVersionExhaustionWithoutWrapping",
+            "shouldRollbackPasswordAndVersionWhenAuditFails",
+            "shouldRejectBcryptByteTruncationAliasesAtLogin",
+            "shouldFenceFinalAuthorizationAgainstConcurrentRevocationCommit",
+            "shouldRecheckLeaseExpiryAfterFinalAuthorizationLockWait",
+            "shouldRollbackAssistantAnswerWhenCompletionAuditInsertFails",
+            "shouldRollbackAssistantCompletionWhenFinalStopCheckFails",
+            "shouldFenceAssistantFinalCommitAgainstConcurrentRevocation",
+            "shouldRecheckAssistantLeaseExpiryAfterFinalLockWait",
+            "shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence",
+            "shouldReplayCompletedAssistantKeyWithCaseSensitiveSessionScope",
+            "shouldRollbackKeyedAssistantCompletionStateWithAnswerAndAudit",
+            "shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt",
+            "shouldRollbackAssistantCancellationWhenAuditInsertFails",
+            "shouldFenceAssistantCompletionAfterCancellationCommit",
+            "shouldPreserveAssistantCompletionWhenCancellationWaitsForCommit"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.LogRedactorTest.xml",
+          "sha256": "30b2859c99a03b000ff2dc6a295b689ede9315e9156b6a6e2532142c499135e0",
+          "bytes": 53689,
+          "name": "org.trigger.opspilot.observability.LogRedactorTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRedactSecretsAndPersonalIdentifiersFromMessagesAndMetadata"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.logs.LogsProviderRouterTest.xml",
+          "sha256": "0400b42d0a1cddbb25ab2cff2d0d704b37630e3c4cd84e3dc00e8a9b5bbab3d7",
+          "bytes": 53706,
+          "name": "org.trigger.opspilot.observability.logs.LogsProviderRouterTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldFallBackAndPreserveExternalProviderFailureAsWarning"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.logs.LokiLogsProviderContractTest.xml",
+          "sha256": "9c6eb683d03c7a9d803957e57cc9b7d28b98c26be7e4e974cda86a2be0feacb1",
+          "bytes": 53729,
+          "name": "org.trigger.opspilot.observability.logs.LokiLogsProviderContractTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldCallRangeQueryMapStructuredLogAndRedactBeforeReturningEvidence"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.metrics.PrometheusMetricsProviderContractTest.xml",
+          "sha256": "31755f17bfbb6aab20c3eb2b0edcad96d31274e7de232f848e5d3f7cdeab4a59",
+          "bytes": 53743,
+          "name": "org.trigger.opspilot.observability.metrics.PrometheusMetricsProviderContractTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldCallInstantQueryAndMapVectorResponseToProviderContract"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.ProviderGuardTest.xml",
+          "sha256": "d95d1bb13adec65e0b1ab2a0638606df8070064cf82bbb3fc64b012750b9895e",
+          "bytes": 53681,
+          "name": "org.trigger.opspilot.observability.ProviderGuardTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRetryOpenCircuitAndRecoverThroughHalfOpenProbe"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.tracing.AgentTraceIntegrationTest.xml",
+          "sha256": "447f0b40b85b637dfccda0264747d80dccbca4609b5f8c51b69375d404ea1662",
+          "bytes": 66010,
+          "name": "org.trigger.opspilot.observability.tracing.AgentTraceIntegrationTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldAttachCreatedAlertAndIncidentIdentifiersToRequestTrace",
+            "shouldKeepHttpParentAcrossExecutorAndCreateToolAndProviderChildren"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.tracing.HttpTracePropagationIntegrationTest.xml",
+          "sha256": "701514865af94857eb98deeb23d90cd0375017655991be7f7b166f6e815751c1",
+          "bytes": 65953,
+          "name": "org.trigger.opspilot.observability.tracing.HttpTracePropagationIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPropagateW3cTraceContextToPrometheusAndLoki"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.tracing.OpenTelemetryBridgeTest.xml",
+          "sha256": "a0243a1793411e98f5f31be18487265c6881e3961f6bfa3588e844a0c84f8708",
+          "bytes": 53782,
+          "name": "org.trigger.opspilot.observability.tracing.OpenTelemetryBridgeTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldExportCapturedAsyncHierarchyThroughRealOtelBridge"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.tracing.OpsPilotTracingTest.xml",
+          "sha256": "0629c745985275a3b0ddab0f633455e1ef8961b0f3a0fc3ad27b70bc70e047c3",
+          "bytes": 54234,
+          "name": "org.trigger.opspilot.observability.tracing.OpsPilotTracingTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldTraceAlertResultWithoutTaggingPayloadText",
+            "shouldRunCapturedTaskWithoutAParentSpan",
+            "shouldPreserveTraceHierarchyAcrossCapturedThreadAndTagBusinessIdentifiers",
+            "shouldMarkFailedProviderSpan"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.IncidentEscalationIntegrationTest.xml",
+          "sha256": "e7d11b2895f41a25c4e6ade45650ceee698a1690a0366ce4f873357f7fc51a9c",
+          "bytes": 67395,
+          "name": "org.trigger.opspilot.oncall.IncidentEscalationIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRouteFirstStepAsPartOfNewAlertTransaction",
+            "shouldRouteOverrideThenStopAfterAcknowledgement",
+            "shouldExposeHistoryButRestrictManualScan",
+            "shouldExecuteEachStepOnceAcrossConcurrentScans",
+            "shouldRecordMissingShiftWithoutClaimingDeliveryAndThenRouteLaterSteps"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest.xml",
+          "sha256": "b7f3a061c8aabaa685db2152328b1b2c82355cd7889842205cb7916cbb961d6a",
+          "bytes": 55736,
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 8,
+          "cases": [
+            "shouldMatchCurrentSelectionAndExcludeCancelledCoverage",
+            "shouldRevealLegacySameLayerOverlapAndUseExactRoutingTieBreaks",
+            "shouldAllowAuthenticatedReadOnlyApiAndValidateWindowsWithoutWrites",
+            "shouldPartitionGapsOverridesAndHalfOpenHandoffsWithoutDoubleCounting",
+            "shouldRecomputeCoverageFromCurrentAccountStatusAndRole",
+            "shouldRejectDenseInputRatherThanReturnTruncatedHealthyCoverage",
+            "shouldFallbackFromIneligibleOverrideAndReportUnavailableGapsAndInactivePlans",
+            "shouldNotForecastUnmaterializedOrPausedRotations"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest.xml",
+          "sha256": "cba8cd44be4274d7c1c2a21f1097e47e33722093b1711d3c764987c3ef48e801",
+          "bytes": 60696,
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest",
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 27,
+          "cases": [
+            "shouldRevokeCoverageOnceWithoutRewritingAcceptedConsentOrSource",
+            "shouldAcceptExactlyOnceAndPreserveSourceAndCoverageHistory",
+            "shouldSerializeDifferentManagerRevocationsWithoutDoubleAudits",
+            "shouldAllowOnlyOneWinnerBetweenAcceptAndWithdraw",
+            "shouldSerializeConcurrentRequestRetriesAndAcceptRetries",
+            "shouldObserveSourceCancellationCommittedBeforeScheduleLock",
+            "shouldSerializeConcurrentSameKeyRevocationWithOnlyOneChange",
+            "shouldExposeListTruncationInsteadOfSilentlyDroppingRequests",
+            "shouldRejectInvalidListFiltersInsteadOfSilentlyBroadeningTheQuery",
+            "shouldRejectChangedPayloadForSameKeyAndInvalidWindows",
+            "shouldRejectInvalidRevocationAndStaleVersionsBeforeMutation",
+            "shouldRefuseNewRevocationAfterEndButAcknowledgePreviouslyCommittedCommand",
+            "shouldRejectInactivePlanOrRequesterAndAllowTargetRejection",
+            "shouldExposeExternalCancellationWithoutInventingARevocationRecord",
+            "shouldRollbackCancellationLedgerAndBothAuditsTogether",
+            "shouldNotPromiseOriginalCoverageWhenOriginalShiftWasAlsoCancelled",
+            "shouldRollBackOverrideDecisionAndAuditsTogether",
+            "shouldRestrictRevocationToCurrentActiveManagersIncludingOldJwt",
+            "shouldEnforceParticipantIdentityEvenForAdminsAndFreshRoles",
+            "shouldRejectNewOverrideAndLegacyOrdinaryOverlapWithoutPartialWrites",
+            "shouldRejectExpiredRequestsWithoutMutatingTheirHistory",
+            "shouldRejectReusedRevocationKeyAndDifferentIntentAfterCancellation",
+            "shouldRejectSourceCancellationAndStillAllowWithdrawal",
+            "shouldNotAcceptTwoDifferentRequestsForTheSameSourceWindow",
+            "shouldClampOngoingCoverageAfterActualLockWaitAndRouteOnlyNewIncidents",
+            "shouldFilterParticipantsAndStatusBeforeTheListLimit",
+            "shouldEnforceHttpRolesAndParticipantIdentity"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest.xml",
+          "sha256": "b79a8ac6c140518f62f3661b1b219c66d4a4531cc3affd176c4cd3567cac015b",
+          "bytes": 56269,
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 10,
+          "cases": [
+            "shouldSerializeConcurrentScansAndConcurrentRotationCreation",
+            "shouldRequireManagementRolesForWritesAndAuditTheHttpActor",
+            "shouldExposeBoundedSlotWindowAndStopWhenScheduleIsDisabled",
+            "shouldRecordUnavailableMemberWithoutSilentlyChangingTheMemberOrder",
+            "shouldRespectManualConflictAndRetryWithoutRevivingCancelledGeneratedShift",
+            "shouldRollBackOneFailedRotationAndContinueOtherRotations",
+            "shouldGenerateStableRoundRobinAndRouteTheActualFirstOwner",
+            "shouldReportMemberRevocationAfterGenerationWithoutReassigningHistoricalFacts",
+            "shouldKeepOverridePriorityAndPauseOnlyFutureGeneration",
+            "shouldRejectInvalidRulesAndKeepHistoricalDemoUntouched"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest.xml",
+          "sha256": "d7aff2005214019cfdf1637968aead92a5a69782dcd4c66a471b8143a6fac380",
+          "bytes": 55629,
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 8,
+          "cases": [
+            "shouldObserveNewOverrideDuringScan",
+            "shouldObserveDisabledScheduleDuringScan",
+            "shouldObserveDisabledUserDuringScan",
+            "shouldObserveChangedRoleDuringScan",
+            "shouldObserveCommittedCancellationDuringScan",
+            "shouldObserveCommittedCancellationDuringAlertIntake",
+            "shouldObserveDisabledPolicyDuringScan",
+            "shouldRollBackIntakeAndItsRoutedFactsTogether"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallSwapIntegrationTest.xml",
+          "sha256": "526a18c3ced3a07eaa8f654335db4b8e076ae618bdd5b7391b9eea3613069750",
+          "bytes": 58191,
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallSwapIntegrationTest",
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 17,
+          "cases": [
+            "shouldFilterParticipantAndEitherScheduleBeforeLimitAndExposeTruncation",
+            "shouldHaveOneWinnerBetweenAcceptanceAndWithdrawal",
+            "shouldRejectEitherInactiveScheduleAndStillAllowTargetRejection",
+            "shouldRejectExistingOverridesAndLegacyOrdinaryOverlapWithoutHalfSwap",
+            "shouldRecheckBothParticipantsAndPermitRejectionWhenRequesterIsDisabled",
+            "shouldSerializeReverseCrossScheduleRequestsWithoutDeadlockOrDoubleExchange",
+            "shouldRejectEitherStaleSourceAndStillAllowWithdrawal",
+            "shouldRequireActualParticipantsEvenForAdministrators",
+            "shouldExchangeBothFutureShiftsAtomicallyAndPreserveOrdinaryHistory",
+            "shouldSerializeConcurrentSameKeyRequestsAndAcceptRetries",
+            "shouldEnforceHttpRolesParticipantAndExplicitVersions",
+            "shouldRejectStartedShiftsAndOverrideSources",
+            "shouldExchangeAcrossSchedulesWithoutChangingEitherRotation",
+            "shouldAcknowledgeAcceptedHistoryWithoutRevivingCancelledCoverage",
+            "shouldRollbackBothOverridesDecisionAndAuditsWhenFinalAuditFails",
+            "shouldRollbackBothOverridesWhenSecondCreationAuditFails",
+            "shouldRejectSelfExchangeInvalidKeysAndChangedIdempotentPayload"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationIntegrationTest.xml",
+          "sha256": "041c77a0e8082a7309450bd966d7a25dae4aac32c5f6329fd9228939c2d4b818",
+          "bytes": 61665,
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationIntegrationTest",
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 27,
+          "cases": [
+            "shouldRollbackRequestAuditAndNotificationTogether",
+            "shouldRollbackBothOverridesAndNotificationRowsWhenEnqueueFails",
+            "shouldSkipIneligibleRecipientWithoutExposingPayload",
+            "shouldRejectRetryForForeignSwapIneligibleActorOrSupersededEvent",
+            "shouldEraseExpiredLeaseWithoutHttpAndFenceItsLateReceipt",
+            "shouldSkipSupersededRequestButNotifyBothParticipantsOfRejection",
+            "shouldRollbackManualRetryWhenAuditFails",
+            "shouldCleanWithSendingDisabledWithoutOccupyingSharedScheduler",
+            "shouldSerializeConcurrentDispatchersWithoutDuplicateLiveClaim",
+            "shouldKeepFrozenPayloadAndStableKeyAcrossRealTransientRetry",
+            "shouldSerializeConcurrentCleanupWithoutDoubleErasureOrAuditChanges",
+            "shouldEraseDeliveredPayloadButPreserveTechnicalReceiptAndOriginalRetryAcknowledgement",
+            "shouldEnforceAuthenticatedHttpRolesAndExplicitRetryVersion",
+            "shouldAllowOptOutButNeverReviveErasedPayloadAfterDisablingRetention",
+            "shouldRejectRedirectAndPermanentFailureWithoutForwardingCredential",
+            "shouldPreventExternalDeliveryFromInsideBusinessTransactionAndPreserveDisabledHistory",
+            "shouldEnqueueRequestAndBothDecisionRecipientsOnceWithoutDecidingFromReceipt",
+            "shouldDeferErasureWhileValidLeaseIsInFlightThenPreserveItsReceipt",
+            "shouldRunOneUnqueuedWorkerWithoutBlockingSharedSchedulerTicks",
+            "shouldFreezeDatabaseDeadlineAcrossRetryAndRejectUnsafeRetentionConfiguration",
+            "shouldManuallyRetryOriginalVersionAndAcknowledgeLostReceiptWithoutNewAudit",
+            "shouldFenceExpiredOldReceiptAndReuseSameFrozenKey",
+            "shouldSkipStartedCancelledOrCoveredRequestSourcesBeforeSending",
+            "shouldStopReclaimingExhaustedExpiredLeaseWithoutAnotherHttp",
+            "shouldBlockExpiredClaimsBeforeBoundedCleanupAndKeepNotificationHistory",
+            "shouldRejectNewManualRetryAfterPayloadRetentionWithoutChangingHistory",
+            "shouldBoundAttemptsAndNotPersistSensitiveReceiverBody"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallCoverageIntegrationTest.xml",
+          "sha256": "1708ac30ad9badbf019865e05064f407d513dc8ece7b9eccb55b9b06adb9bec6",
+          "bytes": 67874,
+          "name": "org.trigger.opspilot.oncall.OnCallCoverageIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldMatchCurrentSelectionAndExcludeCancelledCoverage",
+            "shouldRevealLegacySameLayerOverlapAndUseExactRoutingTieBreaks",
+            "shouldAllowAuthenticatedReadOnlyApiAndValidateWindowsWithoutWrites",
+            "shouldPartitionGapsOverridesAndHalfOpenHandoffsWithoutDoubleCounting",
+            "shouldRecomputeCoverageFromCurrentAccountStatusAndRole",
+            "shouldRejectDenseInputRatherThanReturnTruncatedHealthyCoverage",
+            "shouldFallbackFromIneligibleOverrideAndReportUnavailableGapsAndInactivePlans",
+            "shouldNotForecastUnmaterializedOrPausedRotations"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallHandoffIntegrationTest.xml",
+          "sha256": "2d57ff79babe15617747b8e46c213bab09fdd1a7a08de45e36f8a3e485c4f918",
+          "bytes": 70922,
+          "name": "org.trigger.opspilot.oncall.OnCallHandoffIntegrationTest",
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRevokeCoverageOnceWithoutRewritingAcceptedConsentOrSource",
+            "shouldAcceptExactlyOnceAndPreserveSourceAndCoverageHistory",
+            "shouldSerializeDifferentManagerRevocationsWithoutDoubleAudits",
+            "shouldAllowOnlyOneWinnerBetweenAcceptAndWithdraw",
+            "shouldSerializeConcurrentRequestRetriesAndAcceptRetries",
+            "shouldObserveSourceCancellationCommittedBeforeScheduleLock",
+            "shouldSerializeConcurrentSameKeyRevocationWithOnlyOneChange",
+            "shouldExposeListTruncationInsteadOfSilentlyDroppingRequests",
+            "shouldRejectInvalidListFiltersInsteadOfSilentlyBroadeningTheQuery",
+            "shouldRejectChangedPayloadForSameKeyAndInvalidWindows",
+            "shouldRejectInvalidRevocationAndStaleVersionsBeforeMutation",
+            "shouldRefuseNewRevocationAfterEndButAcknowledgePreviouslyCommittedCommand",
+            "shouldRejectInactivePlanOrRequesterAndAllowTargetRejection",
+            "shouldExposeExternalCancellationWithoutInventingARevocationRecord",
+            "shouldRollbackCancellationLedgerAndBothAuditsTogether",
+            "shouldNotPromiseOriginalCoverageWhenOriginalShiftWasAlsoCancelled",
+            "shouldRollBackOverrideDecisionAndAuditsTogether",
+            "shouldRestrictRevocationToCurrentActiveManagersIncludingOldJwt",
+            "shouldEnforceParticipantIdentityEvenForAdminsAndFreshRoles",
+            "shouldRejectNewOverrideAndLegacyOrdinaryOverlapWithoutPartialWrites",
+            "shouldRejectExpiredRequestsWithoutMutatingTheirHistory",
+            "shouldRejectReusedRevocationKeyAndDifferentIntentAfterCancellation",
+            "shouldRejectSourceCancellationAndStillAllowWithdrawal",
+            "shouldNotAcceptTwoDifferentRequestsForTheSameSourceWindow",
+            "shouldClampOngoingCoverageAfterActualLockWaitAndRouteOnlyNewIncidents",
+            "shouldFilterParticipantsAndStatusBeforeTheListLimit",
+            "shouldEnforceHttpRolesAndParticipantIdentity"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallRosterIntegrationTest.xml",
+          "sha256": "e385fa2e950f052b122098f5bba27f4a38d2c9cc47398801a9b869dc38f01089",
+          "bytes": 67478,
+          "name": "org.trigger.opspilot.oncall.OnCallRosterIntegrationTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRejectSameLayerOverlapButAllowAdjacentHandoffsAndReplacement",
+            "shouldUseHalfOpenQueryWindowsAndMakeTruncationExplicit",
+            "shouldEnforceRolesAndKeepAnAuditedCancellationHistory",
+            "shouldSerializeConcurrentOverlappingCreates",
+            "shouldResumeBaseRoutingAfterAnOverrideIsCancelled",
+            "shouldRejectInvalidWindowsUsersAndStaleCancellationWithoutExtraAudit"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallRotationIntegrationTest.xml",
+          "sha256": "1cbbfd79ffad58a62c213faf725081af01e28e8bf738851ac173e579b56597ad",
+          "bytes": 82623,
+          "name": "org.trigger.opspilot.oncall.OnCallRotationIntegrationTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldSerializeConcurrentScansAndConcurrentRotationCreation",
+            "shouldRequireManagementRolesForWritesAndAuditTheHttpActor",
+            "shouldExposeBoundedSlotWindowAndStopWhenScheduleIsDisabled",
+            "shouldRecordUnavailableMemberWithoutSilentlyChangingTheMemberOrder",
+            "shouldRespectManualConflictAndRetryWithoutRevivingCancelledGeneratedShift",
+            "shouldRollBackOneFailedRotationAndContinueOtherRotations",
+            "shouldGenerateStableRoundRobinAndRouteTheActualFirstOwner",
+            "shouldReportMemberRevocationAfterGenerationWithoutReassigningHistoricalFacts",
+            "shouldKeepOverridePriorityAndPauseOnlyFutureGeneration",
+            "shouldRejectInvalidRulesAndKeepHistoricalDemoUntouched"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallRotationJobIntegrationTest.xml",
+          "sha256": "bf492432902f2b7e24999d59fd3acb9caa86a6d29912114f692aaec33b4138ec",
+          "bytes": 66295,
+          "name": "org.trigger.opspilot.oncall.OnCallRotationJobIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldGenerateTheBlockedSlotThroughTheRealSchedulerAfterConflictIsRemoved"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallRoutingSnapshotIntegrationTest.xml",
+          "sha256": "623ffecd638ca4cb24d68c16be300535b6a49268770b90ab58d9734fd838178b",
+          "bytes": 67365,
+          "name": "org.trigger.opspilot.oncall.OnCallRoutingSnapshotIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldObserveNewOverrideDuringScan",
+            "shouldObserveDisabledScheduleDuringScan",
+            "shouldObserveDisabledUserDuringScan",
+            "shouldObserveChangedRoleDuringScan",
+            "shouldObserveCommittedCancellationDuringScan",
+            "shouldObserveCommittedCancellationDuringAlertIntake",
+            "shouldObserveDisabledPolicyDuringScan",
+            "shouldRollBackIntakeAndItsRoutedFactsTogether"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallSwapIntegrationTest.xml",
+          "sha256": "a036169e78a70f6ebb25fd42ed7930cf9769d420c16f1dfb584d19b9227832af",
+          "bytes": 73009,
+          "name": "org.trigger.opspilot.oncall.OnCallSwapIntegrationTest",
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldFilterParticipantAndEitherScheduleBeforeLimitAndExposeTruncation",
+            "shouldHaveOneWinnerBetweenAcceptanceAndWithdrawal",
+            "shouldRejectEitherInactiveScheduleAndStillAllowTargetRejection",
+            "shouldRejectExistingOverridesAndLegacyOrdinaryOverlapWithoutHalfSwap",
+            "shouldRecheckBothParticipantsAndPermitRejectionWhenRequesterIsDisabled",
+            "shouldSerializeReverseCrossScheduleRequestsWithoutDeadlockOrDoubleExchange",
+            "shouldRejectEitherStaleSourceAndStillAllowWithdrawal",
+            "shouldRequireActualParticipantsEvenForAdministrators",
+            "shouldExchangeBothFutureShiftsAtomicallyAndPreserveOrdinaryHistory",
+            "shouldSerializeConcurrentSameKeyRequestsAndAcceptRetries",
+            "shouldEnforceHttpRolesParticipantAndExplicitVersions",
+            "shouldRejectStartedShiftsAndOverrideSources",
+            "shouldExchangeAcrossSchedulesWithoutChangingEitherRotation",
+            "shouldAcknowledgeAcceptedHistoryWithoutRevivingCancelledCoverage",
+            "shouldRollbackBothOverridesDecisionAndAuditsWhenFinalAuditFails",
+            "shouldRollbackBothOverridesWhenSecondCreationAuditFails",
+            "shouldRejectSelfExchangeInvalidKeysAndChangedIdempotentPayload"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallSwapNotificationIntegrationTest.xml",
+          "sha256": "4de38df3f349d357f61ffdb8f55419acf104a690d5c1aab9c8a538c875425cae",
+          "bytes": 78706,
+          "name": "org.trigger.opspilot.oncall.OnCallSwapNotificationIntegrationTest",
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRollbackRequestAuditAndNotificationTogether",
+            "shouldRollbackBothOverridesAndNotificationRowsWhenEnqueueFails",
+            "shouldSkipIneligibleRecipientWithoutExposingPayload",
+            "shouldRejectRetryForForeignSwapIneligibleActorOrSupersededEvent",
+            "shouldEraseExpiredLeaseWithoutHttpAndFenceItsLateReceipt",
+            "shouldSkipSupersededRequestButNotifyBothParticipantsOfRejection",
+            "shouldRollbackManualRetryWhenAuditFails",
+            "shouldCleanWithSendingDisabledWithoutOccupyingSharedScheduler",
+            "shouldSerializeConcurrentDispatchersWithoutDuplicateLiveClaim",
+            "shouldKeepFrozenPayloadAndStableKeyAcrossRealTransientRetry",
+            "shouldSerializeConcurrentCleanupWithoutDoubleErasureOrAuditChanges",
+            "shouldEraseDeliveredPayloadButPreserveTechnicalReceiptAndOriginalRetryAcknowledgement",
+            "shouldEnforceAuthenticatedHttpRolesAndExplicitRetryVersion",
+            "shouldAllowOptOutButNeverReviveErasedPayloadAfterDisablingRetention",
+            "shouldRejectRedirectAndPermanentFailureWithoutForwardingCredential",
+            "shouldPreventExternalDeliveryFromInsideBusinessTransactionAndPreserveDisabledHistory",
+            "shouldEnqueueRequestAndBothDecisionRecipientsOnceWithoutDecidingFromReceipt",
+            "shouldDeferErasureWhileValidLeaseIsInFlightThenPreserveItsReceipt",
+            "shouldRunOneUnqueuedWorkerWithoutBlockingSharedSchedulerTicks",
+            "shouldFreezeDatabaseDeadlineAcrossRetryAndRejectUnsafeRetentionConfiguration",
+            "shouldManuallyRetryOriginalVersionAndAcknowledgeLostReceiptWithoutNewAudit",
+            "shouldFenceExpiredOldReceiptAndReuseSameFrozenKey",
+            "shouldSkipStartedCancelledOrCoveredRequestSourcesBeforeSending",
+            "shouldStopReclaimingExhaustedExpiredLeaseWithoutAnotherHttp",
+            "shouldBlockExpiredClaimsBeforeBoundedCleanupAndKeepNotificationHistory",
+            "shouldRejectNewManualRetryAfterPayloadRetentionWithoutChangingHistory",
+            "shouldBoundAttemptsAndNotPersistSensitiveReceiverBody"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallSwapNotificationMigrationTest.xml",
+          "sha256": "27cd6b4fa705b94e03afe5bdba60d7804f552cd92a5d6dbfbc9492da82109701",
+          "bytes": 63382,
+          "name": "org.trigger.opspilot.oncall.OnCallSwapNotificationMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldFreezeLegacyDeadlineWithoutErasingV35PayloadOrTechnicalHistory"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.OpsPilotApiIntegrationTest.xml",
+          "sha256": "b12a151e3ddd6ae2bf05f1cd8b996fe785289ea0b6cf7d17a0ef3e3025e0b081",
+          "bytes": 71261,
+          "name": "org.trigger.opspilot.OpsPilotApiIntegrationTest",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldReturnStructuredUnauthorizedResponse",
+            "shouldPersistInspectableAgentInvestigationTrace",
+            "shouldStreamAndReplayPersistedAgentRunEvents",
+            "shouldRequireIndependentVersionedReviewForHighRiskProposal",
+            "shouldDedupeFingerprintAndAttachBothEventsToOneIncident",
+            "shouldAuthenticateAndLoadCoreOperationalViews",
+            "shouldPersistRunCancellationTimeoutAndQueueRejection",
+            "shouldPersistIncidentAwareAssistantConversationAndIsolateUsers",
+            "shouldEnforceRoleAndOptimisticIncidentTransition"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.postmortem.FollowUpNotificationIntegrationTest.xml",
+          "sha256": "979ba9c153d58a0afea8e25645b3c90f8b1ef2c59950e6db2842a864f09931c3",
+          "bytes": 70132,
+          "name": "org.trigger.opspilot.postmortem.FollowUpNotificationIntegrationTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "deliversOnceWithStableKeyRetriesTransientFailureAndSkipsResolvedEscalation",
+            "shouldNeverSendHistoricalDraftNotificationAndAllowRetryAfterPublication"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.postmortem.FollowUpOperationsIntegrationTest.xml",
+          "sha256": "0009a67c8d59f1e190aee382d7e158bd600e2064764257f70986b4e0a8d105ad",
+          "bytes": 70495,
+          "name": "org.trigger.opspilot.postmortem.FollowUpOperationsIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldCreateOneEscalationAndResolveItWhenOwnerCompletesFollowUp",
+            "shouldNotEscalateOrCompleteDraftActionUntilPostmortemIsPublished",
+            "shouldKeepOwnerAcknowledgementSeparateFromDeliveryAndCompletion"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.postmortem.PostmortemIntegrationTest.xml",
+          "sha256": "824b11e590dcceac08467305d3041ee8128ba2602a4dea74a0266c068cf2f114",
+          "bytes": 70060,
+          "name": "org.trigger.opspilot.postmortem.PostmortemIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldCreateReviewPublishAndCompleteEvidenceBackedPostmortem"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.problem.ProblemCreationConcurrencyIntegrationTest.xml",
+          "sha256": "321008be4b4900fc359e9c5e63b27f18e8a403c0d1fe2d378242327016e2f63e",
+          "bytes": 69334,
+          "name": "org.trigger.opspilot.problem.ProblemCreationConcurrencyIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldCreateOneProblemWhenSameCandidateIsPromotedConcurrently"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.problem.ProblemManagementIntegrationTest.xml",
+          "sha256": "6a4432a6ba32cd454eb5bed586211e07710a29714f2def0c4b2431fa62ce74a7",
+          "bytes": 70188,
+          "name": "org.trigger.opspilot.problem.ProblemManagementIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldServeEverySpaRouteThroughOneUnambiguousForwarder",
+            "shouldTurnExactCrossIncidentRecurrenceIntoAuditedProblemLifecycle",
+            "shouldPromoteMaximumLengthEvidenceWithoutLosingOriginalTitles"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.Bm25RetrieverTest.xml",
+          "sha256": "4854c1fee2619b3d5f3fb6db8aad3b53db9cc4e57cf778dc5a3766fb73692a15",
+          "bytes": 53883,
+          "name": "org.trigger.opspilot.runbook.Bm25RetrieverTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldSplitLongMarkdownIntoBoundedOverlappingChunks",
+            "shouldTokenizeChineseBigramsAndRankTheRelevantChunk"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.ReciprocalRankFusionTest.xml",
+          "sha256": "fe1820c93db1090083713e6e8122b22efd6b19de594746fe194dcb8632df3f7d",
+          "bytes": 53885,
+          "name": "org.trigger.opspilot.runbook.ReciprocalRankFusionTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldBreakEqualFusionScoresByStableChunkId",
+            "shouldFuseRanksWithoutMixingRawScoreScales"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookHybridRetrievalIntegrationTest.xml",
+          "sha256": "c508ad797a3321a5d058681482384bbb14134561daeb9a11d9eb1a4eb89b5b6b",
+          "bytes": 69898,
+          "name": "org.trigger.opspilot.runbook.RunbookHybridRetrievalIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldBuildIdempotentIndexFuseRankingsEvaluateAndPreserveOldIndexOnFailure"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookJudgmentAgreementTest.xml",
+          "sha256": "cf3526cac07fd1037c56a73e6389555dd306470c286d662d5f68999721934cd6",
+          "bytes": 54045,
+          "name": "org.trigger.opspilot.runbook.RunbookJudgmentAgreementTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldReportEmptyAgreementDataset",
+            "shouldCalculateLinearWeightedKappaForOrdinalGrades",
+            "shouldReturnUndefinedKappaWithoutLabelVariation"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookKnowledgeIntegrationTest.xml",
+          "sha256": "7976d72a8ffb29172200cd2175d463aeec7f93ccf4d77b6561a0a1e9e74c174a",
+          "bytes": 70449,
+          "name": "org.trigger.opspilot.runbook.RunbookKnowledgeIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldExtractAndIndexPdfText",
+            "shouldKeepEvaluationHistoryVersionedAndBounded",
+            "shouldSearchMigratedRunbooksAndPersistDeterministicEvaluation",
+            "shouldCreateImmutableMarkdownVersionsAndEnforceDocumentAcl",
+            "shouldRejectUnsupportedRunbookFileType"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookPublicationConcurrencyTest.xml",
+          "sha256": "f6ac4547f052d9becf6dd11b8292e982e5bc24bddec42db6861b4617babcba6a",
+          "bytes": 69403,
+          "name": "org.trigger.opspilot.runbook.RunbookPublicationConcurrencyTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRollbackSupersedePublicationAndAuditTogether",
+            "shouldSerializeTwoIndependentReviewerTransactions"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookPublicationIntegrationTest.xml",
+          "sha256": "05ebcb8d8906b3af1d683f15e7d050839560d5ab8c265f3be1405bd12d6e15d3",
+          "bytes": 71780,
+          "name": "org.trigger.opspilot.runbook.RunbookPublicationIntegrationTest",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldFencePublicationAgainstNewerApprovedBaselineAndReplayExactDecision",
+            "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[1]",
+            "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[2]",
+            "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[3]",
+            "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[4]",
+            "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[5]",
+            "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[6]",
+            "shouldEnforceHttpRolesIndependentReviewerAndCurrentDatabaseRole",
+            "shouldKeepUnapprovedVersionsOutOfConsoleAgentAndHistory",
+            "shouldDeduplicateOnlyIdenticalSubmissionAndCheckCurrentRole",
+            "shouldFilterQueueBeforeLimitAndExposeTruncationWithoutContent",
+            "shouldValidateAndFreezeHttpDecisionIdentityBeforeRedaction"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookPublicationMigrationTest.xml",
+          "sha256": "976e80fc537ca484d77c4633686ed60750cd18b678754d9221af479b07d5d590",
+          "bytes": 63487,
+          "name": "org.trigger.opspilot.runbook.RunbookPublicationMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPreservePublishedV29ContentAndHistory"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookRelevanceFeedbackIntegrationTest.xml",
+          "sha256": "cc1f9285ed908f3b4b80985200599acb9ea69d25bcc3b6e5672aaf80428fce97",
+          "bytes": 69940,
+          "name": "org.trigger.opspilot.runbook.RunbookRelevanceFeedbackIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldCaptureSearchEnforceIndependentReviewAndPromoteOnlyPositiveJudgments"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookRetrievalLifecycleIntegrationTest.xml",
+          "sha256": "089376dbebc598cc7eaf0d3af075cff6fa3958fe02fe06004ea25d390a341550",
+          "bytes": 69921,
+          "name": "org.trigger.opspilot.runbook.RunbookRetrievalLifecycleIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRedactPurgeAuditAndPreservePromotedQrel"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookRetrievalTrendIntegrationTest.xml",
+          "sha256": "3f5d89841de1493a5d3c515ec8b1540214142d44e3a07ded80efc4c2343e23b7",
+          "bytes": 70426,
+          "name": "org.trigger.opspilot.runbook.RunbookRetrievalTrendIntegrationTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldKeepQualityCardinalityAfterRealRetentionAndAssignLateReviewsToQueryDate",
+            "shouldPersistDistinctDocumentsNotChunkCountAndNotTrackOfflineSearch",
+            "shouldSeparateCompletePartialPurgedEmptyAndSourceEngineKCohorts",
+            "shouldRestrictAggregateEndpointAndExposeNoQueryOrActorText"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookReturnedCountMigrationTest.xml",
+          "sha256": "27d1ed189bb6b53b2d90fca261ca3024ee8a6e8e849b0b0868cda6a7e705c140",
+          "bytes": 63258,
+          "name": "org.trigger.opspilot.runbook.RunbookReturnedCountMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldBackfillOnlyRecoverableActiveV28SnapshotsWithoutRewritingThem"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.security.AccountStatusHttpIntegrationTest.xml",
+          "sha256": "08f09f9f2fe96dc10027243a05dcda74daf74cffd43c58a46d455925afbbdd5c",
+          "bytes": 80375,
+          "name": "org.trigger.opspilot.security.AccountStatusHttpIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldReloadCurrentRoleButKeepActiveAuthentication",
+            "shouldRejectDisabledWriteWithoutAuditOrTimeline",
+            "shouldRejectMalformedSignedIdentityWithoutBusinessWrites",
+            "shouldRejectOldJwtWhenUsernameIsRecreated",
+            "shouldRejectOldJwtAfterAccountRemoval",
+            "shouldRejectOutOfRangeJwtDatesWithoutServerErrors",
+            "shouldRejectDisabledReadsAndLogin",
+            "shouldUseRealServletRequestForAuthenticatedHttpWrite"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.security.AuthSessionHttpIntegrationTest.xml",
+          "sha256": "026599b9239023b9416b0dabce42307db962b8d95c3fb8ebded018477b713b54",
+          "bytes": 75518,
+          "name": "org.trigger.opspilot.security.AuthSessionHttpIntegrationTest",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldOnlyRevokeAuthenticatedActorsOwnSessions",
+            "shouldRejectBcryptByteTruncationAliasesAtLogin",
+            "shouldFenceConcurrentLogoutRequests",
+            "shouldSupportUnicodeWithoutAllowingUnchangedPassword",
+            "shouldRejectLegacyAndMalformedSessionVersions",
+            "shouldRollbackPasswordAndVersionWhenAuditFails",
+            "shouldRejectInvalidPasswordChangesWithoutWrites",
+            "shouldRejectSessionVersionExhaustionWithoutWrapping",
+            "shouldRevokeAllIssuedTokensWithoutFreshLoginRevivingThem",
+            "shouldRecheckLeaseExpiryAfterFinalAuthorizationLockWait",
+            "shouldChangePasswordAndRevokeTokensAtomically",
+            "shouldServeAccountSpaDeepLinkButKeepApiProtected",
+            "shouldFenceFinalAuthorizationAgainstConcurrentRevocationCommit"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.security.AuthSessionMigrationTest.xml",
+          "sha256": "2a1bbdccb8d37a03fc6f84365d0be92d28ab4a01516530838ba690182eefb190",
+          "bytes": 64698,
+          "name": "org.trigger.opspilot.security.AuthSessionMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPreserveV30AccountsAndOnlyInitializeRevocationVersion"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.security.JwtServiceIdentityTest.xml",
+          "sha256": "e726ecc0aadc2bdf01b5cd0c74c440043bd88cfed67887f7d0a5846d894bdf0c",
+          "bytes": 62170,
+          "name": "org.trigger.opspilot.security.JwtServiceIdentityTest",
+          "tests": 56,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPreserveExactIssuedSessionVersion(long)[1]",
+            "shouldPreserveExactIssuedSessionVersion(long)[2]",
+            "shouldPreserveExactIssuedSessionVersion(long)[3]",
+            "shouldPreserveExactIssuedSessionVersion(long)[4]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[1]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[2]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[3]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[4]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[5]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[6]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[7]",
+            "shouldRejectMissingBlankOrNonTextSubject(String)[8]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[1]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[2]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[3]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[4]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[5]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[6]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[7]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[8]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[9]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[10]",
+            "shouldRejectMissingOrNonPositiveIntegralUid(String)[11]",
+            "shouldRequireRealIntegralExpiry(String)[1]",
+            "shouldRequireRealIntegralExpiry(String)[2]",
+            "shouldRequireRealIntegralExpiry(String)[3]",
+            "shouldRequireRealIntegralExpiry(String)[4]",
+            "shouldRequireRealIntegralExpiry(String)[5]",
+            "shouldRequireRealIntegralExpiry(String)[6]",
+            "shouldRequireRealIntegralExpiry(String)[7]",
+            "shouldRequireRealIntegralExpiry(String)[8]",
+            "shouldRequireRealIntegralExpiry(String)[9]",
+            "shouldRequireRealIntegralExpiry(String)[10]",
+            "shouldPreserveExactIssuedLongIdentity(long)[1]",
+            "shouldPreserveExactIssuedLongIdentity(long)[2]",
+            "shouldPreserveExactIssuedLongIdentity(long)[3]",
+            "shouldPreserveExactIssuedLongIdentity(long)[4]",
+            "shouldUseUnicodeCharactersRatherThanUtf16UnitsForSubjectLimit",
+            "shouldIssueDistinctIdentifiersForIndependentLogins",
+            "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[1]",
+            "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[2]",
+            "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[3]",
+            "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[4]",
+            "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[5]",
+            "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[6]",
+            "shouldRejectOversizedSubjectExpiredWrongIssuerAndWrongSignature",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[1]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[2]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[3]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[4]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[5]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[6]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[7]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[8]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[9]",
+            "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[10]"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.security.ManagementPortIsolationIntegrationTest.xml",
+          "sha256": "212d6ebe4662b39f153b4ac536e18306f2f73eace9e2bc78178c997276f798ef",
+          "bytes": 74026,
+          "name": "org.trigger.opspilot.security.ManagementPortIsolationIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldServeMetricsOnlyOnSeparateManagementListener"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.slo.PrometheusSloClientContractTest.xml",
+          "sha256": "2ffb88a4f4a21b01a006f30796324028ee46e2ec809b98cd5243de553c152f38",
+          "bytes": 53897,
+          "name": "org.trigger.opspilot.slo.PrometheusSloClientContractTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldQuerySingleScalarAtRequestedEvaluationTime",
+            "shouldRejectAmbiguousMultiSeriesVector"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.slo.ServiceSloIntegrationTest.xml",
+          "sha256": "9d4c88bc17172157b53e8e038c39b5a22cd002a3ce4f31effd0435b6510421fb",
+          "bytes": 72458,
+          "name": "org.trigger.opspilot.slo.ServiceSloIntegrationTest",
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldRefuseToCalculateFromZeroDenominatorOrContradictoryCounts",
+            "shouldExportDeterministicVersionBoundRulesWithoutQueryingOrWriting",
+            "shouldRequireManagerAndOptimisticVersionWhenUpdatingObjective",
+            "shouldRequireCurrentActiveManagementRoleForExport",
+            "shouldPreservePositiveFractionalEventsUntilBurnRateDecision",
+            "shouldCalculateRealEventRatioAndErrorBudget",
+            "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[1]",
+            "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[2]",
+            "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[3]",
+            "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[4]",
+            "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[5]",
+            "shouldRejectStaleDisabledMissingOrInvalidRuleExport",
+            "shouldChangeAlertDecisionWithTheCapturedObjectivePeriod(int, String, String)[1]",
+            "shouldChangeAlertDecisionWithTheCapturedObjectivePeriod(int, String, String)[2]",
+            "shouldRejectQueryThatDoesNotUseConfiguredWindow"
+          ]
+        },
+        {
+          "file": "target/cp89-backend/shanghai-xml/TEST-org.trigger.opspilot.slo.SloBurnRateCalculatorTest.xml",
+          "sha256": "3b163c9796c5d1663db1e5a8e0af914f574ad21fcb65909c37471cd19232a697",
+          "bytes": 54200,
+          "name": "org.trigger.opspilot.slo.SloBurnRateCalculatorTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "cases": [
+            "shouldPrioritizeFastPageWhenBothWindowsBurnAboveFourteenPointFour",
+            "shouldExposeMissingOrContradictoryWindowInsteadOfCalculating",
+            "shouldRequireBothFastPageWindowsToExceedThreshold",
+            "shouldDistinguishSlowPageAndTicketPolicies"
+          ]
+        }
+      ]
+    }
+  ],
+  "frontendAndNode": [
+    {
+      "file": "target/cp89-backend/node-tests.log",
+      "sha256": "bf7c081a01a78af60e811a51c12b0ef04ddd96b85883c91a979f8f2425853a8e",
+      "bytes": 7995,
+      "pass": 91
+    },
+    {
+      "file": "target/cp89-backend/frontend-tests.log",
+      "sha256": "5805b2a5d90b88863c74ba688c4bff3a8a34fd60ad6bbf5ec105ae3d979d8c9e",
+      "bytes": 12560,
+      "pass": 129
+    }
+  ],
+  "cleanupRecovery": {
+    "event": "Erroneous Maven clean failed on held cp89-backend/utc.log",
+    "scope": "Known missing evidence identified by committed CP87/CP88 proofs and newly created CP89 baseline",
+    "restored": [
+      {
+        "file": "target/oncall-browser-it/run-xKLNw9/runner-result.json",
+        "sha256": "da0d0b0011f749c16ddcc8cad3174842c5a0436cbb66048f070ba08b021ae63b",
+        "method": "byte-identical reconstruction from committed full result and original formatting"
+      },
+      {
+        "file": "target/oncall-swap-notification-it/run-4Ofoem/result.json",
+        "sha256": "e23024361e3fb0c1ecb60814c51921adae8e937ddfbda8fe2a279ffdf3508dbe",
+        "method": "byte-identical reconstruction from committed full result and original formatting"
+      },
+      {
+        "file": "target/oncall-swap-notification-it/run-G3KDYS/result.json",
+        "sha256": "6003aa9e5f3305a7c48744a0251be56a497be05920d571adcf762cf0f33a0af2",
+        "method": "byte-identical reconstruction from committed full result and original formatting"
+      },
+      {
+        "file": "target/oncall-swap-notification-it/run-fhtd7B/result.json",
+        "sha256": "2b2ca57135be401d6930436ea7874667a134be73e53b686dee17fbf5c7d4d03a",
+        "method": "byte-identical reconstruction from committed full result and original formatting"
+      },
+      {
+        "file": "target/oncall-swap-notification-it/run-18qEZa/result.json",
+        "sha256": "52e19d840936c65df744c7a526fa53fa30f2efdd165b62233ecd1a1d371f8d1d",
+        "method": "byte-identical reconstruction from committed full result and original formatting"
+      },
+      {
+        "file": "target/oncall-swap-notification-it/run-pqJxeG/result.json",
+        "sha256": "81950301643edb2a99e213f50cef4560aa22e445202e3a8a032809c7ddb242be",
+        "method": "byte-identical reconstruction from committed full result and original formatting"
+      },
+      {
+        "file": "target/cp89-before/opspilot-cp88.jar",
+        "sha256": "dcc575a3a2495edc2dd5cfeea8e05ce456da29b8ec8dd0752b5af02a44adce8b",
+        "method": "byte-identical preserved CP88-before JAR copy"
+      }
+    ],
+    "unrecoverable": [],
+    "committedDocsAndRemoteZipArchivesUnchanged": true,
+    "cleanNotUsedAgain": true,
+    "postRecoveryReverified": {
+      "cp88RemoteHashRecords": 223,
+      "cp87FirstRemoteHashRecords": 219,
+      "cp88Archives": 9,
+      "cp87Archives": 9
+    },
+    "scopeCaveat": "Does not prove that every unreferenced temporary file under target survived or was recovered."
+  },
+  "cleanupRecoveryFile": {
+    "file": "docs/assets/v1.7-cp89/clean-recovery.json",
+    "sha256": "99f8320df5565cd020524a18bc27eac3bf2dbd39957eac332e9af4b5bf4ce8c5",
+    "bytes": 2416
+  },
+  "sourceFiles": [
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallSwapNotifications.java",
+      "sha256": "daeb1eae6b111f554520eae856cf7d20ec010123afeba6d27ad916ac794f6621",
+      "bytes": 20569
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallSwapNotificationJob.java",
+      "sha256": "2b04e9e7c5e61548549761c7725205d510161f152f786015db65b3feadd8cb51",
+      "bytes": 1572
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallSwapNotificationProperties.java",
+      "sha256": "5087ce788785005f5c170aac2e6989b8614924edba6b359a0bd072b104cf0674",
+      "bytes": 526
+    },
+    {
+      "file": "src/main/resources/application.yml",
+      "sha256": "442732024f71bbe9f881885b7a7b7ab33056f250544dbd03a9617252dff43f27",
+      "bytes": 6911
+    },
+    {
+      "file": "src/main/resources/db/migration/V36__oncall_swap_notification_payload_retention.sql",
+      "sha256": "42b45d233f46ac9ed7ae4879dfb29563ccea9d23db4705d749d5ebe230335845",
+      "bytes": 410
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/SwapNotificationScenarios.java",
+      "sha256": "22f1bd81d2b92402e3c72c3eebf5885b8a4814a3ca5be7e83fab8ee640ca89fb",
+      "bytes": 34622
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OnCallSwapNotificationMigrationTest.java",
+      "sha256": "02adc4cbccd1af6383f5ae5eb8164cf872d3181b4337d1c40368fad3aefb3aba",
+      "bytes": 3769
+    },
+    {
+      "file": "scripts/verify-oncall-swap-notification-mysql.cjs",
+      "sha256": "a91e9b185cd94179381fc17ee061f3d3b17b2084bc04c8d787eafc1672f3865e",
+      "bytes": 4989
+    },
+    {
+      "file": "scripts/tests/oncall-swap-notification-mysql.test.cjs",
+      "sha256": "07865cad448793ae7ebbc992198d79c59b226ffd9e504a81ecc91a9fbae44667",
+      "bytes": 3508
+    }
+  ],
+  "overallGoalComplete": false
+}

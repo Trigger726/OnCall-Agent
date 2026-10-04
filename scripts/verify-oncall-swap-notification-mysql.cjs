@@ -21,9 +21,18 @@ const cases=[
   'shouldEnforceAuthenticatedHttpRolesAndExplicitRetryVersion',
   'shouldRejectRetryForForeignSwapIneligibleActorOrSupersededEvent',
   'shouldPreventExternalDeliveryFromInsideBusinessTransactionAndPreserveDisabledHistory',
-  'shouldRunOneUnqueuedWorkerWithoutBlockingSharedSchedulerTicks'
+  'shouldRunOneUnqueuedWorkerWithoutBlockingSharedSchedulerTicks',
+  'shouldRejectNewManualRetryAfterPayloadRetentionWithoutChangingHistory',
+  'shouldEraseDeliveredPayloadButPreserveTechnicalReceiptAndOriginalRetryAcknowledgement',
+  'shouldBlockExpiredClaimsBeforeBoundedCleanupAndKeepNotificationHistory',
+  'shouldDeferErasureWhileValidLeaseIsInFlightThenPreserveItsReceipt',
+  'shouldEraseExpiredLeaseWithoutHttpAndFenceItsLateReceipt',
+  'shouldAllowOptOutButNeverReviveErasedPayloadAfterDisablingRetention',
+  'shouldCleanWithSendingDisabledWithoutOccupyingSharedScheduler',
+  'shouldSerializeConcurrentCleanupWithoutDoubleErasureOrAuditChanges',
+  'shouldFreezeDatabaseDeadlineAcrossRetryAndRejectUnsafeRetentionConfiguration'
 ];
-function identity(marker,name){const row=JSON.parse(marker);assert.equal(row.case,name);assert.equal(row.product,'MySQL');assert.match(row.version,/^8\.4\./);assert.equal(row.schema,'opspilot_swap_notification_test');return row;}
+function identity(marker,name){const row=JSON.parse(marker);assert.equal(row.case,name);assert.equal(row.product,'MySQL');assert.match(row.version,/^8\.4\./);assert.equal(row.schema,'opspilot_swap_notification_test');assert.equal(row.migration36,true);return row;}
 function verify(log,xml){
   log=log.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g,'');
   const result=suiteResult(xml,suite,cases.length);assert.equal(result.tests,cases.length);
@@ -39,7 +48,7 @@ function verify(log,xml){
   assert.deepEqual(global.map(m=>{const row=JSON.parse(m[1]);identity(m[1],row.case);assert.ok(xml.includes(m[0].trimEnd()));return row.case;}).sort(),[...cases].sort());
   const started=[...log.matchAll(/(HikariPool-\d+) - Start completed\./g)],stopped=[...log.matchAll(/(HikariPool-\d+) - Shutdown completed\./g)];
   assert.equal(started.length,1);assert.equal(stopped.length,1);assert.equal(started[0][1],stopped[0][1]);assert.ok(stopped[0].index>started[0].index);
-  return {status:'PASS',suite:result,executed:cases.length,skipped:0,cases,database:'MySQL',databaseVersion:[...versions][0],actualJdbcIdentityPerTest:true,migration35VerifiedPerTest:true,fullMavenAndOrderedPoolShutdownVerified:true};
+  return {status:'PASS',suite:result,executed:cases.length,skipped:0,cases,database:'MySQL',databaseVersion:[...versions][0],actualJdbcIdentityPerTest:true,migration35VerifiedPerTest:true,migration36VerifiedPerTest:true,fullMavenAndOrderedPoolShutdownVerified:true};
 }
 module.exports={verify,suite,cases};
 if(require.main===module){try{const dir='target/oncall-swap-notification-mysql-it',log=process.argv[2]||dir+'/maven.log',reports=process.argv[3]||'target/surefire-reports',output=process.argv[4]||dir+'/result.json';

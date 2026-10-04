@@ -15,6 +15,7 @@ import org.testcontainers.containers.MySQLContainer;
 @SpringBootTest(properties={"spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver","spring.h2.console.enabled=false",
         "opspilot.ai.enabled=false","opspilot.oncall.rotation.enabled=false","opspilot.oncall.escalation.enabled=false",
         "opspilot.oncall.swap.notification.enabled=true","opspilot.oncall.swap.notification.token=cp87-notification-token",
+        "opspilot.oncall.swap.notification.retention-enabled=true",
         "opspilot.oncall.swap.notification.connect-timeout=500ms","opspilot.oncall.swap.notification.read-timeout=5s",
         "opspilot.oncall.swap.notification.lease=10s","opspilot.oncall.swap.notification.retry-base-delay=5s",
         "opspilot.oncall.swap.notification.retry-max-delay=30s","opspilot.oncall.swap.notification.max-attempts=3",

@@ -75,6 +75,8 @@ opspilot:
         retry-max-delay: ${ONCALL_SWAP_NOTIFICATION_RETRY_MAX_DELAY:1h}
         max-attempts: ${ONCALL_SWAP_NOTIFICATION_MAX_ATTEMPTS:5}
         batch-size: ${ONCALL_SWAP_NOTIFICATION_BATCH_SIZE:20}
+        retention-enabled: ${ONCALL_SWAP_NOTIFICATION_RETENTION_ENABLED:false}
+        payload-retention-days: ${ONCALL_SWAP_NOTIFICATION_PAYLOAD_RETENTION_DAYS:30}
     rotation:
       enabled: ${ONCALL_ROTATION_ENABLED:true}
       scan-delay: ${ONCALL_ROTATION_SCAN_DELAY:60000}

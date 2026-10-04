@@ -34,6 +34,10 @@ public class OnCallSwapNotifications {
     public OnCallSwapNotifications(JdbcClient jdbc, ObjectMapper json, AuditService audit,
                                    OnCallSwapNotificationProperties properties) {
         this.jdbc = jdbc; this.json = json; this.audit = audit; this.properties = properties;
+        if (properties.payloadRetentionDays() < 1 || properties.payloadRetentionDays() > 3650
+                || (properties.retentionEnabled() && (properties.batchSize() < 1 || properties.batchSize() > 100))) {
+            throw new IllegalArgumentException("Invalid swap notification retention configuration");
+        }
         if (!properties.enabled()) { destination = null; client = null; return; }
         URI uri;
         try { uri = URI.create(properties.url()); }
@@ -70,16 +74,17 @@ public class OnCallSwapNotifications {
             try { payload = json.writeValueAsString(snapshot); }
             catch (JsonProcessingException error) { throw new IllegalStateException("Unable to freeze swap notification"); }
             jdbc.sql("""
-                    INSERT INTO oncall_swap_notification(swap_id,event_version,event_status,recipient_id,recipient_name,delivery_key,payload_json)
-                    VALUES (:swap,:version,:status,:recipient,:name,:key,:payload)
+                    INSERT INTO oncall_swap_notification(swap_id,event_version,event_status,recipient_id,recipient_name,delivery_key,payload_json,payload_expires_at)
+                    VALUES (:swap,:version,:status,:recipient,:name,:key,:payload,:expires)
                     """).param("swap", row.id()).param("version", row.version()).param("status", row.status()).param("recipient", recipient)
-                    .param("name", name).param("key", UUID.randomUUID().toString()).param("payload", payload).update();
+                    .param("name", name).param("key", UUID.randomUUID().toString()).param("payload", payload)
+                    .param("expires", now().plusDays(properties.payloadRetentionDays())).update();
         }
     }
 
     public ListView list(long swapId) {
         requireSwap(swapId, false);
-        return new ListView(properties.enabled(), now(), jdbc.sql("SELECT * FROM oncall_swap_notification WHERE swap_id=:id ORDER BY id")
+        return new ListView(properties.enabled(), properties.retentionEnabled(), now(), jdbc.sql("SELECT * FROM oncall_swap_notification WHERE swap_id=:id ORDER BY id")
                 .param("id", swapId).query(mapper).list()); // At most one request plus two decision notifications.
     }
 
@@ -98,6 +103,9 @@ public class OnCallSwapNotifications {
         var previous = jdbc.sql("SELECT last_retry_from_version,last_retry_reason FROM oncall_swap_notification WHERE id=:id")
                 .param("id", id).query((rs,n) -> new Retry(rs.getObject(1,Integer.class),rs.getString(2))).single();
         if (previous.version() != null && previous.version() == version && clean.equals(previous.reason())) return row;
+        if (row.payloadErasedAt() != null || (properties.retentionEnabled() && !row.payloadExpiresAt().isAfter(now()))) {
+            throw conflict("ONCALL_SWAP_NOTIFICATION_PAYLOAD_EXPIRED", "通知载荷保留期限已到，不能新重试；原回执与换班历史保留");
+        }
         if (!row.status().equals("FAILED") || row.version() != version || ineligible(row) != null) throw conflict("ONCALL_SWAP_NOTIFICATION_NOT_RETRYABLE", "通知已变化或已失效，请刷新核对，不自动重试");
         jdbc.sql("""
                 UPDATE oncall_swap_notification SET status='PENDING',version=version+1,attempts=0,next_attempt_at=:now,
@@ -109,13 +117,38 @@ public class OnCallSwapNotifications {
     }
 
     @Transactional(propagation = Propagation.NEVER)
+    public int purgeExpiredPayloads() {
+        if (!properties.retentionEnabled()) return 0;
+        LocalDateTime at = now();
+        var ids = jdbc.sql("""
+                SELECT id FROM oncall_swap_notification WHERE payload_erased_at IS NULL AND payload_expires_at<=:now
+                  AND (status<>'CLAIMED' OR lease_until<=:now)
+                ORDER BY payload_expires_at,id LIMIT :limit
+                """).param("now",at).param("limit",properties.batchSize()).query(Long.class).list();
+        int erased = 0;
+        for (long id : ids) {
+            if (Thread.currentThread().isInterrupted()) break;
+            erased += jdbc.sql("""
+                    UPDATE oncall_swap_notification SET payload_json='',payload_erased_at=:now,version=version+1,
+                      last_error_code=CASE WHEN status IN ('PENDING','FAILED','CLAIMED') THEN 'RETENTION_EXPIRED' ELSE last_error_code END,
+                      status=CASE WHEN status IN ('PENDING','FAILED','CLAIMED') THEN 'SKIPPED' ELSE status END,
+                      lease_token=NULL,lease_until=NULL
+                    WHERE id=:id AND payload_erased_at IS NULL AND payload_expires_at<=:now
+                      AND (status<>'CLAIMED' OR lease_until<=:now)
+                    """).param("id",id).param("now",at).update();
+        }
+        return erased; // Never delete the event, technical receipt, retry fingerprint or business audit.
+    }
+
+    @Transactional(propagation = Propagation.NEVER)
     public int dispatchDue() {
         if (!properties.enabled()) return 0;
         var ids = jdbc.sql("""
                 SELECT id FROM oncall_swap_notification WHERE
-                (status='PENDING' AND next_attempt_at<=:now) OR (status='CLAIMED' AND lease_until<=:now)
+                ((status='PENDING' AND next_attempt_at<=:now) OR (status='CLAIMED' AND lease_until<=:now))
+                AND payload_erased_at IS NULL AND (:retention=FALSE OR payload_expires_at>:now)
                 ORDER BY id LIMIT :limit
-                """).param("now", now()).param("limit", properties.batchSize()).query(Long.class).list();
+                """).param("now", now()).param("retention",properties.retentionEnabled()).param("limit", properties.batchSize()).query(Long.class).list();
         int claimed = 0;
         for (long id : ids) {
             if (Thread.currentThread().isInterrupted()) break;
@@ -123,13 +156,15 @@ public class OnCallSwapNotifications {
             int exhausted = jdbc.sql("""
                     UPDATE oncall_swap_notification SET status='FAILED',version=version+1,last_error_code='LEASE_EXPIRED',lease_token=NULL,lease_until=NULL
                     WHERE id=:id AND status='CLAIMED' AND lease_until<=:now AND attempts>=:max
-                    """).param("id",id).param("now",at).param("max",properties.maxAttempts()).update();
+                      AND payload_erased_at IS NULL AND (:retention=FALSE OR payload_expires_at>:now)
+                    """).param("id",id).param("now",at).param("max",properties.maxAttempts()).param("retention",properties.retentionEnabled()).update();
             if (exhausted == 1) { claimed++; continue; }
             int updated = jdbc.sql("""
                     UPDATE oncall_swap_notification SET status='CLAIMED',version=version+1,attempts=attempts+1,total_attempts=total_attempts+1,
                       lease_token=:token,lease_until=:until WHERE id=:id AND attempts<:max AND
                       ((status='PENDING' AND next_attempt_at<=:now) OR (status='CLAIMED' AND lease_until<=:now))
-                    """).param("id",id).param("token",token).param("until",at.plus(properties.lease())).param("now",at).param("max",properties.maxAttempts()).update();
+                      AND payload_erased_at IS NULL AND (:retention=FALSE OR payload_expires_at>:now)
+                    """).param("id",id).param("token",token).param("until",at.plus(properties.lease())).param("now",at).param("max",properties.maxAttempts()).param("retention",properties.retentionEnabled()).update();
             if (updated != 1) continue;
             claimed++; deliver(view(id), token); // Claim immediately before this delivery, never an entire batch with one lease clock.
         }
@@ -139,8 +174,10 @@ public class OnCallSwapNotifications {
     private void deliver(View row, String token) {
         String invalid = ineligible(row);
         if (invalid != null) { settle(row,token,"SKIPPED",null,invalid); return; }
-        String payload = jdbc.sql("SELECT payload_json FROM oncall_swap_notification WHERE id=:id AND status='CLAIMED' AND lease_token=:token AND lease_until>:now")
-                .param("id",row.id()).param("token",token).param("now",now()).query(String.class).optional().orElse(null);
+        String payload = jdbc.sql("""
+                SELECT payload_json FROM oncall_swap_notification WHERE id=:id AND status='CLAIMED' AND lease_token=:token AND lease_until>:now
+                  AND payload_erased_at IS NULL AND (:retention=FALSE OR payload_expires_at>:now)
+                """).param("id",row.id()).param("token",token).param("now",now()).param("retention",properties.retentionEnabled()).query(String.class).optional().orElse(null);
         if (payload == null) return;
         Integer status = null; String code = null;
         try {
@@ -205,7 +242,8 @@ public class OnCallSwapNotifications {
     private static final RowMapper<View> mapper=(rs,n)->new View(rs.getLong("id"),rs.getLong("swap_id"),rs.getInt("event_version"),rs.getString("event_status"),
             rs.getLong("recipient_id"),rs.getString("recipient_name"),rs.getString("delivery_key"),rs.getString("status"),rs.getInt("version"),
             rs.getInt("attempts"),rs.getInt("total_attempts"),rs.getObject("next_attempt_at",LocalDateTime.class),rs.getObject("lease_until",LocalDateTime.class),
-            rs.getObject("last_http_status",Integer.class),rs.getString("last_error_code"),rs.getObject("delivered_at",LocalDateTime.class));
+            rs.getObject("last_http_status",Integer.class),rs.getString("last_error_code"),rs.getObject("delivered_at",LocalDateTime.class),
+            rs.getObject("payload_expires_at",LocalDateTime.class),rs.getObject("payload_erased_at",LocalDateTime.class));
     private record SwapState(long requester,long target,int version,String status) {}
     private record Retry(Integer version,String reason) {}
     private record Snapshot(String eventType,long swapId,int eventVersion,String historicalStatus,long recipientId,String recipientName,
@@ -214,6 +252,7 @@ public class OnCallSwapNotifications {
                             String timeBasis,boolean humanConfirmationRequired,boolean currentCoverageMustBeReadSeparately) {}
     public record View(long id,long swapId,int eventVersion,String eventStatus,long recipientId,String recipientName,String deliveryKey,
                        String status,int version,int attempts,int totalAttempts,LocalDateTime nextAttemptAt,LocalDateTime leaseUntil,
-                       Integer lastHttpStatus,String lastErrorCode,LocalDateTime deliveredAt) {}
-    public record ListView(boolean enabled,LocalDateTime databaseNow,List<View> deliveries) {}
+                       Integer lastHttpStatus,String lastErrorCode,LocalDateTime deliveredAt,
+                       LocalDateTime payloadExpiresAt,LocalDateTime payloadErasedAt) {}
+    public record ListView(boolean enabled,boolean retentionEnabled,LocalDateTime databaseNow,List<View> deliveries) {}
 }

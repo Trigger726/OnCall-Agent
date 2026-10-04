@@ -57,7 +57,8 @@ abstract class SwapNotificationScenarios {
         try(var connection=datasource.getConnection()){
             var metadata=connection.getMetaData();databaseProduct=metadata.getDatabaseProductName();if(getClass().getSimpleName().startsWith("MySql")){assertThat(databaseProduct).isEqualTo("MySQL");assertThat(metadata.getDatabaseProductVersion()).startsWith("8.4.");}
             assertThat(jdbc.sql("SELECT COUNT(*) FROM flyway_schema_history WHERE version='35' AND success=TRUE").query(Long.class).single()).isEqualTo(1);
-            System.out.println("CP87_SWAP_NOTIFICATION_DATABASE "+json.writeValueAsString(Map.of("case",test.getTestMethod().orElseThrow().getName(),"product",metadata.getDatabaseProductName(),"version",metadata.getDatabaseProductVersion(),"schema",connection.getCatalog())));
+            assertThat(jdbc.sql("SELECT COUNT(*) FROM flyway_schema_history WHERE version='36' AND success=TRUE").query(Long.class).single()).isEqualTo(1);
+            System.out.println("CP87_SWAP_NOTIFICATION_DATABASE "+json.writeValueAsString(Map.of("case",test.getTestMethod().orElseThrow().getName(),"product",metadata.getDatabaseProductName(),"version",metadata.getDatabaseProductVersion(),"schema",connection.getCatalog(),"migration36",true)));
         }
     }
     @AfterEach void after() {
@@ -188,8 +189,17 @@ abstract class SwapNotificationScenarios {
     }
     @Test void shouldPreventExternalDeliveryFromInsideBusinessTransactionAndPreserveDisabledHistory() {
         var pending=swaps.request(command(pair()),2,"test");assertThatThrownBy(()->transactions.execute(s->{notifications.dispatchDue();return null;})).isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
-        var disabled=new OnCallSwapNotifications(jdbc,json,audit,new OnCallSwapNotificationProperties(false,null,null,null,null,null,null,null,0,0));
+        var disabled=new OnCallSwapNotifications(jdbc,json,audit,new OnCallSwapNotificationProperties(false,null,null,null,null,null,null,null,0,0,false,30));
         transactions.execute(s->{disabled.enqueue(pending);return null;});assertThat(disabled.dispatchDue()).isZero();assertThat(disabled.list(pending.id()).enabled()).isFalse();assertThat(disabled.list(pending.id()).deliveries()).hasSize(1);assertThat(receiver.bodies).isEmpty();
+    }
+
+    @Test void shouldRejectNewManualRetryAfterPayloadRetentionWithoutChangingHistory() {
+        var pending=swaps.request(command(pair()),2,"test");receiver.status.set(401);notifications.dispatchDue();var failed=only(pending.id());long count=auditCount();
+        jdbc.sql("UPDATE oncall_swap_notification SET payload_expires_at=:past WHERE id=:id").param("past",now().minusSeconds(1)).param("id",failed.id()).update();
+        assertThatThrownBy(()->notifications.retry(pending.id(),failed.id(),failed.version(),"过期后新重试",2,"test"))
+                .isInstanceOfSatisfying(ApiException.class,e->assertThat(e.code()).isEqualTo("ONCALL_SWAP_NOTIFICATION_PAYLOAD_EXPIRED"));
+        assertThat(only(pending.id()).status()).isEqualTo("FAILED");assertThat(auditCount()).isEqualTo(count);assertThat(swaps.get(pending.id()).status()).isEqualTo("PENDING");
+        assertThat(receiver.bodies).hasSize(1);
     }
 
     @Test void shouldRunOneUnqueuedWorkerWithoutBlockingSharedSchedulerTicks() throws Exception {
@@ -199,6 +209,83 @@ abstract class SwapNotificationScenarios {
         while(!only(pending.id()).status().equals("DELIVERED")&&System.nanoTime()<deadline)Thread.sleep(20);
         assertThat(only(pending.id()).status()).isEqualTo("DELIVERED");assertThat(receiver.bodies).hasSize(1);
     }
+
+    @Test void shouldEraseDeliveredPayloadButPreserveTechnicalReceiptAndOriginalRetryAcknowledgement() {
+        var pending=swaps.request(command(pair()),2,"test");receiver.status.set(401);notifications.dispatchDue();var failed=only(pending.id());
+        String reason="原人工重试";notifications.retry(pending.id(),failed.id(),failed.version(),reason,2,"test");receiver.status.set(204);notifications.dispatchDue();
+        var delivered=only(pending.id());long count=auditCount();expire(delivered.id());
+        assertThat(notifications.purgeExpiredPayloads()).isEqualTo(1);var erased=only(pending.id());
+        assertThat(payload(erased.id())).isEmpty();assertThat(erased.payloadErasedAt()).isNotNull();assertThat(erased.status()).isEqualTo("DELIVERED");
+        assertThat(erased.deliveredAt()).isEqualTo(delivered.deliveredAt());assertThat(erased.deliveryKey()).isEqualTo(delivered.deliveryKey());
+        assertThat(erased.totalAttempts()).isEqualTo(delivered.totalAttempts());assertThat(erased.lastHttpStatus()).isEqualTo(204);assertThat(auditCount()).isEqualTo(count);
+        assertThat(notifications.retry(pending.id(),failed.id(),failed.version(),reason,2,"test")).isEqualTo(erased);
+        assertThat(notifications.purgeExpiredPayloads()).isZero();assertThat(notifications.dispatchDue()).isZero();assertThat(receiver.bodies).hasSize(2);
+        assertThat(swaps.get(pending.id()).status()).isEqualTo("PENDING");
+    }
+    @Test void shouldBlockExpiredClaimsBeforeBoundedCleanupAndKeepNotificationHistory() {
+        var rows=new ArrayList<OnCallSwapNotifications.View>();for(int i=0;i<3;i++){var pending=swaps.request(command(pair()),2,"test");rows.add(only(pending.id()));expire(rows.get(i).id());}
+        long count=auditCount();var bounded=policy(true,true,1);
+        assertThat(bounded.dispatchDue()).isZero();assertThat(receiver.bodies).isEmpty();
+        for(int i=0;i<3;i++)assertThat(bounded.purgeExpiredPayloads()).isEqualTo(1);
+        assertThat(bounded.purgeExpiredPayloads()).isZero();
+        for(var old:rows){var row=only(old.swapId());assertThat(row.status()).isEqualTo("SKIPPED");assertThat(row.lastErrorCode()).isEqualTo("RETENTION_EXPIRED");
+            assertThat(row.totalAttempts()).isZero();assertThat(payload(row.id())).isEmpty();assertThat(swaps.get(row.swapId()).status()).isEqualTo("PENDING");}
+        assertThat(auditCount()).isEqualTo(count);
+    }
+    @Test void shouldDeferErasureWhileValidLeaseIsInFlightThenPreserveItsReceipt() throws Exception {
+        var pending=swaps.request(command(pair()),2,"test");receiver.block=true;var pool=Executors.newSingleThreadExecutor();
+        try{var active=pool.submit(notifications::dispatchDue);assertThat(receiver.entered.await(5,TimeUnit.SECONDS)).isTrue();expire(only(pending.id()).id());
+            assertThat(notifications.purgeExpiredPayloads()).isZero();assertThat(payload(only(pending.id()).id())).isNotEmpty();assertThat(notifications.dispatchDue()).isZero();
+            receiver.release.countDown();assertThat(active.get(5,TimeUnit.SECONDS)).isEqualTo(1);assertThat(only(pending.id()).status()).isEqualTo("DELIVERED");
+            assertThat(notifications.purgeExpiredPayloads()).isEqualTo(1);assertThat(only(pending.id()).status()).isEqualTo("DELIVERED");assertThat(receiver.bodies).hasSize(1);
+        }finally{receiver.release.countDown();pool.shutdownNow();}
+    }
+    @Test void shouldEraseExpiredLeaseWithoutHttpAndFenceItsLateReceipt() throws Exception {
+        var pending=swaps.request(command(pair()),2,"test");receiver.block=true;var pool=Executors.newSingleThreadExecutor();
+        try{var old=pool.submit(notifications::dispatchDue);assertThat(receiver.entered.await(5,TimeUnit.SECONDS)).isTrue();long id=only(pending.id()).id();expire(id);
+            jdbc.sql("UPDATE oncall_swap_notification SET lease_until=:past WHERE id=:id").param("past",now().minusSeconds(1)).param("id",id).update();
+            assertThat(notifications.dispatchDue()).isZero();assertThat(notifications.purgeExpiredPayloads()).isEqualTo(1);var erased=only(pending.id());
+            receiver.release.countDown();assertThat(old.get(5,TimeUnit.SECONDS)).isEqualTo(1);assertThat(only(pending.id())).isEqualTo(erased);
+            assertThat(erased.status()).isEqualTo("SKIPPED");assertThat(erased.lastErrorCode()).isEqualTo("RETENTION_EXPIRED");assertThat(erased.leaseUntil()).isNull();
+            assertThat(payload(id)).isEmpty();assertThat(receiver.bodies).hasSize(1);
+        }finally{receiver.release.countDown();pool.shutdownNow();}
+    }
+    @Test void shouldAllowOptOutButNeverReviveErasedPayloadAfterDisablingRetention() {
+        var pending=swaps.request(command(pair()),2,"test");long id=only(pending.id()).id();expire(id);var disabled=policy(true,false,20);
+        assertThat(disabled.purgeExpiredPayloads()).isZero();assertThat(disabled.dispatchDue()).isEqualTo(1);assertThat(only(pending.id()).status()).isEqualTo("DELIVERED");
+        assertThat(notifications.purgeExpiredPayloads()).isEqualTo(1);assertThat(disabled.dispatchDue()).isZero();
+        assertThatThrownBy(()->disabled.retry(pending.id(),id,only(pending.id()).version(),"不可恢复空载荷",2,"test"))
+                .isInstanceOfSatisfying(ApiException.class,e->assertThat(e.code()).isEqualTo("ONCALL_SWAP_NOTIFICATION_PAYLOAD_EXPIRED"));
+        assertThat(payload(id)).isEmpty();assertThat(receiver.bodies).hasSize(1);
+    }
+    @Test void shouldCleanWithSendingDisabledWithoutOccupyingSharedScheduler() throws Exception {
+        var pending=swaps.request(command(pair()),2,"test");expire(only(pending.id()).id());var disabled=policy(false,true,1);
+        var cleanupJob=new OnCallSwapNotificationJob(disabled,policyProperties(false,true,1));try{cleanupJob.tick();long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(5);
+            while(only(pending.id()).payloadErasedAt()==null&&System.nanoTime()<deadline)Thread.sleep(20);
+            assertThat(only(pending.id()).payloadErasedAt()).isNotNull();assertThat(disabled.list(pending.id()).enabled()).isFalse();
+            assertThat(disabled.list(pending.id()).retentionEnabled()).isTrue();assertThat(disabled.dispatchDue()).isZero();assertThat(receiver.bodies).isEmpty();
+        }finally{cleanupJob.destroy();}
+        assertThatThrownBy(()->transactions.execute(s->{notifications.purgeExpiredPayloads();return null;})).isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
+    }
+    @Test void shouldSerializeConcurrentCleanupWithoutDoubleErasureOrAuditChanges() throws Exception {
+        var pending=swaps.request(command(pair()),2,"test");long id=only(pending.id()).id();expire(id);long count=auditCount();var pool=Executors.newFixedThreadPool(2);
+        var barrier=new CyclicBarrier(2);try{var a=pool.submit(()->{barrier.await();return notifications.purgeExpiredPayloads();});var b=pool.submit(()->{barrier.await();return notifications.purgeExpiredPayloads();});
+            assertThat(a.get(5,TimeUnit.SECONDS)+b.get(5,TimeUnit.SECONDS)).isEqualTo(1);
+        }finally{pool.shutdownNow();}assertThat(only(pending.id()).version()).isEqualTo(1);assertThat(auditCount()).isEqualTo(count);assertThat(payload(id)).isEmpty();assertThat(receiver.bodies).isEmpty();
+    }
+    @Test void shouldFreezeDatabaseDeadlineAcrossRetryAndRejectUnsafeRetentionConfiguration() {
+        LocalDateTime before=now();var pending=swaps.request(command(pair()),2,"test");var original=only(pending.id());LocalDateTime after=now();
+        assertThat(original.payloadExpiresAt()).isBetween(before.plusDays(30),after.plusDays(30));receiver.status.set(401);notifications.dispatchDue();var failed=only(pending.id());
+        notifications.retry(pending.id(),failed.id(),failed.version(),"原期限不延长",2,"test");assertThat(only(pending.id()).payloadExpiresAt()).isEqualTo(original.payloadExpiresAt());
+        for(int days:List.of(0,-1,3651))assertThatThrownBy(()->new OnCallSwapNotifications(jdbc,json,audit,
+                new OnCallSwapNotificationProperties(false,null,null,null,null,null,null,null,0,20,true,days))).isInstanceOf(IllegalArgumentException.class);
+        for(int batch:List.of(0,101))assertThatThrownBy(()->policy(false,true,batch)).isInstanceOf(IllegalArgumentException.class);
+    }
+    OnCallSwapNotificationProperties policyProperties(boolean sending,boolean retention,int batch){return new OnCallSwapNotificationProperties(sending,properties.url(),properties.token(),
+            properties.connectTimeout(),properties.readTimeout(),properties.lease(),properties.retryBaseDelay(),properties.retryMaxDelay(),properties.maxAttempts(),batch,retention,properties.payloadRetentionDays());}
+    OnCallSwapNotifications policy(boolean sending,boolean retention,int batch){return new OnCallSwapNotifications(jdbc,json,audit,policyProperties(sending,retention,batch));}
+    void expire(long id){jdbc.sql("UPDATE oncall_swap_notification SET payload_expires_at=CURRENT_TIMESTAMP(6) WHERE id=:id").param("id",id).update();}
+    String payload(long id){return jdbc.sql("SELECT payload_json FROM oncall_swap_notification WHERE id=:id").param("id",id).query(String.class).single();}
 
     Fixture pair(){long resource=insert(jdbc.sql("INSERT INTO cmdb_resource(resource_code,resource_type,name,environment,status) VALUES (:code,'APPLICATION','通知独立服务','TEST','RUNNING')").param("code","NOTIFY-"+UUID.randomUUID()));long schedule=insert(jdbc.sql("INSERT INTO oncall_schedule(service_resource_id,name) VALUES (:id,'通知计划')").param("id",resource));LocalDateTime at=now().plusDays(3).withNano(0);
         return new Fixture(roster.create(new OnCallRosterService.ShiftCommand(schedule,2,at,at.plusHours(2),false,"通知本人班次"),1L,"test"),roster.create(new OnCallRosterService.ShiftCommand(schedule,3,at.plusDays(1),at.plusDays(1).plusHours(2),false,"通知对方班次"),1L,"test"));}

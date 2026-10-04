@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-当前CP88已闭环：源码7558b9d的[Run37172618761](https://github.com/Trigger726/OnCall-Agent/actions/runs/37172618761)十八作业全部success，见[88第六节](docs/V1.7-checkpoint-88.md)/[自身远端proof](docs/assets/v1.7-cp88/remote-proof.json)。九个选定ZIP源HEAD/官方摘要/实际字节及原门禁独立核验；真实MySQL通知18与原换班17零跳过、原生18/兼容99/双JVM六项通过，双时区各451执行/142条件跳过、158新鲜XML，前端129/audit0，Linux新九流程及原14/8/6实页通过，三本轮截图已目视。仅修共用测试的原生CHECK精确断言，生产代码、页面和门禁未改，不制造CP88视觉变化。87首次MySQL失败及旧Demo完整保留；以下按各历史阶段当时范围阅读，不把旧“待验”当本轮终态。
+当前推进CP89通知载荷保留：[89报告](docs/acceptance/V1.7-checkpoint-89.md)/[本地证据](docs/assets/v1.7-cp89/local-proof.json)。V36冻结期限、显式清理开关默认关闭、有界清理与租约/领取/人工重试围栏；只擦除payload，保留业务、技术回执和原重试指纹。原18+新9通知/换班17、双时区各461执行、前端129/Node91本地通过；自身真实MySQL与专用前端呈现待验，不借以下88绿灯替代。旧Demo保留；本轮误用clean及逐摘要恢复范围在报告中公开记录。
+
+当前CP88已闭环：源码7558b9d的[Run37172618761](https://github.com/Trigger726/OnCall-Agent/actions/runs/37172618761)十八作业全部success，见[88第六节](docs/acceptance/V1.7-checkpoint-88.md)/[自身远端proof](docs/assets/v1.7-cp88/remote-proof.json)。九个选定ZIP源HEAD/官方摘要/实际字节及原门禁独立核验；真实MySQL通知18与原换班17零跳过、原生18/兼容99/双JVM六项通过，双时区各451执行/142条件跳过、158新鲜XML，前端129/audit0，Linux新九流程及原14/8/6实页通过，三本轮截图已目视。仅修共用测试的原生CHECK精确断言，生产代码、页面和门禁未改，不制造CP88视觉变化。87首次MySQL失败及旧Demo完整保留；以下按各历史阶段当时范围阅读，不把旧“待验”当本轮终态。
 
 当前CP87新增双向换班持久化通知与独立技术投递页面，本地限定通过、自己的源码CI/MySQL仍待：[验收87](docs/acceptance/V1.7-checkpoint-87.md)/[机器证据与新旧图](docs/assets/v1.7-cp87/local-proof.json)。申请通知指定对方、决定通知双方；稳定键/冻结事件同事务入队，独立有界worker、租约围栏/有限重试，技术2xx不等于人已读或接受。新18项、双时区各451实际执行、通知九实页/原14+8+6、前端129/Node113/audit0通过，旧86包与两次首次失败保留。文档基线bccd96a的tracing下载网络失败不称全绿；以下86等为各自历史源证据，不能替代87待验。完整路线继续。
 
