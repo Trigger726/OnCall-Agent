@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+最新 CP97：[开放认领后台与独立验证](V1.7-checkpoint-97.md)/[本地proof](../assets/v1.7-cp97/local-proof.json)，24H2/Node136通过；实际MySQL24、新JAR网络/同库升级重启、专用页面及新旧Demo待验。前一a1262f6自己的[Run37207086248](https://github.com/Trigger726/OnCall-Agent/actions/runs/37207086248)十八success，[96第六节](V1.7-checkpoint-96.md#6-自己源码远端限定通过)/[263记录proof](../assets/v1.7-cp96/remote-proof.json)已独立核验限定范围，不覆盖V38。95/94首次失败保留；以下为各历史时点，完整目标active。
+
 最新 CP96：[报告](V1.7-checkpoint-96.md)/[本地proof](../assets/v1.7-cp96/local-proof.json)，Node128、两次完整成对14本地限定通过，自己的新源码CI待验。前一148f6c9/[Run37205769613](https://github.com/Trigger726/OnCall-Agent/actions/runs/37205769613)实际16success/浏览器failure/镜像skipped，[95第六节](V1.7-checkpoint-95.md#6-自己源码远端通知通过成对页面新失败)完整保留新失败；通知12/HTTP3/MySQL限定通过不当整轮全绿。根因未证实，旧Demo保留，完整目标active。
 
 最新 CP95：[通知拦截生命周期与有限诊断](V1.7-checkpoint-95.md)/[本地证据](../assets/v1.7-cp95/local-proof.json)，Node121/前端147、通知12/成对页面14/HTTP3限定通过，新源码自身CI待验。前一 afd5cfb 的 [Run37204083856](https://github.com/Trigger726/OnCall-Agent/actions/runs/37204083856)实际18作业success，[第二次远端proof](../assets/v1.7-cp94/second-remote-proof.json)核验限定范围；不覆盖首次failure，不证明超时根因已解决。历史Demo和完整路线保留。

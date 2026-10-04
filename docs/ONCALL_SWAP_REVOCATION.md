@@ -1,5 +1,7 @@
 # 双向换班成对撤销契约（CP92 后台 / CP94 页面）
 
+最新[CP97](acceptance/V1.7-checkpoint-97.md)新增独立开放认领后台；不改变成对撤销契约。CP96自己的[Run37207086248](https://github.com/Trigger726/OnCall-Agent/actions/runs/37207086248)十八success，原成对14/HTTP3与五ZIP已独立核验，见[96第六节](acceptance/V1.7-checkpoint-96.md#6-自己源码远端限定通过)。此前failure保留，超时根因未证实；该证据不替代新V38/MySQL24/新页面验收，以下按历史范围阅读。
+
 最新状态：[CP96](acceptance/V1.7-checkpoint-96.md)仅测试/CI观测改动，两次原14和Node128本地通过，自身远端待验。CP94后续afd5cfb十八CI/成对14已限定通过，见[94第六节](acceptance/V1.7-checkpoint-94.md#6-后续文档基线自身远端限定通过)；CP95自己的148f6c9/[Run37205769613](https://github.com/Trigger726/OnCall-Agent/actions/runs/37205769613)则16success/浏览器failure/镜像skipped，第6流程中断后的读取等待超时。通知12/HTTP3/MySQL19等限定成功不覆盖该新failure；历史失败/旧Demo保留，根因未证实，生产成对契约不改。以下“当前/待验”按原历史时点阅读。
 
 保留原ACCEPTED历史，只撤销本次接受生成的两条覆盖。一次数据库事务提交两条取消、独立撤销台账和三条审计；不等于发出两个单独取消请求。后台见[验收92](acceptance/V1.7-checkpoint-92.md)，专用页面已在[CP94](acceptance/V1.7-checkpoint-94.md)本地限定通过：最终包14新实页与原12/14/8/6、前端147均通过，自己的源码CI/真实MySQL待验。

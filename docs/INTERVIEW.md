@@ -1,5 +1,7 @@
 # OpsPilot 面试讲解与追问
 
+最新 CP97：[开放认领后台阶段](acceptance/V1.7-checkpoint-97.md)。可讲本人自主认领、数据库并发唯一赢家、原键与内容回执、审计失败全部回滚，以及历史认领不等于当前覆盖。24H2通过；实际MySQL、新生产包网络/重启和专用页面仍待，不能讲完整功能或团队成员ACL已交付。[CP96自身十八CI](acceptance/V1.7-checkpoint-96.md#6-自己源码远端限定通过)仅闭合其原页面范围，不证明V38或超时唯一根因；历史失败保留。
+
 最新 CP96：[测试生命周期与有界请求证据](acceptance/V1.7-checkpoint-96.md)，Node128/两次真实14页面本地限定通过；95自己的CI为failure，通知12/HTTP3和真实MySQL19/17/27/1/99仅限定通过，根因仍未证实。可讲“真实提交与未转发中断分开、原意图只手动回执、失败证据不覆盖”，不可讲整体全绿/根因已解决。下一步[开放认领](ONCALL_OPEN_CLAIM_DESIGN.md)仅设计，尚无新功能交付；历史范围保留。
 
 最新 CP94：[成对撤销页面与原意图围栏](acceptance/V1.7-checkpoint-94.md)本地限定通过，见[275记录证据与七张新旧图](assets/v1.7-cp94/local-proof.json)。bf1009c自己的[Run37203313914](https://github.com/Trigger726/OnCall-Agent/actions/runs/37203313914)首次failure：16success/浏览器failure/镜像skipped，见[237记录失败proof](assets/v1.7-cp94/first-remote-proof.json)。真实MySQL19及原17/27/1/99独立重放相等、双时区480执行/171跳过/83XML、前端147/audit0、Linux旧14/8/6限定通过；旧通知第4流程错误后刷新超时，新的成对HTTP3/UI14未执行，仍须诊断闭环。本地最终新14、原12/14/8/6及Node117通过不替代新源码远端。完整路线/目标active，首次失败/旧Demo保留；下方文字按历史范围阅读。

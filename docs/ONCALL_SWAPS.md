@@ -1,5 +1,7 @@
 # 双向换班后端契约（CP85）
 
+最新[CP97](acceptance/V1.7-checkpoint-97.md)是独立开放接班后台，不改变本文件指定双方互换契约，也不将原换班成功当新认领完成。24H2通过，实际MySQL/新JAR网络与升级重启/新页面待验；[CP96自己的十八CI](acceptance/V1.7-checkpoint-96.md#6-自己源码远端限定通过)已限定闭合。以下“待验/当前”按历史时点阅读，旧Demo和首次失败保留。
+
 最新96仅改成对页面测试观测：[96报告](acceptance/V1.7-checkpoint-96.md)，两次原14/Node128本地限定通过，新源码自身远端待验。95自己148f6c9的[CI](https://github.com/Trigger726/OnCall-Agent/actions/runs/37205769613)为failure，通知12/成对HTTP3/原14/8/6和真实MySQL19/17/27/1/99限定通过，[失败proof](assets/v1.7-cp95/first-remote-proof.json)保留，不改业务契约。开放认领见[待实现设计](ONCALL_OPEN_CLAIM_DESIGN.md)，不是把现指定双方互换改名；以下按历史范围阅读。
 
 最新 CP94：[成对撤销页面与原意图围栏](acceptance/V1.7-checkpoint-94.md)本地限定通过，见[275记录证据与七张新旧图](assets/v1.7-cp94/local-proof.json)。bf1009c自己的[Run37203313914](https://github.com/Trigger726/OnCall-Agent/actions/runs/37203313914)首次failure：16success/浏览器failure/镜像skipped，见[237记录失败proof](assets/v1.7-cp94/first-remote-proof.json)。真实MySQL19及原17/27/1/99独立重放相等、双时区480执行/171跳过/83XML、前端147/audit0、Linux旧14/8/6限定通过；旧通知第4流程错误后刷新超时，新的成对HTTP3/UI14未执行，仍须诊断闭环。本地最终新14、原12/14/8/6及Node117通过不替代新源码远端。完整路线/目标active，首次失败/旧Demo保留；下方文字按历史范围阅读。

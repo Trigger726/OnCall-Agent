@@ -1,5 +1,7 @@
 # OpsPilot 10 分钟演示脚本
 
+最新 CP97：[开放认领后台报告](acceptance/V1.7-checkpoint-97.md)与[契约](ONCALL_OPEN_CLAIM_DESIGN.md)。后台24H2通过，但专用认领页面、新JAR真实网络/重启与桌面手机新旧Demo待验，不能把旧指定换班页面当成认领演示。旧包/截图完整保留。[CP96自己的远端14页面及18CI](acceptance/V1.7-checkpoint-96.md#6-自己源码远端限定通过)已限定闭合，本次不制造新视觉变化，以下按历史范围阅读。
+
 最新 CP96：[成对中断观测与14原页面两次本地验收](acceptance/V1.7-checkpoint-96.md)，[原Linux失败](assets/v1.7-cp95/first-remote-paired-failure.png)与[本轮桌面409](assets/v1.7-cp96/partial409-desktop.png)/[手机原回执](assets/v1.7-cp96/original-ack-mobile.png)保留。仅测试变化，不制造新视觉版本或把不同运行状态比较当因果修复。95自己的CI failure保留；96自身远端待验、完整路线继续，下方按历史时点阅读。
 
 最新 CP94：[成对撤销页面与原意图围栏](acceptance/V1.7-checkpoint-94.md)本地限定通过，见[275记录证据与七张新旧图](assets/v1.7-cp94/local-proof.json)。bf1009c自己的[Run37203313914](https://github.com/Trigger726/OnCall-Agent/actions/runs/37203313914)首次failure：16success/浏览器failure/镜像skipped，见[237记录失败proof](assets/v1.7-cp94/first-remote-proof.json)。真实MySQL19及原17/27/1/99独立重放相等、双时区480执行/171跳过/83XML、前端147/audit0、Linux旧14/8/6限定通过；旧通知第4流程错误后刷新超时，新的成对HTTP3/UI14未执行，仍须诊断闭环。本地最终新14、原12/14/8/6及Node117通过不替代新源码远端。完整路线/目标active，首次失败/旧Demo保留；下方文字按历史范围阅读。
