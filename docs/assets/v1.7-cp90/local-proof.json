@@ -1,0 +1,1492 @@
+{
+  "status": "LOCAL_RETENTION_UI_SCOPE_PASS_OWN_REMOTE_PENDING",
+  "generatedAt": "2026-10-04T04:11:55.058Z",
+  "baseHead": "adc89b38b3e6881b53e38f74ea1ee5c86ca3a16a",
+  "sourceHashConvention": "sha256 covers actual working bytes; Git normalizes CRLF/LF; CP90 commit not yet created",
+  "sourceFiles": [
+    {
+      "file": "web/src/components/OnCallSwapNotificationPanel.vue",
+      "sha256": "1cf1cf19c9d19c356eb5af73f1c470e303f50bb6dfc6940336777b941e01e12a",
+      "bytes": 11384
+    },
+    {
+      "file": "web/src/services/onCallSwapNotifications.ts",
+      "sha256": "c6b87e3f2b404496d685bcfa66209464c6cb451d0a4e6f357a1c0254bc68d329",
+      "bytes": 5096
+    },
+    {
+      "file": "web/tests/onCallSwapNotifications.test.mjs",
+      "sha256": "78c752fe89154f11e0b70d5487fca90ee992bd1c604aba09e9efbdd143fc7535",
+      "bytes": 7485
+    },
+    {
+      "file": "scripts/verify-oncall-swap-notification-ci.cjs",
+      "sha256": "91ddd7ec66f6a3f4d4d3188e1dea15bd642f81f52bfd8c95c7eb1c866a04af09",
+      "bytes": 37282
+    },
+    {
+      "file": "scripts/tests/oncall-swap-notification-ci.test.cjs",
+      "sha256": "e71fb64419c6d8b87e15688f89c16caf10479ed8cd25a427efbef31381b1ccd7",
+      "bytes": 823
+    },
+    {
+      "file": "scripts/fixtures/SwapNotificationRetentionFixture.java",
+      "sha256": "35ad2fdefb2824be0aaf6aa287913e815a51e7b73a7131d753c4a1e4d5138378",
+      "bytes": 1955
+    },
+    {
+      "file": "src/main/resources/static/index.html",
+      "sha256": "f700bfc4675e8868fb9c4f263321f3c1b1e809b2c3012def18bfad27ae54e4f3",
+      "bytes": 529
+    },
+    {
+      "file": "src/main/resources/static/assets/index-CkCsLsU4.css",
+      "sha256": "96591d381b0b7174fb46cf10b9071f7e2924762ad058c3045f2b71ee4c8f78fa",
+      "bytes": 124535
+    },
+    {
+      "file": "src/main/resources/static/assets/index-elf_t4QK.js",
+      "sha256": "423442358c8c886f773e6b556d424b15209df44c47f296e5317f6e59951e23de",
+      "bytes": 398070
+    }
+  ],
+  "oldDemo": {
+    "jar": {
+      "file": "target/cp90-before/opspilot-cp89.jar",
+      "sha256": "061e900680d8ecf744fcfbe32251e8930c3560ef77c7af6da0070c7668e2a04b",
+      "bytes": 81481534
+    },
+    "resultFile": {
+      "file": "target/oncall-swap-notification-it/run-fbNAYs/result.json",
+      "sha256": "a61c616f7ada78731c0a2228ab726549b4108fc2c8317643815c8b1826244af1",
+      "bytes": 19441
+    },
+    "result": {
+      "status": "RETENTION_UI_BASELINE_CAPTURED",
+      "baselineCapture": false,
+      "retentionUiBaselineCapture": true,
+      "jarSha256": "061e900680d8ecf744fcfbe32251e8930c3560ef77c7af6da0070c7668e2a04b",
+      "cases": [
+        {
+          "name": "real-ui-request-and-independent-transient-receiver",
+          "swapId": 1,
+          "notificationId": 1,
+          "stableKeyAndFrozenBody": true,
+          "actual503Then204": true,
+          "stillPendingAndOriginalResponsibility": true
+        },
+        {
+          "name": "human-decision-then-both-notifications",
+          "swapId": 1,
+          "twoActualParticipants": true,
+          "twoCurrentResponsibilitiesExchanged": true
+        },
+        {
+          "name": "notification-storage-failure-before-post",
+          "posts": 0
+        },
+        {
+          "name": "actual-retry-commit-response-loss-reload-and-original-ack",
+          "swapId": 2,
+          "notificationId": 4,
+          "capturedVersion": 2,
+          "noAutomaticPost": true,
+          "posts": 2,
+          "oneRetryAudit": true,
+          "decisionStillPending": true
+        },
+        {
+          "name": "auditor-reads-notification-without-write-control"
+        },
+        {
+          "name": "failed-notification-read-clears-old-receipts-then-recovers"
+        },
+        {
+          "name": "superseded-notification409-lock-reload-and-explicit-discard",
+          "swapId": 3,
+          "notificationId": 5,
+          "noVersionRebase": true,
+          "serverWithdrawalNotChanged": true
+        },
+        {
+          "name": "notification-late200-after-real-spa-account-switch",
+          "swapId": 4,
+          "sameDocument": true,
+          "actualLate200": true,
+          "replacementIdentityPreserved": true,
+          "originalIntentPreservedAndManuallyAcknowledged": true,
+          "oneRetryAudit": true
+        },
+        {
+          "name": "corrupt-notification-intent-kept-until-explicit-local-discard",
+          "noRetryPost": true,
+          "serverDecisionNotChanged": true
+        },
+        {
+          "name": "retention-old-ui-posts-expired-draft-and-omits-payload-facts",
+          "swapId": 5,
+          "notificationId": 9,
+          "posts": 1,
+          "actualSqlExpiry": true,
+          "actualPayloadErased": true,
+          "noNewAudit": true,
+          "decisionStillPending": true
+        },
+        {
+          "name": "actual-erased-delivered-payload-preserves-original-retry-ack",
+          "swapId": 6,
+          "notificationId": 10,
+          "posts": 2,
+          "actualSqlExpiry": true,
+          "receiptPreserved": true,
+          "noExtraDelivery": true,
+          "oneRetryAudit": true,
+          "noAutomaticPostAfterReload": true,
+          "decisionStillPending": true
+        }
+      ],
+      "deliveries": [
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:fb2d49e0-66fc-4606-8ee8-4a014d1be56f",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 1,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 3,
+            "firstStartsAt": "2026-10-27T03:55:05",
+            "firstEndsAt": "2026-10-27T05:55:05",
+            "secondScheduleId": 2,
+            "secondShiftId": 4,
+            "secondStartsAt": "2026-10-28T03:55:05",
+            "secondEndsAt": "2026-10-28T05:55:05",
+            "eventOccurredAt": "2026-10-04T03:55:05.966743",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 503
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:fb2d49e0-66fc-4606-8ee8-4a014d1be56f",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 1,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 3,
+            "firstStartsAt": "2026-10-27T03:55:05",
+            "firstEndsAt": "2026-10-27T05:55:05",
+            "secondScheduleId": 2,
+            "secondShiftId": 4,
+            "secondStartsAt": "2026-10-28T03:55:05",
+            "secondEndsAt": "2026-10-28T05:55:05",
+            "eventOccurredAt": "2026-10-04T03:55:05.966743",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 204
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:f85f72bf-e26a-484d-96f2-2fde92cbac54",
+          "body": {
+            "eventType": "ONCALL_SWAP_ACCEPTED",
+            "swapId": 1,
+            "eventVersion": 1,
+            "historicalStatus": "ACCEPTED",
+            "recipientId": 2,
+            "recipientName": "张伟",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 3,
+            "firstStartsAt": "2026-10-27T03:55:05",
+            "firstEndsAt": "2026-10-27T05:55:05",
+            "secondScheduleId": 2,
+            "secondShiftId": 4,
+            "secondStartsAt": "2026-10-28T03:55:05",
+            "secondEndsAt": "2026-10-28T05:55:05",
+            "eventOccurredAt": "2026-10-04T03:55:08",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 503
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:8569dc2a-c73e-4033-b328-f3103a5116af",
+          "body": {
+            "eventType": "ONCALL_SWAP_ACCEPTED",
+            "swapId": 1,
+            "eventVersion": 1,
+            "historicalStatus": "ACCEPTED",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 3,
+            "firstStartsAt": "2026-10-27T03:55:05",
+            "firstEndsAt": "2026-10-27T05:55:05",
+            "secondScheduleId": 2,
+            "secondShiftId": 4,
+            "secondStartsAt": "2026-10-28T03:55:05",
+            "secondEndsAt": "2026-10-28T05:55:05",
+            "eventOccurredAt": "2026-10-04T03:55:08",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 503
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:f85f72bf-e26a-484d-96f2-2fde92cbac54",
+          "body": {
+            "eventType": "ONCALL_SWAP_ACCEPTED",
+            "swapId": 1,
+            "eventVersion": 1,
+            "historicalStatus": "ACCEPTED",
+            "recipientId": 2,
+            "recipientName": "张伟",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 3,
+            "firstStartsAt": "2026-10-27T03:55:05",
+            "firstEndsAt": "2026-10-27T05:55:05",
+            "secondScheduleId": 2,
+            "secondShiftId": 4,
+            "secondStartsAt": "2026-10-28T03:55:05",
+            "secondEndsAt": "2026-10-28T05:55:05",
+            "eventOccurredAt": "2026-10-04T03:55:08",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 204
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:8569dc2a-c73e-4033-b328-f3103a5116af",
+          "body": {
+            "eventType": "ONCALL_SWAP_ACCEPTED",
+            "swapId": 1,
+            "eventVersion": 1,
+            "historicalStatus": "ACCEPTED",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 3,
+            "firstStartsAt": "2026-10-27T03:55:05",
+            "firstEndsAt": "2026-10-27T05:55:05",
+            "secondScheduleId": 2,
+            "secondShiftId": 4,
+            "secondStartsAt": "2026-10-28T03:55:05",
+            "secondEndsAt": "2026-10-28T05:55:05",
+            "eventOccurredAt": "2026-10-04T03:55:08",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 204
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:4954a547-6e4a-4b7f-a31e-24bbabc64df3",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 2,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 7,
+            "firstStartsAt": "2026-10-27T07:55:10",
+            "firstEndsAt": "2026-10-27T09:55:10",
+            "secondScheduleId": 2,
+            "secondShiftId": 8,
+            "secondStartsAt": "2026-10-28T07:55:10",
+            "secondEndsAt": "2026-10-28T09:55:10",
+            "eventOccurredAt": "2026-10-04T03:55:10.191155",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:4954a547-6e4a-4b7f-a31e-24bbabc64df3",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 2,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 7,
+            "firstStartsAt": "2026-10-27T07:55:10",
+            "firstEndsAt": "2026-10-27T09:55:10",
+            "secondScheduleId": 2,
+            "secondShiftId": 8,
+            "secondStartsAt": "2026-10-28T07:55:10",
+            "secondEndsAt": "2026-10-28T09:55:10",
+            "eventOccurredAt": "2026-10-04T03:55:10.191155",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 204
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:a2ac79c8-445f-4c44-b56d-7dc2b590d662",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 3,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 9,
+            "firstStartsAt": "2026-10-27T11:55:12",
+            "firstEndsAt": "2026-10-27T13:55:12",
+            "secondScheduleId": 2,
+            "secondShiftId": 10,
+            "secondStartsAt": "2026-10-28T11:55:12",
+            "secondEndsAt": "2026-10-28T13:55:12",
+            "eventOccurredAt": "2026-10-04T03:55:12.896841",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:c4db584d-b496-43fd-aea0-e7f01edaa017",
+          "body": {
+            "eventType": "ONCALL_SWAP_WITHDRAWN",
+            "swapId": 3,
+            "eventVersion": 1,
+            "historicalStatus": "WITHDRAWN",
+            "recipientId": 2,
+            "recipientName": "张伟",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 9,
+            "firstStartsAt": "2026-10-27T11:55:12",
+            "firstEndsAt": "2026-10-27T13:55:12",
+            "secondScheduleId": 2,
+            "secondShiftId": 10,
+            "secondStartsAt": "2026-10-28T11:55:12",
+            "secondEndsAt": "2026-10-28T13:55:12",
+            "eventOccurredAt": "2026-10-04T03:55:13",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:cf290827-487e-409a-8d04-33505bc2ad8f",
+          "body": {
+            "eventType": "ONCALL_SWAP_WITHDRAWN",
+            "swapId": 3,
+            "eventVersion": 1,
+            "historicalStatus": "WITHDRAWN",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 9,
+            "firstStartsAt": "2026-10-27T11:55:12",
+            "firstEndsAt": "2026-10-27T13:55:12",
+            "secondScheduleId": 2,
+            "secondShiftId": 10,
+            "secondStartsAt": "2026-10-28T11:55:12",
+            "secondEndsAt": "2026-10-28T13:55:12",
+            "eventOccurredAt": "2026-10-04T03:55:13",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:1e6db7bf-53e1-41ca-b667-987a0d03c5ad",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 4,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 11,
+            "firstStartsAt": "2026-10-27T15:55:13",
+            "firstEndsAt": "2026-10-27T17:55:13",
+            "secondScheduleId": 2,
+            "secondShiftId": 12,
+            "secondStartsAt": "2026-10-28T15:55:13",
+            "secondEndsAt": "2026-10-28T17:55:13",
+            "eventOccurredAt": "2026-10-04T03:55:13.671276",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:1e6db7bf-53e1-41ca-b667-987a0d03c5ad",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 4,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 11,
+            "firstStartsAt": "2026-10-27T15:55:13",
+            "firstEndsAt": "2026-10-27T17:55:13",
+            "secondScheduleId": 2,
+            "secondShiftId": 12,
+            "secondStartsAt": "2026-10-28T15:55:13",
+            "secondEndsAt": "2026-10-28T17:55:13",
+            "eventOccurredAt": "2026-10-04T03:55:13.671276",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 204
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:bd7b0f39-b1d5-44ba-ae76-d5456674c8bf",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 5,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 13,
+            "firstStartsAt": "2026-10-27T19:55:14",
+            "firstEndsAt": "2026-10-27T21:55:14",
+            "secondScheduleId": 2,
+            "secondShiftId": 14,
+            "secondStartsAt": "2026-10-28T19:55:14",
+            "secondEndsAt": "2026-10-28T21:55:14",
+            "eventOccurredAt": "2026-10-04T03:55:14.902638",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:9fad26a8-7af7-4180-83e0-d88c938977c8",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 6,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 15,
+            "firstStartsAt": "2026-10-27T23:55:16",
+            "firstEndsAt": "2026-10-28T01:55:16",
+            "secondScheduleId": 2,
+            "secondShiftId": 16,
+            "secondStartsAt": "2026-10-28T23:55:16",
+            "secondEndsAt": "2026-10-29T01:55:16",
+            "eventOccurredAt": "2026-10-04T03:55:16.099308",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:9fad26a8-7af7-4180-83e0-d88c938977c8",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 6,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 15,
+            "firstStartsAt": "2026-10-27T23:55:16",
+            "firstEndsAt": "2026-10-28T01:55:16",
+            "secondScheduleId": 2,
+            "secondShiftId": 16,
+            "secondStartsAt": "2026-10-28T23:55:16",
+            "secondEndsAt": "2026-10-29T01:55:16",
+            "eventOccurredAt": "2026-10-04T03:55:16.099308",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 204
+        }
+      ],
+      "screenshots": [
+        "pending-delivered-desktop.png",
+        "both-accepted-desktop.png",
+        "retry-recovery-desktop.png",
+        "retry-recovery-mobile.png",
+        "conflict-locked-desktop.png",
+        "retention-before-desktop.png",
+        "retention-before-mobile.png"
+      ],
+      "fixtureJdbcInvocations": [
+        {
+          "pid": 105852,
+          "exitCode": 0,
+          "changed": 1,
+          "notificationId": 9,
+          "swapId": 5,
+          "actualDriver": "H2",
+          "scope": "one owned notification deadline"
+        },
+        {
+          "pid": 88664,
+          "exitCode": 0,
+          "changed": 1,
+          "notificationId": 10,
+          "swapId": 6,
+          "actualDriver": "H2",
+          "scope": "one owned notification deadline"
+        }
+      ],
+      "browserPath": "Browser plugin not available; existing Playwright",
+      "viewports": [
+        "1440x1000",
+        "390x844"
+      ],
+      "startedPids": [
+        111256,
+        112528
+      ],
+      "stoppedPids": [
+        112528,
+        111256
+      ],
+      "tokensPersistedToEvidence": false,
+      "userFileDatabaseModified": false,
+      "browser": "154.0.8037.93",
+      "independentReceiverPid": 111256,
+      "productionJvmPid": 112528,
+      "pageIdentity": true,
+      "noBlank": true,
+      "noOverlay": true,
+      "mobileDocumentWidth": 390,
+      "consoleLogs": [
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "Failed to load resource: the server responded with a status of 409 ()",
+        "Failed to load resource: the server responded with a status of 409 ()",
+        "Failed to load resource: net::ERR_FAILED"
+      ],
+      "pageErrors": [],
+      "rejected": [
+        {
+          "status": 500,
+          "path": "/api/v1/on-call/swaps/2/notifications"
+        },
+        {
+          "status": 409,
+          "path": "/api/v1/on-call/swaps/3/notifications/5/retry"
+        },
+        {
+          "status": 409,
+          "path": "/api/v1/on-call/swaps/5/notifications/9/retry"
+        }
+      ],
+      "ownedProcessesStopped": true,
+      "unexpectedJarErrors": 0
+    }
+  },
+  "newDemo": {
+    "jar": {
+      "file": "target/opspilot-0.1.0-SNAPSHOT.jar",
+      "sha256": "055da696ea8eb79de6ccf917d024faac15d6a172d36189ea07c6766032750030",
+      "bytes": 81776450
+    },
+    "resultFile": {
+      "file": "target/oncall-swap-notification-it/run-NRdK1r/result.json",
+      "sha256": "b968ccbaeb2e372e08735b24b9ba4b1e62327dffe5d2e366519611e9e6849389",
+      "bytes": 20753
+    },
+    "result": {
+      "status": "PASS",
+      "baselineCapture": false,
+      "retentionUiBaselineCapture": false,
+      "jarSha256": "055da696ea8eb79de6ccf917d024faac15d6a172d36189ea07c6766032750030",
+      "cases": [
+        {
+          "name": "real-ui-request-and-independent-transient-receiver",
+          "swapId": 1,
+          "notificationId": 1,
+          "stableKeyAndFrozenBody": true,
+          "actual503Then204": true,
+          "stillPendingAndOriginalResponsibility": true
+        },
+        {
+          "name": "human-decision-then-both-notifications",
+          "swapId": 1,
+          "twoActualParticipants": true,
+          "twoCurrentResponsibilitiesExchanged": true
+        },
+        {
+          "name": "notification-storage-failure-before-post",
+          "posts": 0
+        },
+        {
+          "name": "actual-retry-commit-response-loss-reload-and-original-ack",
+          "swapId": 2,
+          "notificationId": 4,
+          "capturedVersion": 2,
+          "noAutomaticPost": true,
+          "posts": 2,
+          "oneRetryAudit": true,
+          "decisionStillPending": true
+        },
+        {
+          "name": "auditor-reads-notification-without-write-control"
+        },
+        {
+          "name": "failed-notification-read-clears-old-receipts-then-recovers"
+        },
+        {
+          "name": "superseded-notification409-lock-reload-and-explicit-discard",
+          "swapId": 3,
+          "notificationId": 5,
+          "noVersionRebase": true,
+          "serverWithdrawalNotChanged": true
+        },
+        {
+          "name": "notification-late200-after-real-spa-account-switch",
+          "swapId": 4,
+          "sameDocument": true,
+          "actualLate200": true,
+          "replacementIdentityPreserved": true,
+          "originalIntentPreservedAndManuallyAcknowledged": true,
+          "oneRetryAudit": true
+        },
+        {
+          "name": "corrupt-notification-intent-kept-until-explicit-local-discard",
+          "noRetryPost": true,
+          "serverDecisionNotChanged": true
+        },
+        {
+          "name": "actual-expired-unsubmitted-draft-refreshes-before-post",
+          "swapId": 5,
+          "notificationId": 9,
+          "posts": 0,
+          "actualSqlExpiry": true,
+          "actualPayloadErased": true,
+          "noNewAudit": true,
+          "decisionStillPending": true
+        },
+        {
+          "name": "actual-erased-delivered-payload-preserves-original-retry-ack",
+          "swapId": 6,
+          "notificationId": 10,
+          "posts": 2,
+          "actualSqlExpiry": true,
+          "receiptPreserved": true,
+          "noExtraDelivery": true,
+          "oneRetryAudit": true,
+          "noAutomaticPostAfterReload": true,
+          "decisionStillPending": true
+        },
+        {
+          "name": "fresh-retention-read-failure-before-first-post",
+          "swapId": 7,
+          "posts": 0,
+          "oldFactsCleared": true,
+          "noStorageFreeze": true,
+          "noAutomaticPostAfterRefresh": true
+        }
+      ],
+      "deliveries": [
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:94e66ef4-44a7-426d-b6c4-7955d37b46d5",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 1,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 3,
+            "firstStartsAt": "2026-10-27T04:01:48",
+            "firstEndsAt": "2026-10-27T06:01:48",
+            "secondScheduleId": 2,
+            "secondShiftId": 4,
+            "secondStartsAt": "2026-10-28T04:01:48",
+            "secondEndsAt": "2026-10-28T06:01:48",
+            "eventOccurredAt": "2026-10-04T04:01:49.028161",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 503
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:94e66ef4-44a7-426d-b6c4-7955d37b46d5",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 1,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 3,
+            "firstStartsAt": "2026-10-27T04:01:48",
+            "firstEndsAt": "2026-10-27T06:01:48",
+            "secondScheduleId": 2,
+            "secondShiftId": 4,
+            "secondStartsAt": "2026-10-28T04:01:48",
+            "secondEndsAt": "2026-10-28T06:01:48",
+            "eventOccurredAt": "2026-10-04T04:01:49.028161",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 204
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:9d6bb437-29c8-4cbd-8fb6-fb83b5fb9e60",
+          "body": {
+            "eventType": "ONCALL_SWAP_ACCEPTED",
+            "swapId": 1,
+            "eventVersion": 1,
+            "historicalStatus": "ACCEPTED",
+            "recipientId": 2,
+            "recipientName": "张伟",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 3,
+            "firstStartsAt": "2026-10-27T04:01:48",
+            "firstEndsAt": "2026-10-27T06:01:48",
+            "secondScheduleId": 2,
+            "secondShiftId": 4,
+            "secondStartsAt": "2026-10-28T04:01:48",
+            "secondEndsAt": "2026-10-28T06:01:48",
+            "eventOccurredAt": "2026-10-04T04:01:51",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 503
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:a7736256-0cab-4245-a638-146a218cc399",
+          "body": {
+            "eventType": "ONCALL_SWAP_ACCEPTED",
+            "swapId": 1,
+            "eventVersion": 1,
+            "historicalStatus": "ACCEPTED",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 3,
+            "firstStartsAt": "2026-10-27T04:01:48",
+            "firstEndsAt": "2026-10-27T06:01:48",
+            "secondScheduleId": 2,
+            "secondShiftId": 4,
+            "secondStartsAt": "2026-10-28T04:01:48",
+            "secondEndsAt": "2026-10-28T06:01:48",
+            "eventOccurredAt": "2026-10-04T04:01:51",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 503
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:9d6bb437-29c8-4cbd-8fb6-fb83b5fb9e60",
+          "body": {
+            "eventType": "ONCALL_SWAP_ACCEPTED",
+            "swapId": 1,
+            "eventVersion": 1,
+            "historicalStatus": "ACCEPTED",
+            "recipientId": 2,
+            "recipientName": "张伟",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 3,
+            "firstStartsAt": "2026-10-27T04:01:48",
+            "firstEndsAt": "2026-10-27T06:01:48",
+            "secondScheduleId": 2,
+            "secondShiftId": 4,
+            "secondStartsAt": "2026-10-28T04:01:48",
+            "secondEndsAt": "2026-10-28T06:01:48",
+            "eventOccurredAt": "2026-10-04T04:01:51",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 204
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:a7736256-0cab-4245-a638-146a218cc399",
+          "body": {
+            "eventType": "ONCALL_SWAP_ACCEPTED",
+            "swapId": 1,
+            "eventVersion": 1,
+            "historicalStatus": "ACCEPTED",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 3,
+            "firstStartsAt": "2026-10-27T04:01:48",
+            "firstEndsAt": "2026-10-27T06:01:48",
+            "secondScheduleId": 2,
+            "secondShiftId": 4,
+            "secondStartsAt": "2026-10-28T04:01:48",
+            "secondEndsAt": "2026-10-28T06:01:48",
+            "eventOccurredAt": "2026-10-04T04:01:51",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 204
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:e214d43e-0f51-42dc-a55e-fce0b1579748",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 2,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 7,
+            "firstStartsAt": "2026-10-27T08:01:53",
+            "firstEndsAt": "2026-10-27T10:01:53",
+            "secondScheduleId": 2,
+            "secondShiftId": 8,
+            "secondStartsAt": "2026-10-28T08:01:53",
+            "secondEndsAt": "2026-10-28T10:01:53",
+            "eventOccurredAt": "2026-10-04T04:01:53.248176",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:e214d43e-0f51-42dc-a55e-fce0b1579748",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 2,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 7,
+            "firstStartsAt": "2026-10-27T08:01:53",
+            "firstEndsAt": "2026-10-27T10:01:53",
+            "secondScheduleId": 2,
+            "secondShiftId": 8,
+            "secondStartsAt": "2026-10-28T08:01:53",
+            "secondEndsAt": "2026-10-28T10:01:53",
+            "eventOccurredAt": "2026-10-04T04:01:53.248176",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 204
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:7496fb05-195e-4ec1-95d0-24651ec786c5",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 3,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 9,
+            "firstStartsAt": "2026-10-27T12:01:55",
+            "firstEndsAt": "2026-10-27T14:01:55",
+            "secondScheduleId": 2,
+            "secondShiftId": 10,
+            "secondStartsAt": "2026-10-28T12:01:55",
+            "secondEndsAt": "2026-10-28T14:01:55",
+            "eventOccurredAt": "2026-10-04T04:01:55.522314",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:f856c01d-bc7e-4cbb-8a45-bb7dd93139f3",
+          "body": {
+            "eventType": "ONCALL_SWAP_WITHDRAWN",
+            "swapId": 3,
+            "eventVersion": 1,
+            "historicalStatus": "WITHDRAWN",
+            "recipientId": 2,
+            "recipientName": "张伟",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 9,
+            "firstStartsAt": "2026-10-27T12:01:55",
+            "firstEndsAt": "2026-10-27T14:01:55",
+            "secondScheduleId": 2,
+            "secondShiftId": 10,
+            "secondStartsAt": "2026-10-28T12:01:55",
+            "secondEndsAt": "2026-10-28T14:01:55",
+            "eventOccurredAt": "2026-10-04T04:01:55",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:0e7d0c01-75b5-4c86-a20d-36b8b1a02292",
+          "body": {
+            "eventType": "ONCALL_SWAP_WITHDRAWN",
+            "swapId": 3,
+            "eventVersion": 1,
+            "historicalStatus": "WITHDRAWN",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 9,
+            "firstStartsAt": "2026-10-27T12:01:55",
+            "firstEndsAt": "2026-10-27T14:01:55",
+            "secondScheduleId": 2,
+            "secondShiftId": 10,
+            "secondStartsAt": "2026-10-28T12:01:55",
+            "secondEndsAt": "2026-10-28T14:01:55",
+            "eventOccurredAt": "2026-10-04T04:01:55",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:0207c51c-41ba-48b3-9eb5-cce1ebac7e73",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 4,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 11,
+            "firstStartsAt": "2026-10-27T16:01:56",
+            "firstEndsAt": "2026-10-27T18:01:56",
+            "secondScheduleId": 2,
+            "secondShiftId": 12,
+            "secondStartsAt": "2026-10-28T16:01:56",
+            "secondEndsAt": "2026-10-28T18:01:56",
+            "eventOccurredAt": "2026-10-04T04:01:56.302669",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:0207c51c-41ba-48b3-9eb5-cce1ebac7e73",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 4,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 11,
+            "firstStartsAt": "2026-10-27T16:01:56",
+            "firstEndsAt": "2026-10-27T18:01:56",
+            "secondScheduleId": 2,
+            "secondShiftId": 12,
+            "secondStartsAt": "2026-10-28T16:01:56",
+            "secondEndsAt": "2026-10-28T18:01:56",
+            "eventOccurredAt": "2026-10-04T04:01:56.302669",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 204
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:8732db9e-9995-4f6d-8c64-7f7f245b2a7a",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 5,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 13,
+            "firstStartsAt": "2026-10-27T20:01:57",
+            "firstEndsAt": "2026-10-27T22:01:57",
+            "secondScheduleId": 2,
+            "secondShiftId": 14,
+            "secondStartsAt": "2026-10-28T20:01:57",
+            "secondEndsAt": "2026-10-28T22:01:57",
+            "eventOccurredAt": "2026-10-04T04:01:57.508481",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:d245adda-4540-468e-98ac-17de4f26c095",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 6,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 15,
+            "firstStartsAt": "2026-10-28T00:01:58",
+            "firstEndsAt": "2026-10-28T02:01:58",
+            "secondScheduleId": 2,
+            "secondShiftId": 16,
+            "secondStartsAt": "2026-10-29T00:01:58",
+            "secondEndsAt": "2026-10-29T02:01:58",
+            "eventOccurredAt": "2026-10-04T04:01:58.818463",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:d245adda-4540-468e-98ac-17de4f26c095",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 6,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 15,
+            "firstStartsAt": "2026-10-28T00:01:58",
+            "firstEndsAt": "2026-10-28T02:01:58",
+            "secondScheduleId": 2,
+            "secondShiftId": 16,
+            "secondStartsAt": "2026-10-29T00:01:58",
+            "secondEndsAt": "2026-10-29T02:01:58",
+            "eventOccurredAt": "2026-10-04T04:01:58.818463",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 204
+        },
+        {
+          "event": "delivery",
+          "key": "oncall-swap-notification:292d54f1-d820-4c57-8dcf-56f6202abb5c",
+          "body": {
+            "eventType": "ONCALL_SWAP_PENDING",
+            "swapId": 7,
+            "eventVersion": 0,
+            "historicalStatus": "PENDING",
+            "recipientId": 3,
+            "recipientName": "李娜",
+            "requesterId": 2,
+            "targetUserId": 3,
+            "firstScheduleId": 1,
+            "firstShiftId": 17,
+            "firstStartsAt": "2026-10-28T04:02",
+            "firstEndsAt": "2026-10-28T06:02",
+            "secondScheduleId": 2,
+            "secondShiftId": 18,
+            "secondStartsAt": "2026-10-29T04:02",
+            "secondEndsAt": "2026-10-29T06:02",
+            "eventOccurredAt": "2026-10-04T04:02:00.344034",
+            "timeBasis": "DATABASE_SESSION_LOCAL",
+            "humanConfirmationRequired": true,
+            "currentCoverageMustBeReadSeparately": true
+          },
+          "authCorrect": true,
+          "status": 401
+        }
+      ],
+      "screenshots": [
+        "entry-zhangwei-desktop.png",
+        "pending-delivered-desktop.png",
+        "entry-lina-desktop.png",
+        "both-accepted-desktop.png",
+        "retry-recovery-desktop.png",
+        "retry-recovery-mobile.png",
+        "entry-auditor-desktop.png",
+        "conflict-locked-desktop.png",
+        "retention-expired-desktop.png",
+        "retention-expired-mobile.png",
+        "retention-original-ack-desktop.png",
+        "retention-original-ack-mobile.png"
+      ],
+      "fixtureJdbcInvocations": [
+        {
+          "pid": 112924,
+          "exitCode": 0,
+          "changed": 1,
+          "notificationId": 9,
+          "swapId": 5,
+          "actualDriver": "H2",
+          "scope": "one owned notification deadline"
+        },
+        {
+          "pid": 85120,
+          "exitCode": 0,
+          "changed": 1,
+          "notificationId": 10,
+          "swapId": 6,
+          "actualDriver": "H2",
+          "scope": "one owned notification deadline"
+        }
+      ],
+      "browserPath": "Browser plugin not available; existing Playwright",
+      "viewports": [
+        "1440x1000",
+        "390x844"
+      ],
+      "startedPids": [
+        111488,
+        111768
+      ],
+      "stoppedPids": [
+        111768,
+        111488
+      ],
+      "tokensPersistedToEvidence": false,
+      "userFileDatabaseModified": false,
+      "browser": "154.0.8037.93",
+      "independentReceiverPid": 111488,
+      "productionJvmPid": 111768,
+      "pageIdentity": true,
+      "noBlank": true,
+      "noOverlay": true,
+      "mobileDocumentWidth": 390,
+      "consoleLogs": [
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "Failed to load resource: the server responded with a status of 409 ()",
+        "Failed to load resource: net::ERR_FAILED",
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+      ],
+      "pageErrors": [],
+      "rejected": [
+        {
+          "status": 500,
+          "path": "/api/v1/on-call/swaps/2/notifications"
+        },
+        {
+          "status": 409,
+          "path": "/api/v1/on-call/swaps/3/notifications/5/retry"
+        },
+        {
+          "status": 500,
+          "path": "/api/v1/on-call/swaps/7/notifications"
+        }
+      ],
+      "ownedProcessesStopped": true,
+      "unexpectedJarErrors": 0
+    },
+    "firstViewportScreenshots": [
+      {
+        "file": "target/oncall-swap-notification-it/run-NRdK1r/entry-zhangwei-desktop.png",
+        "sha256": "6671472f19a01b22e92c6c2e54885f42d3f732fb99e5b83ed0cb8c69fbfda26a",
+        "bytes": 109971
+      },
+      {
+        "file": "target/oncall-swap-notification-it/run-NRdK1r/entry-lina-desktop.png",
+        "sha256": "f56de6a8874f3a38f75f9847d6d1fed532ee2bcbd1ed4563981a571cde4bd554",
+        "bytes": 111148
+      },
+      {
+        "file": "target/oncall-swap-notification-it/run-NRdK1r/entry-auditor-desktop.png",
+        "sha256": "6db180ad27df7a5026e3ad082f7c3f1e290461216a0bcf292348a82d9a739fe2",
+        "bytes": 110968
+      }
+    ]
+  },
+  "gallery": [
+    {
+      "durable": {
+        "file": "docs/assets/v1.7-cp90/before-expired-desktop.png",
+        "sha256": "8335ea552843f09e1cbf471d5c73471bad22df8b8fcbae0885e530c20e919806",
+        "bytes": 133726
+      },
+      "original": {
+        "file": "target/oncall-swap-notification-it/run-fbNAYs/retention-before-desktop.png",
+        "sha256": "8335ea552843f09e1cbf471d5c73471bad22df8b8fcbae0885e530c20e919806",
+        "bytes": 133726
+      },
+      "mainAgentVisuallyInspected": true
+    },
+    {
+      "durable": {
+        "file": "docs/assets/v1.7-cp90/before-expired-mobile.png",
+        "sha256": "d9ef358950dba4489274253372f12b26bdda49ebd06dd203a991ab5f92792e4a",
+        "bytes": 69288
+      },
+      "original": {
+        "file": "target/oncall-swap-notification-it/run-fbNAYs/retention-before-mobile.png",
+        "sha256": "d9ef358950dba4489274253372f12b26bdda49ebd06dd203a991ab5f92792e4a",
+        "bytes": 69288
+      },
+      "mainAgentVisuallyInspected": true
+    },
+    {
+      "durable": {
+        "file": "docs/assets/v1.7-cp90/expired-desktop.png",
+        "sha256": "e9d6c541863d54a99b22834f8d300fa6026b33566dbf9837038d4c434bac75b0",
+        "bytes": 138869
+      },
+      "original": {
+        "file": "target/oncall-swap-notification-it/run-NRdK1r/retention-expired-desktop.png",
+        "sha256": "e9d6c541863d54a99b22834f8d300fa6026b33566dbf9837038d4c434bac75b0",
+        "bytes": 138869
+      },
+      "mainAgentVisuallyInspected": true
+    },
+    {
+      "durable": {
+        "file": "docs/assets/v1.7-cp90/expired-mobile.png",
+        "sha256": "75e82eef5f6b62e269b4b3d089879ef71152df4e2c08f84e72606bb2bd92c32d",
+        "bytes": 72706
+      },
+      "original": {
+        "file": "target/oncall-swap-notification-it/run-NRdK1r/retention-expired-mobile.png",
+        "sha256": "75e82eef5f6b62e269b4b3d089879ef71152df4e2c08f84e72606bb2bd92c32d",
+        "bytes": 72706
+      },
+      "mainAgentVisuallyInspected": true
+    },
+    {
+      "durable": {
+        "file": "docs/assets/v1.7-cp90/original-ack-desktop.png",
+        "sha256": "99402c51192796bf9aab05b6fd2754ba20180f32300450adcbb8157e631fb68a",
+        "bytes": 137932
+      },
+      "original": {
+        "file": "target/oncall-swap-notification-it/run-NRdK1r/retention-original-ack-desktop.png",
+        "sha256": "99402c51192796bf9aab05b6fd2754ba20180f32300450adcbb8157e631fb68a",
+        "bytes": 137932
+      },
+      "mainAgentVisuallyInspected": true
+    },
+    {
+      "durable": {
+        "file": "docs/assets/v1.7-cp90/original-ack-mobile.png",
+        "sha256": "b616f2ba2717d2d536192b9a89e87c5ede518efa654cd2b93a31ca86d4c3a3cd",
+        "bytes": 71779
+      },
+      "original": {
+        "file": "target/oncall-swap-notification-it/run-NRdK1r/retention-original-ack-mobile.png",
+        "sha256": "b616f2ba2717d2d536192b9a89e87c5ede518efa654cd2b93a31ca86d4c3a3cd",
+        "bytes": 71779
+      },
+      "mainAgentVisuallyInspected": true
+    }
+  ],
+  "frontend": {
+    "file": "target/cp90-frontend-final-tests.log",
+    "sha256": "c352adfe0df63c9ed5020e4ca30dcd92b5895e3e8ffc6cf40b46a38477c7f4ca",
+    "bytes": 12861,
+    "tests": 132,
+    "pass": 132,
+    "fail": 0,
+    "skip": 0
+  },
+  "node": {
+    "file": "target/cp90-node-tests.log",
+    "sha256": "c3cc26ea3a7bb76a8c721d6a4657a52f59bfb3cd50ed8908969c704c5d2911b9",
+    "bytes": 8078,
+    "tests": 92,
+    "pass": 92,
+    "fail": 0,
+    "skip": 0
+  },
+  "productionBuild": {
+    "file": "target/cp90-frontend-final-build.log",
+    "sha256": "71fdf79f11083e1a0e5c422fee4ad79f9a80c704dc0dfbf88fabc27376aff875",
+    "bytes": 474
+  },
+  "productionPackage": {
+    "record": {
+      "file": "target/cp90-final-package.log",
+      "sha256": "ab151a9ffa3c0d6701a8c2a9c2326f426b2e5038fe996aa7d1c1cf633a1a84d2",
+      "bytes": 1916
+    },
+    "backendTestsRunThisPackage": false,
+    "skipTests": true
+  },
+  "backendScope": {
+    "javaAndMigrationAndWorkflowUnchanged": true,
+    "freshCP90BackendRegressionNotClaimed": true,
+    "ownCP89RemoteProof": {
+      "file": "docs/assets/v1.7-cp89/remote-proof.json",
+      "sha256": "c298d410c59bc1bae8c0d8211f2c7bbf78f559cec9eab74e98359a9ac97d575b",
+      "bytes": 345270
+    }
+  },
+  "faultConsoleExplanation": [
+    "Original committed retry response deliberately aborted: ERR_FAILED",
+    "Original notification read deliberately returns 500",
+    "Superseded original retry deliberately returns real server 409",
+    "Retention original retry committed then response deliberately aborted: ERR_FAILED",
+    "Fresh retention GET deliberately returns 500; no first POST"
+  ],
+  "remaining": [
+    "Own CP90 source CI and actual MySQL job not yet run at proof generation",
+    "Actual MySQL populated V35 historical migration remains unverified",
+    "Local expiry fixture uses owned H2 file database, not MySQL",
+    "Original fourteen/eight/six broader browser runners not freshly rerun locally in CP90; own CP89 machine results kept separate",
+    "Only Chrome desktop/mobile in recorded viewports; no production-scale/cross-machine/exactly-once guarantee",
+    "Whole original iteration goal remains active"
+  ],
+  "verifiedFileRecords": 33
+}

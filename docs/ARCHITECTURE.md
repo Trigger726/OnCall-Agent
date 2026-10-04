@@ -1,5 +1,7 @@
 # OpsPilot 架构设计
 
+最新保留页面边界见[CP90](acceptance/V1.7-checkpoint-90.md)：以数据库快照/完整期限精度显示事实，首次未冻结人工POST前重新GET并锁原版本；事实未知/到期拒绝新提交，已冻结原version/reason仍只显式求原回执。新12实页/前端132本地通过，自己的CI待验。后台V36/期限领取/清理及原回执围栏的CP89自身十八CI、真实MySQL通知27已由[89第六节](acceptance/V1.7-checkpoint-89.md)闭环；真实MySQL旧V35有数据升级尚未验证。技术投递、人工决定、覆盖责任三层不混同，历史Demo及以下阶段记录保留。
+
 当前CP88已闭环：源码7558b9d的[Run37172618761](https://github.com/Trigger726/OnCall-Agent/actions/runs/37172618761)十八作业全部success，见[88第六节](acceptance/V1.7-checkpoint-88.md)/[自身远端proof](assets/v1.7-cp88/remote-proof.json)。九个选定ZIP源HEAD/官方摘要/实际字节及原门禁独立核验；真实MySQL通知18与原换班17零跳过、原生18/兼容99/双JVM六项通过，双时区各451执行/142条件跳过、158新鲜XML，前端129/audit0，Linux新九流程及原14/8/6实页通过，三本轮截图已目视。仅修共用测试的原生CHECK精确断言，生产代码、页面和门禁未改，不制造CP88视觉变化。87首次MySQL失败及旧Demo完整保留；以下按各历史阶段当时范围阅读，不把旧“待验”当本轮终态。
 
 ## CP87换班通知与独立技术投递事实

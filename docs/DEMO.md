@@ -1,5 +1,7 @@
 # OpsPilot 10 分钟演示脚本
 
+CP90实际新旧对照：[报告](acceptance/V1.7-checkpoint-90.md)/[六图与机器证据](assets/v1.7-cp90/local-proof.json)。旧CP89包061e900到期草稿实际1POST/409且无清理事实；新包055da69先GET后0POST、草稿仍保留。另演示原重试已提交但丢响应→真实投递204→SQL到期/后台擦除→刷新不自动POST→手动原回执仍只一审计/无额外投递。测试期限只修改owned H2夹具一行，不是生产按钮或真实MySQL升级。新12流程/桌面390px通过，CP90自己的CI待验；CP89十八CI/MySQL27已有[独立闭环](acceptance/V1.7-checkpoint-89.md)。以下旧Demo和首次失败继续保留。
+
 CP89先保留后台负对照：[89报告](acceptance/V1.7-checkpoint-89.md)/[本地proof](assets/v1.7-cp89/local-proof.json)。旧保留缺口用例一项实际断言失败，修正后通知27/原换班17及双时区各461执行通过；旧CP88包dcc575a、新包061e900不同摘要已记。专门保留前端和实际MySQL待验，不把原87通知图当新保留效果。构建勿用mvn clean清理唯一target证据；先将旧包、原日志/结果与摘要另行保全。本次误用clean及可核验恢复范围已公开记录。
 
 当前CP88已闭环：源码7558b9d的[Run37172618761](https://github.com/Trigger726/OnCall-Agent/actions/runs/37172618761)十八作业全部success，见[88第六节](acceptance/V1.7-checkpoint-88.md)/[自身远端proof](assets/v1.7-cp88/remote-proof.json)。九个选定ZIP源HEAD/官方摘要/实际字节及原门禁独立核验；真实MySQL通知18与原换班17零跳过、原生18/兼容99/双JVM六项通过，双时区各451执行/142条件跳过、158新鲜XML，前端129/audit0，Linux新九流程及原14/8/6实页通过，三本轮截图已目视。仅修共用测试的原生CHECK精确断言，生产代码、页面和门禁未改，不制造CP88视觉变化。87首次MySQL失败及旧Demo完整保留；以下按各历史阶段当时范围阅读，不把旧“待验”当本轮终态。 本轮[双方确认桌面](assets/v1.7-cp88/remote/both-accepted-desktop.png)/[390px冻结恢复](assets/v1.7-cp88/remote/retry-recovery-mobile.png)/[409锁定](assets/v1.7-cp88/remote/conflict-locked-desktop.png)可与86/87历史效果对照。

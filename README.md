@@ -6,6 +6,10 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
+最新 CP90：[保留事实页面验收](docs/acceptance/V1.7-checkpoint-90.md)/[本地机器证据](docs/assets/v1.7-cp90/local-proof.json)。数据库快照/冻结期限/清理记录可见；首次新重试前重新GET，到期或读取失败0POST，原已提交意图在载荷擦除后仍只手动求原回执。前端132、脚本92、真实生产JAR通知12流程/桌面与390px通过，六张新旧图保留；自己的源码CI待验。CP89源码adc89b3的[十八作业CI](https://github.com/Trigger726/OnCall-Agent/actions/runs/37174799138)已全部成功，五选定ZIP与真实MySQL通知27/原换班17、一般99独立重放通过，见[89远端证据](docs/assets/v1.7-cp89/remote-proof.json)。旧V35有数据的真实MySQL升级仍未验，整体路线继续。
+
+以下为各检查点历史记录，“当前/待验”按当时范围阅读，以最新报告的追加闭环为准。
+
 当前推进CP89通知载荷保留：[89报告](docs/acceptance/V1.7-checkpoint-89.md)/[本地证据](docs/assets/v1.7-cp89/local-proof.json)。V36冻结期限、显式清理开关默认关闭、有界清理与租约/领取/人工重试围栏；只擦除payload，保留业务、技术回执和原重试指纹。原18+新9通知/换班17、双时区各461执行、前端129/Node91本地通过；自身真实MySQL与专用前端呈现待验，不借以下88绿灯替代。旧Demo保留；本轮误用clean及逐摘要恢复范围在报告中公开记录。
 
 当前CP88已闭环：源码7558b9d的[Run37172618761](https://github.com/Trigger726/OnCall-Agent/actions/runs/37172618761)十八作业全部success，见[88第六节](docs/acceptance/V1.7-checkpoint-88.md)/[自身远端proof](docs/assets/v1.7-cp88/remote-proof.json)。九个选定ZIP源HEAD/官方摘要/实际字节及原门禁独立核验；真实MySQL通知18与原换班17零跳过、原生18/兼容99/双JVM六项通过，双时区各451执行/142条件跳过、158新鲜XML，前端129/audit0，Linux新九流程及原14/8/6实页通过，三本轮截图已目视。仅修共用测试的原生CHECK精确断言，生产代码、页面和门禁未改，不制造CP88视觉变化。87首次MySQL失败及旧Demo完整保留；以下按各历史阶段当时范围阅读，不把旧“待验”当本轮终态。

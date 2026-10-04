@@ -3,13 +3,14 @@ import { computed,onMounted,onBeforeUnmount,ref } from 'vue'
 import { auth } from '@/stores/auth'
 import { RequestError } from '@/services/api'
 import { swapClock } from '@/services/onCallSwaps'
-import { canManageNotification,canRetryNotification,clearNotificationRetry,getSwapNotifications,notificationRetryError,notificationState,
+import { canManageNotification,canRetryNotification,clearNotificationRetry,getSwapNotifications,notificationRetryError,notificationState,notificationPayloadLabel,notificationClock,
   readNotificationRetry,retrySwapNotification,saveNotificationRetry,type NotificationRetry,type SwapNotification,type SwapNotifications } from '@/services/onCallSwapNotifications'
 const props=defineProps<{swapId:number;requester:number;target:number}>()
 const info=ref<SwapNotifications|null>(null),intent=ref<NotificationRetry|null>(null),busy=ref(false),frozen=ref(false),broken=ref(false),confirmDiscard=ref(false),error=ref(''),message=ref('')
 const other= computed(()=>intent.value&&intent.value.swapId!==props.swapId)
 const canWrite=computed(()=>canManageNotification(auth.state.user?.id,auth.state.user?.roleCode,props.requester,props.target))
-const canRetry=(row:SwapNotification)=>canRetryNotification(row,info.value?.enabled??false,auth.state.user?.id,auth.state.user?.roleCode,props.requester,props.target)
+const canRetry=(row:SwapNotification)=>canRetryNotification(row,info.value?.enabled??false,auth.state.user?.id,auth.state.user?.roleCode,props.requester,props.target,info.value)
+const newRetryAllowed=computed(()=>{const row=info.value?.deliveries.find(n=>n.id===intent.value?.id);return Boolean(row&&row.version===intent.value?.version&&canRetry(row))})
 let epoch=0
 const capture=()=>({epoch,actor:auth.state.user?.id,token:localStorage.getItem('opspilot_token')})
 const current=(value:ReturnType<typeof capture>)=>value.epoch===epoch&&value.actor===auth.state.user?.id&&value.token===localStorage.getItem('opspilot_token')
@@ -21,9 +22,15 @@ function choose(row:SwapNotification){if(busy.value||intent.value||broken.value|
   intent.value={schema:1,actorId:auth.state.user.id,swapId:props.swapId,id:row.id,version:row.version,reason:'',blocked:false};frozen.value=false;error.value='';message.value=''}
 async function submit(){if(busy.value||broken.value||other.value||!intent.value||intent.value.blocked||!canWrite.value||intent.value.actorId!==auth.state.user?.id)return
   error.value='';message.value='';const captured=intent.value
+  const identity=capture()
   if(!frozen.value){captured.reason=captured.reason.trim();const invalid=notificationRetryError(captured);if(invalid){error.value=invalid;return}
+    busy.value=true;info.value=null
+    try{const rows=await getSwapNotifications(props.swapId);if(!current(identity))return;info.value=rows
+      if(!newRetryAllowed.value){error.value='通知已到期、已变化或保留事实异常，未发送新重试；未发送草稿保留，请核对后明确放弃';return}}
+    catch(cause){if(current(identity))error.value=`${cause instanceof Error?cause.message:'通知核对失败'}，未发送新重试；不使用旧保留事实`;return}
+    finally{if(current(identity))busy.value=false}
     try{saveNotificationRetry(sessionStorage,captured)}catch{error.value='无法保存通知重试意图，尚未发送；请检查浏览器存储权限';return}frozen.value=true}
-  const identity=capture();busy.value=true;info.value=null
+  if(!current(identity))return;busy.value=true;info.value=null
   try{const row=await retrySwapNotification(captured);if(!current(identity))return
     message.value=`通知 #${row.id} 原重试已回执；${notificationState(row)}。不会修改换班决定或当前覆盖`
     try{clearNotificationRetry(sessionStorage,captured.actorId);intent.value=null;frozen.value=false}catch{message.value+='；本地意图未清除，核对后可明确放弃'}
@@ -46,11 +53,13 @@ onBeforeUnmount(()=>{epoch++;window.removeEventListener('opspilot-auth-session-c
     <p class="notification-note">2xx仅代表接收端技术回执，不代表本人已读、接受换班或当前责任。双方决定与两段coverage事实仍独立核对；失效事件/收件人可能跳过，出站存在至少一次投递，请接收端按稳定键去重。</p>
     <p v-if="error" class="notification-error" role="alert">{{error}}</p><p v-if="message" role="status">{{message}}</p>
     <p v-if="info&&!info.enabled" class="notification-note">通知未启用；默认旧Demo不发外部请求，不回填历史事件。已有投递事实仍保留。</p>
-    <p v-if="info?.enabled" class="notification-note">通知已启用 · 数据库快照 {{swapClock(info.databaseNow)}} · 当前配置启用不等于所有历史申请曾入队。</p>
+    <p v-if="info?.enabled" class="notification-note">通知已启用 · 数据库快照 {{notificationClock(info.databaseNow)}} · 当前配置启用不等于所有历史申请曾入队。</p>
+    <p v-if="info" class="notification-note">载荷保留按数据库快照核对，不使用浏览器时钟；清理不删除换班决定、审计或技术回执，也不能撤回已发出的外部请求。</p>
     <div v-if="info" class="notification-list"><div v-for="row in info.deliveries" :key="row.id" class="notification-row" :data-notification-id="row.id">
       <strong>{{row.recipientName}} · 事件 {{row.eventStatus}} / v{{row.eventVersion}}</strong><p>{{notificationState(row)}} · 通知版本 v{{row.version}}</p>
       <p>本轮尝试 {{row.attempts}} · 累计 {{row.totalAttempts}} · HTTP {{row.lastHttpStatus??'尚无回执'}}<span v-if="row.lastErrorCode"> · {{row.lastErrorCode}}</span></p>
       <p v-if="row.deliveredAt">技术回执 {{swapClock(row.deliveredAt)}}</p><p v-else-if="row.status==='PENDING'">下次可尝试 {{swapClock(row.nextAttemptAt)}}</p>
+      <p class="notification-retention">{{notificationPayloadLabel(row,info)}}<span v-if="row.payloadExpiresAt"> · 冻结期限 {{notificationClock(row.payloadExpiresAt)}}</span><span v-if="row.payloadErasedAt"> · 清理记录 {{notificationClock(row.payloadErasedAt)}}</span></p>
       <button v-if="canRetry(row)" class="secondary-button" :disabled="busy||Boolean(intent)||broken" @click="choose(row)">核对后重试通知 #{{row.id}}</button>
     </div><p v-if="!info.deliveries.length" class="notification-note">没有本次换班的通知入队事实，不把空列表称为送达。</p></div>
     <p v-else class="notification-note">通知事实尚未取得或读取失败，不显示旧回执。</p>
@@ -58,7 +67,9 @@ onBeforeUnmount(()=>{epoch++;window.removeEventListener('opspilot-auth-session-c
     <form v-if="intent&&!other" class="notification-retry" @submit.prevent="submit"><h4>仅重试通知 #{{intent.id}} · 捕获v{{intent.version}}</h4>
       <label>通知重试说明<textarea v-model="intent.reason" required maxlength="500" rows="2" :disabled="busy||frozen||!canWrite"/></label>
       <p class="notification-note">首次发送前按账号保存原通知版本/说明；丢响应后只回执原意图，不重发新事件。人工重试不会接受换班。</p>
-      <div class="notification-heading"><button class="primary-button" :disabled="busy||intent.blocked||!canWrite">{{frozen?'回执原通知重试':'确认重试通知'}}</button><button type="button" class="secondary-button" :disabled="busy" @click="confirmDiscard=true">放弃通知重试草稿</button></div>
+      <p v-if="frozen" class="notification-note">到期或已清理后仍只手动核对原回执；服务器若已提交会保留原结果，未提交或失效则拒绝，不自动换版本重新投递。</p>
+      <p v-else-if="!newRetryAllowed" class="notification-error">不能新重试：先刷新核对当前版本与保留事实；不会自动更新未发送草稿。</p>
+      <div class="notification-heading"><button class="primary-button" :disabled="busy||intent.blocked||!canWrite||(!frozen&&!newRetryAllowed)">{{frozen?'回执原通知重试':'确认重试通知'}}</button><button type="button" class="secondary-button" :disabled="busy" @click="confirmDiscard=true">放弃通知重试草稿</button></div>
       <p v-if="intent.blocked" class="notification-error">原通知重试已锁定，不自动换版本。</p>
     </form>
     <button v-if="broken||other" class="secondary-button" :disabled="busy" @click="confirmDiscard=true">核对后放弃原通知草稿</button>

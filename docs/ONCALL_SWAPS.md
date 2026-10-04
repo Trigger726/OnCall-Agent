@@ -1,5 +1,7 @@
 # 双向换班后端契约（CP85）
 
+CP90补齐实际页面：[验收](acceptance/V1.7-checkpoint-90.md)。首次未冻结人工重试前重新GET，版本必须仍等于原草稿、期限按数据库快照判断；未知/到期/已擦除或读取失败不新POST、不自动换版本。已冻结的原version/reason在期限后仍可手动求原回执，服务器已提交则只返回原事实，否则拒绝。清理、技术2xx、人接受与两段coverage继续独立。原九加新三实页/前端132通过，自己的源码CI待验。CP89自身真实MySQL27/V36及十八CI已由[89第六节](acceptance/V1.7-checkpoint-89.md)闭环，旧V35有数据的MySQL升级未验；以下原合同/待验文字按历史范围阅读。
+
 CP89新增保留事实，当前仅本地后台/API验收：[89报告](acceptance/V1.7-checkpoint-89.md)。列表增加retentionEnabled，单通知增加payloadExpiresAt/payloadErasedAt（数据库会话时间）。ONCALL_SWAP_NOTIFICATION_RETENTION_ENABLED默认false、PAYLOAD_RETENTION_DAYS默认30且1–3650；既有事件V36冻结created_at+30日，新事件冻结配置期限，重试不延长。清理仅擦除payload_json，未投递终态标SKIPPED/RETENTION_EXPIRED，原DELIVERED/SKIPPED及回执/审计/重试指纹不删；有效CLAIMED租约暂缓。到期新的POST retry返回409/ONCALL_SWAP_NOTIFICATION_PAYLOAD_EXPIRED，但已提交的同原version/reason回执仍返回当前事实、不重复审计。已擦除载荷不能因关闭清理开关恢复。不是远端撤回或完整PII删除，专门前端呈现及实际MySQL仍待。
 
 当前CP88已闭环：源码7558b9d的[Run37172618761](https://github.com/Trigger726/OnCall-Agent/actions/runs/37172618761)十八作业全部success，见[88第六节](acceptance/V1.7-checkpoint-88.md)/[自身远端proof](assets/v1.7-cp88/remote-proof.json)。九个选定ZIP源HEAD/官方摘要/实际字节及原门禁独立核验；真实MySQL通知18与原换班17零跳过、原生18/兼容99/双JVM六项通过，双时区各451执行/142条件跳过、158新鲜XML，前端129/audit0，Linux新九流程及原14/8/6实页通过，三本轮截图已目视。仅修共用测试的原生CHECK精确断言，生产代码、页面和门禁未改，不制造CP88视觉变化。87首次MySQL失败及旧Demo完整保留；以下按各历史阶段当时范围阅读，不把旧“待验”当本轮终态。

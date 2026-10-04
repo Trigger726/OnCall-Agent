@@ -1,5 +1,9 @@
 # OpsPilot 验收记录
 
+最新：[90报告](V1.7-checkpoint-90.md)/[本地proof与六张新旧图](../assets/v1.7-cp90/local-proof.json)，LOCAL_RETENTION_UI_SCOPE_PASS_OWN_REMOTE_PENDING。首次重试前最新GET、真实到期0POST、擦除后原已提交回执、读失败清旧事实；原九加新三实页、前端132/脚本92/构建通过。CP89自身adc89b3/[Run37174799138](https://github.com/Trigger726/OnCall-Agent/actions/runs/37174799138)十八作业全success，五ZIP核验及MySQL通知27/换班17/一般99独立重放通过，见[89第六节](V1.7-checkpoint-89.md)/[自身远端proof](../assets/v1.7-cp89/remote-proof.json)。CP90自己的CI和真实MySQL旧V35有数据升级待验；不借旧绿灯替代新页面。
+
+以下保留历史阶段当时状态与首次失败，后续闭环见对应报告追加节；不删除旧Demo或把历史“待验”当最新终态。
+
 当前阶段：[89报告](V1.7-checkpoint-89.md)/[本地proof](../assets/v1.7-cp89/local-proof.json)，LOCAL_BACKEND_SCOPE_PASS_OWN_MYSQL_AND_RETENTION_UI_PENDING。通知原18+新9、换班17、H2历史升级1、双时区各612发现/461执行/151条件跳过/80新鲜XML、前端129/Node91本地通过。真实MySQL新27及专用保留前端仍待；误用clean事故与已核验恢复范围另记[恢复记录](../assets/v1.7-cp89/clean-recovery.json)，不删首次失败/旧Demo。
 
 当前CP88已闭环：源码7558b9d的[Run37172618761](https://github.com/Trigger726/OnCall-Agent/actions/runs/37172618761)十八作业全部success，见[88第六节](V1.7-checkpoint-88.md)/[自身远端proof](../assets/v1.7-cp88/remote-proof.json)。九个选定ZIP源HEAD/官方摘要/实际字节及原门禁独立核验；真实MySQL通知18与原换班17零跳过、原生18/兼容99/双JVM六项通过，双时区各451执行/142条件跳过、158新鲜XML，前端129/audit0，Linux新九流程及原14/8/6实页通过，三本轮截图已目视。仅修共用测试的原生CHECK精确断言，生产代码、页面和门禁未改，不制造CP88视觉变化。87首次MySQL失败及旧Demo完整保留；以下按各历史阶段当时范围阅读，不把旧“待验”当本轮终态。
