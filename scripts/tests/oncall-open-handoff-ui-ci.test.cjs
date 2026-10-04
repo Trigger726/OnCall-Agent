@@ -1,0 +1,5 @@
+const {test}=require('node:test'),assert=require('node:assert/strict');
+const {configuration,caseNames}=require('../verify-oncall-open-handoff-ui-ci.cjs');
+test('own-source CI defaults to complete dedicated open handoff UI contract',()=>assert.deepEqual(configuration({CI:'true'}),{baseline:false}));
+test('archived UI comparison cannot replace own-source CI acceptance',()=>{assert.deepEqual(configuration({OPSPILOT_OPEN_HANDOFF_UI_BASELINE:'1'}),{baseline:true});assert.throws(()=>configuration({CI:'true',OPSPILOT_OPEN_HANDOFF_UI_BASELINE:'1'}),/cannot replace/);});
+test('all consent loss storage read conflict and three identity fences are retained',()=>{assert.equal(caseNames.length,16);assert.equal(new Set(caseNames).size,16);for(const name of ['committed-publication-loss-reload-original-ack','committed-claim-loss-original-ack-after-independent-cancel','committed-withdrawal-loss-original-ack','late200-after-detail-change-keeps-original-intent','late200-after-spa-account-switch-protects-new-intent','late200-after-same-user-new-token-protects-replacement-intent','actual-database-expiry-before-first-claim-zero-post'])assert.ok(caseNames.includes(name));});

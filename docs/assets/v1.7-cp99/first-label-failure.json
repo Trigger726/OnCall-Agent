@@ -1,0 +1,90 @@
+{
+  "status": "FAIL",
+  "baseline": false,
+  "jarSha256": "ca0cb26495f195b45b3da63bcabd88ccfdcf15dc8a78284de9ee696bc35ec78f",
+  "cases": [
+    {
+      "name": "actual-ui-publication-quota-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "committed-publication-loss-reload-original-ack",
+      "posts": 2,
+      "sameOriginalCommand": true,
+      "requestId": 1
+    }
+  ],
+  "screenshots": [
+    "publication-frozen-desktop.png",
+    "publication-frozen-mobile.png"
+  ],
+  "pageErrors": [],
+  "consoleLogs": [
+    "Failed to load resource: net::ERR_FAILED"
+  ],
+  "rejected": [],
+  "aborts": [
+    {
+      "action": "PUBLISH",
+      "posts": 1,
+      "actualForwardedCommit200": true,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    }
+  ],
+  "held": [],
+  "visualBounds": [
+    {
+      "name": "publication-frozen-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 84.171875,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "publication-frozen-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 84.125,
+      "viewport": 390,
+      "documentWidth": 390
+    }
+  ],
+  "browserPath": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "productionJvmPid": 118436,
+  "browser": "154.0.8037.93",
+  "failure": "locator.selectOption: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.open-handoff-panel').getByLabel('开放接班范围', { exact: true })\u001b[22m\n\n    at detail (D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-oncall-open-handoff-ui-ci.cjs:31:121)\n    at verify (D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-oncall-open-handoff-ui-ci.cjs:60:13)",
+  "ownedProcessStopped": true,
+  "unexpectedJarErrors": 0,
+  "posts": [
+    {
+      "path": "/api/v1/on-call/open-handoffs",
+      "body": {
+        "sourceShiftId": 3,
+        "sourceVersion": 0,
+        "requestKey": "5cc30067-a342-4930-a25d-6a6dd370e50f",
+        "startsAt": "2026-10-06T17:35:08",
+        "endsAt": "2026-10-06T19:35:08",
+        "reason": "CP99 原发布🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs",
+      "body": {
+        "sourceShiftId": 3,
+        "sourceVersion": 0,
+        "requestKey": "5cc30067-a342-4930-a25d-6a6dd370e50f",
+        "startsAt": "2026-10-06T17:35:08",
+        "endsAt": "2026-10-06T19:35:08",
+        "reason": "CP99 原发布🙂"
+      }
+    }
+  ]
+}

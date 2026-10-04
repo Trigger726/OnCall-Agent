@@ -1,5 +1,7 @@
 # OpsPilot
 
+最新 CP99：[专用开放接班页面与新旧Demo](docs/acceptance/V1.7-checkpoint-99.md)/[本地proof](docs/assets/v1.7-cp99/local-proof.json)，本人发布、认领、撤回、原键手动回执及三种晚200围栏已有16实页流程；前端167/Node145/build/audit0通过。旧包/失败/八张新旧图保留，自己源码Linux与新页面资格403等完整矩阵待验。CP98自身20CI及独立HTTP8由[98追加](docs/acceptance/V1.7-checkpoint-98.md#6-自己源码的linux-http限定闭合)限定闭合。以下按历史时点阅读，完整目标继续。
+
 最新 CP98：[开放认领真实网络/升级/重启](docs/acceptance/V1.7-checkpoint-98.md)/[本地证据](docs/assets/v1.7-cp98/local-proof.json)，旧V37→V38升级10、新版独立8和Node142通过；旧包/台账与三次夹具失败保留。新HTTP runner自己的Linux CI、专用页面和桌面手机新旧Demo待验。前一CP97自己的[19作业CI](https://github.com/Trigger726/OnCall-Agent/actions/runs/37209488300)已成功，新MySQL24及原门禁独立重放，见[97第六节](docs/acceptance/V1.7-checkpoint-97.md#6-自己源码实际mysql与远端限定闭合)/[284记录远端证据](docs/assets/v1.7-cp97/remote-proof.json)。以下按历史时点阅读，完整目标继续。
 
 最新 CP97：[开放认领后台](docs/acceptance/V1.7-checkpoint-97.md)/[本地证据](docs/assets/v1.7-cp97/local-proof.json)，独立V38、本人自主认领、唯一赢家与同事务回滚；24项H2及Node136通过。真实MySQL24、新生产JAR网络/升级重启、专用页面与新旧Demo待验，不称完整功能完成。CP96自己的[18作业CI](https://github.com/Trigger726/OnCall-Agent/actions/runs/37207086248)已成功，见[96第六节](docs/acceptance/V1.7-checkpoint-96.md#6-自己源码远端限定通过)/[263记录远端证据](docs/assets/v1.7-cp96/remote-proof.json)，不替代V38。以下状态按历史时点阅读，完整目标继续。

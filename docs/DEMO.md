@@ -1,5 +1,7 @@
 # OpsPilot 10 分钟演示脚本
 
+最新 CP99：[报告与八张新旧对照](acceptance/V1.7-checkpoint-99.md)。真实流程为班次维护“发布开放接班”→本人子时段发布→另一账号“我自愿认领”→丢响应后刷新只GET→手动原键回执；覆盖独立取消后显示CLAIMED历史/取消/操作回执，实际责任另查coverage。桌面1440/手机390已实跑，不使用旧指定接班假称开放认领。旧包、首次标签失败和历史Demo保留；自己的Linux与新页面资格403等待验。
+
 最新 CP98：[旧库升级10](assets/v1.7-cp98/upgrade-result.json)/[默认真实网络8](assets/v1.7-cp98/fresh-result.json)/[报告](acceptance/V1.7-checkpoint-98.md)：旧入口404、新版自愿认领、实际提交后丢响应、重启原回执和取消后不复活已有运行证据。专用认领页面与桌面手机新旧截图仍待交付，不能把此HTTP记录称新UI演示。旧包/页面和三次首次夹具失败保留，新源码自己的Linux待验；[CP97自身MySQL24](acceptance/V1.7-checkpoint-97.md#6-自己源码实际mysql与远端限定闭合)已核验，以下按历史范围阅读。
 
 最新 CP97：[开放认领后台报告](acceptance/V1.7-checkpoint-97.md)与[契约](ONCALL_OPEN_CLAIM_DESIGN.md)。后台24H2通过，但专用认领页面、新JAR真实网络/重启与桌面手机新旧Demo待验，不能把旧指定换班页面当成认领演示。旧包/截图完整保留。[CP96自己的远端14页面及18CI](acceptance/V1.7-checkpoint-96.md#6-自己源码远端限定通过)已限定闭合，本次不制造新视觉变化，以下按历史范围阅读。

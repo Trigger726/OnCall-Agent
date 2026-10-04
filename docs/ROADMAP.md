@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+最新 CP99：[自主认领页面/八张新旧Demo](acceptance/V1.7-checkpoint-99.md)/[证据](assets/v1.7-cp99/local-proof.json)，本地16流程与前端167/Node145通过；CP98自身Linux默认8已由[46记录proof](assets/v1.7-cp98/http-remote-proof.json)核验。下一步新源码自己的远端与页面资格403/完整存储身份矩阵，再继续真实MySQL旧库升级、渠道/提醒、成员ACL、认领撤销、DST与生产容量。全部旧失败/Demo保留，整体active。
+
 最新 CP98：[认领真实网络和原回执](acceptance/V1.7-checkpoint-98.md)/[证据](assets/v1.7-cp98/local-proof.json)，默认8/升级10/Node142本地通过；CP97自身19CI及真实MySQL24已由[284记录proof](assets/v1.7-cp97/remote-proof.json)核验。新HTTP源码自己Linux、专用页面/完整浏览器矩阵与桌面手机新旧Demo继续必需；实际MySQL旧库升级、渠道/提醒/成员ACL/DST及生产容量不删减。三次夹具失败/旧包保留，整体仍active。
 
 最新 CP97：[开放认领后台阶段](acceptance/V1.7-checkpoint-97.md)/[证据](assets/v1.7-cp97/local-proof.json)。V38/本人认领/并发/幂等/回滚已有后台实现与24项H2通过，独立MySQL24作业已接入；真实MySQL、新JAR网络与升级重启、专用页面及新旧Demo仍必须交付。CP96自己的18CI已限定闭合，见[96第六节](acceptance/V1.7-checkpoint-96.md#6-自己源码远端限定通过)。历史失败保留，全部路线继续，不以此阶段缩减目标。
