@@ -21,9 +21,10 @@ public class OnCallSwapService {
     private final JdbcClient jdbc;
     private final OnCallRosterService roster;
     private final AuditService audit;
+    private final OnCallSwapNotifications notifications;
 
-    public OnCallSwapService(JdbcClient jdbc, OnCallRosterService roster, AuditService audit) {
-        this.jdbc = jdbc; this.roster = roster; this.audit = audit;
+    public OnCallSwapService(JdbcClient jdbc, OnCallRosterService roster, AuditService audit, OnCallSwapNotifications notifications) {
+        this.jdbc = jdbc; this.roster = roster; this.audit = audit; this.notifications = notifications;
     }
 
     public ListView list(Long scheduleId, Long participantId, String status) {
@@ -74,7 +75,9 @@ public class OnCallSwapService {
                 .param("start2", second.startsAt()).param("end2", second.endsAt()).param("reason", reason).update(holder, "id");
         long id = holder.getKey().longValue();
         audit.recordAs(actorId, ip, "ONCALL_SWAP_REQUESTED", "ONCALL_SWAP", id, reason);
-        return get(id);
+        View created = get(id);
+        notifications.enqueue(created);
+        return created;
     }
 
     @Transactional(isolation = Isolation.READ_COMMITTED)
@@ -107,7 +110,9 @@ public class OnCallSwapService {
                 """).param("id", id).param("status", decision.status()).param("actor", actorId).param("reason", reason)
                 .param("at", now().truncatedTo(ChronoUnit.SECONDS)).param("first", firstReplacement).param("second", secondReplacement).update();
         audit.recordAs(actorId, ip, "ONCALL_SWAP_" + decision.status(), "ONCALL_SWAP", id, reason);
-        return get(id);
+        View decided = get(id);
+        notifications.enqueue(decided);
+        return decided;
     }
 
     private void validate(Source source, int version) {

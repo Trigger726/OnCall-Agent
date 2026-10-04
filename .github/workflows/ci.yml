@@ -75,6 +75,10 @@ jobs:
         run: node scripts/verify-assistant-request-ui-ci.cjs
       - name: Verify default assistant native previews, final commit and recovery
         run: node scripts/verify-assistant-native-ui-ci.cjs
+      - name: Verify swap notifications against independent receiver and real retry UI
+        run: |
+          node --test scripts/tests/oncall-swap-notification-ci.test.cjs
+          node scripts/verify-oncall-swap-notification-ci.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
@@ -87,6 +91,9 @@ jobs:
             target/assistant-native-ui-it/**/*.json
             target/assistant-native-ui-it/**/*.log
             target/assistant-native-ui-it/**/*.png
+            target/oncall-swap-notification-it/**/*.json
+            target/oncall-swap-notification-it/**/*.log
+            target/oncall-swap-notification-it/**/*.png
           retention-days: 30
 
   auth-session-integration:
@@ -333,7 +340,7 @@ jobs:
         with:
           node-version: 22
       - name: Reject H2, skipped cases, partial rollback coverage and incomplete shutdown
-        run: node --test scripts/tests/oncall-swap-mysql.test.cjs
+        run: node --test scripts/tests/oncall-swap-mysql.test.cjs scripts/tests/oncall-swap-notification-mysql.test.cjs
       - name: Verify both override writes, participant consent and concurrent decisions on owned MySQL
         shell: bash
         run: |
@@ -343,12 +350,21 @@ jobs:
           ./mvnw -B -Duser.timezone=UTC -Dopspilot.oncall.swap.mysql.enabled=true -Dtest=MySqlOnCallSwapIntegrationTest test 2>&1 | tee target/oncall-swap-mysql-it/maven.log
       - name: Verify per-test JDBC identity and full pool shutdown
         run: node scripts/verify-oncall-swap-mysql.cjs
+      - name: Verify durable notification, real receiver, lease fencing and rollback on owned MySQL
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p target/oncall-swap-notification-mysql-it
+          ./mvnw -B -Duser.timezone=UTC -Dopspilot.oncall.swap.notification.mysql.enabled=true -Dtest=MySqlOnCallSwapNotificationIntegrationTest test 2>&1 | tee target/oncall-swap-notification-mysql-it/maven.log
+      - name: Verify every notification scenario used MySQL and the full JVM closed cleanly
+        run: node scripts/verify-oncall-swap-notification-mysql.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: oncall-swap-mysql-evidence
           path: |
             target/oncall-swap-mysql-it/
+            target/oncall-swap-notification-mysql-it/
             target/surefire-reports/
           retention-days: 30
 

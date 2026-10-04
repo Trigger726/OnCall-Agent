@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { api, RequestError } from '@/services/api'
 import { auth } from '@/stores/auth'
+import OnCallSwapNotificationPanel from '@/components/OnCallSwapNotificationPanel.vue'
 import { canChooseSwap, canRequestSwap, clearSwapIntent, decideSwap, getSwap, getSwapCoverage, listSwaps,
   readSwapIntent, requestSwap, saveSwapIntent, swapActions, swapClock, swapDecisionError, swapRequestError, swapState,
   type Swap, type SwapCoverage, type SwapDecision, type SwapIntent, type SwapList, type SwapRoster, type SwapSource, type SwapStatus } from '@/services/onCallSwaps'
@@ -169,6 +170,7 @@ defineExpose({ refresh, open })
       <p v-else-if="list" class="empty-state">此筛选下没有换班请求；可从下方本人未来普通班次发起。</p>
       <section v-if="detailId" class="swap-editor swap-detail"><div class="swap-actions"><h3>两段责任事实 #{{ detailId }}</h3><button class="secondary-button" :disabled="busy" @click="showDetail(detailId)">刷新两段事实</button><button class="secondary-button" :disabled="busy" @click="detailId = null; detail = null">关闭换班详情</button></div><template v-if="detail"><p>{{ swapState(detail.row,detail.first.databaseNow) }}；原决定保留，当前区间责任来自coverage查询。两次区间读取可能处于不同快照。</p><p class="swap-note">原覆盖ID {{ detail.row.firstReplacementShiftId ?? '未生成' }} / {{ detail.row.secondReplacementShiftId ?? '未生成' }}。任一覆盖可被班次维护独立取消；这里不提供成对原子撤销，也不保证原负责人仍能恢复。</p><div class="swap-pair"><article v-for="(view,index) in [detail.first,detail.second]" :key="index"><h4>{{ index ? '第二段' : '第一段' }} · 数据库快照 {{ swapClock(view.databaseNow) }}</h4><p v-for="(segment,i) in view.segments" :key="i">{{ segment.userName ?? '无可用负责人' }} · {{ segment.userId ? (segment.override ? '临时覆盖' : '普通班次') : segment.gapReason }}<br>{{ swapClock(segment.startsAt) }} → {{ swapClock(segment.endsAt) }}</p></article></div></template><p v-else class="swap-note">详情尚未取得或查询失败；不显示旧责任事实。</p></section>
       <p v-if="!canAct" class="swap-note">当前账号只读，不能申请或决定；后端仍会验证最新角色与实际参与者。</p>
+      <OnCallSwapNotificationPanel v-if="detail" :key="detail.row.id" :swap-id="detail.row.id" :requester="detail.row.requesterId" :target="detail.row.targetUserId" />
     </div>
   </section>
 </template>

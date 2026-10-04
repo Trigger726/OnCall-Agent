@@ -5,10 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.trigger.opspilot.postmortem.FollowUpNotificationProperties;
+import org.trigger.opspilot.oncall.OnCallSwapNotificationProperties;
 
 @EnableScheduling
 @SpringBootApplication
-@EnableConfigurationProperties(FollowUpNotificationProperties.class)
+@EnableConfigurationProperties({FollowUpNotificationProperties.class, OnCallSwapNotificationProperties.class})
 public class OpsPilotApplication {
 
     public static void main(String[] args) {

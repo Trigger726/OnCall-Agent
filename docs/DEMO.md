@@ -1,5 +1,11 @@
 # OpsPilot 10 分钟演示脚本
 
+## CP87：通知技术回执不代替本人决定
+
+本地新旧效果：[87验收与图](acceptance/V1.7-checkpoint-87.md)/[proof](assets/v1.7-cp87/local-proof.json)。旧86包能申请/核对coverage但通知404/无面板/外部调用0；新87本人从未来完整普通班次申请，指定对方通知真实503→204后申请仍PENDING。对方实际接受，双方各有ACCEPTED事件，独立coverage交换；重试丢响应后刷新恢复原通知版本/说明，技术已送达也只手动回执一次审计，不再次决定。失效409重载仍锁定，明确放弃仅清本地草稿。
+
+复现新版本：先构建前端及JAR，再`node scripts/verify-oncall-swap-notification-ci.cjs`；自建两个owned进程、9975/9976端口与独立文件DB，不占9900。旧包负对照仅本地可用`OPSPILOT_SWAP_NOTIFICATION_BASELINE=1`（须保存target/cp87-before旧86包），CI禁止用它替代全验收。默认普通Demo通知关闭，只有显式专用接收端配置才外投；不提交真实token。本轮MySQL/Linux还未签字，历史Demo及失败不删除；以下为历史各源状态。
+
 最新86自身4a4141c/[Run37168789059](https://github.com/Trigger726/OnCall-Agent/actions/runs/37168789059)十八作业success，九ZIP源HEAD/实际摘要与独立重放已核验，见[86第六节](acceptance/V1.7-checkpoint-86.md)/[远端证据](assets/v1.7-cp86/remote-proof.json)。真实MySQL8.4.11换班17/原生18/原99及双JVM六项、双时区各433实际执行/154新鲜XML、Linux十四/八/六实页和新换班七流程通过；前端120/全树审计0，Node102为本地结果。已目视本次远端双方确认/当前覆盖及390px冻结恢复/独立取消四图；旧Demo、本地首次失败与85整轮failure保留。通知/开放认领/部分班次/成对撤销/DST及整体路线继续。
 
 85自身332211e/[Run37156379925](https://github.com/Trigger726/OnCall-Agent/actions/runs/37156379925)十六success、H2failure、容器skipped；七ZIP源/实际摘要与重放已核验，真实MySQL8.4.11新换班17零跳过、Linux换班HTTP两项、原MySQL99/原生18/双JVM六项及原十三八六浏览器机器结果限定通过，见[85第五节](acceptance/V1.7-checkpoint-85.md)/[首次远端证据](assets/v1.7-cp85/first-remote-proof.json)。H2错误在MockMvc日志打印器遍历异步SSE响应头，不称整轮全绿或用86本地结果覆盖首次失败。

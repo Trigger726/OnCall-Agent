@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+当前CP87通知能力已取得本地限定证据，源码CI/MySQL待验：[87报告](acceptance/V1.7-checkpoint-87.md)/[本地proof](assets/v1.7-cp87/local-proof.json)。同事务冻结通知/稳定键、独立有界worker、自动有限退避/租约围栏和人工原版本恢复，新18项与九真实页面通过；默认关闭、2xx不代替参与者确认。旧14/8/6实页保留，前端129、Node113、双时区451实际执行。下一步先闭环本轮18项真实MySQL/Linux，再继续通知保留清理、真实账户/自动提醒、开放认领、成对撤销、DST和生产容量；不宣称整体完成。以下为历史源状态，bccd96a文档CI的下载网络失败已另留87第三节。
+
 最新86自身4a4141c/[Run37168789059](https://github.com/Trigger726/OnCall-Agent/actions/runs/37168789059)十八作业success，九ZIP源HEAD/实际摘要与独立重放已核验，见[86第六节](acceptance/V1.7-checkpoint-86.md)/[远端证据](assets/v1.7-cp86/remote-proof.json)。真实MySQL8.4.11换班17/原生18/原99及双JVM六项、双时区各433实际执行/154新鲜XML、Linux十四/八/六实页和新换班七流程通过；前端120/全树审计0，Node102为本地结果。已目视本次远端双方确认/当前覆盖及390px冻结恢复/独立取消四图；旧Demo、本地首次失败与85整轮failure保留。通知/开放认领/部分班次/成对撤销/DST及整体路线继续。
 
 85自身332211e/[Run37156379925](https://github.com/Trigger726/OnCall-Agent/actions/runs/37156379925)十六success、H2failure、容器skipped；七ZIP源/实际摘要与重放已核验，真实MySQL8.4.11新换班17零跳过、Linux换班HTTP两项、原MySQL99/原生18/双JVM六项及原十三八六浏览器机器结果限定通过，见[85第五节](acceptance/V1.7-checkpoint-85.md)/[首次远端证据](assets/v1.7-cp85/first-remote-proof.json)。H2错误在MockMvc日志打印器遍历异步SSE响应头，不称整轮全绿或用86本地结果覆盖首次失败。

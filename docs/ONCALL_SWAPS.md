@@ -1,5 +1,7 @@
 # 双向换班后端契约（CP85）
 
+CP87新增通知契约，本地限定通过、实际MySQL/Linux CI待验：[87报告](acceptance/V1.7-checkpoint-87.md)。`GET /{id}/notifications`返回enabled/databaseNow/独立投递facts，无载荷正文/凭证；`POST /{id}/notifications/{notificationId}/retry`显式`version,reason`，管理角色或本次实际参与者才可写。原版本/说明相同的重试回执不重复审计，变更/失效409；不决定换班。默认关闭，启用时申请同事务仅给指定对方入队，决定同事务给双方；稳定键、冻结历史事件、独立worker有限重试/旧lease围栏、无重定向，2xx不等于已读/接受/当前责任。配置前缀`ONCALL_SWAP_NOTIFICATION_`见application.yml，专用HTTPS或localhost/127 HTTP、专用token，URL不可带userInfo/query/fragment；接收端按稳定Idempotency-Key去重，不声称远端exactly-once。旧86等效果和以下当时未完成边界保留。
+
 CP86新增真实页面：本人从未来普通班次选择对方班次，指定对方确认两段责任；按账号保存原键/双版本或决定意图、403/409锁定及手动恢复。当前coverage详情与历史接受分栏，单覆盖取消不复活，未提供成对原子撤销；桌面/手机与旧包效果对照见[86报告](acceptance/V1.7-checkpoint-86.md)。85真实MySQL后端17项限定通过但其整轮CI失败，见[85第五节](acceptance/V1.7-checkpoint-85.md)；86自身4a4141c十八CI/九ZIP及Linux新七流程已闭环，见[86第六节](acceptance/V1.7-checkpoint-86.md)/[远端证据](assets/v1.7-cp86/remote-proof.json)。
 
 两个本人/对方的未来完整普通班次，由本人申请、指定对方确认后一起交换责任。允许同计划或跨计划，保留原普通班次与轮转配置，生成两条临时覆盖；不是先接受两个独立接班请求。CP85首先交付后端，页面由CP86补齐；通知、开放认领、已开始/部分时段互换和成对原子撤销未完成。

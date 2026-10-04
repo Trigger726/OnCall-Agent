@@ -1,5 +1,7 @@
 # OpsPilot 面试讲解与追问
 
+CP87可讲的本地限定新增：业务确认和通知送达不是一回事。V35 outbox与换班决定/两条覆盖/审计同事务入队；独立worker不占共享调度线程，稳定键至少一次重试、冻结事件、lease/token旧回执围栏，有限自动尝试与人工原版本回执。真实503→204后仍PENDING、人接受后双方才有决定事件；丢响应不会换版本重发事件、409锁定、账号晚200隔离有实页证据。前端129、通知18和九实页/双时区451已本地验证，但实际MySQL/Linux源码CI尚待，不在简历写“已生产验证”或exactly-once。[87报告与新旧Demo](acceptance/V1.7-checkpoint-87.md)。以下按各历史源范围保留。
+
 最新86自身4a4141c/[Run37168789059](https://github.com/Trigger726/OnCall-Agent/actions/runs/37168789059)十八作业success，九ZIP源HEAD/实际摘要与独立重放已核验，见[86第六节](acceptance/V1.7-checkpoint-86.md)/[远端证据](assets/v1.7-cp86/remote-proof.json)。真实MySQL8.4.11换班17/原生18/原99及双JVM六项、双时区各433实际执行/154新鲜XML、Linux十四/八/六实页和新换班七流程通过；前端120/全树审计0，Node102为本地结果。已目视本次远端双方确认/当前覆盖及390px冻结恢复/独立取消四图；旧Demo、本地首次失败与85整轮failure保留。通知/开放认领/部分班次/成对撤销/DST及整体路线继续。
 
 85自身332211e/[Run37156379925](https://github.com/Trigger726/OnCall-Agent/actions/runs/37156379925)十六success、H2failure、容器skipped；七ZIP源/实际摘要与重放已核验，真实MySQL8.4.11新换班17零跳过、Linux换班HTTP两项、原MySQL99/原生18/双JVM六项及原十三八六浏览器机器结果限定通过，见[85第五节](acceptance/V1.7-checkpoint-85.md)/[首次远端证据](assets/v1.7-cp85/first-remote-proof.json)。H2错误在MockMvc日志打印器遍历异步SSE响应头，不称整轮全绿或用86本地结果覆盖首次失败。

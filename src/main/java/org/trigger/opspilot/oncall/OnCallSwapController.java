@@ -18,7 +18,8 @@ import org.trigger.opspilot.security.UserPrincipal;
 @RequestMapping("/api/v1/on-call/swaps")
 public class OnCallSwapController {
     private final OnCallSwapService service;
-    public OnCallSwapController(OnCallSwapService service) { this.service = service; }
+    private final OnCallSwapNotifications notifications;
+    public OnCallSwapController(OnCallSwapService service, OnCallSwapNotifications notifications) { this.service = service; this.notifications = notifications; }
 
     @GetMapping
     public ApiResponse<OnCallSwapService.ListView> list(@RequestParam(required = false) Long scheduleId,
@@ -30,6 +31,16 @@ public class OnCallSwapController {
 
     @GetMapping("/{id}")
     public ApiResponse<OnCallSwapService.View> get(@PathVariable long id) { return ApiResponse.ok(service.get(id)); }
+
+    @GetMapping("/{id}/notifications")
+    public ApiResponse<OnCallSwapNotifications.ListView> notifications(@PathVariable long id) { return ApiResponse.ok(notifications.list(id)); }
+
+    @PostMapping("/{id}/notifications/{notificationId}/retry")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER','ON_CALL')")
+    public ApiResponse<OnCallSwapNotifications.View> retryNotification(@PathVariable long id, @PathVariable long notificationId,
+            @Valid @RequestBody RetryNotification body, @AuthenticationPrincipal UserPrincipal user, HttpServletRequest request) {
+        return ApiResponse.ok(notifications.retry(id,notificationId,body.version(),body.reason(),user.id(),request.getRemoteAddr()));
+    }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER','ON_CALL')")
@@ -50,4 +61,5 @@ public class OnCallSwapController {
                           @NotNull @Min(1) Long secondShiftId, @NotNull @Min(0) Integer secondVersion,
                           @NotBlank @Size(max = 36) String requestKey, @NotBlank @Size(max = 500) String reason) {}
     public record Decision(@NotNull @Min(0) Integer version, @NotBlank String status, @NotBlank @Size(max = 500) String reason) {}
+    public record RetryNotification(@NotNull @Min(0) Integer version, @NotBlank @Size(max = 500) String reason) {}
 }
