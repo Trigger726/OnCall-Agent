@@ -1,6 +1,6 @@
 # OpsPilot 高价值迭代路线
 
-最新 CP93：[持久化时间边界夹具/门禁修复](acceptance/V1.7-checkpoint-93.md)/[本地proof](assets/v1.7-cp93/local-proof.json)限定通过：双时区各480执行/171条件跳过/83新鲜XML、原83套完整case保留、全脚本115；生产包/页面未改，不制造新Demo。CP92自己的[Run37198567000](https://github.com/Trigger726/OnCall-Agent/actions/runs/37198567000)终态failure（16成功/1失败/1跳过），19真实MySQL中1个锁等待到期断言失败，见[首次远端proof](assets/v1.7-cp92/first-remote-proof.json)。操作仍早于实际落库结束；新两个屏障等待持久化值，强化门禁要求真实MySQL舍入/释放，自己的新MySQL CI仍待。原17/27/1/99及原Linux12/14/8/6、HTTP三流程已对ec源独立核对，不能称整轮绿色。专用撤销页面、冻结三版本/键、真实浏览器丢响应/409及桌面手机新旧对照继续必需，目标active，旧Demo/失败保留。
+最新 CP93：[持久化时间边界夹具/门禁修复](acceptance/V1.7-checkpoint-93.md)已由自身033f491/[Run37199872957](https://github.com/Trigger726/OnCall-Agent/actions/runs/37199872957)十八CI success闭合，见[五ZIP自身proof](assets/v1.7-cp93/remote-proof.json)。真实MySQL19零跳过及两次.900→实际下一整秒/DB释放超过存储截止，独立强化门禁重放与CI保存结果相等；原17/27/1/99、双时区各480执行/171跳过/83新鲜XML、前端132/audit0及Linux原12/14/8/6与HTTP三流程也核对。脚本115为本地结果。生产代码/DDL/页面未改，没有新视觉Demo；CP92自己的[首次失败](assets/v1.7-cp92/first-remote-proof.json)保留，不改写绿灯。专用撤销页面、冻结原键/三个版本、真实浏览器丢响应/409/身份围栏和桌面手机新旧对照继续必需，完整路线/目标active。
 
 CP90保留事实页面本地限定通过：[90报告](acceptance/V1.7-checkpoint-90.md)。数据库快照/微秒期限、到期0新POST、擦除后手动原回执及读失败清旧事实；原九加新三实页、前端132/脚本92通过。CP89自身十八CI及真实MySQL27/V36已由[89第六节](acceptance/V1.7-checkpoint-89.md)闭环；下一步验CP90自己的完整CI，再补真实MySQL有数据的V35历史升级。真实渠道/提醒、开放认领、成对撤销、DST/日历和生产容量仍继续，不能将单个检查点改称整体100%。以下状态按历史时点保留。
 
