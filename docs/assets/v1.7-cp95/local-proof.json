@@ -1,0 +1,102 @@
+{
+  "status": "LOCAL_DIAGNOSTIC_LIFECYCLE_PASS_OWN_REMOTE_PENDING",
+  "generatedAt": "2026-10-04T13:28:36.915Z",
+  "baseHead": "afd5cfb636e7ca99044a7d7333b48308d61c6e98",
+  "productionJavaDDLJUnitUIAndWorkflowUnchanged": true,
+  "jarSha256": "7dfc7abba674517d11591416e18d9e056621d5a45432f74cfea24939444c2e48",
+  "checks": {
+    "node": {
+      "tests": 121,
+      "pass": 121,
+      "fail": 0,
+      "skipped": 0
+    },
+    "frontend": {
+      "tests": 147,
+      "pass": 147,
+      "fail": 0,
+      "skipped": 0
+    },
+    "notificationCases": 12,
+    "pairedUICases": 14,
+    "pairedHttpCases": 3,
+    "networkTraceEvents": 198,
+    "networkTraceOmitted": 0
+  },
+  "actualLostPostRecovery": [
+    {
+      "originalPostRequestId": 11,
+      "path": "/api/v1/on-call/swaps/2/notifications/4/retry",
+      "backendCommitStatus": 200,
+      "browserOriginalRequestFailed": true,
+      "freshGetRequestId": 12,
+      "freshGetStatus": 200,
+      "freshGetFinished": true
+    },
+    {
+      "originalPostRequestId": 53,
+      "path": "/api/v1/on-call/swaps/6/notifications/10/retry",
+      "backendCommitStatus": 200,
+      "browserOriginalRequestFailed": true,
+      "freshGetRequestId": 54,
+      "freshGetStatus": 200,
+      "freshGetFinished": true
+    }
+  ],
+  "priorSourceRemote": {
+    "head": "afd5cfb636e7ca99044a7d7333b48308d61c6e98",
+    "runId": 37204083856,
+    "successfulJobs": 18,
+    "verifiedFileRecords": 262,
+    "proof": "../v1.7-cp94/second-remote-proof.json"
+  },
+  "firstFailurePreserved": true,
+  "timeoutRootCauseProven": false,
+  "newSourceRemoteNotYetVerified": true,
+  "remaining": [
+    "original Linux notification timeout root cause remains unproven",
+    "new source own CI must be checked separately",
+    "real channels/open claiming/DST/calendar/production capacity remain"
+  ],
+  "records": [
+    {
+      "path": "docs/assets/v1.7-cp95/notification-result.json",
+      "sha256": "cfe4b70b4750b9ec08d0aa1f1539864b0d487f70f1e74eb6f9c2df5aa314df11",
+      "source": "target/oncall-swap-notification-it/run-GtKBJ7/result.json"
+    },
+    {
+      "path": "docs/assets/v1.7-cp95/pairedUI-result.json",
+      "sha256": "454ed702fb5287d971ccb032685542b99cbf26b5f61cd6fcc7349326cd2acdb5",
+      "source": "target/oncall-swap-revocation-ui-it/run-WlhB0m/result.json"
+    },
+    {
+      "path": "docs/assets/v1.7-cp95/pairedHttp-result.json",
+      "sha256": "27225d35ef60dbee0ffc3517a99e325d5cc006e5417f8c35bd54feb3312df3b5",
+      "source": "target/oncall-swap-revocation-http-it/run-i3SHLd/result.json"
+    },
+    {
+      "path": "scripts/verify-oncall-swap-notification-ci.cjs",
+      "sha256": "77d40faec343bdd97575b88db9c6bd19b40ef38c0e54b86130210853c03d07fd"
+    },
+    {
+      "path": "scripts/tests/oncall-swap-notification-ci.test.cjs",
+      "sha256": "be41a3174c7b9c75f3912494b8922eb28b1f29f057e9047b39a57ed32a2f1e83"
+    },
+    {
+      "path": "target/cp95-diagnostic/node-tests.log",
+      "sha256": "44fd35dfdd8b2802e6fb0545dcd22f6333a6747c386a9ed2b6320895121a2226"
+    },
+    {
+      "path": "target/cp95-diagnostic/frontend-tests.log",
+      "sha256": "cede8c319096b68bd6f9fc879fb29834e306fe7964fcd8a826f25232224a2c46"
+    },
+    {
+      "path": "docs/assets/v1.7-cp94/first-remote-proof.json",
+      "sha256": "f25b356ba1d1ed59c712709a5ec74b55d240eed3241df897213fa6b91ecfce7e"
+    },
+    {
+      "path": "docs/assets/v1.7-cp94/second-remote-proof.json",
+      "sha256": "8449d96bcc701de38306ea1d6c6729af8a9df01bc7df57b4011f7a9d3f08c4c7"
+    }
+  ]
+}

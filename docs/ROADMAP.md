@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+最新 CP95：[通知拦截生命周期与有限诊断](acceptance/V1.7-checkpoint-95.md)本地限定通过，新源码自身CI待验。前一 afd5cfb 的 [Run37204083856](https://github.com/Trigger726/OnCall-Agent/actions/runs/37204083856)实际18作业success，成对页面14/HTTP3及限定远端回归由[第二次proof](assets/v1.7-cp94/second-remote-proof.json)核验。原通知刷新超时根因仍未证实，首次failure与旧Demo保留；真实渠道/提醒、开放认领、DST/日历和生产容量等完整路线继续，不称整体100%。以下记录按历史时点阅读。
+
 最新 CP94：[成对撤销页面与原意图围栏](acceptance/V1.7-checkpoint-94.md)本地限定通过，见[275记录证据与七张新旧图](assets/v1.7-cp94/local-proof.json)。bf1009c自己的[Run37203313914](https://github.com/Trigger726/OnCall-Agent/actions/runs/37203313914)首次failure：16success/浏览器failure/镜像skipped，见[237记录失败proof](assets/v1.7-cp94/first-remote-proof.json)。真实MySQL19及原17/27/1/99独立重放相等、双时区480执行/171跳过/83XML、前端147/audit0、Linux旧14/8/6限定通过；旧通知第4流程错误后刷新超时，新的成对HTTP3/UI14未执行，仍须诊断闭环。本地最终新14、原12/14/8/6及Node117通过不替代新源码远端。完整路线/目标active，首次失败/旧Demo保留；下方文字按历史范围阅读。
 
 最新 CP93：[持久化时间边界夹具/门禁修复](acceptance/V1.7-checkpoint-93.md)已由自身033f491/[Run37199872957](https://github.com/Trigger726/OnCall-Agent/actions/runs/37199872957)十八CI success闭合，见[五ZIP自身proof](assets/v1.7-cp93/remote-proof.json)。真实MySQL19零跳过及两次.900→实际下一整秒/DB释放超过存储截止，独立强化门禁重放与CI保存结果相等；原17/27/1/99、双时区各480执行/171跳过/83新鲜XML、前端132/audit0及Linux原12/14/8/6与HTTP三流程也核对。脚本115为本地结果。生产代码/DDL/页面未改，没有新视觉Demo；CP92自己的[首次失败](assets/v1.7-cp92/first-remote-proof.json)保留，不改写绿灯。专用撤销页面、冻结原键/三个版本、真实浏览器丢响应/409/身份围栏和桌面手机新旧对照继续必需，完整路线/目标active。
