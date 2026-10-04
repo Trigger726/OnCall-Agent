@@ -1,10 +1,11 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
-const {verify,suite,cases}=require('../verify-oncall-swap-revocation-mysql.cjs');
+const {verify,suite,cases,timeCases}=require('../verify-oncall-swap-revocation-mysql.cjs');
 function fixture(){
   const markers=cases.map(name=>'CP92_SWAP_REVOCATION_DATABASE '+JSON.stringify({case:name,product:'MySQL',version:'8.4.11',schema:'opspilot_swap_revocation_test',migration37:true}));
-  const xml='<testsuite name="'+suite+'" tests="19" failures="0" errors="0" skipped="0">'+cases.map((name,i)=>'<testcase name="'+name+'"><system-out><![CDATA['+markers[i]+']]></system-out></testcase>').join('')+'</testsuite>';
-  return {xml,log:'INFO HikariPool-1 - Start completed.\n'+markers.join('\n')+'\nINFO HikariPool-1 - Shutdown completed.\n[INFO] BUILD SUCCESS\n'};
+  const barriers=timeCases.map(name=>'CP93_SWAP_REVOCATION_TIME_BARRIER '+JSON.stringify({case:name,requestedEnd:'2026-10-04T12:00:00.900',persistedEnd:'2026-10-04T12:00:01',releasedDatabaseNow:'2026-10-04T12:00:01.000001',releasedAfterPersistedEnd:true}));
+  const xml='<testsuite name="'+suite+'" tests="19" failures="0" errors="0" skipped="0">'+cases.map((name,i)=>'<testcase name="'+name+'"><system-out><![CDATA['+markers[i]+(timeCases.includes(name)?'\n'+barriers[timeCases.indexOf(name)]:'')+']]></system-out></testcase>').join('')+'</testsuite>';
+  return {xml,log:'INFO HikariPool-1 - Start completed.\n'+markers.join('\n')+'\n'+barriers.join('\n')+'\nINFO HikariPool-1 - Shutdown completed.\n[INFO] BUILD SUCCESS\n'};
 }
 const run=f=>verify(f.log,f.xml);
 test('synthetic complete MySQL gate shape passes, not a product claim',()=>assert.equal(run(fixture()).executed,19));
@@ -19,3 +20,13 @@ test('ANSI and CRLF cannot bypass or spuriously fail the complete gate',()=>{con
 
 
 test('each case must positively assert the actual V37 migration',()=>{const f=fixture();f.xml=f.xml.replace('"migration37":true','"migration37":false');assert.throws(()=>run(f));});
+test('actual stored deadline and release evidence is mandatory for both time fences',()=>{
+  for(const mutate of [f=>f.xml=f.xml.replace('CP93_SWAP_REVOCATION_TIME_BARRIER','missing'),f=>f.log=f.log.replace('CP93_SWAP_REVOCATION_TIME_BARRIER','missing')]){const f=fixture();mutate(f);assert.throws(()=>run(f));}
+});
+test('unpersisted early release, wrong precision and fractional rounding cannot pass',()=>{
+  for(const [before,after] of [['12:00:01.000001','12:00:00.950'],['12:00:01"','12:00:00.900"'],['12:00:00.900','12:00:00.100'],['"releasedAfterPersistedEnd":true','"releasedAfterPersistedEnd":false']]){
+    const f=fixture();f.xml=f.xml.replaceAll(before,after);f.log=f.log.replaceAll(before,after);assert.throws(()=>run(f));}
+});
+test('time barrier cases cannot be duplicated renamed or diverge from their Maven log',()=>{
+  for(const mutate of [f=>f.xml=f.xml.replace('"case":"'+timeCases[0]+'"','"case":"'+timeCases[1]+'"'),f=>f.xml=f.xml.replace('12:00:01.000001','12:00:01.100001')]){const f=fixture();mutate(f);assert.throws(()=>run(f));}
+});

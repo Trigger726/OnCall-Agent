@@ -2,6 +2,8 @@
 
 保留原ACCEPTED历史，只撤销本次接受生成的两条覆盖。一次数据库事务提交两条取消、独立撤销台账和三条审计；不等于发出两个单独取消请求。当前阶段的专用前端仍待，见[验收92](acceptance/V1.7-checkpoint-92.md)。
 
+实际CP92自己的MySQL19有一项时间夹具断言失败，整轮CI为failure；[CP93](acceptance/V1.7-checkpoint-93.md)只修两个屏障等待实际落库结束时间并加强门禁，生产契约/DDL未改，本地H2通过不等于真实MySQL通过。专用页面及新旧实页对照仍须后续交付。
+
 ## API 与明确意图
 
 路径前缀 `/api/v1/on-call/swaps`。`GET /{id}/coverage`需登录，以单条SQL快照返回`databaseNow, accepted, firstReplacement, secondReplacement, revocation`；未接受请求的两条replacement可为null，字段名accepted不意味着其status已经接受。历史接受与当前覆盖/撤销分开显示。

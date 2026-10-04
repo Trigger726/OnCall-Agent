@@ -192,25 +192,39 @@ abstract class SwapRevocationScenarios {
         assertUntouched(f);assertThat(audits()).isEqualTo(before);
     }
     @Test void shouldRollbackAfterFinalAuditCrossesActualDatabaseEnd() {
-        var f=accepted(true);var end=now().plusSeconds(3);shiftTimes(f,true,end.minusHours(1),end);long before=audits();
-        doAnswer(invocation->{invocation.callRealMethod();awaitDatabaseEnd(end);return null;}).when(audit)
+        var f=accepted(true);var requestedEnd=now().withNano(900_000_000).plusSeconds(3);
+        shiftTimes(f,true,requestedEnd.minusHours(1),requestedEnd);var persistedEnd=persistedDeadline(f);long before=audits();
+        doAnswer(invocation->{invocation.callRealMethod();awaitPersistedEnd("shouldRollbackAfterFinalAuditCrossesActualDatabaseEnd",requestedEnd,persistedEnd);return null;}).when(audit)
                 .recordAs(eq(1L),eq("test"),eq("ONCALL_SWAP_COVERAGE_REVOKED"),eq("ONCALL_SWAP"),eq(f.swap().id()),anyString());
         assertCode(()->swaps.revokeCoverage(f.swap().id(),command(),1,"test"),"ONCALL_SWAP_COVERAGE_EXPIRED");assertUntouched(f);assertThat(audits()).isEqualTo(before);
     }
     @Test void shouldRecheckActualDatabaseEndAfterWaitingForScheduleLock() throws Exception {
-        var f=accepted(true);var end=now().plusSeconds(3);shiftTimes(f,true,end.minusHours(1),end);long before=audits();var executor=Executors.newSingleThreadExecutor();
+        var f=accepted(true);var requestedEnd=now().withNano(900_000_000).plusSeconds(3);
+        shiftTimes(f,true,requestedEnd.minusHours(1),requestedEnd);var persistedEnd=persistedDeadline(f);long before=audits();var executor=Executors.newSingleThreadExecutor();
         try(var connection=datasource.getConnection()) {
             connection.setAutoCommit(false);
             try(var statement=connection.prepareStatement("SELECT id FROM oncall_schedule WHERE id=? FOR UPDATE")) {statement.setLong(1,Math.min(f.first().scheduleId(),f.second().scheduleId()));try(var rows=statement.executeQuery()){assertThat(rows.next()).isTrue();}}
             var entered=new CountDownLatch(1);var waiting=executor.submit(()->{entered.countDown();return outcome(new CountDownLatch(0),()->swaps.revokeCoverage(f.swap().id(),command(),1,"test"));});
             assertThat(entered.await(5,TimeUnit.SECONDS)).isTrue();LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(200));assertThat(waiting.isDone()).isFalse();
-            awaitDatabaseEnd(end);connection.commit();
+            awaitPersistedEnd("shouldRecheckActualDatabaseEndAfterWaitingForScheduleLock",requestedEnd,persistedEnd);connection.commit();
             assertThat(waiting.get(15,TimeUnit.SECONDS)).isInstanceOfSatisfying(ApiException.class,e->assertThat(e.code()).isEqualTo("ONCALL_SWAP_COVERAGE_EXPIRED"));
         } finally {executor.shutdownNow();assertThat(executor.awaitTermination(5,TimeUnit.SECONDS)).isTrue();}
         assertUntouched(f);assertThat(audits()).isEqualTo(before);
     }
     private void awaitDatabaseEnd(LocalDateTime end) {long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(10);
         while(now().isBefore(end)&&System.nanoTime()<deadline)LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(50));assertThat(now()).isAfterOrEqualTo(end);}
+    private LocalDateTime persistedDeadline(Fixture f) {
+        var facts=swaps.coverage(f.swap().id());var end=facts.firstReplacement().endsAt();
+        assertThat(facts.accepted().firstEndsAt()).isEqualTo(end);
+        assertThat(jdbc.sql("SELECT ends_at FROM oncall_shift WHERE id=:id").param("id",f.first().id()).query(LocalDateTime.class).single()).isEqualTo(end);
+        if(getClass().getSimpleName().startsWith("MySql"))assertThat(end.getNano()).isZero();
+        return end;
+    }
+    private void awaitPersistedEnd(String caseName,LocalDateTime requested,LocalDateTime persisted)throws Exception {
+        awaitDatabaseEnd(persisted);var released=now();assertThat(released).isAfterOrEqualTo(persisted);
+        System.out.println("CP93_SWAP_REVOCATION_TIME_BARRIER "+json.writeValueAsString(Map.of("case",caseName,
+                "requestedEnd",requested.toString(),"persistedEnd",persisted.toString(),"releasedDatabaseNow",released.toString(),"releasedAfterPersistedEnd",true)));
+    }
     private OnCallSwapService.RevocationCommand command(){return new OnCallSwapService.RevocationCommand(1,0,0,UUID.randomUUID().toString()," 原子撤销中文/emoji🙂 ");}
     private void assertCode(org.assertj.core.api.ThrowableAssert.ThrowingCallable call,String code){assertThatThrownBy(call).isInstanceOfSatisfying(ApiException.class,e->assertThat(e.code()).isEqualTo(code));}
     private long audits(){return jdbc.sql("SELECT COUNT(*) FROM audit_log").query(Long.class).single();}

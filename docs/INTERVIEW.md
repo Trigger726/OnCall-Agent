@@ -1,6 +1,6 @@
 # OpsPilot 面试讲解与追问
 
-最新 CP92：[成对原子撤销后台/API](acceptance/V1.7-checkpoint-92.md)/[本地proof](assets/v1.7-cp92/local-proof.json)限定通过：19项共用矩阵、双时区各480实际执行/171条件跳过/83新鲜XML、全脚本112及旧JAR升级五流程/新包HTTP三流程通过。原ACCEPTED/非空通知历史保留，一事务取消两段/独立台账/三审计；原键正文丢失及重启ACK不重复写。专用前端、自己的真实MySQL和完整CI仍待，未宣称完整交付。CP91源码54fd24c的十八CI与[五ZIP/真实V35有数据MySQL升级](assets/v1.7-cp91/remote-proof.json)已独立闭环，不借旧绿灯证明新V37。详情见[撤销契约](ONCALL_SWAP_REVOCATION.md)，历史Demo/首次失败保留，完整路线继续。
+最新 CP93：[持久化时间边界夹具/门禁修复](acceptance/V1.7-checkpoint-93.md)/[本地proof](assets/v1.7-cp93/local-proof.json)限定通过：双时区各480执行/171条件跳过/83新鲜XML、原83套完整case保留、全脚本115；生产包/页面未改，不制造新Demo。CP92自己的[Run37198567000](https://github.com/Trigger726/OnCall-Agent/actions/runs/37198567000)终态failure（16成功/1失败/1跳过），19真实MySQL中1个锁等待到期断言失败，见[首次远端proof](assets/v1.7-cp92/first-remote-proof.json)。操作仍早于实际落库结束；新两个屏障等待持久化值，强化门禁要求真实MySQL舍入/释放，自己的新MySQL CI仍待。原17/27/1/99及原Linux12/14/8/6、HTTP三流程已对ec源独立核对，不能称整轮绿色。专用撤销页面、冻结三版本/键、真实浏览器丢响应/409及桌面手机新旧对照继续必需，目标active，旧Demo/失败保留。
 
 CP90的新追问：为什么页面不能用本机时钟判断清理，也不能按刷新后的版本悄悄重试？数据库会话时间是权威；新POST前再次GET、原捕获版本不能变，到期/读取失败零提交。已经提交但丢响应的原意图不同：载荷清理后仍只手动核对原回执，不新投递/不新增审计。[实页12流程及新旧对照](acceptance/V1.7-checkpoint-90.md)已本地通过；CP89自己的十八CI/真实MySQL27已验，CP90自身CI与真实MySQL旧V35有数据升级未验。只擦payload不等于完整PII删除，更不能宣称外部exactly-once或人已接受；以下历史材料保留。
 
