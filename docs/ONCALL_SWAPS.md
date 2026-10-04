@@ -1,5 +1,7 @@
 # 双向换班后端契约（CP85）
 
+最新[CP98认领网络](acceptance/V1.7-checkpoint-98.md)为独立单段自愿接班，不改变本指定双方互换契约。前一CP97自身19CI、MySQL新24和原17/27/1/19/99已由[97第六节](acceptance/V1.7-checkpoint-97.md#6-自己源码实际mysql与远端限定闭合)核验。本轮默认8/升级10本地通过，新runner自身Linux、专用页面和完整路线继续；旧失败/台账/Demo保留，以下历史“待验”不是当前终态。
+
 最新[CP97](acceptance/V1.7-checkpoint-97.md)是独立开放接班后台，不改变本文件指定双方互换契约，也不将原换班成功当新认领完成。24H2通过，实际MySQL/新JAR网络与升级重启/新页面待验；[CP96自己的十八CI](acceptance/V1.7-checkpoint-96.md#6-自己源码远端限定通过)已限定闭合。以下“待验/当前”按历史时点阅读，旧Demo和首次失败保留。
 
 最新96仅改成对页面测试观测：[96报告](acceptance/V1.7-checkpoint-96.md)，两次原14/Node128本地限定通过，新源码自身远端待验。95自己148f6c9的[CI](https://github.com/Trigger726/OnCall-Agent/actions/runs/37205769613)为failure，通知12/成对HTTP3/原14/8/6和真实MySQL19/17/27/1/99限定通过，[失败proof](assets/v1.7-cp95/first-remote-proof.json)保留，不改业务契约。开放认领见[待实现设计](ONCALL_OPEN_CLAIM_DESIGN.md)，不是把现指定双方互换改名；以下按历史范围阅读。

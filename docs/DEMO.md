@@ -1,5 +1,7 @@
 # OpsPilot 10 分钟演示脚本
 
+最新 CP98：[旧库升级10](assets/v1.7-cp98/upgrade-result.json)/[默认真实网络8](assets/v1.7-cp98/fresh-result.json)/[报告](acceptance/V1.7-checkpoint-98.md)：旧入口404、新版自愿认领、实际提交后丢响应、重启原回执和取消后不复活已有运行证据。专用认领页面与桌面手机新旧截图仍待交付，不能把此HTTP记录称新UI演示。旧包/页面和三次首次夹具失败保留，新源码自己的Linux待验；[CP97自身MySQL24](acceptance/V1.7-checkpoint-97.md#6-自己源码实际mysql与远端限定闭合)已核验，以下按历史范围阅读。
+
 最新 CP97：[开放认领后台报告](acceptance/V1.7-checkpoint-97.md)与[契约](ONCALL_OPEN_CLAIM_DESIGN.md)。后台24H2通过，但专用认领页面、新JAR真实网络/重启与桌面手机新旧Demo待验，不能把旧指定换班页面当成认领演示。旧包/截图完整保留。[CP96自己的远端14页面及18CI](acceptance/V1.7-checkpoint-96.md#6-自己源码远端限定通过)已限定闭合，本次不制造新视觉变化，以下按历史范围阅读。
 
 最新 CP96：[成对中断观测与14原页面两次本地验收](acceptance/V1.7-checkpoint-96.md)，[原Linux失败](assets/v1.7-cp95/first-remote-paired-failure.png)与[本轮桌面409](assets/v1.7-cp96/partial409-desktop.png)/[手机原回执](assets/v1.7-cp96/original-ack-mobile.png)保留。仅测试变化，不制造新视觉版本或把不同运行状态比较当因果修复。95自己的CI failure保留；96自身远端待验、完整路线继续，下方按历史时点阅读。

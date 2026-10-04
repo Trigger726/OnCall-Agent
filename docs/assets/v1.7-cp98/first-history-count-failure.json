@@ -1,0 +1,54 @@
+{
+  "status": "FAIL",
+  "comparison": true,
+  "cases": [
+    {
+      "name": "old-v37-omits-open-claim-api",
+      "get404": true,
+      "post404": true,
+      "sourcePreserved": true
+    }
+  ],
+  "jarSha256": "f535d7d587b717c487f84f1f84378d0a3e324d266dee47baf5ce0c22af41d32a",
+  "startedPids": [
+    103412
+  ],
+  "stoppedPids": [
+    103412
+  ],
+  "sqlFixtures": [
+    {
+      "mode": "SNAPSHOT",
+      "pid": 92192,
+      "exitCode": 0,
+      "receipt": {
+        "actualProduct": "H2",
+        "actualVersion": "2.2.220 (2023-07-04)",
+        "migrationCount": 38,
+        "migration38": false,
+        "shifts": 5,
+        "shiftHash": "2f16f270e4953959cdf6cf557a1d1363720204f132c90afb2a07b964cfd98a51",
+        "designatedHash": "10d420d76b681faf82e78dd25aeced3ba53ba312692e3e1dee457c5cb5aec09c",
+        "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "onCallAuditHash": "ac5136ad211556c247f77a45c658deffc9d803c927b052afc8d6595c50dfba1b",
+        "openRequestHash": null,
+        "openOperationHash": null,
+        "requests": []
+      }
+    }
+  ],
+  "sqlExpectations": [],
+  "transport": "real HTTP to independent production JAR and owned H2 file database",
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "oldJarSha256": "7dfc7abba674517d11591416e18d9e056621d5a45432f74cfea24939444c2e48",
+  "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n38 !== 37\n\n    at verify (D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-oncall-open-handoff-http-ci.cjs:92:56)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "ownedProcessesStopped": true,
+  "unexpectedJarErrors": 0,
+  "completeJarLogs": [
+    {
+      "file": "target\\oncall-open-handoff-http-it\\run-0Wp92d\\jar-1.log",
+      "sha256": "07eb3f2f0c6fb1048b7d86aefec60669a03fc8e2a6155ca8d04049a04eca7630"
+    }
+  ]
+}

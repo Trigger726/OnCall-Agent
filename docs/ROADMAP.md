@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+最新 CP98：[认领真实网络和原回执](acceptance/V1.7-checkpoint-98.md)/[证据](assets/v1.7-cp98/local-proof.json)，默认8/升级10/Node142本地通过；CP97自身19CI及真实MySQL24已由[284记录proof](assets/v1.7-cp97/remote-proof.json)核验。新HTTP源码自己Linux、专用页面/完整浏览器矩阵与桌面手机新旧Demo继续必需；实际MySQL旧库升级、渠道/提醒/成员ACL/DST及生产容量不删减。三次夹具失败/旧包保留，整体仍active。
+
 最新 CP97：[开放认领后台阶段](acceptance/V1.7-checkpoint-97.md)/[证据](assets/v1.7-cp97/local-proof.json)。V38/本人认领/并发/幂等/回滚已有后台实现与24项H2通过，独立MySQL24作业已接入；真实MySQL、新JAR网络与升级重启、专用页面及新旧Demo仍必须交付。CP96自己的18CI已限定闭合，见[96第六节](acceptance/V1.7-checkpoint-96.md#6-自己源码远端限定通过)。历史失败保留，全部路线继续，不以此阶段缩减目标。
 
 最新 CP96：[成对中断拦截与请求证据](acceptance/V1.7-checkpoint-96.md)Node128/两次原14本地通过，自身新CI待验。95自己的148f6c9/[Run37205769613](https://github.com/Trigger726/OnCall-Agent/actions/runs/37205769613)实际16success/浏览器failure/镜像skipped，[失败proof](assets/v1.7-cp95/first-remote-proof.json)保留；超时根因未证实。下一业务阶段按[开放认领设计/矩阵](ONCALL_OPEN_CLAIM_DESIGN.md)交付真实并发、资格、回滚与页面，不将设计当实现。真实渠道/提醒、DST/日历和生产容量继续，整个目标active。

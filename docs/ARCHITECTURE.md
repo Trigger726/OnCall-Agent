@@ -1,5 +1,7 @@
 # OpsPilot 架构设计
 
+最新 CP98：[真实认领网络、文件库升级和原回执](acceptance/V1.7-checkpoint-98.md)。不改生产代码，提交后实际200销毁未读socket、重启求同原键、当前资格403和最终SQL指纹已验证；自有SQL夹具仅停机后打开已存在受限H2库，禁止替代真实MySQL。[CP97自己MySQL24和19CI](acceptance/V1.7-checkpoint-97.md#6-自己源码实际mysql与远端限定闭合)已限定闭合。新runner自己Linux、专用页面、成员ACL/渠道/DST/生产规模继续，旧失败保留。
+
 最新 CP97：[开放认领后台](acceptance/V1.7-checkpoint-97.md)独立V38与服务，沿用计划锁、账号排序锁、roster覆盖创建和同事务审计；历史请求、操作原回执和覆盖取消事实分离。24共享场景H2通过，实际MySQL24独立CI、新JAR网络/升级重启和专用页面待验，不称全局团队ACL或完整开放认领。[CP96自身远端](acceptance/V1.7-checkpoint-96.md#6-自己源码远端限定通过)18success已限定闭合，历史失败与其余架构路线保留。
 
 最新 CP96：[成对浏览器拦截与有限诊断](acceptance/V1.7-checkpoint-96.md)，只改测试/CI，不改生产Java/DDL/页面/依赖，原14场景和预算保留；Node128/两次14本地通过，自身远端待验，95自己的failure保留。请求ID/阶段/路径有限记录不存头/正文/凭证，原三版本/键仍只手动回执。下一[开放认领设计](ONCALL_OPEN_CLAIM_DESIGN.md)采用独立持久化事务/并发/资格/回滚门禁，但当前未实现；完整架构路线继续。

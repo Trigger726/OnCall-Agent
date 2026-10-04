@@ -1,0 +1,253 @@
+{
+  "status": "FAIL",
+  "comparison": true,
+  "cases": [
+    {
+      "name": "old-v37-omits-open-claim-api",
+      "get404": true,
+      "post404": true,
+      "sourcePreserved": true
+    }
+  ],
+  "jarSha256": "f535d7d587b717c487f84f1f84378d0a3e324d266dee47baf5ce0c22af41d32a",
+  "startedPids": [
+    102168,
+    101924
+  ],
+  "stoppedPids": [
+    102168,
+    101924
+  ],
+  "sqlFixtures": [
+    {
+      "mode": "SNAPSHOT",
+      "pid": 84056,
+      "exitCode": 0,
+      "receipt": {
+        "actualProduct": "H2",
+        "actualVersion": "2.2.220 (2023-07-04)",
+        "migrationCount": 37,
+        "successfulHistoryRows": 38,
+        "history": [
+          {
+            "version": null,
+            "type": "TABLE",
+            "success": true
+          },
+          {
+            "version": "1",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "2",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "3",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "4",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "5",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "6",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "7",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "8",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "9",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "10",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "11",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "12",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "13",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "14",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "15",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "16",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "17",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "18",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "19",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "20",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "21",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "22",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "23",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "24",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "25",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "26",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "27",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "28",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "29",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "30",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "31",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "32",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "33",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "34",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "35",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "36",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "37",
+            "type": "SQL",
+            "success": true
+          }
+        ],
+        "migration38": false,
+        "shifts": 5,
+        "shiftHash": "497a0cd76817b8cd62fbacc6544c3fde39a96d1ecb3bb2d24c1de11446edc904",
+        "designatedHash": "7bb70a6e02da467c833804ab24af85bf3e4252b816f235cc325084df3af422ff",
+        "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "onCallAuditHash": "0dbfc14028b8fae1cc00f90a02017f78b6e8ff5b2a59f80cff2258bcdf65750a",
+        "openRequestHash": null,
+        "openOperationHash": null,
+        "requests": []
+      }
+    }
+  ],
+  "sqlExpectations": [],
+  "transport": "real HTTP to independent production JAR and owned H2 file database",
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "oldJarSha256": "7dfc7abba674517d11591416e18d9e056621d5a45432f74cfea24939444c2e48",
+  "failure": "AssertionError [ERR_ASSERTION]: /on-call/handoffs/1\n\n404 !== 200\n\n    at api (D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-oncall-open-handoff-http-ci.cjs:52:105)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async verify (D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-oncall-open-handoff-http-ci.cjs:101:66)",
+  "ownedProcessesStopped": true,
+  "unexpectedJarErrors": 0,
+  "completeJarLogs": [
+    {
+      "file": "target\\oncall-open-handoff-http-it\\run-SRTsyJ\\jar-1.log",
+      "sha256": "4f92a372dc45ffe9e149032a445300fc187444298f95f58a690fede2f4dc535e"
+    },
+    {
+      "file": "target\\oncall-open-handoff-http-it\\run-SRTsyJ\\jar-2.log",
+      "sha256": "86a30f02d46cdba75b1deb32c88286bf59a0220a00692f5bc9de3e6e315cb7ef"
+    }
+  ]
+}

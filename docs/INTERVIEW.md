@@ -1,5 +1,7 @@
 # OpsPilot 面试讲解与追问
 
+最新 CP98：[认领真实HTTP与重启](acceptance/V1.7-checkpoint-98.md)。可讲真正200后销毁未读socket、同原键重启回执、覆盖独立取消不复活、真实HTTP争抢一200一409和角色失效后旧JWT403；SQL最终只有一回执/一覆盖。[CP97实际MySQL24](acceptance/V1.7-checkpoint-97.md#6-自己源码实际mysql与远端限定闭合)与19CI已验。不可讲新专用页面、实际MySQL有数据升级、团队ACL或生产容量已完成；本轮新runner自己Linux仍待，三次夹具错误公开保留。
+
 最新 CP97：[开放认领后台阶段](acceptance/V1.7-checkpoint-97.md)。可讲本人自主认领、数据库并发唯一赢家、原键与内容回执、审计失败全部回滚，以及历史认领不等于当前覆盖。24H2通过；实际MySQL、新生产包网络/重启和专用页面仍待，不能讲完整功能或团队成员ACL已交付。[CP96自身十八CI](acceptance/V1.7-checkpoint-96.md#6-自己源码远端限定通过)仅闭合其原页面范围，不证明V38或超时唯一根因；历史失败保留。
 
 最新 CP96：[测试生命周期与有界请求证据](acceptance/V1.7-checkpoint-96.md)，Node128/两次真实14页面本地限定通过；95自己的CI为failure，通知12/HTTP3和真实MySQL19/17/27/1/99仅限定通过，根因仍未证实。可讲“真实提交与未转发中断分开、原意图只手动回执、失败证据不覆盖”，不可讲整体全绿/根因已解决。下一步[开放认领](ONCALL_OPEN_CLAIM_DESIGN.md)仅设计，尚无新功能交付；历史范围保留。

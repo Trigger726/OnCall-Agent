@@ -1,6 +1,6 @@
 # 开放接班认领：阶段契约与验收矩阵
 
-状态：**CP97已有后台实现，完整功能仍未交付**，见[97报告](acceptance/V1.7-checkpoint-97.md)。独立V38表、服务及Controller和24个共享场景已实现；本地H2通过不是实际MySQL通过。专用认领页面、生产JAR真实网络丢响应/同库升级重启及新源码自身远端仍待验收。原设计基线为 CP95 `148f6c9`，现有指定接班、双向互换和成对撤销保持独立；不得用它们的通过结果证明开放认领已完成。
+状态：**CP97后台与实际MySQL24已限定闭合，CP98真实网络本地通过，完整功能仍未交付**，见[97追加](acceptance/V1.7-checkpoint-97.md#6-自己源码实际mysql与远端限定闭合)/[98报告](acceptance/V1.7-checkpoint-98.md)。独立V38与本人自主认领已实现；真实生产包默认8/旧库升级10验证原回执/丢响应/重启和取消不复活。新HTTP runner自己的Linux、真实MySQL有数据升级、专用认领页面与桌面手机新旧Demo仍待。原设计基线为 CP95 `148f6c9`，现有指定接班、双向互换和成对撤销保持独立；不得用它们的通过结果证明完整开放认领已完成。
 
 ## 为什么下一阶段做这个
 
@@ -27,7 +27,7 @@
 
 ## CP97已实现后台接口
 
-前缀 `/api/v1/on-call/open-handoffs`。发布正文 `sourceShiftId, sourceVersion, startsAt, endsAt, requestKey, reason`；认领 `POST /{id}/claims` 正文 `version, operationKey, reason`；撤回 `POST /{id}/withdrawals` 为本人明确原版本操作，不删除台账。GET 列表提供可选 `scheduleId`、`scope=ALL/MINE/AVAILABLE`、状态过滤与数据库时间；GET `/{id}` 返回请求；GET `/{id}/coverage` 以一条SQL返回数据库快照、历史请求、独立覆盖和操作回执。认领人始终取认证主体，没有代认领正文参数。Controller已由MockMvc执行，尚未以新生产JAR完成真实网络和重启矩阵。
+前缀 `/api/v1/on-call/open-handoffs`。发布正文 `sourceShiftId, sourceVersion, startsAt, endsAt, requestKey, reason`；认领 `POST /{id}/claims` 正文 `version, operationKey, reason`；撤回 `POST /{id}/withdrawals` 为本人明确原版本操作，不删除台账。GET 列表提供可选 `scheduleId`、`scope=ALL/MINE/AVAILABLE`、状态过滤与数据库时间；GET `/{id}` 返回请求；GET `/{id}/coverage` 以一条SQL返回数据库快照、历史请求、独立覆盖和操作回执。认领人始终取认证主体，没有代认领正文参数。Controller已由H2与实际MySQL24执行，CP98另在真实JAR网络/重启/旧H2有数据升级限定验证；不将其等价于新runner自己的Linux或真实MySQL旧库升级已验。
 
 ## 必须交付的验证矩阵
 

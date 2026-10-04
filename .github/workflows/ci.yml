@@ -433,6 +433,37 @@ jobs:
             target/surefire-reports/
           retention-days: 30
 
+  oncall-open-handoff-http-integration:
+    name: Open handoff real HTTP and persisted restart receipts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Guard complete fresh-source acceptance and SQL migration evidence
+        run: node --test scripts/tests/oncall-open-handoff-http-ci.test.cjs
+      - name: Build fresh own-source executable JAR
+        run: |
+          chmod +x mvnw
+          ./mvnw -B -DskipTests package
+      - name: Verify actual claim loss, restart, consent, concurrency and latest role
+        run: node scripts/verify-oncall-open-handoff-http-ci.cjs
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: oncall-open-handoff-http-evidence
+          path: |
+            target/oncall-open-handoff-http-it/**/*.json
+            target/oncall-open-handoff-http-it/**/*.log
+          retention-days: 30
+
   alertmanager-integration:
     name: Alertmanager webhook integration
     runs-on: ubuntu-latest
@@ -491,7 +522,7 @@ jobs:
 
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, browser-integration, backend-h2, mysql-integration, assistant-native-mysql-integration, assistant-cross-node-mysql-integration, oncall-swap-mysql-integration, oncall-open-handoff-mysql-integration, auth-session-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration, collector-alerting-integration]
+    needs: [frontend, browser-integration, backend-h2, mysql-integration, assistant-native-mysql-integration, assistant-cross-node-mysql-integration, oncall-swap-mysql-integration, oncall-open-handoff-mysql-integration, oncall-open-handoff-http-integration, auth-session-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration, collector-alerting-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
