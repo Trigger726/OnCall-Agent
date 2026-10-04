@@ -1,6 +1,6 @@
 # OpsPilot 验收记录
 
-当前：[88报告](V1.7-checkpoint-88.md)/[本地proof](../assets/v1.7-cp88/local-proof.json)，仅修共用测试CHECK原生错误断言，35定向/双时区451/前端129限定通过，自己的远端/MySQL待验。87自身d119eb7的Run37171869657最终16成功、换班MySQL失败、container跳过，[87第六节](V1.7-checkpoint-87.md)/[九ZIP首次证据](../assets/v1.7-cp87/first-remote-proof.json)保留真实18执行17通过1失败和Linux新九/原14/8/6限定结果；不能把首次失败改称全绿。
+当前CP88已闭环：源码7558b9d的[Run37172618761](https://github.com/Trigger726/OnCall-Agent/actions/runs/37172618761)十八作业全部success，见[88第六节](V1.7-checkpoint-88.md)/[自身远端proof](../assets/v1.7-cp88/remote-proof.json)。九个选定ZIP源HEAD/官方摘要/实际字节及原门禁独立核验；真实MySQL通知18与原换班17零跳过、原生18/兼容99/双JVM六项通过，双时区各451执行/142条件跳过、158新鲜XML，前端129/audit0，Linux新九流程及原14/8/6实页通过，三本轮截图已目视。仅修共用测试的原生CHECK精确断言，生产代码、页面和门禁未改，不制造CP88视觉变化。87首次MySQL失败及旧Demo完整保留；以下按各历史阶段当时范围阅读，不把旧“待验”当本轮终态。
 
 当前检查点：[V1.7-checkpoint-87.md](V1.7-checkpoint-87.md)，LOCAL_SCOPE_PASS_REMOTE_PENDING。[本地机器证据](../assets/v1.7-cp87/local-proof.json)包含双时区各451执行/79新鲜XML、新通知18、九新通知页面和原14/8/6、前端129/Node113/audit0，以及新旧八图/原失败。实际MySQL和本轮源码CI待验，不借以下86全绿证明87；bccd96a文档自身tracing网络失败亦保留。
 

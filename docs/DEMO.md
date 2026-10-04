@@ -1,6 +1,6 @@
 # OpsPilot 10 分钟演示脚本
 
-CP88没有新视觉效果：仅改通知CHECK故障测试，生产JAR/source/UI与87相同。87本次Linux新增九通知/原14/8/6已独立复核，实际双方回执/390px冻结恢复/409锁定三图已目视，见[87第六节](acceptance/V1.7-checkpoint-87.md)；该整轮MySQL失败不能称全绿。88自己的新MySQL回滚验收尚待，[88报告](acceptance/V1.7-checkpoint-88.md)。旧86/87新旧截图、原失败与历史Demo持续保留，不以测试修正制造新页面效果。
+当前CP88已闭环：源码7558b9d的[Run37172618761](https://github.com/Trigger726/OnCall-Agent/actions/runs/37172618761)十八作业全部success，见[88第六节](acceptance/V1.7-checkpoint-88.md)/[自身远端proof](assets/v1.7-cp88/remote-proof.json)。九个选定ZIP源HEAD/官方摘要/实际字节及原门禁独立核验；真实MySQL通知18与原换班17零跳过、原生18/兼容99/双JVM六项通过，双时区各451执行/142条件跳过、158新鲜XML，前端129/audit0，Linux新九流程及原14/8/6实页通过，三本轮截图已目视。仅修共用测试的原生CHECK精确断言，生产代码、页面和门禁未改，不制造CP88视觉变化。87首次MySQL失败及旧Demo完整保留；以下按各历史阶段当时范围阅读，不把旧“待验”当本轮终态。 本轮[双方确认桌面](assets/v1.7-cp88/remote/both-accepted-desktop.png)/[390px冻结恢复](assets/v1.7-cp88/remote/retry-recovery-mobile.png)/[409锁定](assets/v1.7-cp88/remote/conflict-locked-desktop.png)可与86/87历史效果对照。
 
 ## CP87：通知技术回执不代替本人决定
 

@@ -1,6 +1,6 @@
 # OpsPilot 高价值迭代路线
 
-当前CP88仅修通知回滚测试对MySQL CHECK异常类别的错误假设，不改业务/页面/门禁：[88报告](acceptance/V1.7-checkpoint-88.md)/[本地proof](assets/v1.7-cp88/local-proof.json)。35定向与双时区各451执行通过，自己的MySQL十八通知/Linux CI待验。87原源d119eb7十六success、换班MySQL failure、容器skipped；九ZIP/原门禁/158 XML与Linux九通知/原14/8/6限定复核，[87第六节](acceptance/V1.7-checkpoint-87.md)。下一步先取得88自己的十八全执行/联合回滚证据，再继续通知保留清理、真实渠道/提醒、开放认领、成对撤销、DST/日历与原完整路线；旧失败/Demo不删。
+当前CP88已闭环：源码7558b9d的[Run37172618761](https://github.com/Trigger726/OnCall-Agent/actions/runs/37172618761)十八作业全部success，见[88第六节](acceptance/V1.7-checkpoint-88.md)/[自身远端proof](assets/v1.7-cp88/remote-proof.json)。九个选定ZIP源HEAD/官方摘要/实际字节及原门禁独立核验；真实MySQL通知18与原换班17零跳过、原生18/兼容99/双JVM六项通过，双时区各451执行/142条件跳过、158新鲜XML，前端129/audit0，Linux新九流程及原14/8/6实页通过，三本轮截图已目视。仅修共用测试的原生CHECK精确断言，生产代码、页面和门禁未改，不制造CP88视觉变化。87首次MySQL失败及旧Demo完整保留；以下按各历史阶段当时范围阅读，不把旧“待验”当本轮终态。 下一步优先通知载荷保留/清理的租约与人工回执边界，再继续真实渠道/提醒、开放认领、成对撤销、DST/日历及生产容量；整个目标未完成。
 
 当前CP87通知能力已取得本地限定证据，源码CI/MySQL待验：[87报告](acceptance/V1.7-checkpoint-87.md)/[本地proof](assets/v1.7-cp87/local-proof.json)。同事务冻结通知/稳定键、独立有界worker、自动有限退避/租约围栏和人工原版本恢复，新18项与九真实页面通过；默认关闭、2xx不代替参与者确认。旧14/8/6实页保留，前端129、Node113、双时区451实际执行。下一步先闭环本轮18项真实MySQL/Linux，再继续通知保留清理、真实账户/自动提醒、开放认领、成对撤销、DST和生产容量；不宣称整体完成。以下为历史源状态，bccd96a文档CI的下载网络失败已另留87第三节。
 

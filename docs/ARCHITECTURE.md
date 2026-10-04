@@ -1,6 +1,6 @@
 # OpsPilot 架构设计
 
-CP88只校正共用通知回滚测试的原生CHECK分类：实际JDBC产品、错误码/SQLState/约束名精准断言，原业务及投递/MySQL门禁未改。本地35/双时区451通过，自身MySQL/Linux待验；87首次MySQL17/18及整体失败和Linux九实页/原14/8/6限定证据不覆盖，见[88报告](acceptance/V1.7-checkpoint-88.md)/[87首次结果](acceptance/V1.7-checkpoint-87.md)。完整路线继续。
+当前CP88已闭环：源码7558b9d的[Run37172618761](https://github.com/Trigger726/OnCall-Agent/actions/runs/37172618761)十八作业全部success，见[88第六节](acceptance/V1.7-checkpoint-88.md)/[自身远端proof](assets/v1.7-cp88/remote-proof.json)。九个选定ZIP源HEAD/官方摘要/实际字节及原门禁独立核验；真实MySQL通知18与原换班17零跳过、原生18/兼容99/双JVM六项通过，双时区各451执行/142条件跳过、158新鲜XML，前端129/audit0，Linux新九流程及原14/8/6实页通过，三本轮截图已目视。仅修共用测试的原生CHECK精确断言，生产代码、页面和门禁未改，不制造CP88视觉变化。87首次MySQL失败及旧Demo完整保留；以下按各历史阶段当时范围阅读，不把旧“待验”当本轮终态。
 
 ## CP87换班通知与独立技术投递事实
 
