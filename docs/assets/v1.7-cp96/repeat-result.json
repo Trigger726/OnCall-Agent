@@ -1,0 +1,2128 @@
+{
+  "status": "PASS",
+  "baselineCapture": false,
+  "jarSha256": "7dfc7abba674517d11591416e18d9e056621d5a45432f74cfea24939444c2e48",
+  "cases": [
+    {
+      "name": "participants-and-auditor-read-without-manager-write-control",
+      "acceptedHistoryVisible": true
+    },
+    {
+      "name": "storage-quota-before-first-post",
+      "posts": 0
+    },
+    {
+      "name": "real-committed-response-loss-reload-and-original-paired-ack",
+      "posts": 2,
+      "actualForwardedCommit200": true,
+      "browserResponseAborted": true,
+      "noAutomaticPost": true,
+      "capturedVersions": [
+        1,
+        0,
+        0
+      ],
+      "sameOriginalCommand": true,
+      "audits": 3,
+      "nonemptyThreeNotificationsUnchanged": true
+    },
+    {
+      "name": "fresh-pair-read500-clears-facts-without-first-post",
+      "swapId": 2,
+      "posts": 0,
+      "oldFactsCleared": true,
+      "noStorageFreeze": true
+    },
+    {
+      "name": "actual-owned-sql-expiry-before-first-post",
+      "swapId": 3,
+      "posts": 0,
+      "noNewAudit": true
+    },
+    {
+      "name": "actual-single-cancel409-persists-original-lock-after-reload",
+      "swapId": 4,
+      "noVersionRebase": true,
+      "counterpartUnchanged": true
+    },
+    {
+      "name": "foreign-detail-keeps-original-key-until-manual-original-ack",
+      "originalSwapId": 5,
+      "otherSwapId": 6
+    },
+    {
+      "name": "corrupt-cache-retained-until-explicit-local-discard",
+      "noServerRevocation": true
+    },
+    {
+      "name": "actual-late200-after-detail-unmount-keeps-original-intent",
+      "actualLate200": true,
+      "otherFactsPreserved": true
+    },
+    {
+      "name": "actual-late200-after-real-spa-account-switch-protects-new-manager-intent",
+      "sameDocument": true,
+      "actualLate200": true,
+      "originalAndNewActorIntentsPreserved": true
+    },
+    {
+      "name": "actual-late200-after-same-user-new-token-protects-replacement-intent",
+      "sameUserDifferentToken": true,
+      "actualLate200": true,
+      "noNewIntentCleared": true
+    },
+    {
+      "name": "successful-receipt-storage-clear-failure-keeps-original-only",
+      "audits": 3
+    },
+    {
+      "name": "actual-independent-cancel-before-first-post-clears-new-eligibility",
+      "posts": 0,
+      "capturedVersionsNotRebased": true,
+      "counterpartUnchanged": true
+    },
+    {
+      "name": "actual-current-qualification403-persists-original-lock",
+      "swapId": 12,
+      "actualHttp403": true,
+      "noCancellationOrNewAudit": true,
+      "lockSurvivesRoleRestoration": true
+    }
+  ],
+  "screenshots": [
+    "entry-admin-desktop.png",
+    "accepted-desktop.png",
+    "accepted-mobile.png",
+    "entry-zhangwei-desktop.png",
+    "entry-auditor-desktop.png",
+    "original-ack-desktop.png",
+    "revoked-mobile.png",
+    "original-ack-mobile.png",
+    "revoked-receipt-mobile.png",
+    "revoked-receipt-desktop.png",
+    "expired-desktop.png",
+    "partial409-desktop.png",
+    "entry-lina-desktop.png"
+  ],
+  "pageErrors": [],
+  "consoleLogs": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 409 ()",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 403 ()"
+  ],
+  "rejected": [
+    {
+      "status": 500,
+      "path": "/api/v1/on-call/swaps/2/coverage"
+    },
+    {
+      "status": 409,
+      "path": "/api/v1/on-call/swaps/4/coverage/revoke"
+    },
+    {
+      "status": 403,
+      "path": "/api/v1/on-call/swaps/12/coverage/revoke"
+    }
+  ],
+  "routeErrors": [],
+  "browserPath": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "fixtureJdbcInvocations": [
+    {
+      "pid": 84552,
+      "exitCode": 0,
+      "changed": 3,
+      "swapId": 3,
+      "actualProduct": "H2"
+    },
+    {
+      "pid": 95304,
+      "exitCode": 0,
+      "changed": 1,
+      "actorId": 3,
+      "mode": "DEMOTE",
+      "actualProduct": "H2"
+    },
+    {
+      "pid": 95816,
+      "exitCode": 0,
+      "changed": 1,
+      "actorId": 3,
+      "mode": "RESTORE",
+      "actualProduct": "H2"
+    }
+  ],
+  "heldResponseReceipts": [
+    {
+      "swapId": 7,
+      "actualForwardedStatus": 200,
+      "posts": 1,
+      "responseHeldUntilExplicitRelease": true
+    },
+    {
+      "swapId": 8,
+      "actualForwardedStatus": 200,
+      "posts": 1,
+      "responseHeldUntilExplicitRelease": true
+    },
+    {
+      "swapId": 9,
+      "actualForwardedStatus": 200,
+      "posts": 1,
+      "responseHeldUntilExplicitRelease": true
+    }
+  ],
+  "visualBounds": [
+    {
+      "name": "accepted-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 84.109375,
+      "frameLeft": 248,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "accepted-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 84.1875,
+      "frameLeft": 0,
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "original-ack-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 84.109375,
+      "frameLeft": 248,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "revoked-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 84.1875,
+      "frameLeft": 0,
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "original-ack-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 84.390625,
+      "frameLeft": 0,
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "revoked-receipt-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 84.1875,
+      "frameLeft": 0,
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "revoked-receipt-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 84.109375,
+      "frameLeft": 248,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "expired-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 84.453125,
+      "frameLeft": 248,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "partial409-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 83.625,
+      "frameLeft": 248,
+      "viewport": 1440,
+      "documentWidth": 1440
+    }
+  ],
+  "abortedCommandReceipts": [
+    {
+      "swapId": 1,
+      "posts": 1,
+      "actualForwardedCommit200": true,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "swapId": 4,
+      "posts": 1,
+      "actualForwardedCommit200": false,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "swapId": 5,
+      "posts": 1,
+      "actualForwardedCommit200": false,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "swapId": 6,
+      "posts": 1,
+      "actualForwardedCommit200": false,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "swapId": 6,
+      "posts": 1,
+      "actualForwardedCommit200": false,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "swapId": 12,
+      "posts": 1,
+      "actualForwardedCommit200": false,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    }
+  ],
+  "networkTrace": [
+    {
+      "phase": "request",
+      "requestId": 1,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 19761
+    },
+    {
+      "phase": "response",
+      "requestId": 1,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 19774,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 1,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 19775
+    },
+    {
+      "phase": "request",
+      "requestId": 2,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 21138
+    },
+    {
+      "phase": "response",
+      "requestId": 2,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 21141,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 2,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 21141
+    },
+    {
+      "phase": "request",
+      "requestId": 3,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 21927
+    },
+    {
+      "phase": "response",
+      "requestId": 3,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 21931,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 3,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 21931
+    },
+    {
+      "phase": "request",
+      "requestId": 4,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 22272
+    },
+    {
+      "phase": "response",
+      "requestId": 4,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 22278,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 4,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 22279
+    },
+    {
+      "phase": "request",
+      "requestId": 5,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 22334
+    },
+    {
+      "phase": "response",
+      "requestId": 5,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 22344,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 5,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 22344
+    },
+    {
+      "phase": "request",
+      "requestId": 6,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/1/coverage/revoke",
+      "elapsedMs": 22346
+    },
+    {
+      "phase": "committed-fetch-start",
+      "requestId": 6,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/1/coverage/revoke",
+      "elapsedMs": 22347
+    },
+    {
+      "phase": "committed-fetch-end",
+      "requestId": 6,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/1/coverage/revoke",
+      "elapsedMs": 22395,
+      "status": 200
+    },
+    {
+      "phase": "abort-complete",
+      "requestId": 6,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/1/coverage/revoke",
+      "elapsedMs": 22401
+    },
+    {
+      "phase": "failed",
+      "requestId": 6,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/1/coverage/revoke",
+      "elapsedMs": 22403
+    },
+    {
+      "phase": "request",
+      "requestId": 7,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 22404
+    },
+    {
+      "phase": "response",
+      "requestId": 7,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 22420,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 7,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 22420
+    },
+    {
+      "phase": "request",
+      "requestId": 8,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 22663
+    },
+    {
+      "phase": "response",
+      "requestId": 8,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 22666,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 8,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 22666
+    },
+    {
+      "phase": "request",
+      "requestId": 9,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/1/coverage/revoke",
+      "elapsedMs": 23116
+    },
+    {
+      "phase": "response",
+      "requestId": 9,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/1/coverage/revoke",
+      "elapsedMs": 23124,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 9,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/1/coverage/revoke",
+      "elapsedMs": 23125
+    },
+    {
+      "phase": "request",
+      "requestId": 10,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 23131
+    },
+    {
+      "phase": "response",
+      "requestId": 10,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 23137,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 10,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/1/coverage",
+      "elapsedMs": 23138
+    },
+    {
+      "phase": "request",
+      "requestId": 11,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/2/coverage",
+      "elapsedMs": 23669
+    },
+    {
+      "phase": "response",
+      "requestId": 11,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/2/coverage",
+      "elapsedMs": 23672,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 11,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/2/coverage",
+      "elapsedMs": 23673
+    },
+    {
+      "phase": "request",
+      "requestId": 12,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/2/coverage",
+      "elapsedMs": 23762
+    },
+    {
+      "phase": "response",
+      "requestId": 12,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/2/coverage",
+      "elapsedMs": 23766,
+      "status": 500
+    },
+    {
+      "phase": "finished",
+      "requestId": 12,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/2/coverage",
+      "elapsedMs": 23767
+    },
+    {
+      "phase": "request",
+      "requestId": 13,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/2/coverage",
+      "elapsedMs": 23798
+    },
+    {
+      "phase": "response",
+      "requestId": 13,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/2/coverage",
+      "elapsedMs": 23804,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 13,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/2/coverage",
+      "elapsedMs": 23805
+    },
+    {
+      "phase": "request",
+      "requestId": 14,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/2/coverage",
+      "elapsedMs": 23860
+    },
+    {
+      "phase": "response",
+      "requestId": 14,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/2/coverage",
+      "elapsedMs": 23864,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 14,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/2/coverage",
+      "elapsedMs": 23864
+    },
+    {
+      "phase": "request",
+      "requestId": 15,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/3/coverage",
+      "elapsedMs": 24019
+    },
+    {
+      "phase": "response",
+      "requestId": 15,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/3/coverage",
+      "elapsedMs": 24023,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 15,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/3/coverage",
+      "elapsedMs": 24023
+    },
+    {
+      "phase": "request",
+      "requestId": 16,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/3/coverage",
+      "elapsedMs": 24606
+    },
+    {
+      "phase": "response",
+      "requestId": 16,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/3/coverage",
+      "elapsedMs": 24611,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 16,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/3/coverage",
+      "elapsedMs": 24611
+    },
+    {
+      "phase": "request",
+      "requestId": 17,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/3/coverage",
+      "elapsedMs": 24751
+    },
+    {
+      "phase": "response",
+      "requestId": 17,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/3/coverage",
+      "elapsedMs": 24755,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 17,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/3/coverage",
+      "elapsedMs": 24755
+    },
+    {
+      "phase": "request",
+      "requestId": 18,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 24895
+    },
+    {
+      "phase": "response",
+      "requestId": 18,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 24898,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 18,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 24899
+    },
+    {
+      "phase": "request",
+      "requestId": 19,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 24988
+    },
+    {
+      "phase": "response",
+      "requestId": 19,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 24995,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 19,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 24995
+    },
+    {
+      "phase": "request",
+      "requestId": 20,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/4/coverage/revoke",
+      "elapsedMs": 24996
+    },
+    {
+      "phase": "unforwarded-abort-start",
+      "requestId": 20,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/4/coverage/revoke",
+      "elapsedMs": 24996
+    },
+    {
+      "phase": "abort-complete",
+      "requestId": 20,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/4/coverage/revoke",
+      "elapsedMs": 24997
+    },
+    {
+      "phase": "failed",
+      "requestId": 20,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/4/coverage/revoke",
+      "elapsedMs": 24998
+    },
+    {
+      "phase": "request",
+      "requestId": 21,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 24999
+    },
+    {
+      "phase": "response",
+      "requestId": 21,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 25005,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 21,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 25005
+    },
+    {
+      "phase": "request",
+      "requestId": 22,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/4/coverage/revoke",
+      "elapsedMs": 25057
+    },
+    {
+      "phase": "response",
+      "requestId": 22,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/4/coverage/revoke",
+      "elapsedMs": 25067,
+      "status": 409
+    },
+    {
+      "phase": "finished",
+      "requestId": 22,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/4/coverage/revoke",
+      "elapsedMs": 25067
+    },
+    {
+      "phase": "request",
+      "requestId": 23,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 25068
+    },
+    {
+      "phase": "response",
+      "requestId": 23,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 25075,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 23,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 25075
+    },
+    {
+      "phase": "request",
+      "requestId": 24,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 25278
+    },
+    {
+      "phase": "response",
+      "requestId": 24,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 25281,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 24,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 25281
+    },
+    {
+      "phase": "request",
+      "requestId": 25,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 25472
+    },
+    {
+      "phase": "response",
+      "requestId": 25,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 25477,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 25,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/4/coverage",
+      "elapsedMs": 25477
+    },
+    {
+      "phase": "request",
+      "requestId": 26,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 25661
+    },
+    {
+      "phase": "response",
+      "requestId": 26,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 25664,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 26,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 25664
+    },
+    {
+      "phase": "request",
+      "requestId": 27,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 25752
+    },
+    {
+      "phase": "response",
+      "requestId": 27,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 25758,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 27,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 25760
+    },
+    {
+      "phase": "request",
+      "requestId": 28,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/5/coverage/revoke",
+      "elapsedMs": 25761
+    },
+    {
+      "phase": "unforwarded-abort-start",
+      "requestId": 28,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/5/coverage/revoke",
+      "elapsedMs": 25761
+    },
+    {
+      "phase": "abort-complete",
+      "requestId": 28,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/5/coverage/revoke",
+      "elapsedMs": 25762
+    },
+    {
+      "phase": "failed",
+      "requestId": 28,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/5/coverage/revoke",
+      "elapsedMs": 25764
+    },
+    {
+      "phase": "request",
+      "requestId": 29,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 25766
+    },
+    {
+      "phase": "response",
+      "requestId": 29,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 25772,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 29,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 25773
+    },
+    {
+      "phase": "request",
+      "requestId": 30,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 25875
+    },
+    {
+      "phase": "response",
+      "requestId": 30,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 25877,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 30,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 25877
+    },
+    {
+      "phase": "request",
+      "requestId": 31,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 25999
+    },
+    {
+      "phase": "response",
+      "requestId": 31,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 26003,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 31,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 26003
+    },
+    {
+      "phase": "request",
+      "requestId": 32,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/5/coverage/revoke",
+      "elapsedMs": 26058
+    },
+    {
+      "phase": "response",
+      "requestId": 32,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/5/coverage/revoke",
+      "elapsedMs": 26071,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 32,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/5/coverage/revoke",
+      "elapsedMs": 26071
+    },
+    {
+      "phase": "request",
+      "requestId": 33,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 26073
+    },
+    {
+      "phase": "response",
+      "requestId": 33,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 26080,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 33,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/5/coverage",
+      "elapsedMs": 26080
+    },
+    {
+      "phase": "request",
+      "requestId": 34,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 26317
+    },
+    {
+      "phase": "response",
+      "requestId": 34,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 26318,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 34,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 26319
+    },
+    {
+      "phase": "request",
+      "requestId": 35,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 26403
+    },
+    {
+      "phase": "response",
+      "requestId": 35,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 26408,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 35,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 26409
+    },
+    {
+      "phase": "request",
+      "requestId": 36,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/7/coverage",
+      "elapsedMs": 26558
+    },
+    {
+      "phase": "response",
+      "requestId": 36,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/7/coverage",
+      "elapsedMs": 26574,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 36,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/7/coverage",
+      "elapsedMs": 26574
+    },
+    {
+      "phase": "request",
+      "requestId": 37,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/7/coverage",
+      "elapsedMs": 26668
+    },
+    {
+      "phase": "response",
+      "requestId": 37,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/7/coverage",
+      "elapsedMs": 26674,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 37,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/7/coverage",
+      "elapsedMs": 26676
+    },
+    {
+      "phase": "request",
+      "requestId": 38,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/7/coverage/revoke",
+      "elapsedMs": 26677
+    },
+    {
+      "phase": "request",
+      "requestId": 39,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 26787
+    },
+    {
+      "phase": "response",
+      "requestId": 39,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 26794,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 39,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 26794
+    },
+    {
+      "phase": "response",
+      "requestId": 38,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/7/coverage/revoke",
+      "elapsedMs": 26816,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 38,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/7/coverage/revoke",
+      "elapsedMs": 26817
+    },
+    {
+      "phase": "request",
+      "requestId": 40,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/7/coverage",
+      "elapsedMs": 26919
+    },
+    {
+      "phase": "response",
+      "requestId": 40,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/7/coverage",
+      "elapsedMs": 26922,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 40,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/7/coverage",
+      "elapsedMs": 26922
+    },
+    {
+      "phase": "request",
+      "requestId": 41,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/7/coverage/revoke",
+      "elapsedMs": 26970
+    },
+    {
+      "phase": "response",
+      "requestId": 41,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/7/coverage/revoke",
+      "elapsedMs": 26981,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 41,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/7/coverage/revoke",
+      "elapsedMs": 26981
+    },
+    {
+      "phase": "request",
+      "requestId": 42,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/7/coverage",
+      "elapsedMs": 26984
+    },
+    {
+      "phase": "response",
+      "requestId": 42,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/7/coverage",
+      "elapsedMs": 26991,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 42,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/7/coverage",
+      "elapsedMs": 26991
+    },
+    {
+      "phase": "request",
+      "requestId": 43,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/8/coverage",
+      "elapsedMs": 27139
+    },
+    {
+      "phase": "response",
+      "requestId": 43,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/8/coverage",
+      "elapsedMs": 27141,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 43,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/8/coverage",
+      "elapsedMs": 27141
+    },
+    {
+      "phase": "request",
+      "requestId": 44,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/8/coverage",
+      "elapsedMs": 27252
+    },
+    {
+      "phase": "response",
+      "requestId": 44,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/8/coverage",
+      "elapsedMs": 27260,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 44,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/8/coverage",
+      "elapsedMs": 27260
+    },
+    {
+      "phase": "request",
+      "requestId": 45,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/8/coverage/revoke",
+      "elapsedMs": 27261
+    },
+    {
+      "phase": "request",
+      "requestId": 46,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 27566
+    },
+    {
+      "phase": "response",
+      "requestId": 46,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 27572,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 46,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 27572
+    },
+    {
+      "phase": "request",
+      "requestId": 47,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 27681
+    },
+    {
+      "phase": "response",
+      "requestId": 47,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 27686,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 47,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 27687
+    },
+    {
+      "phase": "request",
+      "requestId": 48,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/6/coverage/revoke",
+      "elapsedMs": 27687
+    },
+    {
+      "phase": "unforwarded-abort-start",
+      "requestId": 48,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/6/coverage/revoke",
+      "elapsedMs": 27687
+    },
+    {
+      "phase": "abort-complete",
+      "requestId": 48,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/6/coverage/revoke",
+      "elapsedMs": 27688
+    },
+    {
+      "phase": "failed",
+      "requestId": 48,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/6/coverage/revoke",
+      "elapsedMs": 27690
+    },
+    {
+      "phase": "request",
+      "requestId": 49,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 27691
+    },
+    {
+      "phase": "response",
+      "requestId": 49,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 27697,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 49,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 27697
+    },
+    {
+      "phase": "response",
+      "requestId": 45,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/8/coverage/revoke",
+      "elapsedMs": 27706,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 45,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/8/coverage/revoke",
+      "elapsedMs": 27706
+    },
+    {
+      "phase": "request",
+      "requestId": 50,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/8/coverage",
+      "elapsedMs": 28000
+    },
+    {
+      "phase": "response",
+      "requestId": 50,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/8/coverage",
+      "elapsedMs": 28007,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 50,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/8/coverage",
+      "elapsedMs": 28007
+    },
+    {
+      "phase": "request",
+      "requestId": 51,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/8/coverage/revoke",
+      "elapsedMs": 28066
+    },
+    {
+      "phase": "response",
+      "requestId": 51,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/8/coverage/revoke",
+      "elapsedMs": 28072,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 51,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/8/coverage/revoke",
+      "elapsedMs": 28072
+    },
+    {
+      "phase": "request",
+      "requestId": 52,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/8/coverage",
+      "elapsedMs": 28077
+    },
+    {
+      "phase": "response",
+      "requestId": 52,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/8/coverage",
+      "elapsedMs": 28083,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 52,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/8/coverage",
+      "elapsedMs": 28084
+    },
+    {
+      "phase": "request",
+      "requestId": 53,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/9/coverage",
+      "elapsedMs": 28217
+    },
+    {
+      "phase": "response",
+      "requestId": 53,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/9/coverage",
+      "elapsedMs": 28220,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 53,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/9/coverage",
+      "elapsedMs": 28220
+    },
+    {
+      "phase": "request",
+      "requestId": 54,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/9/coverage",
+      "elapsedMs": 28315
+    },
+    {
+      "phase": "response",
+      "requestId": 54,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/9/coverage",
+      "elapsedMs": 28320,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 54,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/9/coverage",
+      "elapsedMs": 28322
+    },
+    {
+      "phase": "request",
+      "requestId": 55,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/9/coverage/revoke",
+      "elapsedMs": 28323
+    },
+    {
+      "phase": "request",
+      "requestId": 56,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28629
+    },
+    {
+      "phase": "response",
+      "requestId": 56,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28636,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 56,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28636
+    },
+    {
+      "phase": "request",
+      "requestId": 57,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28718
+    },
+    {
+      "phase": "response",
+      "requestId": 57,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28723,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 57,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28723
+    },
+    {
+      "phase": "request",
+      "requestId": 58,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28923
+    },
+    {
+      "phase": "response",
+      "requestId": 58,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28928,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 58,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28929
+    },
+    {
+      "phase": "request",
+      "requestId": 59,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/6/coverage/revoke",
+      "elapsedMs": 28930
+    },
+    {
+      "phase": "unforwarded-abort-start",
+      "requestId": 59,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/6/coverage/revoke",
+      "elapsedMs": 28930
+    },
+    {
+      "phase": "abort-complete",
+      "requestId": 59,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/6/coverage/revoke",
+      "elapsedMs": 28931
+    },
+    {
+      "phase": "failed",
+      "requestId": 59,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/6/coverage/revoke",
+      "elapsedMs": 28933
+    },
+    {
+      "phase": "request",
+      "requestId": 60,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28934
+    },
+    {
+      "phase": "response",
+      "requestId": 60,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28939,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 60,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28939
+    },
+    {
+      "phase": "response",
+      "requestId": 55,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/9/coverage/revoke",
+      "elapsedMs": 28951,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 55,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/9/coverage/revoke",
+      "elapsedMs": 28952
+    },
+    {
+      "phase": "request",
+      "requestId": 61,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/6/coverage/revoke",
+      "elapsedMs": 28973
+    },
+    {
+      "phase": "response",
+      "requestId": 61,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/6/coverage/revoke",
+      "elapsedMs": 28981,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 61,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/6/coverage/revoke",
+      "elapsedMs": 28982
+    },
+    {
+      "phase": "request",
+      "requestId": 62,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28985
+    },
+    {
+      "phase": "response",
+      "requestId": 62,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28991,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 62,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/6/coverage",
+      "elapsedMs": 28992
+    },
+    {
+      "phase": "request",
+      "requestId": 63,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/10/coverage",
+      "elapsedMs": 29159
+    },
+    {
+      "phase": "response",
+      "requestId": 63,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/10/coverage",
+      "elapsedMs": 29162,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 63,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/10/coverage",
+      "elapsedMs": 29162
+    },
+    {
+      "phase": "request",
+      "requestId": 64,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/10/coverage",
+      "elapsedMs": 29269
+    },
+    {
+      "phase": "response",
+      "requestId": 64,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/10/coverage",
+      "elapsedMs": 29276,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 64,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/10/coverage",
+      "elapsedMs": 29277
+    },
+    {
+      "phase": "request",
+      "requestId": 65,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/10/coverage/revoke",
+      "elapsedMs": 29278
+    },
+    {
+      "phase": "response",
+      "requestId": 65,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/10/coverage/revoke",
+      "elapsedMs": 29290,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 65,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/10/coverage/revoke",
+      "elapsedMs": 29290
+    },
+    {
+      "phase": "request",
+      "requestId": 66,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/10/coverage",
+      "elapsedMs": 29293
+    },
+    {
+      "phase": "response",
+      "requestId": 66,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/10/coverage",
+      "elapsedMs": 29301,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 66,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/10/coverage",
+      "elapsedMs": 29301
+    },
+    {
+      "phase": "request",
+      "requestId": 67,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/10/coverage/revoke",
+      "elapsedMs": 29422
+    },
+    {
+      "phase": "response",
+      "requestId": 67,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/10/coverage/revoke",
+      "elapsedMs": 29426,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 67,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/10/coverage/revoke",
+      "elapsedMs": 29426
+    },
+    {
+      "phase": "request",
+      "requestId": 68,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/10/coverage",
+      "elapsedMs": 29430
+    },
+    {
+      "phase": "response",
+      "requestId": 68,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/10/coverage",
+      "elapsedMs": 29437,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 68,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/10/coverage",
+      "elapsedMs": 29437
+    },
+    {
+      "phase": "request",
+      "requestId": 69,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/11/coverage",
+      "elapsedMs": 29588
+    },
+    {
+      "phase": "response",
+      "requestId": 69,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/11/coverage",
+      "elapsedMs": 29591,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 69,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/11/coverage",
+      "elapsedMs": 29591
+    },
+    {
+      "phase": "request",
+      "requestId": 70,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/11/coverage",
+      "elapsedMs": 29717
+    },
+    {
+      "phase": "response",
+      "requestId": 70,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/11/coverage",
+      "elapsedMs": 29722,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 70,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/11/coverage",
+      "elapsedMs": 29722
+    },
+    {
+      "phase": "request",
+      "requestId": 71,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/11/coverage",
+      "elapsedMs": 29793
+    },
+    {
+      "phase": "response",
+      "requestId": 71,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/11/coverage",
+      "elapsedMs": 29797,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 71,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/11/coverage",
+      "elapsedMs": 29797
+    },
+    {
+      "phase": "request",
+      "requestId": 72,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 30546
+    },
+    {
+      "phase": "response",
+      "requestId": 72,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 30556,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 72,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 30559
+    },
+    {
+      "phase": "request",
+      "requestId": 73,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 30674
+    },
+    {
+      "phase": "response",
+      "requestId": 73,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 30681,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 73,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 30681
+    },
+    {
+      "phase": "request",
+      "requestId": 74,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/12/coverage/revoke",
+      "elapsedMs": 30683
+    },
+    {
+      "phase": "unforwarded-abort-start",
+      "requestId": 74,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/12/coverage/revoke",
+      "elapsedMs": 30683
+    },
+    {
+      "phase": "abort-complete",
+      "requestId": 74,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/12/coverage/revoke",
+      "elapsedMs": 30684
+    },
+    {
+      "phase": "failed",
+      "requestId": 74,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/12/coverage/revoke",
+      "elapsedMs": 30685
+    },
+    {
+      "phase": "request",
+      "requestId": 75,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 30686
+    },
+    {
+      "phase": "response",
+      "requestId": 75,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 30693,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 75,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 30693
+    },
+    {
+      "phase": "request",
+      "requestId": 76,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/12/coverage/revoke",
+      "elapsedMs": 31123
+    },
+    {
+      "phase": "response",
+      "requestId": 76,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/12/coverage/revoke",
+      "elapsedMs": 31160,
+      "status": 403
+    },
+    {
+      "phase": "finished",
+      "requestId": 76,
+      "method": "POST",
+      "path": "/api/v1/on-call/swaps/12/coverage/revoke",
+      "elapsedMs": 31160
+    },
+    {
+      "phase": "request",
+      "requestId": 77,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 31161
+    },
+    {
+      "phase": "response",
+      "requestId": 77,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 31167,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 77,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 31168
+    },
+    {
+      "phase": "request",
+      "requestId": 78,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 31351
+    },
+    {
+      "phase": "response",
+      "requestId": 78,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 31353,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 78,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 31353
+    },
+    {
+      "phase": "request",
+      "requestId": 79,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 31950
+    },
+    {
+      "phase": "response",
+      "requestId": 79,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 31953,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 79,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 31953
+    },
+    {
+      "phase": "request",
+      "requestId": 80,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 32033
+    },
+    {
+      "phase": "response",
+      "requestId": 80,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 32038,
+      "status": 200
+    },
+    {
+      "phase": "finished",
+      "requestId": 80,
+      "method": "GET",
+      "path": "/api/v1/on-call/swaps/12/coverage",
+      "elapsedMs": 32038
+    }
+  ],
+  "productionJvmPid": 111688,
+  "browser": "154.0.8037.93",
+  "pageIdentity": true,
+  "noBlank": true,
+  "noOverlay": true,
+  "mobileDocumentWidth": 390,
+  "networkTraceOmitted": 0,
+  "ownedProcessStopped": true,
+  "unexpectedJarErrors": 0
+}

@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+最新 CP96：[报告](V1.7-checkpoint-96.md)/[本地proof](../assets/v1.7-cp96/local-proof.json)，Node128、两次完整成对14本地限定通过，自己的新源码CI待验。前一148f6c9/[Run37205769613](https://github.com/Trigger726/OnCall-Agent/actions/runs/37205769613)实际16success/浏览器failure/镜像skipped，[95第六节](V1.7-checkpoint-95.md#6-自己源码远端通知通过成对页面新失败)完整保留新失败；通知12/HTTP3/MySQL限定通过不当整轮全绿。根因未证实，旧Demo保留，完整目标active。
+
 最新 CP95：[通知拦截生命周期与有限诊断](V1.7-checkpoint-95.md)/[本地证据](../assets/v1.7-cp95/local-proof.json)，Node121/前端147、通知12/成对页面14/HTTP3限定通过，新源码自身CI待验。前一 afd5cfb 的 [Run37204083856](https://github.com/Trigger726/OnCall-Agent/actions/runs/37204083856)实际18作业success，[第二次远端proof](../assets/v1.7-cp94/second-remote-proof.json)核验限定范围；不覆盖首次failure，不证明超时根因已解决。历史Demo和完整路线保留。
 
 最新 CP94：[成对撤销页面与原意图围栏](V1.7-checkpoint-94.md)本地限定通过，见[275记录证据与七张新旧图](../assets/v1.7-cp94/local-proof.json)。bf1009c自己的[Run37203313914](https://github.com/Trigger726/OnCall-Agent/actions/runs/37203313914)首次failure：16success/浏览器failure/镜像skipped，见[237记录失败proof](../assets/v1.7-cp94/first-remote-proof.json)。真实MySQL19及原17/27/1/99独立重放相等、双时区480执行/171跳过/83XML、前端147/audit0、Linux旧14/8/6限定通过；旧通知第4流程错误后刷新超时，新的成对HTTP3/UI14未执行，仍须诊断闭环。本地最终新14、原12/14/8/6及Node117通过不替代新源码远端。完整路线/目标active，首次失败/旧Demo保留；下方文字按历史范围阅读。

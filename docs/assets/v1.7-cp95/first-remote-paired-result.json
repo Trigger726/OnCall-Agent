@@ -1,0 +1,165 @@
+{
+  "status": "FAIL",
+  "baselineCapture": false,
+  "jarSha256": "13546000b0f3598047a8b6befe10b155d446447b2505bcdad0fbf8efb5c0022d",
+  "cases": [
+    {
+      "name": "participants-and-auditor-read-without-manager-write-control",
+      "acceptedHistoryVisible": true
+    },
+    {
+      "name": "storage-quota-before-first-post",
+      "posts": 0
+    },
+    {
+      "name": "real-committed-response-loss-reload-and-original-paired-ack",
+      "posts": 2,
+      "actualForwardedCommit200": true,
+      "browserResponseAborted": true,
+      "noAutomaticPost": true,
+      "capturedVersions": [
+        1,
+        0,
+        0
+      ],
+      "sameOriginalCommand": true,
+      "audits": 3,
+      "nonemptyThreeNotificationsUnchanged": true
+    },
+    {
+      "name": "fresh-pair-read500-clears-facts-without-first-post",
+      "swapId": 2,
+      "posts": 0,
+      "oldFactsCleared": true,
+      "noStorageFreeze": true
+    },
+    {
+      "name": "actual-owned-sql-expiry-before-first-post",
+      "swapId": 3,
+      "posts": 0,
+      "noNewAudit": true
+    }
+  ],
+  "screenshots": [
+    "entry-admin-desktop.png",
+    "accepted-desktop.png",
+    "accepted-mobile.png",
+    "entry-zhangwei-desktop.png",
+    "entry-auditor-desktop.png",
+    "original-ack-desktop.png",
+    "revoked-mobile.png",
+    "original-ack-mobile.png",
+    "revoked-receipt-mobile.png",
+    "revoked-receipt-desktop.png",
+    "expired-desktop.png"
+  ],
+  "pageErrors": [],
+  "consoleLogs": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: net::ERR_FAILED"
+  ],
+  "rejected": [
+    {
+      "status": 500,
+      "path": "/api/v1/on-call/swaps/2/coverage"
+    }
+  ],
+  "routeErrors": [],
+  "browserPath": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "fixtureJdbcInvocations": [
+    {
+      "pid": 5554,
+      "exitCode": 0,
+      "changed": 3,
+      "swapId": 3,
+      "actualProduct": "H2"
+    }
+  ],
+  "heldResponseReceipts": [],
+  "visualBounds": [
+    {
+      "name": "accepted-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 84.109375,
+      "frameLeft": 248,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "accepted-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 84.375,
+      "frameLeft": 0,
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "original-ack-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 84.109375,
+      "frameLeft": 248,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "revoked-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 84.375,
+      "frameLeft": 0,
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "original-ack-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 83.578125,
+      "frameLeft": 0,
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "revoked-receipt-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 84.375,
+      "frameLeft": 0,
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "revoked-receipt-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 84.109375,
+      "frameLeft": 248,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "expired-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 84.453125,
+      "frameLeft": 248,
+      "viewport": 1440,
+      "documentWidth": 1440
+    }
+  ],
+  "productionJvmPid": 5389,
+  "browser": "153.0.8010.12",
+  "failure": "page.waitForFunction: Timeout 30000ms exceeded.\n    at pairIdle (/home/runner/work/OnCall-Agent/OnCall-Agent/scripts/verify-oncall-swap-revocation-ui-ci.cjs:21:141)\n    at frozenWithoutCommit (/home/runner/work/OnCall-Agent/OnCall-Agent/scripts/verify-oncall-swap-revocation-ui-ci.cjs:32:225)\n    at async verify (/home/runner/work/OnCall-Agent/OnCall-Agent/scripts/verify-oncall-swap-revocation-ui-ci.cjs:63:59)",
+  "ownedProcessStopped": true,
+  "unexpectedJarErrors": 0
+}

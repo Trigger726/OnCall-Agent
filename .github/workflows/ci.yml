@@ -85,7 +85,7 @@ jobs:
           node scripts/verify-oncall-swap-revocation-http-ci.cjs
       - name: Verify paired revocation real UI, original intent and identity fences
         run: |
-          node --test scripts/tests/oncall-swap-revocation-ui-ci.test.cjs
+          node --test scripts/tests/oncall-swap-revocation-ui-ci.test.cjs scripts/tests/oncall-ui-interception.test.cjs
           node scripts/verify-oncall-swap-revocation-ui-ci.cjs
       - uses: actions/upload-artifact@v5
         if: always()
