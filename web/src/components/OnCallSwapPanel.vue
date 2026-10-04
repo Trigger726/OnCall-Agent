@@ -3,6 +3,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'v
 import { api, RequestError } from '@/services/api'
 import { auth } from '@/stores/auth'
 import OnCallSwapNotificationPanel from '@/components/OnCallSwapNotificationPanel.vue'
+import OnCallSwapRevocationPanel from '@/components/OnCallSwapRevocationPanel.vue'
 import { canChooseSwap, canRequestSwap, clearSwapIntent, decideSwap, getSwap, getSwapCoverage, listSwaps,
   readSwapIntent, requestSwap, saveSwapIntent, swapActions, swapClock, swapDecisionError, swapRequestError, swapState,
   type Swap, type SwapCoverage, type SwapDecision, type SwapIntent, type SwapList, type SwapRoster, type SwapSource, type SwapStatus } from '@/services/onCallSwaps'
@@ -117,6 +118,7 @@ async function showDetail(id: number) {
   catch (cause) { if (current(identity)) error.value = cause instanceof Error ? cause.message : '两段责任读取失败，旧详情已清空' }
   finally { await finish(identity) }
 }
+async function pairChanged() { emit('changed'); await refresh() }
 async function discard() {
   try { if (auth.state.user) clearSwapIntent(sessionStorage, auth.state.user.id) }
   catch { error.value = '无法清除意图，尚未放弃'; return }
@@ -168,8 +170,9 @@ defineExpose({ refresh, open })
       <p v-if="list?.truncated" role="status">已先按双方/任一计划/状态筛选，仅显示最近200条，请缩小筛选。</p>
       <div v-if="list?.requests.length" class="swap-list"><article v-for="row in list.requests" :key="row.id" class="swap-row" :data-swap-id="row.id"><header><strong>#{{ row.id }} · {{ userName(row.requesterId) }} ⇄ {{ userName(row.targetUserId) }}</strong><span class="status-badge" :class="row.status === 'PENDING' ? 'status-warning' : 'status-info'">{{ swapState(row,list.databaseNow) }}</span></header><div class="swap-pair"><p>{{ planName(row.firstScheduleId) }} · #{{ row.firstShiftId }} · {{ swapClock(row.firstStartsAt) }} → {{ swapClock(row.firstEndsAt) }}</p><p>{{ planName(row.secondScheduleId) }} · #{{ row.secondShiftId }} · {{ swapClock(row.secondStartsAt) }} → {{ swapClock(row.secondEndsAt) }}</p></div><p>{{ row.reason }}</p><p v-if="row.decisionReason" class="swap-note">原决定：{{ row.decisionReason }} · v{{ row.version }}</p><div class="swap-actions"><button v-for="action in actions(row)" :key="action" class="secondary-button" :disabled="busy" @click="chooseDecision(row,action)">{{ actionName(action) }}</button><button class="secondary-button" :disabled="busy" @click="showDetail(row.id)">核对两段责任</button></div></article></div>
       <p v-else-if="list" class="empty-state">此筛选下没有换班请求；可从下方本人未来普通班次发起。</p>
-      <section v-if="detailId" class="swap-editor swap-detail"><div class="swap-actions"><h3>两段责任事实 #{{ detailId }}</h3><button class="secondary-button" :disabled="busy" @click="showDetail(detailId)">刷新两段事实</button><button class="secondary-button" :disabled="busy" @click="detailId = null; detail = null">关闭换班详情</button></div><template v-if="detail"><p>{{ swapState(detail.row,detail.first.databaseNow) }}；原决定保留，当前区间责任来自coverage查询。两次区间读取可能处于不同快照。</p><p class="swap-note">原覆盖ID {{ detail.row.firstReplacementShiftId ?? '未生成' }} / {{ detail.row.secondReplacementShiftId ?? '未生成' }}。任一覆盖可被班次维护独立取消；这里不提供成对原子撤销，也不保证原负责人仍能恢复。</p><div class="swap-pair"><article v-for="(view,index) in [detail.first,detail.second]" :key="index"><h4>{{ index ? '第二段' : '第一段' }} · 数据库快照 {{ swapClock(view.databaseNow) }}</h4><p v-for="(segment,i) in view.segments" :key="i">{{ segment.userName ?? '无可用负责人' }} · {{ segment.userId ? (segment.override ? '临时覆盖' : '普通班次') : segment.gapReason }}<br>{{ swapClock(segment.startsAt) }} → {{ swapClock(segment.endsAt) }}</p></article></div></template><p v-else class="swap-note">详情尚未取得或查询失败；不显示旧责任事实。</p></section>
+      <section v-if="detailId" class="swap-editor swap-detail"><div class="swap-actions"><h3>两段责任事实 #{{ detailId }}</h3><button class="secondary-button" :disabled="busy" @click="showDetail(detailId)">刷新两段事实</button><button class="secondary-button" :disabled="busy" @click="detailId = null; detail = null">关闭换班详情</button></div><template v-if="detail"><p>{{ swapState(detail.row,detail.first.databaseNow) }}；原决定保留，当前区间责任来自coverage查询。两次区间读取可能处于不同快照。</p><p class="swap-note">原覆盖ID {{ detail.row.firstReplacementShiftId ?? '未生成' }} / {{ detail.row.secondReplacementShiftId ?? '未生成' }}。任一覆盖可被班次维护独立取消；管理成对撤销请在下方独立面板核对；不保证原负责人仍能恢复。</p><div class="swap-pair"><article v-for="(view,index) in [detail.first,detail.second]" :key="index"><h4>{{ index ? '第二段' : '第一段' }} · 数据库快照 {{ swapClock(view.databaseNow) }}</h4><p v-for="(segment,i) in view.segments" :key="i">{{ segment.userName ?? '无可用负责人' }} · {{ segment.userId ? (segment.override ? '临时覆盖' : '普通班次') : segment.gapReason }}<br>{{ swapClock(segment.startsAt) }} → {{ swapClock(segment.endsAt) }}</p></article></div></template><p v-else class="swap-note">详情尚未取得或查询失败；不显示旧责任事实。</p></section>
       <p v-if="!canAct" class="swap-note">当前账号只读，不能申请或决定；后端仍会验证最新角色与实际参与者。</p>
+      <OnCallSwapRevocationPanel v-if="detailId" :key="detailId" :swap-id="detailId" @changed="pairChanged" />
       <OnCallSwapNotificationPanel v-if="detail" :key="detail.row.id" :swap-id="detail.row.id" :requester="detail.row.requesterId" :target="detail.row.targetUserId" />
     </div>
   </section>

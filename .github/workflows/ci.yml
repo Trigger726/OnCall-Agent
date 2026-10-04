@@ -83,6 +83,10 @@ jobs:
         run: |
           node --test scripts/tests/oncall-swap-revocation-http-ci.test.cjs
           node scripts/verify-oncall-swap-revocation-http-ci.cjs
+      - name: Verify paired revocation real UI, original intent and identity fences
+        run: |
+          node --test scripts/tests/oncall-swap-revocation-ui-ci.test.cjs
+          node scripts/verify-oncall-swap-revocation-ui-ci.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
@@ -100,6 +104,9 @@ jobs:
             target/oncall-swap-notification-it/**/*.png
             target/oncall-swap-revocation-http-it/**/*.json
             target/oncall-swap-revocation-http-it/**/*.log
+            target/oncall-swap-revocation-ui-it/**/*.json
+            target/oncall-swap-revocation-ui-it/**/*.log
+            target/oncall-swap-revocation-ui-it/**/*.png
           retention-days: 30
 
   auth-session-integration:

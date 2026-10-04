@@ -9,7 +9,7 @@ export const notificationState=(value:SwapNotification)=>({PENDING:'待技术投
 export const canManageNotification=(actor:number|undefined,role:string|undefined,requester:number,target:number)=>
   ['ADMIN','OPS_MANAGER'].includes(role??'') || role==='ON_CALL'&&(actor===requester||actor===target)
 // Compare database-session local timestamps without interpreting them in a browser timezone.
-function databaseTime(value:unknown){
+export function databaseTime(value:unknown){
   if(typeof value!=='string')return null
   const m=value.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{1,9}))?)?$/);if(!m)return null
   const year=Number(m[1]),month=Number(m[2]),day=Number(m[3]),leap=year%4===0&&(year%100!==0||year%400===0)

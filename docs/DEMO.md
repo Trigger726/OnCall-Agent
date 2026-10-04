@@ -1,5 +1,7 @@
 # OpsPilot 10 分钟演示脚本
 
+最新 CP94：[成对撤销页面与原意图围栏](acceptance/V1.7-checkpoint-94.md)本地限定通过，见[275记录机器证据与七张新旧图](assets/v1.7-cp94/local-proof.json)。最终生产包新14实页、原通知12/浏览器14/助手8/原生6均重新通过；前端147/Node117、双时区各480执行/171条件跳过/83新鲜XML，历史ACCEPTED/实际覆盖/独立撤销回执分层。403/409锁定、刷新不自动POST、晚200不清新身份草稿；手机确认标题和桌面截图过渡问题已修。自己的源码CI/真实MySQL待验，不借CP93绿灯。完整路线/目标active；下方CP93和更早文字保留历史当时范围。
+
 最新 CP93：[持久化时间边界夹具/门禁修复](acceptance/V1.7-checkpoint-93.md)已由自身033f491/[Run37199872957](https://github.com/Trigger726/OnCall-Agent/actions/runs/37199872957)十八CI success闭合，见[五ZIP自身proof](assets/v1.7-cp93/remote-proof.json)。真实MySQL19零跳过及两次.900→实际下一整秒/DB释放超过存储截止，独立强化门禁重放与CI保存结果相等；原17/27/1/99、双时区各480执行/171跳过/83新鲜XML、前端132/audit0及Linux原12/14/8/6与HTTP三流程也核对。脚本115为本地结果。生产代码/DDL/页面未改，没有新视觉Demo；CP92自己的[首次失败](assets/v1.7-cp92/first-remote-proof.json)保留，不改写绿灯。专用撤销页面、冻结原键/三个版本、真实浏览器丢响应/409/身份围栏和桌面手机新旧对照继续必需，完整路线/目标active。
 
 CP90实际新旧对照：[报告](acceptance/V1.7-checkpoint-90.md)/[六图与机器证据](assets/v1.7-cp90/local-proof.json)。旧CP89包061e900到期草稿实际1POST/409且无清理事实；新包055da69先GET后0POST、草稿仍保留。另演示原重试已提交但丢响应→真实投递204→SQL到期/后台擦除→刷新不自动POST→手动原回执仍只一审计/无额外投递。测试期限只修改owned H2夹具一行，不是生产按钮或真实MySQL升级。新12流程/桌面390px通过，CP90自己的CI待验；CP89十八CI/MySQL27已有[独立闭环](acceptance/V1.7-checkpoint-89.md)。以下旧Demo和首次失败继续保留。
