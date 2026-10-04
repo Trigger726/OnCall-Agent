@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+当前：[88报告](V1.7-checkpoint-88.md)/[本地proof](../assets/v1.7-cp88/local-proof.json)，仅修共用测试CHECK原生错误断言，35定向/双时区451/前端129限定通过，自己的远端/MySQL待验。87自身d119eb7的Run37171869657最终16成功、换班MySQL失败、container跳过，[87第六节](V1.7-checkpoint-87.md)/[九ZIP首次证据](../assets/v1.7-cp87/first-remote-proof.json)保留真实18执行17通过1失败和Linux新九/原14/8/6限定结果；不能把首次失败改称全绿。
+
 当前检查点：[V1.7-checkpoint-87.md](V1.7-checkpoint-87.md)，LOCAL_SCOPE_PASS_REMOTE_PENDING。[本地机器证据](../assets/v1.7-cp87/local-proof.json)包含双时区各451执行/79新鲜XML、新通知18、九新通知页面和原14/8/6、前端129/Node113/audit0，以及新旧八图/原失败。实际MySQL和本轮源码CI待验，不借以下86全绿证明87；bccd96a文档自身tracing网络失败亦保留。
 
 最新86自身4a4141c/[Run37168789059](https://github.com/Trigger726/OnCall-Agent/actions/runs/37168789059)十八作业success，九ZIP源HEAD/实际摘要与独立重放已核验，见[86第六节](V1.7-checkpoint-86.md)/[远端证据](../assets/v1.7-cp86/remote-proof.json)。真实MySQL8.4.11换班17/原生18/原99及双JVM六项、双时区各433实际执行/154新鲜XML、Linux十四/八/六实页和新换班七流程通过；前端120/全树审计0，Node102为本地结果。已目视本次远端双方确认/当前覆盖及390px冻结恢复/独立取消四图；旧Demo、本地首次失败与85整轮failure保留。通知/开放认领/部分班次/成对撤销/DST及整体路线继续。

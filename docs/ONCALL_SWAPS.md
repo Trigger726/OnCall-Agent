@@ -1,5 +1,7 @@
 # 双向换班后端契约（CP85）
 
+CP88只改跨库CHECK故障的共用测试，生产API/通知/页面契约不变。87自身CI换班MySQL18执行17通过1失败（错误Spring包装假设，后续联合回滚未断言），其余Linux九通知/原14/8/6限定通过；88本地35与双时区451通过，但自己MySQL/Linux CI待验，见[88报告](acceptance/V1.7-checkpoint-88.md)/[87第六节](acceptance/V1.7-checkpoint-87.md)。不删历史失败或Demo。
+
 CP87新增通知契约，本地限定通过、实际MySQL/Linux CI待验：[87报告](acceptance/V1.7-checkpoint-87.md)。`GET /{id}/notifications`返回enabled/databaseNow/独立投递facts，无载荷正文/凭证；`POST /{id}/notifications/{notificationId}/retry`显式`version,reason`，管理角色或本次实际参与者才可写。原版本/说明相同的重试回执不重复审计，变更/失效409；不决定换班。默认关闭，启用时申请同事务仅给指定对方入队，决定同事务给双方；稳定键、冻结历史事件、独立worker有限重试/旧lease围栏、无重定向，2xx不等于已读/接受/当前责任。配置前缀`ONCALL_SWAP_NOTIFICATION_`见application.yml，专用HTTPS或localhost/127 HTTP、专用token，URL不可带userInfo/query/fragment；接收端按稳定Idempotency-Key去重，不声称远端exactly-once。旧86等效果和以下当时未完成边界保留。
 
 CP86新增真实页面：本人从未来普通班次选择对方班次，指定对方确认两段责任；按账号保存原键/双版本或决定意图、403/409锁定及手动恢复。当前coverage详情与历史接受分栏，单覆盖取消不复活，未提供成对原子撤销；桌面/手机与旧包效果对照见[86报告](acceptance/V1.7-checkpoint-86.md)。85真实MySQL后端17项限定通过但其整轮CI失败，见[85第五节](acceptance/V1.7-checkpoint-85.md)；86自身4a4141c十八CI/九ZIP及Linux新七流程已闭环，见[86第六节](acceptance/V1.7-checkpoint-86.md)/[远端证据](assets/v1.7-cp86/remote-proof.json)。

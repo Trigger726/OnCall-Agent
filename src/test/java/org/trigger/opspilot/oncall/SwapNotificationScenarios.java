@@ -42,6 +42,7 @@ abstract class SwapNotificationScenarios {
     @SpyBean AuditService audit;
     static Receiver receiver;
     List<UserState> originalUsers;
+    String databaseProduct;
 
     @DynamicPropertySource static void receiverUrl(DynamicPropertyRegistry registry) {
         registry.add("opspilot.oncall.swap.notification.url",()->"http://127.0.0.1:"+fixtureReceiver().server.getAddress().getPort()+"/notify");
@@ -54,7 +55,7 @@ abstract class SwapNotificationScenarios {
                 .query((rs,n)->new UserState(rs.getLong(1),rs.getString(2),rs.getString(3),rs.getString(4))).list();
         fixtureReceiver().reset();
         try(var connection=datasource.getConnection()){
-            var metadata=connection.getMetaData();if(getClass().getSimpleName().startsWith("MySql")){assertThat(metadata.getDatabaseProductName()).isEqualTo("MySQL");assertThat(metadata.getDatabaseProductVersion()).startsWith("8.4.");}
+            var metadata=connection.getMetaData();databaseProduct=metadata.getDatabaseProductName();if(getClass().getSimpleName().startsWith("MySql")){assertThat(databaseProduct).isEqualTo("MySQL");assertThat(metadata.getDatabaseProductVersion()).startsWith("8.4.");}
             assertThat(jdbc.sql("SELECT COUNT(*) FROM flyway_schema_history WHERE version='35' AND success=TRUE").query(Long.class).single()).isEqualTo(1);
             System.out.println("CP87_SWAP_NOTIFICATION_DATABASE "+json.writeValueAsString(Map.of("case",test.getTestMethod().orElseThrow().getName(),"product",metadata.getDatabaseProductName(),"version",metadata.getDatabaseProductVersion(),"schema",connection.getCatalog())));
         }
@@ -85,7 +86,15 @@ abstract class SwapNotificationScenarios {
     @Test void shouldRollbackBothOverridesAndNotificationRowsWhenEnqueueFails() {
         var f=pair();var pending=swaps.request(command(f),2,"test");long count=auditCount();
         jdbc.sql("ALTER TABLE oncall_swap_notification ADD CONSTRAINT cp87_reject_decision CHECK(event_status='PENDING')").update();
-        try{assertThatThrownBy(()->swaps.decide(pending.id(),decision("ACCEPTED"),3,"test")).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);}
+        try{assertThatThrownBy(()->swaps.decide(pending.id(),decision("ACCEPTED"),3,"test"))
+                .isInstanceOfSatisfying(org.springframework.dao.DataAccessException.class,error->{
+                    assertThat(databaseProduct).isIn("H2","MySQL");
+                    assertThat(error.getMostSpecificCause()).isInstanceOf(java.sql.SQLException.class);
+                    var sql=(java.sql.SQLException)error.getMostSpecificCause();boolean mysql=databaseProduct.equals("MySQL");
+                    assertThat(sql.getErrorCode()).isEqualTo(mysql?3819:23513);
+                    assertThat(sql.getSQLState()).isEqualTo(mysql?"HY000":"23513");
+                    assertThat(sql.getMessage()).containsIgnoringCase("cp87_reject_decision");
+                });}
         finally{jdbc.sql("ALTER TABLE oncall_swap_notification DROP CONSTRAINT cp87_reject_decision").update();}
         assertThat(swaps.get(pending.id()).status()).isEqualTo("PENDING");assertThat(shifts(f)).isEqualTo(2);assertThat(auditCount()).isEqualTo(count);
         assertThat(notifications.list(pending.id()).deliveries()).hasSize(1);

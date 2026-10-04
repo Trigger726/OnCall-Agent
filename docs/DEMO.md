@@ -1,5 +1,7 @@
 # OpsPilot 10 分钟演示脚本
 
+CP88没有新视觉效果：仅改通知CHECK故障测试，生产JAR/source/UI与87相同。87本次Linux新增九通知/原14/8/6已独立复核，实际双方回执/390px冻结恢复/409锁定三图已目视，见[87第六节](acceptance/V1.7-checkpoint-87.md)；该整轮MySQL失败不能称全绿。88自己的新MySQL回滚验收尚待，[88报告](acceptance/V1.7-checkpoint-88.md)。旧86/87新旧截图、原失败与历史Demo持续保留，不以测试修正制造新页面效果。
+
 ## CP87：通知技术回执不代替本人决定
 
 本地新旧效果：[87验收与图](acceptance/V1.7-checkpoint-87.md)/[proof](assets/v1.7-cp87/local-proof.json)。旧86包能申请/核对coverage但通知404/无面板/外部调用0；新87本人从未来完整普通班次申请，指定对方通知真实503→204后申请仍PENDING。对方实际接受，双方各有ACCEPTED事件，独立coverage交换；重试丢响应后刷新恢复原通知版本/说明，技术已送达也只手动回执一次审计，不再次决定。失效409重载仍锁定，明确放弃仅清本地草稿。

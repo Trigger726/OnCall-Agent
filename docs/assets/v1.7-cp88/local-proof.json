@@ -1,0 +1,1502 @@
+{
+  "status": "LOCAL_TEST_REPAIR_PASS_OWN_REMOTE_PENDING",
+  "baseHead": "d119eb7fbf1d6dbb5b9a39f24dd5be09a51eb03d",
+  "actualMysqlNotExecutedLocally": true,
+  "productionFrontendGatesAndWorkflowUnchangedFromBase": true,
+  "productionJar": {
+    "file": "target/opspilot-0.1.0-SNAPSHOT.jar",
+    "sha256": "dcc575a3a2495edc2dd5cfeea8e05ce456da29b8ec8dd0752b5af02a44adce8b"
+  },
+  "preserved87Jar": {
+    "file": "target/cp88-before/opspilot-cp87.jar",
+    "sha256": "dcc575a3a2495edc2dd5cfeea8e05ce456da29b8ec8dd0752b5af02a44adce8b"
+  },
+  "changedTest": {
+    "file": "src/test/java/org/trigger/opspilot/oncall/SwapNotificationScenarios.java",
+    "sha256": "911dc739b4cfe96b187212c6e0df8ad691d45db2315da4c154e23306d8ae7806"
+  },
+  "targeted": {
+    "file": "target/cp88-backend/targeted-first.log",
+    "sha256": "dd68502aee09116bd48749f36cb5075f11af52e45619e3f35997e43219050a92",
+    "executed": 35,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0
+  },
+  "regression": [
+    {
+      "zone": "utc",
+      "discovered": 593,
+      "executed": 451,
+      "skipped": 142,
+      "failures": 0,
+      "errors": 0,
+      "freshXmlCount": 79,
+      "allOwn87SuiteCountsAndCaseNamesPreserved": true,
+      "notificationPoolOrderedShutdown": "HikariPool-23",
+      "fullMaven": {
+        "file": "target/cp88-backend/utc.log",
+        "sha256": "6024bf7019d48d605203ab17ec33e7ed989e6fdd4ab2b83e6d13c2a2bade8a4d"
+      },
+      "suites": [
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.alert.AlertmanagerRejectionLifecycleIntegrationTest.xml",
+          "sha256": "6da66f483d862042bd786d75d970c8dab7cbf17dddffc1b1327976771b95c25d",
+          "suite": "org.trigger.opspilot.alert.AlertmanagerRejectionLifecycleIntegrationTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.alert.AlertmanagerWebhookDisabledIntegrationTest.xml",
+          "sha256": "8414f78dc64721ec2c71a5f0e3b1ffff93783cf00d1f994e5fe1632898aa0f20",
+          "suite": "org.trigger.opspilot.alert.AlertmanagerWebhookDisabledIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.alert.AlertmanagerWebhookIntegrationTest.xml",
+          "sha256": "a759857c5b522df93a07319532c5afa0a39f3b794b77e3e603866e4990b1984d",
+          "suite": "org.trigger.opspilot.alert.AlertmanagerWebhookIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.analytics.IncidentAnalyticsIntegrationTest.xml",
+          "sha256": "22ceb8790b901da5c5381e9dbae196151435df6753571b2f0480772804e42885",
+          "suite": "org.trigger.opspilot.analytics.IncidentAnalyticsIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantAiStreamingTest.xml",
+          "sha256": "a3113a36c60d3e8e3619ec2f62de40a5dced06443da915c2dd6ec9a36ac190e0",
+          "suite": "org.trigger.opspilot.assistant.AssistantAiStreamingTest",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest.xml",
+          "sha256": "1b3e5a223ab37967ec9859195635f7665c0aa44b9cb99495a28e6364a4c3d917",
+          "suite": "org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 1
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantExecutionManagerTest.xml",
+          "sha256": "a48f26bba17a853b5b0b18c3fd19316d6f344375625b74959953ceefb93d42e6",
+          "suite": "org.trigger.opspilot.assistant.AssistantExecutionManagerTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest.xml",
+          "sha256": "f895b9b5f9b71caadc991d1da40eb08caf1c37b0d26b1359ce30f67953066d5c",
+          "suite": "org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeHttpClientTest.xml",
+          "sha256": "f7d473ac0da477a93f74e9ce213017a33e66bda2def8cab03d8bc5a5e046a501",
+          "suite": "org.trigger.opspilot.assistant.AssistantNativeHttpClientTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest.xml",
+          "sha256": "bc39b92caa00790e292efaebdcbbbe488006a6f112240e0bfe5c2719b8c3101c",
+          "suite": "org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeTransportTest.xml",
+          "sha256": "61ffb6fba671948f6b00cc99378729747d3491ed2f48eca9c4f2d0450a2e12ac",
+          "suite": "org.trigger.opspilot.assistant.AssistantNativeTransportTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantSessionRevocationIntegrationTest.xml",
+          "sha256": "1df545a9340ca22c7706efa60e96c95d45c4ad5fd80148ff0fea3fbd9e7edae8",
+          "suite": "org.trigger.opspilot.assistant.AssistantSessionRevocationIntegrationTest",
+          "tests": 32,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantStreamReaderTest.xml",
+          "sha256": "944a57f8c462a21d106a9be464c5d88b63cc7bdb7d6819ac0d7d45d11c8ea2e6",
+          "suite": "org.trigger.opspilot.assistant.AssistantStreamReaderTest",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantStreamTransportTest.xml",
+          "sha256": "3e452aea45b42a460e2ecbf429c9369334bc4105598889e0a7f69d046d448467",
+          "suite": "org.trigger.opspilot.assistant.AssistantStreamTransportTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest.xml",
+          "sha256": "5300a9a4d0cabce0f10e6a04d307eb77b95f2eb2979880e740c92c79e1bc09d2",
+          "suite": "org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.common.GlobalExceptionHandlerDisconnectTest.xml",
+          "sha256": "8cfa07d31fd76dca096ba041c764812e60a9f944924da01f0bbf8b5c93b051cb",
+          "suite": "org.trigger.opspilot.common.GlobalExceptionHandlerDisconnectTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.distributed.DistributedAgentEventsIntegrationTest.xml",
+          "sha256": "aa3709fcdfc15ae903193eae08ed9d5bd3fa98d1fb0811c13eaced461072e51a",
+          "suite": "org.trigger.opspilot.distributed.DistributedAgentEventsIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 3
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.incident.IncidentStatusTest.xml",
+          "sha256": "47e1aab9352345329cd665928e5428e07b649edd979e1e2c353a2b73d65b3aec",
+          "suite": "org.trigger.opspilot.incident.IncidentStatusTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentEventReceiverTest.xml",
+          "sha256": "dddf577bd3f904e45a9fd69374b7e57c296d85ca851a0672f4791d731b3a0ff0",
+          "suite": "org.trigger.opspilot.investigation.AgentEventReceiverTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentEventStreamIntegrationTest.xml",
+          "sha256": "6fb9ae47dbf6b5db2e5c00afca41ff837aef765aebb3701c3a1f1f4e29af1b25",
+          "suite": "org.trigger.opspilot.investigation.AgentEventStreamIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentEventSubscriptionsTest.xml",
+          "sha256": "917d81f7e32c2d69103afa2ad81b6607552ba3f1dfa63ef5a210d8054bf5d4eb",
+          "suite": "org.trigger.opspilot.investigation.AgentEventSubscriptionsTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentEventTransactionIntegrationTest.xml",
+          "sha256": "cce43d916772566aca2ee6c640bf697542ec133287341770b4793cd6e595c075",
+          "suite": "org.trigger.opspilot.investigation.AgentEventTransactionIntegrationTest",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentExecutionManagerTest.xml",
+          "sha256": "62c1727683837b93554e5808984df4dcf39a6227d3e713631b4b7e934003eaa7",
+          "suite": "org.trigger.opspilot.investigation.AgentExecutionManagerTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentRunCancellationIntegrationTest.xml",
+          "sha256": "2c2f3d0e5bfa7724bf8bb7eed868bb55271b092aa227d0745a561be461162992",
+          "suite": "org.trigger.opspilot.investigation.AgentRunCancellationIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentRunRecoveryIntegrationTest.xml",
+          "sha256": "58d2b1f6cac22de1ae9c7c49c2debeb8938989cd9508bc5f903f204ef05fdfb1",
+          "suite": "org.trigger.opspilot.investigation.AgentRunRecoveryIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.investigation.AgentSessionRevocationIntegrationTest.xml",
+          "sha256": "2adc884e3d2f043b1740e9497312eac76d7aea79f9c41cd52e879c8a3245c5bf",
+          "suite": "org.trigger.opspilot.investigation.AgentSessionRevocationIntegrationTest",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.investigation.InvestigationControllerDisconnectTest.xml",
+          "sha256": "dd35440aca03ea7b5423579c09de042904c6e397089264e12273cf36d979c035",
+          "suite": "org.trigger.opspilot.investigation.InvestigationControllerDisconnectTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.investigation.RedisRelayIntegrationTest.xml",
+          "sha256": "1a8ad109a2cf371727ffb4f3a22baa7944d634c91c8bd17425eb9303a00fb93a",
+          "suite": "org.trigger.opspilot.investigation.RedisRelayIntegrationTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 4
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.MySqlCompatibilityIntegrationTest.xml",
+          "sha256": "e258b52699396aed6d6754a8c43aafc2f47afe7cbf36b00c96c7fc6bb1b5eab8",
+          "suite": "org.trigger.opspilot.MySqlCompatibilityIntegrationTest",
+          "tests": 46,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 46
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.observability.LogRedactorTest.xml",
+          "sha256": "cf74f0843a6bd6a7c777b8b25c2c897ac76e571e302c8766e6b9dc55660eecd6",
+          "suite": "org.trigger.opspilot.observability.LogRedactorTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.observability.logs.LogsProviderRouterTest.xml",
+          "sha256": "9c56f8d4c156ffbaa2af55c6a567562d071abc07a6c1972443489546c2688604",
+          "suite": "org.trigger.opspilot.observability.logs.LogsProviderRouterTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.observability.logs.LokiLogsProviderContractTest.xml",
+          "sha256": "0ff1f152f045d091a529aff579c706b075b762e0facf3efd715cc82533e6a428",
+          "suite": "org.trigger.opspilot.observability.logs.LokiLogsProviderContractTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.observability.metrics.PrometheusMetricsProviderContractTest.xml",
+          "sha256": "6bd88b028cf059403851bd818900fbe4a3216aa262e3646385a01964650d48b7",
+          "suite": "org.trigger.opspilot.observability.metrics.PrometheusMetricsProviderContractTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.observability.ProviderGuardTest.xml",
+          "sha256": "ab48dc161694b1bce5bdc0d608e5d0ffcbdf5df21b7511a94ef4f1fca7913640",
+          "suite": "org.trigger.opspilot.observability.ProviderGuardTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.observability.tracing.AgentTraceIntegrationTest.xml",
+          "sha256": "e7921279c226cd763953669ce04cf56414300ba231857fa875397cd0f701d6e3",
+          "suite": "org.trigger.opspilot.observability.tracing.AgentTraceIntegrationTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.observability.tracing.HttpTracePropagationIntegrationTest.xml",
+          "sha256": "de453e806845c264fa677ae3a814dc9f0e7a5143c1e81efdf7b5b57438eeb956",
+          "suite": "org.trigger.opspilot.observability.tracing.HttpTracePropagationIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.observability.tracing.OpenTelemetryBridgeTest.xml",
+          "sha256": "d9199d35cb793d448b71f5176bb8354ee59f8dd31c3f1bf8c9cb6d073b36e919",
+          "suite": "org.trigger.opspilot.observability.tracing.OpenTelemetryBridgeTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.observability.tracing.OpsPilotTracingTest.xml",
+          "sha256": "94794f5ebced897c1c977680e828073b890a10f1b9bf73d8867784fdd6a6d20c",
+          "suite": "org.trigger.opspilot.observability.tracing.OpsPilotTracingTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.IncidentEscalationIntegrationTest.xml",
+          "sha256": "e5e13dde971245fce08f81787289cb90cdd53a3c8772d1e80d11ba1d94a3578f",
+          "suite": "org.trigger.opspilot.oncall.IncidentEscalationIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest.xml",
+          "sha256": "3f91795a30597d5506a4162c1514b74efb7494f6aec6810f5f4a9edc60c248e5",
+          "suite": "org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 8
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest.xml",
+          "sha256": "dcaa37487a4d6676176e4d208e9bd221ab56d2ad38f5f49acd470e6566056a41",
+          "suite": "org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest",
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 27
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest.xml",
+          "sha256": "04e4a4be61d9461dff991f8604a88157059a3cd7f9f446e7cbda20746dd0d6cd",
+          "suite": "org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 10
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest.xml",
+          "sha256": "18ffd626ccf8ddca4ee393cade8e1aa30c3937e660ac8fdee532383ceaacd81b",
+          "suite": "org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 8
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallSwapIntegrationTest.xml",
+          "sha256": "bef630e4b281d2ef5edeee0320e5e48796b88266a303bd612e98095de601aa8c",
+          "suite": "org.trigger.opspilot.oncall.MySqlOnCallSwapIntegrationTest",
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 17
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationIntegrationTest.xml",
+          "sha256": "d6504a5c3411f01124dfbac44697ace1a28082614b1666c2537d83e450a3e09d",
+          "suite": "org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationIntegrationTest",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 18
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallCoverageIntegrationTest.xml",
+          "sha256": "36903f5cc18901c4ee3b33bf59eedbacf1354fc3030e6cf8fe6466ba84b7c94b",
+          "suite": "org.trigger.opspilot.oncall.OnCallCoverageIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallHandoffIntegrationTest.xml",
+          "sha256": "966aaae6325b86472c9b898626b8b6bcec0e5aeaea0a79fa54146081e03f2be9",
+          "suite": "org.trigger.opspilot.oncall.OnCallHandoffIntegrationTest",
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallRosterIntegrationTest.xml",
+          "sha256": "4c0885c28faf3d628740bf4aede15c46f4814b2830c74c468bf04924f8da6959",
+          "suite": "org.trigger.opspilot.oncall.OnCallRosterIntegrationTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallRotationIntegrationTest.xml",
+          "sha256": "23587f1fac9d41721d524e1a5db87422da52205297e2e9b7ced41e6236757f16",
+          "suite": "org.trigger.opspilot.oncall.OnCallRotationIntegrationTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallRotationJobIntegrationTest.xml",
+          "sha256": "19944bea4f4069204fe9427963d01461f4b08600a26b2b6d1659582611215cdb",
+          "suite": "org.trigger.opspilot.oncall.OnCallRotationJobIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallRoutingSnapshotIntegrationTest.xml",
+          "sha256": "2cae1fe7caf3d4d1d9b944518bc8f8cc99f40034b277c50181ee236882a9ca96",
+          "suite": "org.trigger.opspilot.oncall.OnCallRoutingSnapshotIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallSwapIntegrationTest.xml",
+          "sha256": "65308e2215a90a944ea8f88b6ff55311ae703cb03fa00ac8e50563c8c769d996",
+          "suite": "org.trigger.opspilot.oncall.OnCallSwapIntegrationTest",
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.oncall.OnCallSwapNotificationIntegrationTest.xml",
+          "sha256": "03de0116e56a57fac39c0d4157d980a00168a1f48f0539373f08260eba2020ce",
+          "suite": "org.trigger.opspilot.oncall.OnCallSwapNotificationIntegrationTest",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.OpsPilotApiIntegrationTest.xml",
+          "sha256": "a72acb56e53a9ab728f9e6d63d6798e0b752452b731cfbeb3658b3667a5dc10f",
+          "suite": "org.trigger.opspilot.OpsPilotApiIntegrationTest",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.postmortem.FollowUpNotificationIntegrationTest.xml",
+          "sha256": "f66907f7d9f18b2171cacfc93c7fb0d04e5cdcb723c7bbc32b53da2f9f7ecc5e",
+          "suite": "org.trigger.opspilot.postmortem.FollowUpNotificationIntegrationTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.postmortem.FollowUpOperationsIntegrationTest.xml",
+          "sha256": "27ad3ef2d1a04cb8544d68c889c526014886aa9a1f4de5cb49fd13f3eab0cc59",
+          "suite": "org.trigger.opspilot.postmortem.FollowUpOperationsIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.postmortem.PostmortemIntegrationTest.xml",
+          "sha256": "f3b3640e6799a0033d48999467e15ba371c074426b8e7e44f141edf557cb2b0b",
+          "suite": "org.trigger.opspilot.postmortem.PostmortemIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.problem.ProblemCreationConcurrencyIntegrationTest.xml",
+          "sha256": "9c2bd38ed8b52ada96011704341af4936171771e121f070d65c5a89abe3ffd3f",
+          "suite": "org.trigger.opspilot.problem.ProblemCreationConcurrencyIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.problem.ProblemManagementIntegrationTest.xml",
+          "sha256": "a78a88c2caed43b92b20a23982a1c7bc2e5e1d0b8f4446394576a69f2ccd4932",
+          "suite": "org.trigger.opspilot.problem.ProblemManagementIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.runbook.Bm25RetrieverTest.xml",
+          "sha256": "d6116c3a1fb7962c7bc7254409243f4037942dda7569c0b33479b30b4c15a499",
+          "suite": "org.trigger.opspilot.runbook.Bm25RetrieverTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.runbook.ReciprocalRankFusionTest.xml",
+          "sha256": "6ef7d8a1722e2eb1c0ca468c4ed6fb1c0f303055a8982bb38acca368e7c1b1a6",
+          "suite": "org.trigger.opspilot.runbook.ReciprocalRankFusionTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookHybridRetrievalIntegrationTest.xml",
+          "sha256": "c087b273aeb2402e769a9a82fdcf689b8fa2069720b24ef8304d6d605aa17f8b",
+          "suite": "org.trigger.opspilot.runbook.RunbookHybridRetrievalIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookJudgmentAgreementTest.xml",
+          "sha256": "3f6bf1086175c75fad0d4d6945d675acb9e3a5072a7319a611fab1ad51becc1c",
+          "suite": "org.trigger.opspilot.runbook.RunbookJudgmentAgreementTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookKnowledgeIntegrationTest.xml",
+          "sha256": "39f7fc5ec93217f66656abd25e4ac9478a2399f6358b5c5a3eabf429649cc4b4",
+          "suite": "org.trigger.opspilot.runbook.RunbookKnowledgeIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookPublicationConcurrencyTest.xml",
+          "sha256": "03380a2ac819bfcaeed97bc342d2fca817c787dfa1959811b21c80c72bc82030",
+          "suite": "org.trigger.opspilot.runbook.RunbookPublicationConcurrencyTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookPublicationIntegrationTest.xml",
+          "sha256": "1e81912774c5b8e9a07c196c9888e52ad2ece5a25dc606e6c6be32c3acba0e0b",
+          "suite": "org.trigger.opspilot.runbook.RunbookPublicationIntegrationTest",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookPublicationMigrationTest.xml",
+          "sha256": "a3511e3e6b2a8486b881c2a1cfe43c14a877ae3a54fcf7220ff02a21295d9691",
+          "suite": "org.trigger.opspilot.runbook.RunbookPublicationMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookRelevanceFeedbackIntegrationTest.xml",
+          "sha256": "cc1d0370f93761e7189534901b3aa9864b7b5c2fb0d26ff28d28a9d74256835a",
+          "suite": "org.trigger.opspilot.runbook.RunbookRelevanceFeedbackIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookRetrievalLifecycleIntegrationTest.xml",
+          "sha256": "3edbe63234b4c17e16b5b16ef6c3231fd5b0485fa4165f3ae37eb6ea254e0edd",
+          "suite": "org.trigger.opspilot.runbook.RunbookRetrievalLifecycleIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookRetrievalTrendIntegrationTest.xml",
+          "sha256": "ab7690517f1c304ffa6d967e2cc2f2989a8763f21e8cffaad65339bddb5e73b3",
+          "suite": "org.trigger.opspilot.runbook.RunbookRetrievalTrendIntegrationTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.runbook.RunbookReturnedCountMigrationTest.xml",
+          "sha256": "791a2c734f761470b1239afe9a97a2e923b2bd850fdcd88e42dd3ba23b1e5002",
+          "suite": "org.trigger.opspilot.runbook.RunbookReturnedCountMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.security.AccountStatusHttpIntegrationTest.xml",
+          "sha256": "c72aa9836795d0c5ef1e84900940854881a075bf1b5f81cabd76f1e8c5f9b220",
+          "suite": "org.trigger.opspilot.security.AccountStatusHttpIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.security.AuthSessionHttpIntegrationTest.xml",
+          "sha256": "49febe02139a5c889c494f2b1d6b92ce6a74afdbca6684f1d7e1b3532c2c0ced",
+          "suite": "org.trigger.opspilot.security.AuthSessionHttpIntegrationTest",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.security.AuthSessionMigrationTest.xml",
+          "sha256": "9cb6b4c98d6fd46bca8e637fffd4c6177aa295defd78af2bb4409f5a9a307a4f",
+          "suite": "org.trigger.opspilot.security.AuthSessionMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.security.JwtServiceIdentityTest.xml",
+          "sha256": "6884c3363c4fb06ca353b04318d0edda4831899c058ee9b6423319c5b2f6f773",
+          "suite": "org.trigger.opspilot.security.JwtServiceIdentityTest",
+          "tests": 56,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.security.ManagementPortIsolationIntegrationTest.xml",
+          "sha256": "3a0a1807a29d3bb2877df756704a5506a6e308b5fd8dbcc21c3f142e2b7b2fef",
+          "suite": "org.trigger.opspilot.security.ManagementPortIsolationIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.slo.PrometheusSloClientContractTest.xml",
+          "sha256": "c27b3fbdf039ac993cb683dc591d4c1fb192832f950d47ad13683b060ad52236",
+          "suite": "org.trigger.opspilot.slo.PrometheusSloClientContractTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.slo.ServiceSloIntegrationTest.xml",
+          "sha256": "f67a7b0cdb452c72cd02c2a1cd20a16c476b42e4f5bd291c79d9e4de9150b59d",
+          "suite": "org.trigger.opspilot.slo.ServiceSloIntegrationTest",
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/utc-xml/TEST-org.trigger.opspilot.slo.SloBurnRateCalculatorTest.xml",
+          "sha256": "a65f5679588e8bdbb4e695ec8c05123bb48e1597c72366eac7a29bda37799228",
+          "suite": "org.trigger.opspilot.slo.SloBurnRateCalculatorTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    {
+      "zone": "shanghai",
+      "discovered": 593,
+      "executed": 451,
+      "skipped": 142,
+      "failures": 0,
+      "errors": 0,
+      "freshXmlCount": 79,
+      "allOwn87SuiteCountsAndCaseNamesPreserved": true,
+      "notificationPoolOrderedShutdown": "HikariPool-23",
+      "fullMaven": {
+        "file": "target/cp88-backend/shanghai.log",
+        "sha256": "4e317a2c7c009425b24f847de6f7e5efbdd9930a4238148980bfc4c1b275390a"
+      },
+      "suites": [
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.alert.AlertmanagerRejectionLifecycleIntegrationTest.xml",
+          "sha256": "8653e71c494b697535440a671d90201c05b7224a1598e4001a86f3f752e085b2",
+          "suite": "org.trigger.opspilot.alert.AlertmanagerRejectionLifecycleIntegrationTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.alert.AlertmanagerWebhookDisabledIntegrationTest.xml",
+          "sha256": "1edf2266cc0afd43295e7321d72475899534ea795a174768a5caadb16bcc24e5",
+          "suite": "org.trigger.opspilot.alert.AlertmanagerWebhookDisabledIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.alert.AlertmanagerWebhookIntegrationTest.xml",
+          "sha256": "a6a1af21ab9fe799db3bcfe275f23aec1c1110f6512cde533c1fefe400be89d4",
+          "suite": "org.trigger.opspilot.alert.AlertmanagerWebhookIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.analytics.IncidentAnalyticsIntegrationTest.xml",
+          "sha256": "b45d9845330fcfb36dba09d32e25d46455512956776af41cc50c634261e9e3b9",
+          "suite": "org.trigger.opspilot.analytics.IncidentAnalyticsIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantAiStreamingTest.xml",
+          "sha256": "0812fe1fcfc4995da1fa5cacfabc2486baaf17f54833a19b024b09e90fa13191",
+          "suite": "org.trigger.opspilot.assistant.AssistantAiStreamingTest",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest.xml",
+          "sha256": "0a9c5b8b21d2c1ac16fe612c0865d5da007cd6657ffacf66b3b7dc662f70e05b",
+          "suite": "org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 1
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantExecutionManagerTest.xml",
+          "sha256": "b438768da8accae8e6b600001ac02f6b55af34b71e693c68dd62d701f417e378",
+          "suite": "org.trigger.opspilot.assistant.AssistantExecutionManagerTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest.xml",
+          "sha256": "4291951a3764e1dea659580d6ac204f306fb3e74d79db1f7f2a6cee9bf06aaae",
+          "suite": "org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeHttpClientTest.xml",
+          "sha256": "57449e0e75d3326969b1961e6357b5166ecadc6107ade01135b6a80fedebd099",
+          "suite": "org.trigger.opspilot.assistant.AssistantNativeHttpClientTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest.xml",
+          "sha256": "2d68f361f060e57325c949c45011116bbb4159e1bc616f0be3062c29ee6aa5a2",
+          "suite": "org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantNativeTransportTest.xml",
+          "sha256": "628f73757eb62dea113aac528b000977a94a91d5f2e5b8ae3ed80fa22cd9955c",
+          "suite": "org.trigger.opspilot.assistant.AssistantNativeTransportTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantSessionRevocationIntegrationTest.xml",
+          "sha256": "3a1422800765d71e84882d595e54d124148e7574dd6ac4052cbb8f1b8d961084",
+          "suite": "org.trigger.opspilot.assistant.AssistantSessionRevocationIntegrationTest",
+          "tests": 32,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantStreamReaderTest.xml",
+          "sha256": "b7bd9d85f00ce3556b87118f53572d8f039cfa8bcd181152f7eea28e6d42f6f3",
+          "suite": "org.trigger.opspilot.assistant.AssistantStreamReaderTest",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantStreamTransportTest.xml",
+          "sha256": "b2b18a884d7b8439c1cfb58f990cf375034af0ba60f4d1aeff5d010e0769a467",
+          "suite": "org.trigger.opspilot.assistant.AssistantStreamTransportTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest.xml",
+          "sha256": "d7647832846a848165ead6fcbca61bc627cc604239f0fb40bf252de4eb7461c0",
+          "suite": "org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.common.GlobalExceptionHandlerDisconnectTest.xml",
+          "sha256": "3cda62b174dec41f34fc429cf1d0135eff9087fe33e3ed202ba32b04fcaf3871",
+          "suite": "org.trigger.opspilot.common.GlobalExceptionHandlerDisconnectTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.distributed.DistributedAgentEventsIntegrationTest.xml",
+          "sha256": "e5fec2369d4ffdbd122f6204cc2eb41bd6010f4693f9abfa604e8c3fc2936d92",
+          "suite": "org.trigger.opspilot.distributed.DistributedAgentEventsIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 3
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.incident.IncidentStatusTest.xml",
+          "sha256": "f060aa663f39683d6701f09da2cd6242b3d786bfedcac3278c1fe7cbc5dd7ed9",
+          "suite": "org.trigger.opspilot.incident.IncidentStatusTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentEventReceiverTest.xml",
+          "sha256": "69d8e50b7dc5a1968885edc7673ef642c46212f59cf0af4c8233329eb796a196",
+          "suite": "org.trigger.opspilot.investigation.AgentEventReceiverTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentEventStreamIntegrationTest.xml",
+          "sha256": "e30fb5485064a1fa84251c469abe7e8e1c0415120eeb22f92624bf41dcc106ee",
+          "suite": "org.trigger.opspilot.investigation.AgentEventStreamIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentEventSubscriptionsTest.xml",
+          "sha256": "f702003b6d1c4c773cffaaeb50375fac24343cc4a76f592d027a2ce03f7f7950",
+          "suite": "org.trigger.opspilot.investigation.AgentEventSubscriptionsTest",
+          "tests": 11,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentEventTransactionIntegrationTest.xml",
+          "sha256": "002a9a22045ee97b4e202bb7335dcda20a4d52379acc22f5fd3af0ca7554c1e1",
+          "suite": "org.trigger.opspilot.investigation.AgentEventTransactionIntegrationTest",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentExecutionManagerTest.xml",
+          "sha256": "064e42e4fab412c0085c6e0fbe40a68ddc0ab3249627424eed38423907c0e7f9",
+          "suite": "org.trigger.opspilot.investigation.AgentExecutionManagerTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentRunCancellationIntegrationTest.xml",
+          "sha256": "e4da008cab85a061e8a4a1fa30d16af2e6f3b80d5d13c5767281716cc529acde",
+          "suite": "org.trigger.opspilot.investigation.AgentRunCancellationIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentRunRecoveryIntegrationTest.xml",
+          "sha256": "0d857910fe95415a2094c64d2ceb7dea4b01f90dda9fd2a4e36a7e14bcf83c9c",
+          "suite": "org.trigger.opspilot.investigation.AgentRunRecoveryIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.AgentSessionRevocationIntegrationTest.xml",
+          "sha256": "05c06e54029616f80fe1f706b7a0610bffd62f10b9441fbf5544c33707d6d704",
+          "suite": "org.trigger.opspilot.investigation.AgentSessionRevocationIntegrationTest",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.InvestigationControllerDisconnectTest.xml",
+          "sha256": "fdf432715b45ad02d5bb8f37286a6e3dba064e36dda49a37b6938550bde44cba",
+          "suite": "org.trigger.opspilot.investigation.InvestigationControllerDisconnectTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.investigation.RedisRelayIntegrationTest.xml",
+          "sha256": "735c1a7b1c68814f46ee3791afce155d4ee68a8d7aae79aaf7ca771fc62da352",
+          "suite": "org.trigger.opspilot.investigation.RedisRelayIntegrationTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 4
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.MySqlCompatibilityIntegrationTest.xml",
+          "sha256": "e92584fd79ae287fe1102ae94e45770fe8b3227f5634c7c85a4da7edb36e6195",
+          "suite": "org.trigger.opspilot.MySqlCompatibilityIntegrationTest",
+          "tests": 46,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 46
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.LogRedactorTest.xml",
+          "sha256": "817f0761623bceb5d397fefdadf8c3776d500e3cabe87c661f362489d19474b7",
+          "suite": "org.trigger.opspilot.observability.LogRedactorTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.logs.LogsProviderRouterTest.xml",
+          "sha256": "f5c727b2b7d15f84ac051fd71c65fec57fe116c792ee626e4b28b572844faeab",
+          "suite": "org.trigger.opspilot.observability.logs.LogsProviderRouterTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.logs.LokiLogsProviderContractTest.xml",
+          "sha256": "0d7bb9fe6fab5737ea45a19f1c3f2d3188724d575e1546a6f4fce0915fb018aa",
+          "suite": "org.trigger.opspilot.observability.logs.LokiLogsProviderContractTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.metrics.PrometheusMetricsProviderContractTest.xml",
+          "sha256": "5ed4b07bdb1d67c8db9eb7a7aee87bce5c0eab7c65e0872f31ad3c4982ffbb53",
+          "suite": "org.trigger.opspilot.observability.metrics.PrometheusMetricsProviderContractTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.ProviderGuardTest.xml",
+          "sha256": "6d7a0cdeb65b381e8e4dece83b8c8705739d01028c7e504a4ea8cd7a31b3a8ce",
+          "suite": "org.trigger.opspilot.observability.ProviderGuardTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.tracing.AgentTraceIntegrationTest.xml",
+          "sha256": "f0ce65a5b643d34cbd5ebe5ce0309b2cff11f708dbcfc189b68e83cbeebd2a3e",
+          "suite": "org.trigger.opspilot.observability.tracing.AgentTraceIntegrationTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.tracing.HttpTracePropagationIntegrationTest.xml",
+          "sha256": "91d69d36cd684297900233ed6b7ca24f377e845173554e40811b892d50163f02",
+          "suite": "org.trigger.opspilot.observability.tracing.HttpTracePropagationIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.tracing.OpenTelemetryBridgeTest.xml",
+          "sha256": "1dd010fd0ce65765eda7b18b47575cd29a0fb0619cc09b3d3c82be05948bf7c2",
+          "suite": "org.trigger.opspilot.observability.tracing.OpenTelemetryBridgeTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.observability.tracing.OpsPilotTracingTest.xml",
+          "sha256": "59d86722cd2387ff94bdb29b56d195db97624482fa4cf078957ac35968d08e7a",
+          "suite": "org.trigger.opspilot.observability.tracing.OpsPilotTracingTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.IncidentEscalationIntegrationTest.xml",
+          "sha256": "2564876020a64bffbcbea1a279279f2df99b67e1cb2accd166ede9cd169ce5ef",
+          "suite": "org.trigger.opspilot.oncall.IncidentEscalationIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest.xml",
+          "sha256": "3787ceec16d1f72e95947a43435fd1addf3cabae8951cee5ca86f0f4bebd7dba",
+          "suite": "org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 8
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest.xml",
+          "sha256": "a212c8aff6195935ca6f5ed70758b9d2708414641e22e83fc5813cdaceb21fe0",
+          "suite": "org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest",
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 27
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest.xml",
+          "sha256": "1adb265eddbaa70dfa691d1c3eca61a7e64d344acaa1f397057d0c38271678f1",
+          "suite": "org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 10
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest.xml",
+          "sha256": "f3046dd983ee985ee38316294e19ac158df82fea51b3df57410c445462d91092",
+          "suite": "org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 8
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallSwapIntegrationTest.xml",
+          "sha256": "028bb2730fc4ca79d1ccdf6ea7949b485b482e647527be9bd41855a81cd1d930",
+          "suite": "org.trigger.opspilot.oncall.MySqlOnCallSwapIntegrationTest",
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 17
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationIntegrationTest.xml",
+          "sha256": "fe83bd7e386e682d487892ee83953372e72af874285d0f1273c90780222f7493",
+          "suite": "org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationIntegrationTest",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 18
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallCoverageIntegrationTest.xml",
+          "sha256": "38cee0c625d7a3e29e3e676ea4dd4079818fea7ab2a8c889e480ca1aba0648fe",
+          "suite": "org.trigger.opspilot.oncall.OnCallCoverageIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallHandoffIntegrationTest.xml",
+          "sha256": "8b87846ebaa386314b9e3225ca3d5eefd3c4b4ba8f2580785c3824cacc0109d9",
+          "suite": "org.trigger.opspilot.oncall.OnCallHandoffIntegrationTest",
+          "tests": 27,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallRosterIntegrationTest.xml",
+          "sha256": "a359e9252546f08d2e122f92d3d82599c665537426e0fef396ea610afb1364ee",
+          "suite": "org.trigger.opspilot.oncall.OnCallRosterIntegrationTest",
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallRotationIntegrationTest.xml",
+          "sha256": "99800a0458401232ac8fe48e408ce1c039f5b282f3b510f33297cef086234f30",
+          "suite": "org.trigger.opspilot.oncall.OnCallRotationIntegrationTest",
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallRotationJobIntegrationTest.xml",
+          "sha256": "ddc70f11ef3bc6b3db4630c2b48c61c11eba4532d93f50d8a9b8063b9e8c8a5f",
+          "suite": "org.trigger.opspilot.oncall.OnCallRotationJobIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallRoutingSnapshotIntegrationTest.xml",
+          "sha256": "23e717072b57f88febfc7f662cae4f959e8319b04b51f1c844030ffe5c60c3ab",
+          "suite": "org.trigger.opspilot.oncall.OnCallRoutingSnapshotIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallSwapIntegrationTest.xml",
+          "sha256": "e561639c17ce29a221b6163b37ed1c29e166be2bbe77bb0b9acffedfce8f00b0",
+          "suite": "org.trigger.opspilot.oncall.OnCallSwapIntegrationTest",
+          "tests": 17,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.oncall.OnCallSwapNotificationIntegrationTest.xml",
+          "sha256": "4c700def4afb7456a96d18f0562be8631878cec08a81d6560a4ce8571cc55cfb",
+          "suite": "org.trigger.opspilot.oncall.OnCallSwapNotificationIntegrationTest",
+          "tests": 18,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.OpsPilotApiIntegrationTest.xml",
+          "sha256": "3eccbfc171007a9fe29cebbcc66d91b9cbdcd39751647c01eb6fc098845bb276",
+          "suite": "org.trigger.opspilot.OpsPilotApiIntegrationTest",
+          "tests": 9,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.postmortem.FollowUpNotificationIntegrationTest.xml",
+          "sha256": "56a65fde6b28e8dc812d730ff535d10d5cf991e1bb05947ef87b24d02eccb2ac",
+          "suite": "org.trigger.opspilot.postmortem.FollowUpNotificationIntegrationTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.postmortem.FollowUpOperationsIntegrationTest.xml",
+          "sha256": "519d33325d44227affbe92a038b02d12f8d9bd6a5e3e4d45c3958141f2d860b8",
+          "suite": "org.trigger.opspilot.postmortem.FollowUpOperationsIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.postmortem.PostmortemIntegrationTest.xml",
+          "sha256": "02036239c97f7393949688efe50cb85b279e55de602f39474f1fc4ab479bd44d",
+          "suite": "org.trigger.opspilot.postmortem.PostmortemIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.problem.ProblemCreationConcurrencyIntegrationTest.xml",
+          "sha256": "3d028b59856740114a9be47b36a872a65044572ce92c7b462945b0aedbecbdb1",
+          "suite": "org.trigger.opspilot.problem.ProblemCreationConcurrencyIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.problem.ProblemManagementIntegrationTest.xml",
+          "sha256": "e2970d1d70cedac199bb8f7f5e9e1efb3fca8171efbf11f54bb3ab510fecc612",
+          "suite": "org.trigger.opspilot.problem.ProblemManagementIntegrationTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.Bm25RetrieverTest.xml",
+          "sha256": "cfcc892acfbca28f489b4b2c32a05f63cac99c344a256b9eda09be942e33a17e",
+          "suite": "org.trigger.opspilot.runbook.Bm25RetrieverTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.ReciprocalRankFusionTest.xml",
+          "sha256": "2acb9a0a6da399e414a444464499bbfcb8aca983f0b83f6bfc619fd31537e7a3",
+          "suite": "org.trigger.opspilot.runbook.ReciprocalRankFusionTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookHybridRetrievalIntegrationTest.xml",
+          "sha256": "1812484ebd200354df551ac1b015bee7734e2d08c241c9f94407a8e401a8980c",
+          "suite": "org.trigger.opspilot.runbook.RunbookHybridRetrievalIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookJudgmentAgreementTest.xml",
+          "sha256": "8a3006b5994b7926903c5b9285cd15520a817b8bbc8da6bd5a5bdc3225d680dc",
+          "suite": "org.trigger.opspilot.runbook.RunbookJudgmentAgreementTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookKnowledgeIntegrationTest.xml",
+          "sha256": "0572c4fe36de2d69cb3e8034575481f9001e2ff454ad81fd506b828779abb18b",
+          "suite": "org.trigger.opspilot.runbook.RunbookKnowledgeIntegrationTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookPublicationConcurrencyTest.xml",
+          "sha256": "1e7b9bbae3616da46a585b3950b769f5c9e8c99d1240f9381f9c10617d7ee90d",
+          "suite": "org.trigger.opspilot.runbook.RunbookPublicationConcurrencyTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookPublicationIntegrationTest.xml",
+          "sha256": "a0d226b4d60e76ceeddcf0efb882a6f804363ea44beb4b8f669714b3fec76756",
+          "suite": "org.trigger.opspilot.runbook.RunbookPublicationIntegrationTest",
+          "tests": 12,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookPublicationMigrationTest.xml",
+          "sha256": "af5942a5154d4e67773065cc231f55e47558ce4353972b8e1c08cf8d2f730cfc",
+          "suite": "org.trigger.opspilot.runbook.RunbookPublicationMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookRelevanceFeedbackIntegrationTest.xml",
+          "sha256": "c73da4bc41ec73d59cda768762d077ff5b6feae9d60dca115e982d38627b2872",
+          "suite": "org.trigger.opspilot.runbook.RunbookRelevanceFeedbackIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookRetrievalLifecycleIntegrationTest.xml",
+          "sha256": "16057ba05a0f93bcb925254eab6ed51e809cdd3200c7aab3818496b180c9ef48",
+          "suite": "org.trigger.opspilot.runbook.RunbookRetrievalLifecycleIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookRetrievalTrendIntegrationTest.xml",
+          "sha256": "dc18d9024f5dbd1050e7ffa517381ee56ec45a260f48640782a301b14ee54b00",
+          "suite": "org.trigger.opspilot.runbook.RunbookRetrievalTrendIntegrationTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.runbook.RunbookReturnedCountMigrationTest.xml",
+          "sha256": "863d4788ee9c795447d2a9bd93ff38c738b4f147c2caed31de425e018d056da0",
+          "suite": "org.trigger.opspilot.runbook.RunbookReturnedCountMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.security.AccountStatusHttpIntegrationTest.xml",
+          "sha256": "9230d94b2bcca07e7911611afb8e5674398146e58434035107f8f7e42fb3f15d",
+          "suite": "org.trigger.opspilot.security.AccountStatusHttpIntegrationTest",
+          "tests": 8,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.security.AuthSessionHttpIntegrationTest.xml",
+          "sha256": "25bdb6b1523e45b58ecd03676d307375246bb25a4df4d4153c762cdb81b5ae91",
+          "suite": "org.trigger.opspilot.security.AuthSessionHttpIntegrationTest",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.security.AuthSessionMigrationTest.xml",
+          "sha256": "3c7b88dd595309c67b5837d78bac9783c6f06abeb5c899e40ac0425ea3bc5787",
+          "suite": "org.trigger.opspilot.security.AuthSessionMigrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.security.JwtServiceIdentityTest.xml",
+          "sha256": "0cd6864ffbec8c053fbe455cf0937d51d951dd35d388e32756699da813b9639a",
+          "suite": "org.trigger.opspilot.security.JwtServiceIdentityTest",
+          "tests": 56,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.security.ManagementPortIsolationIntegrationTest.xml",
+          "sha256": "5649e4c4ded6b49e3d8e9f1335926263949bcde813fa0cf5a76917d10b5169c8",
+          "suite": "org.trigger.opspilot.security.ManagementPortIsolationIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.slo.PrometheusSloClientContractTest.xml",
+          "sha256": "9ed7cccf2c954b91deb01c1650cd03bba7377cdeea74638b6ec116a6502345da",
+          "suite": "org.trigger.opspilot.slo.PrometheusSloClientContractTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.slo.ServiceSloIntegrationTest.xml",
+          "sha256": "e36a81639ee59e13bc9fb2d7b777d8cab45f1336475eeaf13293f79aabc9557c",
+          "suite": "org.trigger.opspilot.slo.ServiceSloIntegrationTest",
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "file": "target/cp88-backend/shanghai-xml/TEST-org.trigger.opspilot.slo.SloBurnRateCalculatorTest.xml",
+          "sha256": "ed997b2ae2e2707601ec15dc9a77fe638b4294cca19f255af770c69b398ab328",
+          "suite": "org.trigger.opspilot.slo.SloBurnRateCalculatorTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    }
+  ],
+  "frontendAndNode": [
+    {
+      "file": "target/cp88-backend/frontend-tests.log",
+      "sha256": "31139655c14c19eff292ace77cb6e5caeb79fa78cce7b2022cea1da2809f7247",
+      "pass": 129
+    },
+    {
+      "file": "target/cp88-backend/node-tests.log",
+      "sha256": "439614216d205414170579ce0c3bb0492d69fbf0c7b850d20bb3a9638f5fc100",
+      "pass": 90
+    }
+  ],
+  "first87RemoteProof": {
+    "file": "docs/assets/v1.7-cp87/first-remote-proof.json",
+    "sha256": "e792d8a3f0f2cad49c1884d40cda3ab1c1b2ac798f721b0f2a54fc5376cc1899"
+  },
+  "hashBasis": "raw local working-file bytes; Git-normalized LF may differ",
+  "cachedContextShutdownAndProductionScaleNotClaimed": true
+}
