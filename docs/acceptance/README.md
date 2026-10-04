@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+最新 CP91：[有数据历史升级门禁](V1.7-checkpoint-91.md)已落地，本地双时区各613发现/461执行/152条件跳过、81新鲜XML，H2十行/五状态/微秒/原21列/重复0通过，全脚本100通过；生产JAR及前端与CP90逐字节/内容不变，不伪造新视觉Demo。CP91自己的真实MySQL升级及完整CI待验。CP90源码ac3b053的十八CI已全success，[五ZIP与自己的新12/Linux原14/8/6独立证据](../assets/v1.7-cp90/remote-proof.json)已闭环，保留旧六图及自己的三张Linux图。以下为历史阶段记录，完整路线继续。
+
 最新：[90报告](V1.7-checkpoint-90.md)/[本地proof与六张新旧图](../assets/v1.7-cp90/local-proof.json)，LOCAL_RETENTION_UI_SCOPE_PASS_OWN_REMOTE_PENDING。首次重试前最新GET、真实到期0POST、擦除后原已提交回执、读失败清旧事实；原九加新三实页、前端132/脚本92/构建通过。CP89自身adc89b3/[Run37174799138](https://github.com/Trigger726/OnCall-Agent/actions/runs/37174799138)十八作业全success，五ZIP核验及MySQL通知27/换班17/一般99独立重放通过，见[89第六节](V1.7-checkpoint-89.md)/[自身远端proof](../assets/v1.7-cp89/remote-proof.json)。CP90自己的CI和真实MySQL旧V35有数据升级待验；不借旧绿灯替代新页面。
 
 以下保留历史阶段当时状态与首次失败，后续闭环见对应报告追加节；不删除旧Demo或把历史“待验”当最新终态。

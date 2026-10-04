@@ -1,5 +1,7 @@
 # 双向换班后端契约（CP85）
 
+最新 CP91：[有数据历史升级门禁](acceptance/V1.7-checkpoint-91.md)已落地，本地双时区各613发现/461执行/152条件跳过、81新鲜XML，H2十行/五状态/微秒/原21列/重复0通过，全脚本100通过；生产JAR及前端与CP90逐字节/内容不变，不伪造新视觉Demo。CP91自己的真实MySQL升级及完整CI待验。CP90源码ac3b053的十八CI已全success，[五ZIP与自己的新12/Linux原14/8/6独立证据](assets/v1.7-cp90/remote-proof.json)已闭环，保留旧六图及自己的三张Linux图。以下为历史阶段记录，完整路线继续。
+
 CP90补齐实际页面：[验收](acceptance/V1.7-checkpoint-90.md)。首次未冻结人工重试前重新GET，版本必须仍等于原草稿、期限按数据库快照判断；未知/到期/已擦除或读取失败不新POST、不自动换版本。已冻结的原version/reason在期限后仍可手动求原回执，服务器已提交则只返回原事实，否则拒绝。清理、技术2xx、人接受与两段coverage继续独立。原九加新三实页/前端132通过，自己的源码CI待验。CP89自身真实MySQL27/V36及十八CI已由[89第六节](acceptance/V1.7-checkpoint-89.md)闭环，旧V35有数据的MySQL升级未验；以下原合同/待验文字按历史范围阅读。
 
 CP89新增保留事实，当前仅本地后台/API验收：[89报告](acceptance/V1.7-checkpoint-89.md)。列表增加retentionEnabled，单通知增加payloadExpiresAt/payloadErasedAt（数据库会话时间）。ONCALL_SWAP_NOTIFICATION_RETENTION_ENABLED默认false、PAYLOAD_RETENTION_DAYS默认30且1–3650；既有事件V36冻结created_at+30日，新事件冻结配置期限，重试不延长。清理仅擦除payload_json，未投递终态标SKIPPED/RETENTION_EXPIRED，原DELIVERED/SKIPPED及回执/审计/重试指纹不删；有效CLAIMED租约暂缓。到期新的POST retry返回409/ONCALL_SWAP_NOTIFICATION_PAYLOAD_EXPIRED，但已提交的同原version/reason回执仍返回当前事实、不重复审计。已擦除载荷不能因关闭清理开关恢复。不是远端撤回或完整PII删除，专门前端呈现及实际MySQL仍待。
