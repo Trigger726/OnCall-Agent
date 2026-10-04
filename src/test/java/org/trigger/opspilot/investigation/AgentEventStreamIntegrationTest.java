@@ -3,6 +3,7 @@ package org.trigger.opspilot.investigation;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -25,7 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.ai.dashscope.api-key=disabled", "opspilot.ai.enabled=false",
         "opspilot.agent.events.catchup-delay=3600000"
 })
-@AutoConfigureMockMvc
+// MockMvc's default failure-log collector iterates response headers while the async SSE
+// converter is writing them. Assert headers explicitly below; do not run that unsafe printer.
+@AutoConfigureMockMvc(print = MockMvcPrint.NONE)
 class AgentEventStreamIntegrationTest {
     @Autowired MockMvc mvc;
     @Autowired InvestigationService investigations;

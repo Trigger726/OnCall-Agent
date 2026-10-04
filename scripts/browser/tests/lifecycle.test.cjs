@@ -6,6 +6,15 @@ const { spawn } = require('node:child_process');
 const { once } = require('node:events');
 const { requireFreePort, stopProcess, waitForHealth, redact, unexpectedLogLines } = require('../../verify-oncall-browser-ci.cjs');
 
+for (const flag of ['OPSPILOT_SWAP_BASELINE','OPSPILOT_SWAP_ONLY']) test(`${flag} cannot bypass full browser CI or launch a process`, async () => {
+  const child = spawn(process.execPath, [require.resolve('../../verify-oncall-browser-ci.cjs')], {
+    env: { ...process.env, CI: 'true', [flag]: '1' }, windowsHide: true,
+  });
+  let output = ''; child.stderr.on('data', chunk => { output += chunk; });
+  const [code] = await once(child, 'close'); assert.equal(code, 1);
+  assert.match(output, /cannot replace full CI acceptance/); assert.doesNotMatch(output, /evidenceDirectory|occupied/);
+});
+
 test('archived swap comparison cannot replace acceptance or launch an old JAR in CI', async () => {
   const child = spawn(process.execPath, [require.resolve('../../verify-oncall-swap-http-ci.cjs')], {
     env: { ...process.env, CI: 'true', OPSPILOT_SWAP_UPGRADE: '1' }, windowsHide: true,

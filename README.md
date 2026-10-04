@@ -6,7 +6,9 @@ OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。�
 
 ## 核心能力
 
-最新85：[双向换班后端报告](docs/acceptance/V1.7-checkpoint-85.md)/[本地证据](docs/assets/v1.7-cp85/local-proof.json)。两个未来完整普通班次可同/跨计划互换，本人申请、指定对方确认后原子生成两覆盖/审计，管理员无参与者豁免，保留原班次；17共享场景/双时区各433实际执行/100脚本单测与旧404→同库V34真实HTTP对照通过。自己的新MySQL17项/十八作业源CI待验，本机条件跳过不能签字；页面、通知、开放认领、已开始/部分时段互换及成对原子撤销未交付，旧Demo/失败保留。
+最新86：[双向换班页面验收](docs/acceptance/V1.7-checkpoint-86.md)/[本地证据](docs/assets/v1.7-cp86/local-proof.json)。本人选择同/跨计划两个未来普通班次，对方一次确认；原键/双版本与决定按账号冻结恢复、403/409锁定、真实晚200账号隔离及两段coverage核对已验。最终十四/八/六实页、新换班七流程、前端120/Node102、双时区各433执行通过，新旧桌面/手机及首次失败保留。仅禁用既有SSE测试的并发MockMvc自动打印器、原断言不删，补全量失败日志/XML上传；自己的新十八源CI待验，通知/开放认领/部分班次/成对撤销与整体路线继续。
+
+85自身332211e/[Run37156379925](https://github.com/Trigger726/OnCall-Agent/actions/runs/37156379925)十六success、H2failure、容器skipped；七ZIP源/实际摘要与重放已核验，真实MySQL8.4.11新换班17零跳过、Linux换班HTTP两项、原MySQL99/原生18/双JVM六项及原十三八六浏览器机器结果限定通过，见[85第五节](docs/acceptance/V1.7-checkpoint-85.md)/[首次远端证据](docs/assets/v1.7-cp85/first-remote-proof.json)。H2错误在MockMvc日志打印器遍历异步SSE响应头，不称整轮全绿或用86本地结果覆盖首次失败。
 
 84自身3abb34c9/[Run37154511110](https://github.com/Trigger726/OnCall-Agent/actions/runs/37154511110)十七success，六ZIP来源/实际摘要核验、真实MySQL8.4.11独占schema双JVM六项/Provider10及最终SQL/双池关闭/原门禁重放通过，见[84第四节](docs/acceptance/V1.7-checkpoint-84.md)/[远端证据](docs/assets/v1.7-cp84/remote-proof.json)。原生MySQL18/原99/H2原生63、十runner/十九完整JAR日志/十三八六浏览器机器结果已核验；不覆盖85新换班事务、跨机器或生产规模。
 

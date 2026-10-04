@@ -3,10 +3,11 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { api } from '@/services/api'
 import { auth } from '@/stores/auth'
 import { canRequestHandoff, type HandoffSource } from '@/services/onCallHandoffs'
+import { canRequestSwap } from '@/services/onCallSwaps'
 
 interface Shift { id: number; scheduleId: number; scheduleName: string; userId: number; userName: string; startsAt: string; endsAt: string; override: boolean; version: number; note: string; cancelledAt: string | null; cancellationReason: string | null }
 interface Roster { databaseNow: string; from: string; to: string; suggestedStart: string; suggestedEnd: string; schedules: { id: number; name: string; resourceName: string }[]; users: { id: number; displayName: string; roleCode: string }[]; shifts: Shift[]; truncated: boolean }
-const emit = defineEmits<{ changed: []; handoff: [source: HandoffSource] }>()
+const emit = defineEmits<{ changed: []; handoff: [source: HandoffSource]; swap: [source: HandoffSource] }>()
 const canManage = computed(() => ['ADMIN', 'OPS_MANAGER'].includes(auth.state.user?.roleCode ?? ''))
 const roster = ref<Roster | null>(null)
 const busy = ref(false)
@@ -128,7 +129,7 @@ defineExpose({ refresh })
         <article v-for="item in roster.shifts" :key="item.id" class="roster-row" :class="{ cancelled: item.cancelledAt }">
           <div><strong>{{ item.userName }} · {{ item.override ? '临时覆盖' : '普通班次' }}</strong><span>{{ item.scheduleName }} · {{ shiftState(item) }} · v{{ item.version }}</span></div>
           <div><span>{{ clockText(item.startsAt) }} → {{ clockText(item.endsAt) }}</span><small>{{ item.cancelledAt ? `取消原因：${item.cancellationReason}` : item.note || '历史班次' }}</small></div>
-          <div class="roster-row-actions"><button v-if="roster.schedules.some(s => s.id === item.scheduleId) && canRequestHandoff(item, auth.state.user?.id, auth.state.user?.roleCode, roster.databaseNow)" class="secondary-button" :disabled="busy" @click="emit('handoff', { ...item })">申请接班</button><button v-if="canManage && !item.cancelledAt && shiftState(item) !== '已结束'" class="secondary-button" :disabled="busy" @click="cancelTarget = item; cancelReason = ''">取消班次</button></div>
+          <div class="roster-row-actions"><button v-if="roster.schedules.some(s => s.id === item.scheduleId) && canRequestSwap(item, auth.state.user?.id, auth.state.user?.roleCode, roster.databaseNow)" class="secondary-button" :disabled="busy" @click="emit('swap', { ...item })">申请双向换班</button><button v-if="roster.schedules.some(s => s.id === item.scheduleId) && canRequestHandoff(item, auth.state.user?.id, auth.state.user?.roleCode, roster.databaseNow)" class="secondary-button" :disabled="busy" @click="emit('handoff', { ...item })">申请接班</button><button v-if="canManage && !item.cancelledAt && shiftState(item) !== '已结束'" class="secondary-button" :disabled="busy" @click="cancelTarget = item; cancelReason = ''">取消班次</button></div>
         </article>
       </div>
       <div v-else-if="roster" class="empty-state">窗口内没有班次。历史排班未删除；可调整窗口查看，管理角色可新增有效班次。</div>

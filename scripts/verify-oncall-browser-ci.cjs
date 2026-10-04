@@ -68,6 +68,8 @@ async function runScript(name, env, evidence) {
   }
 }
 async function verify() {
+  if (process.env.OPSPILOT_SWAP_BASELINE === '1' && process.env.CI) throw new Error('Swap baseline cannot replace full CI acceptance');
+  if (process.env.OPSPILOT_SWAP_ONLY === '1' && process.env.CI) throw new Error('Swap only mode cannot replace full CI acceptance');
   if (process.env.OPSPILOT_STREAM_SESSION_ONLY === '1' && process.env.CI) throw new Error('Stream session only mode must not replace full CI acceptance');
   if (process.env.OPSPILOT_ACCOUNT_BASELINE === '1' && process.env.CI) throw new Error('Account baseline capture must not replace CI acceptance');
   if (process.env.OPSPILOT_SLO_BASELINE === '1' && process.env.CI) throw new Error('SLO baseline capture must not replace CI acceptance');
@@ -75,7 +77,9 @@ async function verify() {
   if (process.env.OPSPILOT_TREND_BASELINE === '1' && process.env.CI) throw new Error('Trend baseline capture must not replace CI acceptance');
   if (process.env.OPSPILOT_REVOCATION_BASELINE === '1' && process.env.CI) throw new Error('Baseline capture must not replace CI acceptance');
   if (process.env.OPSPILOT_STREAM_SESSION_BASELINE === '1' && process.env.CI) throw new Error('Stream session baseline must not replace CI acceptance');
-  const jar = process.env.OPSPILOT_STREAM_SESSION_BASELINE === '1'
+  const jar = process.env.OPSPILOT_SWAP_BASELINE === '1'
+    ? path.join(root, 'target', 'cp86-before', 'opspilot-cp85.jar')
+    : process.env.OPSPILOT_STREAM_SESSION_BASELINE === '1'
     ? path.join(root, 'target', 'cp67-after', 'opspilot-cp67.jar')
     : process.env.OPSPILOT_ACCOUNT_BASELINE === '1'
     ? path.join(root, 'target', 'cp66-before', 'opspilot-cp65.jar')
@@ -115,15 +119,19 @@ async function verify() {
     await waitForHealth(health, child);
     const env = { ...process.env, OPSPILOT_BASE_URL: base, OPSPILOT_EVIDENCE_DIR: evidence,
       OPSPILOT_ACCEPTANCE_ISOLATED: '1', OPSPILOT_PLAYWRIGHT_MODULE: modulePath };
-    const scripts = process.env.OPSPILOT_STREAM_SESSION_BASELINE === '1' || process.env.OPSPILOT_STREAM_SESSION_ONLY === '1'
+    const scripts = process.env.OPSPILOT_SWAP_BASELINE === '1' || process.env.OPSPILOT_SWAP_ONLY === '1'
+      ? ['verify-oncall-swap-ui.cjs']
+      : process.env.OPSPILOT_STREAM_SESSION_BASELINE === '1' || process.env.OPSPILOT_STREAM_SESSION_ONLY === '1'
       ? ['verify-stream-session-ui.cjs']
       : process.env.OPSPILOT_ACCOUNT_BASELINE === '1' ? ['verify-account-security-ui.cjs']
       : process.env.OPSPILOT_SLO_BASELINE === '1' ? ['verify-slo-rules-ui.cjs']
-      : ['verify-oncall-rotation-ui.cjs', 'verify-oncall-rotation-boundaries.cjs', 'verify-oncall-coverage-ui.cjs', 'verify-oncall-handoff-http.cjs', 'verify-oncall-handoff-ui.cjs', 'verify-oncall-handoff-revocation-http.cjs', 'verify-oncall-handoff-revocation-ui.cjs', 'verify-runbook-trend-ui.cjs', 'verify-runbook-publication-ui.cjs', 'verify-slo-rules-ui.cjs', 'verify-jwt-numeric-date-http.cjs', 'verify-stream-session-ui.cjs', 'verify-account-security-ui.cjs'];
+      : ['verify-oncall-rotation-ui.cjs', 'verify-oncall-rotation-boundaries.cjs', 'verify-oncall-coverage-ui.cjs', 'verify-oncall-handoff-http.cjs', 'verify-oncall-handoff-ui.cjs', 'verify-oncall-handoff-revocation-http.cjs', 'verify-oncall-handoff-revocation-ui.cjs', 'verify-runbook-trend-ui.cjs', 'verify-runbook-publication-ui.cjs', 'verify-slo-rules-ui.cjs', 'verify-jwt-numeric-date-http.cjs', 'verify-stream-session-ui.cjs', 'verify-oncall-swap-ui.cjs', 'verify-account-security-ui.cjs'];
     result.accountBaselineCapture = process.env.OPSPILOT_ACCOUNT_BASELINE === '1';
     result.sloBaselineCapture = process.env.OPSPILOT_SLO_BASELINE === '1';
     result.streamSessionBaselineCapture = process.env.OPSPILOT_STREAM_SESSION_BASELINE === '1';
     result.streamSessionOnly = process.env.OPSPILOT_STREAM_SESSION_ONLY === '1';
+    result.swapBaselineCapture = process.env.OPSPILOT_SWAP_BASELINE === '1';
+    result.swapOnly = process.env.OPSPILOT_SWAP_ONLY === '1';
     for (const name of scripts) {
       if (interrupted) throw new Error('Browser acceptance interrupted');
       result.scripts.push(await runScript(name, env, evidence));
@@ -131,7 +139,7 @@ async function verify() {
     if (interrupted) throw new Error('Browser acceptance interrupted');
     if (unexpectedLogLines(fs.readFileSync(log, 'utf8'))) throw new Error('Owned JAR reported unexpected errors; see sanitized evidence');
     result.unexpectedJarErrors = 0;
-    result.status = result.accountBaselineCapture || result.streamSessionBaselineCapture ? 'BASELINE_CAPTURED' : 'PASS';
+    result.status = result.accountBaselineCapture || result.streamSessionBaselineCapture || result.swapBaselineCapture ? 'BASELINE_CAPTURED' : 'PASS';
   } catch (error) { result.status = 'FAIL'; result.failure = redact(error.message); throw error; }
   finally {
     process.off('SIGINT', interrupt);

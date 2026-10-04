@@ -178,9 +178,25 @@ jobs:
           cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantNativeHttpClientTest.xml target/assistant-native-it/
           cp target/surefire-reports/TEST-org.trigger.opspilot.assistant.AssistantStreamTransportTest.xml target/assistant-native-it/
       - name: Test and package (UTC)
-        run: ./mvnw -B -Duser.timezone=UTC package
+        run: |
+          set -o pipefail
+          mkdir -p target/backend-regression-it/utc-xml
+          touch target/backend-regression-it/utc-start
+          trap 'find target/surefire-reports -name "TEST-*.xml" -newer target/backend-regression-it/utc-start -exec cp {} target/backend-regression-it/utc-xml/ \;' EXIT
+          ./mvnw -B -Duser.timezone=UTC package 2>&1 | tee target/backend-regression-it/utc.log
       - name: Regression tests (Asia/Shanghai)
-        run: ./mvnw -B -Duser.timezone=Asia/Shanghai test
+        run: |
+          set -o pipefail
+          mkdir -p target/backend-regression-it/shanghai-xml
+          touch target/backend-regression-it/shanghai-start
+          trap 'find target/surefire-reports -name "TEST-*.xml" -newer target/backend-regression-it/shanghai-start -exec cp {} target/backend-regression-it/shanghai-xml/ \;' EXIT
+          ./mvnw -B -Duser.timezone=Asia/Shanghai test 2>&1 | tee target/backend-regression-it/shanghai.log
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: backend-regression-evidence
+          path: target/backend-regression-it/
+          retention-days: 30
       - uses: actions/upload-artifact@v5
         if: always()
         with:
