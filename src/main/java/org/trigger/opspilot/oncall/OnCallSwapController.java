@@ -50,6 +50,17 @@ public class OnCallSwapController {
                 body.secondShiftId(), body.secondVersion(), body.requestKey(), body.reason()), user.id(), request.getRemoteAddr()));
     }
 
+    @GetMapping("/{id}/coverage")
+    public ApiResponse<OnCallSwapService.CoverageView> coverage(@PathVariable long id){return ApiResponse.ok(service.coverage(id));}
+
+    @PostMapping("/{id}/coverage/revoke")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
+    public ApiResponse<OnCallSwapService.CoverageView> revokeCoverage(@PathVariable long id,@Valid @RequestBody Revocation body,
+            @AuthenticationPrincipal UserPrincipal user,HttpServletRequest request){
+        return ApiResponse.ok(service.revokeCoverage(id,new OnCallSwapService.RevocationCommand(body.swapVersion(),body.firstReplacementVersion(),
+                body.secondReplacementVersion(),body.operationKey(),body.reason()),user.id(),request.getRemoteAddr()));
+    }
+
     @PostMapping("/{id}/decisions")
     @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER','ON_CALL')")
     public ApiResponse<OnCallSwapService.View> decide(@PathVariable long id, @Valid @RequestBody Decision body,
@@ -62,4 +73,6 @@ public class OnCallSwapController {
                           @NotBlank @Size(max = 36) String requestKey, @NotBlank @Size(max = 500) String reason) {}
     public record Decision(@NotNull @Min(0) Integer version, @NotBlank String status, @NotBlank @Size(max = 500) String reason) {}
     public record RetryNotification(@NotNull @Min(0) Integer version, @NotBlank @Size(max = 500) String reason) {}
+    public record Revocation(@NotNull @Min(0) Integer swapVersion,@NotNull @Min(0) Integer firstReplacementVersion,@NotNull @Min(0) Integer secondReplacementVersion,
+                             @NotBlank @Size(max=36) String operationKey,@NotBlank @Size(max=500) String reason){}
 }

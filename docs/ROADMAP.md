@@ -1,6 +1,6 @@
 # OpsPilot 高价值迭代路线
 
-最新 CP91：[有数据历史升级门禁](acceptance/V1.7-checkpoint-91.md)已落地，本地双时区各613发现/461执行/152条件跳过、81新鲜XML，H2十行/五状态/微秒/原21列/重复0通过，全脚本100通过；生产JAR及前端与CP90逐字节/内容不变，不伪造新视觉Demo。CP91自己的真实MySQL升级及完整CI待验。CP90源码ac3b053的十八CI已全success，[五ZIP与自己的新12/Linux原14/8/6独立证据](assets/v1.7-cp90/remote-proof.json)已闭环，保留旧六图及自己的三张Linux图。以下为历史阶段记录，完整路线继续。
+最新 CP92：[成对原子撤销后台/API](acceptance/V1.7-checkpoint-92.md)/[本地proof](assets/v1.7-cp92/local-proof.json)限定通过：19项共用矩阵、双时区各480实际执行/171条件跳过/83新鲜XML、全脚本112及旧JAR升级五流程/新包HTTP三流程通过。原ACCEPTED/非空通知历史保留，一事务取消两段/独立台账/三审计；原键正文丢失及重启ACK不重复写。专用前端、自己的真实MySQL和完整CI仍待，未宣称完整交付。CP91源码54fd24c的十八CI与[五ZIP/真实V35有数据MySQL升级](assets/v1.7-cp91/remote-proof.json)已独立闭环，不借旧绿灯证明新V37。详情见[撤销契约](ONCALL_SWAP_REVOCATION.md)，历史Demo/首次失败保留，完整路线继续。
 
 CP90保留事实页面本地限定通过：[90报告](acceptance/V1.7-checkpoint-90.md)。数据库快照/微秒期限、到期0新POST、擦除后手动原回执及读失败清旧事实；原九加新三实页、前端132/脚本92通过。CP89自身十八CI及真实MySQL27/V36已由[89第六节](acceptance/V1.7-checkpoint-89.md)闭环；下一步验CP90自己的完整CI，再补真实MySQL有数据的V35历史升级。真实渠道/提醒、开放认领、成对撤销、DST/日历和生产容量仍继续，不能将单个检查点改称整体100%。以下状态按历史时点保留。
 

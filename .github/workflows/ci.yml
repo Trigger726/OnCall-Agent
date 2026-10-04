@@ -79,6 +79,10 @@ jobs:
         run: |
           node --test scripts/tests/oncall-swap-notification-ci.test.cjs
           node scripts/verify-oncall-swap-notification-ci.cjs
+      - name: Verify paired revocation over real HTTP and persisted original receipt after JVM restart
+        run: |
+          node --test scripts/tests/oncall-swap-revocation-http-ci.test.cjs
+          node scripts/verify-oncall-swap-revocation-http-ci.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
@@ -94,6 +98,8 @@ jobs:
             target/oncall-swap-notification-it/**/*.json
             target/oncall-swap-notification-it/**/*.log
             target/oncall-swap-notification-it/**/*.png
+            target/oncall-swap-revocation-http-it/**/*.json
+            target/oncall-swap-revocation-http-it/**/*.log
           retention-days: 30
 
   auth-session-integration:
@@ -340,7 +346,7 @@ jobs:
         with:
           node-version: 22
       - name: Reject H2, skipped cases, partial rollback coverage and incomplete shutdown
-        run: node --test scripts/tests/oncall-swap-mysql.test.cjs scripts/tests/oncall-swap-notification-mysql.test.cjs scripts/tests/oncall-swap-notification-migration-mysql.test.cjs
+        run: node --test scripts/tests/oncall-swap-mysql.test.cjs scripts/tests/oncall-swap-notification-mysql.test.cjs scripts/tests/oncall-swap-notification-migration-mysql.test.cjs scripts/tests/oncall-swap-revocation-mysql.test.cjs
       - name: Verify both override writes, participant consent and concurrent decisions on owned MySQL
         shell: bash
         run: |
@@ -366,6 +372,14 @@ jobs:
           ./mvnw -B -Duser.timezone=UTC -Dopspilot.oncall.swap.notification.migration.mysql.enabled=true -Dtest=MySqlOnCallSwapNotificationMigrationTest test 2>&1 | tee target/oncall-swap-notification-migration-mysql-it/maven.log
       - name: Verify original columns payload receipts deadlines and stopped migration container
         run: node scripts/verify-oncall-swap-notification-migration-mysql.cjs
+      - name: Verify paired atomic revocation and original receipts on independently owned MySQL
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p target/oncall-swap-revocation-mysql-it
+          ./mvnw -B -Duser.timezone=UTC -Dopspilot.oncall.swap.revocation.mysql.enabled=true -Dtest=MySqlOnCallSwapRevocationIntegrationTest test 2>&1 | tee target/oncall-swap-revocation-mysql-it/maven.log
+      - name: Verify all revocation cases used MySQL V37 and the full JVM closed cleanly
+        run: node scripts/verify-oncall-swap-revocation-mysql.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
@@ -374,6 +388,7 @@ jobs:
             target/oncall-swap-mysql-it/
             target/oncall-swap-notification-mysql-it/
             target/oncall-swap-notification-migration-mysql-it/
+            target/oncall-swap-revocation-mysql-it/
             target/surefire-reports/
           retention-days: 30
 

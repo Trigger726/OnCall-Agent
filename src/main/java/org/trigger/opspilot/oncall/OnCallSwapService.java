@@ -115,6 +115,93 @@ public class OnCallSwapService {
         return decided;
     }
 
+    /** A single SQL statement separates immutable acceptance, both current replacements and revocation. */
+    public CoverageView coverage(long id) {
+        return jdbc.sql("""
+                SELECT s.*, CURRENT_TIMESTAMP(6) AS database_now,
+                  a.id AS first_coverage_id,a.schedule_id AS first_coverage_schedule,a.user_id AS first_coverage_user,
+                  a.version AS first_coverage_version,a.starts_at AS first_coverage_start,a.ends_at AS first_coverage_end,
+                  a.cancelled_at AS first_coverage_cancelled,a.cancellation_reason AS first_coverage_reason,
+                  b.id AS second_coverage_id,b.schedule_id AS second_coverage_schedule,b.user_id AS second_coverage_user,
+                  b.version AS second_coverage_version,b.starts_at AS second_coverage_start,b.ends_at AS second_coverage_end,
+                  b.cancelled_at AS second_coverage_cancelled,b.cancellation_reason AS second_coverage_reason,
+                  r.swap_id AS revoked_swap,r.actor_id,r.operation_key,r.swap_version,r.first_replacement_version,
+                  r.second_replacement_version,r.reason AS revocation_reason,r.revoked_at
+                FROM oncall_shift_swap s LEFT JOIN oncall_shift a ON a.id=s.first_replacement_shift_id
+                LEFT JOIN oncall_shift b ON b.id=s.second_replacement_shift_id
+                LEFT JOIN oncall_swap_revocation r ON r.swap_id=s.id WHERE s.id=:id
+                """).param("id",id).query((rs,n)->new CoverageView(rs.getObject("database_now",LocalDateTime.class),mapper.mapRow(rs,n),
+                        replacement(rs,"first"),replacement(rs,"second"),rs.getObject("revoked_swap",Long.class)==null?null:new Revocation(
+                        rs.getLong("revoked_swap"),rs.getLong("actor_id"),rs.getString("operation_key"),rs.getInt("swap_version"),
+                        rs.getInt("first_replacement_version"),rs.getInt("second_replacement_version"),rs.getString("revocation_reason"),rs.getObject("revoked_at",LocalDateTime.class))))
+                .optional().orElseThrow(()->missing("换班请求不存在"));
+    }
+
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public CoverageView revokeCoverage(long id, RevocationCommand command, long actorId, String ip) {
+        String reason = text(command.reason()), key;
+        try {
+            key = UUID.fromString(command.operationKey()).toString();
+            if (!key.equals(command.operationKey())) throw new IllegalArgumentException();
+        } catch (IllegalArgumentException | NullPointerException error) { throw invalid("撤销键须为规范UUID"); }
+        if (command.swapVersion() < 0 || command.firstReplacementVersion() < 0 || command.secondReplacementVersion() < 0)
+            throw invalid("请显式提供原换班及两条覆盖版本");
+        var initial = get(id);
+        lockSchedules(initial.firstScheduleId(), initial.secondScheduleId());
+        var row = get(id, true);
+        boolean manager = jdbc.sql("SELECT id FROM sys_user WHERE id=:id AND status='ACTIVE' AND role_code IN ('ADMIN','OPS_MANAGER') FOR UPDATE")
+                .param("id", actorId).query(Long.class).optional().isPresent();
+        if (!manager) throw forbidden("仅当前活跃管理员或运维经理可成对撤销覆盖");
+        var previous = jdbc.sql("SELECT * FROM oncall_swap_revocation WHERE actor_id=:actor AND operation_key=:key")
+                .param("actor", actorId).param("key", key).query(revocationMapper).optional();
+        if (previous.isPresent()) {
+            var recorded = previous.get();
+            if (recorded.swapId() != id || recorded.swapVersion() != command.swapVersion()
+                    || recorded.firstReplacementVersion() != command.firstReplacementVersion()
+                    || recorded.secondReplacementVersion() != command.secondReplacementVersion() || !recorded.reason().equals(reason))
+                throw conflict("ONCALL_SWAP_REVOCATION_KEY_REUSED", "撤销键已用于不同换班、版本或说明");
+            return coverage(id); // Acknowledges the original command; never revives either replacement.
+        }
+        if (!row.status().equals("ACCEPTED") || row.version() != command.swapVersion()
+                || row.firstReplacementShiftId() == null || row.secondReplacementShiftId() == null)
+            throw conflict("ONCALL_SWAP_VERSION_CONFLICT", "须核对原已接受换班及捕获版本");
+        if (jdbc.sql("SELECT swap_id FROM oncall_swap_revocation WHERE swap_id=:id").param("id", id).query(Long.class).optional().isPresent())
+            throw conflict("ONCALL_SWAP_COVERAGE_ALREADY_REVOKED", "两段已成对撤销，只能核对原回执");
+        var first = source(row.firstReplacementShiftId());
+        var second = source(row.secondReplacementShiftId());
+        requireSnapshot(first, row.firstScheduleId(), row.targetUserId(), row.firstStartsAt(), row.firstEndsAt());
+        requireSnapshot(second, row.secondScheduleId(), row.requesterId(), row.secondStartsAt(), row.secondEndsAt());
+        if (!first.override() || !second.override()) throw conflict("ONCALL_SWAP_SOURCE_CHANGED", "两段须为原换班生成的覆盖");
+        if (first.cancelledAt() != null || second.cancelledAt() != null
+                || first.version() != command.firstReplacementVersion() || second.version() != command.secondReplacementVersion()
+                || first.version() == Integer.MAX_VALUE || second.version() == Integer.MAX_VALUE)
+            throw conflict("ONCALL_SHIFT_VERSION_CONFLICT", "任一覆盖已变化或已取消，不能做半撤销");
+        requireRemaining(first, second);
+        roster.cancel(first.id(), command.firstReplacementVersion(), reason, actorId, ip);
+        roster.cancel(second.id(), command.secondReplacementVersion(), reason, actorId, ip);
+        jdbc.sql("""
+                INSERT INTO oncall_swap_revocation(swap_id,actor_id,operation_key,swap_version,first_replacement_version,second_replacement_version,reason,revoked_at)
+                VALUES (:id,:actor,:key,:swap,:first,:second,:reason,:at)
+                """).param("id",id).param("actor",actorId).param("key",key).param("swap",command.swapVersion())
+                .param("first",command.firstReplacementVersion()).param("second",command.secondReplacementVersion()).param("reason",reason)
+                .param("at",now().truncatedTo(ChronoUnit.MICROS)).update();
+        audit.recordAs(actorId,ip,"ONCALL_SWAP_COVERAGE_REVOKED","ONCALL_SWAP",id,"两条覆盖 #"+first.id()+" / #"+second.id()+"；"+reason);
+        requireRemaining(first, second); // Recheck after audit work; an ended pair must roll back together.
+        return coverage(id);
+    }
+
+    private void requireRemaining(Source first, Source second) {
+        var current = now();
+        if (!first.endsAt().isAfter(current) || !second.endsAt().isAfter(current))
+            throw conflict("ONCALL_SWAP_COVERAGE_EXPIRED", "任一覆盖已结束，不能撤销历史责任");
+    }
+    private static Replacement replacement(java.sql.ResultSet rs,String prefix)throws java.sql.SQLException {
+        String p=prefix+"_coverage_";return rs.getObject(p+"id",Long.class)==null?null:new Replacement(rs.getLong(p+"id"),rs.getLong(p+"schedule"),rs.getLong(p+"user"),
+                rs.getInt(p+"version"),rs.getObject(p+"start",LocalDateTime.class),rs.getObject(p+"end",LocalDateTime.class),rs.getObject(p+"cancelled",LocalDateTime.class),rs.getString(p+"reason"));
+    }
+    private static final RowMapper<Revocation> revocationMapper=(rs,n)->new Revocation(rs.getLong("swap_id"),rs.getLong("actor_id"),rs.getString("operation_key"),
+            rs.getInt("swap_version"),rs.getInt("first_replacement_version"),rs.getInt("second_replacement_version"),rs.getString("reason"),rs.getObject("revoked_at",LocalDateTime.class));
+
     private void validate(Source source, int version) {
         boolean active = jdbc.sql("SELECT active FROM oncall_schedule WHERE id=:id").param("id", source.scheduleId()).query(Boolean.class).single();
         if (!active) throw conflict("ONCALL_SCHEDULE_INACTIVE", "计划已停用");
@@ -173,6 +260,10 @@ public class OnCallSwapService {
     private record Source(long id, long scheduleId, long userId, int version, boolean override, LocalDateTime startsAt, LocalDateTime endsAt, LocalDateTime cancelledAt) {}
     public record Command(long firstShiftId, int firstVersion, long secondShiftId, int secondVersion, String requestKey, String reason) {}
     public record Decision(int version, String status, String reason) {}
+    public record RevocationCommand(int swapVersion,int firstReplacementVersion,int secondReplacementVersion,String operationKey,String reason){}
+    public record Replacement(long id,long scheduleId,long userId,int version,LocalDateTime startsAt,LocalDateTime endsAt,LocalDateTime cancelledAt,String cancellationReason){}
+    public record Revocation(long swapId,long actorId,String operationKey,int swapVersion,int firstReplacementVersion,int secondReplacementVersion,String reason,LocalDateTime revokedAt){}
+    public record CoverageView(LocalDateTime databaseNow,View accepted,Replacement firstReplacement,Replacement secondReplacement,Revocation revocation){}
     public record View(long id, long requesterId, long targetUserId, String requestKey,
                        long firstScheduleId, long firstShiftId, int firstVersion, LocalDateTime firstStartsAt, LocalDateTime firstEndsAt,
                        long secondScheduleId, long secondShiftId, int secondVersion, LocalDateTime secondStartsAt, LocalDateTime secondEndsAt,
