@@ -1,0 +1,1007 @@
+{
+  "status": "PASS",
+  "comparison": false,
+  "cases": [
+    {
+      "name": "real-http-consent-explicit-versions-and-keyed-publication",
+      "anonymous401": true,
+      "auditor403": true,
+      "noManagerImpersonation": true,
+      "eachMissingVersion400": true,
+      "originalPublicationAck": true,
+      "changedKey409": true
+    },
+    {
+      "name": "real-committed-claim-response-loss-and-original-manual-ack",
+      "loss": {
+        "status": 200,
+        "bodyRead": false,
+        "actualSocketDestroyed": true
+      },
+      "manualOriginalAck": true,
+      "originalVersion": 0,
+      "committedVersion": 1,
+      "oneReceipt": true,
+      "audits": 2,
+      "actualResponsibilityUser": 3
+    },
+    {
+      "name": "same-original-receipt-after-jvm-restart-and-independent-cancel",
+      "sameReceiptAfterRestart": true,
+      "cancelledCoverageNotRevived": true,
+      "historicalClaimedPreserved": true,
+      "actualFallbackUser": 2,
+      "audits": 2
+    },
+    {
+      "name": "different-http-claimants-one-winner-with-one-override",
+      "actualHttpStatuses": [
+        200,
+        409
+      ],
+      "oneOverride": true,
+      "oneReceipt": true,
+      "audits": 2,
+      "winner": 3
+    },
+    {
+      "name": "owner-withdrawal-original-receipt-and-reject-other-claim",
+      "originalWithdrawAck": true,
+      "subsequentClaim409": true,
+      "noOverride": true,
+      "audits": 2
+    },
+    {
+      "name": "changed-source-blocks-claim-without-new-responsibility",
+      "sourceChanged409": true,
+      "requestStillOpen": true,
+      "noOverrideOrReceipt": true,
+      "audits": 1
+    },
+    {
+      "name": "ongoing-subwindow-preserves-past-and-future-owner",
+      "originalTimesPreserved": true,
+      "remainingWholeSecondsOnly": true,
+      "pastOwner": 2,
+      "remainingOwner": 3,
+      "futureOwner": 2
+    },
+    {
+      "name": "current-role-loss-blocks-original-claim-without-writes",
+      "staleJwtUsesLatestRole": true,
+      "http403": true,
+      "allBusinessSqlFingerprintsUnchanged": true
+    }
+  ],
+  "jarSha256": "f54182ff7ccd4b7a044ce48ba2913da49bcccbf2167ded958216b0cef33bd328",
+  "startedPids": [
+    2381,
+    2472,
+    2604
+  ],
+  "stoppedPids": [
+    2381,
+    2472,
+    2604
+  ],
+  "sqlFixtures": [
+    {
+      "mode": "SNAPSHOT",
+      "pid": 2557,
+      "exitCode": 0,
+      "receipt": {
+        "actualProduct": "H2",
+        "actualVersion": "2.2.220 (2023-07-04)",
+        "migrationCount": 38,
+        "successfulHistoryRows": 39,
+        "history": [
+          {
+            "version": null,
+            "type": "TABLE",
+            "success": true
+          },
+          {
+            "version": "1",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "2",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "3",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "4",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "5",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "6",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "7",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "8",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "9",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "10",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "11",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "12",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "13",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "14",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "15",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "16",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "17",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "18",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "19",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "20",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "21",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "22",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "23",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "24",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "25",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "26",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "27",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "28",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "29",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "30",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "31",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "32",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "33",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "34",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "35",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "36",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "37",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "38",
+            "type": "SQL",
+            "success": true
+          }
+        ],
+        "migration38": true,
+        "shifts": 12,
+        "shiftHash": "713597e8e493f17b1f35cb817c701501a3d785f609b36971d8eac2af97286405",
+        "designatedHash": "c8cc3563a681ad5b14d3769547786202f44a017701d413eadb0c5d64d6a09539",
+        "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "designatedRows": 1,
+        "swapRows": 0,
+        "swapRevocationRows": 0,
+        "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+        "onCallAuditHash": "0800e494192ef975489bdfeea0529fd9012f9cb91f8fbbe1542b20de6b207919",
+        "openRequestHash": "6c0f5cab293c5ad5bb1fcdc964df9560fc5753172254e1b4271af446cf437247",
+        "openOperationHash": "6bf4719f636deccc0009d4ce248696268104ce8e47010f72a52db008b066de40",
+        "requests": [
+          {
+            "id": 1,
+            "sourceShiftId": 3,
+            "status": "CLAIMED",
+            "version": 1,
+            "claimedBy": 3,
+            "replacementShiftId": 6,
+            "operations": 1,
+            "audits": 2,
+            "overrides": 1
+          },
+          {
+            "id": 2,
+            "sourceShiftId": 7,
+            "status": "CLAIMED",
+            "version": 1,
+            "claimedBy": 3,
+            "replacementShiftId": 8,
+            "operations": 1,
+            "audits": 2,
+            "overrides": 1
+          },
+          {
+            "id": 3,
+            "sourceShiftId": 9,
+            "status": "WITHDRAWN",
+            "version": 1,
+            "claimedBy": null,
+            "replacementShiftId": null,
+            "operations": 1,
+            "audits": 2,
+            "overrides": 0
+          },
+          {
+            "id": 4,
+            "sourceShiftId": 10,
+            "status": "OPEN",
+            "version": 0,
+            "claimedBy": null,
+            "replacementShiftId": null,
+            "operations": 0,
+            "audits": 1,
+            "overrides": 0
+          },
+          {
+            "id": 5,
+            "sourceShiftId": 11,
+            "status": "CLAIMED",
+            "version": 1,
+            "claimedBy": 3,
+            "replacementShiftId": 12,
+            "operations": 1,
+            "audits": 2,
+            "overrides": 1
+          }
+        ]
+      }
+    },
+    {
+      "mode": "DEMOTE",
+      "pid": 2581,
+      "exitCode": 0,
+      "receipt": {
+        "actualProduct": "H2",
+        "actualVersion": "2.2.220 (2023-07-04)",
+        "actorId": 3,
+        "changed": 1,
+        "role": "AUDITOR"
+      }
+    },
+    {
+      "mode": "SNAPSHOT",
+      "pid": 2689,
+      "exitCode": 0,
+      "receipt": {
+        "actualProduct": "H2",
+        "actualVersion": "2.2.220 (2023-07-04)",
+        "migrationCount": 38,
+        "successfulHistoryRows": 39,
+        "history": [
+          {
+            "version": null,
+            "type": "TABLE",
+            "success": true
+          },
+          {
+            "version": "1",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "2",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "3",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "4",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "5",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "6",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "7",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "8",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "9",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "10",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "11",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "12",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "13",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "14",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "15",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "16",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "17",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "18",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "19",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "20",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "21",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "22",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "23",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "24",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "25",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "26",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "27",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "28",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "29",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "30",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "31",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "32",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "33",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "34",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "35",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "36",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "37",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "38",
+            "type": "SQL",
+            "success": true
+          }
+        ],
+        "migration38": true,
+        "shifts": 12,
+        "shiftHash": "713597e8e493f17b1f35cb817c701501a3d785f609b36971d8eac2af97286405",
+        "designatedHash": "c8cc3563a681ad5b14d3769547786202f44a017701d413eadb0c5d64d6a09539",
+        "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "designatedRows": 1,
+        "swapRows": 0,
+        "swapRevocationRows": 0,
+        "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+        "onCallAuditHash": "0800e494192ef975489bdfeea0529fd9012f9cb91f8fbbe1542b20de6b207919",
+        "openRequestHash": "6c0f5cab293c5ad5bb1fcdc964df9560fc5753172254e1b4271af446cf437247",
+        "openOperationHash": "6bf4719f636deccc0009d4ce248696268104ce8e47010f72a52db008b066de40",
+        "requests": [
+          {
+            "id": 1,
+            "sourceShiftId": 3,
+            "status": "CLAIMED",
+            "version": 1,
+            "claimedBy": 3,
+            "replacementShiftId": 6,
+            "operations": 1,
+            "audits": 2,
+            "overrides": 1
+          },
+          {
+            "id": 2,
+            "sourceShiftId": 7,
+            "status": "CLAIMED",
+            "version": 1,
+            "claimedBy": 3,
+            "replacementShiftId": 8,
+            "operations": 1,
+            "audits": 2,
+            "overrides": 1
+          },
+          {
+            "id": 3,
+            "sourceShiftId": 9,
+            "status": "WITHDRAWN",
+            "version": 1,
+            "claimedBy": null,
+            "replacementShiftId": null,
+            "operations": 1,
+            "audits": 2,
+            "overrides": 0
+          },
+          {
+            "id": 4,
+            "sourceShiftId": 10,
+            "status": "OPEN",
+            "version": 0,
+            "claimedBy": null,
+            "replacementShiftId": null,
+            "operations": 0,
+            "audits": 1,
+            "overrides": 0
+          },
+          {
+            "id": 5,
+            "sourceShiftId": 11,
+            "status": "CLAIMED",
+            "version": 1,
+            "claimedBy": 3,
+            "replacementShiftId": 12,
+            "operations": 1,
+            "audits": 2,
+            "overrides": 1
+          }
+        ]
+      }
+    }
+  ],
+  "sqlExpectations": [
+    {
+      "id": 1,
+      "sourceShiftId": 3,
+      "status": "CLAIMED",
+      "version": 1,
+      "claimedBy": 3,
+      "replacementShiftId": 6,
+      "operations": 1,
+      "audits": 2,
+      "overrides": 1
+    },
+    {
+      "id": 2,
+      "sourceShiftId": 7,
+      "status": "CLAIMED",
+      "version": 1,
+      "claimedBy": 3,
+      "replacementShiftId": 8,
+      "operations": 1,
+      "audits": 2,
+      "overrides": 1
+    },
+    {
+      "id": 3,
+      "sourceShiftId": 9,
+      "status": "WITHDRAWN",
+      "version": 1,
+      "claimedBy": null,
+      "replacementShiftId": null,
+      "operations": 1,
+      "audits": 2,
+      "overrides": 0
+    },
+    {
+      "id": 4,
+      "sourceShiftId": 10,
+      "status": "OPEN",
+      "version": 0,
+      "claimedBy": null,
+      "replacementShiftId": null,
+      "operations": 0,
+      "audits": 1,
+      "overrides": 0
+    },
+    {
+      "id": 5,
+      "sourceShiftId": 11,
+      "status": "CLAIMED",
+      "version": 1,
+      "claimedBy": 3,
+      "replacementShiftId": 12,
+      "operations": 1,
+      "audits": 2,
+      "overrides": 1
+    }
+  ],
+  "databaseMode": "H2_OWNED_FILE",
+  "transport": "real HTTP to independent production JAR and owned H2 file database",
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "finalSql": {
+    "actualProduct": "H2",
+    "actualVersion": "2.2.220 (2023-07-04)",
+    "migrationCount": 38,
+    "successfulHistoryRows": 39,
+    "history": [
+      {
+        "version": null,
+        "type": "TABLE",
+        "success": true
+      },
+      {
+        "version": "1",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "2",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "3",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "4",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "5",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "6",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "7",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "8",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "9",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "10",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "11",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "12",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "13",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "14",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "15",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "16",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "17",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "18",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "19",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "20",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "21",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "22",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "23",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "24",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "25",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "26",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "27",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "28",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "29",
+        "type": "JDBC",
+        "success": true
+      },
+      {
+        "version": "30",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "31",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "32",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "33",
+        "type": "JDBC",
+        "success": true
+      },
+      {
+        "version": "34",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "35",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "36",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "37",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "38",
+        "type": "SQL",
+        "success": true
+      }
+    ],
+    "migration38": true,
+    "shifts": 12,
+    "shiftHash": "713597e8e493f17b1f35cb817c701501a3d785f609b36971d8eac2af97286405",
+    "designatedHash": "c8cc3563a681ad5b14d3769547786202f44a017701d413eadb0c5d64d6a09539",
+    "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "designatedRows": 1,
+    "swapRows": 0,
+    "swapRevocationRows": 0,
+    "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+    "onCallAuditHash": "0800e494192ef975489bdfeea0529fd9012f9cb91f8fbbe1542b20de6b207919",
+    "openRequestHash": "6c0f5cab293c5ad5bb1fcdc964df9560fc5753172254e1b4271af446cf437247",
+    "openOperationHash": "6bf4719f636deccc0009d4ce248696268104ce8e47010f72a52db008b066de40",
+    "requests": [
+      {
+        "id": 1,
+        "sourceShiftId": 3,
+        "status": "CLAIMED",
+        "version": 1,
+        "claimedBy": 3,
+        "replacementShiftId": 6,
+        "operations": 1,
+        "audits": 2,
+        "overrides": 1
+      },
+      {
+        "id": 2,
+        "sourceShiftId": 7,
+        "status": "CLAIMED",
+        "version": 1,
+        "claimedBy": 3,
+        "replacementShiftId": 8,
+        "operations": 1,
+        "audits": 2,
+        "overrides": 1
+      },
+      {
+        "id": 3,
+        "sourceShiftId": 9,
+        "status": "WITHDRAWN",
+        "version": 1,
+        "claimedBy": null,
+        "replacementShiftId": null,
+        "operations": 1,
+        "audits": 2,
+        "overrides": 0
+      },
+      {
+        "id": 4,
+        "sourceShiftId": 10,
+        "status": "OPEN",
+        "version": 0,
+        "claimedBy": null,
+        "replacementShiftId": null,
+        "operations": 0,
+        "audits": 1,
+        "overrides": 0
+      },
+      {
+        "id": 5,
+        "sourceShiftId": 11,
+        "status": "CLAIMED",
+        "version": 1,
+        "claimedBy": 3,
+        "replacementShiftId": 12,
+        "operations": 1,
+        "audits": 2,
+        "overrides": 1
+      }
+    ]
+  },
+  "ownedProcessesStopped": true,
+  "unexpectedJarErrors": 0,
+  "completeJarLogs": [
+    {
+      "file": "target/oncall-open-handoff-http-it/run-vj2F1g/jar-1.log",
+      "sha256": "e0a3b1f032a49acebd25ae393e8fd0e66ef7da02f6884816088bf820cd211f99"
+    },
+    {
+      "file": "target/oncall-open-handoff-http-it/run-vj2F1g/jar-2.log",
+      "sha256": "d33d9946526cfa1daccf2cf1acc6c330924d67517363298b8f07bc0e6ae9c17e"
+    },
+    {
+      "file": "target/oncall-open-handoff-http-it/run-vj2F1g/jar-3.log",
+      "sha256": "88c856639d05f035998c8d5dd29dc93654b734142c88dec906efd8c9d1d731f1"
+    }
+  ]
+}

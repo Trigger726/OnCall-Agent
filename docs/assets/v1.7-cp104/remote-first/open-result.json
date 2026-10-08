@@ -1,0 +1,2134 @@
+{
+  "status": "PASS",
+  "baseline": false,
+  "previous": false,
+  "jarSha256": "777523a79fef4c7d166ace85d35faace7b0bbc35e63ea05294db0ba2048b609b",
+  "cases": [
+    {
+      "name": "actual-ui-publication-quota-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "committed-publication-loss-reload-original-ack",
+      "posts": 2,
+      "sameOriginalCommand": true,
+      "requestId": 1
+    },
+    {
+      "name": "readers-and-owner-cannot-substitute-claimant",
+      "noSubstituteConsent": true
+    },
+    {
+      "name": "claim-quota-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "committed-claim-loss-original-ack-after-independent-cancel",
+      "sameOriginalCommand": true,
+      "noResurrection": true
+    },
+    {
+      "name": "fresh-read500-clears-facts-zero-post",
+      "posts": 0,
+      "oldFactsCleared": true
+    },
+    {
+      "name": "cancelled-source-before-first-claim-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "actual409-lock-survives-reload-no-version-rebase",
+      "actualHttp409": true,
+      "lockSurvivesReload": true
+    },
+    {
+      "name": "committed-withdrawal-loss-original-ack",
+      "sameOriginalCommand": true
+    },
+    {
+      "name": "corrupt-intent-explicit-local-discard",
+      "noServerMutation": true
+    },
+    {
+      "name": "late200-after-detail-change-keeps-original-intent",
+      "actualLate200": true,
+      "originalIntentPreserved": true
+    },
+    {
+      "name": "late200-after-spa-account-switch-protects-new-intent",
+      "actualLate200": true,
+      "sameDocument": true,
+      "newActorIntentPreserved": true
+    },
+    {
+      "name": "late200-after-same-user-new-token-protects-replacement-intent",
+      "actualLate200": true,
+      "sameUserDifferentToken": true,
+      "newIntentPreserved": true
+    },
+    {
+      "name": "storage-read-denied-disables-new-operation-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "committed-receipt-clear-failure-retains-original-only",
+      "sameOriginalCommand": true
+    },
+    {
+      "name": "actual-database-expiry-before-first-claim-zero-post",
+      "posts": 0,
+      "databaseNow": "2026-10-08T12:24:15.042406",
+      "storedEnd": "2026-10-08T12:24:15"
+    },
+    {
+      "name": "current-role403-original-lock-after-role-restore-and-restart",
+      "actualHttp403": true,
+      "sameJwtAfterThreeJvms": true,
+      "currentRoleAfterDemotion": "AUDITOR",
+      "currentRoleAfterRestoration": "OPS_MANAGER",
+      "businessHashUnchanged": "013876218b5c49fe37757fc123a09599b0b1d5a8fb1e96f41174aa7b5a9cd19c",
+      "originalCommand": {
+        "version": 0,
+        "operationKey": "1b558a1c-5067-47f0-9ab4-19475d782ffb",
+        "reason": "CP99 原说明🙂"
+      },
+      "lockedCommand": {
+        "version": 0,
+        "operationKey": "1b558a1c-5067-47f0-9ab4-19475d782ffb",
+        "reason": "CP99 原说明🙂"
+      },
+      "posts": 2,
+      "explicitLocalDiscardOnly": true
+    },
+    {
+      "name": "withdrawal-quota-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "publication-silent-save-zero-post",
+      "posts": 0,
+      "silentWriteDetected": true
+    },
+    {
+      "name": "claim-save-readback-denied-zero-post",
+      "posts": 0,
+      "bytesSavedButNotSent": true
+    },
+    {
+      "name": "frozen-discard-removal-failure-preserves-original",
+      "originalPreserved": true,
+      "noForwardedPost": true
+    },
+    {
+      "name": "actual409-lock-save-failure-explicit-warning-reload-no-auto-post",
+      "actualHttp409": true,
+      "noAutomaticPostAfterReload": true,
+      "durableLockNotClaimed": true,
+      "originalUnblockedBytesPreserved": true
+    },
+    {
+      "name": "publication-fresh-roster500-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "withdrawal-fresh-coverage500-zero-post",
+      "posts": 0,
+      "oldFactsCleared": true
+    },
+    {
+      "name": "history-non-owner-receipt-labels-actual-actor",
+      "viewerId": 2,
+      "actualOperationActorId": 3,
+      "readerLabelsHistoricalActor": true,
+      "claimantLabelsOwnReceipt": true
+    },
+    {
+      "name": "committed-clear-silent-noop-retains-original-only",
+      "actualCommit200": true,
+      "sameOriginalCommand": true,
+      "visibleOriginalPreserved": true
+    },
+    {
+      "name": "claim-contradictory-post-receipt-retains-original",
+      "actualForwardedCommit200": true,
+      "controlledResponseProjection": true,
+      "sameOriginalCommand": true,
+      "noRecreatedResponsibility": true
+    },
+    {
+      "name": "withdrawal-contradictory-post-receipt-retains-original",
+      "actualForwardedCommit200": true,
+      "controlledResponseProjection": true,
+      "sameOriginalCommand": true,
+      "noRecreatedResponsibility": true
+    },
+    {
+      "name": "contradictory-history-read-clears-facts",
+      "actualRead200": true,
+      "controlledResponseProjection": true,
+      "oldFactsCleared": true
+    },
+    {
+      "name": "late200-real-cross-tab-stored-actor-mismatch-preserves-original",
+      "actualLate200": true,
+      "realTrustedStorageEvent": true,
+      "sameTokenStoredActorMismatch": true,
+      "originalIntentPreserved": true
+    },
+    {
+      "name": "late200-real-cross-tab-same-user-new-token-preserves-original",
+      "actualLate200": true,
+      "realTrustedStorageEvent": true,
+      "realLoginIssuedDifferentSameActorToken": true,
+      "originalIntentPreserved": true
+    },
+    {
+      "name": "frozen-discard-silent-noop-keeps-original",
+      "noForwardedPost": true,
+      "originalPreserved": true
+    },
+    {
+      "name": "committed-clear-readback-denied-keeps-frozen-original",
+      "originalInMemoryKept": true,
+      "durableStorageNotClaimed": true,
+      "sameOriginalCommand": true
+    }
+  ],
+  "screenshots": [
+    "publication-frozen-desktop.png",
+    "publication-frozen-mobile.png",
+    "cancelled-history-desktop.png",
+    "cancelled-history-mobile.png",
+    "expired-first-claim-desktop.png",
+    "role-before-original-desktop.png",
+    "role-restored-locked-desktop.png",
+    "role-restored-locked-mobile.png",
+    "lock-save-failure-warning-desktop.png",
+    "after-foreign-receipt-desktop.png",
+    "after-foreign-receipt-mobile.png",
+    "after-silent-clear-frozen-desktop.png",
+    "cross-tab-identity-mismatch-desktop.png",
+    "cancelled-detail-desktop.png",
+    "cancelled-detail-mobile.png"
+  ],
+  "pageErrors": [],
+  "consoleLogs": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 409 ()",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 403 ()",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 409 ()",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+    "Failed to load resource: net::ERR_FAILED"
+  ],
+  "rejected": [
+    {
+      "path": "/api/v1/on-call/open-handoffs/2/coverage",
+      "status": 500
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/4/claims",
+      "status": 409
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/12/claims",
+      "status": 403
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/16/claims",
+      "status": 409
+    },
+    {
+      "path": "/api/v1/on-call/roster",
+      "status": 500
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/17/coverage",
+      "status": 500
+    }
+  ],
+  "aborts": [
+    {
+      "action": "PUBLISH",
+      "posts": 1,
+      "actualForwardedCommit200": true,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "action": "CLAIM",
+      "posts": 1,
+      "actualForwardedCommit200": true,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "action": "CLAIM",
+      "posts": 1,
+      "actualForwardedCommit200": false,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "action": "WITHDRAW",
+      "posts": 1,
+      "actualForwardedCommit200": true,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "action": "PUBLISH",
+      "posts": 1,
+      "actualForwardedCommit200": false,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "action": "CLAIM",
+      "posts": 1,
+      "actualForwardedCommit200": false,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "action": "CLAIM",
+      "posts": 1,
+      "actualForwardedCommit200": false,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "action": "CLAIM",
+      "posts": 1,
+      "actualForwardedCommit200": false,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "action": "CLAIM",
+      "posts": 1,
+      "actualForwardedCommit200": false,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    },
+    {
+      "action": "CLAIM",
+      "posts": 1,
+      "actualForwardedCommit200": false,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    }
+  ],
+  "held": [
+    {
+      "requestId": 6,
+      "actualForwardedStatus": 200,
+      "posts": 1,
+      "heldUntilExplicitRelease": true
+    },
+    {
+      "requestId": 7,
+      "actualForwardedStatus": 200,
+      "posts": 1,
+      "heldUntilExplicitRelease": true
+    },
+    {
+      "requestId": 8,
+      "actualForwardedStatus": 200,
+      "posts": 1,
+      "heldUntilExplicitRelease": true
+    },
+    {
+      "requestId": 21,
+      "actualForwardedStatus": 200,
+      "posts": 1,
+      "heldUntilExplicitRelease": true
+    },
+    {
+      "requestId": 22,
+      "actualForwardedStatus": 200,
+      "posts": 1,
+      "heldUntilExplicitRelease": true
+    }
+  ],
+  "visualBounds": [
+    {
+      "name": "publication-frozen-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 84.171875,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "publication-frozen-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 84.125,
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "cancelled-history-desktop.png",
+      "left": 276,
+      "right": 1412,
+      "top": 84,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "cancelled-history-mobile.png",
+      "left": 13,
+      "right": 377,
+      "top": 84,
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "expired-first-claim-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 83.671875,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "role-before-original-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 83.8125,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "role-restored-locked-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 84.09375,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "role-restored-locked-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 83.828125,
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "lock-save-failure-warning-desktop.png",
+      "left": 276,
+      "right": 1412,
+      "top": 84,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "after-foreign-receipt-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 83.703125,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "after-foreign-receipt-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 84.265625,
+      "viewport": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "after-silent-clear-frozen-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 83.796875,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "cross-tab-identity-mismatch-desktop.png",
+      "left": 276,
+      "right": 1412,
+      "top": 84,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "cancelled-detail-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 83.90625,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "cancelled-detail-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 84.46875,
+      "viewport": 390,
+      "documentWidth": 390
+    }
+  ],
+  "browserPath": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "startedPids": [
+    5985,
+    6237,
+    6375
+  ],
+  "stoppedPids": [
+    5985,
+    6237,
+    6375
+  ],
+  "sqlFixtures": [
+    {
+      "mode": "DEMOTE",
+      "allOwnedJarsStopped": true,
+      "receipt": {
+        "actualProduct": "H2",
+        "actorId": 3,
+        "changed": 1,
+        "role": "AUDITOR",
+        "businessBefore": "013876218b5c49fe37757fc123a09599b0b1d5a8fb1e96f41174aa7b5a9cd19c",
+        "businessAfter": "013876218b5c49fe37757fc123a09599b0b1d5a8fb1e96f41174aa7b5a9cd19c"
+      }
+    },
+    {
+      "mode": "SNAPSHOT",
+      "allOwnedJarsStopped": true,
+      "receipt": {
+        "actualProduct": "H2",
+        "actorId": 3,
+        "changed": 0,
+        "role": "AUDITOR",
+        "businessBefore": "013876218b5c49fe37757fc123a09599b0b1d5a8fb1e96f41174aa7b5a9cd19c",
+        "businessAfter": "013876218b5c49fe37757fc123a09599b0b1d5a8fb1e96f41174aa7b5a9cd19c"
+      }
+    },
+    {
+      "mode": "RESTORE",
+      "allOwnedJarsStopped": true,
+      "receipt": {
+        "actualProduct": "H2",
+        "actorId": 3,
+        "changed": 1,
+        "role": "OPS_MANAGER",
+        "businessBefore": "013876218b5c49fe37757fc123a09599b0b1d5a8fb1e96f41174aa7b5a9cd19c",
+        "businessAfter": "013876218b5c49fe37757fc123a09599b0b1d5a8fb1e96f41174aa7b5a9cd19c"
+      }
+    }
+  ],
+  "database": "isolated runner-owned H2 file; offline fixture only with all owned JARs stopped",
+  "productionJvmPid": 5985,
+  "browser": "153.0.8010.12",
+  "consoleDetails": [
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs/1/claims"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs/2/coverage"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs/4/claims"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 409 ()",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs/4/claims"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs/5/withdrawals"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs/9/claims"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs/12/claims"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 403 ()",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs/12/claims"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs/15/claims"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs/16/claims"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 409 ()",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs/16/claims"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/roster?scheduleId=1&from=2026-10-19T00%3A24%3A47&to=2026-10-19T04%3A24%3A47"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs/17/coverage"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs/23/claims"
+    }
+  ],
+  "cancelledResponsibility": {
+    "databaseNow": "2026-10-08T12:24:57.95929",
+    "from": "2026-10-10T13:23:53",
+    "to": "2026-10-10T15:23:53",
+    "schedule": {
+      "id": 1,
+      "name": "结算系统 7x24 值班",
+      "resourceName": "统一结算服务",
+      "active": true
+    },
+    "sourceShifts": 1,
+    "totalSeconds": 7200,
+    "coveredSeconds": 7200,
+    "gapSeconds": 0,
+    "segments": [
+      {
+        "startsAt": "2026-10-10T13:23:53",
+        "endsAt": "2026-10-10T15:23:53",
+        "shiftId": 3,
+        "userId": 2,
+        "userName": "张伟",
+        "override": false,
+        "gapReason": null,
+        "shadowedShiftIds": [],
+        "unavailableShiftIds": [],
+        "sameLayerOverlap": false
+      }
+    ]
+  },
+  "finalRequests": [
+    {
+      "id": 24,
+      "scheduleId": 1,
+      "sourceShiftId": 41,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "a463ba9f-f070-4c01-a5d5-e60fbc7b4810",
+      "startsAt": "2026-10-23T00:24:56",
+      "endsAt": "2026-10-23T04:24:56",
+      "reason": "CP99 CP101 清除后读回拒绝",
+      "status": "CLAIMED",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:56.437343",
+      "closedAt": "2026-10-08T12:24:56.791731",
+      "claimedBy": 3,
+      "replacementShiftId": 42
+    },
+    {
+      "id": 23,
+      "scheduleId": 1,
+      "sourceShiftId": 40,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "d3ff9c77-516b-4b62-9662-a3c3173103b4",
+      "startsAt": "2026-10-22T12:24:55",
+      "endsAt": "2026-10-22T16:24:55",
+      "reason": "CP99 CP101 放弃静默清除",
+      "status": "OPEN",
+      "version": 0,
+      "createdAt": "2026-10-08T12:24:55.724671",
+      "closedAt": null,
+      "claimedBy": null,
+      "replacementShiftId": null
+    },
+    {
+      "id": 22,
+      "scheduleId": 1,
+      "sourceShiftId": 38,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "af6ca542-5f94-49c3-8429-b251da862c7c",
+      "startsAt": "2026-10-22T00:24:54",
+      "endsAt": "2026-10-22T04:24:54",
+      "reason": "CP99 CP101 跨标签同账号新token",
+      "status": "CLAIMED",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:54.379441",
+      "closedAt": "2026-10-08T12:24:54.844017",
+      "claimedBy": 3,
+      "replacementShiftId": 39
+    },
+    {
+      "id": 21,
+      "scheduleId": 1,
+      "sourceShiftId": 36,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "b3ee14b8-d34a-4e5c-aceb-f45ab010db21",
+      "startsAt": "2026-10-21T12:24:53",
+      "endsAt": "2026-10-21T16:24:53",
+      "reason": "CP99 CP101 跨标签同token账号不符",
+      "status": "CLAIMED",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:53.581937",
+      "closedAt": "2026-10-08T12:24:53.946597",
+      "claimedBy": 3,
+      "replacementShiftId": 37
+    },
+    {
+      "id": 20,
+      "scheduleId": 1,
+      "sourceShiftId": 35,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "cafe1bee-bc5c-4f57-b093-06b7a584d2a5",
+      "startsAt": "2026-10-21T00:24:51",
+      "endsAt": "2026-10-21T04:24:51",
+      "reason": "CP99 CP101 不一致WITHDRAW",
+      "status": "WITHDRAWN",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:51.90829",
+      "closedAt": "2026-10-08T12:24:52.361807",
+      "claimedBy": null,
+      "replacementShiftId": null
+    },
+    {
+      "id": 19,
+      "scheduleId": 1,
+      "sourceShiftId": 33,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "eae6be12-79c7-4bfa-9159-b0f8e01d4f19",
+      "startsAt": "2026-10-20T12:24:50",
+      "endsAt": "2026-10-20T16:24:50",
+      "reason": "CP99 CP101 不一致CLAIM",
+      "status": "CLAIMED",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:50.995562",
+      "closedAt": "2026-10-08T12:24:51.411534",
+      "claimedBy": 3,
+      "replacementShiftId": 34
+    },
+    {
+      "id": 18,
+      "scheduleId": 1,
+      "sourceShiftId": 31,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "c60599a8-2e8e-4fa7-954b-55722bcb4832",
+      "startsAt": "2026-10-20T00:24:49",
+      "endsAt": "2026-10-20T04:24:49",
+      "reason": "CP99 CP101 成功后静默清除",
+      "status": "CLAIMED",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:49.85314",
+      "closedAt": "2026-10-08T12:24:50.206096",
+      "claimedBy": 3,
+      "replacementShiftId": 32
+    },
+    {
+      "id": 17,
+      "scheduleId": 1,
+      "sourceShiftId": 30,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "d122407a-630c-4f5f-916f-e72120281e46",
+      "startsAt": "2026-10-19T12:24:48",
+      "endsAt": "2026-10-19T16:24:48",
+      "reason": "CP99 CP100 撤回最新读取失败",
+      "status": "OPEN",
+      "version": 0,
+      "createdAt": "2026-10-08T12:24:48.042953",
+      "closedAt": null,
+      "claimedBy": null,
+      "replacementShiftId": null
+    },
+    {
+      "id": 16,
+      "scheduleId": 1,
+      "sourceShiftId": 27,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "f2826351-f9f7-4fc4-87b4-9292191e2a03",
+      "startsAt": "2026-10-18T12:24:46",
+      "endsAt": "2026-10-18T16:24:46",
+      "reason": "CP99 CP100 锁定写失败",
+      "status": "CLAIMED",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:46.350217",
+      "closedAt": "2026-10-08T12:24:46.828005",
+      "claimedBy": 1,
+      "replacementShiftId": 28
+    },
+    {
+      "id": 15,
+      "scheduleId": 1,
+      "sourceShiftId": 26,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "f50c73a9-db5e-4473-98b4-c7aa9f8894c0",
+      "startsAt": "2026-10-18T00:24:45",
+      "endsAt": "2026-10-18T04:24:45",
+      "reason": "CP99 CP100 放弃清除失败",
+      "status": "OPEN",
+      "version": 0,
+      "createdAt": "2026-10-08T12:24:45.642499",
+      "closedAt": null,
+      "claimedBy": null,
+      "replacementShiftId": null
+    },
+    {
+      "id": 14,
+      "scheduleId": 1,
+      "sourceShiftId": 25,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "45320349-d27c-49b5-ba91-a3b4de132977",
+      "startsAt": "2026-10-17T12:24:44",
+      "endsAt": "2026-10-17T16:24:44",
+      "reason": "CP99 CP100 写后读拒绝",
+      "status": "OPEN",
+      "version": 0,
+      "createdAt": "2026-10-08T12:24:44.981789",
+      "closedAt": null,
+      "claimedBy": null,
+      "replacementShiftId": null
+    },
+    {
+      "id": 13,
+      "scheduleId": 1,
+      "sourceShiftId": 23,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "3c3296a5-84c8-4c95-b4fb-71c9c5bb64f8",
+      "startsAt": "2026-10-16T12:24:43",
+      "endsAt": "2026-10-16T16:24:43",
+      "reason": "CP99 CP100 撤回配额",
+      "status": "OPEN",
+      "version": 0,
+      "createdAt": "2026-10-08T12:24:43.558701",
+      "closedAt": null,
+      "claimedBy": null,
+      "replacementShiftId": null
+    },
+    {
+      "id": 12,
+      "scheduleId": 1,
+      "sourceShiftId": 22,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "bd4d1569-9e44-47a6-8e85-f9efcaa14235",
+      "startsAt": "2026-10-16T00:24:15",
+      "endsAt": "2026-10-16T04:24:15",
+      "reason": "CP99 CP100 当前资格撤销",
+      "status": "OPEN",
+      "version": 0,
+      "createdAt": "2026-10-08T12:24:15.389416",
+      "closedAt": null,
+      "claimedBy": null,
+      "replacementShiftId": null
+    },
+    {
+      "id": 11,
+      "scheduleId": 2,
+      "sourceShiftId": 21,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "287fbe09-790b-4200-ab50-a098ebdf433d",
+      "startsAt": "2026-10-08T11:24:07",
+      "endsAt": "2026-10-08T12:24:15",
+      "reason": "CP99 真实即将到期",
+      "status": "OPEN",
+      "version": 0,
+      "createdAt": "2026-10-08T12:24:07.561203",
+      "closedAt": null,
+      "claimedBy": null,
+      "replacementShiftId": null
+    },
+    {
+      "id": 10,
+      "scheduleId": 1,
+      "sourceShiftId": 19,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "9db55ccd-452d-42a8-b8c5-8518826cc4c8",
+      "startsAt": "2026-10-15T12:24:06",
+      "endsAt": "2026-10-15T16:24:06",
+      "reason": "CP99 清除失败原回执",
+      "status": "CLAIMED",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:06.952598",
+      "closedAt": "2026-10-08T12:24:07.253799",
+      "claimedBy": 3,
+      "replacementShiftId": 20
+    },
+    {
+      "id": 9,
+      "scheduleId": 1,
+      "sourceShiftId": 16,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "04cbf424-977f-4b76-a8e5-8c3734b04213",
+      "startsAt": "2026-10-15T00:24:05",
+      "endsAt": "2026-10-15T04:24:05",
+      "reason": "CP99 同账号替换意图",
+      "status": "CLAIMED",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:05.349175",
+      "closedAt": "2026-10-08T12:24:06.598071",
+      "claimedBy": 3,
+      "replacementShiftId": 18
+    },
+    {
+      "id": 8,
+      "scheduleId": 1,
+      "sourceShiftId": 15,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "3e5bae91-71f3-43bc-a89f-4ff50d6ee78b",
+      "startsAt": "2026-10-14T12:24:05",
+      "endsAt": "2026-10-14T16:24:05",
+      "reason": "CP99 晚200同账号新凭证",
+      "status": "CLAIMED",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:05.325562",
+      "closedAt": "2026-10-08T12:24:05.713318",
+      "claimedBy": 3,
+      "replacementShiftId": 17
+    },
+    {
+      "id": 7,
+      "scheduleId": 1,
+      "sourceShiftId": 12,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "f9a636c7-aaa9-4f53-a3ae-151108e753c6",
+      "startsAt": "2026-10-13T12:24:03",
+      "endsAt": "2026-10-13T16:24:03",
+      "reason": "CP99 晚200账号",
+      "status": "CLAIMED",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:03.69825",
+      "closedAt": "2026-10-08T12:24:04.119514",
+      "claimedBy": 3,
+      "replacementShiftId": 14
+    },
+    {
+      "id": 6,
+      "scheduleId": 1,
+      "sourceShiftId": 10,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "b78dad39-5909-4bba-95f0-c95a6d621557",
+      "startsAt": "2026-10-13T00:24:02",
+      "endsAt": "2026-10-13T04:24:02",
+      "reason": "CP99 晚200详情",
+      "status": "CLAIMED",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:02.83177",
+      "closedAt": "2026-10-08T12:24:03.185413",
+      "claimedBy": 3,
+      "replacementShiftId": 11
+    },
+    {
+      "id": 5,
+      "scheduleId": 1,
+      "sourceShiftId": 9,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "f22bcb01-7188-4324-9136-8dd812bcb565",
+      "startsAt": "2026-10-12T12:24:01",
+      "endsAt": "2026-10-12T16:24:01",
+      "reason": "CP99 本人撤回丢响应",
+      "status": "WITHDRAWN",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:01.396368",
+      "closedAt": "2026-10-08T12:24:01.765769",
+      "claimedBy": null,
+      "replacementShiftId": null
+    },
+    {
+      "id": 4,
+      "scheduleId": 1,
+      "sourceShiftId": 7,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "06cd0f22-feb4-4bd9-8900-8608b453dd6a",
+      "startsAt": "2026-10-12T00:24:00",
+      "endsAt": "2026-10-12T04:24:00",
+      "reason": "CP99 另一个人先认领",
+      "status": "CLAIMED",
+      "version": 1,
+      "createdAt": "2026-10-08T12:24:00.236934",
+      "closedAt": "2026-10-08T12:24:00.748618",
+      "claimedBy": 1,
+      "replacementShiftId": 8
+    },
+    {
+      "id": 3,
+      "scheduleId": 1,
+      "sourceShiftId": 6,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "c85038f4-1c4c-4cad-af73-9bde2bb507c8",
+      "startsAt": "2026-10-11T12:23:59",
+      "endsAt": "2026-10-11T16:23:59",
+      "reason": "CP99 原班次取消",
+      "status": "OPEN",
+      "version": 0,
+      "createdAt": "2026-10-08T12:23:59.665069",
+      "closedAt": null,
+      "claimedBy": null,
+      "replacementShiftId": null
+    },
+    {
+      "id": 2,
+      "scheduleId": 1,
+      "sourceShiftId": 5,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "5678a930-649b-445d-bc12-89ba85d16682",
+      "startsAt": "2026-10-11T00:23:59",
+      "endsAt": "2026-10-11T04:23:59",
+      "reason": "CP99 核对读失败",
+      "status": "OPEN",
+      "version": 0,
+      "createdAt": "2026-10-08T12:23:59.14119",
+      "closedAt": null,
+      "claimedBy": null,
+      "replacementShiftId": null
+    },
+    {
+      "id": 1,
+      "scheduleId": 1,
+      "sourceShiftId": 3,
+      "sourceVersion": 0,
+      "requesterId": 2,
+      "requestKey": "5e702de4-8ca8-4b4f-878a-44a20e6fd1b8",
+      "startsAt": "2026-10-10T13:23:53",
+      "endsAt": "2026-10-10T15:23:53",
+      "reason": "CP99 原发布🙂",
+      "status": "CLAIMED",
+      "version": 1,
+      "createdAt": "2026-10-08T12:23:54.327971",
+      "closedAt": "2026-10-08T12:23:57.743195",
+      "claimedBy": 3,
+      "replacementShiftId": 4
+    }
+  ],
+  "finalCoverages": [
+    {
+      "databaseNow": "2026-10-08T12:24:58.009802",
+      "request": {
+        "id": 24,
+        "scheduleId": 1,
+        "sourceShiftId": 41,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "a463ba9f-f070-4c01-a5d5-e60fbc7b4810",
+        "startsAt": "2026-10-23T00:24:56",
+        "endsAt": "2026-10-23T04:24:56",
+        "reason": "CP99 CP101 清除后读回拒绝",
+        "status": "CLAIMED",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:56.437343",
+        "closedAt": "2026-10-08T12:24:56.791731",
+        "claimedBy": 3,
+        "replacementShiftId": 42
+      },
+      "replacement": {
+        "id": 42,
+        "scheduleId": 1,
+        "userId": 3,
+        "version": 0,
+        "startsAt": "2026-10-23T00:24:56",
+        "endsAt": "2026-10-23T04:24:56",
+        "cancelledAt": null,
+        "cancellationReason": null
+      },
+      "operation": {
+        "handoffId": 24,
+        "actorId": 3,
+        "operationKey": "cdff5dd3-479b-4676-9f4f-5b016cba5ab6",
+        "operation": "CLAIM",
+        "capturedVersion": 0,
+        "reason": "CP99 原说明🙂",
+        "committedAt": "2026-10-08T12:24:56.791731"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.015271",
+      "request": {
+        "id": 23,
+        "scheduleId": 1,
+        "sourceShiftId": 40,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "d3ff9c77-516b-4b62-9662-a3c3173103b4",
+        "startsAt": "2026-10-22T12:24:55",
+        "endsAt": "2026-10-22T16:24:55",
+        "reason": "CP99 CP101 放弃静默清除",
+        "status": "OPEN",
+        "version": 0,
+        "createdAt": "2026-10-08T12:24:55.724671",
+        "closedAt": null,
+        "claimedBy": null,
+        "replacementShiftId": null
+      },
+      "replacement": null,
+      "operation": null
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.023905",
+      "request": {
+        "id": 22,
+        "scheduleId": 1,
+        "sourceShiftId": 38,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "af6ca542-5f94-49c3-8429-b251da862c7c",
+        "startsAt": "2026-10-22T00:24:54",
+        "endsAt": "2026-10-22T04:24:54",
+        "reason": "CP99 CP101 跨标签同账号新token",
+        "status": "CLAIMED",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:54.379441",
+        "closedAt": "2026-10-08T12:24:54.844017",
+        "claimedBy": 3,
+        "replacementShiftId": 39
+      },
+      "replacement": {
+        "id": 39,
+        "scheduleId": 1,
+        "userId": 3,
+        "version": 0,
+        "startsAt": "2026-10-22T00:24:54",
+        "endsAt": "2026-10-22T04:24:54",
+        "cancelledAt": null,
+        "cancellationReason": null
+      },
+      "operation": {
+        "handoffId": 22,
+        "actorId": 3,
+        "operationKey": "846abe68-0443-45f4-b305-da129a6ba239",
+        "operation": "CLAIM",
+        "capturedVersion": 0,
+        "reason": "CP99 原说明🙂",
+        "committedAt": "2026-10-08T12:24:54.844017"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.019198",
+      "request": {
+        "id": 21,
+        "scheduleId": 1,
+        "sourceShiftId": 36,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "b3ee14b8-d34a-4e5c-aceb-f45ab010db21",
+        "startsAt": "2026-10-21T12:24:53",
+        "endsAt": "2026-10-21T16:24:53",
+        "reason": "CP99 CP101 跨标签同token账号不符",
+        "status": "CLAIMED",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:53.581937",
+        "closedAt": "2026-10-08T12:24:53.946597",
+        "claimedBy": 3,
+        "replacementShiftId": 37
+      },
+      "replacement": {
+        "id": 37,
+        "scheduleId": 1,
+        "userId": 3,
+        "version": 0,
+        "startsAt": "2026-10-21T12:24:53",
+        "endsAt": "2026-10-21T16:24:53",
+        "cancelledAt": null,
+        "cancellationReason": null
+      },
+      "operation": {
+        "handoffId": 21,
+        "actorId": 3,
+        "operationKey": "790a535c-101c-4e62-a81c-39c82c3bb652",
+        "operation": "CLAIM",
+        "capturedVersion": 0,
+        "reason": "CP99 原说明🙂",
+        "committedAt": "2026-10-08T12:24:53.946597"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.028296",
+      "request": {
+        "id": 20,
+        "scheduleId": 1,
+        "sourceShiftId": 35,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "cafe1bee-bc5c-4f57-b093-06b7a584d2a5",
+        "startsAt": "2026-10-21T00:24:51",
+        "endsAt": "2026-10-21T04:24:51",
+        "reason": "CP99 CP101 不一致WITHDRAW",
+        "status": "WITHDRAWN",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:51.90829",
+        "closedAt": "2026-10-08T12:24:52.361807",
+        "claimedBy": null,
+        "replacementShiftId": null
+      },
+      "replacement": null,
+      "operation": {
+        "handoffId": 20,
+        "actorId": 2,
+        "operationKey": "b36f3553-4508-4f1f-b0ac-44c709d3cf8f",
+        "operation": "WITHDRAW",
+        "capturedVersion": 0,
+        "reason": "CP99 原说明🙂",
+        "committedAt": "2026-10-08T12:24:52.361807"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.023974",
+      "request": {
+        "id": 19,
+        "scheduleId": 1,
+        "sourceShiftId": 33,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "eae6be12-79c7-4bfa-9159-b0f8e01d4f19",
+        "startsAt": "2026-10-20T12:24:50",
+        "endsAt": "2026-10-20T16:24:50",
+        "reason": "CP99 CP101 不一致CLAIM",
+        "status": "CLAIMED",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:50.995562",
+        "closedAt": "2026-10-08T12:24:51.411534",
+        "claimedBy": 3,
+        "replacementShiftId": 34
+      },
+      "replacement": {
+        "id": 34,
+        "scheduleId": 1,
+        "userId": 3,
+        "version": 0,
+        "startsAt": "2026-10-20T12:24:50",
+        "endsAt": "2026-10-20T16:24:50",
+        "cancelledAt": null,
+        "cancellationReason": null
+      },
+      "operation": {
+        "handoffId": 19,
+        "actorId": 3,
+        "operationKey": "a2eb6a13-75cf-4974-8d03-958c01003c98",
+        "operation": "CLAIM",
+        "capturedVersion": 0,
+        "reason": "CP99 原说明🙂",
+        "committedAt": "2026-10-08T12:24:51.411534"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.031573",
+      "request": {
+        "id": 18,
+        "scheduleId": 1,
+        "sourceShiftId": 31,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "c60599a8-2e8e-4fa7-954b-55722bcb4832",
+        "startsAt": "2026-10-20T00:24:49",
+        "endsAt": "2026-10-20T04:24:49",
+        "reason": "CP99 CP101 成功后静默清除",
+        "status": "CLAIMED",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:49.85314",
+        "closedAt": "2026-10-08T12:24:50.206096",
+        "claimedBy": 3,
+        "replacementShiftId": 32
+      },
+      "replacement": {
+        "id": 32,
+        "scheduleId": 1,
+        "userId": 3,
+        "version": 0,
+        "startsAt": "2026-10-20T00:24:49",
+        "endsAt": "2026-10-20T04:24:49",
+        "cancelledAt": null,
+        "cancellationReason": null
+      },
+      "operation": {
+        "handoffId": 18,
+        "actorId": 3,
+        "operationKey": "714c99a7-8bbe-4cc2-9750-1d07cb909d2b",
+        "operation": "CLAIM",
+        "capturedVersion": 0,
+        "reason": "CP99 原说明🙂",
+        "committedAt": "2026-10-08T12:24:50.206096"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.037939",
+      "request": {
+        "id": 17,
+        "scheduleId": 1,
+        "sourceShiftId": 30,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "d122407a-630c-4f5f-916f-e72120281e46",
+        "startsAt": "2026-10-19T12:24:48",
+        "endsAt": "2026-10-19T16:24:48",
+        "reason": "CP99 CP100 撤回最新读取失败",
+        "status": "OPEN",
+        "version": 0,
+        "createdAt": "2026-10-08T12:24:48.042953",
+        "closedAt": null,
+        "claimedBy": null,
+        "replacementShiftId": null
+      },
+      "replacement": null,
+      "operation": null
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.022328",
+      "request": {
+        "id": 16,
+        "scheduleId": 1,
+        "sourceShiftId": 27,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "f2826351-f9f7-4fc4-87b4-9292191e2a03",
+        "startsAt": "2026-10-18T12:24:46",
+        "endsAt": "2026-10-18T16:24:46",
+        "reason": "CP99 CP100 锁定写失败",
+        "status": "CLAIMED",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:46.350217",
+        "closedAt": "2026-10-08T12:24:46.828005",
+        "claimedBy": 1,
+        "replacementShiftId": 28
+      },
+      "replacement": {
+        "id": 28,
+        "scheduleId": 1,
+        "userId": 1,
+        "version": 0,
+        "startsAt": "2026-10-18T12:24:46",
+        "endsAt": "2026-10-18T16:24:46",
+        "cancelledAt": null,
+        "cancellationReason": null
+      },
+      "operation": {
+        "handoffId": 16,
+        "actorId": 1,
+        "operationKey": "220858ae-af5a-4575-8826-7aafb5a817e8",
+        "operation": "CLAIM",
+        "capturedVersion": 0,
+        "reason": "CP99 本人明确认领",
+        "committedAt": "2026-10-08T12:24:46.828005"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.033881",
+      "request": {
+        "id": 15,
+        "scheduleId": 1,
+        "sourceShiftId": 26,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "f50c73a9-db5e-4473-98b4-c7aa9f8894c0",
+        "startsAt": "2026-10-18T00:24:45",
+        "endsAt": "2026-10-18T04:24:45",
+        "reason": "CP99 CP100 放弃清除失败",
+        "status": "OPEN",
+        "version": 0,
+        "createdAt": "2026-10-08T12:24:45.642499",
+        "closedAt": null,
+        "claimedBy": null,
+        "replacementShiftId": null
+      },
+      "replacement": null,
+      "operation": null
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.02258",
+      "request": {
+        "id": 14,
+        "scheduleId": 1,
+        "sourceShiftId": 25,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "45320349-d27c-49b5-ba91-a3b4de132977",
+        "startsAt": "2026-10-17T12:24:44",
+        "endsAt": "2026-10-17T16:24:44",
+        "reason": "CP99 CP100 写后读拒绝",
+        "status": "OPEN",
+        "version": 0,
+        "createdAt": "2026-10-08T12:24:44.981789",
+        "closedAt": null,
+        "claimedBy": null,
+        "replacementShiftId": null
+      },
+      "replacement": null,
+      "operation": null
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.026124",
+      "request": {
+        "id": 13,
+        "scheduleId": 1,
+        "sourceShiftId": 23,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "3c3296a5-84c8-4c95-b4fb-71c9c5bb64f8",
+        "startsAt": "2026-10-16T12:24:43",
+        "endsAt": "2026-10-16T16:24:43",
+        "reason": "CP99 CP100 撤回配额",
+        "status": "OPEN",
+        "version": 0,
+        "createdAt": "2026-10-08T12:24:43.558701",
+        "closedAt": null,
+        "claimedBy": null,
+        "replacementShiftId": null
+      },
+      "replacement": null,
+      "operation": null
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.016719",
+      "request": {
+        "id": 12,
+        "scheduleId": 1,
+        "sourceShiftId": 22,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "bd4d1569-9e44-47a6-8e85-f9efcaa14235",
+        "startsAt": "2026-10-16T00:24:15",
+        "endsAt": "2026-10-16T04:24:15",
+        "reason": "CP99 CP100 当前资格撤销",
+        "status": "OPEN",
+        "version": 0,
+        "createdAt": "2026-10-08T12:24:15.389416",
+        "closedAt": null,
+        "claimedBy": null,
+        "replacementShiftId": null
+      },
+      "replacement": null,
+      "operation": null
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.036584",
+      "request": {
+        "id": 11,
+        "scheduleId": 2,
+        "sourceShiftId": 21,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "287fbe09-790b-4200-ab50-a098ebdf433d",
+        "startsAt": "2026-10-08T11:24:07",
+        "endsAt": "2026-10-08T12:24:15",
+        "reason": "CP99 真实即将到期",
+        "status": "OPEN",
+        "version": 0,
+        "createdAt": "2026-10-08T12:24:07.561203",
+        "closedAt": null,
+        "claimedBy": null,
+        "replacementShiftId": null
+      },
+      "replacement": null,
+      "operation": null
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.036562",
+      "request": {
+        "id": 10,
+        "scheduleId": 1,
+        "sourceShiftId": 19,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "9db55ccd-452d-42a8-b8c5-8518826cc4c8",
+        "startsAt": "2026-10-15T12:24:06",
+        "endsAt": "2026-10-15T16:24:06",
+        "reason": "CP99 清除失败原回执",
+        "status": "CLAIMED",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:06.952598",
+        "closedAt": "2026-10-08T12:24:07.253799",
+        "claimedBy": 3,
+        "replacementShiftId": 20
+      },
+      "replacement": {
+        "id": 20,
+        "scheduleId": 1,
+        "userId": 3,
+        "version": 0,
+        "startsAt": "2026-10-15T12:24:06",
+        "endsAt": "2026-10-15T16:24:06",
+        "cancelledAt": null,
+        "cancellationReason": null
+      },
+      "operation": {
+        "handoffId": 10,
+        "actorId": 3,
+        "operationKey": "93187f3f-9b8f-4748-bdd2-28f818f3ce44",
+        "operation": "CLAIM",
+        "capturedVersion": 0,
+        "reason": "CP99 原说明🙂",
+        "committedAt": "2026-10-08T12:24:07.253799"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.025446",
+      "request": {
+        "id": 9,
+        "scheduleId": 1,
+        "sourceShiftId": 16,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "04cbf424-977f-4b76-a8e5-8c3734b04213",
+        "startsAt": "2026-10-15T00:24:05",
+        "endsAt": "2026-10-15T04:24:05",
+        "reason": "CP99 同账号替换意图",
+        "status": "CLAIMED",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:05.349175",
+        "closedAt": "2026-10-08T12:24:06.598071",
+        "claimedBy": 3,
+        "replacementShiftId": 18
+      },
+      "replacement": {
+        "id": 18,
+        "scheduleId": 1,
+        "userId": 3,
+        "version": 0,
+        "startsAt": "2026-10-15T00:24:05",
+        "endsAt": "2026-10-15T04:24:05",
+        "cancelledAt": null,
+        "cancellationReason": null
+      },
+      "operation": {
+        "handoffId": 9,
+        "actorId": 3,
+        "operationKey": "bd17d090-835c-4514-b033-e94671b32717",
+        "operation": "CLAIM",
+        "capturedVersion": 0,
+        "reason": "CP99 原说明🙂",
+        "committedAt": "2026-10-08T12:24:06.598071"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.036789",
+      "request": {
+        "id": 8,
+        "scheduleId": 1,
+        "sourceShiftId": 15,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "3e5bae91-71f3-43bc-a89f-4ff50d6ee78b",
+        "startsAt": "2026-10-14T12:24:05",
+        "endsAt": "2026-10-14T16:24:05",
+        "reason": "CP99 晚200同账号新凭证",
+        "status": "CLAIMED",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:05.325562",
+        "closedAt": "2026-10-08T12:24:05.713318",
+        "claimedBy": 3,
+        "replacementShiftId": 17
+      },
+      "replacement": {
+        "id": 17,
+        "scheduleId": 1,
+        "userId": 3,
+        "version": 0,
+        "startsAt": "2026-10-14T12:24:05",
+        "endsAt": "2026-10-14T16:24:05",
+        "cancelledAt": null,
+        "cancellationReason": null
+      },
+      "operation": {
+        "handoffId": 8,
+        "actorId": 3,
+        "operationKey": "8d328621-0d69-46bf-91cd-6be44e793167",
+        "operation": "CLAIM",
+        "capturedVersion": 0,
+        "reason": "CP99 原说明🙂",
+        "committedAt": "2026-10-08T12:24:05.713318"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.028655",
+      "request": {
+        "id": 7,
+        "scheduleId": 1,
+        "sourceShiftId": 12,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "f9a636c7-aaa9-4f53-a3ae-151108e753c6",
+        "startsAt": "2026-10-13T12:24:03",
+        "endsAt": "2026-10-13T16:24:03",
+        "reason": "CP99 晚200账号",
+        "status": "CLAIMED",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:03.69825",
+        "closedAt": "2026-10-08T12:24:04.119514",
+        "claimedBy": 3,
+        "replacementShiftId": 14
+      },
+      "replacement": {
+        "id": 14,
+        "scheduleId": 1,
+        "userId": 3,
+        "version": 0,
+        "startsAt": "2026-10-13T12:24:03",
+        "endsAt": "2026-10-13T16:24:03",
+        "cancelledAt": null,
+        "cancellationReason": null
+      },
+      "operation": {
+        "handoffId": 7,
+        "actorId": 3,
+        "operationKey": "6ab7291b-cd87-433b-8114-8e653d1ebdf9",
+        "operation": "CLAIM",
+        "capturedVersion": 0,
+        "reason": "CP99 原说明🙂",
+        "committedAt": "2026-10-08T12:24:04.119514"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.031249",
+      "request": {
+        "id": 6,
+        "scheduleId": 1,
+        "sourceShiftId": 10,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "b78dad39-5909-4bba-95f0-c95a6d621557",
+        "startsAt": "2026-10-13T00:24:02",
+        "endsAt": "2026-10-13T04:24:02",
+        "reason": "CP99 晚200详情",
+        "status": "CLAIMED",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:02.83177",
+        "closedAt": "2026-10-08T12:24:03.185413",
+        "claimedBy": 3,
+        "replacementShiftId": 11
+      },
+      "replacement": {
+        "id": 11,
+        "scheduleId": 1,
+        "userId": 3,
+        "version": 0,
+        "startsAt": "2026-10-13T00:24:02",
+        "endsAt": "2026-10-13T04:24:02",
+        "cancelledAt": null,
+        "cancellationReason": null
+      },
+      "operation": {
+        "handoffId": 6,
+        "actorId": 3,
+        "operationKey": "6964a70c-0551-4105-983b-df298be15ef9",
+        "operation": "CLAIM",
+        "capturedVersion": 0,
+        "reason": "CP99 原说明🙂",
+        "committedAt": "2026-10-08T12:24:03.185413"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.035194",
+      "request": {
+        "id": 5,
+        "scheduleId": 1,
+        "sourceShiftId": 9,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "f22bcb01-7188-4324-9136-8dd812bcb565",
+        "startsAt": "2026-10-12T12:24:01",
+        "endsAt": "2026-10-12T16:24:01",
+        "reason": "CP99 本人撤回丢响应",
+        "status": "WITHDRAWN",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:01.396368",
+        "closedAt": "2026-10-08T12:24:01.765769",
+        "claimedBy": null,
+        "replacementShiftId": null
+      },
+      "replacement": null,
+      "operation": {
+        "handoffId": 5,
+        "actorId": 2,
+        "operationKey": "23ddf7fd-daa3-4a92-8c10-769bce7ea2bf",
+        "operation": "WITHDRAW",
+        "capturedVersion": 0,
+        "reason": "CP99 原说明🙂",
+        "committedAt": "2026-10-08T12:24:01.765769"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.039113",
+      "request": {
+        "id": 4,
+        "scheduleId": 1,
+        "sourceShiftId": 7,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "06cd0f22-feb4-4bd9-8900-8608b453dd6a",
+        "startsAt": "2026-10-12T00:24:00",
+        "endsAt": "2026-10-12T04:24:00",
+        "reason": "CP99 另一个人先认领",
+        "status": "CLAIMED",
+        "version": 1,
+        "createdAt": "2026-10-08T12:24:00.236934",
+        "closedAt": "2026-10-08T12:24:00.748618",
+        "claimedBy": 1,
+        "replacementShiftId": 8
+      },
+      "replacement": {
+        "id": 8,
+        "scheduleId": 1,
+        "userId": 1,
+        "version": 0,
+        "startsAt": "2026-10-12T00:24:00",
+        "endsAt": "2026-10-12T04:24:00",
+        "cancelledAt": null,
+        "cancellationReason": null
+      },
+      "operation": {
+        "handoffId": 4,
+        "actorId": 1,
+        "operationKey": "6a7ac171-0a0e-4c3b-aac5-c7a2f072b61d",
+        "operation": "CLAIM",
+        "capturedVersion": 0,
+        "reason": "CP99 本人明确认领",
+        "committedAt": "2026-10-08T12:24:00.748618"
+      }
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.03063",
+      "request": {
+        "id": 3,
+        "scheduleId": 1,
+        "sourceShiftId": 6,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "c85038f4-1c4c-4cad-af73-9bde2bb507c8",
+        "startsAt": "2026-10-11T12:23:59",
+        "endsAt": "2026-10-11T16:23:59",
+        "reason": "CP99 原班次取消",
+        "status": "OPEN",
+        "version": 0,
+        "createdAt": "2026-10-08T12:23:59.665069",
+        "closedAt": null,
+        "claimedBy": null,
+        "replacementShiftId": null
+      },
+      "replacement": null,
+      "operation": null
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.033012",
+      "request": {
+        "id": 2,
+        "scheduleId": 1,
+        "sourceShiftId": 5,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "5678a930-649b-445d-bc12-89ba85d16682",
+        "startsAt": "2026-10-11T00:23:59",
+        "endsAt": "2026-10-11T04:23:59",
+        "reason": "CP99 核对读失败",
+        "status": "OPEN",
+        "version": 0,
+        "createdAt": "2026-10-08T12:23:59.14119",
+        "closedAt": null,
+        "claimedBy": null,
+        "replacementShiftId": null
+      },
+      "replacement": null,
+      "operation": null
+    },
+    {
+      "databaseNow": "2026-10-08T12:24:58.02928",
+      "request": {
+        "id": 1,
+        "scheduleId": 1,
+        "sourceShiftId": 3,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "5e702de4-8ca8-4b4f-878a-44a20e6fd1b8",
+        "startsAt": "2026-10-10T13:23:53",
+        "endsAt": "2026-10-10T15:23:53",
+        "reason": "CP99 原发布🙂",
+        "status": "CLAIMED",
+        "version": 1,
+        "createdAt": "2026-10-08T12:23:54.327971",
+        "closedAt": "2026-10-08T12:23:57.743195",
+        "claimedBy": 3,
+        "replacementShiftId": 4
+      },
+      "replacement": {
+        "id": 4,
+        "scheduleId": 1,
+        "userId": 3,
+        "version": 1,
+        "startsAt": "2026-10-10T13:23:53",
+        "endsAt": "2026-10-10T15:23:53",
+        "cancelledAt": "2026-10-08T12:23:57.886437",
+        "cancellationReason": "CP99 独立取消覆盖"
+      },
+      "operation": {
+        "handoffId": 1,
+        "actorId": 3,
+        "operationKey": "93d0da62-3090-4956-84e3-beb38f0560aa",
+        "operation": "CLAIM",
+        "capturedVersion": 0,
+        "reason": "CP99 原说明🙂",
+        "committedAt": "2026-10-08T12:23:57.743195"
+      }
+    }
+  ],
+  "pageIdentity": true,
+  "noBlank": true,
+  "noOverlay": true,
+  "mobileDocumentWidth": 390,
+  "ownedProcessStopped": true,
+  "completeJarLogs": [
+    {
+      "file": "jar.log",
+      "unexpectedErrors": 0
+    },
+    {
+      "file": "jar-2.log",
+      "unexpectedErrors": 0
+    },
+    {
+      "file": "jar-3.log",
+      "unexpectedErrors": 0
+    }
+  ],
+  "unexpectedJarErrors": 0,
+  "posts": [
+    {
+      "path": "/api/v1/on-call/open-handoffs",
+      "body": {
+        "sourceShiftId": 3,
+        "sourceVersion": 0,
+        "requestKey": "5e702de4-8ca8-4b4f-878a-44a20e6fd1b8",
+        "startsAt": "2026-10-10T13:23:53",
+        "endsAt": "2026-10-10T15:23:53",
+        "reason": "CP99 原发布🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs",
+      "body": {
+        "sourceShiftId": 3,
+        "sourceVersion": 0,
+        "requestKey": "5e702de4-8ca8-4b4f-878a-44a20e6fd1b8",
+        "startsAt": "2026-10-10T13:23:53",
+        "endsAt": "2026-10-10T15:23:53",
+        "reason": "CP99 原发布🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/1/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "93d0da62-3090-4956-84e3-beb38f0560aa",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/1/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "93d0da62-3090-4956-84e3-beb38f0560aa",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/4/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "ba43ec86-1e88-40ed-be84-0b7a7b180aa3",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/4/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "ba43ec86-1e88-40ed-be84-0b7a7b180aa3",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/5/withdrawals",
+      "body": {
+        "version": 0,
+        "operationKey": "23ddf7fd-daa3-4a92-8c10-769bce7ea2bf",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/5/withdrawals",
+      "body": {
+        "version": 0,
+        "operationKey": "23ddf7fd-daa3-4a92-8c10-769bce7ea2bf",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/6/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "6964a70c-0551-4105-983b-df298be15ef9",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/6/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "6964a70c-0551-4105-983b-df298be15ef9",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/7/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "6ab7291b-cd87-433b-8114-8e653d1ebdf9",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs",
+      "body": {
+        "sourceShiftId": 13,
+        "sourceVersion": 0,
+        "requestKey": "d3c49071-fcd2-4363-8e48-3f4b5e8f8646",
+        "startsAt": "2026-10-14T00:24:03",
+        "endsAt": "2026-10-14T04:24:03",
+        "reason": "CP99 原发布🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/7/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "6ab7291b-cd87-433b-8114-8e653d1ebdf9",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/8/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "8d328621-0d69-46bf-91cd-6be44e793167",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/9/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "bd17d090-835c-4514-b033-e94671b32717",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/9/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "bd17d090-835c-4514-b033-e94671b32717",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/10/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "93187f3f-9b8f-4748-bdd2-28f818f3ce44",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/10/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "93187f3f-9b8f-4748-bdd2-28f818f3ce44",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/12/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "1b558a1c-5067-47f0-9ab4-19475d782ffb",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/12/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "1b558a1c-5067-47f0-9ab4-19475d782ffb",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/15/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "7e25f2c7-b0ae-4831-9cbe-14abdf3676f0",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/16/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "34e0fef4-f2c7-4c48-a226-903adf695c14",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/16/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "34e0fef4-f2c7-4c48-a226-903adf695c14",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/18/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "714c99a7-8bbe-4cc2-9750-1d07cb909d2b",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/18/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "714c99a7-8bbe-4cc2-9750-1d07cb909d2b",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/19/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "a2eb6a13-75cf-4974-8d03-958c01003c98",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/19/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "a2eb6a13-75cf-4974-8d03-958c01003c98",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/20/withdrawals",
+      "body": {
+        "version": 0,
+        "operationKey": "b36f3553-4508-4f1f-b0ac-44c709d3cf8f",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/20/withdrawals",
+      "body": {
+        "version": 0,
+        "operationKey": "b36f3553-4508-4f1f-b0ac-44c709d3cf8f",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/21/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "790a535c-101c-4e62-a81c-39c82c3bb652",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/21/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "790a535c-101c-4e62-a81c-39c82c3bb652",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/22/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "846abe68-0443-45f4-b305-da129a6ba239",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/22/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "846abe68-0443-45f4-b305-da129a6ba239",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/23/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "cb1281f7-07ca-45d1-85a9-21bb02eac136",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/24/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "cdff5dd3-479b-4676-9f4f-5b016cba5ab6",
+        "reason": "CP99 原说明🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs/24/claims",
+      "body": {
+        "version": 0,
+        "operationKey": "cdff5dd3-479b-4676-9f4f-5b016cba5ab6",
+        "reason": "CP99 原说明🙂"
+      }
+    }
+  ]
+}

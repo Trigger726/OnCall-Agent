@@ -28,9 +28,10 @@ function fixture(){
     ownedProcessesStopped:true,unexpectedJarErrors:0,tokensPersistedToEvidence:false,userFileDatabaseModified:false,startedPids:[11,12,13,14,15],stoppedPids:[11,12,13,14,15]};
   const line='INFO Database: jdbc:mysql://localhost:33061/'+identity.schema+' (MySQL 8.4)';
   const audit={status:'PASS',database:identity,ownedContainerStopped:true,recordedJvmPidsVerifiedAbsent:true,twoScopedPortsVerifiedFree:true,
+    binaryAuditKeyProbe:{exactId:true,leadingZero:false,differentId:false,trailingSpace:false,numericAlias:false},
     finalJdbcCounts:{versionedMigrations:38,openRequests:5,claimed:3,withdrawn:1,open:1,operations:4,oldBilateralRevocations:1},
     nodeConnections:result.startedPids.map((pid,i)=>({jar:i+1,pid,flywayDatabaseLine:line,poolStartedAndStopped:true}))};
-  const markers='CP104_OPEN_UPGRADE_DATABASE '+JSON.stringify(identity)+'\nCP104_OPEN_UPGRADE_CONTAINER_STOPPED {"stopped":true}\n';
+  const markers='CP104_OPEN_UPGRADE_DATABASE '+JSON.stringify(identity)+'\nCP105_OPEN_UPGRADE_BINARY_COMPARE '+JSON.stringify(audit.binaryAuditKeyProbe)+'\nCP104_OPEN_UPGRADE_CONTAINER_STOPPED {"stopped":true}\n';
   const log=markers+'[INFO] BUILD SUCCESS\n';
   const xml='<testsuite name="'+suite+'" tests="1" failures="0" errors="0" skipped="0"><testcase classname="'+suite+'" name="'+testName+'"><system-out><![CDATA['+markers+']]></system-out></testcase></testsuite>';
   const jarLogs=Array(5).fill(line+'\nINFO HikariPool-1 - Start completed.\nINFO HikariPool-1 - Shutdown completed.\n');
@@ -53,6 +54,12 @@ test('MySQL history has no H2 TABLE marker; neither wrong history shape can pass
   const before=fixture().result.cases[1].before;assertMigrations(before,37);
   for(const row of [{...before,actualProduct:'H2'},{...before,successfulHistoryRows:38},{...before,history:[{version:null,type:'TABLE',success:true},...before.history]}])assert.throws(()=>assertMigrations(row,37));
 });
+test('offline audit counts use exact binary IDs without changing H2 or inherited collations',()=>{
+  const fixture=fs.readFileSync(path.join(__dirname,'../fixtures/OpenHandoffSqlFixture.java'),'utf8');
+  assert.ok(fixture.includes('.replace("a.target_id=CAST(h.id AS VARCHAR)", auditTargetComparison(mysql))'));
+  assert.ok(fixture.includes('mysql ? "CAST(a.target_id AS BINARY)=CAST(h.id AS BINARY)" : "a.target_id=CAST(h.id AS VARCHAR)"'));
+  assert.doesNotMatch(fixture,/mysql \? "CAST\(h.id AS CHAR\)"|SET NAMES|ALTER TABLE|ALTER DATABASE/);
+});
 test('one skipped failed empty or renamed JUnit execution cannot pass',()=>rejects([
   ...['skipped','errors','failures'].map(k=>f=>f.xml=f.xml.replace(k+'="0"',k+'="1"')),
   f=>f.xml=f.xml.replace('tests="1"','tests="0"'),f=>f.xml=f.xml.replace(testName,'renamed'),f=>f.xml=f.xml.replace('</testsuite>',''),
@@ -60,7 +67,9 @@ test('one skipped failed empty or renamed JUnit execution cannot pass',()=>rejec
 ]));
 test('real identity is required in both Maven and XML and every SQL fixture',()=>rejects([
   f=>f.log=f.log.replace('MySQL','H2'),f=>f.xml=f.xml.replace('8.4.11','8.0.1'),f=>f.result.databaseMode='H2_OWNED_FILE',
-  f=>f.result.sqlFixtures[2].receipt.ownerConfirmed=false,f=>f.result.sqlFixtures[3].receipt.serverUuid='other',f=>f.result.sqlFixtures[1].exitCode=1
+  f=>f.result.sqlFixtures[2].receipt.ownerConfirmed=false,f=>f.result.sqlFixtures[3].receipt.serverUuid='other',f=>f.result.sqlFixtures[1].exitCode=1,
+  f=>f.log=f.log.replace('CP105_OPEN_UPGRADE_BINARY_COMPARE','missing'),f=>f.xml=f.xml.replace('CP105_OPEN_UPGRADE_BINARY_COMPARE','missing'),
+  f=>f.audit.binaryAuditKeyProbe.leadingZero=true,f=>delete f.audit.binaryAuditKeyProbe
 ]));
 test('all ten HTTP cases and old/new immutable identities are mandatory',()=>rejects([
   f=>f.result.cases.pop(),f=>f.result.oldSource='HEAD',f=>f.result.oldJarSha256=f.result.jarSha256,

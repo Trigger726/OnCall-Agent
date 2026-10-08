@@ -48,6 +48,22 @@ class MySqlOpenHandoffUpgradeHttpIntegrationTest {
                 identity=identity(connection,schema);
                 // A freshly owned schema must be empty. No JDBC seeded imitation of old application writes.
                 assertThat(count(connection,"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE()")).isZero();
+                // Exercise the fixture's exact-key semantics under the actual conflicting collations.
+                var probe=new LinkedHashMap<String,Boolean>();
+                for(var sample:Map.of("exactId","12","leadingZero","012","differentId","13","trailingSpace","12 ","numericAlias","1.2e1").entrySet()){
+                    try(var statement=connection.prepareStatement("SELECT CAST(CONVERT(? USING utf8mb4) COLLATE utf8mb4_unicode_ci AS BINARY)=CAST(12 AS BINARY), CAST(CONVERT(? USING utf8mb4) COLLATE utf8mb4_unicode_ci AS BINARY)=CAST(CAST(12 AS CHAR CHARACTER SET utf8mb4) COLLATE utf8mb4_0900_ai_ci AS BINARY)")){
+                        statement.setString(1,sample.getValue());
+                        statement.setString(2,sample.getValue());
+                        try(var rows=statement.executeQuery()){
+                            assertThat(rows.next()).isTrue();boolean matches=rows.getBoolean(1);
+                            assertThat(matches).as("exact audit key under different actual collations: %s",sample.getKey()).isEqualTo(sample.getKey().equals("exactId"));
+                            assertThat(rows.getBoolean(2)).as("the same key across both actual CHAR collations").isEqualTo(matches);
+                            probe.put(sample.getKey(),matches);
+                        }
+                    }
+                }
+                audit.put("binaryAuditKeyProbe",probe);
+                System.out.println("CP105_OPEN_UPGRADE_BINARY_COMPARE "+JSON.writeValueAsString(probe));
             }
             audit.put("database",identity);
             System.out.println("CP104_OPEN_UPGRADE_DATABASE "+JSON.writeValueAsString(identity));

@@ -76,7 +76,7 @@ public class OpenHandoffSqlFixture {
                          AND a.target_id=CAST(h.id AS VARCHAR)) AS audits,
                       (SELECT COUNT(*) FROM oncall_shift s WHERE s.id=h.replacement_shift_id AND s.override_flag=TRUE) AS overrides
                     FROM oncall_open_handoff h ORDER BY h.id
-                    """.replace("CAST(h.id AS VARCHAR)", mysql ? "CAST(h.id AS CHAR)" : "CAST(h.id AS VARCHAR)"))) {
+                    """.replace("a.target_id=CAST(h.id AS VARCHAR)", auditTargetComparison(mysql)))) {
                 while (rows.next()) requests.add("{\"id\":" + rows.getLong("id") + ",\"sourceShiftId\":" + rows.getLong("source_shift_id")
                         + ",\"status\":" + quote(rows.getString("status")) + ",\"version\":" + rows.getInt("version")
                         + ",\"claimedBy\":" + rows.getObject("claimed_by") + ",\"replacementShiftId\":" + rows.getObject("replacement_shift_id")
@@ -105,6 +105,10 @@ public class OpenHandoffSqlFixture {
     }
     private static long count(Connection connection, String sql) throws Exception {
         try (var statement = connection.createStatement(); var rows = statement.executeQuery(sql)) { rows.next(); return rows.getLong(1); }
+    }
+    public static String auditTargetComparison(boolean mysql) {
+        // Numeric IDs are canonical decimal strings, not collation-dependent CHARs or coercible numbers.
+        return mysql ? "CAST(a.target_id AS BINARY)=CAST(h.id AS BINARY)" : "a.target_id=CAST(h.id AS VARCHAR)";
     }
     private static String fingerprint(Connection connection, String sql) throws Exception {
         var digest = MessageDigest.getInstance("SHA-256");

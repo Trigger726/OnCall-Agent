@@ -21,6 +21,8 @@ function verify(log,xml,audit,result,jarLogs){
   assert.match(identity.schema,/^opspilot_open_upgrade_[a-f0-9]{12}$/);assert.equal(result.mysqlSchema,identity.schema);
   assert.match(identity.serverUuid,/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/);
   for(const text of [log,xml]){assert.deepEqual(markers(text,'CP104_OPEN_UPGRADE_DATABASE'),[identity]);
+    const probe={exactId:true,leadingZero:false,differentId:false,trailingSpace:false,numericAlias:false};
+    assert.deepEqual(audit.binaryAuditKeyProbe,probe);assert.deepEqual(markers(text,'CP105_OPEN_UPGRADE_BINARY_COMPARE'),[probe]);
     assert.deepEqual(markers(text,'CP104_OPEN_UPGRADE_CONTAINER_STOPPED'),[{stopped:true}]);}
   assert.deepEqual(result.cases.map(c=>c.name),[...upgradeNames,...caseNames]);
   const [omitted,upgrade,...cases]=result.cases;

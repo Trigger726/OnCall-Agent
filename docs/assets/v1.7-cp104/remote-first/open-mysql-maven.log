@@ -1,0 +1,204 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< org.trigger:opspilot >------------------------
+[INFO] Building OpsPilot 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 40 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 132 source files with javac [debug release 17] to target/classes
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java uses unchecked or unsafe operations.
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+[INFO] Copying 1 resource from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+[INFO] Changes detected - recompiling the module! :dependency
+[INFO] Compiling 103 source files with javac [debug release 17] to target/test-classes
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/investigation/AgentEventReceiverTest.java: Some input files use unchecked or unsafe operations.
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/investigation/AgentEventReceiverTest.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.trigger.opspilot.oncall.MySqlOnCallOpenHandoffIntegrationTest
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+12:18:04.953 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.oncall.MySqlOnCallOpenHandoffIntegrationTest
+12:18:05.090 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-08T12:18:05.434Z  INFO 2321 --- [opspilot] [           main] .o.MySqlOnCallOpenHandoffIntegrationTest : Starting MySqlOnCallOpenHandoffIntegrationTest using Java 17.0.20.1 with PID 2321 (started by runner in /home/runner/work/OnCall-Agent/OnCall-Agent)
+2026-10-08T12:18:05.435Z  INFO 2321 --- [opspilot] [           main] .o.MySqlOnCallOpenHandoffIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-08T12:18:06.886Z  INFO 2321 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-08T12:18:06.889Z  INFO 2321 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-08T12:18:06.926Z  INFO 2321 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 0 Redis repository interfaces.
+2026-10-08T12:18:07.443Z  INFO 2321 --- [opspilot] [           main] org.testcontainers.images.PullPolicy     : Image pull policy will be performed by: DefaultPullPolicy()
+2026-10-08T12:18:07.446Z  INFO 2321 --- [opspilot] [           main] o.t.utility.ImageNameSubstitutor         : Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+2026-10-08T12:18:07.468Z  INFO 2321 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : Testcontainers version: 1.21.4
+2026-10-08T12:18:07.888Z  INFO 2321 --- [opspilot] [           main] o.t.d.DockerClientProviderStrategy       : Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
+2026-10-08T12:18:07.890Z  INFO 2321 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : Docker host IP address is localhost
+2026-10-08T12:18:07.906Z  INFO 2321 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : Connected to docker: 
+  Server Version: 28.0.4
+  API Version: 1.48
+  Operating System: Ubuntu 24.04.5 LTS
+  Total Memory: 15988 MB
+2026-10-08T12:18:07.930Z  INFO 2321 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Pulling docker image: testcontainers/ryuk:0.12.0. Please be patient; this may take some time but only needs to be done once.
+2026-10-08T12:18:08.737Z  INFO 2321 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Starting to pull image
+2026-10-08T12:18:08.765Z  INFO 2321 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
+2026-10-08T12:18:09.147Z  INFO 2321 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  2 pending,  1 downloaded,  0 extracted, (142 KB/? MB)
+2026-10-08T12:18:09.159Z  INFO 2321 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  1 pending,  2 downloaded,  0 extracted, (142 KB/? MB)
+2026-10-08T12:18:09.162Z  INFO 2321 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  3 downloaded,  0 extracted, (158 KB/11 MB)
+2026-10-08T12:18:09.251Z  INFO 2321 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  3 downloaded,  1 extracted, (3 MB/11 MB)
+2026-10-08T12:18:09.608Z  INFO 2321 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  3 downloaded,  2 extracted, (4 MB/11 MB)
+2026-10-08T12:18:09.677Z  INFO 2321 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  3 downloaded,  3 extracted, (11 MB/11 MB)
+2026-10-08T12:18:09.684Z  INFO 2321 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Image testcontainers/ryuk:0.12.0 pull took PT1.754142186S
+2026-10-08T12:18:09.703Z  INFO 2321 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Creating container for image: testcontainers/ryuk:0.12.0
+2026-10-08T12:18:09.747Z  INFO 2321 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Container testcontainers/ryuk:0.12.0 is starting: 012a24872509e87b29527ce8b873e01ea8659467da878e4474dbd8c19901f4cc
+2026-10-08T12:18:09.958Z  INFO 2321 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Container testcontainers/ryuk:0.12.0 started in PT0.254505824S
+2026-10-08T12:18:09.989Z  INFO 2321 --- [opspilot] [           main] o.t.utility.RyukResourceReaper           : Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+2026-10-08T12:18:09.990Z  INFO 2321 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : Checking the system...
+2026-10-08T12:18:09.990Z  INFO 2321 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : ✔︎ Docker server version should be at least 1.6.0
+2026-10-08T12:18:09.994Z  INFO 2321 --- [opspilot] [           main] tc.mysql:8.4                             : Pulling docker image: mysql:8.4. Please be patient; this may take some time but only needs to be done once.
+2026-10-08T12:18:10.714Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Starting to pull image
+2026-10-08T12:18:10.715Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
+2026-10-08T12:18:11.254Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  9 pending,  1 downloaded,  0 extracted, (884 bytes/? MB)
+2026-10-08T12:18:11.268Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  8 pending,  2 downloaded,  0 extracted, (495 KB/? MB)
+2026-10-08T12:18:11.420Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  7 pending,  3 downloaded,  0 extracted, (25 MB/? MB)
+2026-10-08T12:18:11.436Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  6 pending,  4 downloaded,  0 extracted, (25 MB/? MB)
+2026-10-08T12:18:11.464Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  5 pending,  5 downloaded,  0 extracted, (25 MB/? MB)
+2026-10-08T12:18:11.589Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  4 pending,  6 downloaded,  0 extracted, (25 MB/? MB)
+2026-10-08T12:18:11.632Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  3 pending,  7 downloaded,  0 extracted, (26 MB/? MB)
+2026-10-08T12:18:11.771Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  2 pending,  8 downloaded,  0 extracted, (54 MB/? MB)
+2026-10-08T12:18:11.804Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  1 pending,  9 downloaded,  0 extracted, (54 MB/? MB)
+2026-10-08T12:18:12.054Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  0 extracted, (142 MB/227 MB)
+2026-10-08T12:18:12.512Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  1 extracted, (162 MB/227 MB)
+2026-10-08T12:18:14.269Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  2 extracted, (162 MB/227 MB)
+2026-10-08T12:18:14.320Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  3 extracted, (163 MB/227 MB)
+2026-10-08T12:18:14.578Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  4 extracted, (169 MB/227 MB)
+2026-10-08T12:18:14.586Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  5 extracted, (169 MB/227 MB)
+2026-10-08T12:18:14.595Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  6 extracted, (169 MB/227 MB)
+2026-10-08T12:18:16.100Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  7 extracted, (190 MB/227 MB)
+2026-10-08T12:18:16.108Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  8 extracted, (190 MB/227 MB)
+2026-10-08T12:18:24.207Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  9 extracted, (227 MB/227 MB)
+2026-10-08T12:18:24.217Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded, 10 extracted, (227 MB/227 MB)
+2026-10-08T12:18:24.223Z  INFO 2321 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pull complete. 10 layers, pulled in 13s (downloaded 227 MB at 17 MB/s)
+2026-10-08T12:18:24.223Z  INFO 2321 --- [opspilot] [           main] tc.mysql:8.4                             : Image mysql:8.4 pull took PT14.228619041S
+2026-10-08T12:18:24.225Z  INFO 2321 --- [opspilot] [           main] tc.mysql:8.4                             : Creating container for image: mysql:8.4
+2026-10-08T12:18:24.261Z  INFO 2321 --- [opspilot] [           main] tc.mysql:8.4                             : Container mysql:8.4 is starting: a3dd16ad8f00e4e4581aab5c1395e02cf7726f5ffa1c22732e249b8906b845ff
+2026-10-08T12:18:24.364Z  INFO 2321 --- [opspilot] [           main] tc.mysql:8.4                             : Waiting for database connection to become available at jdbc:mysql://localhost:32769/opspilot_open_handoff_test using query 'SELECT 1'
+2026-10-08T12:18:34.970Z  INFO 2321 --- [opspilot] [           main] tc.mysql:8.4                             : Container mysql:8.4 started in PT10.745377688S
+2026-10-08T12:18:34.971Z  INFO 2321 --- [opspilot] [           main] tc.mysql:8.4                             : Container is started (JDBC URL: jdbc:mysql://localhost:32769/opspilot_open_handoff_test)
+2026-10-08T12:18:35.619Z  INFO 2321 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
+2026-10-08T12:18:35.619Z  INFO 2321 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2026-10-08T12:18:35.619Z  INFO 2321 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : 
+2026-10-08T12:18:35.662Z  INFO 2321 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://localhost:32769/opspilot_open_handoff_test (MySQL 8.4)
+2026-10-08T12:18:35.675Z  WARN 2321 --- [opspilot] [           main] o.f.c.internal.database.base.Database    : Flyway upgrade recommended: MySQL 8.4 is newer than this version of Flyway and support has not been tested. The latest supported version of MySQL is 8.0.
+2026-10-08T12:18:35.710Z  INFO 2321 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table `opspilot_open_handoff_test`.`flyway_schema_history` does not exist yet
+2026-10-08T12:18:35.714Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 38 migrations (execution time 00:00.027s)
+2026-10-08T12:18:35.739Z  INFO 2321 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table `opspilot_open_handoff_test`.`flyway_schema_history` ...
+2026-10-08T12:18:35.793Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `opspilot_open_handoff_test`: << Empty Schema >>
+2026-10-08T12:18:35.819Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "1 - init opspilot"
+2026-10-08T12:18:36.162Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "2 - assistant conversations"
+2026-10-08T12:18:36.233Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "3 - agent investigation runs"
+2026-10-08T12:18:36.329Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "4 - observability evidence"
+2026-10-08T12:18:36.389Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "5 - agent events and remediation proposals"
+2026-10-08T12:18:36.464Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "6 - agent run controls"
+2026-10-08T12:18:36.848Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "7 - runbook knowledge base"
+2026-10-08T12:18:37.029Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "8 - hybrid runbook retrieval"
+2026-10-08T12:18:37.118Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "9 - runbook relevance feedback"
+2026-10-08T12:18:37.301Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "10 - graded runbook relevance evaluation"
+2026-10-08T12:18:37.398Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "11 - runbook judgment agreement"
+2026-10-08T12:18:37.481Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-08T12:18:37.630Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "13 - incident postmortems"
+2026-10-08T12:18:37.814Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "14 - incident analytics and follow up escalations"
+2026-10-08T12:18:37.860Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "15 - recurring incident problems"
+2026-10-08T12:18:38.064Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "16 - agent event outbox"
+2026-10-08T12:18:38.109Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "17 - outbox timestamp precision"
+2026-10-08T12:18:38.243Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "18 - outbox retention index"
+2026-10-08T12:18:38.263Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "19 - service slo objectives"
+2026-10-08T12:18:38.308Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "20 - alert ingest rejections"
+2026-10-08T12:18:38.364Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "21 - alert rejection lifecycle"
+2026-10-08T12:18:38.597Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "22 - follow up notification outbox"
+2026-10-08T12:18:38.632Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "23 - follow up owner acknowledgement"
+2026-10-08T12:18:38.749Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "24 - incident escalation execution"
+2026-10-08T12:18:38.800Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "25 - oncall roster management"
+2026-10-08T12:18:38.860Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "26 - oncall rotations"
+2026-10-08T12:18:39.127Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "27 - oncall handoff requests"
+2026-10-08T12:18:39.192Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "28 - oncall handoff revocations"
+2026-10-08T12:18:39.217Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "29 - runbook returned document count"
+2026-10-08T12:18:39.305Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "30 - runbook publication review"
+2026-10-08T12:18:39.671Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "31 - account auth version"
+2026-10-08T12:18:39.914Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "32 - assistant request idempotency"
+2026-10-08T12:18:39.958Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "33 - assistant queue and cancel"
+2026-10-08T12:18:40.024Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "34 - oncall shift swaps"
+2026-10-08T12:18:40.103Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "35 - oncall swap notification outbox"
+2026-10-08T12:18:40.166Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "36 - oncall swap notification payload retention"
+2026-10-08T12:18:40.229Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "37 - oncall swap revocations"
+2026-10-08T12:18:40.253Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_handoff_test` to version "38 - oncall open handoffs"
+2026-10-08T12:18:40.311Z  INFO 2321 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 38 migrations to schema `opspilot_open_handoff_test`, now at version v38 (execution time 00:03.944s)
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-10-08T12:18:42.888Z  INFO 2321 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-08T12:18:43.235Z  INFO 2321 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1c7aa676, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@fa200ab, org.springframework.security.web.context.SecurityContextHolderFilter@337f6716, org.springframework.security.web.header.HeaderWriterFilter@37dcda42, org.springframework.web.filter.CorsFilter@5e9f4f76, org.springframework.security.web.authentication.logout.LogoutFilter@426753a6, org.trigger.opspilot.security.JwtAuthenticationFilter@41628b4f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@780ccdc9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2d4df467, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@43ee4942, org.springframework.security.web.session.SessionManagementFilter@7f2163d3, org.springframework.security.web.access.ExceptionTranslationFilter@7b900883, org.springframework.security.web.access.intercept.AuthorizationFilter@1638fa8b]
+2026-10-08T12:18:44.286Z  INFO 2321 --- [opspilot] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-08T12:18:44.287Z  INFO 2321 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-08T12:18:44.289Z  INFO 2321 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-10-08T12:18:44.377Z  INFO 2321 --- [opspilot] [           main] .o.MySqlOnCallOpenHandoffIntegrationTest : Started MySqlOnCallOpenHandoffIntegrationTest in 39.295 seconds (process running for 40.407)
+2026-10-08T12:18:44.571Z  INFO 2321 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-08T12:18:44.677Z  INFO 2321 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5d0e1f13
+2026-10-08T12:18:44.683Z  INFO 2321 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldSerializeConcurrentOriginalClaimKeyAcknowledgements","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldRollbackWithdrawalReceiptAndAuditTogether","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldAcknowledgeOriginalClaimAfterCancellationAndEndWithoutRevival","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldRollbackCoverageCreationAuditFailure","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldRecheckActualPersistedDeadlineAfterScheduleLockWait","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_TIME_BARRIER {"case":"shouldRecheckActualPersistedDeadlineAfterScheduleLockWait","requestedEnd":"2026-10-08T12:18:49","releasedDatabaseNow":"2026-10-08T12:18:49.005702","releasedAfterPersistedEnd":true,"persistedEnd":"2026-10-08T12:18:49"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldRollbackCoverageOperationAndFinalClaimAuditTogether","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldClaimOnlyRemainingSubwindowAndKeepOriginalTimes","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldAllowExactlyOneWinnerBetweenDifferentClaimants","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldRollbackWhenFinalClaimAuditCrossesPersistedDeadline","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_TIME_BARRIER {"case":"shouldRollbackWhenFinalClaimAuditCrossesPersistedDeadline","requestedEnd":"2026-10-08T12:18:53","releasedDatabaseNow":"2026-10-08T12:18:53.004948","releasedAfterPersistedEnd":true,"persistedEnd":"2026-10-08T12:18:53"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldReadLatestQualificationAfterScheduleLockWait","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldRejectCancelledSourceButPermitExplicitOwnerWithdrawal","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldFilterAvailableAndMineInSqlBeforeBoundedInbox","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldSerializeClaimVersusOwnerWithdrawalWithoutHalfCoverage","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldRejectNewOverrideAndLegacyOrdinaryOverlap","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldRejectChangedPublicationKeyContentAndMalformedWindows","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldSerializeSameActorOperationKeyAcrossDifferentPlans","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldRollbackPublicationWhenItsAuditFails","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldRecheckCurrentClaimantQualificationEvenForOriginalReceipt","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldRejectEndedClaimWithoutInventingAutomaticExpiryStatus","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldEnforceHttpAuthenticationAndExplicitVersions","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldEnforcePersonalConsentAndOriginalOperationPayload","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldRejectInactivePlanAndPublisherWithoutChangingResponsibility","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldPublishAndClaimThroughHttpWithActualIndependentCoverage","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+CP97_OPEN_HANDOFF_DATABASE {"case":"shouldSerializeConcurrentPublicationOriginalKeys","migration38":true,"version":"8.4.11","product":"MySQL","schema":"opspilot_open_handoff_test"}
+2026-10-08T12:18:56.401Z  INFO 2321 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-08T12:18:56.407Z  INFO 2321 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+[INFO] Tests run: 24, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 52.10 s -- in org.trigger.opspilot.oncall.MySqlOnCallOpenHandoffIntegrationTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 24, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:03 min
+[INFO] Finished at: 2026-10-08T12:18:57Z
+[INFO] ------------------------------------------------------------------------
