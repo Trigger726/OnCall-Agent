@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+当前CP104：[报告](acceptance/V1.7-checkpoint-104.md)/[本地proof](assets/v1.7-cp104/local-proof.json)。真实MySQL有数据升级现在有独立旧/新JAR门禁，非空旧指定/双向撤销、原迁移校验和及认领重启完整验证，实际MySQL新执行仍待本轮自己CI；H210/8与Node158、默认518执行/196条件跳过不替代它。CP103自己20CI/六ZIP已[限定闭合](acceptance/V1.7-checkpoint-103.md#7-自身远端限定闭合cp104追加)。下一步核验自身实际升级，再继续通知/提醒/渠道、成员ACL、认领撤销、DST/日历及生产容量；原始OnCall能力基线、历史Demo与失败不删减，整体active。
+
 当前CP103：[报告](acceptance/V1.7-checkpoint-103.md)/[本地proof](assets/v1.7-cp103/local-proof.json)。及时原生预览与接纳前typed JSON拒绝、上下文未就绪控件门禁已本地验收，原六/八项保留并新增就绪一项；自身新源码远端仍待。下一步自身Linux/实际MySQL，然后真实MySQL有数据升级、通知/提醒/渠道、成员ACL、认领撤销、DST/日历及生产容量；整体active，原始OnCall能力基线及历史Demo不删减。
 
 当前CP101：[报告](acceptance/V1.7-checkpoint-101.md)/[证据](assets/v1.7-cp101/local-proof.json)。本地开放接班33及可靠清除/回执关系/真实跨标签页围栏通过，依赖audit0；原生助手六流程在第一预览失败，须优先定位，新源码自身Linux仍待。CP100自己整轮failure保留，不缩减整体路线、不标100%。

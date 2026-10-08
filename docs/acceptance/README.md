@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+最新 CP104：[报告](V1.7-checkpoint-104.md)/[128检查/113文件proof](../assets/v1.7-cp104/local-proof.json)。新增实际旧/新JAR与MySQL独立升级门禁，H2升级10/默认HTTP8、Node158、默认Java518执行/196条件跳过已验；新MySQL本地条件跳过、自己源码CI待验。CP103自己20success/六ZIP/实际原生18和开放24/双时区各518执行/页面由[289检查proof](../assets/v1.7-cp103/remote-first-proof.json)限定闭合。无新视觉变化，旧Demo/首失败保持，整体active。
+
 最新 CP103：[报告](V1.7-checkpoint-103.md)/[106检查/126文件proof](../assets/v1.7-cp103/local-proof.json)。原生6、助手原8+新1、开放33、成对14、通知12与原14runner本地通过；默认后端518执行/195条件跳过、前端175/Node148/audit0。三次实页失败与新旧Demo保留，自己新源码远端仍待；CP101自己20CI/三个工件由[77检查proof](../assets/v1.7-cp101/remote-first-proof.json)限定核验，整体active。
 
 最新 CP102：[原生预览分段诊断报告](V1.7-checkpoint-102.md)。Java定向22项通过；本机Chrome154在最小SSE及真实应用中复现混合Accept延迟，q权重及仅自有浏览器绕过代理均未解决，原始诊断JSON已归档。仅阶段性诊断上传，生产修复、真实503 JSON保留与完整回归仍待验，旧失败及Demo不覆盖。

@@ -1,0 +1,93 @@
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-08T11:46:48.952Z  INFO 4767 --- [opspilot] [           main] o.trigger.opspilot.OpsPilotApplication   : Starting OpsPilotApplication v0.1.0-SNAPSHOT using Java 17.0.20.1 with PID 4767 (/home/runner/work/OnCall-Agent/OnCall-Agent/target/opspilot-0.1.0-SNAPSHOT.jar started by runner in /home/runner/work/OnCall-Agent/OnCall-Agent)
+2026-10-08T11:46:48.957Z  INFO 4767 --- [opspilot] [           main] o.trigger.opspilot.OpsPilotApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-10-08T11:46:51.212Z  INFO 4767 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-08T11:46:51.215Z  INFO 4767 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-08T11:46:51.271Z  INFO 4767 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 41 ms. Found 0 Redis repository interfaces.
+2026-10-08T11:46:52.023Z  INFO 4767 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9955 (http)
+2026-10-08T11:46:52.037Z  INFO 4767 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-08T11:46:52.038Z  INFO 4767 --- [opspilot] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-10-08T11:46:52.097Z  INFO 4767 --- [opspilot] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-10-08T11:46:52.099Z  INFO 4767 --- [opspilot] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2993 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-08T11:46:52.501Z  INFO 4767 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-08T11:46:52.745Z  INFO 4767 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:native_ui_b4737725-d395-4041-829b-86dcd936150a user=SA
+2026-10-08T11:46:52.747Z  INFO 4767 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-08T11:46:52.822Z  INFO 4767 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
+2026-10-08T11:46:52.822Z  INFO 4767 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2026-10-08T11:46:52.822Z  INFO 4767 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : 
+2026-10-08T11:46:52.866Z  INFO 4767 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:native_ui_b4737725-d395-4041-829b-86dcd936150a (H2 2.2)
+2026-10-08T11:46:52.913Z  INFO 4767 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-08T11:46:52.916Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 38 migrations (execution time 00:00.025s)
+2026-10-08T11:46:52.923Z  INFO 4767 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-08T11:46:52.949Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-08T11:46:52.989Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-08T11:46:53.064Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-08T11:46:53.077Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-08T11:46:53.091Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-08T11:46:53.106Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-08T11:46:53.121Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-08T11:46:53.184Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-08T11:46:53.206Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-08T11:46:53.226Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-08T11:46:53.249Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-08T11:46:53.267Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-08T11:46:53.277Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-08T11:46:53.295Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-08T11:46:53.308Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-08T11:46:53.319Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-08T11:46:53.331Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-08T11:46:53.337Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-08T11:46:53.345Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-08T11:46:53.352Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-08T11:46:53.363Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-08T11:46:53.372Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-08T11:46:53.403Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-08T11:46:53.409Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-08T11:46:53.424Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-08T11:46:53.433Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-08T11:46:53.449Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-08T11:46:53.464Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-08T11:46:53.473Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-08T11:46:53.477Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-08T11:46:53.488Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-08T11:46:53.529Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-08T11:46:53.541Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-08T11:46:53.547Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-08T11:46:53.553Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-08T11:46:53.565Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-08T11:46:53.570Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-08T11:46:53.581Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-08T11:46:53.587Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-08T11:46:53.596Z  INFO 4767 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 38 migrations to schema "public", now at version v38 (execution time 00:00.411s)
+2026-10-08T11:46:54.830Z  INFO 4767 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-08T11:46:55.187Z  INFO 4767 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@393d4e34, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@123d666b, org.springframework.security.web.context.SecurityContextHolderFilter@7f38545a, org.springframework.security.web.header.HeaderWriterFilter@7afac89a, org.springframework.web.filter.CorsFilter@1f3310fc, org.springframework.security.web.authentication.logout.LogoutFilter@44b82007, org.trigger.opspilot.security.JwtAuthenticationFilter@54530644, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@d03cdc7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@59043128, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7e44f989, org.springframework.security.web.session.SessionManagementFilter@488c608a, org.springframework.security.web.access.ExceptionTranslationFilter@20a7ce0, org.springframework.security.web.access.intercept.AuthorizationFilter@6888746c]
+2026-10-08T11:46:56.276Z  INFO 4767 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9955 (http) with context path ''
+2026-10-08T11:46:56.377Z  INFO 4767 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9956 (http)
+2026-10-08T11:46:56.378Z  INFO 4767 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-08T11:46:56.378Z  INFO 4767 --- [opspilot] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-10-08T11:46:56.384Z  INFO 4767 --- [opspilot] [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-10-08T11:46:56.384Z  INFO 4767 --- [opspilot] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 101 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-08T11:46:56.434Z  INFO 4767 --- [opspilot] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoint(s) beneath base path '/actuator'
+2026-10-08T11:46:56.508Z  INFO 4767 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9956 (http) with context path ''
+2026-10-08T11:46:56.547Z  INFO 4767 --- [opspilot] [           main] o.trigger.opspilot.OpsPilotApplication   : Started OpsPilotApplication in 8.241 seconds (process running for 8.922)
+2026-10-08T11:46:56.592Z  INFO 4767 --- [opspilot] [0.1-9956-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServletRegistration'
+2026-10-08T11:46:56.592Z  INFO 4767 --- [opspilot] [0.1-9956-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServletRegistration'
+2026-10-08T11:46:56.594Z  INFO 4767 --- [opspilot] [0.1-9956-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-10-08T11:46:56.959Z  INFO 4767 --- [opspilot] [0.1-9955-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-08T11:46:56.960Z  INFO 4767 --- [opspilot] [0.1-9955-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-08T11:46:56.962Z  INFO 4767 --- [opspilot] [0.1-9955-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-10-08T11:46:56.977Z  WARN 4767 --- [opspilot] [0.1-9955-exec-1] o.s.w.s.h.HandlerMappingIntrospector     : Cache miss for REQUEST dispatch to '/login' (previous null). Performing MatchableHandlerMapping lookup. This is logged once only at WARN level, and every time at TRACE.
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-08T11:47:15.095Z  INFO 4767 --- [opspilot] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-08T11:47:15.097Z  INFO 4767 --- [opspilot] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

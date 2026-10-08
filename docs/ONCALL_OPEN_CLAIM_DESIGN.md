@@ -2,6 +2,8 @@
 
 CP101追加：原24+新9完整实页本地通过，真实回执关系、可靠清除及两种跨标签页身份变化见[报告](acceptance/V1.7-checkpoint-101.md)/[proof](assets/v1.7-cp101/local-proof.json)。旧关闭/取消回执不重建覆盖；读后验证null才能视为本地清除。自己的Linux待验，原生助手回归FAIL及CP100远端首次failure保留；剩余矩阵和整体路线不缩减。
 
+最新 CP104：[旧包有数据升级门禁](acceptance/V1.7-checkpoint-104.md)已接入独立实际MySQL旧/新JAR作业，旧指定/非空双向撤销、责任覆盖和迁移校验和均须保留，新执行待自己CI。增强H210/默认HTTP8与Node158通过不替代它。CP103自己Linux开放33/助手9/原生6和实际MySQL开放24/原生18由[六ZIP证据](assets/v1.7-cp103/remote-first-proof.json)限定核验；仍不包含完整广播/提醒/成员ACL/撤销/DST/生产容量，全部历史Demo/失败保持，下方按各时点阅读。
+
 最新范围：**CP99自身Linux16/MySQL24限定闭合，CP100原16+新8本地24通过，完整开放认领仍未完成**，见[99追加](acceptance/V1.7-checkpoint-99.md#6-自己源码的-linux-页面与-mysql-限定闭合)/[100资格恢复与存储追加](acceptance/V1.7-checkpoint-100.md)。同原JWT实际403与角色恢复后持久锁定、无法可靠存储时0首次POST已验；自己的Linux24、跨标签页/同token身份、回执关系/清除静默失败仍待。旧Demo保留、生产代码/DDL未改，真实MySQL有数据升级、广播/提醒、成员ACL/撤销/DST及生产容量路线不删。下方保留各历史时点范围。
 
 状态：**CP97后台/MySQL24、CP98真实网络/Linux8已限定闭合，CP99专用页面本地16通过，完整功能仍未交付**，见[97追加](acceptance/V1.7-checkpoint-97.md#6-自己源码实际mysql与远端限定闭合)/[98追加](acceptance/V1.7-checkpoint-98.md#6-自己源码的linux-http限定闭合)/[99页面与八张新旧Demo](acceptance/V1.7-checkpoint-99.md)。独立V38与本人自主认领已实现；页面保留原键/版本、可靠保存后首次写、失响应手动原回执、三类晚200围栏与到期0POST已有证据。CP99自己源码Linux/完整UI资格与存储矩阵、真实MySQL有数据升级仍待。原设计基线为 CP95 `148f6c9`，现有指定接班、双向互换和成对撤销保持独立；不得用它们的通过结果证明完整开放认领已完成。

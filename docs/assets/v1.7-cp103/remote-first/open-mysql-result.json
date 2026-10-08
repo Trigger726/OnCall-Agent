@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "suite": {
+    "name": "org.trigger.opspilot.oncall.MySqlOnCallOpenHandoffIntegrationTest",
+    "tests": 24,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "executed": 24,
+  "skipped": 0,
+  "cases": [
+    "shouldPublishAndClaimThroughHttpWithActualIndependentCoverage",
+    "shouldSerializeConcurrentPublicationOriginalKeys",
+    "shouldRejectChangedPublicationKeyContentAndMalformedWindows",
+    "shouldAcknowledgeOriginalClaimAfterCancellationAndEndWithoutRevival",
+    "shouldRecheckCurrentClaimantQualificationEvenForOriginalReceipt",
+    "shouldRejectCancelledSourceButPermitExplicitOwnerWithdrawal",
+    "shouldRejectInactivePlanAndPublisherWithoutChangingResponsibility",
+    "shouldRejectNewOverrideAndLegacyOrdinaryOverlap",
+    "shouldClaimOnlyRemainingSubwindowAndKeepOriginalTimes",
+    "shouldRejectEndedClaimWithoutInventingAutomaticExpiryStatus",
+    "shouldRollbackCoverageCreationAuditFailure",
+    "shouldRollbackCoverageOperationAndFinalClaimAuditTogether",
+    "shouldRollbackWithdrawalReceiptAndAuditTogether",
+    "shouldAllowExactlyOneWinnerBetweenDifferentClaimants",
+    "shouldSerializeConcurrentOriginalClaimKeyAcknowledgements",
+    "shouldSerializeSameActorOperationKeyAcrossDifferentPlans",
+    "shouldSerializeClaimVersusOwnerWithdrawalWithoutHalfCoverage",
+    "shouldEnforcePersonalConsentAndOriginalOperationPayload",
+    "shouldFilterAvailableAndMineInSqlBeforeBoundedInbox",
+    "shouldEnforceHttpAuthenticationAndExplicitVersions",
+    "shouldRecheckActualPersistedDeadlineAfterScheduleLockWait",
+    "shouldRollbackWhenFinalClaimAuditCrossesPersistedDeadline",
+    "shouldReadLatestQualificationAfterScheduleLockWait",
+    "shouldRollbackPublicationWhenItsAuditFails"
+  ],
+  "database": "MySQL",
+  "databaseVersion": "8.4.11",
+  "actualJdbcIdentityPerTest": true,
+  "migration38VerifiedPerTest": true,
+  "persistedWholeSecondDeadlineBarriers": [
+    {
+      "case": "shouldRecheckActualPersistedDeadlineAfterScheduleLockWait",
+      "persistedEnd": "2026-10-08T11:44:22",
+      "releasedAfterPersistedEnd": true,
+      "releasedDatabaseNow": "2026-10-08T11:44:22.006364",
+      "requestedEnd": "2026-10-08T11:44:22"
+    },
+    {
+      "case": "shouldRollbackWhenFinalClaimAuditCrossesPersistedDeadline",
+      "persistedEnd": "2026-10-08T11:44:26",
+      "releasedAfterPersistedEnd": true,
+      "releasedDatabaseNow": "2026-10-08T11:44:26.041743",
+      "requestedEnd": "2026-10-08T11:44:26"
+    }
+  ],
+  "fullMavenAndOrderedPoolShutdownVerified": true
+}

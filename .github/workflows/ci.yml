@@ -440,6 +440,55 @@ jobs:
             target/surefire-reports/
           retention-days: 30
 
+  oncall-open-handoff-upgrade-mysql-integration:
+    name: Populated V37 JAR upgrade and restart on owned MySQL 8.4
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Reject H2 fallback, empty history and incomplete upgrade evidence
+        run: node --test scripts/tests/oncall-open-handoff-upgrade-mysql.test.cjs scripts/tests/oncall-open-handoff-http-ci.test.cjs
+      - name: Build fresh own-source executable JAR
+        run: |
+          chmod +x mvnw
+          ./mvnw -B -DskipTests package
+      - name: Isolated immutable V37 source checkout
+        uses: actions/checkout@v5
+        with:
+          ref: a1262f6765b46416a7fdc192642cf631465f4caf
+          path: target/cp104-v37-source
+      - name: Build and record actual old JAR without resetting current checkout
+        run: |
+          chmod +x target/cp104-v37-source/mvnw
+          (cd target/cp104-v37-source && ./mvnw -B -DskipTests package)
+          node scripts/record-open-handoff-upgrade-baseline.cjs
+      - name: Verify populated old/new HTTP, migration checksums, restart and original receipts
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p target/oncall-open-handoff-upgrade-mysql-it
+          ./mvnw -B -Duser.timezone=UTC -Dopspilot.oncall.open.upgrade.mysql.enabled=true -Dtest=MySqlOpenHandoffUpgradeHttpIntegrationTest test 2>&1 | tee target/oncall-open-handoff-upgrade-mysql-it/maven.log
+      - name: Independently inspect MySQL identity, ten HTTP cases and all five JVM shutdowns
+        run: node scripts/verify-oncall-open-handoff-upgrade-mysql.cjs
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: oncall-open-handoff-upgrade-mysql-evidence
+          path: |
+            target/oncall-open-handoff-upgrade-mysql-it/**/*.json
+            target/oncall-open-handoff-upgrade-mysql-it/**/*.log
+            target/surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOpenHandoffUpgradeHttpIntegrationTest.xml
+            target/cp104-v37-source/old-jar-provenance.json
+          retention-days: 30
+
   oncall-open-handoff-http-integration:
     name: Open handoff real HTTP and persisted restart receipts
     runs-on: ubuntu-latest
@@ -529,7 +578,7 @@ jobs:
 
   container-image:
     name: Container image build and smoke test
-    needs: [frontend, browser-integration, backend-h2, mysql-integration, assistant-native-mysql-integration, assistant-cross-node-mysql-integration, oncall-swap-mysql-integration, oncall-open-handoff-mysql-integration, oncall-open-handoff-http-integration, auth-session-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration, collector-alerting-integration]
+    needs: [frontend, browser-integration, backend-h2, mysql-integration, assistant-native-mysql-integration, assistant-cross-node-mysql-integration, oncall-swap-mysql-integration, oncall-open-handoff-mysql-integration, oncall-open-handoff-upgrade-mysql-integration, oncall-open-handoff-http-integration, auth-session-integration, alertmanager-integration, prometheus-alerting-integration, service-metrics-alerting-integration, slo-alerting-integration, follow-up-notification-integration, redis-integration, distributed-integration, tracing-integration, collector-alerting-integration]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

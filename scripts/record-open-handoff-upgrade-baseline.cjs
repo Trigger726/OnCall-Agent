@@ -1,0 +1,10 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const {execFileSync}=require('node:child_process');
+const {createHash}=require('node:crypto');
+const source='a1262f6765b46416a7fdc192642cf631465f4caf';
+const root=path.resolve(__dirname,'..'),checkout=path.join(root,'target/cp104-v37-source');
+assert.equal(execFileSync('git',['-C',checkout,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),source);
+const file=path.join(checkout,'target/opspilot-0.1.0-SNAPSHOT.jar');
+const jarSha256=createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+fs.writeFileSync(path.join(checkout,'old-jar-provenance.json'),JSON.stringify({source,jarSha256},null,2)+'\n');
+console.log(JSON.stringify({source,jarSha256}));
