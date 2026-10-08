@@ -9,7 +9,7 @@ const rows=ref<OpenHandoff[]>([]),databaseNow=ref(''),truncated=ref(false),info=
 const scope=ref<'ALL'|'MINE'|'AVAILABLE'>('AVAILABLE'),status=ref<OpenHandoff['status']|''>(''),scheduleId=ref('')
 const intent=ref<OpenIntent|null>(null),frozen=ref(false),broken=ref(false),busy=ref(false),error=ref(''),message=ref(''),confirmDiscard=ref(false)
 const sessionActor=()=>{try{return JSON.parse(localStorage.getItem('opspilot_user')??'null')?.id as number|undefined}catch{return undefined}}
-const qualified=computed(()=>sessionActor()===auth.state.user?.id&&openQualified(auth.state.user?.id,auth.state.user?.roleCode))
+const qualified=computed(()=>Boolean(localStorage.getItem('opspilot_token'))&&sessionActor()===auth.state.user?.id&&openQualified(auth.state.user?.id,auth.state.user?.roleCode))
 const foreign=computed(()=>intent.value&&intent.value.action!=='PUBLISH'&&intent.value.row.id!==selected.value)
 let epoch=0
 const capture=()=>({epoch,actor:auth.state.user?.id,token:localStorage.getItem('opspilot_token')})
@@ -19,7 +19,7 @@ const actionName=computed(()=>intent.value?.action==='PUBLISH'?'发布':intent.v
 const newOperationBlocked=computed(()=>{const draft=intent.value;if(!draft||frozen.value||draft.action==='PUBLISH')return false
   return Boolean(openActionError(info.value,draft.action,auth.state.user?.id,auth.state.user?.roleCode)||info.value?.request.id!==draft.row.id||info.value?.request.version!==draft.command.version)})
 async function refresh(keepError=false){
-  if(busy.value||!auth.state.user)return
+  if(busy.value||!auth.state.user||!localStorage.getItem('opspilot_token')||sessionActor()!==auth.state.user.id)return
   const identity=capture();busy.value=true;rows.value=[];info.value=null;databaseNow.value='';truncated.value=false;if(!keepError)error.value=''
   try{
     const list=await listOpenHandoffs(scope.value,status.value,scheduleId.value);if(!current(identity))return
@@ -81,7 +81,7 @@ async function discard(){
 function resetAccount(){
   epoch++;busy.value=false;rows.value=[];databaseNow.value='';info.value=null;selected.value=null;intent.value=null;frozen.value=false;broken.value=false;confirmDiscard.value=false;error.value='';message.value=''
   if(!auth.state.user)return
-  if(sessionActor()!==auth.state.user.id){broken.value=true;error.value='浏览器会话账号与页面身份不一致，请重新登录；未发送任何操作';return}
+  if(!localStorage.getItem('opspilot_token')||sessionActor()!==auth.state.user.id){broken.value=true;error.value='浏览器会话账号与页面身份不一致，请重新登录；未发送任何操作';return}
   try{intent.value=readOpenIntent(sessionStorage,auth.state.user.id);frozen.value=Boolean(intent.value)
     if(intent.value){if(intent.value.action!=='PUBLISH')selected.value=intent.value.row.id;message.value='已恢复本人原键/原版本/原说明，仅手动求回执，不自动POST'}
   }catch(cause){broken.value=true;error.value=cause instanceof Error?cause.message:'原意图读取失败，未发送'}
@@ -113,7 +113,7 @@ defineExpose({refresh,open})
         <p>数据库事实时间 {{openClock(info.databaseNow)}} · 原班次 #{{info.request.sourceShiftId}} / v{{info.request.sourceVersion}}</p>
         <p v-if="info.replacement" class="open-replacement">覆盖 #{{info.replacement.id}} · 负责人 #{{info.replacement.userId}} · v{{info.replacement.version}}<br>{{openClock(info.replacement.startsAt)}} → {{openClock(info.replacement.endsAt)}}<br>{{info.replacement.cancelledAt===null?'覆盖未取消，不等于此刻胜出':'覆盖已取消；原CLAIMED不改写、不重新创建'}}<span v-if="info.replacement.cancelledAt"><br>{{openClock(info.replacement.cancelledAt)}} · {{info.replacement.cancellationReason}}</span></p>
         <p v-else>没有本次认领生成的覆盖，不假定已转移责任。</p>
-        <p v-if="info.operation" class="open-receipt">本人操作回执：{{info.operation.operation}} · 账号 #{{info.operation.actorId}} · {{openClock(info.operation.committedAt)}}<br>原键 {{info.operation.operationKey}} · 捕获v{{info.operation.capturedVersion}}<br>{{info.operation.reason}}</p>
+        <p v-if="info.operation" class="open-receipt">{{info.operation.actorId===auth.state.user?.id?'本人操作回执':'历史操作回执 · 非本人'}}：{{info.operation.operation}} · 账号 #{{info.operation.actorId}} · {{openClock(info.operation.committedAt)}}<br>原键 {{info.operation.operationKey}} · 捕获v{{info.operation.capturedVersion}}<br>{{info.operation.reason}}</p>
         <p class="open-note">历史认领与当前责任分开。请在区间coverage选择计划 #{{info.request.scheduleId}}、原请求时段独立查询；取消后也不承诺原负责人仍可用。</p>
         <div class="open-actions"><button v-for="action in (['CLAIM','WITHDRAW'] as const)" v-show="qualified&&!openActionError(info,action,auth.state.user?.id,auth.state.user?.roleCode)" :key="action" class="secondary-button" :disabled="busy||Boolean(intent)||broken" @click="choose(action)">{{action==='CLAIM'?'我自愿认领':'本人撤回请求'}}</button></div>
         <p v-if="info.request.status==='OPEN'" class="open-note">{{openActionError(info,info.request.requesterId===auth.state.user?.id?'WITHDRAW':'CLAIM',auth.state.user?.id,auth.state.user?.roleCode)}}</p>

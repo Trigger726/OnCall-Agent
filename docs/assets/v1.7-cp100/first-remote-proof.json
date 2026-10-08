@@ -1,0 +1,231 @@
+{
+  "status": "OWN_SOURCE_FIRST_FAILURE_PRESERVED_TWO_ARCHIVES_VERIFIED",
+  "runId": 37763070343,
+  "source": "63e1a79694feff57aba7cd5b469a6e5d15482bac",
+  "jobConclusions": {
+    "success": 17,
+    "failure": 2,
+    "skipped": 1
+  },
+  "verifiedArchives": [
+    {
+      "id": 11542979112,
+      "name": "oncall-browser-evidence",
+      "size_in_bytes": 12736358,
+      "url": "https://api.github.com/repos/Trigger726/OnCall-Agent/actions/artifacts/11542979112",
+      "archive_download_url": "https://api.github.com/repos/Trigger726/OnCall-Agent/actions/artifacts/11542979112/zip",
+      "expired": false,
+      "created_at": "2026-10-08T10:28:03Z",
+      "expires_at": "2026-11-07T10:28:01Z",
+      "updated_at": "2026-10-08T10:28:03Z",
+      "digest": "sha256:0c7a055bd99efc43df333fa3c0072bb31298c172cb152c4fc84409d20e4971b2",
+      "workflow_run": {
+        "id": 37763070343,
+        "repository_id": 1265067261,
+        "head_repository_id": 1265067261,
+        "head_branch": "feat/opspilot-v1",
+        "head_sha": "63e1a79694feff57aba7cd5b469a6e5d15482bac"
+      }
+    },
+    {
+      "id": 11542254737,
+      "name": "frontend-security-evidence",
+      "size_in_bytes": 831,
+      "url": "https://api.github.com/repos/Trigger726/OnCall-Agent/actions/artifacts/11542254737",
+      "archive_download_url": "https://api.github.com/repos/Trigger726/OnCall-Agent/actions/artifacts/11542254737/zip",
+      "expired": false,
+      "created_at": "2026-10-08T10:23:13Z",
+      "expires_at": "2026-11-07T10:23:12Z",
+      "updated_at": "2026-10-08T10:23:13Z",
+      "digest": "sha256:eb97a6f1824ec331aefadad81773eaaecbf9afe47775a0c09adf884ebf604327",
+      "workflow_run": {
+        "id": 37763070343,
+        "repository_id": 1265067261,
+        "head_repository_id": 1265067261,
+        "head_branch": "feat/opspilot-v1",
+        "head_sha": "63e1a79694feff57aba7cd5b469a6e5d15482bac"
+      }
+    }
+  ],
+  "remoteUi": {
+    "status": "FAIL",
+    "baseline": false,
+    "jarSha256": "83cc8839c9b05e9717ee1f178e0a0010da782bcfeaef7b37f1e5f683b0203129",
+    "cases": [],
+    "screenshots": [],
+    "pageErrors": [],
+    "consoleLogs": [],
+    "rejected": [],
+    "aborts": [],
+    "held": [],
+    "visualBounds": [],
+    "browserPath": "Browser plugin not available; existing Playwright",
+    "viewports": [
+      "1440x1000",
+      "390x844"
+    ],
+    "tokensPersistedToEvidence": false,
+    "userFileDatabaseModified": false,
+    "startedPids": [
+      5751
+    ],
+    "stoppedPids": [
+      5751
+    ],
+    "sqlFixtures": [],
+    "database": "isolated runner-owned H2 file; offline fixture only with all owned JARs stopped",
+    "productionJvmPid": 5751,
+    "browser": "153.0.8010.12",
+    "failure": "locator.fill: Error: Malformed value\nCall log:\n  - waiting for getByLabel('开放时段开始', { exact: true })\n    - locator resolved to <input step=\"1\" required=\"\" data-v-78f29aaa=\"\" type=\"datetime-local\"/>\n    - fill(\"2026-10-10T11:28:00\")\n  - attempting fill action\n    - waiting for element to be visible, enabled and editable\n\n    at verify (/home/runner/work/OnCall-Agent/OnCall-Agent/scripts/verify-oncall-open-handoff-ui-ci.cjs:73:176)",
+    "ownedProcessStopped": true,
+    "completeJarLogs": [
+      {
+        "file": "jar.log",
+        "unexpectedErrors": 0
+      }
+    ],
+    "unexpectedJarErrors": 0,
+    "posts": []
+  },
+  "audit": {
+    "auditReportVersion": 2,
+    "vulnerabilities": {
+      "@vue/server-renderer": {
+        "name": "@vue/server-renderer",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          {
+            "source": 1241259,
+            "name": "@vue/server-renderer",
+            "dependency": "@vue/server-renderer",
+            "title": "@vue/server-renderer: XSS via missing CR in attribute-name blacklist",
+            "url": "https://github.com/advisories/GHSA-g2v6-rqmx-r4w6",
+            "severity": "high",
+            "cwe": [
+              "CWE-79",
+              "CWE-116"
+            ],
+            "cvss": {
+              "score": 7.2,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N"
+            },
+            "range": "<3.5.42"
+          }
+        ],
+        "effects": [
+          "vue"
+        ],
+        "range": "<3.5.42",
+        "nodes": [
+          "node_modules/@vue/server-renderer"
+        ],
+        "fixAvailable": true
+      },
+      "source-map-js": {
+        "name": "source-map-js",
+        "severity": "high",
+        "isDirect": false,
+        "via": [
+          {
+            "source": 1241209,
+            "name": "source-map-js",
+            "dependency": "source-map-js",
+            "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+            "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+            "severity": "high",
+            "cwe": [
+              "CWE-1284"
+            ],
+            "cvss": {
+              "score": 7.5,
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+            },
+            "range": ">=1.0.0 <1.2.2"
+          }
+        ],
+        "effects": [],
+        "range": "1.0.0 - 1.2.1",
+        "nodes": [
+          "node_modules/source-map-js"
+        ],
+        "fixAvailable": true
+      },
+      "vue": {
+        "name": "vue",
+        "severity": "high",
+        "isDirect": true,
+        "via": [
+          "@vue/server-renderer"
+        ],
+        "effects": [],
+        "range": "3.2.13 - 3.5.41",
+        "nodes": [
+          "node_modules/vue"
+        ],
+        "fixAvailable": true
+      }
+    },
+    "metadata": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 3,
+        "critical": 0,
+        "total": 3
+      },
+      "dependencies": {
+        "prod": 28,
+        "dev": 79,
+        "optional": 53,
+        "peer": 0,
+        "peerOptional": 0,
+        "total": 106
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "docs/assets/v1.7-cp100/first-own-run.json",
+      "sha256": "ea7d0c0ca2dd354487fb8e0ebea7a3888df42e920fa831f726b9980f058e6c2c",
+      "bytes": 13798
+    },
+    {
+      "path": "docs/assets/v1.7-cp100/first-own-jobs.json",
+      "sha256": "7cacdabfb5ee33b71102b3abebd1dbaca4e0079cf0405a32ff8235d02596e519",
+      "bytes": 40640
+    },
+    {
+      "path": "docs/assets/v1.7-cp100/first-own-artifacts.json",
+      "sha256": "fee145492fe82d495102a915a80706d9f6bba3bf71b54e6bc783404e22fbd6f1",
+      "bytes": 16504
+    },
+    {
+      "path": "docs/assets/v1.7-cp100/first-remote-ui-failure.json",
+      "sha256": "59ac18eb2d7bc278a6e5f5ed054b2cffdaaab0da3c8370e7ef54eeb5b358222a",
+      "bytes": 1360
+    },
+    {
+      "path": "docs/assets/v1.7-cp100/first-remote-audit.json",
+      "sha256": "90482fc683223120c925b441f10d7bb3adbb14cd6d2adbeb04921cc2d29154da",
+      "bytes": 2374
+    },
+    {
+      "path": "docs/assets/v1.7-cp100/first-frontend-job.log",
+      "sha256": "7bd8a8ec74561345c20548badc6c619324897f4cb0a38bffdc0e767912452997",
+      "bytes": 84849
+    },
+    {
+      "path": "docs/assets/v1.7-cp100/first-browser-job.log",
+      "sha256": "8fef307bdfd5775709adc953127ce6ee5e87af93c3dec1afa8266098de5129c3",
+      "bytes": 158064
+    },
+    {
+      "path": "docs/assets/v1.7-cp100/first-remote-ui-failure.png",
+      "sha256": "f54362662887031eb6651cce6155e16ac27860e7a55214ba149e07d544acfab0",
+      "bytes": 160778
+    }
+  ],
+  "allJobArtifactsIndependentlyReplayed": false
+}

@@ -31,7 +31,21 @@ export function openTime(value:string){const time=databaseTime(value);return tim
 function validSource(s:HandoffSource){return s&&[s.id,s.scheduleId,s.userId].every(id)&&version(s.version)&&s.override===false&&s.cancelledAt===null
   &&Boolean(databaseTime(s.startsAt)&&databaseTime(s.endsAt)&&databaseTime(s.startsAt)!<databaseTime(s.endsAt)!)}
 function validRow(r:OpenHandoff){return r&&[r.id,r.scheduleId,r.sourceShiftId,r.requesterId].every(id)&&version(r.version)&&version(r.sourceVersion)
-  &&['OPEN','CLAIMED','WITHDRAWN'].includes(r.status)&&Boolean(openTime(r.startsAt)&&openTime(r.endsAt)&&openTime(r.startsAt)<openTime(r.endsAt))}
+  &&uuid.test(r.requestKey??'')&&reason(r.reason)&&Boolean(databaseTime(r.createdAt))
+  &&['OPEN','CLAIMED','WITHDRAWN'].includes(r.status)&&Boolean(openTime(r.startsAt)&&openTime(r.endsAt)&&openTime(r.startsAt)<openTime(r.endsAt))
+  &&(r.status==='OPEN'?r.closedAt===null&&r.claimedBy===null&&r.replacementShiftId===null
+    :Boolean(databaseTime(r.closedAt))&&(r.status==='CLAIMED'?id(r.claimedBy)&&r.claimedBy!==r.requesterId&&id(r.replacementShiftId)&&r.replacementShiftId!==r.sourceShiftId:r.claimedBy===null&&r.replacementShiftId===null))}
+function validCoverage(info:OpenCoverage){
+  if(!info||!validRow(info.request)||!databaseTime(info.databaseNow))return false
+  const r=info.request,o=info.operation,s=info.replacement
+  if(r.status==='OPEN')return o===null&&s===null
+  if(!o||o.handoffId!==r.id||!id(o.actorId)||!uuid.test(o.operationKey??'')||!version(o.capturedVersion)||r.version!==o.capturedVersion+1
+    ||!reason(o.reason)||!databaseTime(o.committedAt)||databaseTime(o.committedAt)!==databaseTime(r.closedAt))return false
+  if(r.status==='WITHDRAWN')return o.operation==='WITHDRAW'&&o.actorId===r.requesterId&&s===null
+  return Boolean(o.operation==='CLAIM'&&o.actorId===r.claimedBy&&s&&s.id===r.replacementShiftId&&s.scheduleId===r.scheduleId&&s.userId===o.actorId&&version(s.version)
+    &&openTime(s.startsAt)&&openTime(s.endsAt)&&openTime(s.startsAt)>=openTime(r.startsAt)&&openTime(s.startsAt)<openTime(s.endsAt)&&openTime(s.endsAt)===openTime(r.endsAt)
+    &&(s.cancelledAt===null?s.cancellationReason===null:Boolean(databaseTime(s.cancelledAt)&&reason(s.cancellationReason))))
+}
 export function canPublishOpen(source:HandoffSource,actor:number|undefined,role:string|undefined,now:string){return openQualified(actor,role)&&validSource(source)
   &&source.userId===actor&&Boolean(databaseTime(now)&&databaseTime(source.endsAt)!>databaseTime(now)!)}
 export function openActionError(info:OpenCoverage|null,action:'CLAIM'|'WITHDRAW',actor:number|undefined,role:string|undefined){
@@ -91,25 +105,30 @@ export function readOpenIntent(storage:Pick<Storage,'getItem'>,actor:number):Ope
   if(value?.actorId!==actor||openIntentError(value))throw Error('开放接班原意图损坏，未发送；核对后明确放弃')
   return value
 }
-export const clearOpenIntent=(storage:Pick<Storage,'removeItem'>,actor:number)=>storage.removeItem(storageKey(actor))
+export function clearOpenIntent(storage:Pick<Storage,'removeItem'|'getItem'>,actor:number){
+  storage.removeItem(storageKey(actor))
+  if(storage.getItem(storageKey(actor))!==null)throw Error('原意图未可靠清除，请保留并核对原回执')
+}
 export const listOpenHandoffs=(scope:'ALL'|'MINE'|'AVAILABLE',status:OpenHandoff['status']|'',scheduleId:string)=>{
   const query=new URLSearchParams({scope});if(status)query.set('status',status);if(scheduleId)query.set('scheduleId',scheduleId)
   return api<{databaseNow:string;requests:OpenHandoff[];truncated:boolean}>(`/on-call/open-handoffs?${query}`)
 }
 export async function getOpenCoverage(id:number){const info=await api<OpenCoverage>(`/on-call/open-handoffs/${id}/coverage`)
-  if(info?.request?.id!==id||!validRow(info.request)||!databaseTime(info.databaseNow))throw Error('请求快照身份或时间异常，旧事实已清空');return info}
+  if(info?.request?.id!==id||!validCoverage(info))throw Error('请求/覆盖/操作回执关系或时间异常，旧事实已清空');return info}
 export const getOpenRoster=(intent:OpenIntent)=>{const value=intent.action==='PUBLISH'?intent.source:intent.row
   return api<OpenRoster>('/on-call/roster?'+new URLSearchParams({scheduleId:String(value.scheduleId),from:openTime(value.startsAt),to:openTime(value.endsAt)}))}
 export async function submitOpenIntent(intent:OpenIntent){
   if(intent.action==='PUBLISH'){
     const row=await api<OpenHandoff>('/on-call/open-handoffs',{method:'POST',body:JSON.stringify(intent.command)}),c=intent.command
-    if(!validRow(row)||row.requesterId!==intent.actorId||row.requestKey!==c.requestKey||row.sourceShiftId!==c.sourceShiftId||row.sourceVersion!==c.sourceVersion
+    if(!validRow(row)||row.scheduleId!==intent.source.scheduleId||row.requesterId!==intent.actorId||row.requestKey!==c.requestKey||row.sourceShiftId!==c.sourceShiftId||row.sourceVersion!==c.sourceVersion
       ||openTime(row.startsAt)!==c.startsAt||openTime(row.endsAt)!==c.endsAt||row.reason!==c.reason)throw Error('发布回执与原意图不符，仍保留原键')
     return {row,coverage:null}
   }
   const info=await api<OpenCoverage>(`/on-call/open-handoffs/${intent.row.id}/${intent.action==='CLAIM'?'claims':'withdrawals'}`,{method:'POST',body:JSON.stringify(intent.command)})
   const operation=info?.operation,c=intent.command
-  if(info?.request?.id!==intent.row.id||!validRow(info.request)||!operation||operation.handoffId!==intent.row.id||operation.actorId!==intent.actorId
+  if(info?.request?.id!==intent.row.id||!validCoverage(info)||!operation||operation.handoffId!==intent.row.id||operation.actorId!==intent.actorId
+    ||!(['scheduleId','sourceShiftId','sourceVersion','requesterId','requestKey','reason'] as const).every(field=>info.request[field]===intent.row[field])
+    ||openTime(info.request.startsAt)!==openTime(intent.row.startsAt)||openTime(info.request.endsAt)!==openTime(intent.row.endsAt)||databaseTime(info.request.createdAt)!==databaseTime(intent.row.createdAt)
     ||operation.operation!==intent.action||operation.operationKey!==c.operationKey||operation.capturedVersion!==c.version||operation.reason!==c.reason)throw Error('操作回执与本人原意图不符，仍保留原键')
   return {row:info.request,coverage:info}
 }

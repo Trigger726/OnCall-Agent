@@ -1,0 +1,981 @@
+﻿2026-10-08T10:22:55.1310311Z Current runner version: '2.337.0'
+2026-10-08T10:22:55.1331211Z ##[group]Runner Image Provisioner
+2026-10-08T10:22:55.1331964Z Hosted Compute Agent
+2026-10-08T10:22:55.1332485Z Version: 20260901.588
+2026-10-08T10:22:55.1333089Z Commit: f88ec8081b781fac6c440065ac7ff9e710ce3d0b
+2026-10-08T10:22:55.1333683Z Build Date: 2026-09-01T19:56:44Z
+2026-10-08T10:22:55.1334266Z Worker ID: {8190aed2-1f33-418a-962c-3b5fe47217eb}
+2026-10-08T10:22:55.1334906Z Azure Region: westus3
+2026-10-08T10:22:55.1335405Z ##[endgroup]
+2026-10-08T10:22:55.1336618Z ##[group]Operating System
+2026-10-08T10:22:55.1337121Z Ubuntu
+2026-10-08T10:22:55.1337675Z 24.04.5
+2026-10-08T10:22:55.1338187Z LTS
+2026-10-08T10:22:55.1338642Z ##[endgroup]
+2026-10-08T10:22:55.1339464Z ##[group]Runner Image
+2026-10-08T10:22:55.1339969Z Image: ubuntu-24.04
+2026-10-08T10:22:55.1340428Z Version: 20260927.320.1
+2026-10-08T10:22:55.1341543Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260927.320/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-08T10:22:55.1342832Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260927.320
+2026-10-08T10:22:55.1343613Z ##[endgroup]
+2026-10-08T10:22:55.1344527Z ##[group]GITHUB_TOKEN Permissions
+2026-10-08T10:22:55.1346295Z Contents: read
+2026-10-08T10:22:55.1346778Z Metadata: read
+2026-10-08T10:22:55.1347582Z ##[endgroup]
+2026-10-08T10:22:55.1349439Z Secret source: Actions
+2026-10-08T10:22:55.1350300Z Cache mode: write
+2026-10-08T10:22:55.1350906Z Prepare workflow directory
+2026-10-08T10:22:55.1613246Z Prepare all required actions
+2026-10-08T10:22:55.1653380Z Getting action download info
+2026-10-08T10:22:55.4688188Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+2026-10-08T10:22:55.5406777Z Download action repository 'actions/setup-node@v5' (SHA:a0853c24544627f65ddf259abe73b1d18a591444)
+2026-10-08T10:22:55.6849629Z Download action repository 'actions/setup-java@v5' (SHA:b6effb05e454b25005698d916606bdc6ffcbf961)
+2026-10-08T10:22:56.5952881Z Download action repository 'actions/upload-artifact@v5' (SHA:330a01c490aca151604b8cf639adc76d48f6c5d4)
+2026-10-08T10:22:56.8658390Z Complete job name: On-call real browser integration
+2026-10-08T10:22:56.9309685Z ##[group]Run actions/checkout@v5
+2026-10-08T10:22:56.9310377Z with:
+2026-10-08T10:22:56.9310744Z   repository: Trigger726/OnCall-Agent
+2026-10-08T10:22:56.9313738Z   token: ***
+2026-10-08T10:22:56.9314086Z   ssh-strict: true
+2026-10-08T10:22:56.9314446Z   ssh-user: git
+2026-10-08T10:22:56.9314806Z   persist-credentials: true
+2026-10-08T10:22:56.9315192Z   clean: true
+2026-10-08T10:22:56.9315548Z   sparse-checkout-cone-mode: true
+2026-10-08T10:22:56.9315961Z   fetch-depth: 1
+2026-10-08T10:22:56.9316307Z   fetch-tags: false
+2026-10-08T10:22:56.9316653Z   show-progress: true
+2026-10-08T10:22:56.9317018Z   lfs: false
+2026-10-08T10:22:56.9317571Z   submodules: false
+2026-10-08T10:22:56.9317942Z   set-safe-directory: true
+2026-10-08T10:22:56.9318351Z   allow-unsafe-pr-checkout: false
+2026-10-08T10:22:56.9319015Z ##[endgroup]
+2026-10-08T10:22:57.0135704Z Syncing repository: Trigger726/OnCall-Agent
+2026-10-08T10:22:57.0137955Z ##[group]Getting Git version info
+2026-10-08T10:22:57.0138976Z Working directory is '/home/runner/work/OnCall-Agent/OnCall-Agent'
+2026-10-08T10:22:57.0140366Z [command]/usr/bin/git version
+2026-10-08T10:22:57.0185420Z git version 2.55.0
+2026-10-08T10:22:57.0203197Z ##[endgroup]
+2026-10-08T10:22:57.0224842Z Temporarily overriding HOME='/home/runner/work/_temp/d3e910b1-9c2f-45bc-a291-6d75843c77a6' before making global git config changes
+2026-10-08T10:22:57.0230011Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-08T10:22:57.0231279Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-08T10:22:57.0271096Z Deleting the contents of '/home/runner/work/OnCall-Agent/OnCall-Agent'
+2026-10-08T10:22:57.0275871Z ##[group]Initializing the repository
+2026-10-08T10:22:57.0280004Z [command]/usr/bin/git init /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-08T10:22:57.0379981Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-08T10:22:57.0381593Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-08T10:22:57.0382996Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-08T10:22:57.0384079Z hint: call:
+2026-10-08T10:22:57.0385112Z hint:
+2026-10-08T10:22:57.0385952Z hint: 	git config --global init.defaultBranch <name>
+2026-10-08T10:22:57.0386888Z hint:
+2026-10-08T10:22:57.0387955Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-08T10:22:57.0389290Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-08T10:22:57.0390375Z hint:
+2026-10-08T10:22:57.0391758Z hint: 	git branch -m <name>
+2026-10-08T10:22:57.0392536Z hint:
+2026-10-08T10:22:57.0393486Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-08T10:22:57.0394866Z Initialized empty Git repository in /home/runner/work/OnCall-Agent/OnCall-Agent/.git/
+2026-10-08T10:22:57.0397155Z [command]/usr/bin/git remote add origin https://github.com/Trigger726/OnCall-Agent
+2026-10-08T10:22:57.0437211Z ##[endgroup]
+2026-10-08T10:22:57.0438322Z ##[group]Disabling automatic garbage collection
+2026-10-08T10:22:57.0440907Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-08T10:22:57.0467887Z ##[endgroup]
+2026-10-08T10:22:57.0468787Z ##[group]Setting up auth
+2026-10-08T10:22:57.0473511Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-08T10:22:57.0502306Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-08T10:22:57.0901745Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-08T10:22:57.0965805Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-08T10:22:57.1136210Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-08T10:22:57.1170443Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-08T10:22:57.1366471Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-08T10:22:57.1404291Z ##[endgroup]
+2026-10-08T10:22:57.1405342Z ##[group]Fetching the repository
+2026-10-08T10:22:57.1413471Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +63e1a79694feff57aba7cd5b469a6e5d15482bac:refs/remotes/origin/feat/opspilot-v1
+2026-10-08T10:22:58.7881964Z From https://github.com/Trigger726/OnCall-Agent
+2026-10-08T10:22:58.7883995Z  * [new ref]         63e1a79694feff57aba7cd5b469a6e5d15482bac -> origin/feat/opspilot-v1
+2026-10-08T10:22:58.7888886Z ##[endgroup]
+2026-10-08T10:22:58.7890249Z ##[group]Determining the checkout info
+2026-10-08T10:22:58.7891696Z ##[endgroup]
+2026-10-08T10:22:58.7892539Z [command]/usr/bin/git sparse-checkout disable
+2026-10-08T10:22:58.7940241Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-08T10:22:58.7968600Z ##[group]Checking out the ref
+2026-10-08T10:22:58.7972073Z [command]/usr/bin/git checkout --progress --force -B feat/opspilot-v1 refs/remotes/origin/feat/opspilot-v1
+2026-10-08T10:22:58.9806249Z Switched to a new branch 'feat/opspilot-v1'
+2026-10-08T10:22:58.9808857Z branch 'feat/opspilot-v1' set up to track 'origin/feat/opspilot-v1'.
+2026-10-08T10:22:58.9822858Z ##[endgroup]
+2026-10-08T10:22:58.9862034Z [command]/usr/bin/git log -1 --format=%H
+2026-10-08T10:22:58.9886037Z 63e1a79694feff57aba7cd5b469a6e5d15482bac
+2026-10-08T10:22:59.0201507Z ##[group]Run actions/setup-node@v5
+2026-10-08T10:22:59.0202616Z with:
+2026-10-08T10:22:59.0203241Z   node-version: 22
+2026-10-08T10:22:59.0203901Z   cache: npm
+2026-10-08T10:22:59.0205023Z   cache-dependency-path: web/package-lock.json
+scripts/browser/package-lock.json
+
+2026-10-08T10:22:59.0206419Z   always-auth: false
+2026-10-08T10:22:59.0207130Z   check-latest: false
+2026-10-08T10:22:59.0214199Z   token: ***
+2026-10-08T10:22:59.0214878Z   package-manager-cache: true
+2026-10-08T10:22:59.0215670Z ##[endgroup]
+2026-10-08T10:22:59.1400314Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+2026-10-08T10:22:59.1403686Z (node:2086) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-08T10:22:59.1406065Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-08T10:22:59.1407934Z ##[group]Environment details
+2026-10-08T10:22:59.4713632Z node: v22.23.3
+2026-10-08T10:22:59.4714224Z npm: 10.9.9
+2026-10-08T10:22:59.4714537Z yarn: 1.22.22
+2026-10-08T10:22:59.4715495Z ##[endgroup]
+2026-10-08T10:22:59.4731724Z [command]/opt/hostedtoolcache/node/22.23.3/x64/bin/npm config get cache
+2026-10-08T10:22:59.5599861Z /home/runner/.npm
+2026-10-08T10:22:59.7765221Z Cache hit for: node-cache-Linux-x64-npm-c70cd1b885d507e1de4d92bdeacca889b3ddde806c4972f1739179c995f312c3
+2026-10-08T10:22:59.7846454Z (node:2086) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-08T10:23:01.0043262Z Received 22832712 of 22832712 (100.0%), 21.7 MBs/sec
+2026-10-08T10:23:01.0043712Z Cache Size: ~22 MB (22832712 B)
+2026-10-08T10:23:01.0065754Z [command]/usr/bin/tar -xf /home/runner/work/_temp/6075e4d0-4b8e-4d85-b05c-da025e6de36b/cache.tzst -P -C /home/runner/work/OnCall-Agent/OnCall-Agent --use-compress-program unzstd
+2026-10-08T10:23:01.0445629Z Cache restored successfully
+2026-10-08T10:23:01.0458873Z Cache restored from key: node-cache-Linux-x64-npm-c70cd1b885d507e1de4d92bdeacca889b3ddde806c4972f1739179c995f312c3
+2026-10-08T10:23:01.0656190Z ##[group]Run actions/setup-java@v5
+2026-10-08T10:23:01.0656429Z with:
+2026-10-08T10:23:01.0656600Z   distribution: temurin
+2026-10-08T10:23:01.0656786Z   java-version: 17
+2026-10-08T10:23:01.0656958Z   cache: maven
+2026-10-08T10:23:01.0657135Z   java-package: jdk
+2026-10-08T10:23:01.0657554Z   check-latest: false
+2026-10-08T10:23:01.0657774Z   set-default: true
+2026-10-08T10:23:01.0657943Z   verify-signature: false
+2026-10-08T10:23:01.0658140Z   server-id: github
+2026-10-08T10:23:01.0658316Z   server-username: GITHUB_ACTOR
+2026-10-08T10:23:01.0658545Z   server-password: GITHUB_TOKEN
+2026-10-08T10:23:01.0658744Z   overwrite-settings: true
+2026-10-08T10:23:01.0658941Z   job-status: success
+2026-10-08T10:23:01.0660707Z   token: ***
+2026-10-08T10:23:01.0660899Z   show-download-progress: false
+2026-10-08T10:23:01.0661122Z ##[endgroup]
+2026-10-08T10:23:01.1885521Z ##[group]Installed distributions
+2026-10-08T10:23:01.1947051Z Resolved Java 17.0.20+1 from tool-cache
+2026-10-08T10:23:01.1947874Z Setting Java 17.0.20+1 as the default
+2026-10-08T10:23:01.1950456Z Creating toolchains.xml for JDK version 17 from temurin
+2026-10-08T10:23:01.2003732Z Writing to /home/runner/.m2/toolchains.xml
+2026-10-08T10:23:01.2004054Z 
+2026-10-08T10:23:01.2004277Z Java configuration:
+2026-10-08T10:23:01.2004627Z   Distribution: temurin
+2026-10-08T10:23:01.2004960Z   Version: 17.0.20+1
+2026-10-08T10:23:01.2005473Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:23:01.2005845Z 
+2026-10-08T10:23:01.2006176Z ##[endgroup]
+2026-10-08T10:23:01.2011893Z Creating settings.xml with server-id: github
+2026-10-08T10:23:01.2042116Z Writing to /home/runner/.m2/settings.xml
+2026-10-08T10:23:01.2043107Z Configured MAVEN_ARGS to include -ntp to suppress Maven transfer progress logs. Set 'show-download-progress: true' to keep the download progress output.
+2026-10-08T10:23:01.5529347Z Cache hit for: setup-java-Linux-x64-maven-d32cb843aa19f08330bb1496da7a1a49cc2deb22a4e49d97b309eae19c7fe74e
+2026-10-08T10:23:02.7905909Z Received 33554432 of 97722820 (34.3%), 32.0 MBs/sec
+2026-10-08T10:23:03.2294629Z Received 97722820 of 97722820 (100.0%), 64.7 MBs/sec
+2026-10-08T10:23:03.2295114Z Cache Size: ~93 MB (97722820 B)
+2026-10-08T10:23:03.2351325Z [command]/usr/bin/tar -xf /home/runner/work/_temp/37c080c1-b952-475c-be7f-708e87c072bf/cache.tzst -P -C /home/runner/work/OnCall-Agent/OnCall-Agent --use-compress-program unzstd
+2026-10-08T10:23:03.4223362Z Cache restored successfully
+2026-10-08T10:23:03.4267026Z Cache restored from key: setup-java-Linux-x64-maven-d32cb843aa19f08330bb1496da7a1a49cc2deb22a4e49d97b309eae19c7fe74e
+2026-10-08T10:23:03.7192049Z Cache hit for: setup-java-Linux-x64-maven-wrapper-4010b7b513ce627636150913aad6edbf72eda4862fdc6f4a8c75796c51ae597a
+2026-10-08T10:23:04.7001391Z Received 8933049 of 8933049 (100.0%), 10.8 MBs/sec
+2026-10-08T10:23:04.7002116Z Cache Size: ~9 MB (8933049 B)
+2026-10-08T10:23:04.7019003Z [command]/usr/bin/tar -xf /home/runner/work/_temp/09911a45-dceb-4931-a203-f84d7c55e535/cache.tzst -P -C /home/runner/work/OnCall-Agent/OnCall-Agent --use-compress-program unzstd
+2026-10-08T10:23:04.7213978Z Cache restored successfully
+2026-10-08T10:23:04.7222066Z maven-wrapper cache restored from key: setup-java-Linux-x64-maven-wrapper-4010b7b513ce627636150913aad6edbf72eda4862fdc6f4a8c75796c51ae597a
+2026-10-08T10:23:04.7379675Z ##[group]Run npm ci --prefix web
+2026-10-08T10:23:04.7380008Z [36;1mnpm ci --prefix web[0m
+2026-10-08T10:23:04.7380243Z [36;1mnpm run build --prefix web[0m
+2026-10-08T10:23:04.7380482Z [36;1mchmod +x mvnw[0m
+2026-10-08T10:23:04.7380697Z [36;1m./mvnw -B -DskipTests package[0m
+2026-10-08T10:23:04.7604833Z shell: /usr/bin/bash -e {0}
+2026-10-08T10:23:04.7605102Z env:
+2026-10-08T10:23:04.7605390Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:23:04.7605802Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:23:04.7606174Z   MAVEN_ARGS: -ntp
+2026-10-08T10:23:04.7606369Z ##[endgroup]
+2026-10-08T10:23:07.1874146Z 
+2026-10-08T10:23:07.1874900Z added 56 packages, and audited 57 packages in 2s
+2026-10-08T10:23:07.1875273Z 
+2026-10-08T10:23:07.1875502Z 8 packages are looking for funding
+2026-10-08T10:23:07.1875909Z   run `npm fund` for details
+2026-10-08T10:23:07.1914138Z 
+2026-10-08T10:23:07.1914702Z 3 high severity vulnerabilities
+2026-10-08T10:23:07.1914948Z 
+2026-10-08T10:23:07.1915099Z To address all issues, run:
+2026-10-08T10:23:07.1915389Z   npm audit fix
+2026-10-08T10:23:07.1915539Z 
+2026-10-08T10:23:07.1915685Z Run `npm audit` for details.
+2026-10-08T10:23:07.3107943Z 
+2026-10-08T10:23:07.3108606Z > opspilot-web@0.1.0 build
+2026-10-08T10:23:07.3109184Z > vue-tsc -b && vite build
+2026-10-08T10:23:07.3109327Z 
+2026-10-08T10:23:12.0502079Z [36mvite v6.4.3 [32mbuilding for production...[36m[39m
+2026-10-08T10:23:12.1336691Z transforming...
+2026-10-08T10:23:14.4820910Z [32m✓[39m 1660 modules transformed.
+2026-10-08T10:23:14.7453407Z rendering chunks...
+2026-10-08T10:23:14.7571827Z computing gzip size...
+2026-10-08T10:23:14.7636848Z [2m../src/main/resources/static/[22m[32mindex.html                 [39m[1m[2m  0.53 kB[22m[1m[22m[2m │ gzip:   0.36 kB[22m
+2026-10-08T10:23:14.7637951Z [2m../src/main/resources/static/[22m[2massets/[22m[35mindex-C_S5W8VX.css  [39m[1m[2m127.65 kB[22m[1m[22m[2m │ gzip:  22.39 kB[22m
+2026-10-08T10:23:14.7638950Z [2m../src/main/resources/static/[22m[2massets/[22m[36mindex-CZ27gtKX.js   [39m[1m[2m434.30 kB[22m[1m[22m[2m │ gzip: 135.76 kB[22m
+2026-10-08T10:23:14.7639606Z [32m✓ built in 2.69s[39m
+2026-10-08T10:23:18.1028707Z [INFO] Scanning for projects...
+2026-10-08T10:23:18.2962007Z [INFO] 
+2026-10-08T10:23:18.2985780Z [INFO] ------------------------< org.trigger:opspilot >------------------------
+2026-10-08T10:23:18.2986724Z [INFO] Building OpsPilot 0.1.0-SNAPSHOT
+2026-10-08T10:23:18.2987497Z [INFO]   from pom.xml
+2026-10-08T10:23:18.2988210Z [INFO] --------------------------------[ jar ]---------------------------------
+2026-10-08T10:23:20.2782147Z [INFO] 
+2026-10-08T10:23:20.2802594Z [INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+2026-10-08T10:23:20.5696715Z [INFO] Copying 1 resource from src/main/resources to target/classes
+2026-10-08T10:23:20.5863489Z [INFO] Copying 40 resources from src/main/resources to target/classes
+2026-10-08T10:23:20.5902604Z [INFO] 
+2026-10-08T10:23:20.5903184Z [INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+2026-10-08T10:23:20.7745726Z [INFO] Changes detected - recompiling the module! :source
+2026-10-08T10:23:20.7766303Z [INFO] Compiling 132 source files with javac [debug release 17] to target/classes
+2026-10-08T10:23:25.4310285Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java uses unchecked or unsafe operations.
+2026-10-08T10:23:25.4316778Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: Recompile with -Xlint:unchecked for details.
+2026-10-08T10:23:25.4318233Z [INFO] 
+2026-10-08T10:23:25.4318996Z [INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+2026-10-08T10:23:25.4347513Z [INFO] Copying 1 resource from src/test/resources to target/test-classes
+2026-10-08T10:23:25.4352149Z [INFO] 
+2026-10-08T10:23:25.4352883Z [INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+2026-10-08T10:23:25.4442240Z [INFO] Changes detected - recompiling the module! :dependency
+2026-10-08T10:23:25.4443372Z [INFO] Compiling 101 source files with javac [debug release 17] to target/test-classes
+2026-10-08T10:23:29.5748110Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/investigation/AgentEventReceiverTest.java: Some input files use unchecked or unsafe operations.
+2026-10-08T10:23:29.5753384Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/investigation/AgentEventReceiverTest.java: Recompile with -Xlint:unchecked for details.
+2026-10-08T10:23:29.5768114Z [INFO] 
+2026-10-08T10:23:29.5798142Z [INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+2026-10-08T10:23:29.6726312Z [INFO] Tests are skipped.
+2026-10-08T10:23:29.6748834Z [INFO] 
+2026-10-08T10:23:29.6763989Z [INFO] --- jar:3.3.0:jar (default-jar) @ opspilot ---
+2026-10-08T10:23:30.3914294Z [INFO] Building jar: /home/runner/work/OnCall-Agent/OnCall-Agent/target/opspilot-0.1.0-SNAPSHOT.jar
+2026-10-08T10:23:30.4804150Z [INFO] 
+2026-10-08T10:23:30.4806896Z [INFO] --- spring-boot:3.2.0:repackage (repackage) @ opspilot ---
+2026-10-08T10:23:32.6179378Z [INFO] Replacing main artifact /home/runner/work/OnCall-Agent/OnCall-Agent/target/opspilot-0.1.0-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+2026-10-08T10:23:32.6180922Z [INFO] The original artifact has been renamed to /home/runner/work/OnCall-Agent/OnCall-Agent/target/opspilot-0.1.0-SNAPSHOT.jar.original
+2026-10-08T10:23:32.6181912Z [INFO] ------------------------------------------------------------------------
+2026-10-08T10:23:32.6182404Z [INFO] BUILD SUCCESS
+2026-10-08T10:23:32.6182897Z [INFO] ------------------------------------------------------------------------
+2026-10-08T10:23:32.6196558Z [INFO] Total time:  14.538 s
+2026-10-08T10:23:32.6197215Z [INFO] Finished at: 2026-10-08T10:23:32Z
+2026-10-08T10:23:32.6198410Z [INFO] ------------------------------------------------------------------------
+2026-10-08T10:23:32.6635773Z ##[group]Run npm ci --prefix scripts/browser
+2026-10-08T10:23:32.6636132Z [36;1mnpm ci --prefix scripts/browser[0m
+2026-10-08T10:23:32.6636538Z [36;1mnode scripts/browser/node_modules/playwright/cli.js install --with-deps chromium[0m
+2026-10-08T10:23:32.6636941Z [36;1mnpm test --prefix scripts/browser[0m
+2026-10-08T10:23:32.6695451Z shell: /usr/bin/bash -e {0}
+2026-10-08T10:23:32.6695869Z env:
+2026-10-08T10:23:32.6696151Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:23:32.6696601Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:23:32.6696924Z   MAVEN_ARGS: -ntp
+2026-10-08T10:23:32.6697119Z ##[endgroup]
+2026-10-08T10:23:33.0428991Z 
+2026-10-08T10:23:33.0429632Z added 2 packages, and audited 3 packages in 324ms
+2026-10-08T10:23:33.0434472Z 
+2026-10-08T10:23:33.0434684Z found 0 vulnerabilities
+2026-10-08T10:23:33.4549296Z Installing dependencies...
+2026-10-08T10:23:33.4597441Z Switching to root user to install dependencies...
+2026-10-08T10:23:33.6854401Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-08T10:23:33.7136869Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-10-08T10:23:33.7141776Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-10-08T10:23:33.7148923Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-10-08T10:23:33.7180472Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-10-08T10:23:33.7209301Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-10-08T10:23:33.8365903Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [530 kB]
+2026-10-08T10:23:33.8517903Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.3 kB]
+2026-10-08T10:23:33.8544732Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [640 B]
+2026-10-08T10:23:33.8591309Z Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [475 kB]
+2026-10-08T10:23:33.8786682Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1375 kB]
+2026-10-08T10:23:33.8863389Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [306 kB]
+2026-10-08T10:23:33.8878441Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [181 kB]
+2026-10-08T10:23:33.8890467Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1702 kB]
+2026-10-08T10:23:33.8967574Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [341 kB]
+2026-10-08T10:23:33.8990203Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [388 kB]
+2026-10-08T10:23:33.9038681Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1761 kB]
+2026-10-08T10:23:33.9100731Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [401 kB]
+2026-10-08T10:23:33.9122512Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [55.0 kB]
+2026-10-08T10:23:33.9133576Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.3 kB]
+2026-10-08T10:23:33.9568992Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+2026-10-08T10:23:33.9581206Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [5764 B]
+2026-10-08T10:23:33.9602704Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [12.6 kB]
+2026-10-08T10:23:33.9698749Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1074 kB]
+2026-10-08T10:23:33.9735168Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [223 kB]
+2026-10-08T10:23:33.9750211Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [46.3 kB]
+2026-10-08T10:23:33.9759072Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1218 kB]
+2026-10-08T10:23:33.9806998Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [245 kB]
+2026-10-08T10:23:33.9821653Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [76.3 kB]
+2026-10-08T10:23:33.9832165Z Get:30 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1566 kB]
+2026-10-08T10:23:33.9891857Z Get:31 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [361 kB]
+2026-10-08T10:23:33.9910344Z Get:32 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [11.6 kB]
+2026-10-08T10:23:41.7424227Z Fetched 12.8 MB in 1s (11.0 MB/s)
+2026-10-08T10:23:42.4215547Z Reading package lists...
+2026-10-08T10:23:42.4421497Z Reading package lists...
+2026-10-08T10:23:42.6044957Z Building dependency tree...
+2026-10-08T10:23:42.6051082Z Reading state information...
+2026-10-08T10:23:42.7399590Z libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+2026-10-08T10:23:42.7400270Z libasound2t64 set to manually installed.
+2026-10-08T10:23:42.7400923Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-08T10:23:42.7401556Z libatk-bridge2.0-0t64 set to manually installed.
+2026-10-08T10:23:42.7402157Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-08T10:23:42.7402748Z libatk1.0-0t64 set to manually installed.
+2026-10-08T10:23:42.7403337Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-08T10:23:42.7403930Z libatspi2.0-0t64 set to manually installed.
+2026-10-08T10:23:42.7404515Z libcairo2 is already the newest version (1.18.0-3build1).
+2026-10-08T10:23:42.7405056Z libcairo2 set to manually installed.
+2026-10-08T10:23:42.7405717Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+2026-10-08T10:23:42.7406343Z libcups2t64 set to manually installed.
+2026-10-08T10:23:42.7406994Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+2026-10-08T10:23:42.7408229Z libdbus-1-3 set to manually installed.
+2026-10-08T10:23:42.7408748Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+2026-10-08T10:23:42.7409225Z libdrm2 set to manually installed.
+2026-10-08T10:23:42.7409768Z libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.9).
+2026-10-08T10:23:42.7410337Z libglib2.0-0t64 set to manually installed.
+2026-10-08T10:23:42.7410741Z libnspr4 is already the newest version (2:4.35-1.1build1).
+2026-10-08T10:23:42.7411067Z libnspr4 set to manually installed.
+2026-10-08T10:23:42.7411404Z libnss3 is already the newest version (2:3.98-1ubuntu0.2).
+2026-10-08T10:23:42.7411710Z libnss3 set to manually installed.
+2026-10-08T10:23:42.7412206Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+2026-10-08T10:23:42.7412615Z libpango-1.0-0 set to manually installed.
+2026-10-08T10:23:42.7412966Z libx11-6 is already the newest version (2:1.8.7-1build1).
+2026-10-08T10:23:42.7413293Z libx11-6 set to manually installed.
+2026-10-08T10:23:42.7413603Z libxcb1 is already the newest version (1.15-1ubuntu2).
+2026-10-08T10:23:42.7413930Z libxcb1 set to manually installed.
+2026-10-08T10:23:42.7414394Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+2026-10-08T10:23:42.7414751Z libxcomposite1 set to manually installed.
+2026-10-08T10:23:42.7415111Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+2026-10-08T10:23:42.7415449Z libxdamage1 set to manually installed.
+2026-10-08T10:23:42.7415800Z libxext6 is already the newest version (2:1.3.4-1build2).
+2026-10-08T10:23:42.7416114Z libxext6 set to manually installed.
+2026-10-08T10:23:42.7416481Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+2026-10-08T10:23:42.7416944Z libxfixes3 set to manually installed.
+2026-10-08T10:23:42.7417577Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+2026-10-08T10:23:42.7418075Z libxkbcommon0 set to manually installed.
+2026-10-08T10:23:42.7418920Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+2026-10-08T10:23:42.7419437Z libxrandr2 set to manually installed.
+2026-10-08T10:23:42.7419800Z xvfb is already the newest version (2:21.1.12-1ubuntu1.8).
+2026-10-08T10:23:42.7420262Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+2026-10-08T10:23:42.7420751Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+2026-10-08T10:23:42.7421680Z libfontconfig1 set to manually installed.
+2026-10-08T10:23:42.7422244Z fonts-liberation is already the newest version (1:2.1.5-3).
+2026-10-08T10:23:42.7422684Z fonts-liberation set to manually installed.
+2026-10-08T10:23:42.7423035Z The following additional packages will be installed:
+2026-10-08T10:23:42.7423456Z   libgl1-mesa-dri libglx-mesa0 mesa-libgallium xfonts-encodings xfonts-utils
+2026-10-08T10:23:42.7423821Z Recommended packages:
+2026-10-08T10:23:42.7424062Z   fonts-ipafont-mincho fonts-tlwg-loma
+2026-10-08T10:23:42.7587551Z The following NEW packages will be installed:
+2026-10-08T10:23:42.7588076Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+2026-10-08T10:23:42.7592317Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+2026-10-08T10:23:42.7592657Z   xfonts-utils
+2026-10-08T10:23:42.7595564Z The following packages will be upgraded:
+2026-10-08T10:23:42.7599153Z   libfreetype6 libgbm1 libgl1-mesa-dri libglx-mesa0 mesa-libgallium
+2026-10-08T10:23:42.7740780Z 5 upgraded, 9 newly installed, 0 to remove and 31 not upgraded.
+2026-10-08T10:23:42.7741360Z Need to get 32.5 MB of archives.
+2026-10-08T10:23:42.7741950Z After this operation, 79.5 MB of additional disk space will be used.
+2026-10-08T10:23:42.7742637Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-08T10:23:42.8542907Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+2026-10-08T10:23:42.9870770Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+2026-10-08T10:23:43.1623415Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+2026-10-08T10:23:43.2258889Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+2026-10-08T10:23:43.3509428Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+2026-10-08T10:23:43.5632257Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libfreetype6 amd64 2.13.2+dfsg-1ubuntu0.2 [403 kB]
+2026-10-08T10:23:43.6337004Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libgl1-mesa-dri amd64 25.2.8-0ubuntu0.24.04.4 [38.0 kB]
+2026-10-08T10:23:43.6968224Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libglx-mesa0 amd64 25.2.8-0ubuntu0.24.04.4 [110 kB]
+2026-10-08T10:23:43.7615767Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libgbm1 amd64 25.2.8-0ubuntu0.24.04.4 [34.2 kB]
+2026-10-08T10:23:43.8248951Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 mesa-libgallium amd64 25.2.8-0ubuntu0.24.04.4 [10.8 MB]
+2026-10-08T10:23:44.1072740Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+2026-10-08T10:23:44.1805661Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+2026-10-08T10:23:44.2444084Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+2026-10-08T10:23:44.3139621Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+2026-10-08T10:23:44.5326070Z Fetched 32.5 MB in 2s (20.9 MB/s)
+2026-10-08T10:23:44.5509686Z Selecting previously unselected package fonts-ipafont-gothic.
+2026-10-08T10:23:44.5740190Z (Reading database ... 
+2026-10-08T10:23:44.5740515Z (Reading database ... 5%
+2026-10-08T10:23:44.5741017Z (Reading database ... 10%
+2026-10-08T10:23:44.5741278Z (Reading database ... 15%
+2026-10-08T10:23:44.5741873Z (Reading database ... 20%
+2026-10-08T10:23:44.5742115Z (Reading database ... 25%
+2026-10-08T10:23:44.5742345Z (Reading database ... 30%
+2026-10-08T10:23:44.5742574Z (Reading database ... 35%
+2026-10-08T10:23:44.5742782Z (Reading database ... 40%
+2026-10-08T10:23:44.5742994Z (Reading database ... 45%
+2026-10-08T10:23:44.5743350Z (Reading database ... 50%
+2026-10-08T10:23:44.5778942Z (Reading database ... 55%
+2026-10-08T10:23:44.7322979Z (Reading database ... 60%
+2026-10-08T10:23:44.9404550Z (Reading database ... 65%
+2026-10-08T10:23:45.1291293Z (Reading database ... 70%
+2026-10-08T10:23:45.3316398Z (Reading database ... 75%
+2026-10-08T10:23:45.4765296Z (Reading database ... 80%
+2026-10-08T10:23:45.6819630Z (Reading database ... 85%
+2026-10-08T10:23:45.8820655Z (Reading database ... 90%
+2026-10-08T10:23:46.0422567Z (Reading database ... 95%
+2026-10-08T10:23:46.0423000Z (Reading database ... 100%
+2026-10-08T10:23:46.0423612Z (Reading database ... 202296 files and directories currently installed.)
+2026-10-08T10:23:46.0466069Z Preparing to unpack .../00-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+2026-10-08T10:23:46.0538040Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-08T10:23:46.2914975Z Selecting previously unselected package fonts-freefont-ttf.
+2026-10-08T10:23:46.3024889Z Preparing to unpack .../01-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+2026-10-08T10:23:46.3030833Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-08T10:23:46.4047177Z Selecting previously unselected package fonts-tlwg-loma-otf.
+2026-10-08T10:23:46.4157664Z Preparing to unpack .../02-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+2026-10-08T10:23:46.4284815Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-08T10:23:46.4454090Z Selecting previously unselected package fonts-unifont.
+2026-10-08T10:23:46.4564413Z Preparing to unpack .../03-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+2026-10-08T10:23:46.4570171Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+2026-10-08T10:23:46.6638263Z Selecting previously unselected package fonts-wqy-zenhei.
+2026-10-08T10:23:46.6749132Z Preparing to unpack .../04-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+2026-10-08T10:23:46.6835157Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-08T10:23:47.1549403Z Preparing to unpack .../05-libfreetype6_2.13.2+dfsg-1ubuntu0.2_amd64.deb ...
+2026-10-08T10:23:47.1573744Z Unpacking libfreetype6:amd64 (2.13.2+dfsg-1ubuntu0.2) over (2.13.2+dfsg-1ubuntu0.1) ...
+2026-10-08T10:23:47.1905029Z Preparing to unpack .../06-libgl1-mesa-dri_25.2.8-0ubuntu0.24.04.4_amd64.deb ...
+2026-10-08T10:23:47.2020143Z Unpacking libgl1-mesa-dri:amd64 (25.2.8-0ubuntu0.24.04.4) over (25.2.8-0ubuntu0.24.04.2) ...
+2026-10-08T10:23:47.2431500Z Preparing to unpack .../07-libglx-mesa0_25.2.8-0ubuntu0.24.04.4_amd64.deb ...
+2026-10-08T10:23:47.2448373Z Unpacking libglx-mesa0:amd64 (25.2.8-0ubuntu0.24.04.4) over (25.2.8-0ubuntu0.24.04.2) ...
+2026-10-08T10:23:47.2772069Z Preparing to unpack .../08-libgbm1_25.2.8-0ubuntu0.24.04.4_amd64.deb ...
+2026-10-08T10:23:47.2856357Z Unpacking libgbm1:amd64 (25.2.8-0ubuntu0.24.04.4) over (25.2.8-0ubuntu0.24.04.2) ...
+2026-10-08T10:23:47.3185428Z Preparing to unpack .../09-mesa-libgallium_25.2.8-0ubuntu0.24.04.4_amd64.deb ...
+2026-10-08T10:23:47.3201526Z Unpacking mesa-libgallium:amd64 (25.2.8-0ubuntu0.24.04.4) over (25.2.8-0ubuntu0.24.04.2) ...
+2026-10-08T10:23:47.6757568Z Selecting previously unselected package xfonts-encodings.
+2026-10-08T10:23:47.6869061Z Preparing to unpack .../10-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+2026-10-08T10:23:47.6874409Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-08T10:23:47.7104374Z Selecting previously unselected package xfonts-utils.
+2026-10-08T10:23:47.7215167Z Preparing to unpack .../11-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+2026-10-08T10:23:47.7220957Z Unpacking xfonts-utils (1:7.7+6build3) ...
+2026-10-08T10:23:47.7510778Z Selecting previously unselected package xfonts-cyrillic.
+2026-10-08T10:23:47.7623352Z Preparing to unpack .../12-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+2026-10-08T10:23:47.7629165Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-08T10:23:47.7976374Z Selecting previously unselected package xfonts-scalable.
+2026-10-08T10:23:47.8088780Z Preparing to unpack .../13-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+2026-10-08T10:23:47.8094905Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-08T10:23:47.8507628Z Setting up mesa-libgallium:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-08T10:23:47.8661631Z Setting up libgbm1:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-08T10:23:47.8674925Z Setting up libgl1-mesa-dri:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-08T10:23:47.8735338Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-08T10:23:47.8825941Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-08T10:23:47.8840422Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-08T10:23:47.8853579Z Setting up libfreetype6:amd64 (2.13.2+dfsg-1ubuntu0.2) ...
+2026-10-08T10:23:47.8867401Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-08T10:23:47.8880549Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-08T10:23:47.8935934Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+2026-10-08T10:23:47.8946870Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+2026-10-08T10:23:47.8962348Z Setting up libglx-mesa0:amd64 (25.2.8-0ubuntu0.24.04.4) ...
+2026-10-08T10:23:47.8976343Z Setting up xfonts-utils (1:7.7+6build3) ...
+2026-10-08T10:23:47.9009681Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-08T10:23:47.9242555Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-08T10:23:47.9465672Z Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+2026-10-08T10:23:48.1600678Z Processing triggers for man-db (2.12.0-4build2) ...
+2026-10-08T10:23:48.1618730Z Not building database; man-db/auto-update is not 'true'.
+2026-10-08T10:23:48.1628101Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+2026-10-08T10:23:48.8244492Z 
+2026-10-08T10:23:48.8245313Z Running kernel seems to be up-to-date.
+2026-10-08T10:23:48.8245580Z 
+2026-10-08T10:23:48.8245692Z Restarting services...
+2026-10-08T10:23:48.8311463Z  systemctl restart php8.3-fpm.service
+2026-10-08T10:23:48.9433091Z 
+2026-10-08T10:23:48.9434177Z No containers need to be restarted.
+2026-10-08T10:23:48.9434726Z 
+2026-10-08T10:23:48.9435167Z No user sessions are running outdated binaries.
+2026-10-08T10:23:48.9435637Z 
+2026-10-08T10:23:48.9436133Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-10-08T10:23:49.8790970Z Downloading Chrome for Testing 153.0.8010.12 (playwright chromium v1243) from https://cdn.playwright.dev/builds/cft/153.0.8010.12/linux64/chrome-linux64.zip
+2026-10-08T10:23:50.2128994Z |                                                                                |   0% of 186.8 MiB
+2026-10-08T10:23:50.4041074Z |■■■■■■■■                                                                        |  10% of 186.8 MiB
+2026-10-08T10:23:50.4929959Z |■■■■■■■■■■■■■■■■                                                                |  20% of 186.8 MiB
+2026-10-08T10:23:50.5429191Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 186.8 MiB
+2026-10-08T10:23:50.5906618Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 186.8 MiB
+2026-10-08T10:23:50.6376740Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 186.8 MiB
+2026-10-08T10:23:50.6905232Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 186.8 MiB
+2026-10-08T10:23:50.7358946Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 186.8 MiB
+2026-10-08T10:23:50.7813651Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 186.8 MiB
+2026-10-08T10:23:50.8235858Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 186.8 MiB
+2026-10-08T10:23:50.8699026Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 186.8 MiB
+2026-10-08T10:23:52.9021105Z Chrome for Testing 153.0.8010.12 (playwright chromium v1243) downloaded to /home/runner/.cache/ms-playwright/chromium-1243
+2026-10-08T10:23:52.9024616Z Downloading FFmpeg (playwright ffmpeg v1011) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux.zip
+2026-10-08T10:23:53.3832994Z |                                                                                |   0% of 2.3 MiB
+2026-10-08T10:23:53.3874007Z |■■■■■■■■                                                                        |  10% of 2.3 MiB
+2026-10-08T10:23:53.3899070Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.3 MiB
+2026-10-08T10:23:53.3929046Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.3 MiB
+2026-10-08T10:23:53.3956080Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.3 MiB
+2026-10-08T10:23:53.3984074Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.3 MiB
+2026-10-08T10:23:53.4107877Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.3 MiB
+2026-10-08T10:23:53.4220593Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.3 MiB
+2026-10-08T10:23:53.4239325Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.3 MiB
+2026-10-08T10:23:53.4260045Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.3 MiB
+2026-10-08T10:23:53.4277534Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.3 MiB
+2026-10-08T10:23:53.4727887Z FFmpeg (playwright ffmpeg v1011) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1011
+2026-10-08T10:23:53.4730117Z Downloading Chrome Headless Shell 153.0.8010.12 (playwright chromium-headless-shell v1243) from https://cdn.playwright.dev/builds/cft/153.0.8010.12/linux64/chrome-headless-shell-linux64.zip
+2026-10-08T10:23:53.8213009Z |                                                                                |   0% of 114.3 MiB
+2026-10-08T10:23:53.8961835Z |■■■■■■■■                                                                        |  10% of 114.3 MiB
+2026-10-08T10:23:53.9360563Z |■■■■■■■■■■■■■■■■                                                                |  20% of 114.3 MiB
+2026-10-08T10:23:53.9697501Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 114.3 MiB
+2026-10-08T10:23:54.0012306Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 114.3 MiB
+2026-10-08T10:23:54.0321859Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 114.3 MiB
+2026-10-08T10:23:54.0573403Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 114.3 MiB
+2026-10-08T10:23:54.0843017Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 114.3 MiB
+2026-10-08T10:23:54.1208414Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 114.3 MiB
+2026-10-08T10:23:54.1548318Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 114.3 MiB
+2026-10-08T10:23:54.1830185Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 114.3 MiB
+2026-10-08T10:23:55.6332220Z Chrome Headless Shell 153.0.8010.12 (playwright chromium-headless-shell v1243) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1243
+2026-10-08T10:23:55.7291258Z 
+2026-10-08T10:23:55.7292004Z > opspilot-browser-acceptance@0.1.0 test
+2026-10-08T10:23:55.7292594Z > node --test tests/*.test.cjs
+2026-10-08T10:23:55.7292908Z 
+2026-10-08T10:23:55.7652107Z TAP version 13
+2026-10-08T10:23:55.8251940Z # Subtest: OPSPILOT_SWAP_BASELINE cannot bypass full browser CI or launch a process
+2026-10-08T10:23:55.8256260Z ok 1 - OPSPILOT_SWAP_BASELINE cannot bypass full browser CI or launch a process
+2026-10-08T10:23:55.8256848Z   ---
+2026-10-08T10:23:55.8257199Z   duration_ms: 28.521164
+2026-10-08T10:23:55.8257699Z   type: 'test'
+2026-10-08T10:23:55.8258078Z   ...
+2026-10-08T10:23:55.8556897Z # Subtest: OPSPILOT_SWAP_ONLY cannot bypass full browser CI or launch a process
+2026-10-08T10:23:55.8558482Z ok 2 - OPSPILOT_SWAP_ONLY cannot bypass full browser CI or launch a process
+2026-10-08T10:23:55.8559049Z   ---
+2026-10-08T10:23:55.8559372Z   duration_ms: 30.684483
+2026-10-08T10:23:55.8559732Z   type: 'test'
+2026-10-08T10:23:55.8560044Z   ...
+2026-10-08T10:23:55.8865995Z # Subtest: archived swap comparison cannot replace acceptance or launch an old JAR in CI
+2026-10-08T10:23:55.8867183Z ok 3 - archived swap comparison cannot replace acceptance or launch an old JAR in CI
+2026-10-08T10:23:55.8868047Z   ---
+2026-10-08T10:23:55.8868389Z   duration_ms: 30.930391
+2026-10-08T10:23:55.8868751Z   type: 'test'
+2026-10-08T10:23:55.8874297Z   ...
+2026-10-08T10:23:55.9182516Z # Subtest: cross-node assistant baseline cannot replace acceptance or launch an archived JAR in CI
+2026-10-08T10:23:55.9183655Z ok 4 - cross-node assistant baseline cannot replace acceptance or launch an archived JAR in CI
+2026-10-08T10:23:55.9184135Z   ---
+2026-10-08T10:23:55.9184352Z   duration_ms: 31.45076
+2026-10-08T10:23:55.9184619Z   type: 'test'
+2026-10-08T10:23:55.9184817Z   ...
+2026-10-08T10:23:55.9465669Z # Subtest: slow-consumer investigation probe cannot replace acceptance or launch a baseline JAR in CI
+2026-10-08T10:23:55.9466634Z ok 5 - slow-consumer investigation probe cannot replace acceptance or launch a baseline JAR in CI
+2026-10-08T10:23:55.9467150Z   ---
+2026-10-08T10:23:55.9468064Z   duration_ms: 28.484189
+2026-10-08T10:23:55.9468437Z   type: 'test'
+2026-10-08T10:23:55.9469140Z   ...
+2026-10-08T10:23:55.9771845Z # Subtest: slow-consumer acceptance rejects baseline mode before ports or JAR access
+2026-10-08T10:23:55.9772819Z ok 6 - slow-consumer acceptance rejects baseline mode before ports or JAR access
+2026-10-08T10:23:55.9773360Z   ---
+2026-10-08T10:23:55.9773659Z   duration_ms: 30.458455
+2026-10-08T10:23:55.9773993Z   type: 'test'
+2026-10-08T10:23:55.9774650Z   ...
+2026-10-08T10:23:56.0078378Z # Subtest: assistant UI baseline cannot replace acceptance or launch an archived JAR in CI
+2026-10-08T10:23:56.0079398Z ok 7 - assistant UI baseline cannot replace acceptance or launch an archived JAR in CI
+2026-10-08T10:23:56.0080228Z   ---
+2026-10-08T10:23:56.0080724Z   duration_ms: 30.587127
+2026-10-08T10:23:56.0080984Z   type: 'test'
+2026-10-08T10:23:56.0081175Z   ...
+2026-10-08T10:23:56.0385066Z # Subtest: assistant baseline cannot replace CI acceptance or launch the archived JAR
+2026-10-08T10:23:56.0386147Z ok 8 - assistant baseline cannot replace CI acceptance or launch the archived JAR
+2026-10-08T10:23:56.0386733Z   ---
+2026-10-08T10:23:56.0387052Z   duration_ms: 30.534528
+2026-10-08T10:23:56.0387962Z   type: 'test'
+2026-10-08T10:23:56.0388277Z   ...
+2026-10-08T10:23:56.0669517Z # Subtest: OPSPILOT_STREAM_SESSION_BASELINE cannot replace full CI acceptance
+2026-10-08T10:23:56.0677940Z ok 9 - OPSPILOT_STREAM_SESSION_BASELINE cannot replace full CI acceptance
+2026-10-08T10:23:56.0678618Z   ---
+2026-10-08T10:23:56.0678858Z   duration_ms: 26.337956
+2026-10-08T10:23:56.0679096Z   type: 'test'
+2026-10-08T10:23:56.0679353Z   ...
+2026-10-08T10:23:56.0914601Z # Subtest: OPSPILOT_STREAM_SESSION_ONLY cannot replace full CI acceptance
+2026-10-08T10:23:56.0915540Z ok 10 - OPSPILOT_STREAM_SESSION_ONLY cannot replace full CI acceptance
+2026-10-08T10:23:56.0916145Z   ---
+2026-10-08T10:23:56.0916425Z   duration_ms: 26.135338
+2026-10-08T10:23:56.0916743Z   type: 'test'
+2026-10-08T10:23:56.0917011Z   ...
+2026-10-08T10:23:56.1170628Z # Subtest: account baseline cannot replace CI acceptance or launch the archived JAR
+2026-10-08T10:23:56.1171488Z ok 11 - account baseline cannot replace CI acceptance or launch the archived JAR
+2026-10-08T10:23:56.1171939Z   ---
+2026-10-08T10:23:56.1172287Z   duration_ms: 26.21674
+2026-10-08T10:23:56.1172806Z   type: 'test'
+2026-10-08T10:23:56.1173177Z   ...
+2026-10-08T10:23:56.1427925Z # Subtest: SLO baseline cannot replace CI acceptance or launch the archived JAR
+2026-10-08T10:23:56.1428973Z ok 12 - SLO baseline cannot replace CI acceptance or launch the archived JAR
+2026-10-08T10:23:56.1429548Z   ---
+2026-10-08T10:23:56.1429894Z   duration_ms: 25.532435
+2026-10-08T10:23:56.1430267Z   type: 'test'
+2026-10-08T10:23:56.1430578Z   ...
+2026-10-08T10:23:56.1695958Z # Subtest: publication baseline cannot replace CI acceptance or launch the old published-immediately JAR
+2026-10-08T10:23:56.1697246Z ok 13 - publication baseline cannot replace CI acceptance or launch the old published-immediately JAR
+2026-10-08T10:23:56.1698108Z   ---
+2026-10-08T10:23:56.1698483Z   duration_ms: 26.73081
+2026-10-08T10:23:56.1698852Z   type: 'test'
+2026-10-08T10:23:56.1699155Z   ...
+2026-10-08T10:23:56.2046198Z # Subtest: trend baseline cannot replace CI acceptance or launch an old JAR
+2026-10-08T10:23:56.2052250Z ok 14 - trend baseline cannot replace CI acceptance or launch an old JAR
+2026-10-08T10:23:56.2052771Z   ---
+2026-10-08T10:23:56.2053053Z   duration_ms: 30.203177
+2026-10-08T10:23:56.2053407Z   type: 'test'
+2026-10-08T10:23:56.2053677Z   ...
+2026-10-08T10:23:56.2060339Z # Subtest: occupied port is rejected without stopping the original listener
+2026-10-08T10:23:56.2062416Z ok 15 - occupied port is rejected without stopping the original listener
+2026-10-08T10:23:56.2062986Z   ---
+2026-10-08T10:23:56.2063309Z   duration_ms: 7.46838
+2026-10-08T10:23:56.2063674Z   type: 'test'
+2026-10-08T10:23:56.2063935Z   ...
+2026-10-08T10:23:56.2071455Z # Subtest: strict log scan includes shutdown errors and does not count a disconnected-client debug line
+2026-10-08T10:23:56.2243434Z ok 16 - strict log scan includes shutdown errors and does not count a disconnected-client debug line
+2026-10-08T10:23:56.2244236Z   ---
+2026-10-08T10:23:56.2258946Z   duration_ms: 0.290896
+2026-10-08T10:23:56.2259389Z   type: 'test'
+2026-10-08T10:23:56.2259670Z   ...
+2026-10-08T10:23:56.2260089Z # Subtest: free port probe closes its own listener
+2026-10-08T10:23:56.2260633Z ok 17 - free port probe closes its own listener
+2026-10-08T10:23:56.2261333Z   ---
+2026-10-08T10:23:56.2261594Z   duration_ms: 1.007328
+2026-10-08T10:23:56.2261903Z   type: 'test'
+2026-10-08T10:23:56.2262165Z   ...
+2026-10-08T10:23:56.4405745Z # Subtest: readiness waits for a real UP response
+2026-10-08T10:23:56.4406608Z ok 18 - readiness waits for a real UP response
+2026-10-08T10:23:56.4407119Z   ---
+2026-10-08T10:23:56.4407550Z   duration_ms: 231.941161
+2026-10-08T10:23:56.4407862Z   type: 'test'
+2026-10-08T10:23:56.4408126Z   ...
+2026-10-08T10:23:56.4413851Z # Subtest: terminal or failed-launch child cannot be mistaken for readiness
+2026-10-08T10:23:56.4414566Z ok 19 - terminal or failed-launch child cannot be mistaken for readiness
+2026-10-08T10:23:56.4415107Z   ---
+2026-10-08T10:23:56.4415405Z   duration_ms: 0.321171
+2026-10-08T10:23:56.4415768Z   type: 'test'
+2026-10-08T10:23:56.4416040Z   ...
+2026-10-08T10:23:56.6476297Z # Subtest: readiness deadline is bounded and a non-UP service is not accepted
+2026-10-08T10:23:56.6477182Z ok 20 - readiness deadline is bounded and a non-UP service is not accepted
+2026-10-08T10:23:56.6477849Z   ---
+2026-10-08T10:23:56.6478099Z   duration_ms: 205.859201
+2026-10-08T10:23:56.6478313Z   type: 'test'
+2026-10-08T10:23:56.6478500Z   ...
+2026-10-08T10:23:56.6499575Z # Subtest: cleanup stops only the child passed by its owner
+2026-10-08T10:23:56.6508057Z ok 21 - cleanup stops only the child passed by its owner
+2026-10-08T10:23:56.6508502Z   ---
+2026-10-08T10:23:56.6508714Z   duration_ms: 3.174062
+2026-10-08T10:23:56.6508929Z   type: 'test'
+2026-10-08T10:23:56.6509124Z   ...
+2026-10-08T10:23:56.6713852Z # Subtest: already exited child cleanup is a no-op
+2026-10-08T10:23:56.6714274Z ok 22 - already exited child cleanup is a no-op
+2026-10-08T10:23:56.6714536Z   ---
+2026-10-08T10:23:56.6714746Z   duration_ms: 21.980522
+2026-10-08T10:23:56.6714971Z   type: 'test'
+2026-10-08T10:23:56.6715156Z   ...
+2026-10-08T10:23:56.6715549Z # Subtest: diagnostics redact bearer tokens while preserving business identifiers
+2026-10-08T10:23:56.6732646Z ok 23 - diagnostics redact bearer tokens while preserving business identifiers
+2026-10-08T10:23:56.6733254Z   ---
+2026-10-08T10:23:56.6733530Z   duration_ms: 0.277115
+2026-10-08T10:23:56.6733835Z   type: 'test'
+2026-10-08T10:23:56.6734086Z   ...
+2026-10-08T10:23:56.6823747Z 1..23
+2026-10-08T10:23:56.6823991Z # tests 23
+2026-10-08T10:23:56.6824245Z # suites 0
+2026-10-08T10:23:56.6824495Z # pass 23
+2026-10-08T10:23:56.6824714Z # fail 0
+2026-10-08T10:23:56.6824939Z # cancelled 0
+2026-10-08T10:23:56.6825205Z # skipped 0
+2026-10-08T10:23:56.6825455Z # todo 0
+2026-10-08T10:23:56.6825932Z # duration_ms 926.569871
+2026-10-08T10:23:56.6949050Z ##[group]Run node scripts/verify-oncall-browser-ci.cjs
+2026-10-08T10:23:56.6949417Z [36;1mnode scripts/verify-oncall-browser-ci.cjs[0m
+2026-10-08T10:23:56.7005754Z shell: /usr/bin/bash -e {0}
+2026-10-08T10:23:56.7005988Z env:
+2026-10-08T10:23:56.7006267Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:23:56.7006685Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:23:56.7007010Z   MAVEN_ARGS: -ntp
+2026-10-08T10:23:56.7007206Z ##[endgroup]
+2026-10-08T10:25:23.9854132Z {"status":"PASS","evidenceDirectory":"target/oncall-browser-it/run-QokPkt","database":"isolated unique H2 memory","url":"http://127.0.0.1:9917/on-call","jarTimezone":"UTC","scanDelayMs":200,"defaultScanDelayMs":60000,"scripts":[{"name":"verify-oncall-rotation-ui.cjs","exitCode":0},{"name":"verify-oncall-rotation-boundaries.cjs","exitCode":0},{"name":"verify-oncall-coverage-ui.cjs","exitCode":0},{"name":"verify-oncall-handoff-http.cjs","exitCode":0},{"name":"verify-oncall-handoff-ui.cjs","exitCode":0},{"name":"verify-oncall-handoff-revocation-http.cjs","exitCode":0},{"name":"verify-oncall-handoff-revocation-ui.cjs","exitCode":0},{"name":"verify-runbook-trend-ui.cjs","exitCode":0},{"name":"verify-runbook-publication-ui.cjs","exitCode":0},{"name":"verify-slo-rules-ui.cjs","exitCode":0},{"name":"verify-jwt-numeric-date-http.cjs","exitCode":0},{"name":"verify-stream-session-ui.cjs","exitCode":0},{"name":"verify-oncall-swap-ui.cjs","exitCode":0},{"name":"verify-account-security-ui.cjs","exitCode":0}],"browserCi":true,"publicationBaselineCapture":false,"trendBaselineCapture":false,"revocationBaselineCapture":false,"userFileDatabaseModified":false,"originalProcessesNotStopped":true,"ownedProcessStopped":true,"accountBaselineCapture":false,"sloBaselineCapture":false,"streamSessionBaselineCapture":false,"streamSessionOnly":false,"swapBaselineCapture":false,"swapOnly":false,"unexpectedJarErrors":0}
+2026-10-08T10:25:23.9941009Z ##[group]Run node scripts/verify-assistant-request-ui-ci.cjs
+2026-10-08T10:25:23.9941404Z [36;1mnode scripts/verify-assistant-request-ui-ci.cjs[0m
+2026-10-08T10:25:23.9996977Z shell: /usr/bin/bash -e {0}
+2026-10-08T10:25:23.9997204Z env:
+2026-10-08T10:25:23.9997589Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:25:23.9997993Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:25:23.9998323Z   MAVEN_ARGS: -ntp
+2026-10-08T10:25:23.9998519Z ##[endgroup]
+2026-10-08T10:26:08.9945688Z {"status":"PASS","evidenceDirectory":"target/assistant-request-ui-it/run-AgKDx1","cases":[{"name":"explicit-running-cancel","originalKeyUsed":true,"serverState":"CANCELLED","lateAnswers":0,"actualWorkerSettledByFreshAnswer":true},{"name":"lost-completed-response-refresh-query","actualCompletedResponseLost":true,"originalAnswerIdPreserved":true,"streamPostsIncludingRecovery":1,"modelCallsIncludingRecovery":1},{"name":"lost-cancel-response","backendCancelResponseActuallyLost":true,"noFalseCancelledBeforeQuery":true,"queriedServerState":"CANCELLED","cancelAuditRows":1,"lateAnswers":0},{"name":"not-admitted-manual-retry","serverLookupStatus":404,"noAutomaticPost":true,"exactOriginalKeyAndContent":true,"actualModelCalls":1},{"name":"queued-ui-cancel","queriedStateBeforeCancel":"QUEUED","questionAndAnswerRows":0,"modelCallsForQueuedQuestion":0},{"name":"real-capacity-feedback","serverCapacity":"one worker and one queue slot","actualRejectedStatus":503,"actualJsonErrorResponse":true,"rejectedQuestionRows":0,"noAutomaticPost":true,"lookupStatus":404,"manualRecoveryWithOriginalKeyAndQuestion":true},{"name":"real-budget-timeout","serverBudgetSeconds":30,"queriedTerminal":"TIMED_OUT","originalRequestNotRerun":true,"lateAnswers":0,"actualWorkerSettledByFreshAnswer":true},{"name":"late-successful-clear-after-account-change","actualOldClearStatus":200,"actualOldLogoutStatus":200,"replacementTokenPreserved":true,"replacementServerStatus":200,"oldPrivateMessagesNotReintroduced":true}]}
+2026-10-08T10:26:09.0084153Z ##[group]Run node scripts/verify-assistant-native-ui-ci.cjs
+2026-10-08T10:26:09.0084539Z [36;1mnode scripts/verify-assistant-native-ui-ci.cjs[0m
+2026-10-08T10:26:09.0141527Z shell: /usr/bin/bash -e {0}
+2026-10-08T10:26:09.0141759Z env:
+2026-10-08T10:26:09.0142030Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:26:09.0142445Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:26:09.0142775Z   MAVEN_ARGS: -ntp
+2026-10-08T10:26:09.0142964Z ##[endgroup]
+2026-10-08T10:26:35.0854745Z {"status":"PASS","evidenceDirectory":"target/assistant-native-ui-it/run-0VNt5D","cases":[{"name":"preview-before-final-commit","native":true,"incremental":true,"previewVisibleBeforeProviderRelease":true,"databaseAnswersBeforeRelease":0,"finalAnswers":1,"modelCalls":1},{"name":"explicit-cancel-after-preview","status":"CANCELLED","cancelledAnswers":0,"originalKeyUsed":true,"workerReusedBeforeOldProviderRelease":true,"nativeHttpConnectionClosedBeforeProviderRelease":true},{"name":"truncated-preview","status":"FAILED","partialAnswersCommitted":0,"modelCalls":1},{"name":"idle-after-preview","status":"TIMED_OUT","executionBudgetSeconds":12,"partialAnswersCommitted":0,"nativeHttpConnectionClosedBeforeProviderRelease":true},{"name":"disconnect-after-preview-manual-query","status":"COMPLETED","originalAnswerIdPreserved":true,"streamPosts":1,"modelCalls":1},{"name":"output-capacity-503-and-fixed-key-manual-recovery","actualErrorCode":"ASSISTANT_STREAM_SATURATED","errorMessageVisible":true,"rejectedQuestionRows":0,"rejectedModelCalls":0,"rejectedKeyStatus":404,"noAutomaticRetry":true,"sameKeyAndQuestionOnManualRetry":true,"recoveredAnswerRows":1,"fixtureCancelPosts":2}]}
+2026-10-08T10:26:35.0995046Z ##[group]Run node --test scripts/tests/oncall-swap-notification-ci.test.cjs
+2026-10-08T10:26:35.0995787Z [36;1mnode --test scripts/tests/oncall-swap-notification-ci.test.cjs[0m
+2026-10-08T10:26:35.0996392Z [36;1mnode scripts/verify-oncall-swap-notification-ci.cjs[0m
+2026-10-08T10:26:35.1060610Z shell: /usr/bin/bash -e {0}
+2026-10-08T10:26:35.1060850Z env:
+2026-10-08T10:26:35.1061120Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:26:35.1061534Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:26:35.1061845Z   MAVEN_ARGS: -ntp
+2026-10-08T10:26:35.1062040Z ##[endgroup]
+2026-10-08T10:26:35.1477826Z TAP version 13
+2026-10-08T10:26:35.1842127Z # Subtest: CI cannot replace notification acceptance with archived baseline
+2026-10-08T10:26:35.1845531Z ok 1 - CI cannot replace notification acceptance with archived baseline
+2026-10-08T10:26:35.1846065Z   ---
+2026-10-08T10:26:35.1850869Z   duration_ms: 0.703784
+2026-10-08T10:26:35.1851250Z   type: 'test'
+2026-10-08T10:26:35.1851526Z   ...
+2026-10-08T10:26:35.1852086Z # Subtest: normal CI and explicit local archived comparison remain distinct
+2026-10-08T10:26:35.1852878Z ok 2 - normal CI and explicit local archived comparison remain distinct
+2026-10-08T10:26:35.1853361Z   ---
+2026-10-08T10:26:35.1853633Z   duration_ms: 0.573429
+2026-10-08T10:26:35.1853938Z   type: 'test'
+2026-10-08T10:26:35.1854195Z   ...
+2026-10-08T10:26:35.1854737Z # Subtest: retention UI archived baseline cannot replace actual CI acceptance
+2026-10-08T10:26:35.1856559Z ok 3 - retention UI archived baseline cannot replace actual CI acceptance
+2026-10-08T10:26:35.1873373Z   ---
+2026-10-08T10:26:35.1875438Z   duration_ms: 0.148172
+2026-10-08T10:26:35.1875736Z   type: 'test'
+2026-10-08T10:26:35.1875962Z   ...
+2026-10-08T10:26:35.1876489Z # Subtest: observation preserves request identity across actual phases and distinguishes concurrent equal paths
+2026-10-08T10:26:35.1877220Z ok 4 - observation preserves request identity across actual phases and distinguishes concurrent equal paths
+2026-10-08T10:26:35.1878157Z   ---
+2026-10-08T10:26:35.1878477Z   duration_ms: 0.56071
+2026-10-08T10:26:35.1878810Z   type: 'test'
+2026-10-08T10:26:35.1879059Z   ...
+2026-10-08T10:26:35.1879537Z # Subtest: observation excludes headers body query fragments credentials unrelated routes and other origins
+2026-10-08T10:26:35.1880203Z ok 5 - observation excludes headers body query fragments credentials unrelated routes and other origins
+2026-10-08T10:26:35.1880588Z   ---
+2026-10-08T10:26:35.1880766Z   duration_ms: 0.261762
+2026-10-08T10:26:35.1880983Z   type: 'test'
+2026-10-08T10:26:35.1881161Z   ...
+2026-10-08T10:26:35.1881661Z # Subtest: observation has a hard event bound with explicit omission instead of unbounded logs
+2026-10-08T10:26:35.1883099Z ok 6 - observation has a hard event bound with explicit omission instead of unbounded logs
+2026-10-08T10:26:35.1883553Z   ---
+2026-10-08T10:26:35.1883832Z   duration_ms: 0.271637
+2026-10-08T10:26:35.1884066Z   type: 'test'
+2026-10-08T10:26:35.1884234Z   ...
+2026-10-08T10:26:35.1884585Z # Subtest: default notification CI retains all twelve original full case identifiers
+2026-10-08T10:26:35.1885084Z ok 7 - default notification CI retains all twelve original full case identifiers
+2026-10-08T10:26:35.1885409Z   ---
+2026-10-08T10:26:35.1885584Z   duration_ms: 2.602016
+2026-10-08T10:26:35.1885773Z   type: 'test'
+2026-10-08T10:26:35.1885937Z   ...
+2026-10-08T10:26:35.1924392Z 1..7
+2026-10-08T10:26:35.1924605Z # tests 7
+2026-10-08T10:26:35.1924841Z # suites 0
+2026-10-08T10:26:35.1925282Z # pass 7
+2026-10-08T10:26:35.1925575Z # fail 0
+2026-10-08T10:26:35.1926291Z # cancelled 0
+2026-10-08T10:26:35.1926579Z # skipped 0
+2026-10-08T10:26:35.1926853Z # todo 0
+2026-10-08T10:26:35.1927150Z # duration_ms 53.948232
+2026-10-08T10:27:02.5218039Z {"status":"PASS","baselineCapture":false,"retentionUiBaselineCapture":false,"jarSha256":"83cc8839c9b05e9717ee1f178e0a0010da782bcfeaef7b37f1e5f683b0203129","cases":[{"name":"real-ui-request-and-independent-transient-receiver","swapId":1,"notificationId":1,"stableKeyAndFrozenBody":true,"actual503Then204":true,"stillPendingAndOriginalResponsibility":true},{"name":"human-decision-then-both-notifications","swapId":1,"twoActualParticipants":true,"twoCurrentResponsibilitiesExchanged":true},{"name":"notification-storage-failure-before-post","posts":0},{"name":"actual-retry-commit-response-loss-reload-and-original-ack","swapId":2,"notificationId":4,"capturedVersion":2,"noAutomaticPost":true,"posts":2,"oneRetryAudit":true,"decisionStillPending":true},{"name":"auditor-reads-notification-without-write-control"},{"name":"failed-notification-read-clears-old-receipts-then-recovers"},{"name":"superseded-notification409-lock-reload-and-explicit-discard","swapId":3,"notificationId":5,"noVersionRebase":true,"serverWithdrawalNotChanged":true},{"name":"notification-late200-after-real-spa-account-switch","swapId":4,"sameDocument":true,"actualLate200":true,"replacementIdentityPreserved":true,"originalIntentPreservedAndManuallyAcknowledged":true,"oneRetryAudit":true},{"name":"corrupt-notification-intent-kept-until-explicit-local-discard","noRetryPost":true,"serverDecisionNotChanged":true},{"name":"actual-expired-unsubmitted-draft-refreshes-before-post","swapId":5,"notificationId":9,"posts":0,"actualSqlExpiry":true,"actualPayloadErased":true,"noNewAudit":true,"decisionStillPending":true},{"name":"actual-erased-delivered-payload-preserves-original-retry-ack","swapId":6,"notificationId":10,"posts":2,"actualSqlExpiry":true,"receiptPreserved":true,"noExtraDelivery":true,"oneRetryAudit":true,"noAutomaticPostAfterReload":true,"decisionStillPending":true},{"name":"fresh-retention-read-failure-before-first-post","swapId":7,"posts":0,"oldFactsCleared":true,"noStorageFreeze":true,"noAutomaticPostAfterRefresh":true}],"deliveries":[{"event":"delivery","key":"oncall-swap-notification:0a41da7b-b9f1-4451-a30a-38b5957c4dda","body":{"eventType":"ONCALL_SWAP_PENDING","swapId":1,"eventVersion":0,"historicalStatus":"PENDING","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":3,"firstStartsAt":"2026-10-31T10:26:45","firstEndsAt":"2026-10-31T12:26:45","secondScheduleId":2,"secondShiftId":4,"secondStartsAt":"2026-11-01T10:26:45","secondEndsAt":"2026-11-01T12:26:45","eventOccurredAt":"2026-10-08T10:26:46.198283","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":503},{"event":"delivery","key":"oncall-swap-notification:0a41da7b-b9f1-4451-a30a-38b5957c4dda","body":{"eventType":"ONCALL_SWAP_PENDING","swapId":1,"eventVersion":0,"historicalStatus":"PENDING","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":3,"firstStartsAt":"2026-10-31T10:26:45","firstEndsAt":"2026-10-31T12:26:45","secondScheduleId":2,"secondShiftId":4,"secondStartsAt":"2026-11-01T10:26:45","secondEndsAt":"2026-11-01T12:26:45","eventOccurredAt":"2026-10-08T10:26:46.198283","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":204},{"event":"delivery","key":"oncall-swap-notification:f1884751-7f83-4fe4-8a4b-64f1dd2926e7","body":{"eventType":"ONCALL_SWAP_ACCEPTED","swapId":1,"eventVersion":1,"historicalStatus":"ACCEPTED","recipientId":2,"recipientName":"张伟","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":3,"firstStartsAt":"2026-10-31T10:26:45","firstEndsAt":"2026-10-31T12:26:45","secondScheduleId":2,"secondShiftId":4,"secondStartsAt":"2026-11-01T10:26:45","secondEndsAt":"2026-11-01T12:26:45","eventOccurredAt":"2026-10-08T10:26:49","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":503},{"event":"delivery","key":"oncall-swap-notification:c75b9ad5-fae5-48f7-bf53-605d90da7b0d","body":{"eventType":"ONCALL_SWAP_ACCEPTED","swapId":1,"eventVersion":1,"historicalStatus":"ACCEPTED","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":3,"firstStartsAt":"2026-10-31T10:26:45","firstEndsAt":"2026-10-31T12:26:45","secondScheduleId":2,"secondShiftId":4,"secondStartsAt":"2026-11-01T10:26:45","secondEndsAt":"2026-11-01T12:26:45","eventOccurredAt":"2026-10-08T10:26:49","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":503},{"event":"delivery","key":"oncall-swap-notification:f1884751-7f83-4fe4-8a4b-64f1dd2926e7","body":{"eventType":"ONCALL_SWAP_ACCEPTED","swapId":1,"eventVersion":1,"historicalStatus":"ACCEPTED","recipientId":2,"recipientName":"张伟","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":3,"firstStartsAt":"2026-10-31T10:26:45","firstEndsAt":"2026-10-31T12:26:45","secondScheduleId":2,"secondShiftId":4,"secondStartsAt":"2026-11-01T10:26:45","secondEndsAt":"2026-11-01T12:26:45","eventOccurredAt":"2026-10-08T10:26:49","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":204},{"event":"delivery","key":"oncall-swap-notification:c75b9ad5-fae5-48f7-bf53-605d90da7b0d","body":{"eventType":"ONCALL_SWAP_ACCEPTED","swapId":1,"eventVersion":1,"historicalStatus":"ACCEPTED","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":3,"firstStartsAt":"2026-10-31T10:26:45","firstEndsAt":"2026-10-31T12:26:45","secondScheduleId":2,"secondShiftId":4,"secondStartsAt":"2026-11-01T10:26:45","secondEndsAt":"2026-11-01T12:26:45","eventOccurredAt":"2026-10-08T10:26:49","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":204},{"event":"delivery","key":"oncall-swap-notification:59edd0c0-1b35-49dc-ab1a-6c2ca6dadae1","body":{"eventType":"ONCALL_SWAP_PENDING","swapId":2,"eventVersion":0,"historicalStatus":"PENDING","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":7,"firstStartsAt":"2026-10-31T14:26:51","firstEndsAt":"2026-10-31T16:26:51","secondScheduleId":2,"secondShiftId":8,"secondStartsAt":"2026-11-01T14:26:51","secondEndsAt":"2026-11-01T16:26:51","eventOccurredAt":"2026-10-08T10:26:51.295476","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":401},{"event":"delivery","key":"oncall-swap-notification:59edd0c0-1b35-49dc-ab1a-6c2ca6dadae1","body":{"eventType":"ONCALL_SWAP_PENDING","swapId":2,"eventVersion":0,"historicalStatus":"PENDING","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":7,"firstStartsAt":"2026-10-31T14:26:51","firstEndsAt":"2026-10-31T16:26:51","secondScheduleId":2,"secondShiftId":8,"secondStartsAt":"2026-11-01T14:26:51","secondEndsAt":"2026-11-01T16:26:51","eventOccurredAt":"2026-10-08T10:26:51.295476","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":204},{"event":"delivery","key":"oncall-swap-notification:86e6f500-eedd-4493-8c7c-aee722ae662a","body":{"eventType":"ONCALL_SWAP_PENDING","swapId":3,"eventVersion":0,"historicalStatus":"PENDING","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":9,"firstStartsAt":"2026-10-31T18:26:54","firstEndsAt":"2026-10-31T20:26:54","secondScheduleId":2,"secondShiftId":10,"secondStartsAt":"2026-11-01T18:26:54","secondEndsAt":"2026-11-01T20:26:54","eventOccurredAt":"2026-10-08T10:26:54.779306","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":401},{"event":"delivery","key":"oncall-swap-notification:58512849-4933-44bc-8a7b-688eda2c77f4","body":{"eventType":"ONCALL_SWAP_WITHDRAWN","swapId":3,"eventVersion":1,"historicalStatus":"WITHDRAWN","recipientId":2,"recipientName":"张伟","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":9,"firstStartsAt":"2026-10-31T18:26:54","firstEndsAt":"2026-10-31T20:26:54","secondScheduleId":2,"secondShiftId":10,"secondStartsAt":"2026-11-01T18:26:54","secondEndsAt":"2026-11-01T20:26:54","eventOccurredAt":"2026-10-08T10:26:55","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":401},{"event":"delivery","key":"oncall-swap-notification:74f29889-7786-4441-933e-e121898997de","body":{"eventType":"ONCALL_SWAP_WITHDRAWN","swapId":3,"eventVersion":1,"historicalStatus":"WITHDRAWN","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":9,"firstStartsAt":"2026-10-31T18:26:54","firstEndsAt":"2026-10-31T20:26:54","secondScheduleId":2,"secondShiftId":10,"secondStartsAt":"2026-11-01T18:26:54","secondEndsAt":"2026-11-01T20:26:54","eventOccurredAt":"2026-10-08T10:26:55","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":401},{"event":"delivery","key":"oncall-swap-notification:4f1e3b0b-8282-400f-bbf9-158937efb483","body":{"eventType":"ONCALL_SWAP_PENDING","swapId":4,"eventVersion":0,"historicalStatus":"PENDING","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":11,"firstStartsAt":"2026-10-31T22:26:56","firstEndsAt":"2026-11-01T00:26:56","secondScheduleId":2,"secondShiftId":12,"secondStartsAt":"2026-11-01T22:26:56","secondEndsAt":"2026-11-02T00:26:56","eventOccurredAt":"2026-10-08T10:26:56.126820","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":401},{"event":"delivery","key":"oncall-swap-notification:4f1e3b0b-8282-400f-bbf9-158937efb483","body":{"eventType":"ONCALL_SWAP_PENDING","swapId":4,"eventVersion":0,"historicalStatus":"PENDING","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":11,"firstStartsAt":"2026-10-31T22:26:56","firstEndsAt":"2026-11-01T00:26:56","secondScheduleId":2,"secondShiftId":12,"secondStartsAt":"2026-11-01T22:26:56","secondEndsAt":"2026-11-02T00:26:56","eventOccurredAt":"2026-10-08T10:26:56.126820","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":204},{"event":"delivery","key":"oncall-swap-notification:7809890d-77d3-4c57-a7d2-1af6ac4b818f","body":{"eventType":"ONCALL_SWAP_PENDING","swapId":5,"eventVersion":0,"historicalStatus":"PENDING","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":13,"firstStartsAt":"2026-11-01T02:26:58","firstEndsAt":"2026-11-01T04:26:58","secondScheduleId":2,"secondShiftId":14,"secondStartsAt":"2026-11-02T02:26:58","secondEndsAt":"2026-11-02T04:26:58","eventOccurredAt":"2026-10-08T10:26:58.185860","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":401},{"event":"delivery","key":"oncall-swap-notification:391ed9d0-66e1-462e-8af0-9f939b69bcfc","body":{"eventType":"ONCALL_SWAP_PENDING","swapId":6,"eventVersion":0,"historicalStatus":"PENDING","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":15,"firstStartsAt":"2026-11-01T06:26:59","firstEndsAt":"2026-11-01T08:26:59","secondScheduleId":2,"secondShiftId":16,"secondStartsAt":"2026-11-02T06:26:59","secondEndsAt":"2026-11-02T08:26:59","eventOccurredAt":"2026-10-08T10:26:59.591062","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":401},{"event":"delivery","key":"oncall-swap-notification:391ed9d0-66e1-462e-8af0-9f939b69bcfc","body":{"eventType":"ONCALL_SWAP_PENDING","swapId":6,"eventVersion":0,"historicalStatus":"PENDING","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":15,"firstStartsAt":"2026-11-01T06:26:59","firstEndsAt":"2026-11-01T08:26:59","secondScheduleId":2,"secondShiftId":16,"secondStartsAt":"2026-11-02T06:26:59","secondEndsAt":"2026-11-02T08:26:59","eventOccurredAt":"2026-10-08T10:26:59.591062","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":204},{"event":"delivery","key":"oncall-swap-notification:bf3c4dc3-07be-4815-9331-4f7a5b81eaba","body":{"eventType":"ONCALL_SWAP_PENDING","swapId":7,"eventVersion":0,"historicalStatus":"PENDING","recipientId":3,"recipientName":"李娜","requesterId":2,"targetUserId":3,"firstScheduleId":1,"firstShiftId":17,"firstStartsAt":"2026-11-01T10:27:01","firstEndsAt":"2026-11-01T12:27:01","secondScheduleId":2,"secondShiftId":18,"secondStartsAt":"2026-11-02T10:27:01","secondEndsAt":"2026-11-02T12:27:01","eventOccurredAt":"2026-10-08T10:27:01.338390","timeBasis":"DATABASE_SESSION_LOCAL","humanConfirmationRequired":true,"currentCoverageMustBeReadSeparately":true},"authCorrect":true,"status":401}],"screenshots":["entry-zhangwei-desktop.png","pending-delivered-desktop.png","entry-lina-desktop.png","both-accepted-desktop.png","retry-recovery-desktop.png","retry-recovery-mobile.png","entry-auditor-desktop.png","conflict-locked-desktop.png","retention-expired-desktop.png","retention-expired-mobile.png","retention-original-ack-desktop.png","retention-original-ack-mobile.png"],"fixtureJdbcInvocations":[{"pid":5086,"exitCode":0,"changed":1,"notificationId":9,"swapId":5,"actualDriver":"H2","scope":"one owned notification deadline"},{"pid":5109,"exitCode":0,"changed":1,"notificationId":10,"swapId":6,"actualDriver":"H2","scope":"one owned notification deadline"}],"browserPath":"Browser plugin not available; existing Playwright","viewports":["1440x1000","390x844"],"startedPids":[4833,4903],"stoppedPids":[4903,4833],"tokensPersistedToEvidence":false,"userFileDatabaseModified":false,"networkTrace":[{"phase":"request","requestId":1,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":11129},{"phase":"response","requestId":1,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":11147,"status":200},{"phase":"finished","requestId":1,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":11147},{"phase":"request","requestId":2,"method":"GET","path":"/api/v1/on-call/swaps/1/notifications","elapsedMs":11161},{"phase":"response","requestId":2,"method":"GET","path":"/api/v1/on-call/swaps/1/notifications","elapsedMs":11200,"status":200},{"phase":"finished","requestId":2,"method":"GET","path":"/api/v1/on-call/swaps/1/notifications","elapsedMs":11202},{"phase":"request","requestId":3,"method":"GET","path":"/api/v1/on-call/swaps/1/notifications","elapsedMs":12443},{"phase":"response","requestId":3,"method":"GET","path":"/api/v1/on-call/swaps/1/notifications","elapsedMs":12458,"status":200},{"phase":"finished","requestId":3,"method":"GET","path":"/api/v1/on-call/swaps/1/notifications","elapsedMs":12458},{"phase":"request","requestId":4,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":15738},{"phase":"response","requestId":4,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":15740,"status":200},{"phase":"finished","requestId":4,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":15744},{"phase":"request","requestId":5,"method":"GET","path":"/api/v1/on-call/swaps/1/notifications","elapsedMs":15759},{"phase":"response","requestId":5,"method":"GET","path":"/api/v1/on-call/swaps/1/notifications","elapsedMs":15769,"status":200},{"phase":"finished","requestId":5,"method":"GET","path":"/api/v1/on-call/swaps/1/notifications","elapsedMs":15771},{"phase":"request","requestId":6,"method":"GET","path":"/api/v1/on-call/swaps/1/notifications","elapsedMs":16236},{"phase":"response","requestId":6,"method":"GET","path":"/api/v1/on-call/swaps/1/notifications","elapsedMs":16245,"status":200},{"phase":"finished","requestId":6,"method":"GET","path":"/api/v1/on-call/swaps/1/notifications","elapsedMs":16249},{"phase":"request","requestId":7,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":16292},{"phase":"response","requestId":7,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":16307,"status":200},{"phase":"finished","requestId":7,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":16308},{"phase":"request","requestId":8,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":16325},{"phase":"response","requestId":8,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":16330,"status":200},{"phase":"finished","requestId":8,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":16332},{"phase":"request","requestId":9,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":16430},{"phase":"response","requestId":9,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":16441,"status":200},{"phase":"finished","requestId":9,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":16442},{"phase":"request","requestId":10,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":16494},{"phase":"response","requestId":10,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":16507,"status":200},{"phase":"finished","requestId":10,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":16508},{"phase":"request","requestId":11,"method":"POST","path":"/api/v1/on-call/swaps/2/notifications/4/retry","elapsedMs":16509},{"phase":"committed-fetch-start","requestId":11,"method":"POST","path":"/api/v1/on-call/swaps/2/notifications/4/retry","elapsedMs":16509},{"phase":"committed-fetch-end","requestId":11,"method":"POST","path":"/api/v1/on-call/swaps/2/notifications/4/retry","elapsedMs":16544,"status":200},{"phase":"abort-complete","requestId":11,"method":"POST","path":"/api/v1/on-call/swaps/2/notifications/4/retry","elapsedMs":16545},{"phase":"failed","requestId":11,"method":"POST","path":"/api/v1/on-call/swaps/2/notifications/4/retry","elapsedMs":16546},{"phase":"request","requestId":12,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":16547},{"phase":"response","requestId":12,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":16555,"status":200},{"phase":"finished","requestId":12,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":16556},{"phase":"request","requestId":13,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":17104},{"phase":"response","requestId":13,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":17109,"status":200},{"phase":"finished","requestId":13,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":17110},{"phase":"request","requestId":14,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":17124},{"phase":"response","requestId":14,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":17135,"status":200},{"phase":"finished","requestId":14,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":17136},{"phase":"request","requestId":15,"method":"POST","path":"/api/v1/on-call/swaps/2/notifications/4/retry","elapsedMs":17594},{"phase":"response","requestId":15,"method":"POST","path":"/api/v1/on-call/swaps/2/notifications/4/retry","elapsedMs":17607,"status":200},{"phase":"finished","requestId":15,"method":"POST","path":"/api/v1/on-call/swaps/2/notifications/4/retry","elapsedMs":17607},{"phase":"request","requestId":16,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":17608},{"phase":"response","requestId":16,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":17613,"status":200},{"phase":"finished","requestId":16,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":17613},{"phase":"request","requestId":17,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":18366},{"phase":"response","requestId":17,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":18374,"status":200},{"phase":"finished","requestId":17,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":18375},{"phase":"request","requestId":18,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":18388},{"phase":"response","requestId":18,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":18396,"status":200},{"phase":"finished","requestId":18,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":18398},{"phase":"request","requestId":19,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":19293},{"phase":"response","requestId":19,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":19306,"status":500},{"phase":"finished","requestId":19,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":19308},{"phase":"request","requestId":20,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":19368},{"phase":"response","requestId":20,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":19373,"status":200},{"phase":"finished","requestId":20,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":19374},{"phase":"request","requestId":21,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":19752},{"phase":"response","requestId":21,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":19759,"status":200},{"phase":"finished","requestId":21,"method":"GET","path":"/api/v1/on-call/swaps/2/notifications","elapsedMs":19760},{"phase":"request","requestId":22,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":19811},{"phase":"response","requestId":22,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":19823,"status":200},{"phase":"finished","requestId":22,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":19824},{"phase":"request","requestId":23,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":19838},{"phase":"response","requestId":23,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":19847,"status":200},{"phase":"finished","requestId":23,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":19847},{"phase":"request","requestId":24,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":20029},{"phase":"response","requestId":24,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":20041,"status":200},{"phase":"finished","requestId":24,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":20042},{"phase":"request","requestId":25,"method":"POST","path":"/api/v1/on-call/swaps/3/notifications/5/retry","elapsedMs":20044},{"phase":"response","requestId":25,"method":"POST","path":"/api/v1/on-call/swaps/3/notifications/5/retry","elapsedMs":20063,"status":409},{"phase":"finished","requestId":25,"method":"POST","path":"/api/v1/on-call/swaps/3/notifications/5/retry","elapsedMs":20064},{"phase":"request","requestId":26,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":20065},{"phase":"response","requestId":26,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":20070,"status":200},{"phase":"finished","requestId":26,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":20071},{"phase":"request","requestId":27,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":20426},{"phase":"response","requestId":27,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":20435,"status":200},{"phase":"finished","requestId":27,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":20438},{"phase":"request","requestId":28,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":20448},{"phase":"response","requestId":28,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":20455,"status":200},{"phase":"finished","requestId":28,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":20457},{"phase":"request","requestId":29,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":20699},{"phase":"response","requestId":29,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":20709,"status":200},{"phase":"finished","requestId":29,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":20709},{"phase":"request","requestId":30,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":21033},{"phase":"response","requestId":30,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":21044,"status":200},{"phase":"finished","requestId":30,"method":"GET","path":"/api/v1/on-call/swaps/3/notifications","elapsedMs":21046},{"phase":"request","requestId":31,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":21092},{"phase":"response","requestId":31,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":21101,"status":200},{"phase":"finished","requestId":31,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":21102},{"phase":"request","requestId":32,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":21116},{"phase":"response","requestId":32,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":21123,"status":200},{"phase":"finished","requestId":32,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":21123},{"phase":"request","requestId":33,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":21227},{"phase":"response","requestId":33,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":21242,"status":200},{"phase":"finished","requestId":33,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":21243},{"phase":"request","requestId":34,"method":"POST","path":"/api/v1/on-call/swaps/4/notifications/8/retry","elapsedMs":21243},{"phase":"held-fetch-start","requestId":34,"method":"POST","path":"/api/v1/on-call/swaps/4/notifications/8/retry","elapsedMs":21244},{"phase":"held-fetch-end","requestId":34,"method":"POST","path":"/api/v1/on-call/swaps/4/notifications/8/retry","elapsedMs":21259,"status":200},{"phase":"request","requestId":35,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":21732},{"phase":"response","requestId":35,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":21758,"status":200},{"phase":"finished","requestId":35,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":21758},{"phase":"request","requestId":36,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":21781},{"phase":"response","requestId":36,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":21790,"status":200},{"phase":"finished","requestId":36,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":21803},{"phase":"response","requestId":34,"method":"POST","path":"/api/v1/on-call/swaps/4/notifications/8/retry","elapsedMs":21823,"status":200},{"phase":"finished","requestId":34,"method":"POST","path":"/api/v1/on-call/swaps/4/notifications/8/retry","elapsedMs":21827},{"phase":"request","requestId":37,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":22246},{"phase":"response","requestId":37,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":22256,"status":200},{"phase":"finished","requestId":37,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":22256},{"phase":"request","requestId":38,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":22267},{"phase":"response","requestId":38,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":22271,"status":200},{"phase":"finished","requestId":38,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":22271},{"phase":"request","requestId":39,"method":"POST","path":"/api/v1/on-call/swaps/4/notifications/8/retry","elapsedMs":22314},{"phase":"response","requestId":39,"method":"POST","path":"/api/v1/on-call/swaps/4/notifications/8/retry","elapsedMs":22328,"status":200},{"phase":"finished","requestId":39,"method":"POST","path":"/api/v1/on-call/swaps/4/notifications/8/retry","elapsedMs":22329},{"phase":"request","requestId":40,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":22330},{"phase":"response","requestId":40,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":22335,"status":200},{"phase":"finished","requestId":40,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":22335},{"phase":"request","requestId":41,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":22635},{"phase":"response","requestId":41,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":22642,"status":200},{"phase":"finished","requestId":41,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":22642},{"phase":"request","requestId":42,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":22651},{"phase":"response","requestId":42,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":22666,"status":200},{"phase":"finished","requestId":42,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":22667},{"phase":"request","requestId":43,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":22776},{"phase":"response","requestId":43,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":22791,"status":200},{"phase":"finished","requestId":43,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":22793},{"phase":"request","requestId":44,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":23094},{"phase":"response","requestId":44,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":23102,"status":200},{"phase":"finished","requestId":44,"method":"GET","path":"/api/v1/on-call/swaps/4/notifications","elapsedMs":23105},{"phase":"request","requestId":45,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":23149},{"phase":"response","requestId":45,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":23164,"status":200},{"phase":"finished","requestId":45,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":23165},{"phase":"request","requestId":46,"method":"GET","path":"/api/v1/on-call/swaps/5/notifications","elapsedMs":23180},{"phase":"response","requestId":46,"method":"GET","path":"/api/v1/on-call/swaps/5/notifications","elapsedMs":23184,"status":200},{"phase":"finished","requestId":46,"method":"GET","path":"/api/v1/on-call/swaps/5/notifications","elapsedMs":23184},{"phase":"request","requestId":47,"method":"GET","path":"/api/v1/on-call/swaps/5/notifications","elapsedMs":23662},{"phase":"response","requestId":47,"method":"GET","path":"/api/v1/on-call/swaps/5/notifications","elapsedMs":23674,"status":200},{"phase":"finished","requestId":47,"method":"GET","path":"/api/v1/on-call/swaps/5/notifications","elapsedMs":23674},{"phase":"request","requestId":48,"method":"GET","path":"/api/v1/on-call/swaps/5/notifications","elapsedMs":24177},{"phase":"response","requestId":48,"method":"GET","path":"/api/v1/on-call/swaps/5/notifications","elapsedMs":24189,"status":200},{"phase":"finished","requestId":48,"method":"GET","path":"/api/v1/on-call/swaps/5/notifications","elapsedMs":24190},{"phase":"request","requestId":49,"method":"GET","path":"/api/v1/on-call/swaps/5/notifications","elapsedMs":24496},{"phase":"response","requestId":49,"method":"GET","path":"/api/v1/on-call/swaps/5/notifications","elapsedMs":24502,"status":200},{"phase":"finished","requestId":49,"method":"GET","path":"/api/v1/on-call/swaps/5/notifications","elapsedMs":24516},{"phase":"request","requestId":50,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":24562},{"phase":"response","requestId":50,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":24578,"status":200},{"phase":"finished","requestId":50,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":24578},{"phase":"request","requestId":51,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":24593},{"phase":"response","requestId":51,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":24609,"status":200},{"phase":"finished","requestId":51,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":24611},{"phase":"request","requestId":52,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":24711},{"phase":"response","requestId":52,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":24724,"status":200},{"phase":"finished","requestId":52,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":24726},{"phase":"request","requestId":53,"method":"POST","path":"/api/v1/on-call/swaps/6/notifications/10/retry","elapsedMs":24727},{"phase":"committed-fetch-start","requestId":53,"method":"POST","path":"/api/v1/on-call/swaps/6/notifications/10/retry","elapsedMs":24728},{"phase":"committed-fetch-end","requestId":53,"method":"POST","path":"/api/v1/on-call/swaps/6/notifications/10/retry","elapsedMs":24739,"status":200},{"phase":"abort-complete","requestId":53,"method":"POST","path":"/api/v1/on-call/swaps/6/notifications/10/retry","elapsedMs":24740},{"phase":"failed","requestId":53,"method":"POST","path":"/api/v1/on-call/swaps/6/notifications/10/retry","elapsedMs":24748},{"phase":"request","requestId":54,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":24748},{"phase":"response","requestId":54,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":24755,"status":200},{"phase":"finished","requestId":54,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":24755},{"phase":"request","requestId":55,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":25450},{"phase":"response","requestId":55,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":25464,"status":200},{"phase":"finished","requestId":55,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":25464},{"phase":"request","requestId":56,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":25472},{"phase":"response","requestId":56,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":25479,"status":200},{"phase":"finished","requestId":56,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":25479},{"phase":"request","requestId":57,"method":"POST","path":"/api/v1/on-call/swaps/6/notifications/10/retry","elapsedMs":25909},{"phase":"response","requestId":57,"method":"POST","path":"/api/v1/on-call/swaps/6/notifications/10/retry","elapsedMs":25924,"status":200},{"phase":"finished","requestId":57,"method":"POST","path":"/api/v1/on-call/swaps/6/notifications/10/retry","elapsedMs":25924},{"phase":"request","requestId":58,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":25924},{"phase":"response","requestId":58,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":25929,"status":200},{"phase":"finished","requestId":58,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":25929},{"phase":"request","requestId":59,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":26241},{"phase":"response","requestId":59,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":26245,"status":200},{"phase":"finished","requestId":59,"method":"GET","path":"/api/v1/on-call/swaps/6/notifications","elapsedMs":26246},{"phase":"request","requestId":60,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":26322},{"phase":"response","requestId":60,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":26328,"status":200},{"phase":"finished","requestId":60,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":26328},{"phase":"request","requestId":61,"method":"GET","path":"/api/v1/on-call/swaps/7/notifications","elapsedMs":26338},{"phase":"response","requestId":61,"method":"GET","path":"/api/v1/on-call/swaps/7/notifications","elapsedMs":26340,"status":200},{"phase":"finished","requestId":61,"method":"GET","path":"/api/v1/on-call/swaps/7/notifications","elapsedMs":26341},{"phase":"request","requestId":62,"method":"GET","path":"/api/v1/on-call/swaps/7/notifications","elapsedMs":26428},{"phase":"response","requestId":62,"method":"GET","path":"/api/v1/on-call/swaps/7/notifications","elapsedMs":26441,"status":500},{"phase":"finished","requestId":62,"method":"GET","path":"/api/v1/on-call/swaps/7/notifications","elapsedMs":26443},{"phase":"request","requestId":63,"method":"GET","path":"/api/v1/on-call/swaps/7/notifications","elapsedMs":26495},{"phase":"response","requestId":63,"method":"GET","path":"/api/v1/on-call/swaps/7/notifications","elapsedMs":26507,"status":200},{"phase":"finished","requestId":63,"method":"GET","path":"/api/v1/on-call/swaps/7/notifications","elapsedMs":26507},{"phase":"request","requestId":64,"method":"GET","path":"/api/v1/on-call/swaps/7/notifications","elapsedMs":26596},{"phase":"response","requestId":64,"method":"GET","path":"/api/v1/on-call/swaps/7/notifications","elapsedMs":26610,"status":200},{"phase":"finished","requestId":64,"method":"GET","path":"/api/v1/on-call/swaps/7/notifications","elapsedMs":26610}],"routeErrors":[],"browser":"153.0.8010.12","heldResponseReceipts":[{"swapId":4,"actualForwardedStatus":200,"posts":1,"responseHeldUntilExplicitRelease":true}],"independentReceiverPid":4833,"productionJvmPid":4903,"pageIdentity":true,"noBlank":true,"noOverlay":true,"mobileDocumentWidth":390,"consoleLogs":["Failed to load resource: net::ERR_FAILED","Failed to load resource: the server responded with a status of 500 (Internal Server Error)","Failed to load resource: the server responded with a status of 409 ()","Failed to load resource: net::ERR_FAILED","Failed to load resource: the server responded with a status of 500 (Internal Server Error)"],"pageErrors":[],"rejected":[{"status":500,"path":"/api/v1/on-call/swaps/2/notifications"},{"status":409,"path":"/api/v1/on-call/swaps/3/notifications/5/retry"},{"status":500,"path":"/api/v1/on-call/swaps/7/notifications"}],"networkTraceOmitted":0,"ownedProcessesStopped":true,"unexpectedJarErrors":0,"evidenceDirectory":"target/oncall-swap-notification-it/run-rmHaAo"}
+2026-10-08T10:27:04.2537908Z ##[group]Run node --test scripts/tests/oncall-swap-revocation-http-ci.test.cjs
+2026-10-08T10:27:04.2538444Z [36;1mnode --test scripts/tests/oncall-swap-revocation-http-ci.test.cjs[0m
+2026-10-08T10:27:04.2538846Z [36;1mnode scripts/verify-oncall-swap-revocation-http-ci.cjs[0m
+2026-10-08T10:27:04.2594001Z shell: /usr/bin/bash -e {0}
+2026-10-08T10:27:04.2594229Z env:
+2026-10-08T10:27:04.2594492Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:27:04.2594921Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:27:04.2595239Z   MAVEN_ARGS: -ntp
+2026-10-08T10:27:04.2595424Z ##[endgroup]
+2026-10-08T10:27:04.3011107Z TAP version 13
+2026-10-08T10:27:04.3329776Z # Subtest: archived revocation upgrade comparison cannot replace own-source CI
+2026-10-08T10:27:04.3335349Z ok 1 - archived revocation upgrade comparison cannot replace own-source CI
+2026-10-08T10:27:04.3335904Z   ---
+2026-10-08T10:27:04.3337853Z   duration_ms: 1.087578
+2026-10-08T10:27:04.3338205Z   type: 'test'
+2026-10-08T10:27:04.3338490Z   ...
+2026-10-08T10:27:04.3341343Z # Subtest: local upgrade comparison and ordinary fresh-source acceptance remain separate
+2026-10-08T10:27:04.3343067Z ok 2 - local upgrade comparison and ordinary fresh-source acceptance remain separate
+2026-10-08T10:27:04.3343664Z   ---
+2026-10-08T10:27:04.3345921Z   duration_ms: 0.497945
+2026-10-08T10:27:04.3346463Z   type: 'test'
+2026-10-08T10:27:04.3346642Z   ...
+2026-10-08T10:27:04.3405476Z 1..2
+2026-10-08T10:27:04.3419041Z # tests 2
+2026-10-08T10:27:04.3419473Z # suites 0
+2026-10-08T10:27:04.3419739Z # pass 2
+2026-10-08T10:27:04.3419999Z # fail 0
+2026-10-08T10:27:04.3420237Z # cancelled 0
+2026-10-08T10:27:04.3420510Z # skipped 0
+2026-10-08T10:27:04.3420796Z # todo 0
+2026-10-08T10:27:04.3421075Z # duration_ms 48.711523
+2026-10-08T10:27:23.6585389Z {"status":"PASS","comparison":false,"cases":[{"name":"real-http-paired-revocation-and-response-body-loss","swapId":1,"capturedVersions":[1,0,0],"loss":{"status":200,"bodyRead":false,"actualSocketDestroyed":true},"manualOriginalAck":true,"noDuplicateAudit":true,"audits":3,"bothCurrentResponsibilitiesRestored":true,"acceptedAndOriginalCommandsPreserved":true,"anonymous401":true,"nonManager403":true,"eachMissingVersion400":true,"staleVersion409":true},{"name":"persisted-original-ack-after-jvm-restart","sameOriginalReceipt":true,"audits":3,"noRevival":true},{"name":"one-independent-cancel-blocks-paired-command","httpStatus":409,"uncancelledCounterpartPreserved":true,"noRevocationOrNewAudit":true}],"jarSha256":"83cc8839c9b05e9717ee1f178e0a0010da782bcfeaef7b37f1e5f683b0203129","startedPids":[5169,5258],"stoppedPids":[5169,5258],"transport":"real HTTP to owned production JAR and H2 file database","tokensPersistedToEvidence":false,"userFileDatabaseModified":false,"ownedProcessesStopped":true,"unexpectedJarErrors":0,"evidenceDirectory":"target/oncall-swap-revocation-http-it/run-58GHf3"}
+2026-10-08T10:27:23.6681668Z ##[group]Run node --test scripts/tests/oncall-swap-revocation-ui-ci.test.cjs scripts/tests/oncall-ui-interception.test.cjs
+2026-10-08T10:27:23.6682639Z [36;1mnode --test scripts/tests/oncall-swap-revocation-ui-ci.test.cjs scripts/tests/oncall-ui-interception.test.cjs[0m
+2026-10-08T10:27:23.6683150Z [36;1mnode scripts/verify-oncall-swap-revocation-ui-ci.cjs[0m
+2026-10-08T10:27:23.6739780Z shell: /usr/bin/bash -e {0}
+2026-10-08T10:27:23.6740016Z env:
+2026-10-08T10:27:23.6740318Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:27:23.6740727Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:27:23.6741043Z   MAVEN_ARGS: -ntp
+2026-10-08T10:27:23.6741230Z ##[endgroup]
+2026-10-08T10:27:23.7198586Z TAP version 13
+2026-10-08T10:27:23.7502304Z # Subtest: own-source CI defaults to the full real paired revocation UI contract
+2026-10-08T10:27:23.7508713Z ok 1 - own-source CI defaults to the full real paired revocation UI contract
+2026-10-08T10:27:23.7509475Z   ---
+2026-10-08T10:27:23.7510032Z   duration_ms: 1.111985
+2026-10-08T10:27:23.7510624Z   type: 'test'
+2026-10-08T10:27:23.7511074Z   ...
+2026-10-08T10:27:23.7514506Z # Subtest: archived old UI may be compared only locally, never replace full CI acceptance
+2026-10-08T10:27:23.7538542Z ok 2 - archived old UI may be compared only locally, never replace full CI acceptance
+2026-10-08T10:27:23.7539526Z   ---
+2026-10-08T10:27:23.7539796Z   duration_ms: 0.762842
+2026-10-08T10:27:23.7540054Z   type: 'test'
+2026-10-08T10:27:23.7540260Z   ...
+2026-10-08T10:27:23.7540664Z # Subtest: paired interception changes retain every original full fourteen case identifier
+2026-10-08T10:27:23.7541237Z ok 3 - paired interception changes retain every original full fourteen case identifier
+2026-10-08T10:27:23.7541590Z   ---
+2026-10-08T10:27:23.7541796Z   duration_ms: 0.476363
+2026-10-08T10:27:23.7541997Z   type: 'test'
+2026-10-08T10:27:23.7542176Z   ...
+2026-10-08T10:27:23.7583461Z # Subtest: unforwarded abort stays registered through facts read and never forwards the command
+2026-10-08T10:27:23.7584516Z ok 4 - unforwarded abort stays registered through facts read and never forwards the command
+2026-10-08T10:27:23.7585105Z   ---
+2026-10-08T10:27:23.7585392Z   duration_ms: 1.665754
+2026-10-08T10:27:23.7585705Z   type: 'test'
+2026-10-08T10:27:23.7585976Z   ...
+2026-10-08T10:27:23.7586614Z # Subtest: committed response loss requires actual 200 before abort and removal after read
+2026-10-08T10:27:23.7588783Z ok 5 - committed response loss requires actual 200 before abort and removal after read
+2026-10-08T10:27:23.7589347Z   ---
+2026-10-08T10:27:23.7589622Z   duration_ms: 0.63432
+2026-10-08T10:27:23.7589935Z   type: 'test'
+2026-10-08T10:27:23.7590194Z   ...
+2026-10-08T10:27:23.7590788Z # Subtest: forwarding error cannot produce a passing receipt or a settled-read label
+2026-10-08T10:27:23.7591649Z ok 6 - forwarding error cannot produce a passing receipt or a settled-read label
+2026-10-08T10:27:23.7596576Z   ---
+2026-10-08T10:27:23.7596936Z   duration_ms: 0.8614
+2026-10-08T10:27:23.7597447Z   type: 'test'
+2026-10-08T10:27:23.7597815Z   ...
+2026-10-08T10:27:23.7598434Z # Subtest: missing interception is bounded and cannot remove a route as if the command completed
+2026-10-08T10:27:23.7599376Z ok 7 - missing interception is bounded and cannot remove a route as if the command completed
+2026-10-08T10:27:23.7599935Z   ---
+2026-10-08T10:27:23.7600212Z   duration_ms: 5.886803
+2026-10-08T10:27:23.7600550Z   type: 'test'
+2026-10-08T10:27:23.7600833Z   ...
+2026-10-08T10:27:23.7601569Z # Subtest: pair trace filters origin and path, never accesses command headers/body or stores query credentials
+2026-10-08T10:27:23.7602733Z ok 8 - pair trace filters origin and path, never accesses command headers/body or stores query credentials
+2026-10-08T10:27:23.7603396Z   ---
+2026-10-08T10:27:23.7603701Z   duration_ms: 0.645467
+2026-10-08T10:27:23.7604170Z   type: 'test'
+2026-10-08T10:27:23.7604503Z   ...
+2026-10-08T10:27:23.7605458Z # Subtest: bounded pair trace counts omissions without claiming a complete observation
+2026-10-08T10:27:23.7606299Z ok 9 - bounded pair trace counts omissions without claiming a complete observation
+2026-10-08T10:27:23.7606806Z   ---
+2026-10-08T10:27:23.7607055Z   duration_ms: 0.36054
+2026-10-08T10:27:23.7607515Z   type: 'test'
+2026-10-08T10:27:23.7607760Z   ...
+2026-10-08T10:27:23.7624914Z 1..9
+2026-10-08T10:27:23.7625202Z # tests 9
+2026-10-08T10:27:23.7625410Z # suites 0
+2026-10-08T10:27:23.7625694Z # pass 9
+2026-10-08T10:27:23.7629309Z # fail 0
+2026-10-08T10:27:23.7629685Z # cancelled 0
+2026-10-08T10:27:23.7630030Z # skipped 0
+2026-10-08T10:27:23.7630354Z # todo 0
+2026-10-08T10:27:23.7630709Z # duration_ms 55.727964
+2026-10-08T10:27:50.7691950Z {"status":"PASS","baselineCapture":false,"jarSha256":"83cc8839c9b05e9717ee1f178e0a0010da782bcfeaef7b37f1e5f683b0203129","cases":[{"name":"participants-and-auditor-read-without-manager-write-control","acceptedHistoryVisible":true},{"name":"storage-quota-before-first-post","posts":0},{"name":"real-committed-response-loss-reload-and-original-paired-ack","posts":2,"actualForwardedCommit200":true,"browserResponseAborted":true,"noAutomaticPost":true,"capturedVersions":[1,0,0],"sameOriginalCommand":true,"audits":3,"nonemptyThreeNotificationsUnchanged":true},{"name":"fresh-pair-read500-clears-facts-without-first-post","swapId":2,"posts":0,"oldFactsCleared":true,"noStorageFreeze":true},{"name":"actual-owned-sql-expiry-before-first-post","swapId":3,"posts":0,"noNewAudit":true},{"name":"actual-single-cancel409-persists-original-lock-after-reload","swapId":4,"noVersionRebase":true,"counterpartUnchanged":true},{"name":"foreign-detail-keeps-original-key-until-manual-original-ack","originalSwapId":5,"otherSwapId":6},{"name":"corrupt-cache-retained-until-explicit-local-discard","noServerRevocation":true},{"name":"actual-late200-after-detail-unmount-keeps-original-intent","actualLate200":true,"otherFactsPreserved":true},{"name":"actual-late200-after-real-spa-account-switch-protects-new-manager-intent","sameDocument":true,"actualLate200":true,"originalAndNewActorIntentsPreserved":true},{"name":"actual-late200-after-same-user-new-token-protects-replacement-intent","sameUserDifferentToken":true,"actualLate200":true,"noNewIntentCleared":true},{"name":"successful-receipt-storage-clear-failure-keeps-original-only","audits":3},{"name":"actual-independent-cancel-before-first-post-clears-new-eligibility","posts":0,"capturedVersionsNotRebased":true,"counterpartUnchanged":true},{"name":"actual-current-qualification403-persists-original-lock","swapId":12,"actualHttp403":true,"noCancellationOrNewAudit":true,"lockSurvivesRoleRestoration":true}],"screenshots":["entry-admin-desktop.png","accepted-desktop.png","accepted-mobile.png","entry-zhangwei-desktop.png","entry-auditor-desktop.png","original-ack-desktop.png","revoked-mobile.png","original-ack-mobile.png","revoked-receipt-mobile.png","revoked-receipt-desktop.png","expired-desktop.png","partial409-desktop.png","entry-lina-desktop.png"],"pageErrors":[],"consoleLogs":["Failed to load resource: net::ERR_FAILED","Failed to load resource: the server responded with a status of 500 (Internal Server Error)","Failed to load resource: net::ERR_FAILED","Failed to load resource: the server responded with a status of 409 ()","Failed to load resource: net::ERR_FAILED","Failed to load resource: net::ERR_FAILED","Failed to load resource: net::ERR_FAILED","Failed to load resource: net::ERR_FAILED","Failed to load resource: the server responded with a status of 403 ()"],"rejected":[{"status":500,"path":"/api/v1/on-call/swaps/2/coverage"},{"status":409,"path":"/api/v1/on-call/swaps/4/coverage/revoke"},{"status":403,"path":"/api/v1/on-call/swaps/12/coverage/revoke"}],"routeErrors":[],"browserPath":"Browser plugin not available; existing Playwright","viewports":["1440x1000","390x844"],"tokensPersistedToEvidence":false,"userFileDatabaseModified":false,"fixtureJdbcInvocations":[{"pid":5608,"exitCode":0,"changed":3,"swapId":3,"actualProduct":"H2"},{"pid":5671,"exitCode":0,"changed":1,"actorId":3,"mode":"DEMOTE","actualProduct":"H2"},{"pid":5694,"exitCode":0,"changed":1,"actorId":3,"mode":"RESTORE","actualProduct":"H2"}],"heldResponseReceipts":[{"swapId":7,"actualForwardedStatus":200,"posts":1,"responseHeldUntilExplicitRelease":true},{"swapId":8,"actualForwardedStatus":200,"posts":1,"responseHeldUntilExplicitRelease":true},{"swapId":9,"actualForwardedStatus":200,"posts":1,"responseHeldUntilExplicitRelease":true}],"visualBounds":[{"name":"accepted-desktop.png","left":297,"right":1391,"top":84.28125,"frameLeft":248,"viewport":1440,"documentWidth":1440},{"name":"accepted-mobile.png","left":28,"right":362,"top":83.5,"frameLeft":0,"viewport":390,"documentWidth":390},{"name":"original-ack-desktop.png","left":297,"right":1391,"top":84.28125,"frameLeft":248,"viewport":1440,"documentWidth":1440},{"name":"revoked-mobile.png","left":28,"right":362,"top":83.5,"frameLeft":0,"viewport":390,"documentWidth":390},{"name":"original-ack-mobile.png","left":28,"right":362,"top":83.703125,"frameLeft":0,"viewport":390,"documentWidth":390},{"name":"revoked-receipt-mobile.png","left":28,"right":362,"top":83.5,"frameLeft":0,"viewport":390,"documentWidth":390},{"name":"revoked-receipt-desktop.png","left":297,"right":1391,"top":84.28125,"frameLeft":248,"viewport":1440,"documentWidth":1440},{"name":"expired-desktop.png","left":297,"right":1391,"top":83.625,"frameLeft":248,"viewport":1440,"documentWidth":1440},{"name":"partial409-desktop.png","left":297,"right":1391,"top":83.796875,"frameLeft":248,"viewport":1440,"documentWidth":1440}],"abortedCommandReceipts":[{"swapId":1,"posts":1,"actualForwardedCommit200":true,"browserRequestAborted":true,"removedAfterReadSettled":true},{"swapId":4,"posts":1,"actualForwardedCommit200":false,"browserRequestAborted":true,"removedAfterReadSettled":true},{"swapId":5,"posts":1,"actualForwardedCommit200":false,"browserRequestAborted":true,"removedAfterReadSettled":true},{"swapId":6,"posts":1,"actualForwardedCommit200":false,"browserRequestAborted":true,"removedAfterReadSettled":true},{"swapId":6,"posts":1,"actualForwardedCommit200":false,"browserRequestAborted":true,"removedAfterReadSettled":true},{"swapId":12,"posts":1,"actualForwardedCommit200":false,"browserRequestAborted":true,"removedAfterReadSettled":true}],"networkTrace":[{"phase":"request","requestId":1,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":10625},{"phase":"response","requestId":1,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":10651,"status":200},{"phase":"finished","requestId":1,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":10651},{"phase":"request","requestId":2,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":12084},{"phase":"response","requestId":2,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":12098,"status":200},{"phase":"finished","requestId":2,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":12099},{"phase":"request","requestId":3,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":12838},{"phase":"response","requestId":3,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":12846,"status":200},{"phase":"finished","requestId":3,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":12847},{"phase":"request","requestId":4,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":13256},{"phase":"response","requestId":4,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":13267,"status":200},{"phase":"finished","requestId":4,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":13269},{"phase":"request","requestId":5,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":13328},{"phase":"response","requestId":5,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":13341,"status":200},{"phase":"finished","requestId":5,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":13343},{"phase":"request","requestId":6,"method":"POST","path":"/api/v1/on-call/swaps/1/coverage/revoke","elapsedMs":13345},{"phase":"committed-fetch-start","requestId":6,"method":"POST","path":"/api/v1/on-call/swaps/1/coverage/revoke","elapsedMs":13345},{"phase":"committed-fetch-end","requestId":6,"method":"POST","path":"/api/v1/on-call/swaps/1/coverage/revoke","elapsedMs":13392,"status":200},{"phase":"abort-complete","requestId":6,"method":"POST","path":"/api/v1/on-call/swaps/1/coverage/revoke","elapsedMs":13399},{"phase":"failed","requestId":6,"method":"POST","path":"/api/v1/on-call/swaps/1/coverage/revoke","elapsedMs":13400},{"phase":"request","requestId":7,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":13402},{"phase":"response","requestId":7,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":13418,"status":200},{"phase":"finished","requestId":7,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":13421},{"phase":"request","requestId":8,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":13978},{"phase":"response","requestId":8,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":13991,"status":200},{"phase":"finished","requestId":8,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":13991},{"phase":"request","requestId":9,"method":"POST","path":"/api/v1/on-call/swaps/1/coverage/revoke","elapsedMs":14592},{"phase":"response","requestId":9,"method":"POST","path":"/api/v1/on-call/swaps/1/coverage/revoke","elapsedMs":14607,"status":200},{"phase":"finished","requestId":9,"method":"POST","path":"/api/v1/on-call/swaps/1/coverage/revoke","elapsedMs":14608},{"phase":"request","requestId":10,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":14619},{"phase":"response","requestId":10,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":14630,"status":200},{"phase":"finished","requestId":10,"method":"GET","path":"/api/v1/on-call/swaps/1/coverage","elapsedMs":14630},{"phase":"request","requestId":11,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":15349},{"phase":"response","requestId":11,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":15353,"status":200},{"phase":"finished","requestId":11,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":15353},{"phase":"request","requestId":12,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":15519},{"phase":"response","requestId":12,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":15530,"status":500},{"phase":"finished","requestId":12,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":15534},{"phase":"request","requestId":13,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":15614},{"phase":"response","requestId":13,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":15627,"status":200},{"phase":"finished","requestId":13,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":15627},{"phase":"request","requestId":14,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":15729},{"phase":"response","requestId":14,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":15743,"status":200},{"phase":"finished","requestId":14,"method":"GET","path":"/api/v1/on-call/swaps/2/coverage","elapsedMs":15744},{"phase":"request","requestId":15,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":16034},{"phase":"response","requestId":15,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":16044,"status":200},{"phase":"finished","requestId":15,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":16045},{"phase":"request","requestId":16,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":16376},{"phase":"response","requestId":16,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":16391,"status":200},{"phase":"finished","requestId":16,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":16391},{"phase":"request","requestId":17,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":16616},{"phase":"response","requestId":17,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":16631,"status":200},{"phase":"finished","requestId":17,"method":"GET","path":"/api/v1/on-call/swaps/3/coverage","elapsedMs":16631},{"phase":"request","requestId":18,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":16880},{"phase":"response","requestId":18,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":16894,"status":200},{"phase":"finished","requestId":18,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":16894},{"phase":"request","requestId":19,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17030},{"phase":"response","requestId":19,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17049,"status":200},{"phase":"finished","requestId":19,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17049},{"phase":"request","requestId":20,"method":"POST","path":"/api/v1/on-call/swaps/4/coverage/revoke","elapsedMs":17050},{"phase":"unforwarded-abort-start","requestId":20,"method":"POST","path":"/api/v1/on-call/swaps/4/coverage/revoke","elapsedMs":17050},{"phase":"abort-complete","requestId":20,"method":"POST","path":"/api/v1/on-call/swaps/4/coverage/revoke","elapsedMs":17051},{"phase":"failed","requestId":20,"method":"POST","path":"/api/v1/on-call/swaps/4/coverage/revoke","elapsedMs":17053},{"phase":"request","requestId":21,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17053},{"phase":"response","requestId":21,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17079,"status":200},{"phase":"finished","requestId":21,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17083},{"phase":"request","requestId":22,"method":"POST","path":"/api/v1/on-call/swaps/4/coverage/revoke","elapsedMs":17147},{"phase":"response","requestId":22,"method":"POST","path":"/api/v1/on-call/swaps/4/coverage/revoke","elapsedMs":17164,"status":409},{"phase":"finished","requestId":22,"method":"POST","path":"/api/v1/on-call/swaps/4/coverage/revoke","elapsedMs":17164},{"phase":"request","requestId":23,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17164},{"phase":"response","requestId":23,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17168,"status":200},{"phase":"finished","requestId":23,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17169},{"phase":"request","requestId":24,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17493},{"phase":"response","requestId":24,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17498,"status":200},{"phase":"finished","requestId":24,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17498},{"phase":"request","requestId":25,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17732},{"phase":"response","requestId":25,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17740,"status":200},{"phase":"finished","requestId":25,"method":"GET","path":"/api/v1/on-call/swaps/4/coverage","elapsedMs":17740},{"phase":"request","requestId":26,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18007},{"phase":"response","requestId":26,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18020,"status":200},{"phase":"finished","requestId":26,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18021},{"phase":"request","requestId":27,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18162},{"phase":"response","requestId":27,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18174,"status":200},{"phase":"finished","requestId":27,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18175},{"phase":"request","requestId":28,"method":"POST","path":"/api/v1/on-call/swaps/5/coverage/revoke","elapsedMs":18177},{"phase":"unforwarded-abort-start","requestId":28,"method":"POST","path":"/api/v1/on-call/swaps/5/coverage/revoke","elapsedMs":18177},{"phase":"abort-complete","requestId":28,"method":"POST","path":"/api/v1/on-call/swaps/5/coverage/revoke","elapsedMs":18177},{"phase":"failed","requestId":28,"method":"POST","path":"/api/v1/on-call/swaps/5/coverage/revoke","elapsedMs":18180},{"phase":"request","requestId":29,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18180},{"phase":"response","requestId":29,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18185,"status":200},{"phase":"finished","requestId":29,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18185},{"phase":"request","requestId":30,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":18323},{"phase":"response","requestId":30,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":18338,"status":200},{"phase":"finished","requestId":30,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":18338},{"phase":"request","requestId":31,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18498},{"phase":"response","requestId":31,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18501,"status":200},{"phase":"finished","requestId":31,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18502},{"phase":"request","requestId":32,"method":"POST","path":"/api/v1/on-call/swaps/5/coverage/revoke","elapsedMs":18582},{"phase":"response","requestId":32,"method":"POST","path":"/api/v1/on-call/swaps/5/coverage/revoke","elapsedMs":18607,"status":200},{"phase":"finished","requestId":32,"method":"POST","path":"/api/v1/on-call/swaps/5/coverage/revoke","elapsedMs":18609},{"phase":"request","requestId":33,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18609},{"phase":"response","requestId":33,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18626,"status":200},{"phase":"finished","requestId":33,"method":"GET","path":"/api/v1/on-call/swaps/5/coverage","elapsedMs":18627},{"phase":"request","requestId":34,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":19028},{"phase":"response","requestId":34,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":19042,"status":200},{"phase":"finished","requestId":34,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":19042},{"phase":"request","requestId":35,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":19161},{"phase":"response","requestId":35,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":19175,"status":200},{"phase":"finished","requestId":35,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":19175},{"phase":"request","requestId":36,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":19397},{"phase":"response","requestId":36,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":19407,"status":200},{"phase":"finished","requestId":36,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":19408},{"phase":"request","requestId":37,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":19562},{"phase":"response","requestId":37,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":19577,"status":200},{"phase":"finished","requestId":37,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":19577},{"phase":"request","requestId":38,"method":"POST","path":"/api/v1/on-call/swaps/7/coverage/revoke","elapsedMs":19579},{"phase":"request","requestId":39,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":19731},{"phase":"response","requestId":39,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":19742,"status":200},{"phase":"finished","requestId":39,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":19742},{"phase":"response","requestId":38,"method":"POST","path":"/api/v1/on-call/swaps/7/coverage/revoke","elapsedMs":19769,"status":200},{"phase":"finished","requestId":38,"method":"POST","path":"/api/v1/on-call/swaps/7/coverage/revoke","elapsedMs":19769},{"phase":"request","requestId":40,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":19911},{"phase":"response","requestId":40,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":19913,"status":200},{"phase":"finished","requestId":40,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":19913},{"phase":"request","requestId":41,"method":"POST","path":"/api/v1/on-call/swaps/7/coverage/revoke","elapsedMs":19989},{"phase":"response","requestId":41,"method":"POST","path":"/api/v1/on-call/swaps/7/coverage/revoke","elapsedMs":20004,"status":200},{"phase":"finished","requestId":41,"method":"POST","path":"/api/v1/on-call/swaps/7/coverage/revoke","elapsedMs":20004},{"phase":"request","requestId":42,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":20015},{"phase":"response","requestId":42,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":20021,"status":200},{"phase":"finished","requestId":42,"method":"GET","path":"/api/v1/on-call/swaps/7/coverage","elapsedMs":20030},{"phase":"request","requestId":43,"method":"GET","path":"/api/v1/on-call/swaps/8/coverage","elapsedMs":20362},{"phase":"response","requestId":43,"method":"GET","path":"/api/v1/on-call/swaps/8/coverage","elapsedMs":20374,"status":200},{"phase":"finished","requestId":43,"method":"GET","path":"/api/v1/on-call/swaps/8/coverage","elapsedMs":20374},{"phase":"request","requestId":44,"method":"GET","path":"/api/v1/on-call/swaps/8/coverage","elapsedMs":20501},{"phase":"response","requestId":44,"method":"GET","path":"/api/v1/on-call/swaps/8/coverage","elapsedMs":20508,"status":200},{"phase":"finished","requestId":44,"method":"GET","path":"/api/v1/on-call/swaps/8/coverage","elapsedMs":20511},{"phase":"request","requestId":45,"method":"POST","path":"/api/v1/on-call/swaps/8/coverage/revoke","elapsedMs":20511},{"phase":"request","requestId":46,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":20948},{"phase":"response","requestId":46,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":20957,"status":200},{"phase":"finished","requestId":46,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":20957},{"phase":"request","requestId":47,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":21079},{"phase":"response","requestId":47,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":21093,"status":200},{"phase":"finished","requestId":47,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":21093},{"phase":"request","requestId":48,"method":"POST","path":"/api/v1/on-call/swaps/6/coverage/revoke","elapsedMs":21093},{"phase":"unforwarded-abort-start","requestId":48,"method":"POST","path":"/api/v1/on-call/swaps/6/coverage/revoke","elapsedMs":21093},{"phase":"abort-complete","requestId":48,"method":"POST","path":"/api/v1/on-call/swaps/6/coverage/revoke","elapsedMs":21094},{"phase":"failed","requestId":48,"method":"POST","path":"/api/v1/on-call/swaps/6/coverage/revoke","elapsedMs":21095},{"phase":"request","requestId":49,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":21095},{"phase":"response","requestId":49,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":21100,"status":200},{"phase":"finished","requestId":49,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":21100},{"phase":"response","requestId":45,"method":"POST","path":"/api/v1/on-call/swaps/8/coverage/revoke","elapsedMs":21112,"status":200},{"phase":"finished","requestId":45,"method":"POST","path":"/api/v1/on-call/swaps/8/coverage/revoke","elapsedMs":21113},{"phase":"request","requestId":50,"method":"GET","path":"/api/v1/on-call/swaps/8/coverage","elapsedMs":21470},{"phase":"response","requestId":50,"method":"GET","path":"/api/v1/on-call/swaps/8/coverage","elapsedMs":21487,"status":200},{"phase":"finished","requestId":50,"method":"GET","path":"/api/v1/on-call/swaps/8/coverage","elapsedMs":21487},{"phase":"request","requestId":51,"method":"POST","path":"/api/v1/on-call/swaps/8/coverage/revoke","elapsedMs":21577},{"phase":"response","requestId":51,"method":"POST","path":"/api/v1/on-call/swaps/8/coverage/revoke","elapsedMs":21592,"status":200},{"phase":"finished","requestId":51,"method":"POST","path":"/api/v1/on-call/swaps/8/coverage/revoke","elapsedMs":21592},{"phase":"request","requestId":52,"method":"GET","path":"/api/v1/on-call/swaps/8/coverage","elapsedMs":21595},{"phase":"response","requestId":52,"method":"GET","path":"/api/v1/on-call/swaps/8/coverage","elapsedMs":21608,"status":200},{"phase":"finished","requestId":52,"method":"GET","path":"/api/v1/on-call/swaps/8/coverage","elapsedMs":21611},{"phase":"request","requestId":53,"method":"GET","path":"/api/v1/on-call/swaps/9/coverage","elapsedMs":21840},{"phase":"response","requestId":53,"method":"GET","path":"/api/v1/on-call/swaps/9/coverage","elapsedMs":21845,"status":200},{"phase":"finished","requestId":53,"method":"GET","path":"/api/v1/on-call/swaps/9/coverage","elapsedMs":21846},{"phase":"request","requestId":54,"method":"GET","path":"/api/v1/on-call/swaps/9/coverage","elapsedMs":21945},{"phase":"response","requestId":54,"method":"GET","path":"/api/v1/on-call/swaps/9/coverage","elapsedMs":21962,"status":200},{"phase":"finished","requestId":54,"method":"GET","path":"/api/v1/on-call/swaps/9/coverage","elapsedMs":21963},{"phase":"request","requestId":55,"method":"POST","path":"/api/v1/on-call/swaps/9/coverage/revoke","elapsedMs":21963},{"phase":"request","requestId":56,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22378},{"phase":"response","requestId":56,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22395,"status":200},{"phase":"finished","requestId":56,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22395},{"phase":"request","requestId":57,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22478},{"phase":"response","requestId":57,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22492,"status":200},{"phase":"finished","requestId":57,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22493},{"phase":"request","requestId":58,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22767},{"phase":"response","requestId":58,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22774,"status":200},{"phase":"finished","requestId":58,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22774},{"phase":"request","requestId":59,"method":"POST","path":"/api/v1/on-call/swaps/6/coverage/revoke","elapsedMs":22776},{"phase":"unforwarded-abort-start","requestId":59,"method":"POST","path":"/api/v1/on-call/swaps/6/coverage/revoke","elapsedMs":22776},{"phase":"abort-complete","requestId":59,"method":"POST","path":"/api/v1/on-call/swaps/6/coverage/revoke","elapsedMs":22777},{"phase":"failed","requestId":59,"method":"POST","path":"/api/v1/on-call/swaps/6/coverage/revoke","elapsedMs":22777},{"phase":"request","requestId":60,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22778},{"phase":"response","requestId":60,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22782,"status":200},{"phase":"finished","requestId":60,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22782},{"phase":"response","requestId":55,"method":"POST","path":"/api/v1/on-call/swaps/9/coverage/revoke","elapsedMs":22799,"status":200},{"phase":"finished","requestId":55,"method":"POST","path":"/api/v1/on-call/swaps/9/coverage/revoke","elapsedMs":22799},{"phase":"request","requestId":61,"method":"POST","path":"/api/v1/on-call/swaps/6/coverage/revoke","elapsedMs":22842},{"phase":"response","requestId":61,"method":"POST","path":"/api/v1/on-call/swaps/6/coverage/revoke","elapsedMs":22860,"status":200},{"phase":"finished","requestId":61,"method":"POST","path":"/api/v1/on-call/swaps/6/coverage/revoke","elapsedMs":22860},{"phase":"request","requestId":62,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22866},{"phase":"response","requestId":62,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22876,"status":200},{"phase":"finished","requestId":62,"method":"GET","path":"/api/v1/on-call/swaps/6/coverage","elapsedMs":22878},{"phase":"request","requestId":63,"method":"GET","path":"/api/v1/on-call/swaps/10/coverage","elapsedMs":23108},{"phase":"response","requestId":63,"method":"GET","path":"/api/v1/on-call/swaps/10/coverage","elapsedMs":23130,"status":200},{"phase":"finished","requestId":63,"method":"GET","path":"/api/v1/on-call/swaps/10/coverage","elapsedMs":23131},{"phase":"request","requestId":64,"method":"GET","path":"/api/v1/on-call/swaps/10/coverage","elapsedMs":23246},{"phase":"response","requestId":64,"method":"GET","path":"/api/v1/on-call/swaps/10/coverage","elapsedMs":23260,"status":200},{"phase":"finished","requestId":64,"method":"GET","path":"/api/v1/on-call/swaps/10/coverage","elapsedMs":23260},{"phase":"request","requestId":65,"method":"POST","path":"/api/v1/on-call/swaps/10/coverage/revoke","elapsedMs":23262},{"phase":"response","requestId":65,"method":"POST","path":"/api/v1/on-call/swaps/10/coverage/revoke","elapsedMs":23276,"status":200},{"phase":"finished","requestId":65,"method":"POST","path":"/api/v1/on-call/swaps/10/coverage/revoke","elapsedMs":23279},{"phase":"request","requestId":66,"method":"GET","path":"/api/v1/on-call/swaps/10/coverage","elapsedMs":23281},{"phase":"response","requestId":66,"method":"GET","path":"/api/v1/on-call/swaps/10/coverage","elapsedMs":23295,"status":200},{"phase":"finished","requestId":66,"method":"GET","path":"/api/v1/on-call/swaps/10/coverage","elapsedMs":23295},{"phase":"request","requestId":67,"method":"POST","path":"/api/v1/on-call/swaps/10/coverage/revoke","elapsedMs":23368},{"phase":"response","requestId":67,"method":"POST","path":"/api/v1/on-call/swaps/10/coverage/revoke","elapsedMs":23384,"status":200},{"phase":"finished","requestId":67,"method":"POST","path":"/api/v1/on-call/swaps/10/coverage/revoke","elapsedMs":23384},{"phase":"request","requestId":68,"method":"GET","path":"/api/v1/on-call/swaps/10/coverage","elapsedMs":23387},{"phase":"response","requestId":68,"method":"GET","path":"/api/v1/on-call/swaps/10/coverage","elapsedMs":23400,"status":200},{"phase":"finished","requestId":68,"method":"GET","path":"/api/v1/on-call/swaps/10/coverage","elapsedMs":23401},{"phase":"request","requestId":69,"method":"GET","path":"/api/v1/on-call/swaps/11/coverage","elapsedMs":23735},{"phase":"response","requestId":69,"method":"GET","path":"/api/v1/on-call/swaps/11/coverage","elapsedMs":23751,"status":200},{"phase":"finished","requestId":69,"method":"GET","path":"/api/v1/on-call/swaps/11/coverage","elapsedMs":23755},{"phase":"request","requestId":70,"method":"GET","path":"/api/v1/on-call/swaps/11/coverage","elapsedMs":23896},{"phase":"response","requestId":70,"method":"GET","path":"/api/v1/on-call/swaps/11/coverage","elapsedMs":23911,"status":200},{"phase":"finished","requestId":70,"method":"GET","path":"/api/v1/on-call/swaps/11/coverage","elapsedMs":23911},{"phase":"request","requestId":71,"method":"GET","path":"/api/v1/on-call/swaps/11/coverage","elapsedMs":24012},{"phase":"response","requestId":71,"method":"GET","path":"/api/v1/on-call/swaps/11/coverage","elapsedMs":24027,"status":200},{"phase":"finished","requestId":71,"method":"GET","path":"/api/v1/on-call/swaps/11/coverage","elapsedMs":24027},{"phase":"request","requestId":72,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":24748},{"phase":"response","requestId":72,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":24759,"status":200},{"phase":"finished","requestId":72,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":24760},{"phase":"request","requestId":73,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":24896},{"phase":"response","requestId":73,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":24912,"status":200},{"phase":"finished","requestId":73,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":24912},{"phase":"request","requestId":74,"method":"POST","path":"/api/v1/on-call/swaps/12/coverage/revoke","elapsedMs":24913},{"phase":"unforwarded-abort-start","requestId":74,"method":"POST","path":"/api/v1/on-call/swaps/12/coverage/revoke","elapsedMs":24913},{"phase":"abort-complete","requestId":74,"method":"POST","path":"/api/v1/on-call/swaps/12/coverage/revoke","elapsedMs":24914},{"phase":"failed","requestId":74,"method":"POST","path":"/api/v1/on-call/swaps/12/coverage/revoke","elapsedMs":24915},{"phase":"request","requestId":75,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":24915},{"phase":"response","requestId":75,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":24920,"status":200},{"phase":"finished","requestId":75,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":24928},{"phase":"request","requestId":76,"method":"POST","path":"/api/v1/on-call/swaps/12/coverage/revoke","elapsedMs":25146},{"phase":"response","requestId":76,"method":"POST","path":"/api/v1/on-call/swaps/12/coverage/revoke","elapsedMs":25158,"status":403},{"phase":"finished","requestId":76,"method":"POST","path":"/api/v1/on-call/swaps/12/coverage/revoke","elapsedMs":25158},{"phase":"request","requestId":77,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":25160},{"phase":"response","requestId":77,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":25163,"status":200},{"phase":"finished","requestId":77,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":25164},{"phase":"request","requestId":78,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":25510},{"phase":"response","requestId":78,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":25512,"status":200},{"phase":"finished","requestId":78,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":25514},{"phase":"request","requestId":79,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":26028},{"phase":"response","requestId":79,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":26039,"status":200},{"phase":"finished","requestId":79,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":26041},{"phase":"request","requestId":80,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":26148},{"phase":"response","requestId":80,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":26163,"status":200},{"phase":"finished","requestId":80,"method":"GET","path":"/api/v1/on-call/swaps/12/coverage","elapsedMs":26163}],"productionJvmPid":5434,"browser":"153.0.8010.12","pageIdentity":true,"noBlank":true,"noOverlay":true,"mobileDocumentWidth":390,"networkTraceOmitted":0,"ownedProcessStopped":true,"unexpectedJarErrors":0,"evidenceDirectory":"target/oncall-swap-revocation-ui-it/run-2S3JRb"}
+2026-10-08T10:27:50.7798248Z ##[group]Run node --test scripts/tests/oncall-open-handoff-ui-ci.test.cjs
+2026-10-08T10:27:50.7798701Z [36;1mnode --test scripts/tests/oncall-open-handoff-ui-ci.test.cjs[0m
+2026-10-08T10:27:50.7799063Z [36;1mnode scripts/verify-oncall-open-handoff-ui-ci.cjs[0m
+2026-10-08T10:27:50.7854440Z shell: /usr/bin/bash -e {0}
+2026-10-08T10:27:50.7854663Z env:
+2026-10-08T10:27:50.7854926Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:27:50.7855325Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:27:50.7855663Z   MAVEN_ARGS: -ntp
+2026-10-08T10:27:50.7855842Z ##[endgroup]
+2026-10-08T10:27:50.8244544Z TAP version 13
+2026-10-08T10:27:50.8559186Z # Subtest: own-source CI defaults to complete dedicated open handoff UI contract
+2026-10-08T10:27:50.8565648Z ok 1 - own-source CI defaults to complete dedicated open handoff UI contract
+2026-10-08T10:27:50.8566321Z   ---
+2026-10-08T10:27:50.8566944Z   duration_ms: 0.979106
+2026-10-08T10:27:50.8567585Z   type: 'test'
+2026-10-08T10:27:50.8572111Z   ...
+2026-10-08T10:27:50.8572800Z # Subtest: archived UI comparison cannot replace own-source CI acceptance
+2026-10-08T10:27:50.8573709Z ok 2 - archived UI comparison cannot replace own-source CI acceptance
+2026-10-08T10:27:50.8574292Z   ---
+2026-10-08T10:27:50.8574831Z   duration_ms: 0.674019
+2026-10-08T10:27:50.8575160Z   type: 'test'
+2026-10-08T10:27:50.8575434Z   ...
+2026-10-08T10:27:50.8576135Z # Subtest: all original sixteen flows retain exact identities before additive role and storage checks
+2026-10-08T10:27:50.8577496Z ok 3 - all original sixteen flows retain exact identities before additive role and storage checks
+2026-10-08T10:27:50.8578226Z   ---
+2026-10-08T10:27:50.8578535Z   duration_ms: 0.691875
+2026-10-08T10:27:50.8578921Z   type: 'test'
+2026-10-08T10:27:50.8579203Z   ...
+2026-10-08T10:27:50.8580756Z # Subtest: current database role revocation restoration and every new storage/read flow are mandatory
+2026-10-08T10:27:50.8581997Z ok 4 - current database role revocation restoration and every new storage/read flow are mandatory
+2026-10-08T10:27:50.8582727Z   ---
+2026-10-08T10:27:50.8583036Z   duration_ms: 0.102523
+2026-10-08T10:27:50.8583433Z   type: 'test'
+2026-10-08T10:27:50.8583767Z   ...
+2026-10-08T10:27:50.8642430Z 1..4
+2026-10-08T10:27:50.8643053Z # tests 4
+2026-10-08T10:27:50.8643312Z # suites 0
+2026-10-08T10:27:50.8643654Z # pass 4
+2026-10-08T10:27:50.8643980Z # fail 0
+2026-10-08T10:27:50.8644309Z # cancelled 0
+2026-10-08T10:27:50.8644704Z # skipped 0
+2026-10-08T10:27:50.8645034Z # todo 0
+2026-10-08T10:27:50.8645404Z # duration_ms 48.839578
+2026-10-08T10:28:01.6035635Z {"status":"FAIL","cases":0,"evidenceDirectory":"target/oncall-open-handoff-ui-it/run-OVeg1Y","failure":"locator.fill: Error: Malformed value\nCall log:\n  - waiting for getByLabel('开放时段开始', { exact: true })\n    - locator resolved to <input step=\"1\" required=\"\" data-v-78f29aaa=\"\" type=\"datetime-local\"/>\n    - fill(\"2026-10-10T11:28:00\")\n  - attempting fill action\n    - waiting for element to be visible, enabled and editable\n\n    at verify (/home/runner/work/OnCall-Agent/OnCall-Agent/scripts/verify-oncall-open-handoff-ui-ci.cjs:73:176)"}
+2026-10-08T10:28:01.6037508Z locator.fill: Error: Malformed value
+2026-10-08T10:28:01.6037763Z Call log:
+2026-10-08T10:28:01.6038090Z   - waiting for getByLabel('开放时段开始', { exact: true })
+2026-10-08T10:28:01.6038539Z     - locator resolved to <input step="1" required="" data-v-78f29aaa="" type="datetime-local"/>
+2026-10-08T10:28:01.6038944Z     - fill("2026-10-10T11:28:00")
+2026-10-08T10:28:01.6039183Z   - attempting fill action
+2026-10-08T10:28:01.6039484Z     - waiting for element to be visible, enabled and editable
+2026-10-08T10:28:01.6039974Z 
+2026-10-08T10:28:01.6040326Z     at verify (/home/runner/work/OnCall-Agent/OnCall-Agent/scripts/verify-oncall-open-handoff-ui-ci.cjs:73:176)
+2026-10-08T10:28:01.6160730Z ##[error]Process completed with exit code 1.
+2026-10-08T10:28:01.6217220Z ##[group]Run actions/upload-artifact@v5
+2026-10-08T10:28:01.6217706Z with:
+2026-10-08T10:28:01.6217900Z   name: oncall-browser-evidence
+2026-10-08T10:28:01.6219923Z   path: target/oncall-browser-it/
+target/assistant-request-ui-it/**/*.json
+target/assistant-request-ui-it/**/*.log
+target/assistant-request-ui-it/**/*.png
+target/assistant-native-ui-it/**/*.json
+target/assistant-native-ui-it/**/*.log
+target/assistant-native-ui-it/**/*.png
+target/oncall-swap-notification-it/**/*.json
+target/oncall-swap-notification-it/**/*.log
+target/oncall-swap-notification-it/**/*.png
+target/oncall-swap-revocation-http-it/**/*.json
+target/oncall-swap-revocation-http-it/**/*.log
+target/oncall-swap-revocation-ui-it/**/*.json
+target/oncall-swap-revocation-ui-it/**/*.log
+target/oncall-swap-revocation-ui-it/**/*.png
+target/oncall-open-handoff-ui-it/**/*.json
+target/oncall-open-handoff-ui-it/**/*.log
+target/oncall-open-handoff-ui-it/**/*.png
+
+2026-10-08T10:28:01.6221963Z   retention-days: 30
+2026-10-08T10:28:01.6222186Z   if-no-files-found: warn
+2026-10-08T10:28:01.6222395Z   compression-level: 6
+2026-10-08T10:28:01.6222586Z   overwrite: false
+2026-10-08T10:28:01.6222784Z   include-hidden-files: false
+2026-10-08T10:28:01.6222986Z env:
+2026-10-08T10:28:01.6223242Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:28:01.6223639Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T10:28:01.6223943Z   MAVEN_ARGS: -ntp
+2026-10-08T10:28:01.6224128Z ##[endgroup]
+2026-10-08T10:28:01.7555499Z (node:5903) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-08T10:28:01.7556178Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-08T10:28:01.7969505Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-08T10:28:01.7973057Z The least common ancestor is /home/runner/work/OnCall-Agent/OnCall-Agent/target. This will be the root directory of the artifact
+2026-10-08T10:28:01.7974081Z With the provided path, there will be 156 files uploaded
+2026-10-08T10:28:01.7974980Z Artifact name is valid!
+2026-10-08T10:28:01.7975779Z Root directory input is valid!
+2026-10-08T10:28:02.1332393Z Beginning upload of artifact content to blob storage
+2026-10-08T10:28:02.4248844Z (node:5903) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-08T10:28:03.1086935Z Uploaded bytes 8388608
+2026-10-08T10:28:03.2701615Z Uploaded bytes 12736358
+2026-10-08T10:28:03.3263600Z Finished uploading artifact content to blob storage!
+2026-10-08T10:28:03.3264413Z SHA256 digest of uploaded artifact zip is 0c7a055bd99efc43df333fa3c0072bb31298c172cb152c4fc84409d20e4971b2
+2026-10-08T10:28:03.3266093Z Finalizing artifact upload
+2026-10-08T10:28:03.6009148Z Artifact oncall-browser-evidence.zip successfully finalized. Artifact ID 11542979112
+2026-10-08T10:28:03.6010311Z Artifact oncall-browser-evidence has been successfully uploaded! Final size is 12736358 bytes. Artifact ID is 11542979112
+2026-10-08T10:28:03.6015007Z Artifact download URL: https://github.com/Trigger726/OnCall-Agent/actions/runs/37763070343/artifacts/11542979112
+2026-10-08T10:28:03.6197787Z Post job cleanup.
+2026-10-08T10:28:03.7362137Z Post job cleanup.
+2026-10-08T10:28:03.8074042Z [command]/usr/bin/git version
+2026-10-08T10:28:03.8107963Z git version 2.55.0
+2026-10-08T10:28:03.8139262Z Temporarily overriding HOME='/home/runner/work/_temp/24c31e5d-3269-4366-bb43-9fb2702c42aa' before making global git config changes
+2026-10-08T10:28:03.8140576Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-08T10:28:03.8143294Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-08T10:28:03.8173804Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-08T10:28:03.8200235Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-08T10:28:03.8404792Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-08T10:28:03.8436709Z http.https://github.com/.extraheader
+2026-10-08T10:28:03.8439579Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-08T10:28:03.8480396Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-08T10:28:03.8684417Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-08T10:28:03.8715756Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-08T10:28:03.9050687Z Cleaning up orphan processes
+2026-10-08T10:28:03.9326688Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/upload-artifact@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -1,0 +1,56 @@
+{
+  "status": "FAIL",
+  "baselineCapture": false,
+  "url": "http://127.0.0.1:9945/assistant",
+  "browserReason": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "jarSha256": "e7d89886f32cc759d5667b841db79b78e3070bb884fcc00630f97ae6950212cc",
+  "fixture": "owned production HTTP adapter and real browser controls, not model quality",
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "cases": [
+    {
+      "name": "explicit-running-cancel",
+      "originalKeyUsed": true,
+      "serverState": "CANCELLED",
+      "lateAnswers": 0,
+      "actualWorkerSettledByFreshAnswer": true
+    },
+    {
+      "name": "lost-completed-response-refresh-query",
+      "actualCompletedResponseLost": true,
+      "originalAnswerIdPreserved": true,
+      "streamPostsIncludingRecovery": 1,
+      "modelCallsIncludingRecovery": 1
+    },
+    {
+      "name": "lost-cancel-response",
+      "backendCancelResponseActuallyLost": true,
+      "noFalseCancelledBeforeQuery": true,
+      "queriedServerState": "CANCELLED",
+      "cancelAuditRows": 1,
+      "lateAnswers": 0
+    }
+  ],
+  "screenshots": [
+    "waiting-desktop.png",
+    "cancelled-desktop.png",
+    "cancelled-mobile.png",
+    "recovery-desktop.png",
+    "recovered-completed-desktop.png"
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+  ],
+  "startedPid": 37536,
+  "failure": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('结果待确认', { exact: true }) to be visible\u001b[22m\n",
+  "ownedProcessStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}

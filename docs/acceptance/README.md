@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+最新 CP101：[报告](V1.7-checkpoint-101.md)/[63项本地proof](../assets/v1.7-cp101/local-proof.json)。开放接班33、前端174/Node148、原14/成对14/通知12/助手8与audit0通过；原生助手预览回归FAIL，新源码自己的远端待验。CP100自己的17success/2failure/1skipped已追加[首次远端证据](../assets/v1.7-cp100/first-remote-proof.json)，原失败/旧Demo完整保留，整体active。
+
 最新 CP100：[报告](V1.7-checkpoint-100.md)/[本地proof](../assets/v1.7-cp100/local-proof.json)，原16+新8完整24实页、前端167/Node146；实际403/恢复角色锁定和新增存储/读取故障成立，两次首失败与旧Demo保留。生产页面未改，自己Linux24与余下完整矩阵待。CP99自己20CI success，其中Linux16/原回归/MySQL24/前端167由[69记录远端proof](../assets/v1.7-cp99/remote-proof.json)限定核验，见[99追加](V1.7-checkpoint-99.md#6-自己源码的-linux-页面与-mysql-限定闭合)。完整目标active，下方历史待验按各时点阅读。
 
 最新 CP99：[专用页面/新旧Demo](V1.7-checkpoint-99.md)/[本地proof](../assets/v1.7-cp99/local-proof.json)，16真实页面、前端167/Node145/build/audit0限定通过，原回归/旧Demo/首次标签失败保留。自己的远端、资格403和完整矩阵待。CP98自身[Run37215889027](https://github.com/Trigger726/OnCall-Agent/actions/runs/37215889027)20success，新增Linux HTTP8与SQL/日志经[46记录proof](../assets/v1.7-cp98/http-remote-proof.json)独立核验，其他19工件未逐一重放，见[98追加](V1.7-checkpoint-98.md#6-自己源码的linux-http限定闭合)。以下按历史范围阅读，整体active。

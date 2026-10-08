@@ -272,7 +272,14 @@ async function verify() {
     result.providerTransportCalls = calls;
     result.streamResponseStatuses = responseEvidence;
     result.status = baseline ? 'BASELINE_CAPTURED' : 'PASS';
-  } catch (error) { result.status = 'FAIL'; result.failure = redact(error.message); throw error; }
+  } catch (error) {
+    result.status = 'FAIL'; result.failure = redact(error.message);
+    for(const page of browser?.contexts().flatMap(context=>context.pages())??[])try{
+      result.failurePageText=redact(await page.locator('body').innerText());
+      await page.screenshot({path:path.join(evidence,'failure.png')});
+    }catch(diagnostic){result.failureDiagnosticError=redact(diagnostic.message)}
+    throw error;
+  }
   finally {
     process.off('SIGINT', interrupt); process.off('SIGTERM', interrupt); release();
     try {

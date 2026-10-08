@@ -12,6 +12,8 @@ const roster=()=>({databaseNow:facts().databaseNow,shifts:[source()],schedules:[
 const publish=()=>({schema:1,actorId:2,blocked:false,action:'PUBLISH',source:source(),command:{sourceShiftId:10,sourceVersion:0,requestKey:uuid,startsAt:row().startsAt,endsAt:row().endsAt,reason:'原发布'}})
 const claim=()=>({schema:1,actorId:3,blocked:false,action:'CLAIM',row:row(),command:{version:0,operationKey:uuid,reason:'本人接班'}})
 const withdraw=()=>({...claim(),actorId:2,action:'WITHDRAW'})
+const closed=(i=claim())=>{const f=facts(),at='2026-10-05T12:00:00';Object.assign(f.request,{status:i.action==='CLAIM'?'CLAIMED':'WITHDRAWN',version:i.command.version+1,closedAt:at,claimedBy:i.action==='CLAIM'?i.actorId:null,replacementShiftId:i.action==='CLAIM'?11:null});
+  f.operation={handoffId:7,actorId:i.actorId,operation:i.action,operationKey:uuid,capturedVersion:i.command.version,reason:i.command.reason,committedAt:at};if(i.action==='CLAIM')f.replacement={id:11,scheduleId:1,userId:i.actorId,version:0,startsAt:at,endsAt:f.request.endsAt,cancelledAt:null,cancellationReason:null};return f}
 const storage=()=>{const data=new Map();return {getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v),removeItem:k=>data.delete(k),data}}
 beforeEach(()=>{mock.restoreAll();globalThis.localStorage={getItem:()=> 'unit-public-token'};globalThis.window=new EventTarget()})
 test('publication is owned ordinary live source for all three operational roles, never manager impersonation',()=>{
@@ -90,13 +92,35 @@ test('publish sends only exact original command and requires its own matching re
   const calls=[],p=publish();mock.method(globalThis,'fetch',async(url,init)=>{calls.push({url,init});return new Response(JSON.stringify({success:true,data:row()}),{status:200})});await open.submitOpenIntent(p);assert.equal(calls[0].url,'/api/v1/on-call/open-handoffs');assert.deepEqual(JSON.parse(calls[0].init.body),p.command)
 })
 test('claim and withdrawal send original keys/version, never targetUserId or new identity',async()=>{
-  for(const i of [claim(),withdraw()]){const f=facts();f.request.status=i.action==='CLAIM'?'CLAIMED':'WITHDRAWN';f.operation={handoffId:7,actorId:i.actorId,operation:i.action,operationKey:uuid,capturedVersion:0,reason:i.command.reason};let call
+  for(const i of [claim(),withdraw()]){const f=closed(i);let call
     mock.method(globalThis,'fetch',async(url,init)=>{call={url,init};return new Response(JSON.stringify({success:true,data:f}),{status:200})});await open.submitOpenIntent(i);assert.equal(call.url,`/api/v1/on-call/open-handoffs/7/${i.action==='CLAIM'?'claims':'withdrawals'}`);assert.deepEqual(JSON.parse(call.init.body),i.command);mock.restoreAll()}
 })
 test('foreign actor key version kind or reason in POST receipt cannot clear original intent',async()=>{
-  for(const change of [f=>f.request.id=99,f=>f.operation.actorId=2,f=>f.operation.operationKey='foreign',f=>f.operation.operation='WITHDRAW',f=>f.operation.capturedVersion=1,f=>f.operation.reason='changed']){const f=facts();f.request.status='CLAIMED';f.operation={handoffId:7,actorId:3,operation:'CLAIM',operationKey:uuid,capturedVersion:0,reason:claim().command.reason};change(f);mock.method(globalThis,'fetch',async()=>new Response(JSON.stringify({success:true,data:f}),{status:200}));await assert.rejects(()=>open.submitOpenIntent(claim()),/不符/);mock.restoreAll()}
+  for(const change of [f=>f.request.id=99,f=>f.operation.actorId=2,f=>f.operation.operationKey='foreign',f=>f.operation.operation='WITHDRAW',f=>f.operation.capturedVersion=1,f=>f.operation.reason='changed']){const f=closed();change(f);mock.method(globalThis,'fetch',async()=>new Response(JSON.stringify({success:true,data:f}),{status:200}));await assert.rejects(()=>open.submitOpenIntent(claim()),/不符/);mock.restoreAll()}
 })
 test('HTTP409 and transport loss are single calls, with no implicit retry',async()=>{
   let count=0;mock.method(globalThis,'fetch',async()=>{count++;return new Response(JSON.stringify({success:false,error:{code:'CONFLICT',message:'已变化'}}),{status:409})});await assert.rejects(()=>open.submitOpenIntent(claim()),e=>e.status===409);assert.equal(count,1);mock.restoreAll()
   count=0;mock.method(globalThis,'fetch',async()=>{count++;throw new TypeError('lost response')});await assert.rejects(()=>open.submitOpenIntent(claim()),/lost/);assert.equal(count,1)
+})
+test('silent removal and failed clear readback do not claim original intent was removed',()=>{
+  const s=storage(),c=claim();open.saveOpenIntent(s,c);const original=s.getItem('opspilot_open_handoff_intent:v1:3');s.removeItem=()=>{};assert.throws(()=>open.clearOpenIntent(s,3),/未可靠清除/);assert.equal(s.getItem('opspilot_open_handoff_intent:v1:3'),original)
+  assert.throws(()=>open.clearOpenIntent({removeItem:()=>{},getItem:()=>{throw Error('readback denied')}},3),/readback denied/)
+})
+test('successful clear verifies null for exactly this actor and leaves another actor untouched',()=>{
+  const s=storage();open.saveOpenIntent(s,claim());open.saveOpenIntent(s,publish());open.clearOpenIntent(s,3);assert.equal(s.getItem('opspilot_open_handoff_intent:v1:3'),null);assert.deepEqual(open.readOpenIntent(s,2),publish())
+})
+test('history response rejects contradictory request operation replacement relationships',async()=>{
+  for(const change of [f=>f.request.status='OPEN',f=>f.request.version=0,f=>f.request.claimedBy=1,f=>f.request.replacementShiftId=99,f=>f.request.closedAt=null,f=>f.operation=null,f=>f.operation.handoffId=99,f=>f.operation.committedAt='invalid',f=>f.operation.committedAt='2026-10-05T12:00:01',f=>f.operation.capturedVersion=1,f=>f.replacement=null,f=>f.replacement.scheduleId=2,f=>f.replacement.userId=1,f=>f.replacement.startsAt=f.replacement.endsAt,f=>f.replacement.endsAt='2026-10-05T14:00:00',f=>f.replacement.cancelledAt='invalid',f=>f.replacement.cancellationReason='no timestamp']){const f=closed();change(f);mock.method(globalThis,'fetch',async()=>new Response(JSON.stringify({success:true,data:f}),{status:200}));await assert.rejects(()=>open.getOpenCoverage(7),/异常/);mock.restoreAll()}
+})
+test('POST receipt preserves all immutable captured request fields before clearing original intent',async()=>{
+  for(const change of [f=>f.request.scheduleId=2,f=>f.request.sourceShiftId=99,f=>f.request.sourceVersion=1,f=>f.request.requesterId=1,f=>f.request.requestKey='11111111-1111-4111-8111-111111111111',f=>f.request.startsAt='2026-10-05T10:30:00',f=>f.request.endsAt='2026-10-05T13:30:00',f=>f.request.reason='changed publication',f=>f.request.createdAt='2026-10-04T11:00:00',f=>f.request.version=0,f=>f.replacement.userId=1]){const f=closed();change(f);mock.method(globalThis,'fetch',async()=>new Response(JSON.stringify({success:true,data:f}),{status:200}));await assert.rejects(()=>open.submitOpenIntent(claim()),/不符/);mock.restoreAll()}
+})
+test('real cancelled ended claim receipt remains valid without inventing current responsibility',async()=>{
+  const f=closed();f.databaseNow='2026-10-06T10:00:00';Object.assign(f.replacement,{version:1,cancelledAt:'2026-10-05T12:30:00',cancellationReason:'independent cancel'});mock.method(globalThis,'fetch',async()=>new Response(JSON.stringify({success:true,data:f}),{status:200}));assert.deepEqual((await open.submitOpenIntent(claim())).coverage,f);assert.deepEqual(await open.getOpenCoverage(7),f)
+})
+test('withdrawal cannot acknowledge a claim coverage or another actor operation',async()=>{
+  for(const change of [f=>f.replacement=closed().replacement,f=>f.request.claimedBy=3,f=>f.request.replacementShiftId=11,f=>f.operation.actorId=3]){const f=closed(withdraw());change(f);mock.method(globalThis,'fetch',async()=>new Response(JSON.stringify({success:true,data:f}),{status:200}));await assert.rejects(()=>open.submitOpenIntent(withdraw()),/不符/);mock.restoreAll()}
+})
+test('publication original receipt may already be closed but cannot move to another schedule',async()=>{
+  const f=closed().request;mock.method(globalThis,'fetch',async()=>new Response(JSON.stringify({success:true,data:f}),{status:200}));assert.equal((await open.submitOpenIntent(publish())).row.status,'CLAIMED');f.scheduleId=2;await assert.rejects(()=>open.submitOpenIntent(publish()),/不符/)
 })

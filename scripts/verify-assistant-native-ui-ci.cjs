@@ -271,7 +271,14 @@ async function verify() {
     result.providerRequests = [...controls.values()].map(({ question, calls, native, incremental, transportClosed }) => ({ question, calls, native, incremental, transportClosed }));
     result.streamPosts = posts.length; result.explicitCancelPosts = cancellations.length;
     result.status = baseline ? 'BASELINE_CAPTURED' : 'PASS';
-  } catch (error) { result.status = 'FAIL'; result.failure = redact(error.message); result.failureStack = redact(error.stack ?? ''); throw error; }
+  } catch (error) {
+    result.status = 'FAIL'; result.failure = redact(error.message); result.failureStack = redact(error.stack ?? '');
+    for(const page of browser?.contexts().flatMap(context=>context.pages())??[])try{
+      result.failurePageText=redact(await page.locator('body').innerText());
+      await page.screenshot({path:path.join(evidence,'failure.png')});
+    }catch(diagnostic){result.failureDiagnosticError=redact(diagnostic.message)}
+    throw error;
+  }
   finally {
     result.fixtureHeldStreams = heldStreams.map(({ sessionId, responseStatus, body, ended }) => ({ sessionId, responseStatus, ended,
       cancelledEvent: body.includes('event:cancelled'), doneEvent: body.includes('event:done'), observedBytes: Buffer.byteLength(body) }));

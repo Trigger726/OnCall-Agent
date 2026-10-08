@@ -1,0 +1,113 @@
+✔ publication is owned ordinary live source for all three operational roles, never manager impersonation (1.2465ms)
+✔ strict naive time accepts minute inputs and whole seconds, rejects invalid dates and fractional commands (0.2185ms)
+✔ claimants must be themselves and cannot self-claim; readers cannot write (0.2788ms)
+✔ ongoing request allows remaining claim, exact DB end rejects new claim but owner withdrawal remains (0.3596ms)
+✔ closed unknown or inconsistent receipt facts do not offer a new operation (0.4063ms)
+✔ all command versions explicit integers, lower UUID, bounded reason and original identity mandatory (0.6674ms)
+✔ publication subwindow must stay within captured source and retain canonical seconds (0.5312ms)
+✔ preflight reads exact source version, owner and active plan/users; no silent rebase (0.609ms)
+✔ latest coverage ID/version or deadline changes block a first claim without rebasing (0.2342ms)
+✔ remaining-window conflicts reject while an earlier ended override does not (0.2542ms)
+✔ owner withdrawal needs request but not ongoing source/active schedule (0.1105ms)
+✔ original per actor intent roundtrips with blocked flag and no network/retry (0.8583ms)
+✔ corrupt foreign empty or structurally invalid saved intent retained and rejected (0.3735ms)
+✔ quota read denial silent no-op save and removal errors propagate without POST (0.4001ms)
+✔ list/coverage/roster actual API paths retain SQL filters and captured naive interval (16.25ms)
+✔ foreign or invalid coverage response rejects and cannot masquerade as selected request (0.8185ms)
+✔ publish sends only exact original command and requires its own matching receipt (0.4181ms)
+✔ claim and withdrawal send original keys/version, never targetUserId or new identity (0.6292ms)
+✔ foreign actor key version kind or reason in POST receipt cannot clear original intent (1.6827ms)
+✔ HTTP409 and transport loss are single calls, with no implicit retry (0.3696ms)
+✖ silent removal and failed clear readback do not claim original intent was removed (0.515ms)
+✔ successful clear verifies null for exactly this actor and leaves another actor untouched (0.1653ms)
+✖ history response rejects contradictory request operation replacement relationships (0.3703ms)
+✖ POST receipt preserves all immutable captured request fields before clearing original intent (0.3558ms)
+✔ real cancelled ended claim receipt remains valid without inventing current responsibility (0.3302ms)
+✖ withdrawal cannot acknowledge a claim coverage or another actor operation (0.2959ms)
+✖ publication original receipt may already be closed but cannot move to another schedule (0.3676ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 22
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 178.5331
+
+✖ failing tests:
+
+test at web\tests\onCallOpenHandoffs.test.mjs:105:1
+✖ silent removal and failed clear readback do not claim original intent was removed (0.515ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///D:/Codex/%E5%9B%BD%E7%BD%91/%E5%A4%AE%E5%9B%BD%E4%BC%81%E6%B1%82%E8%81%8C/OpsPilot/web/tests/onCallOpenHandoffs.test.mjs:106:145)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /未可靠清除/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at web\tests\onCallOpenHandoffs.test.mjs:112:1
+✖ history response rejects contradictory request operation replacement relationships (0.3703ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (file:///D:/Codex/%E5%9B%BD%E7%BD%91/%E5%A4%AE%E5%9B%BD%E4%BC%81%E6%B1%82%E8%81%8C/OpsPilot/web/tests/onCallOpenHandoffs.test.mjs:113:724)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /异常/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at web\tests\onCallOpenHandoffs.test.mjs:115:1
+✖ POST receipt preserves all immutable captured request fields before clearing original intent (0.3558ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (file:///D:/Codex/%E5%9B%BD%E7%BD%91/%E5%A4%AE%E5%9B%BD%E4%BC%81%E6%B1%82%E8%81%8C/OpsPilot/web/tests/onCallOpenHandoffs.test.mjs:116:556)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /不符/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at web\tests\onCallOpenHandoffs.test.mjs:121:1
+✖ withdrawal cannot acknowledge a claim coverage or another actor operation (0.2959ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (file:///D:/Codex/%E5%9B%BD%E7%BD%91/%E5%A4%AE%E5%9B%BD%E4%BC%81%E6%B1%82%E8%81%8C/OpsPilot/web/tests/onCallOpenHandoffs.test.mjs:122:292)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /不符/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at web\tests\onCallOpenHandoffs.test.mjs:124:1
+✖ publication original receipt may already be closed but cannot move to another schedule (0.3676ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (file:///D:/Codex/%E5%9B%BD%E7%BD%91/%E5%A4%AE%E5%9B%BD%E4%BC%81%E6%B1%82%E8%81%8C/OpsPilot/web/tests/onCallOpenHandoffs.test.mjs:125:225)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /不符/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

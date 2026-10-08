@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+当前CP101：[报告](acceptance/V1.7-checkpoint-101.md)/[证据](assets/v1.7-cp101/local-proof.json)。本地开放接班33及可靠清除/回执关系/真实跨标签页围栏通过，依赖audit0；原生助手六流程在第一预览失败，须优先定位，新源码自身Linux仍待。CP100自己整轮failure保留，不缩减整体路线、不标100%。
+
 最新 CP100：[24实页/原JWT实际403恢复锁定](acceptance/V1.7-checkpoint-100.md)/[本地proof](assets/v1.7-cp100/local-proof.json)，原16和历史Demo完整保留；前端167/Node146限定通过，自己的Linux24待。CP99自身Linux16/MySQL24/前端167由[69记录远端proof](assets/v1.7-cp99/remote-proof.json)核验。下一步跨标签页/同token身份、回执一致性/清除静默失败及“非本人回执”UI纠正，再继续真实MySQL旧库升级、渠道/提醒、成员ACL、认领撤销、DST/日历与生产容量；不缩减整体active目标。
 
 最新 CP99：[自主认领页面/八张新旧Demo](acceptance/V1.7-checkpoint-99.md)/[证据](assets/v1.7-cp99/local-proof.json)，本地16流程与前端167/Node145通过；CP98自身Linux默认8已由[46记录proof](assets/v1.7-cp98/http-remote-proof.json)核验。下一步新源码自己的远端与页面资格403/完整存储身份矩阵，再继续真实MySQL旧库升级、渠道/提醒、成员ACL、认领撤销、DST与生产容量。全部旧失败/Demo保留，整体active。
