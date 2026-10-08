@@ -1,5 +1,7 @@
 # OpsPilot 架构设计
 
+CP103[错误表示与页面就绪](acceptance/V1.7-checkpoint-103.md)：GlobalExceptionHandler的ApiResponse错误正文显式application/json，成功SSE保持原produces/有界池/原预算/幂等与提交边界；前端偏好纯SSE但仍解析真实JSON拒绝，不将已开始的流切换JSON。requestLocked加入loading/!active以阻止上下文未就绪发送。无DDL/Provider SDK升级或系统代理改动，原生6/助手原8+新1本地通过，自身远端与生产容量待验。
+
 CP101仅开放接班前端/依赖/测试变化：[报告](acceptance/V1.7-checkpoint-101.md)。回执关系校验与删后读回确认、missing-token/stored-actor守卫增强；无Java/DDL变更。跨标签页真实storage事件与旧200围栏本地通过，原生助手预览回归仍FAIL，自身Linux待验，不把本阶段当整体稳定性证明。
 
 CP100追加[原JWT实际403与角色恢复锁定](acceptance/V1.7-checkpoint-100.md)：只增强测试，生产Java/DDL/Vue不改。runner用独占文件H2、三次自有JAR/同临时签名密钥及只在停机后执行的受限离线角色夹具，六类OnCall业务表指纹不变；可靠保存/读回、清除失败与无法持久化锁定的边界有实际页面证据。原16+新8本地限定通过，自己Linux24与完整身份/回执矩阵待；不由H2夹具推导MySQL生产HA，CP99自身MySQL24/Linux16各有独立证据。

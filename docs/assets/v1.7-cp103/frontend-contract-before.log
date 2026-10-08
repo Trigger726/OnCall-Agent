@@ -1,0 +1,54 @@
+✔ native generation and token previews have no durable ID until committed done (26.7595ms)
+✔ freezes and persists the original question before POST; refresh uses the same key and cannot overwrite (1.0033ms)
+✔ native previews reject premature IDs, missing generation, mixed protocols and empty completion (4.7456ms)
+✔ native EOF and terminal error never turn partial output into a saved answer or retry (0.8968ms)
+✔ native cancellation after one-byte UTF-8 previews retains the frozen intent for SQL reconciliation (5.352ms)
+✔ account and session namespaces isolate pending intents; a refreshed token for the same owner may query (1.2455ms)
+✔ storage failure, damaged intent and missing owner reject before any command (0.9413ms)
+✖ network failure is ambiguous, does not retry and retains exactly the frozen payload/key (1.2438ms)
+✔ EOF without done, truncated done and unknown protocol cannot be claimed completed or auto-retried (1.4244ms)
+✔ UTF-8 one-byte chunks, CRLF and multi-line data require a real done and stable message ID (3.7407ms)
+✔ different answer IDs and non-SSE success are unsafe; explicit cancelled is a distinct terminal (0.8295ms)
+✔ query and cancellation use original key, no question body, no automatic POST after 404/409/503 (1.1354ms)
+✔ completed before cancellation preserves the original IDs; all documented statuses validate (1.3572ms)
+✔ lost cancellation response stays ambiguous and can be queried without a second cancellation (0.4909ms)
+✔ late old 401 and late old success cannot expire or update the replacement account (0.8174ms)
+✔ current 401 expires once and keeps the recoverable intent (0.3132ms)
+✔ caller abort and identity change while reading cancel the reader without backend cancellation (9.0358ms)
+✔ owner metadata change after fetch is fenced even if token did not change (0.4624ms)
+✔ late token change during JSON decoding fences query and cancel results (0.2879ms)
+✔ every helper releases account listeners on success and failure (1.2995ms)
+✔ already aborted caller never reaches fetch or removes original storage (0.3449ms)
+✔ manual continuation after a missing request sends byte-identical payload without rotating key (0.5678ms)
+✔ empty 503 response preserves HTTP status and gives actionable unavailability feedback, not a guessed terminal (0.4156ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 22
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 246.3073
+
+✖ failing tests:
+
+test at tests\assistantRequests.test.mjs:95:1
+✖ network failure is ambiguous, does not retry and retains exactly the frozen payload/key (1.2438ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'text/event-stream, application/json'
+  - 'text/event-stream'
+                      ^
+  
+      at TestContext.<anonymous> (file:///D:/Codex/%E5%9B%BD%E7%BD%91/%E5%A4%AE%E5%9B%BD%E4%BC%81%E6%B1%82%E8%81%8C/OpsPilot/web/tests/assistantRequests.test.mjs:101:10)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'text/event-stream, application/json',
+    expected: 'text/event-stream',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

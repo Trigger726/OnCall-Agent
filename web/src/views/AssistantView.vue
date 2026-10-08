@@ -67,7 +67,7 @@ let disposed = false
 const suggestions = computed(() => active.value?.context
   ? ['总结当前证据', '最可能的根因是什么？', '展示 Agent 调查过程', '下一步应该怎么验证？']
   : ['当前有哪些活跃 Incident？', '告警聚合的处理流程是什么？', '如何使用 CMDB 辅助故障定位？'])
-const requestLocked = computed(() => sessionChanged.value || sending.value || requestControl.value || Boolean(pendingRequest.value) || requestRecordBroken.value)
+const requestLocked = computed(() => loading.value || !active.value || sessionChanged.value || sending.value || requestControl.value || Boolean(pendingRequest.value) || requestRecordBroken.value)
 const requestTerminal = computed(() => Boolean(requestState.value && assistantTerminal(requestState.value.status)))
 const requestLabel = computed(() => requestState.value ? assistantStatusLabel(requestState.value.status)
   : requestNotFound.value ? '暂未查到原请求' : sending.value ? '等待回答' : '结果待确认')

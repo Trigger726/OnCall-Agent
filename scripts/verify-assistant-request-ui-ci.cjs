@@ -118,6 +118,28 @@ async function verify() {
     const counts = async id => (await api(context, token, '/assistant/sessions/' + id)).json.data.messages;
     const state = async (id, key) => api(context, token, '/assistant/sessions/' + id + '/request', 'GET', undefined, key);
     const send = async content => { await page.locator('.assistant-composer textarea').fill(content); await page.getByTitle('发送消息', { exact: true }).click(); };
+    if (!baseline) {
+      // Hold a real successful session GET: the composer must not accept a question before its context exists.
+      const readyId = (await api(context, token, '/assistant/sessions', 'POST', {})).json.data.session.id;
+      const routeUrl = base + '/api/v1/assistant/sessions/' + readyId;
+      let delayedSession;
+      await page.route(routeUrl, async route => {
+        const response = await context.request.fetch(route.request()); assert.equal(response.status(), 200);
+        delayedSession = { route, response };
+      });
+      await page.goto(base + '/assistant?session=' + readyId); await until(() => Boolean(delayedSession));
+      await page.locator('.assistant-loading').waitFor({ state: 'visible' });
+      await snapshot(page, 'context-loading-desktop');
+      assert.equal(await page.locator('.assistant-composer textarea').isDisabled(), true);
+      assert.equal(await page.getByTitle('发送消息', { exact: true }).isDisabled(), true);
+      assert.equal(posts.length, 0); assert.equal(calls, 0);
+      await delayedSession.route.fulfill({ response: delayedSession.response }); await page.unroute(routeUrl);
+      await page.locator('.assistant-loading').waitFor({ state: 'hidden' });
+      await page.locator('.assistant-composer textarea').fill('Context now ready');
+      assert.equal(await page.getByTitle('发送消息', { exact: true }).isEnabled(), true);
+      result.cases.push({ name: 'composer-waits-for-real-session-context', heldActualSessionStatus: 200,
+        inputDisabledBeforeContext: true, noEarlyPosts: true, noEarlyModelCalls: true, sendEnabledAfterContext: true });
+    }
     const id = await fresh(); holding = true; await send('held UI cancellation'); await until(() => held.size === 1);
     await snapshot(page, 'waiting-desktop');
     if (baseline) {

@@ -1,0 +1,239 @@
+{
+  "status": "PASS",
+  "baselineCapture": false,
+  "url": "http://127.0.0.1:9945/assistant",
+  "browserReason": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "jarSha256": "c97c66848200d71d52c921479dd3c17119eff5db6f4447d6ec97fad60154a6e4",
+  "fixture": "owned production HTTP adapter and real browser controls, not model quality",
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "cases": [
+    {
+      "name": "explicit-running-cancel",
+      "originalKeyUsed": true,
+      "serverState": "CANCELLED",
+      "lateAnswers": 0,
+      "actualWorkerSettledByFreshAnswer": true
+    },
+    {
+      "name": "lost-completed-response-refresh-query",
+      "actualCompletedResponseLost": true,
+      "originalAnswerIdPreserved": true,
+      "streamPostsIncludingRecovery": 1,
+      "modelCallsIncludingRecovery": 1
+    },
+    {
+      "name": "lost-cancel-response",
+      "backendCancelResponseActuallyLost": true,
+      "noFalseCancelledBeforeQuery": true,
+      "queriedServerState": "CANCELLED",
+      "cancelAuditRows": 1,
+      "lateAnswers": 0
+    },
+    {
+      "name": "not-admitted-manual-retry",
+      "serverLookupStatus": 404,
+      "noAutomaticPost": true,
+      "exactOriginalKeyAndContent": true,
+      "actualModelCalls": 1
+    },
+    {
+      "name": "queued-ui-cancel",
+      "queriedStateBeforeCancel": "QUEUED",
+      "questionAndAnswerRows": 0,
+      "modelCallsForQueuedQuestion": 0
+    },
+    {
+      "name": "real-capacity-feedback",
+      "serverCapacity": "one worker and one queue slot",
+      "actualRejectedStatus": 503,
+      "actualJsonErrorResponse": true,
+      "rejectedQuestionRows": 0,
+      "noAutomaticPost": true,
+      "lookupStatus": 404,
+      "manualRecoveryWithOriginalKeyAndQuestion": true
+    },
+    {
+      "name": "real-budget-timeout",
+      "serverBudgetSeconds": 30,
+      "queriedTerminal": "TIMED_OUT",
+      "originalRequestNotRerun": true,
+      "lateAnswers": 0,
+      "actualWorkerSettledByFreshAnswer": true
+    },
+    {
+      "name": "late-successful-clear-after-account-change",
+      "actualOldClearStatus": 200,
+      "actualOldLogoutStatus": 200,
+      "replacementTokenPreserved": true,
+      "replacementServerStatus": 200,
+      "oldPrivateMessagesNotReintroduced": true
+    }
+  ],
+  "screenshots": [
+    "waiting-desktop.png",
+    "cancelled-desktop.png",
+    "cancelled-mobile.png",
+    "recovery-desktop.png",
+    "recovered-completed-desktop.png",
+    "queued-desktop.png",
+    "saturated-desktop.png",
+    "timed-out-mobile.png"
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 404 ()",
+    "Failed to load resource: the server responded with a status of 503 ()",
+    "Failed to load resource: the server responded with a status of 404 ()"
+  ],
+  "startedPid": 33124,
+  "sendObservations": [
+    {
+      "content": "held UI cancellation",
+      "url": "http://127.0.0.1:9945/assistant?session=1",
+      "before": "",
+      "postsBefore": 0,
+      "heldBefore": 0,
+      "afterFill": "held UI cancellation",
+      "disabledBeforeClick": false,
+      "afterClick": "",
+      "postsAfterClick": 1,
+      "heldAfterClick": 0
+    },
+    {
+      "content": "positive answer after cancellation",
+      "url": "http://127.0.0.1:9945/assistant?session=1",
+      "before": "",
+      "postsBefore": 1,
+      "heldBefore": 0,
+      "afterFill": "positive answer after cancellation",
+      "disabledBeforeClick": false,
+      "afterClick": "",
+      "postsAfterClick": 2,
+      "heldAfterClick": 0
+    },
+    {
+      "content": "lost completed browser response",
+      "url": "http://127.0.0.1:9945/assistant?session=2",
+      "before": "",
+      "postsBefore": 2,
+      "heldBefore": 0,
+      "afterFill": "lost completed browser response",
+      "disabledBeforeClick": false,
+      "afterClick": "",
+      "postsAfterClick": 3,
+      "heldAfterClick": 0
+    },
+    {
+      "content": "lost start and cancel response",
+      "url": "http://127.0.0.1:9945/assistant?session=3",
+      "before": "",
+      "postsBefore": 3,
+      "heldBefore": 0,
+      "afterFill": "lost start and cancel response",
+      "disabledBeforeClick": false,
+      "afterClick": "",
+      "postsAfterClick": 4,
+      "heldAfterClick": 0
+    },
+    {
+      "content": "not yet admitted same frozen question",
+      "url": "http://127.0.0.1:9945/assistant?session=4",
+      "before": "",
+      "postsBefore": 4,
+      "heldBefore": 0,
+      "afterFill": "not yet admitted same frozen question",
+      "disabledBeforeClick": false,
+      "afterClick": "",
+      "postsAfterClick": 5,
+      "heldAfterClick": 0
+    },
+    {
+      "content": "queued UI cancellation",
+      "url": "http://127.0.0.1:9945/assistant?session=6",
+      "before": "",
+      "postsBefore": 6,
+      "heldBefore": 1,
+      "afterFill": "queued UI cancellation",
+      "disabledBeforeClick": false,
+      "afterClick": "",
+      "postsAfterClick": 7,
+      "heldAfterClick": 1
+    },
+    {
+      "content": "UI saturated same key manual recovery",
+      "url": "http://127.0.0.1:9945/assistant?session=8",
+      "before": "",
+      "postsBefore": 7,
+      "heldBefore": 1,
+      "afterFill": "UI saturated same key manual recovery",
+      "disabledBeforeClick": false,
+      "afterClick": "",
+      "postsAfterClick": 8,
+      "heldAfterClick": 1
+    },
+    {
+      "content": "UI deadline terminal",
+      "url": "http://127.0.0.1:9945/assistant?session=9",
+      "before": "",
+      "postsBefore": 9,
+      "heldBefore": 0,
+      "afterFill": "UI deadline terminal",
+      "disabledBeforeClick": false,
+      "afterClick": "",
+      "postsAfterClick": 10,
+      "heldAfterClick": 0
+    },
+    {
+      "content": "actual answer after timeout",
+      "url": "http://127.0.0.1:9945/assistant?session=9",
+      "before": "",
+      "postsBefore": 10,
+      "heldBefore": 0,
+      "afterFill": "actual answer after timeout",
+      "disabledBeforeClick": false,
+      "afterClick": "",
+      "postsAfterClick": 11,
+      "heldAfterClick": 0
+    }
+  ],
+  "unexpectedConsoleErrors": [],
+  "providerTransportCalls": 10,
+  "streamResponseStatuses": [
+    {
+      "status": 200,
+      "contentType": "text/event-stream;charset=UTF-8"
+    },
+    {
+      "status": 200,
+      "contentType": "text/event-stream;charset=UTF-8"
+    },
+    {
+      "status": 503,
+      "contentType": "application/json;charset=UTF-8"
+    },
+    {
+      "status": 200,
+      "contentType": "text/event-stream;charset=UTF-8"
+    },
+    {
+      "status": 200,
+      "contentType": "text/event-stream;charset=UTF-8"
+    },
+    {
+      "status": 200,
+      "contentType": "text/event-stream;charset=UTF-8"
+    }
+  ],
+  "ownedProcessStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}

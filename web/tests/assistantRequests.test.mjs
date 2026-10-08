@@ -98,7 +98,7 @@ test('network failure is ambiguous, does not retry and retains exactly the froze
   await assert.rejects(api.streamAssistantRequest(intent, () => {}), /network lost/)
   assert.equal(calls.length, 1); assert.deepEqual(api.readAssistantIntent(1), intent)
   assert.equal(calls[0].init.headers['Idempotency-Key'], intent.requestKey)
-  assert.equal(calls[0].init.headers.Accept, 'text/event-stream, application/json')
+  assert.equal(calls[0].init.headers.Accept, 'text/event-stream')
   assert.deepEqual(JSON.parse(calls[0].init.body), { content: intent.content })
 })
 test('EOF without done, truncated done and unknown protocol cannot be claimed completed or auto-retried', async () => {
@@ -224,6 +224,20 @@ test('manual continuation after a missing request sends byte-identical payload w
   await api.streamAssistantRequest(api.readAssistantIntent(1), () => {})
   assert.equal(calls.length, 2); assert.equal(calls[0].init.headers['Idempotency-Key'], calls[1].init.headers['Idempotency-Key'])
   assert.equal(calls[1].init.body, JSON.stringify({ content: '原问题' }))
+})
+
+test('SSE preference still parses typed JSON rejection without retry or clearing the original key', async () => {
+  const intent = api.freezeAssistantIntent(1, '原问题')
+  for (const [status, code] of [[503, 'ASSISTANT_STREAM_SATURATED'], [409, 'ASSISTANT_REQUEST_RUNNING'], [404, 'ASSISTANT_SESSION_NOT_FOUND']]) {
+    const fetcher = mock.method(globalThis, 'fetch', async (_url, init) => {
+      assert.equal(init.headers.Accept, 'text/event-stream')
+      assert.equal(init.headers['Idempotency-Key'], intent.requestKey)
+      return Response.json({ success: false, error: { code, message: '服务反馈' } }, { status })
+    })
+    await assert.rejects(api.streamAssistantRequest(intent, () => assert.fail('No SSE event on JSON refusal')), { status, code, message: '服务反馈' })
+    assert.equal(fetcher.mock.callCount(), 1); assert.deepEqual(api.readAssistantIntent(1), intent)
+    fetcher.mock.restore()
+  }
 })
 
 test('empty 503 response preserves HTTP status and gives actionable unavailability feedback, not a guessed terminal', async () => {

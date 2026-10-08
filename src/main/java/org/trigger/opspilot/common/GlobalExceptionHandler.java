@@ -6,6 +6,7 @@ import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -24,7 +25,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ApiException.class)
     ResponseEntity<ApiResponse<Void>> handleApiException(ApiException exception) {
+        // Pre-admission errors are JSON, even when the successful endpoint produces an SSE stream.
         return ResponseEntity.status(exception.status())
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.failure(exception.code(), exception.getMessage()));
     }
 
@@ -35,47 +38,55 @@ public class GlobalExceptionHandler {
                     .findFirst().map(error -> error.getField() + ": " + error.getDefaultMessage())
                     .orElse("请求参数不合法")
                 : exception.getMessage();
-        return ResponseEntity.badRequest().body(ApiResponse.failure("VALIDATION_ERROR", message));
+        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.failure("VALIDATION_ERROR", message));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     ResponseEntity<ApiResponse<Void>> handleUnreadableBody(HttpMessageNotReadableException exception) {
         return ResponseEntity.badRequest()
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.failure("INVALID_JSON", "请求体不是合法 JSON"));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     ResponseEntity<ApiResponse<Void>> handleParameterTypeMismatch(MethodArgumentTypeMismatchException exception) {
-        return ResponseEntity.badRequest().body(ApiResponse.failure("VALIDATION_ERROR", "请求参数类型不合法"));
+        return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON)
+                .body(ApiResponse.failure("VALIDATION_ERROR", "请求参数类型不合法"));
     }
 
     @ExceptionHandler(CredentialsExpiredException.class)
     ResponseEntity<ApiResponse<Void>> handleExpiredCredentials(CredentialsExpiredException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.failure("AUTHENTICATION_REQUIRED", "登录已失效，请重新登录"));
     }
 
     @ExceptionHandler(AuthenticationException.class)
     ResponseEntity<ApiResponse<Void>> handleAuthentication(AuthenticationException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.failure("AUTHENTICATION_FAILED", "用户名或密码错误"));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     ResponseEntity<ApiResponse<Void>> handleAccessDenied(AccessDeniedException exception) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.failure("ACCESS_DENIED", "当前角色无权执行该操作"));
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     ResponseEntity<ApiResponse<Void>> handleUploadTooLarge(MaxUploadSizeExceededException exception) {
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.failure("RUNBOOK_FILE_TOO_LARGE", "上传文件不能超过 5 MB"));
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
     ResponseEntity<ApiResponse<Void>> handleMissingResource(NoResourceFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.failure("NOT_FOUND", "请求的资源不存在"));
     }
 
@@ -83,6 +94,7 @@ public class GlobalExceptionHandler {
     ResponseEntity<ApiResponse<Void>> handleUnexpected(Exception exception) {
         log.error("Unhandled request error", exception);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .contentType(MediaType.APPLICATION_JSON)
                 .body(ApiResponse.failure("INTERNAL_ERROR", "系统暂时无法处理该请求"));
     }
 

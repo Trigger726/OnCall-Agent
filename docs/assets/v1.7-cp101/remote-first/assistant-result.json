@@ -1,0 +1,129 @@
+{
+  "status": "PASS",
+  "baselineCapture": false,
+  "url": "http://127.0.0.1:9945/assistant",
+  "browserReason": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "jarSha256": "9427915554410f7aadb7489e0dd88475503ecd6b0ec9ce831bed421150d354bb",
+  "fixture": "owned production HTTP adapter and real browser controls, not model quality",
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "cases": [
+    {
+      "name": "explicit-running-cancel",
+      "originalKeyUsed": true,
+      "serverState": "CANCELLED",
+      "lateAnswers": 0,
+      "actualWorkerSettledByFreshAnswer": true
+    },
+    {
+      "name": "lost-completed-response-refresh-query",
+      "actualCompletedResponseLost": true,
+      "originalAnswerIdPreserved": true,
+      "streamPostsIncludingRecovery": 1,
+      "modelCallsIncludingRecovery": 1
+    },
+    {
+      "name": "lost-cancel-response",
+      "backendCancelResponseActuallyLost": true,
+      "noFalseCancelledBeforeQuery": true,
+      "queriedServerState": "CANCELLED",
+      "cancelAuditRows": 1,
+      "lateAnswers": 0
+    },
+    {
+      "name": "not-admitted-manual-retry",
+      "serverLookupStatus": 404,
+      "noAutomaticPost": true,
+      "exactOriginalKeyAndContent": true,
+      "actualModelCalls": 1
+    },
+    {
+      "name": "queued-ui-cancel",
+      "queriedStateBeforeCancel": "QUEUED",
+      "questionAndAnswerRows": 0,
+      "modelCallsForQueuedQuestion": 0
+    },
+    {
+      "name": "real-capacity-feedback",
+      "serverCapacity": "one worker and one queue slot",
+      "actualRejectedStatus": 503,
+      "actualJsonErrorResponse": true,
+      "rejectedQuestionRows": 0,
+      "noAutomaticPost": true,
+      "lookupStatus": 404,
+      "manualRecoveryWithOriginalKeyAndQuestion": true
+    },
+    {
+      "name": "real-budget-timeout",
+      "serverBudgetSeconds": 30,
+      "queriedTerminal": "TIMED_OUT",
+      "originalRequestNotRerun": true,
+      "lateAnswers": 0,
+      "actualWorkerSettledByFreshAnswer": true
+    },
+    {
+      "name": "late-successful-clear-after-account-change",
+      "actualOldClearStatus": 200,
+      "actualOldLogoutStatus": 200,
+      "replacementTokenPreserved": true,
+      "replacementServerStatus": 200,
+      "oldPrivateMessagesNotReintroduced": true
+    }
+  ],
+  "screenshots": [
+    "waiting-desktop.png",
+    "cancelled-desktop.png",
+    "cancelled-mobile.png",
+    "recovery-desktop.png",
+    "recovered-completed-desktop.png",
+    "queued-desktop.png",
+    "saturated-desktop.png",
+    "timed-out-mobile.png"
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: the server responded with a status of 404 ()",
+    "Failed to load resource: the server responded with a status of 503 ()",
+    "Failed to load resource: the server responded with a status of 404 ()"
+  ],
+  "startedPid": 4562,
+  "unexpectedConsoleErrors": [],
+  "providerTransportCalls": 10,
+  "streamResponseStatuses": [
+    {
+      "status": 200,
+      "contentType": "text/event-stream;charset=UTF-8"
+    },
+    {
+      "status": 200,
+      "contentType": "text/event-stream;charset=UTF-8"
+    },
+    {
+      "status": 503,
+      "contentType": "application/json;charset=UTF-8"
+    },
+    {
+      "status": 200,
+      "contentType": "text/event-stream;charset=UTF-8"
+    },
+    {
+      "status": 200,
+      "contentType": "text/event-stream;charset=UTF-8"
+    },
+    {
+      "status": 200,
+      "contentType": "text/event-stream;charset=UTF-8"
+    }
+  ],
+  "ownedProcessStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}

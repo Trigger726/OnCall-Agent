@@ -1,5 +1,7 @@
 # OpsPilot
 
+最新 CP103：[SSE预览与上下文就绪修复](docs/acceptance/V1.7-checkpoint-103.md)/[106检查本地证据](docs/assets/v1.7-cp103/local-proof.json)。真实503 JSON与原键恢复保留，原生6、助手原8+新1、开放33、成对14、通知12、原14runner、默认后端518执行/195条件跳过、前端175/Node148及audit0本地通过。CP101自己20CI与三个ZIP已[限定核验](docs/acceptance/V1.7-checkpoint-101.md#6-自己源码远端的限定核验cp103追加)；CP103自己远端仍待。新旧Demo和首次失败完整保留，不等于整体100%。
+
 最新 CP101：[报告](docs/acceptance/V1.7-checkpoint-101.md)/[证据](docs/assets/v1.7-cp101/local-proof.json)。回执实际归属、可靠清除和跨标签页身份围栏：开放接班33、原14/成对14/通知12/助手8、前端174/脚本148与audit0本地通过；原生助手预览回归失败保留，新源码自身CI待验，不能称整体验收完成。CP100自身[首次远端失败](docs/assets/v1.7-cp100/first-remote-proof.json)保留；旧Demo及完整路线继续。
 
 最新 CP100：[真实资格恢复与存储故障追加](docs/acceptance/V1.7-checkpoint-100.md)/[本地proof](docs/assets/v1.7-cp100/local-proof.json)：原16+新8共24实页，原JWT实际403、恢复角色/三次JAR后仍锁定；撤回quota、静默保存、读回/清除/锁定写失败及发布/撤回GET500已验，前端167/Node146。只增强测试与证据，生产页面/DDL未改、旧Demo保留；自己的Linux24与剩余身份/存储矩阵待。CP99自身Linux16/MySQL24/前端167由[99追加](docs/acceptance/V1.7-checkpoint-99.md#6-自己源码的-linux-页面与-mysql-限定闭合)限定闭合；完整目标继续，以下按历史范围阅读。

@@ -1,0 +1,55 @@
+{
+  "status": "PASS",
+  "comparison": false,
+  "cases": [
+    {
+      "name": "real-http-paired-revocation-and-response-body-loss",
+      "swapId": 1,
+      "capturedVersions": [
+        1,
+        0,
+        0
+      ],
+      "loss": {
+        "status": 200,
+        "bodyRead": false,
+        "actualSocketDestroyed": true
+      },
+      "manualOriginalAck": true,
+      "noDuplicateAudit": true,
+      "audits": 3,
+      "bothCurrentResponsibilitiesRestored": true,
+      "acceptedAndOriginalCommandsPreserved": true,
+      "anonymous401": true,
+      "nonManager403": true,
+      "eachMissingVersion400": true,
+      "staleVersion409": true
+    },
+    {
+      "name": "persisted-original-ack-after-jvm-restart",
+      "sameOriginalReceipt": true,
+      "audits": 3,
+      "noRevival": true
+    },
+    {
+      "name": "one-independent-cancel-blocks-paired-command",
+      "httpStatus": 409,
+      "uncancelledCounterpartPreserved": true,
+      "noRevocationOrNewAudit": true
+    }
+  ],
+  "jarSha256": "9427915554410f7aadb7489e0dd88475503ecd6b0ec9ce831bed421150d354bb",
+  "startedPids": [
+    5307,
+    5395
+  ],
+  "stoppedPids": [
+    5307,
+    5395
+  ],
+  "transport": "real HTTP to owned production JAR and H2 file database",
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "ownedProcessesStopped": true,
+  "unexpectedJarErrors": 0
+}

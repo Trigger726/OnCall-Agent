@@ -1,0 +1,57 @@
+{
+  "status": "FAIL",
+  "baselineCapture": false,
+  "url": "http://127.0.0.1:9945/assistant",
+  "browserReason": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "jarSha256": "c97c66848200d71d52c921479dd3c17119eff5db6f4447d6ec97fad60154a6e4",
+  "fixture": "owned production HTTP adapter and real browser controls, not model quality",
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "cases": [
+    {
+      "name": "explicit-running-cancel",
+      "originalKeyUsed": true,
+      "serverState": "CANCELLED",
+      "lateAnswers": 0,
+      "actualWorkerSettledByFreshAnswer": true
+    },
+    {
+      "name": "lost-completed-response-refresh-query",
+      "actualCompletedResponseLost": true,
+      "originalAnswerIdPreserved": true,
+      "streamPostsIncludingRecovery": 1,
+      "modelCallsIncludingRecovery": 1
+    },
+    {
+      "name": "lost-cancel-response",
+      "backendCancelResponseActuallyLost": true,
+      "noFalseCancelledBeforeQuery": true,
+      "queriedServerState": "CANCELLED",
+      "cancelAuditRows": 1,
+      "lateAnswers": 0
+    }
+  ],
+  "screenshots": [
+    "waiting-desktop.png",
+    "cancelled-desktop.png",
+    "cancelled-mobile.png",
+    "recovery-desktop.png",
+    "recovered-completed-desktop.png"
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to load resource: net::ERR_FAILED"
+  ],
+  "startedPid": 31972,
+  "failure": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('结果待确认', { exact: true }) to be visible\u001b[22m\n",
+  "failurePageText": "OpsPilot\n智能运维平台\n运行总览\nIncident\nOnCall 助手\n告警中心\n资源与拓扑\n值班与升级\n处置手册\n运营分析\n问题治理\n审计日志\n账号安全\n生产域 · 受控\n收起侧栏\nOnCall 助手\nPRODUCTION\n搜索资源、告警或编号\nCtrl K\n服务正常\n10/08 19:27:56\n系\n系统管理员\nADMIN\n会话\n新对话\n新对话\n开始新的协作对话\n11:27 · 0 条消息\n新对话\nlost start and cancel response\n11:27 · 1 条消息\nlost completed browser response\nCP73-controlled-HTTP-answer\n11:27 · 2 条消息\n新对话\nCP73-controlled-HTTP-answer\n11:27 · 3 条消息\nGENERAL CONTEXT\n证据约束模式\n新对话\n通用运维协作\n今天需要处理什么？\n\n选择一个 Incident 建立上下文，或直接进行通用运维问答。\n\n当前有哪些活跃 Incident？\n告警聚合的处理流程是什么？\n如何使用 CMDB 辅助故障定位？\n证据约束\n回答不会自动执行生产操作\nSELECT CONTEXT\n绑定 Incident\n\n新建一个带完整故障上下文的协作会话。\n\nP1\n统一结算接口持续超时\nINC-20260819-0001 · 统一结算服务\nP2\n统一认证登录错误率升高\nINC-20260818-0002 · 统一身份认证",
+  "ownedProcessStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}

@@ -107,7 +107,7 @@ class AssistantNativeEndpointIntegrationTest {
         var control = new Control(); CONTROLS.put(control.question, control);
         var events = new LinkedBlockingQueue<JsonNode>();
         var pending = http.sendAsync(post("/assistant/sessions/" + id + "/stream", token,
-                Map.of("content", control.question), key), info -> new ObservedBody(events));
+                Map.of("content", control.question), key, "text/event-stream"), info -> new ObservedBody(events));
         try {
             assertThat(control.entered.await(4, TimeUnit.SECONDS)).isTrue();
             assertThat(control.nativeProtocol.get()).as("Default endpoint must call the native HTTP stream, not answer().call()").isTrue();
@@ -123,6 +123,7 @@ class AssistantNativeEndpointIntegrationTest {
             assertThat(requestState(id, token, key).path("status").asText()).isEqualTo("RUNNING");
             control.release.countDown(); var response = pending.get(4, TimeUnit.SECONDS);
             assertThat(response.statusCode()).isEqualTo(200); assertThat(response.body()).contains("event:done");
+            assertThat(response.headers().firstValue("Content-Type").orElseThrow()).startsWith("text/event-stream");
             assertThat(count(id, "ASSISTANT")).isEqualTo(1);
             assertThat(jdbc.sql("SELECT content FROM assistant_message WHERE session_id=:id AND role='ASSISTANT'")
                     .param("id", id).query(String.class).single()).isEqualTo(FIRST + LAST);
@@ -185,10 +186,13 @@ class AssistantNativeEndpointIntegrationTest {
                     Map.of("content", queued.question), queuedKey), HttpResponse.BodyHandlers.ofString());
             awaitQueued(queuedId); assertThat(queued.calls).hasValue(0); assertThat(count(queuedId, "USER")).isZero();
             String rejectedKey = UUID.randomUUID().toString();
-            var refusal = http.send(post("/assistant/sessions/" + rejectedId + "/stream", token,
-                    Map.of("content", rejected.question), rejectedKey), HttpResponse.BodyHandlers.ofString());
-            assertThat(refusal.statusCode()).isEqualTo(503);
-            assertThat(JSON.readTree(refusal.body()).path("error").path("code").asText()).isEqualTo("ASSISTANT_QUEUE_SATURATED");
+            for (String accept : List.of("text/event-stream, application/json", "text/event-stream")) {
+                var refusal = http.send(post("/assistant/sessions/" + rejectedId + "/stream", token,
+                        Map.of("content", rejected.question), rejectedKey, accept), HttpResponse.BodyHandlers.ofString());
+                assertThat(refusal.statusCode()).isEqualTo(503);
+                assertThat(refusal.headers().firstValue("Content-Type").orElseThrow()).startsWith("application/json");
+                assertThat(JSON.readTree(refusal.body()).path("error").path("code").asText()).isEqualTo("ASSISTANT_QUEUE_SATURATED");
+            }
             assertThat(count(rejectedId, "USER")).isZero(); assertThat(count(rejectedId, "ASSISTANT")).isZero(); assertThat(rejected.calls).hasValue(0);
             var lookup = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/api/v1/assistant/sessions/" + rejectedId + "/request"))
                     .timeout(Duration.ofSeconds(5)).header("Authorization", "Bearer " + token).header("Idempotency-Key", rejectedKey).GET().build();
@@ -329,10 +333,13 @@ class AssistantNativeEndpointIntegrationTest {
         assertThat(result.statusCode()).isEqualTo(200); return JSON.readTree(result.body()).path("data").path("session").path("id").asLong();
     }
     private HttpRequest post(String route, String token, Object body, String key) throws Exception {
+        return post(route, token, body, key, "text/event-stream, application/json");
+    }
+    private HttpRequest post(String route, String token, Object body, String key, String accept) throws Exception {
         var request = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/api/v1" + route)).timeout(Duration.ofSeconds(12));
         if (token != null) request.header("Authorization", "Bearer " + token);
         if (key != null) request.header("Idempotency-Key", key);
-        request.header("Accept", "text/event-stream, application/json");
+        request.header("Accept", accept);
         if (body != null) request.header("Content-Type", "application/json");
         return request.POST(body == null ? HttpRequest.BodyPublishers.noBody() : HttpRequest.BodyPublishers.ofString(JSON.writeValueAsString(body))).build();
     }

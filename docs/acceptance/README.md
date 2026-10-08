@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+最新 CP103：[报告](V1.7-checkpoint-103.md)/[106检查/126文件proof](../assets/v1.7-cp103/local-proof.json)。原生6、助手原8+新1、开放33、成对14、通知12与原14runner本地通过；默认后端518执行/195条件跳过、前端175/Node148/audit0。三次实页失败与新旧Demo保留，自己新源码远端仍待；CP101自己20CI/三个工件由[77检查proof](../assets/v1.7-cp101/remote-first-proof.json)限定核验，整体active。
+
 最新 CP102：[原生预览分段诊断报告](V1.7-checkpoint-102.md)。Java定向22项通过；本机Chrome154在最小SSE及真实应用中复现混合Accept延迟，q权重及仅自有浏览器绕过代理均未解决，原始诊断JSON已归档。仅阶段性诊断上传，生产修复、真实503 JSON保留与完整回归仍待验，旧失败及Demo不覆盖。
 
 最新 CP101：[报告](V1.7-checkpoint-101.md)/[63项本地proof](../assets/v1.7-cp101/local-proof.json)。开放接班33、前端174/Node148、原14/成对14/通知12/助手8与audit0通过；原生助手预览回归FAIL，新源码自己的远端待验。CP100自己的17success/2failure/1skipped已追加[首次远端证据](../assets/v1.7-cp100/first-remote-proof.json)，原失败/旧Demo完整保留，整体active。

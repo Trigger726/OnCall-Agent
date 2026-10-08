@@ -111,7 +111,9 @@ export const readAssistantSession = <T>(intent: AssistantIntent, signal?: AbortS
 export async function streamAssistantRequest(intent: AssistantIntent, onEvent: (event: AssistantStreamEvent) => void, signal?: AbortSignal) {
   return withSession(intent, AbortSignal.any([AbortSignal.timeout(75000), ...(signal ? [signal] : [])]), async (lease, check) => {
     const response = await fetch(`/api/v1/assistant/sessions/${intent.sessionId}/stream`, { method: 'POST', signal: lease.signal,
-      headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream, application/json', 'Idempotency-Key': intent.requestKey,
+      // Prefer only the success stream: Chrome can buffer small SSE responses with a mixed JSON Accept.
+      // Pre-admission rejections still have explicit JSON Content-Type and are parsed by checkResponse.
+      headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream', 'Idempotency-Key': intent.requestKey,
         ...(lease.token ? { Authorization: `Bearer ${lease.token}` } : {}) }, body: JSON.stringify({ content: intent.content }) })
     await checkResponse(response, lease, check)
     if (!response.body || !response.headers.get('content-type')?.includes('text/event-stream')) {
