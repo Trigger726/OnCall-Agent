@@ -1,5 +1,7 @@
 # OpsPilot 架构设计
 
+CP100追加[原JWT实际403与角色恢复锁定](acceptance/V1.7-checkpoint-100.md)：只增强测试，生产Java/DDL/Vue不改。runner用独占文件H2、三次自有JAR/同临时签名密钥及只在停机后执行的受限离线角色夹具，六类OnCall业务表指纹不变；可靠保存/读回、清除失败与无法持久化锁定的边界有实际页面证据。原16+新8本地限定通过，自己Linux24与完整身份/回执矩阵待；不由H2夹具推导MySQL生产HA，CP99自身MySQL24/Linux16各有独立证据。
+
 CP99新增[开放接班客户端原意图围栏](acceptance/V1.7-checkpoint-99.md)：专用Vue组件读取既有V38 API，与指定接班/互换独立。首次写前核对最新请求/源/资格、可靠保存原版本/UUID/正文；不确定结果只能手动原回执。epoch+账号+已存账号+token隔离三类晚200，GET失败清空事实，403/409锁定而不重基。16实页范围/八图已有本地证据，当前资格403等完整UI矩阵与自身远端待验；不新增生产执行器，不把历史CLAIMED等同当前coverage。
 
 最新 CP98：[真实认领网络、文件库升级和原回执](acceptance/V1.7-checkpoint-98.md)。不改生产代码，提交后实际200销毁未读socket、重启求同原键、当前资格403和最终SQL指纹已验证；自有SQL夹具仅停机后打开已存在受限H2库，禁止替代真实MySQL。[CP97自己MySQL24和19CI](acceptance/V1.7-checkpoint-97.md#6-自己源码实际mysql与远端限定闭合)已限定闭合。新runner自己Linux、专用页面、成员ACL/渠道/DST/生产规模继续，旧失败保留。

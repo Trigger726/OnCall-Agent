@@ -1,5 +1,7 @@
 # OpsPilot
 
+最新 CP100：[真实资格恢复与存储故障追加](docs/acceptance/V1.7-checkpoint-100.md)/[本地proof](docs/assets/v1.7-cp100/local-proof.json)：原16+新8共24实页，原JWT实际403、恢复角色/三次JAR后仍锁定；撤回quota、静默保存、读回/清除/锁定写失败及发布/撤回GET500已验，前端167/Node146。只增强测试与证据，生产页面/DDL未改、旧Demo保留；自己的Linux24与剩余身份/存储矩阵待。CP99自身Linux16/MySQL24/前端167由[99追加](docs/acceptance/V1.7-checkpoint-99.md#6-自己源码的-linux-页面与-mysql-限定闭合)限定闭合；完整目标继续，以下按历史范围阅读。
+
 最新 CP99：[专用开放接班页面与新旧Demo](docs/acceptance/V1.7-checkpoint-99.md)/[本地proof](docs/assets/v1.7-cp99/local-proof.json)，本人发布、认领、撤回、原键手动回执及三种晚200围栏已有16实页流程；前端167/Node145/build/audit0通过。旧包/失败/八张新旧图保留，自己源码Linux与新页面资格403等完整矩阵待验。CP98自身20CI及独立HTTP8由[98追加](docs/acceptance/V1.7-checkpoint-98.md#6-自己源码的linux-http限定闭合)限定闭合。以下按历史时点阅读，完整目标继续。
 
 最新 CP98：[开放认领真实网络/升级/重启](docs/acceptance/V1.7-checkpoint-98.md)/[本地证据](docs/assets/v1.7-cp98/local-proof.json)，旧V37→V38升级10、新版独立8和Node142通过；旧包/台账与三次夹具失败保留。新HTTP runner自己的Linux CI、专用页面和桌面手机新旧Demo待验。前一CP97自己的[19作业CI](https://github.com/Trigger726/OnCall-Agent/actions/runs/37209488300)已成功，新MySQL24及原门禁独立重放，见[97第六节](docs/acceptance/V1.7-checkpoint-97.md#6-自己源码实际mysql与远端限定闭合)/[284记录远端证据](docs/assets/v1.7-cp97/remote-proof.json)。以下按历史时点阅读，完整目标继续。

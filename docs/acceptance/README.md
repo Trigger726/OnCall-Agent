@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+最新 CP100：[报告](V1.7-checkpoint-100.md)/[本地proof](../assets/v1.7-cp100/local-proof.json)，原16+新8完整24实页、前端167/Node146；实际403/恢复角色锁定和新增存储/读取故障成立，两次首失败与旧Demo保留。生产页面未改，自己Linux24与余下完整矩阵待。CP99自己20CI success，其中Linux16/原回归/MySQL24/前端167由[69记录远端proof](../assets/v1.7-cp99/remote-proof.json)限定核验，见[99追加](V1.7-checkpoint-99.md#6-自己源码的-linux-页面与-mysql-限定闭合)。完整目标active，下方历史待验按各时点阅读。
+
 最新 CP99：[专用页面/新旧Demo](V1.7-checkpoint-99.md)/[本地proof](../assets/v1.7-cp99/local-proof.json)，16真实页面、前端167/Node145/build/audit0限定通过，原回归/旧Demo/首次标签失败保留。自己的远端、资格403和完整矩阵待。CP98自身[Run37215889027](https://github.com/Trigger726/OnCall-Agent/actions/runs/37215889027)20success，新增Linux HTTP8与SQL/日志经[46记录proof](../assets/v1.7-cp98/http-remote-proof.json)独立核验，其他19工件未逐一重放，见[98追加](V1.7-checkpoint-98.md#6-自己源码的linux-http限定闭合)。以下按历史范围阅读，整体active。
 
 最新 CP98：[真实认领网络/升级/重启](V1.7-checkpoint-98.md)/[本地proof](../assets/v1.7-cp98/local-proof.json)，默认8、旧库升级10和Node142通过，三次夹具失败保留；新源码自己的Linux与专用页面/新旧Demo待。前一6ea273a/[Run37209488300](https://github.com/Trigger726/OnCall-Agent/actions/runs/37209488300)19success，实际MySQL24与原门禁/双时区504/原页面经[284记录proof](../assets/v1.7-cp97/remote-proof.json)核验，见[97第六节](V1.7-checkpoint-97.md#6-自己源码实际mysql与远端限定闭合)。旧失败/历史Demo不覆盖，以下按各历史时点阅读，完整目标active。
