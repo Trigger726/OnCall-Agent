@@ -79,9 +79,11 @@ public class OnCallOpenNotifications {
         for(long id:ids) {
             if(Thread.currentThread().isInterrupted())break;
             var at=now();String token=UUID.randomUUID().toString();
+            // MySQL evaluates SET assignments left-to-right: read the original status before changing it.
             int exhausted=jdbc.sql("""
-                    UPDATE oncall_open_handoff_notification SET status='FAILED',version=version+1,
-                      last_error_code=CASE WHEN status='CLAIMED' THEN 'LEASE_EXPIRED' ELSE 'ATTEMPTS_EXHAUSTED' END,lease_token=NULL,lease_until=NULL
+                    UPDATE oncall_open_handoff_notification SET
+                      last_error_code=CASE WHEN status='CLAIMED' THEN 'LEASE_EXPIRED' ELSE 'ATTEMPTS_EXHAUSTED' END,
+                      status='FAILED',version=version+1,lease_token=NULL,lease_until=NULL
                     WHERE id=:id AND attempts>=:max AND ((status='CLAIMED' AND lease_until<=:now) OR (status='PENDING' AND next_attempt_at<=:now))
                     """).param("id",id).param("now",at).param("max",properties.maxAttempts()).update();
             if(exhausted==1){count++;continue;}

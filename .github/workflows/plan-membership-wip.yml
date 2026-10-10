@@ -14,6 +14,49 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  open-notification-jar:
+    name: Populated V40 to V41 notification JAR HTTP and durable restart
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Inspect actual H2 proof and rejection cases
+        run: node --test scripts/tests/oncall-open-notification-http.test.cjs
+      - name: Build own-source current JAR
+        run: bash mvnw -B -DskipTests package
+      - name: Immutable original V40 checkout
+        uses: actions/checkout@v5
+        with:
+          ref: 83a6842f2218427fa4de401ff0f3af40d96f9b97
+          path: target/cp118-v40-source
+      - name: Build clean original V40 package and record provenance
+        run: |
+          (cd target/cp118-v40-source && bash mvnw -B -DskipTests package)
+          node scripts/record-open-notification-baseline.cjs
+      - name: Execute real receiver HTTP retries upgrade and restart
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p target/oncall-open-notification-http-it
+          node scripts/verify-oncall-open-notification-http-ci.cjs 2>&1 | tee target/oncall-open-notification-http-it/runner.log
+          node -e 'const fs=require("fs"),p=require("path"),d="target/oncall-open-notification-http-it";const r=JSON.parse(fs.readFileSync(d+"/runner.log","utf8").split(/\r?\n/).find(l=>l.startsWith("{")));require("child_process").execFileSync(process.execPath,["scripts/verify-oncall-open-notification-http-evidence.cjs",r.evidenceDirectory],{stdio:"inherit"});'
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: open-notification-jar-evidence
+          path: |
+            target/oncall-open-notification-http-it/**/*.json
+            target/oncall-open-notification-http-it/**/*.log
+          retention-days: 30
+
   membership-mysql:
     name: Plan membership shared cases on owned MySQL 8.4
     runs-on: ubuntu-latest

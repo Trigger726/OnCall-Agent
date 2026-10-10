@@ -1,0 +1,253 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< org.trigger:opspilot >------------------------
+[INFO] Building OpsPilot 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 43 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 138 source files with javac [debug release 17] to target/classes
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java uses unchecked or unsafe operations.
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+[INFO] Copying 1 resource from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+[INFO] Changes detected - recompiling the module! :dependency
+[INFO] Compiling 119 source files with javac [debug release 17] to target/test-classes
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/investigation/AgentEventReceiverTest.java: Some input files use unchecked or unsafe operations.
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/investigation/AgentEventReceiverTest.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.trigger.opspilot.oncall.MySqlOnCallOpenNotificationIntegrationTest
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+18:27:22.215 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.oncall.MySqlOnCallOpenNotificationIntegrationTest
+18:27:22.317 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-10T18:27:22.694Z  INFO 2302 --- [opspilot] [           main] SqlOnCallOpenNotificationIntegrationTest : Starting MySqlOnCallOpenNotificationIntegrationTest using Java 17.0.20.1 with PID 2302 (started by runner in /home/runner/work/OnCall-Agent/OnCall-Agent)
+2026-10-10T18:27:22.695Z  INFO 2302 --- [opspilot] [           main] SqlOnCallOpenNotificationIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-10T18:27:23.780Z  INFO 2302 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-10T18:27:23.782Z  INFO 2302 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-10T18:27:23.813Z  INFO 2302 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21 ms. Found 0 Redis repository interfaces.
+2026-10-10T18:27:24.202Z  INFO 2302 --- [opspilot] [           main] org.testcontainers.images.PullPolicy     : Image pull policy will be performed by: DefaultPullPolicy()
+2026-10-10T18:27:24.204Z  INFO 2302 --- [opspilot] [           main] o.t.utility.ImageNameSubstitutor         : Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+2026-10-10T18:27:24.232Z  INFO 2302 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : Testcontainers version: 1.21.4
+2026-10-10T18:27:24.608Z  INFO 2302 --- [opspilot] [           main] o.t.d.DockerClientProviderStrategy       : Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
+2026-10-10T18:27:24.609Z  INFO 2302 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : Docker host IP address is localhost
+2026-10-10T18:27:24.622Z  INFO 2302 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : Connected to docker: 
+  Server Version: 28.0.4
+  API Version: 1.48
+  Operating System: Ubuntu 24.04.5 LTS
+  Total Memory: 15989 MB
+2026-10-10T18:27:24.643Z  INFO 2302 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Pulling docker image: testcontainers/ryuk:0.12.0. Please be patient; this may take some time but only needs to be done once.
+2026-10-10T18:27:25.629Z  INFO 2302 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Starting to pull image
+2026-10-10T18:27:25.639Z  INFO 2302 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
+2026-10-10T18:27:26.362Z  INFO 2302 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  2 pending,  1 downloaded,  0 extracted, (906 KB/? MB)
+2026-10-10T18:27:26.391Z  INFO 2302 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  1 pending,  2 downloaded,  0 extracted, (906 KB/? MB)
+2026-10-10T18:27:26.402Z  INFO 2302 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  3 downloaded,  0 extracted, (923 KB/11 MB)
+2026-10-10T18:27:26.481Z  INFO 2302 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  3 downloaded,  1 extracted, (4 MB/11 MB)
+2026-10-10T18:27:27.567Z  INFO 2302 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  3 downloaded,  2 extracted, (4 MB/11 MB)
+2026-10-10T18:27:27.647Z  INFO 2302 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  3 downloaded,  3 extracted, (11 MB/11 MB)
+2026-10-10T18:27:27.652Z  INFO 2302 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pull complete. 3 layers, pulled in 2s (downloaded 11 MB at 5 MB/s)
+2026-10-10T18:27:27.652Z  INFO 2302 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Image testcontainers/ryuk:0.12.0 pull took PT3.008820739S
+2026-10-10T18:27:27.669Z  INFO 2302 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Creating container for image: testcontainers/ryuk:0.12.0
+2026-10-10T18:27:27.713Z  INFO 2302 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Container testcontainers/ryuk:0.12.0 is starting: a50798bdfe6440ed67c5c451a2e5b350519d899470e5afb571676cc65f1798ce
+2026-10-10T18:27:27.926Z  INFO 2302 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Container testcontainers/ryuk:0.12.0 started in PT0.256750895S
+2026-10-10T18:27:27.930Z  INFO 2302 --- [opspilot] [           main] o.t.utility.RyukResourceReaper           : Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+2026-10-10T18:27:27.931Z  INFO 2302 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : Checking the system...
+2026-10-10T18:27:27.931Z  INFO 2302 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : ✔︎ Docker server version should be at least 1.6.0
+2026-10-10T18:27:27.935Z  INFO 2302 --- [opspilot] [           main] tc.mysql:8.4                             : Pulling docker image: mysql:8.4. Please be patient; this may take some time but only needs to be done once.
+2026-10-10T18:27:28.801Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Starting to pull image
+2026-10-10T18:27:28.802Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
+2026-10-10T18:27:29.291Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  9 pending,  1 downloaded,  0 extracted, (884 bytes/? MB)
+2026-10-10T18:27:29.346Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  8 pending,  2 downloaded,  0 extracted, (1 MB/? MB)
+2026-10-10T18:27:29.445Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  7 pending,  3 downloaded,  0 extracted, (35 MB/? MB)
+2026-10-10T18:27:29.575Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  6 pending,  4 downloaded,  0 extracted, (35 MB/? MB)
+2026-10-10T18:27:29.586Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  5 pending,  5 downloaded,  0 extracted, (35 MB/? MB)
+2026-10-10T18:27:29.674Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  4 pending,  6 downloaded,  0 extracted, (35 MB/? MB)
+2026-10-10T18:27:29.818Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  3 pending,  7 downloaded,  0 extracted, (35 MB/? MB)
+2026-10-10T18:27:29.962Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  2 pending,  8 downloaded,  0 extracted, (71 MB/? MB)
+2026-10-10T18:27:30.058Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  1 pending,  9 downloaded,  0 extracted, (111 MB/? MB)
+2026-10-10T18:27:30.239Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  0 extracted, (200 MB/227 MB)
+2026-10-10T18:27:30.351Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  1 extracted, (206 MB/227 MB)
+2026-10-10T18:27:32.133Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  2 extracted, (206 MB/227 MB)
+2026-10-10T18:27:32.154Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  3 extracted, (206 MB/227 MB)
+2026-10-10T18:27:32.350Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  4 extracted, (212 MB/227 MB)
+2026-10-10T18:27:32.356Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  5 extracted, (212 MB/227 MB)
+2026-10-10T18:27:32.362Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  6 extracted, (212 MB/227 MB)
+2026-10-10T18:27:33.697Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  7 extracted, (226 MB/227 MB)
+2026-10-10T18:27:33.706Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  8 extracted, (226 MB/227 MB)
+2026-10-10T18:27:37.865Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  9 extracted, (227 MB/227 MB)
+2026-10-10T18:27:41.035Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded, 10 extracted, (227 MB/227 MB)
+2026-10-10T18:27:41.121Z  INFO 2302 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pull complete. 10 layers, pulled in 12s (downloaded 227 MB at 18 MB/s)
+2026-10-10T18:27:41.121Z  INFO 2302 --- [opspilot] [           main] tc.mysql:8.4                             : Image mysql:8.4 pull took PT13.185949277S
+2026-10-10T18:27:41.123Z  INFO 2302 --- [opspilot] [           main] tc.mysql:8.4                             : Creating container for image: mysql:8.4
+2026-10-10T18:27:41.150Z  INFO 2302 --- [opspilot] [           main] tc.mysql:8.4                             : Container mysql:8.4 is starting: da93165d96c3aa82ae9b630af3ea7ca385cc100ee95224ec9dd3cf02f5a8ed58
+2026-10-10T18:27:41.250Z  INFO 2302 --- [opspilot] [           main] tc.mysql:8.4                             : Waiting for database connection to become available at jdbc:mysql://localhost:32769/opspilot_open_notification_test using query 'SELECT 1'
+2026-10-10T18:27:48.969Z  INFO 2302 --- [opspilot] [           main] tc.mysql:8.4                             : Container mysql:8.4 started in PT7.845499166S
+2026-10-10T18:27:48.969Z  INFO 2302 --- [opspilot] [           main] tc.mysql:8.4                             : Container is started (JDBC URL: jdbc:mysql://localhost:32769/opspilot_open_notification_test)
+2026-10-10T18:27:49.630Z  INFO 2302 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
+2026-10-10T18:27:49.630Z  INFO 2302 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2026-10-10T18:27:49.630Z  INFO 2302 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : 
+2026-10-10T18:27:49.662Z  INFO 2302 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://localhost:32769/opspilot_open_notification_test (MySQL 8.4)
+2026-10-10T18:27:49.671Z  WARN 2302 --- [opspilot] [           main] o.f.c.internal.database.base.Database    : Flyway upgrade recommended: MySQL 8.4 is newer than this version of Flyway and support has not been tested. The latest supported version of MySQL is 8.0.
+2026-10-10T18:27:49.700Z  INFO 2302 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table `opspilot_open_notification_test`.`flyway_schema_history` does not exist yet
+2026-10-10T18:27:49.703Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 41 migrations (execution time 00:00.022s)
+2026-10-10T18:27:49.728Z  INFO 2302 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table `opspilot_open_notification_test`.`flyway_schema_history` ...
+2026-10-10T18:27:49.795Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `opspilot_open_notification_test`: << Empty Schema >>
+2026-10-10T18:27:49.815Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "1 - init opspilot"
+2026-10-10T18:27:50.073Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "2 - assistant conversations"
+2026-10-10T18:27:50.122Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "3 - agent investigation runs"
+2026-10-10T18:27:50.189Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "4 - observability evidence"
+2026-10-10T18:27:50.233Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "5 - agent events and remediation proposals"
+2026-10-10T18:27:50.287Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "6 - agent run controls"
+2026-10-10T18:27:50.627Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "7 - runbook knowledge base"
+2026-10-10T18:27:50.725Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "8 - hybrid runbook retrieval"
+2026-10-10T18:27:50.784Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "9 - runbook relevance feedback"
+2026-10-10T18:27:50.917Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "10 - graded runbook relevance evaluation"
+2026-10-10T18:27:51.083Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "11 - runbook judgment agreement"
+2026-10-10T18:27:51.142Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-10T18:27:51.276Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "13 - incident postmortems"
+2026-10-10T18:27:51.336Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "14 - incident analytics and follow up escalations"
+2026-10-10T18:27:51.368Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "15 - recurring incident problems"
+2026-10-10T18:27:51.433Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "16 - agent event outbox"
+2026-10-10T18:27:51.461Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "17 - outbox timestamp precision"
+2026-10-10T18:27:51.637Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "18 - outbox retention index"
+2026-10-10T18:27:51.656Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "19 - service slo objectives"
+2026-10-10T18:27:51.691Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "20 - alert ingest rejections"
+2026-10-10T18:27:51.742Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "21 - alert rejection lifecycle"
+2026-10-10T18:27:52.026Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "22 - follow up notification outbox"
+2026-10-10T18:27:52.058Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "23 - follow up owner acknowledgement"
+2026-10-10T18:27:52.156Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "24 - incident escalation execution"
+2026-10-10T18:27:52.191Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "25 - oncall roster management"
+2026-10-10T18:27:52.235Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "26 - oncall rotations"
+2026-10-10T18:27:52.341Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "27 - oncall handoff requests"
+2026-10-10T18:27:52.380Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "28 - oncall handoff revocations"
+2026-10-10T18:27:52.399Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "29 - runbook returned document count"
+2026-10-10T18:27:52.468Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "30 - runbook publication review"
+2026-10-10T18:27:52.871Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "31 - account auth version"
+2026-10-10T18:27:53.020Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "32 - assistant request idempotency"
+2026-10-10T18:27:53.041Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "33 - assistant queue and cancel"
+2026-10-10T18:27:53.181Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "34 - oncall shift swaps"
+2026-10-10T18:27:53.231Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "35 - oncall swap notification outbox"
+2026-10-10T18:27:53.264Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "36 - oncall swap notification payload retention"
+2026-10-10T18:27:53.313Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "37 - oncall swap revocations"
+2026-10-10T18:27:53.351Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "38 - oncall open handoffs"
+2026-10-10T18:27:53.398Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "39 - oncall plan memberships"
+2026-10-10T18:27:53.436Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "40 - open handoff publication snapshots"
+2026-10-10T18:27:53.453Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_open_notification_test` to version "41 - open handoff notification outbox"
+2026-10-10T18:27:53.480Z  INFO 2302 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 41 migrations to schema `opspilot_open_notification_test`, now at version v41 (execution time 00:03.268s)
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-10-10T18:27:55.363Z  INFO 2302 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-10T18:27:55.692Z  INFO 2302 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3f774d60, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@333ab718, org.springframework.security.web.context.SecurityContextHolderFilter@633e4742, org.springframework.security.web.header.HeaderWriterFilter@1de78f97, org.springframework.web.filter.CorsFilter@7fcbed77, org.springframework.security.web.authentication.logout.LogoutFilter@68628510, org.trigger.opspilot.security.JwtAuthenticationFilter@3e02988, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@25a2702c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@23110196, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2e2b1310, org.springframework.security.web.session.SessionManagementFilter@3f96ef2, org.springframework.security.web.access.ExceptionTranslationFilter@60a98fa6, org.springframework.security.web.access.intercept.AuthorizationFilter@59f2a9e9]
+2026-10-10T18:27:56.743Z  INFO 2302 --- [opspilot] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-10T18:27:56.744Z  INFO 2302 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-10T18:27:56.746Z  INFO 2302 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-10T18:27:56.824Z  INFO 2302 --- [opspilot] [           main] SqlOnCallOpenNotificationIntegrationTest : Started MySqlOnCallOpenNotificationIntegrationTest in 34.512 seconds (process running for 35.439)
+2026-10-10T18:27:57.043Z  INFO 2302 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-10T18:27:57.108Z  INFO 2302 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@12223aed
+2026-10-10T18:27:57.111Z  INFO 2302 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+OPEN_NOTIFICATION_DATABASE {"case":"shouldSkipRevokedOriginalRecipientAndNeverRetargetLaterGrants","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldSkipRevokedOriginalRecipientAndNeverRetargetLaterGrants","payloadSha256":["f768150aa6a3ae47bb6e05b28489fdc25e2e9b47b415d6d2162b293d6c6f31b4"],"httpCalls":1,"keys":["oncall-open-notification:8342066e-5b2c-43d5-b723-7dce2e4a205e"],"events":[{"id":1,"handoffId":1,"eventVersion":0,"recipientId":6,"deliveryKey":"31bad79e-487a-44e0-8353-616650c76363","status":"SKIPPED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:27:57.690237","leaseUntil":null,"lastHttpStatus":null,"lastErrorCode":"NO_LONGER_ELIGIBLE","deliveredAt":null},{"id":2,"handoffId":1,"eventVersion":0,"recipientId":7,"deliveryKey":"8342066e-5b2c-43d5-b723-7dce2e4a205e","status":"DELIVERED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:27:57.818448","leaseUntil":null,"lastHttpStatus":200,"lastErrorCode":null,"deliveredAt":"2026-10-10T18:27:57.718448"}],"authenticatedRequests":1}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldDeliverOnlyCapturedRespondersWithStableKeyAndNoAutomaticClaim","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldDeliverOnlyCapturedRespondersWithStableKeyAndNoAutomaticClaim","payloadSha256":["9f415eb11e600d0132d5e4e2b745eaa163a08aeab516dad180d25182286c9218","1df6b730b4d604a4f97b93914f4ccd9fae467238f864ec810b46d3f00dc00e6b"],"httpCalls":2,"keys":["oncall-open-notification:21e3e79d-3551-4fb0-b9fb-92b4ea1497f8","oncall-open-notification:a4c0c834-7291-4435-a66d-a627bf2f10b0"],"events":[{"id":3,"handoffId":2,"eventVersion":0,"recipientId":10,"deliveryKey":"21e3e79d-3551-4fb0-b9fb-92b4ea1497f8","status":"DELIVERED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:27:57.953121","leaseUntil":null,"lastHttpStatus":200,"lastErrorCode":null,"deliveredAt":"2026-10-10T18:27:57.853121"},{"id":4,"handoffId":2,"eventVersion":0,"recipientId":11,"deliveryKey":"a4c0c834-7291-4435-a66d-a627bf2f10b0","status":"DELIVERED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:27:57.968326","leaseUntil":null,"lastHttpStatus":200,"lastErrorCode":null,"deliveredAt":"2026-10-10T18:27:57.868326"}],"authenticatedRequests":2}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldSkipWhenPublisherResponsePermissionIsRevoked","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldSkipWhenPublisherResponsePermissionIsRevoked","payloadSha256":[],"httpCalls":0,"keys":[],"events":[{"id":5,"handoffId":3,"eventVersion":0,"recipientId":13,"deliveryKey":"04b7e620-cdb9-405f-9882-4fc754dd56de","status":"SKIPPED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:27:58.096568","leaseUntil":null,"lastHttpStatus":null,"lastErrorCode":"NO_LONGER_ELIGIBLE","deliveredAt":null}],"authenticatedRequests":0}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldExposeAuthenticatedTechnicalMetadataWithoutPayloadTokenOrLeaseOwner","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldExposeAuthenticatedTechnicalMetadataWithoutPayloadTokenOrLeaseOwner","payloadSha256":["7da7c14e2c223eb9608d7264279206ed225f63cb7cf7175f2879fe5bba1c2349"],"httpCalls":1,"keys":["oncall-open-notification:37ea9791-d46c-4d54-a928-a6686452fa0b"],"events":[{"id":6,"handoffId":4,"eventVersion":0,"recipientId":15,"deliveryKey":"37ea9791-d46c-4d54-a928-a6686452fa0b","status":"DELIVERED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:27:58.189025","leaseUntil":null,"lastHttpStatus":200,"lastErrorCode":null,"deliveredAt":"2026-10-10T18:27:58.089025"}],"authenticatedRequests":1}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldFinalizePendingAttemptsAfterConfigurationLimitIsTightened","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldFinalizePendingAttemptsAfterConfigurationLimitIsTightened","payloadSha256":[],"httpCalls":0,"keys":[],"events":[{"id":7,"handoffId":5,"eventVersion":0,"recipientId":17,"deliveryKey":"e71d5969-75df-429c-9057-c3532f921a7f","status":"FAILED","version":1,"attempts":2,"nextAttemptAt":"2026-10-10T18:27:57.449504","leaseUntil":null,"lastHttpStatus":null,"lastErrorCode":"ATTEMPTS_EXHAUSTED","deliveredAt":null}],"authenticatedRequests":0}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldNotFollowRedirectsOrLeakChannelToken","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldNotFollowRedirectsOrLeakChannelToken","payloadSha256":["7b93b82fa249c430d298bb1a747d778c799281c7f583ef1a94862f358ab675db"],"httpCalls":1,"keys":["oncall-open-notification:2ba8642f-858e-4e61-b4da-6fda8970160f"],"events":[{"id":8,"handoffId":6,"eventVersion":0,"recipientId":19,"deliveryKey":"2ba8642f-858e-4e61-b4da-6fda8970160f","status":"FAILED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:27:58.630332","leaseUntil":null,"lastHttpStatus":302,"lastErrorCode":"HTTP_302","deliveredAt":null}],"authenticatedRequests":1}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldSkipInactivePlan","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldSkipInactivePlan","payloadSha256":[],"httpCalls":0,"keys":[],"events":[{"id":9,"handoffId":7,"eventVersion":0,"recipientId":21,"deliveryKey":"1a1aa9fe-27ca-4e15-9044-257fc6c1b44b","status":"SKIPPED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:27:58.721939","leaseUntil":null,"lastHttpStatus":null,"lastErrorCode":"NO_LONGER_ELIGIBLE","deliveredAt":null}],"authenticatedRequests":0}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldSkipAfterActualClaimWithoutRewritingCoverageOrPublication","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldSkipAfterActualClaimWithoutRewritingCoverageOrPublication","payloadSha256":[],"httpCalls":0,"keys":[],"events":[{"id":10,"handoffId":8,"eventVersion":0,"recipientId":23,"deliveryKey":"307ad6b6-5bba-44b6-bb98-2353aec28349","status":"SKIPPED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:27:58.802025","leaseUntil":null,"lastHttpStatus":null,"lastErrorCode":"NO_LONGER_ELIGIBLE","deliveredAt":null}],"authenticatedRequests":0}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldSkipCancelledSource","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldSkipCancelledSource","payloadSha256":[],"httpCalls":0,"keys":[],"events":[{"id":11,"handoffId":9,"eventVersion":0,"recipientId":25,"deliveryKey":"fb2d02c3-6052-47ab-bf61-47bf4104dfde","status":"SKIPPED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:27:58.9016","leaseUntil":null,"lastHttpStatus":null,"lastErrorCode":"NO_LONGER_ELIGIBLE","deliveredAt":null}],"authenticatedRequests":0}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldRetryTransient503WithSameFrozenPayloadAndIdempotencyKey","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldRetryTransient503WithSameFrozenPayloadAndIdempotencyKey","payloadSha256":["f253a8979e0c9216793ca269d537d25b31f569d17b1f7ce1ef87627b89182b7d","f253a8979e0c9216793ca269d537d25b31f569d17b1f7ce1ef87627b89182b7d"],"httpCalls":2,"keys":["oncall-open-notification:69f0d407-f733-4b74-999b-a357dca5d0f2","oncall-open-notification:69f0d407-f733-4b74-999b-a357dca5d0f2"],"events":[{"id":12,"handoffId":10,"eventVersion":0,"recipientId":27,"deliveryKey":"69f0d407-f733-4b74-999b-a357dca5d0f2","status":"DELIVERED","version":4,"attempts":2,"nextAttemptAt":"2026-10-10T18:27:59.100425","leaseUntil":null,"lastHttpStatus":200,"lastErrorCode":null,"deliveredAt":"2026-10-10T18:27:58.900425"}],"authenticatedRequests":2}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldBound429RetriesAndNeverAutomaticallyRetryFailedEvents","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldBound429RetriesAndNeverAutomaticallyRetryFailedEvents","payloadSha256":["ff28431ba48b81106048f1c8810c9866e886a3d91fec24345f4d5589fe180fef","ff28431ba48b81106048f1c8810c9866e886a3d91fec24345f4d5589fe180fef"],"httpCalls":2,"keys":["oncall-open-notification:1f393ffb-496f-4de7-867e-98b079d879c1","oncall-open-notification:1f393ffb-496f-4de7-867e-98b079d879c1"],"events":[{"id":13,"handoffId":11,"eventVersion":0,"recipientId":29,"deliveryKey":"1f393ffb-496f-4de7-867e-98b079d879c1","status":"FAILED","version":4,"attempts":2,"nextAttemptAt":"2026-10-10T18:27:59.198091","leaseUntil":null,"lastHttpStatus":429,"lastErrorCode":"HTTP_429","deliveredAt":null}],"authenticatedRequests":2}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldKeepOriginalAcknowledgementReadOnlyBeforeAndAfterDelivery","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldKeepOriginalAcknowledgementReadOnlyBeforeAndAfterDelivery","payloadSha256":["6187c17b3c5f45d64a2e4f9489576f1595b16baa9382b7ccd34eee89aabf4d60"],"httpCalls":1,"keys":["oncall-open-notification:78dfd913-a59c-49c6-905e-6d17419b9a1b"],"events":[{"id":14,"handoffId":12,"eventVersion":0,"recipientId":31,"deliveryKey":"78dfd913-a59c-49c6-905e-6d17419b9a1b","status":"DELIVERED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:27:59.215191","leaseUntil":null,"lastHttpStatus":200,"lastErrorCode":null,"deliveredAt":"2026-10-10T18:27:59.115191"}],"authenticatedRequests":1}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldRefuseNetworkDispatchInsideCallerTransaction","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldRefuseNetworkDispatchInsideCallerTransaction","payloadSha256":[],"httpCalls":0,"keys":[],"events":[{"id":15,"handoffId":13,"eventVersion":0,"recipientId":33,"deliveryKey":"bcdf4cc9-b3a8-49d7-a913-c67ab00119ea","status":"PENDING","version":0,"attempts":0,"nextAttemptAt":"2026-10-10T18:27:59.180536","leaseUntil":null,"lastHttpStatus":null,"lastErrorCode":null,"deliveredAt":null}],"authenticatedRequests":0}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldSkipDisabledRecipientAccountWithoutChangingFrozenPayload","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldSkipDisabledRecipientAccountWithoutChangingFrozenPayload","payloadSha256":[],"httpCalls":0,"keys":[],"events":[{"id":16,"handoffId":14,"eventVersion":0,"recipientId":35,"deliveryKey":"5be2a9dc-86f4-418e-b099-64dc81184266","status":"SKIPPED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:27:59.35082","leaseUntil":null,"lastHttpStatus":null,"lastErrorCode":"NO_LONGER_ELIGIBLE","deliveredAt":null}],"authenticatedRequests":0}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldFenceLateOldLeaseReceiptAfterAnotherWorkerSucceeds","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldFenceLateOldLeaseReceiptAfterAnotherWorkerSucceeds","payloadSha256":["a33a46f02b9d62be2a5d2b0177f3735915ff45415856b57774ae7cac2f96f162","a33a46f02b9d62be2a5d2b0177f3735915ff45415856b57774ae7cac2f96f162"],"httpCalls":2,"keys":["oncall-open-notification:fadd6bb6-64d7-4635-9f9e-77cbd4051e31","oncall-open-notification:fadd6bb6-64d7-4635-9f9e-77cbd4051e31"],"events":[{"id":17,"handoffId":15,"eventVersion":0,"recipientId":37,"deliveryKey":"fadd6bb6-64d7-4635-9f9e-77cbd4051e31","status":"DELIVERED","version":3,"attempts":2,"nextAttemptAt":"2026-10-10T18:27:59.531795","leaseUntil":null,"lastHttpStatus":200,"lastErrorCode":null,"deliveredAt":"2026-10-10T18:27:59.331795"}],"authenticatedRequests":2}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldDropBusyWorkerTicksWithoutInMemoryBacklog","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldDropBusyWorkerTicksWithoutInMemoryBacklog","payloadSha256":["2ca408de310d8eac5d491d15cbb107284ad12da9a5349875036e5874fe00ce7d"],"httpCalls":1,"keys":["oncall-open-notification:ff4ea7fa-9cdf-420d-ab08-20cb4bed27d0"],"events":[{"id":18,"handoffId":16,"eventVersion":0,"recipientId":39,"deliveryKey":"ff4ea7fa-9cdf-420d-ab08-20cb4bed27d0","status":"DELIVERED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:27:59.513684","leaseUntil":null,"lastHttpStatus":200,"lastErrorCode":null,"deliveredAt":"2026-10-10T18:27:59.413684"}],"authenticatedRequests":1}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldRejectOversizedOriginalPublicationWithoutPartialRows","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldRejectOversizedOriginalPublicationWithoutPartialRows","payloadSha256":[],"httpCalls":0,"keys":[],"events":[],"authenticatedRequests":0}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldRollbackRequestPublicationAuditAndOutboxAfterActualEnqueueFails","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldRollbackRequestPublicationAuditAndOutboxAfterActualEnqueueFails","payloadSha256":[],"httpCalls":0,"keys":[],"events":[],"authenticatedRequests":0}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldFinalizeExpiredMaximumLeaseWithoutSendingAgain","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldFinalizeExpiredMaximumLeaseWithoutSendingAgain","payloadSha256":[],"httpCalls":0,"keys":[],"events":[{"id":21,"handoffId":19,"eventVersion":0,"recipientId":285,"deliveryKey":"2bbccdb4-e2ae-4c69-ae07-2e80f170ecbc","status":"FAILED","version":1,"attempts":2,"nextAttemptAt":"2026-10-10T18:28:00.193273","leaseUntil":null,"lastHttpStatus":null,"lastErrorCode":"ATTEMPTS_EXHAUSTED","deliveredAt":null}],"authenticatedRequests":0}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldSkipAfterActualWithdrawalAndPreserveOriginalEvent","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldSkipAfterActualWithdrawalAndPreserveOriginalEvent","payloadSha256":[],"httpCalls":0,"keys":[],"events":[{"id":22,"handoffId":20,"eventVersion":0,"recipientId":287,"deliveryKey":"41ea2bee-5c6e-47c2-ad68-128e5ce92e44","status":"SKIPPED","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:28:00.38327","leaseUntil":null,"lastHttpStatus":null,"lastErrorCode":"NO_LONGER_ELIGIBLE","deliveredAt":null}],"authenticatedRequests":0}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldPersistEmptyAudienceWithoutLaterGrantBackfill","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldPersistEmptyAudienceWithoutLaterGrantBackfill","payloadSha256":[],"httpCalls":0,"keys":[],"events":[],"authenticatedRequests":0}
+OPEN_NOTIFICATION_DATABASE {"case":"shouldBoundTransportTimeoutWithoutClaimingDeliveryOrHumanAcceptance","schema":"opspilot_open_notification_test","migration41":true,"product":"MySQL","version":"8.4.11"}
+OPEN_NOTIFICATION_OUTCOME {"case":"shouldBoundTransportTimeoutWithoutClaimingDeliveryOrHumanAcceptance","payloadSha256":["d6753cb14a0ee63fd611046bfbc1dc527762eec85b56b3413544962163c390fc"],"httpCalls":1,"keys":["oncall-open-notification:3b1903c0-36de-422f-a836-a768f671c5fa"],"events":[{"id":23,"handoffId":22,"eventVersion":0,"recipientId":291,"deliveryKey":"3b1903c0-36de-422f-a836-a768f671c5fa","status":"PENDING","version":2,"attempts":1,"nextAttemptAt":"2026-10-10T18:28:02.71878","leaseUntil":null,"lastHttpStatus":null,"lastErrorCode":"TRANSPORT_ERROR","deliveredAt":null}],"authenticatedRequests":1}
+2026-10-10T18:28:02.663Z  INFO 2302 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-10T18:28:02.668Z  INFO 2302 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+[ERROR] Tests run: 22, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 41.03 s <<< FAILURE! -- in org.trigger.opspilot.oncall.MySqlOnCallOpenNotificationIntegrationTest
+[ERROR] org.trigger.opspilot.oncall.MySqlOnCallOpenNotificationIntegrationTest.shouldFinalizeExpiredMaximumLeaseWithoutSendingAgain -- Time elapsed: 0.066 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: 
+
+expected: "LEASE_EXPIRED"
+ but was: "ATTEMPTS_EXHAUSTED"
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+	at org.trigger.opspilot.oncall.OpenNotificationScenarios.shouldFinalizeExpiredMaximumLeaseWithoutSendingAgain(OpenNotificationScenarios.java:152)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   MySqlOnCallOpenNotificationIntegrationTest>OpenNotificationScenarios.shouldFinalizeExpiredMaximumLeaseWithoutSendingAgain:152 
+expected: "LEASE_EXPIRED"
+ but was: "ATTEMPTS_EXHAUSTED"
+[INFO] 
+[ERROR] Tests run: 22, Failures: 1, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  51.372 s
+[INFO] Finished at: 2026-10-10T18:28:03Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.1.2:test (default-test) on project opspilot: There are test failures.
+[ERROR] 
+[ERROR] Please refer to /home/runner/work/OnCall-Agent/OnCall-Agent/target/surefire-reports for the individual test results.
+[ERROR] Please refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

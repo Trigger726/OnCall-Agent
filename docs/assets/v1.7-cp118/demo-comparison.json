@@ -1,0 +1,45 @@
+{
+  "sourceEvidence": "final-notification-jar/result.json",
+  "stages": [
+    {
+      "version": "V40",
+      "adapterImplemented": false,
+      "notificationRows": 0
+    },
+    {
+      "version": "V41-disabled",
+      "notificationRows": 0,
+      "noBackfill": true
+    },
+    {
+      "version": "V41-enabled-before-tick",
+      "status": "PENDING",
+      "attempts": 0
+    },
+    {
+      "version": "V41-first-restart",
+      "status": "PENDING",
+      "httpStatus": 503,
+      "attempts": 1
+    },
+    {
+      "version": "V41-second-restart",
+      "status": "DELIVERED",
+      "httpStatus": 200,
+      "attempts": 2,
+      "requestStill": "OPEN"
+    },
+    {
+      "version": "V41-revoked-recipient-restart",
+      "status": "SKIPPED",
+      "additionalHttpRequests": 0
+    },
+    {
+      "version": "V41-explicit-human-claim",
+      "requestStatus": "CLAIMED",
+      "replacementId": 7
+    }
+  ],
+  "actualThirdPartyAccountDelivery": false,
+  "newRenderedNotificationPage": false
+}

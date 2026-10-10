@@ -31,7 +31,7 @@ public class OpenHandoffSqlFixture {
         } else {
         Path database = Path.of(args[0]).toAbsolutePath().normalize();
         if (!root.getFileName().toString().startsWith("run-")
-                || !java.util.List.of("oncall-open-handoff-http-it", "oncall-plan-membership-upgrade-http-it", "oncall-open-publication-upgrade-http-it").contains(root.getParent().getFileName().toString())
+                || !java.util.List.of("oncall-open-handoff-http-it", "oncall-plan-membership-upgrade-http-it", "oncall-open-publication-upgrade-http-it", "oncall-open-notification-http-it").contains(root.getParent().getFileName().toString())
                 || !database.getParent().toRealPath().equals(root.resolve("database").toRealPath())
                 || !database.getFileName().toString().equals("opspilot")
                 || !Files.isRegularFile(Path.of(database + ".mv.db"))
@@ -104,6 +104,15 @@ public class OpenHandoffSqlFixture {
                         + ",\"active\":" + rows.getBoolean("active") + ",\"canRespond\":" + rows.getBoolean("can_respond")
                         + ",\"canManage\":" + rows.getBoolean("can_manage") + ",\"version\":" + rows.getInt("version") + ",\"origin\":" + quote(rows.getString("origin")) + "}");
             }
+            var notifications = new ArrayList<String>();
+            if (notificationMigrated) try (var statement = connection.createStatement(); var rows = statement.executeQuery("SELECT id,handoff_id,event_version,recipient_id,delivery_key,payload_json,status,version,attempts,last_http_status,last_error_code,lease_token,lease_until,delivered_at FROM oncall_open_handoff_notification ORDER BY id")) {
+                while (rows.next()) notifications.add("{\"id\":" + rows.getLong(1) + ",\"handoffId\":" + rows.getLong(2) + ",\"eventVersion\":" + rows.getInt(3)
+                        + ",\"recipientId\":" + rows.getLong(4) + ",\"deliveryKey\":" + quote(rows.getString(5))
+                        + ",\"payloadSha256\":" + quote(HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(rows.getString(6).getBytes(StandardCharsets.UTF_8))))
+                        + ",\"status\":" + quote(rows.getString(7)) + ",\"version\":" + rows.getInt(8) + ",\"attempts\":" + rows.getInt(9)
+                        + ",\"lastHttpStatus\":" + rows.getObject(10) + ",\"lastErrorCode\":" + quote(rows.getString(11))
+                        + ",\"leaseOwnerPresent\":" + (rows.getString(12) != null) + ",\"leaseUntil\":" + quote(rows.getString(13)) + ",\"deliveredAt\":" + quote(rows.getString(14)) + "}");
+            }
             System.out.println("{" + identity
                     + ",\"migrationCount\":" + count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE AND version IS NOT NULL")
                     + ",\"successfulHistoryRows\":" + count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE")
@@ -112,6 +121,7 @@ public class OpenHandoffSqlFixture {
                     + ",\"migration41\":" + notificationMigrated
                     + ",\"notificationRows\":" + (notificationMigrated ? count(connection,"SELECT COUNT(*) FROM oncall_open_handoff_notification") : 0)
                     + ",\"notificationHash\":" + quote(notificationMigrated ? fingerprint(connection,"SELECT * FROM oncall_open_handoff_notification ORDER BY id") : null)
+                    + ",\"notifications\":[" + String.join(",", notifications) + "]"
                     + ",\"publicationRows\":" + publicationRows + ",\"publicationHash\":" + quote(publicationHash) + ",\"shifts\":" + count(connection, "SELECT COUNT(*) FROM oncall_shift")
                     + ",\"publications\":[" + String.join(",", publications) + "]"
                     + ",\"shiftHash\":" + quote(fingerprint(connection, "SELECT * FROM oncall_shift ORDER BY id"))
@@ -125,6 +135,7 @@ public class OpenHandoffSqlFixture {
                     + ",\"onCallAuditHash\":" + quote(fingerprint(connection, "SELECT * FROM audit_log WHERE action LIKE 'ONCALL_%' ORDER BY id"))
                     + ",\"v38MigrationHash\":" + quote(fingerprint(connection, "SELECT version,type,script,checksum,success FROM flyway_schema_history WHERE version IS NOT NULL AND CAST(version AS INTEGER)<=38 ORDER BY installed_rank".replace("CAST(version AS INTEGER)", mysql ? "CAST(version AS UNSIGNED)" : "CAST(version AS INTEGER)")))
                     + ",\"v39MigrationHash\":" + quote(fingerprint(connection, "SELECT version,type,script,checksum,success FROM flyway_schema_history WHERE version IS NOT NULL AND CAST(version AS INTEGER)<=39 ORDER BY installed_rank".replace("CAST(version AS INTEGER)", mysql ? "CAST(version AS UNSIGNED)" : "CAST(version AS INTEGER)")))
+                    + ",\"v40MigrationHash\":" + quote(fingerprint(connection, "SELECT version,type,script,checksum,success FROM flyway_schema_history WHERE version IS NOT NULL AND CAST(version AS INTEGER)<=40 ORDER BY installed_rank".replace("CAST(version AS INTEGER)", mysql ? "CAST(version AS UNSIGNED)" : "CAST(version AS INTEGER)")))
                     + ",\"memberHash\":" + quote(memberMigrated ? fingerprint(connection, "SELECT * FROM oncall_schedule_member ORDER BY schedule_id,user_id") : null)
                     + ",\"memberOperationHash\":" + quote(memberMigrated ? fingerprint(connection, "SELECT * FROM oncall_schedule_member_operation ORDER BY id") : null)
                     + ",\"members\":[" + String.join(",", members) + "]"

@@ -17,7 +17,7 @@ test('new membership jobs keep their own explicit MySQL opt-in and strict eviden
 });
 test('membership browser is an additional own-source job, never replaces original 33 cases',()=>{
   const yaml=fs.readFileSync(path.join(root,'.github/workflows/plan-membership-wip.yml'),'utf8');
-  assert.equal([...yaml.matchAll(/^  [\w-]+:\s*$/gm)].filter(m=>m.index>yaml.indexOf('\njobs:\n')).length,7);
+  assert.equal([...yaml.matchAll(/^  [\w-]+:\s*$/gm)].filter(m=>m.index>yaml.indexOf('\njobs:\n')).length,8);
   for(const command of ['-Dtest=MySqlOnCallPlanMembershipCrossNodeIntegrationTest test','node scripts/verify-oncall-plan-membership-cross-node.cjs','node scripts/verify-oncall-plan-membership-ui-ci.cjs','node scripts/verify-oncall-plan-membership-ui-evidence.cjs','npm test --prefix web','npm run build --prefix web'])assert.ok(yaml.includes(command));
   assert.doesNotMatch(yaml,/OPSPILOT_MEMBER_UI_BASELINE|continue-on-error/);
 });
