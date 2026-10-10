@@ -20,17 +20,18 @@ public class OpenHandoffSqlFixture {
         if (mysql) {
             String parent = root.getParent().getFileName().toString();
             boolean memberUpgrade = parent.equals("oncall-plan-membership-upgrade-mysql-it");
-            if (!memberUpgrade && !parent.equals("oncall-open-handoff-upgrade-mysql-it")) throw new IllegalArgumentException("Require MySQL runner root");
+            boolean publicationUpgrade = parent.equals("oncall-open-publication-upgrade-mysql-it");
+            if (!memberUpgrade && !publicationUpgrade && !parent.equals("oncall-open-handoff-upgrade-mysql-it")) throw new IllegalArgumentException("Require MySQL runner root");
             url = System.getenv("OPSPILOT_UPGRADE_JDBC_URL");
             String schema = System.getenv("OPSPILOT_UPGRADE_SCHEMA");
-            if (schema == null || !schema.matches((memberUpgrade ? "opspilot_member_upgrade_" : "opspilot_open_upgrade_") + "[a-f0-9]{12}") || url == null
+            if (schema == null || !schema.matches((memberUpgrade ? "opspilot_member_upgrade_" : publicationUpgrade ? "opspilot_publication_upgrade_" : "opspilot_open_upgrade_") + "[a-f0-9]{12}") || url == null
                     || !url.matches("jdbc:mysql://(?:localhost|127\\.0\\.0\\.1):[0-9]+/" + schema + "\\?[^\\s]+")) {
                 throw new IllegalArgumentException("Require dedicated loopback Testcontainer schema");
             }
         } else {
         Path database = Path.of(args[0]).toAbsolutePath().normalize();
         if (!root.getFileName().toString().startsWith("run-")
-                || !java.util.List.of("oncall-open-handoff-http-it", "oncall-plan-membership-upgrade-http-it").contains(root.getParent().getFileName().toString())
+                || !java.util.List.of("oncall-open-handoff-http-it", "oncall-plan-membership-upgrade-http-it", "oncall-open-publication-upgrade-http-it").contains(root.getParent().getFileName().toString())
                 || !database.getParent().toRealPath().equals(root.resolve("database").toRealPath())
                 || !database.getFileName().toString().equals("opspilot")
                 || !Files.isRegularFile(Path.of(database + ".mv.db"))
@@ -91,6 +92,11 @@ public class OpenHandoffSqlFixture {
             String operationHash = migrated ? fingerprint(connection, "SELECT * FROM oncall_open_handoff_operation ORDER BY handoff_id") : null;
             long publicationRows = publicationMigrated ? count(connection, "SELECT COUNT(*) FROM oncall_open_handoff_publication") : 0;
             String publicationHash = publicationMigrated ? fingerprint(connection, "SELECT * FROM oncall_open_handoff_publication ORDER BY handoff_id") : null;
+            var publications = new ArrayList<String>();
+            if (publicationMigrated) try (var statement = connection.createStatement(); var rows = statement.executeQuery("SELECT handoff_id,event_version,snapshot_json FROM oncall_open_handoff_publication ORDER BY handoff_id")) {
+                while (rows.next()) publications.add("{\"handoffId\":" + rows.getLong(1) + ",\"eventVersion\":" + rows.getInt(2)
+                        + ",\"snapshotJson\":" + quote(rows.getString(3)) + "}");
+            }
             var members = new ArrayList<String>();
             if (memberMigrated) try (var statement = connection.createStatement(); var rows = statement.executeQuery("SELECT * FROM oncall_schedule_member ORDER BY schedule_id,user_id")) {
                 while (rows.next()) members.add("{\"scheduleId\":" + rows.getLong("schedule_id") + ",\"userId\":" + rows.getLong("user_id")
@@ -103,6 +109,7 @@ public class OpenHandoffSqlFixture {
                     + ",\"history\":[" + String.join(",", history) + "]"
                     + ",\"migration38\":" + migrated + ",\"migration39\":" + memberMigrated + ",\"migration40\":" + publicationMigrated
                     + ",\"publicationRows\":" + publicationRows + ",\"publicationHash\":" + quote(publicationHash) + ",\"shifts\":" + count(connection, "SELECT COUNT(*) FROM oncall_shift")
+                    + ",\"publications\":[" + String.join(",", publications) + "]"
                     + ",\"shiftHash\":" + quote(fingerprint(connection, "SELECT * FROM oncall_shift ORDER BY id"))
                     + ",\"designatedHash\":" + quote(fingerprint(connection, "SELECT * FROM oncall_handoff ORDER BY id"))
                     + ",\"swapHash\":" + quote(fingerprint(connection, "SELECT * FROM oncall_shift_swap ORDER BY id"))
@@ -113,6 +120,7 @@ public class OpenHandoffSqlFixture {
                     + ",\"legacyMigrationHash\":" + quote(fingerprint(connection, "SELECT version,type,script,checksum,success FROM flyway_schema_history WHERE version IS NOT NULL AND CAST(version AS INTEGER)<38 ORDER BY installed_rank".replace("CAST(version AS INTEGER)", mysql ? "CAST(version AS UNSIGNED)" : "CAST(version AS INTEGER)")))
                     + ",\"onCallAuditHash\":" + quote(fingerprint(connection, "SELECT * FROM audit_log WHERE action LIKE 'ONCALL_%' ORDER BY id"))
                     + ",\"v38MigrationHash\":" + quote(fingerprint(connection, "SELECT version,type,script,checksum,success FROM flyway_schema_history WHERE version IS NOT NULL AND CAST(version AS INTEGER)<=38 ORDER BY installed_rank".replace("CAST(version AS INTEGER)", mysql ? "CAST(version AS UNSIGNED)" : "CAST(version AS INTEGER)")))
+                    + ",\"v39MigrationHash\":" + quote(fingerprint(connection, "SELECT version,type,script,checksum,success FROM flyway_schema_history WHERE version IS NOT NULL AND CAST(version AS INTEGER)<=39 ORDER BY installed_rank".replace("CAST(version AS INTEGER)", mysql ? "CAST(version AS UNSIGNED)" : "CAST(version AS INTEGER)")))
                     + ",\"memberHash\":" + quote(memberMigrated ? fingerprint(connection, "SELECT * FROM oncall_schedule_member ORDER BY schedule_id,user_id") : null)
                     + ",\"memberOperationHash\":" + quote(memberMigrated ? fingerprint(connection, "SELECT * FROM oncall_schedule_member_operation ORDER BY id") : null)
                     + ",\"members\":[" + String.join(",", members) + "]"

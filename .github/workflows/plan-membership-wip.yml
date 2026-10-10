@@ -48,6 +48,54 @@ jobs:
             target/surefire-reports/
           retention-days: 30
 
+  publication-upgrade-mysql:
+    name: Nonempty V39 to V40 publication HTTP and restart on owned MySQL 8.4
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # Gate compares immutable CP115 V1-V40 blobs, including unmodified published V40.
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Check publication upgrade evidence gates
+        run: node --test scripts/tests/oncall-open-publication-upgrade.test.cjs
+      - name: Build own-source current JAR
+        run: bash mvnw -B -DskipTests package
+      - name: Immutable old V39 checkout
+        uses: actions/checkout@v5
+        with:
+          ref: 915e3f29557bd8019c79793b12f73f990215ad71
+          path: target/cp116-v39-source
+      - name: Build actual original V39 JAR and record clean provenance
+        run: |
+          (cd target/cp116-v39-source && bash mvnw -B -DskipTests package)
+          node scripts/record-open-publication-upgrade-baseline.cjs
+      - name: Exercise populated upgrade real publication endpoint and restart
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p target/oncall-open-publication-upgrade-mysql-it
+          bash mvnw -B -Duser.timezone=UTC -Dopspilot.oncall.publication.upgrade.mysql.enabled=true -Dtest=MySqlOpenPublicationUpgradeHttpIntegrationTest test 2>&1 | tee target/oncall-open-publication-upgrade-mysql-it/maven.log
+      - name: Verify persisted snapshots original checksums and all owned cleanup
+        run: node scripts/verify-oncall-open-publication-upgrade-mysql.cjs
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: open-publication-upgrade-mysql-evidence
+          path: |
+            target/oncall-open-publication-upgrade-mysql-it/**/*.json
+            target/oncall-open-publication-upgrade-mysql-it/**/*.log
+            target/surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOpenPublicationUpgradeHttpIntegrationTest.xml
+            target/cp116-v39-source/old-v39-jar-provenance.json
+          retention-days: 30
+
   membership-ui:
     name: Plan membership real browser identity and original receipts
     runs-on: ubuntu-latest

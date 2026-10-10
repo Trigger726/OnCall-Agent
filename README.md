@@ -1,5 +1,7 @@
 # OpsPilot
 
+当前开发CP116：[非空V39→V40与发布快照真网络/重启](docs/acceptance/V1.7-checkpoint-116.md)。旧/新JAR六H2 HTTP、独立SQL两快照、四次认证关闭与原39校验和保持通过；Node222、定向Java60通过。CP115自己主21＋专项5已success，五ZIP独立核验（MySQL14/22、升级7、双JVM6、Linux25）。新增独立MySQL升级作业，自己的新MySQL与完整CI继续验；真实开放渠道/提醒未实现，旧Demo/失败完整保留，不称整体完成。以下CP115及更早文字是当时历史状态。
+
 当前开发CP115：[开放发布快照与权威接收人](docs/acceptance/V1.7-checkpoint-115.md)。V40原事务冻结发布候选，当前响应资格独立重查，不补入后来授权的成员；新14/原22+24 H2通过，默认后端554执行/235条件跳过、Node212通过。渠道与提醒尚未实施，deliveryImplemented=false。CP114主21CI success、专项三个MySQL成功但UI在浅克隆历史对照门禁失败；首失败保留，本轮定向补齐历史，不当Linux25通过。当前新源码的MySQL/真网络与非空V39→V40 JAR升级继续验收；旧Demo保留，完整目标仍active。
 
 开发中CP114：[首次成员授权/清除故障与跨标签围栏](docs/acceptance/V1.7-checkpoint-114.md)。CP113自身原21/专项4 CI success，六ZIP由[109检查限定proof](docs/assets/v1.7-cp113/remote-proof.json)核验。新25/原开放33实页、前端198/脚本203本地通过；修复真实删除后读回失败的原回执恢复、成员POST固定捕获会话，首失败/旧Demo保留。本次自己的Linux尚待，不宣称所有写入口都固定会话或全部14门禁闭合；权威通知、完整路线与目标active。下方为历史时点。

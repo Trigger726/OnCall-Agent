@@ -1,0 +1,398 @@
+{
+  "status": "CP115_FIVE_OFFICIAL_ARTIFACT_GATES_REPLAYED",
+  "source": "e13cecf53595e131bbb5ee891e3845934733d6b6",
+  "runId": 38071797083,
+  "verifiedArtifactGates": 5,
+  "artifacts": [
+    {
+      "artifactId": 11677132823,
+      "name": "open-recipient",
+      "officialZipSha256": "1fdb2f754cbde92e9704e955da8978b2674a21749bf609ac41c06b620b801007",
+      "actualZipSha256": "1fdb2f754cbde92e9704e955da8978b2674a21749bf609ac41c06b620b801007",
+      "proof": {
+        "status": "PASS",
+        "suite": {
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallOpenHandoffRecipientIntegrationTest",
+          "tests": 14,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "executed": 14,
+        "skipped": 0,
+        "database": "MySQL",
+        "migration40VerifiedPerCase": true,
+        "originalPublicationAndCurrentEligibilitySeparated": true,
+        "allObservedPoolsStopped": 1,
+        "actualDeliveryVerified": false,
+        "remindersVerified": false,
+        "populatedV39JarUpgradeVerified": false
+      },
+      "files": [
+        {
+          "file": "oncall-open-recipient-mysql-it/maven.log",
+          "sha256": "9657a6a992e42bb6dca22dc4120c485178a9eefede03b4843f48b32dd8b54162"
+        },
+        {
+          "file": "oncall-open-recipient-mysql-it/result.json",
+          "sha256": "b5230d8835eab465bc01e8ce5d137048b7b82b5f359c39ebfab27b18b27ac3e3"
+        },
+        {
+          "file": "surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOnCallOpenHandoffRecipientIntegrationTest.xml",
+          "sha256": "7db0d8bf88df0f2fa3c8a61968446b522b6877ca3bee202c0f82463b8ba84c73"
+        }
+      ]
+    },
+    {
+      "artifactId": 11677042991,
+      "name": "member-shared",
+      "officialZipSha256": "52fe11d0e0e173dd4d418988276668a6e28bed04e897d8b2f9b2014e5794279e",
+      "actualZipSha256": "52fe11d0e0e173dd4d418988276668a6e28bed04e897d8b2f9b2014e5794279e",
+      "proof": {
+        "status": "PASS",
+        "suite": {
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest",
+          "tests": 22,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "cases": [
+          "shouldBackfillOnlyPreexistingOperationalUsersAndNeverEnrolNewPlansOrAccounts",
+          "shouldSeparateManagementFromResponseAndKeepAdminRecoveryWithoutSelfClaim",
+          "shouldDenyAnotherValidPlanAndPermitItsExplicitMemberControl",
+          "shouldRejectMissingExpectedVersionButAcceptExplicitNullAndSerializeEffectivePermissions",
+          "shouldRecordActualActorIpAndOldAndNewPermissions",
+          "shouldCommitOneImmutableReceiptForConcurrentOriginalCommands",
+          "shouldRejectCrossPlanOrChangedKeyAndStaleOrOverflowedVersions",
+          "shouldPermitOriginalManagerReceiptAfterOwnPlanManagementWasRevoked",
+          "shouldRollbackFirstGrantAfterActualAuditInsertFails",
+          "shouldRollbackUpdateAfterActualAuditInsertFails",
+          "shouldRollbackRevocationAfterActualAuditInsertFails",
+          "shouldRetainAssignedCoverageAndOriginalClaimReceiptAfterMembershipRevocation",
+          "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait",
+          "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait",
+          "shouldFilterDepartedRequestersBeforeAvailableLimitAndAllowOwnWithdrawal",
+          "shouldRequireResponseForManualOverridesAndManagementForCancellation",
+          "shouldRejectNewDesignatedAcceptanceButAllowDepartedTargetRejection",
+          "shouldRequireBothParticipantsInBothPlansForBilateralSwap",
+          "shouldBlockOriginalRotationSlotsWithoutReassigningHistoryAndResumeOnlyMissingSlots",
+          "shouldNotWriteRotationWarningWhenManualScannerHasNoPlanManagement",
+          "shouldRetainBadRotationTargetErrorContractAndRejectInvalidManagementTargets",
+          "shouldRecheckCurrentRoleAndNotResurrectRevokedMembershipWhenAccountIsRestored"
+        ],
+        "executed": 22,
+        "skipped": 0,
+        "database": {
+          "case": "shouldRequireBothParticipantsInBothPlansForBilateralSwap",
+          "version": "8.4.11",
+          "product": "MySQL",
+          "migration39": true,
+          "schema": "opspilot_plan_membership_test"
+        },
+        "orderedResponsibilityRaces": [
+          {
+            "case": "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait",
+            "revocationFirst": false,
+            "databaseLockWaitObserved": true,
+            "responsibilityMatchesCommitOrder": true
+          },
+          {
+            "case": "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait",
+            "revocationFirst": true,
+            "databaseLockWaitObserved": true,
+            "responsibilityMatchesCommitOrder": true
+          }
+        ],
+        "completeMavenAndPoolShutdownVerified": true,
+        "populatedOldJarUpgradeVerified": false,
+        "fullCiMatrixVerified": false,
+        "membershipUiVerified": false
+      },
+      "files": [
+        {
+          "file": "oncall-plan-membership-mysql-it/maven.log",
+          "sha256": "f19f35057895804f17299aca116b1dc272971b7094a91962a401ea4a90ba06ab"
+        },
+        {
+          "file": "oncall-plan-membership-mysql-it/result.json",
+          "sha256": "255f8f417b76612810c2ba2d4c075ed62d099d0eadc77ffe5d71141c0942aa60"
+        },
+        {
+          "file": "surefire-reports/org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest.txt",
+          "sha256": "3d55384a4de18b490bd94d3a4be07aeac2e9a2a8ea474fb7fcaeb175b17deac6"
+        },
+        {
+          "file": "surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest.xml",
+          "sha256": "99d2efaddf8ca003e80d85b80067d7ae7ff1fe1501c72fbcaa288b3f1c5e3af9"
+        }
+      ]
+    },
+    {
+      "artifactId": 11676678600,
+      "name": "member-upgrade",
+      "officialZipSha256": "1b527fa631ce129f54d04ab9868929206eacbc8ba0747c2172227c998757ccb1",
+      "actualZipSha256": "1b527fa631ce129f54d04ab9868929206eacbc8ba0747c2172227c998757ccb1",
+      "proof": {
+        "status": "PASS",
+        "suite": {
+          "name": "org.trigger.opspilot.oncall.MySqlPlanMembershipUpgradeHttpIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "httpCases": 7,
+        "oldSource": "ce5fc51aee215e4eebccfd9e02bccf5271f6fea5",
+        "database": {
+          "schema": "opspilot_member_upgrade_4fd1ad51dd82",
+          "version": "8.4.11",
+          "product": "MySQL",
+          "serverUuid": "03bf64ab-c4d0-11f1-bf5e-869d7daf8bfa"
+        },
+        "nonemptyOldV38ToV39": true,
+        "all38MigrationChecksumsPreserved": true,
+        "originalCancelledReceiptRetained": true,
+        "explicitRevocationAndRestorationVerified": true,
+        "fiveJvmPoolsStopped": true,
+        "ownedContainerStopped": true,
+        "membershipUiVerified": false,
+        "fullOriginalCiMatrixVerified": false
+      },
+      "files": [
+        {
+          "file": "cp110-v38-source/old-v38-jar-provenance.json",
+          "sha256": "b24310937dc70ced37883a41ba81f58f0d952bdbae661f9b312b889391b4aebe"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/audit-53fa1780-b992-4cca-ad72-929f80ef8ebb/audit.json",
+          "sha256": "69f8935a93d63814719f84cce4d856e52db34c0b40a373f64f4f6fc2909b8115"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/audit-53fa1780-b992-4cca-ad72-929f80ef8ebb/runner.log",
+          "sha256": "d8db23f0a6d069d10f308f5f90be3c0abac92780c5afcc36f1cdfb7dd271d692"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/maven.log",
+          "sha256": "863480b1197ec8d3234608c28e80fac5054748559366a05df25f0acc44e7341b"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/result.json",
+          "sha256": "91992b3c66c8ace481c6a096e28fcec38278fb3c1d393b3415be0a44d9414389"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/run-buCsJ8/jar-1.log",
+          "sha256": "3b76a964aa679c8b7bc2073b4daaedcdc0e283c9e2bec483a428447e1d66abd9"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/run-buCsJ8/jar-2.log",
+          "sha256": "a2d9b9ba9130038fd250dcefa74d0d57fc423c8a8453c78527a9e4a4edebcf5a"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/run-buCsJ8/jar-3.log",
+          "sha256": "230e952130698f1eeb79b9314c2d535cdd3afd78cc9f5f8c24f39189bcf4e530"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/run-buCsJ8/jar-4.log",
+          "sha256": "716a858cf2f090743fcc01e0c29bbdb5d56be297d05d17f7fa976a5491ea37c5"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/run-buCsJ8/jar-5.log",
+          "sha256": "451aecbda3e1b8bdfe6eae1b99c9d334efa62401124eb1c8314653b5b6956caa"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/run-buCsJ8/result.json",
+          "sha256": "d220b9da9d3cfb74c5b4781c673f060e4f3509bc9edb7ca92f4710f269f5a79a"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/run-buCsJ8/sql-0.log",
+          "sha256": "fcf98b159f3f87e2f3d57640b685e3a500e314eb62e5151f1732be995107a921"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/run-buCsJ8/sql-1.log",
+          "sha256": "9b359fbbf77c7e33d0a0f47cb89ad1f00d21657360aff7577ca3b5ff36355b49"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/run-buCsJ8/sql-2.log",
+          "sha256": "9b359fbbf77c7e33d0a0f47cb89ad1f00d21657360aff7577ca3b5ff36355b49"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/run-buCsJ8/sql-3.log",
+          "sha256": "fa7fc30acfc17ad043898823276dc080fd54399945ab279d7e505600a5124d1d"
+        },
+        {
+          "file": "oncall-plan-membership-upgrade-mysql-it/run-buCsJ8/sql-4.log",
+          "sha256": "fa7fc30acfc17ad043898823276dc080fd54399945ab279d7e505600a5124d1d"
+        },
+        {
+          "file": "surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlPlanMembershipUpgradeHttpIntegrationTest.xml",
+          "sha256": "ae6328c46542e3640052f793ba6dddc296279851e41e0390c724cb230a13e7bd"
+        }
+      ]
+    },
+    {
+      "artifactId": 11677043015,
+      "name": "member-cross",
+      "officialZipSha256": "c601ddbcbc4d7b040bc4c13ff13eaa86bf3bda35a6bb22a7fd83d57aa7c15b3f",
+      "actualZipSha256": "c601ddbcbc4d7b040bc4c13ff13eaa86bf3bda35a6bb22a7fd83d57aa7c15b3f",
+      "proof": {
+        "status": "PASS",
+        "suite": {
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipCrossNodeIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "httpCases": 6,
+        "database": {
+          "product": "MySQL",
+          "version": "8.4.11",
+          "schema": "opspilot_member_cross_a94636f673a8",
+          "serverUuid": "f3e26ad6-c4cf-11f1-a5b3-2a4284e339fb"
+        },
+        "threeJvmLifecycles": true,
+        "twoLiveApplicationJvms": true,
+        "versionedMigrations": 40,
+        "allPoolsAndOwnedDatabaseStopped": true,
+        "finalSql": {
+          "memberAudits": 5,
+          "memberOperations": 5,
+          "open": 1,
+          "claimed": 4,
+          "claimOperations": 4,
+          "requests": 5
+        },
+        "crossMachineOrHaVerified": false,
+        "membershipUiVerified": false
+      },
+      "files": [
+        {
+          "file": "oncall-plan-membership-cross-node-mysql-it/gate-result.json",
+          "sha256": "cff0d054fcda3e4119fb371169c58d38e49866d36e169b308cef293df52e4dfc"
+        },
+        {
+          "file": "oncall-plan-membership-cross-node-mysql-it/maven.log",
+          "sha256": "f5305b8a71218507ae85ad43de8f9ce958bd36572df38a025d9b1bfa3124a49c"
+        },
+        {
+          "file": "oncall-plan-membership-cross-node-mysql-it/run-227567409525504178/jar-1.log",
+          "sha256": "4fc15698751ca70df852bd5de6c5ca2a6f32fb66cb6524625e1fd548c3268ef6"
+        },
+        {
+          "file": "oncall-plan-membership-cross-node-mysql-it/run-227567409525504178/jar-2.log",
+          "sha256": "308d4e69ef76c110060a3a4610ba0d635b03113cd3260682fc21a0c0f6581b92"
+        },
+        {
+          "file": "oncall-plan-membership-cross-node-mysql-it/run-227567409525504178/jar-3.log",
+          "sha256": "b4906c7e9d0b273d8a4b35d183c4fb4d2b13080120a3c3ff0fd4efeaee2c55f1"
+        },
+        {
+          "file": "oncall-plan-membership-cross-node-mysql-it/run-227567409525504178/result.json",
+          "sha256": "2c8d47a8694eba03b13fc9510d7655c588e991635bb517508441d4ac3ba9602f"
+        },
+        {
+          "file": "surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipCrossNodeIntegrationTest.xml",
+          "sha256": "0a19543d399d72885b6b8507c8b9f47f7b958e9a32d40f08b4f2b273479dff8c"
+        }
+      ]
+    },
+    {
+      "artifactId": 11676798232,
+      "name": "member-ui",
+      "officialZipSha256": "3b59d0edce83fef382460f11d58d9caa348cf6cbd649567e8275fc7af34cf746",
+      "actualZipSha256": "3b59d0edce83fef382460f11d58d9caa348cf6cbd649567e8275fc7af34cf746",
+      "proof": {
+        "status": "PASS",
+        "browserCases": 25,
+        "originalBrowserCaseIdsPreserved": 14,
+        "viewports": [
+          "1440x1000",
+          "390x844"
+        ],
+        "separateOriginalReceiptAndCurrentVersion": true,
+        "threeLateResponseIdentityFences": true,
+        "twoNativeCrossTabStorageFences": true,
+        "explicitNullFirstGrantAndSqlVerified": true,
+        "clearUncertaintyManualSameOriginalRecovery": true,
+        "actual403And409": true,
+        "allScreenshotsWidthVerified": true,
+        "completeTwoOwnedJvmPoolsShutdown": true,
+        "realMysqlUiVerified": false,
+        "fullMembershipDeliveryVerified": false
+      },
+      "files": [
+        {
+          "file": "run-WUz89U/after-clear-uncertain-desktop.png",
+          "sha256": "4c8b1c4cbd2e1cc25325d7e06d2e8d865b4ded04718eda10d6245df0177e52f9"
+        },
+        {
+          "file": "run-WUz89U/after-desktop.png",
+          "sha256": "d313d2494f9bab295f1ffaae493f371e236ec14f5b924c8d3f91647e3db3eaf4"
+        },
+        {
+          "file": "run-WUz89U/after-first-desktop.png",
+          "sha256": "c588d5f475b6bc4641cd1035e4c37275c252963edda953e86d9d85d16478693a"
+        },
+        {
+          "file": "run-WUz89U/after-first-mobile.png",
+          "sha256": "fb1be6f7f0658c27df6287b1a670de65be79c50e78cf9fb83917ace7d484fb65"
+        },
+        {
+          "file": "run-WUz89U/after-mobile.png",
+          "sha256": "1f783cdb908d5c04559ee9d8b8af334296475867009660e7a94e88deb3fff75f"
+        },
+        {
+          "file": "run-WUz89U/bootstrap.log",
+          "sha256": "2c2e1df57092f8b8973fa1abb6c1c34ce5309a05f50cb2d25652f2032671dec6"
+        },
+        {
+          "file": "run-WUz89U/first-null-receipt-desktop.png",
+          "sha256": "a1783c096e3ec9de41bde24355585709ba87d9625ad14e396dc8476977c5b3f3"
+        },
+        {
+          "file": "run-WUz89U/fixture-seed.json",
+          "sha256": "31576ca6116b3e258a2b9d0fdbafbb8165f0ce0ea840af1c41c4c9bf7674e848"
+        },
+        {
+          "file": "run-WUz89U/fixture-snapshot.json",
+          "sha256": "73622d9acdc48df1f104d65220be827348ed79adb2c955f25151bdd1e2342152"
+        },
+        {
+          "file": "run-WUz89U/frozen-original-mobile.png",
+          "sha256": "5933867e59615d901bfa435fd32810d3732ab3628e000f254124241c49801c04"
+        },
+        {
+          "file": "run-WUz89U/gate-result.json",
+          "sha256": "23277fa8d9a0fc3982a07c844e3c3f988de28ef2d816b434380fd5ae24e2aae7"
+        },
+        {
+          "file": "run-WUz89U/jar.log",
+          "sha256": "c464e09dfab578e1b3428ff2da3535dc307b606650689faeadd2b92aa0fc5b52"
+        },
+        {
+          "file": "run-WUz89U/locked-original-mobile.png",
+          "sha256": "e69124ff91bcc21bc2239d77eade83539eabd404326f33e82026b2777f565fa1"
+        },
+        {
+          "file": "run-WUz89U/native-cross-tab-frozen-mobile.png",
+          "sha256": "8a34bf48e6564dd5577a6cf8e1d394f50e1b7664e19fccfdacc66573e23e41c7"
+        },
+        {
+          "file": "run-WUz89U/original-vs-current-desktop.png",
+          "sha256": "8098654bf0f43f5d8709e561b0647cfbf20392eb76f814eecfbdd99c22ea0a6a"
+        },
+        {
+          "file": "run-WUz89U/result.json",
+          "sha256": "309d40fa5516866a48acb332a4d9ea19707c250db225abf92fb9023d6811cd2a"
+        },
+        {
+          "file": "runner.log",
+          "sha256": "b725a053aa2ff44753662501cbb2d98fe207711ce6cd3e42d2f0e81a4abdc96d"
+        }
+      ]
+    }
+  ],
+  "fullMainCiMatrixVerified": false,
+  "actualOpenPublicationDeliveryVerified": false
+}

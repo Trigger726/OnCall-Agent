@@ -1,0 +1,97 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< org.trigger:opspilot >------------------------
+[INFO] Building OpsPilot 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 42 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+[INFO] Copying 1 resource from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipCrossNodeIntegrationTest
+17:27:48.564 [main] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
+17:27:48.567 [main] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+17:27:48.571 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 1.21.4
+17:27:48.885 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
+17:27:48.891 [main] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
+17:27:48.904 [main] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
+  Server Version: 28.0.4
+  API Version: 1.48
+  Operating System: Ubuntu 24.04.5 LTS
+  Total Memory: 15989 MB
+17:27:48.923 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Pulling docker image: testcontainers/ryuk:0.12.0. Please be patient; this may take some time but only needs to be done once.
+17:27:49.534 [docker-java-stream--1900126211] INFO tc.testcontainers/ryuk:0.12.0 -- Starting to pull image
+17:27:49.545 [docker-java-stream--1900126211] INFO tc.testcontainers/ryuk:0.12.0 -- Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
+17:27:49.948 [docker-java-stream--1900126211] INFO tc.testcontainers/ryuk:0.12.0 -- Pulling image layers:  2 pending,  1 downloaded,  0 extracted, (827 KB/? MB)
+17:27:50.008 [docker-java-stream--1900126211] INFO tc.testcontainers/ryuk:0.12.0 -- Pulling image layers:  1 pending,  2 downloaded,  0 extracted, (906 KB/? MB)
+17:27:50.076 [docker-java-stream--1900126211] INFO tc.testcontainers/ryuk:0.12.0 -- Pulling image layers:  0 pending,  3 downloaded,  0 extracted, (8 MB/11 MB)
+17:27:50.084 [docker-java-stream--1900126211] INFO tc.testcontainers/ryuk:0.12.0 -- Pulling image layers:  0 pending,  3 downloaded,  1 extracted, (8 MB/11 MB)
+17:27:52.397 [docker-java-stream--1900126211] INFO tc.testcontainers/ryuk:0.12.0 -- Pulling image layers:  0 pending,  3 downloaded,  2 extracted, (8 MB/11 MB)
+17:27:52.446 [docker-java-stream--1900126211] INFO tc.testcontainers/ryuk:0.12.0 -- Pulling image layers:  0 pending,  3 downloaded,  3 extracted, (11 MB/11 MB)
+17:27:52.456 [docker-java-stream--1900126211] INFO tc.testcontainers/ryuk:0.12.0 -- Pull complete. 3 layers, pulled in 2s (downloaded 11 MB at 5 MB/s)
+17:27:52.456 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Image testcontainers/ryuk:0.12.0 pull took PT3.533139245S
+17:27:52.471 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Creating container for image: testcontainers/ryuk:0.12.0
+17:27:52.517 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 is starting: abf8545311032a44283082257818752c0fff45000b4da50b266b4591d3dcd96e
+17:27:52.737 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 started in PT0.265432793S
+17:27:52.740 [main] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+17:27:52.740 [main] INFO org.testcontainers.DockerClientFactory -- Checking the system...
+17:27:52.740 [main] INFO org.testcontainers.DockerClientFactory -- ✔︎ Docker server version should be at least 1.6.0
+17:27:52.743 [main] INFO tc.mysql:8.4 -- Pulling docker image: mysql:8.4. Please be patient; this may take some time but only needs to be done once.
+17:27:53.294 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Starting to pull image
+17:27:53.295 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
+17:27:53.600 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  9 pending,  1 downloaded,  0 extracted, (16 KB/? MB)
+17:27:53.630 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  8 pending,  2 downloaded,  0 extracted, (766 KB/? MB)
+17:27:53.777 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  7 pending,  3 downloaded,  0 extracted, (11 MB/? MB)
+17:27:53.820 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  6 pending,  4 downloaded,  0 extracted, (11 MB/? MB)
+17:27:53.869 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  5 pending,  5 downloaded,  0 extracted, (14 MB/? MB)
+17:27:53.914 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  4 pending,  6 downloaded,  0 extracted, (14 MB/? MB)
+17:27:54.012 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  3 pending,  7 downloaded,  0 extracted, (14 MB/? MB)
+17:27:54.153 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  2 pending,  8 downloaded,  0 extracted, (33 MB/? MB)
+17:27:54.252 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  1 pending,  9 downloaded,  0 extracted, (49 MB/? MB)
+17:27:54.516 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  0 pending, 10 downloaded,  0 extracted, (141 MB/227 MB)
+17:27:54.712 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  0 pending, 10 downloaded,  1 extracted, (148 MB/227 MB)
+17:27:56.426 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  0 pending, 10 downloaded,  2 extracted, (148 MB/227 MB)
+17:27:56.446 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  0 pending, 10 downloaded,  3 extracted, (148 MB/227 MB)
+17:27:56.639 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  0 pending, 10 downloaded,  4 extracted, (150 MB/227 MB)
+17:27:56.646 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  0 pending, 10 downloaded,  5 extracted, (150 MB/227 MB)
+17:27:56.653 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  0 pending, 10 downloaded,  6 extracted, (150 MB/227 MB)
+17:27:57.826 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  0 pending, 10 downloaded,  7 extracted, (192 MB/227 MB)
+17:27:57.833 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  0 pending, 10 downloaded,  8 extracted, (192 MB/227 MB)
+17:28:04.943 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  0 pending, 10 downloaded,  9 extracted, (227 MB/227 MB)
+17:28:04.951 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pulling image layers:  0 pending, 10 downloaded, 10 extracted, (227 MB/227 MB)
+17:28:04.955 [docker-java-stream--898200810] INFO tc.mysql:8.4 -- Pull complete. 10 layers, pulled in 11s (downloaded 227 MB at 20 MB/s)
+17:28:04.955 [main] INFO tc.mysql:8.4 -- Image mysql:8.4 pull took PT12.211803306S
+17:28:04.957 [main] INFO tc.mysql:8.4 -- Creating container for image: mysql:8.4
+17:28:04.985 [main] INFO tc.mysql:8.4 -- Container mysql:8.4 is starting: 991d93dce68f73b6f7b343b6baaa0aa7e28387e78928ae0999f60cf8f5c4e032
+17:28:05.089 [main] INFO tc.mysql:8.4 -- Waiting for database connection to become available at jdbc:mysql://localhost:32769/opspilot_member_cross_a94636f673a8?allowPublicKeyRetrieval=true&forceConnectionTimeZoneToSession=true&connectionTimeZone=UTC&useSSL=false using query 'SELECT 1'
+17:28:12.675 [main] INFO tc.mysql:8.4 -- Container mysql:8.4 started in PT7.71754173S
+17:28:12.675 [main] INFO tc.mysql:8.4 -- Container is started (JDBC URL: jdbc:mysql://localhost:32769/opspilot_member_cross_a94636f673a8?allowPublicKeyRetrieval=true&forceConnectionTimeZoneToSession=true&connectionTimeZone=UTC&useSSL=false)
+PLAN_MEMBERSHIP_CROSS_NODE_RESULT target/oncall-plan-membership-cross-node-mysql-it/run-227567409525504178/result.json
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 54.49 s -- in org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipCrossNodeIntegrationTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  56.268 s
+[INFO] Finished at: 2026-10-10T17:28:42Z
+[INFO] ------------------------------------------------------------------------
