@@ -9,7 +9,7 @@ const row=()=>({scheduleId:1,userId:3,userName:'经理',active:true,canRespond:t
 const intent=()=>({schema:1,actorId:1,scheduleId:1,blocked:false,command:{userId:3,expectedVersion:0,active:true,canRespond:true,canManage:false,operationKey:uuid,reason:'独立响应授权'}})
 const result=(i=intent())=>({current:{...row(),version:i.command.expectedVersion===null?0:i.command.expectedVersion+1,active:i.command.active,canRespond:i.command.canRespond,canManage:i.command.canManage,effectiveResponse:i.command.active&&i.command.canRespond,effectiveManagement:i.command.active&&i.command.canManage,updatedAt:'2026-10-10T11:00:00'},receipt:{...i.command,scheduleId:i.scheduleId,actorId:i.actorId,resultVersion:i.command.expectedVersion===null?0:i.command.expectedVersion+1,committedAt:'2026-10-10T11:00:00'}})
 const storage=()=>{const data=new Map();return{data,getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v),removeItem:k=>data.delete(k)}}
-beforeEach(()=>{mock.restoreAll();globalThis.localStorage={getItem:()=> 'unit-public-token'};globalThis.window=new EventTarget()})
+beforeEach(()=>{mock.restoreAll();globalThis.localStorage={getItem:k=>k==='opspilot_user'?JSON.stringify({id:1}):'unit-public-token'};globalThis.window=new EventTarget()})
 const respond=data=>mock.method(globalThis,'fetch',async()=>new Response(JSON.stringify({success:true,data}),{status:200}))
 test('explicit null first insert is distinct from missing, zero and saturated version',()=>{
   for(const v of [null,0,2147483646]){const i=intent();i.command.expectedVersion=v;assert.equal(members.memberIntentError(i),'')}
@@ -58,9 +58,30 @@ test('corrupt or foreign stored intent and denied reads fail closed',()=>{
 test('remove failure silent no-op and readback denial retain original intent',()=>{
   for(const s of [{removeItem(){throw Error('denied')},getItem(){return null}},{removeItem(){},getItem(){return 'original'}},{removeItem(){},getItem(){throw Error('readback')}}])assert.throws(()=>members.clearMemberIntent(s,1))
 })
+test('manual ack restores only absent exact original after remove succeeded but readback failed',async()=>{
+  const s=storage(),i=intent();members.saveMemberIntent(s,i);const get=s.getItem;s.getItem=()=>{throw Error('denied after remove')};assert.throws(()=>members.clearMemberIntent(s,1));s.getItem=get;assert.equal(members.readMemberIntent(s,1),null)
+  members.restoreMemberIntentForManualAck(s,i);assert.deepEqual(members.readMemberIntent(s,1),i);respond(result());assert.deepEqual((await members.submitMemberIntent(s,i)).receipt,result().receipt)
+})
+test('manual recovery never overwrites a different frozen command or a blocked intent',()=>{
+  const s=storage(),original=intent(),other=intent();other.command.reason='other';members.saveMemberIntent(s,other);assert.throws(()=>members.restoreMemberIntentForManualAck(s,original),/不同原意图/);assert.deepEqual(members.readMemberIntent(s,1),other)
+  const blocked={...original,blocked:true};assert.throws(()=>members.restoreMemberIntentForManualAck(storage(),blocked),/锁定/)
+})
+test('manual recovery requires reliable storage again and denied reads never trigger a save',()=>{
+  let writes=0;assert.throws(()=>members.restoreMemberIntentForManualAck({getItem(){throw Error('denied')},setItem(){writes++}},intent()));assert.equal(writes,0)
+  assert.throws(()=>members.restoreMemberIntentForManualAck({getItem:()=>null,setItem(){}},intent()),/可靠保存/)
+})
 test('submit requires reliable exact original stored content and refuses blocked zero POST',async()=>{
   let calls=0;mock.method(globalThis,'fetch',async()=>{calls++;throw Error('must not send')});const s=storage(),i=intent()
   await assert.rejects(()=>members.submitMemberIntent(s,i));members.saveMemberIntent(s,i);i.command.reason='changed';await assert.rejects(()=>members.submitMemberIntent(s,i));i.blocked=true;await assert.rejects(()=>members.submitMemberIntent(s,i));assert.equal(calls,0)
+})
+test('captured member session never substitutes a different current token or actor zero POST',async()=>{
+  let calls=0;mock.method(globalThis,'fetch',async()=>{calls++;throw Error('must not send')});const i=intent(),s=storage();members.saveMemberIntent(s,i)
+  globalThis.localStorage={getItem:k=>k==='opspilot_user'?JSON.stringify({id:3}):'new-actor-token'};await assert.rejects(()=>members.submitMemberIntent(s,i,'unit-public-token'));assert.equal(calls,0)
+})
+test('member Authorization stays pinned if current token changes after the final synchronous check',async()=>{
+  const i=intent(),s=storage();members.saveMemberIntent(s,i);let current='unit-public-token';globalThis.localStorage={getItem:k=>{if(k==='opspilot_user')return JSON.stringify({id:1});const read=current;current='replacement-token';return read}}
+  mock.method(globalThis,'fetch',async(_url,options)=>{assert.equal(options.headers.get('Authorization'),'Bearer unit-public-token');assert.equal(current,'replacement-token');return new Response(JSON.stringify({success:true,data:result()}))})
+  assert.deepEqual((await members.submitMemberIntent(s,i,'unit-public-token')).receipt,result().receipt)
 })
 test('POST transmits exact nullable original command, not auto-rebased current version',async()=>{
   const i=intent();i.command.expectedVersion=null;const s=storage();members.saveMemberIntent(s,i);let body

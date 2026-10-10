@@ -1,0 +1,50 @@
+✔ explicit null first insert is distinct from missing, zero and saturated version (1.2287ms)
+✔ flags independent and tombstone may retain stored permissions (0.2523ms)
+✔ strict actor plan target boolean canonical UUID and bounded trimmed reason (0.2657ms)
+✔ preflight scopes manager to exact plan, ADMIN recovery does not imply response (0.5075ms)
+✔ preflight first insert uses explicit absence; stale or tombstone not absent (0.2522ms)
+✔ contradictory effectiveness, duplicate/cross-plan and malformed facts rejected (0.699ms)
+✔ ON_CALL cannot receive management flag; inactive target cannot be activated (0.2134ms)
+✔ actor-scoped exact reliable storage round-trip, blocked state retained (0.7105ms)
+✔ quota silent save and readback failure never pass reliable-save gate (0.4352ms)
+✔ corrupt or foreign stored intent and denied reads fail closed (0.53ms)
+✔ remove failure silent no-op and readback denial retain original intent (0.1943ms)
+✔ manual ack restores only absent exact original after remove succeeded but readback failed (17.4871ms)
+✔ manual recovery never overwrites a different frozen command or a blocked intent (0.3725ms)
+✔ manual recovery requires reliable storage again and denied reads never trigger a save (0.3377ms)
+✔ submit requires reliable exact original stored content and refuses blocked zero POST (0.333ms)
+✖ captured member session never substitutes a different current token or actor zero POST (1.1075ms)
+✔ POST transmits exact nullable original command, not auto-rebased current version (0.4842ms)
+✔ immutable original receipt survives higher current version and revoked privileges (0.3793ms)
+✔ wrong actor plan original command result version timestamp or missing receipt rejected (3.7192ms)
+✔ current row cannot precede receipt or contradict flags at same version (0.8063ms)
+✔ member list only contains matching actual member rows, validates duplicates (0.4664ms)
+✔ plan options do not turn global users into members or tolerate duplicate IDs (0.3585ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 21
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 188.2942
+
+✖ failing tests:
+
+test at tests\onCallPlanMembers.test.mjs:77:1
+✖ captured member session never substitutes a different current token or actor zero POST (1.1075ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///D:/Codex/%E5%9B%BD%E7%BD%91/%E5%A4%AE%E5%9B%BD%E4%BC%81%E6%B1%82%E8%81%8C/OpsPilot/web/tests/onCallPlanMembers.test.mjs:79:186)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

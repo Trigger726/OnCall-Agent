@@ -2,7 +2,7 @@
 import { computed,onBeforeUnmount,onMounted,ref } from 'vue'
 import { auth } from '@/stores/auth'
 import { RequestError } from '@/services/api'
-import { clearMemberIntent,listMemberPlans,listPlanMembers,memberIntentError,memberManager,memberPreflightError,readMemberIntent,saveMemberIntent,submitMemberIntent,type MemberIntent,type MemberResult,type PlanMember,type PlanOption } from '@/services/onCallPlanMembers'
+import { clearMemberIntent,listMemberPlans,listPlanMembers,memberIntentError,memberManager,memberPreflightError,readMemberIntent,restoreMemberIntentForManualAck,saveMemberIntent,submitMemberIntent,type MemberIntent,type MemberResult,type PlanMember,type PlanOption } from '@/services/onCallPlanMembers'
 const emit=defineEmits<{changed:[]}>()
 const plans=ref<PlanOption[]>([]),rows=ref<PlanMember[]|null>(null),selected=ref<number|null>(null),targetId=ref('')
 const intent=ref<MemberIntent|null>(null),result=ref<MemberResult|null>(null),frozen=ref(false),broken=ref(false),busy=ref(false),error=ref(''),message=ref(''),confirmDiscard=ref(false)
@@ -39,11 +39,16 @@ async function submit(){
       const invalidLatest=memberPreflightError(draft,latest,auth.state.user?.roleCode);if(invalidLatest){error.value=`${invalidLatest}；未发送，请核对后明确放弃`;return}
       try{saveMemberIntent(sessionStorage,draft)}catch{error.value='原意图无法可靠保存，尚未发送；请检查浏览器存储权限';return}
       frozen.value=true
+    }else{
+      // A successful remove followed by denied readback may leave only this page's frozen command.
+      // Manual recovery re-saves the exact original only when absent; a different intent is never overwritten.
+      if(!current(identity))return
+      restoreMemberIntentForManualAck(sessionStorage,draft)
     }
     if(!current(identity))return
-    const response=await submitMemberIntent(sessionStorage,draft);if(!current(identity))return
+    const response=await submitMemberIntent(sessionStorage,draft,identity.token);if(!current(identity))return
     result.value=response;message.value='本人原成员操作已回执；当前成员版本/权限与原回执分开显示，不取消已有责任'
-    try{clearMemberIntent(sessionStorage,draft.actorId);intent.value=null;frozen.value=false}catch{message.value+='；本地原意图未清除，只能手动求原回执或明确放弃'}
+    try{clearMemberIntent(sessionStorage,draft.actorId);intent.value=null;frozen.value=false}catch{message.value+='；本地原意图清除未能确认，当前页仍保留原命令；刷新可能丢失，请先手动求原回执或明确放弃'}
     emit('changed')
   }catch(cause){
     if(!current(identity))return

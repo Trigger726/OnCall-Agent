@@ -1,0 +1,90 @@
+{
+  "status" : "PASS",
+  "jarSha256" : "090128951118fa6eccd62b0471b9285717a7e5ab648a9fda26f7c09148779f18",
+  "database" : {
+    "product" : "MySQL",
+    "version" : "8.4.11",
+    "schema" : "opspilot_member_cross_e5beec96bf9e",
+    "serverUuid" : "12df29fd-c4ac-11f1-bbac-365799de72f1"
+  },
+  "twoApplicationJvmsObservedAliveTogether" : true,
+  "versionedMigrations" : 39,
+  "finalSql" : {
+    "open" : 1,
+    "memberOperations" : 5,
+    "memberAudits" : 5,
+    "requests" : 5,
+    "claimOperations" : 4,
+    "claimed" : 4
+  },
+  "databaseOwnerStopped" : true,
+  "cases" : [ {
+    "oneAudit" : true,
+    "sameOriginalOperation" : true,
+    "oneReceipt" : true,
+    "name" : "two-live-jvms-concurrent-original-membership-command"
+  }, {
+    "staleVersion409" : true,
+    "claim403" : true,
+    "changedAndCrossPlanKey409" : true,
+    "noWrites" : true,
+    "originalOperationRetained" : true,
+    "management403" : true,
+    "name" : "remote-revocation-and-immutable-member-ack-without-rebase"
+  }, {
+    "cancelledCoverageNotRevived" : true,
+    "statusLine200BeforeSocketClosed" : true,
+    "bodyNotRead" : true,
+    "requestId" : 2,
+    "originalOperation" : {
+      "handoffId" : 2,
+      "actorId" : 3,
+      "operationKey" : "db26057d-c555-43fe-a2fd-33e85b56415f",
+      "operation" : "CLAIM",
+      "capturedVersion" : 0,
+      "reason" : "captured cross-node voluntary claim",
+      "committedAt" : "2026-10-10T13:11:50.204841"
+    },
+    "snapshotUnchangedAfterRestartAck" : true,
+    "name" : "committed-http-response-loss-remote-manual-ack-cancel-and-jvm-restart"
+  }, {
+    "ownOriginalKey200" : true,
+    "bothOldJwtAfterRoleLoss403" : true,
+    "newManagement403" : true,
+    "roleRestorationDoesNotRestorePlanManagement" : true,
+    "name" : "manager-own-revocation-current-role-and-restoration-fences"
+  }, {
+    "plan2SameActor403" : true,
+    "bothPlansValid" : true,
+    "plan1Accepted" : true,
+    "plan2QualifiedControl200" : true,
+    "name" : "two-valid-plans-response-isolation-and-qualified-control"
+  }, {
+    "oneReplacement" : true,
+    "oneReceipt" : true,
+    "exactlyTwoResponsibilityAudits" : true,
+    "requestId" : 5,
+    "sameOriginalOperation" : true,
+    "name" : "two-jvm-concurrent-original-claim-one-responsibility"
+  } ],
+  "startedPids" : [ 3365, 3713, 3820 ],
+  "allApplicationPidsAbsent" : true,
+  "applicationPorts" : [ 38065, 44471, 43229 ],
+  "managementPorts" : [ 33109, 42235, 36611 ],
+  "portsFree" : true,
+  "pools" : [ {
+    "file" : "jar-1.log",
+    "pid" : 3365,
+    "completePoolShutdown" : true
+  }, {
+    "file" : "jar-2.log",
+    "pid" : 3713,
+    "completePoolShutdown" : true
+  }, {
+    "file" : "jar-3.log",
+    "pid" : 3820,
+    "completePoolShutdown" : true
+  } ],
+  "crossMachineOrHaClaimed" : false,
+  "tokensPersistedToEvidence" : false
+}

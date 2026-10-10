@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+开发中CP114：[成员25流程与两处反例](V1.7-checkpoint-114.md)。CP113自身21+4与六ZIP/五门禁/原开放33已[109检查限定核验](../assets/v1.7-cp113/remote-proof.json)。本轮本地新25/原33、前端198/脚本203通过，缺失关系显式null由真实HTTP/退出后JDBC核验；清除故障人工恢复、两个原生跨标签围栏与固定成员POST会话，首次失败和新旧Demo保留。自己Linux/权威通知与整个目标继续，不称14门禁全完成。以下按历史阶段阅读。
+
 开发中 CP113：[成员页面限定验收](V1.7-checkpoint-113.md)/[本地proof](../assets/v1.7-cp113/local-proof.json)。CP112自身原21/成员3 success及三MySQL ZIP已[83检查限定核验](../assets/v1.7-cp112/remote-proof.json)。本轮新14/原开放33实页、前端193/Node200、新旧11图与首失败保留；页面自己的Linux/完整UI故障矩阵/权威通知仍待，不称14门禁全部闭合。下方按历史时点阅读。
 
 开发中 CP112：[成员真网络/两JVM阶段](V1.7-checkpoint-112.md)/[本地proof](../assets/v1.7-cp112/local-proof.json)。CP111自身原21/成员2 success及原MySQL24/成员22/升级7的[三个ZIP限定proof](../assets/v1.7-cp111/remote-proof.json)已核验。本轮H2 TCP六HTTP/双应用/三生命周期完整关闭、选定后端47/Node193通过；本次实际MySQL两JVM与成员页面/Demo待验，不称完整14门禁完成。首失败和历史Demo保留，下方对应历史时点。

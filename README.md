@@ -1,5 +1,7 @@
 # OpsPilot
 
+开发中CP114：[首次成员授权/清除故障与跨标签围栏](docs/acceptance/V1.7-checkpoint-114.md)。CP113自身原21/专项4 CI success，六ZIP由[109检查限定proof](docs/assets/v1.7-cp113/remote-proof.json)核验。新25/原开放33实页、前端198/脚本203本地通过；修复真实删除后读回失败的原回执恢复、成员POST固定捕获会话，首失败/旧Demo保留。本次自己的Linux尚待，不宣称所有写入口都固定会话或全部14门禁闭合；权威通知、完整路线与目标active。下方为历史时点。
+
 开发中 CP113：[计划成员实页与远端证据](docs/acceptance/V1.7-checkpoint-113.md)。CP112自身原21/成员3 CI均success，成员MySQL22/升级7/双JVM六流程由[83检查proof](docs/assets/v1.7-cp112/remote-proof.json)限定重放。本轮新增Vue成员页面，真实本地14/原开放33、前端193/Node200通过，桌面/390px新旧Demo与失败保留；新增页面自身LinuxCI待验、UI故障矩阵及权威通知接收人继续，不称全部14门禁/整体完成。下方均按历史时点阅读。
 
 开发中 CP112：[成员真网络与两JVM阶段](docs/acceptance/V1.7-checkpoint-112.md)。CP111自身原21/成员2 CI已success，原MySQL24/成员22/升级7由[三个官方ZIP重放](docs/assets/v1.7-cp111/remote-proof.json)限定核验。本轮自有H2 TCP六HTTP流程/两应用JVM/三次生命周期与完整关闭、选定后端47/Node193通过；本次实际MySQL两JVM、页面/新旧Demo仍待。首失败和所有未提交改动保留，下方按历史时点阅读，整体active。

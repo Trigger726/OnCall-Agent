@@ -27,8 +27,16 @@ export class RequestError extends Error {
   }
 }
 
-export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const token = localStorage.getItem('opspilot_token')
+export interface CapturedSession { token:string|null; actorId:number }
+export async function api<T>(path: string, init: RequestInit = {}, captured?:CapturedSession): Promise<T> {
+  const token = captured ? captured.token : localStorage.getItem('opspilot_token')
+  if(captured){
+    let storedActor:unknown
+    try{storedActor=JSON.parse(localStorage.getItem('opspilot_user')??'null')?.id}catch{storedActor=undefined}
+    if(!token||localStorage.getItem('opspilot_token')!==token||storedActor!==captured.actorId){
+      throw new RequestError('捕获会话已改变，未发送原命令','CAPTURED_SESSION_CHANGED',401)
+    }
+  }
   const headers = new Headers(init.headers)
   if (init.body && !(init.body instanceof FormData) && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json')

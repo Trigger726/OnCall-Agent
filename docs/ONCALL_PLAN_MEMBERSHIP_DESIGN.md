@@ -1,5 +1,7 @@
 # 计划成员权限：实现契约与验证矩阵
 
+最新[CP114](acceptance/V1.7-checkpoint-114.md)：CP113自身21+4和六ZIP限定闭合；新25实页/HTTP及独立SQL首次null授权、本地原命令清除不确定时人工恢复与两个原生跨标签围栏已限定通过，自己Linux仍待。仅成员POST接入捕获会话，不宣称所有写入口覆盖。ACL-14权威通知接收人仍未实施，完整路线继续；以下历史阶段状态保留。
+
 最新[CP113](acceptance/V1.7-checkpoint-113.md)：CP112自己的原21/成员3 CI success，三MySQL工件含六双JVM实际HTTP独立重放；Vue成员页面本地14/原33与新旧桌面手机Demo限定通过，新页面Linux与更完整UI故障矩阵仍待。ACL-14权威通知尚未实施；不是全部14门禁闭合。以下原状态按历史阶段阅读。
 
 状态：独立WIP推进至[CP112](acceptance/V1.7-checkpoint-112.md)。CP111自身原21/成员2 CI已success，原MySQL24/成员22/非空升级7独立ZIP核验。本轮H2 TCP六HTTP流程证明双应用JVM共享SQL与原键/撤权/重启，实际MySQL同场景CI及成员页面仍待，不能称14门禁全部闭合。以下契约以CP106 `d0cb78f708b977b6ef79935ad7356eb4f569a517` 的基线分析为起点，通知/提醒/真实渠道、认领撤销、DST/日历与生产容量继续保留。

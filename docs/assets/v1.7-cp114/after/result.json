@@ -1,0 +1,324 @@
+{
+  "status": "PASS",
+  "baseline": false,
+  "previous": false,
+  "jarSha256": "1a1aed70f34ff8ca3e97e66e47ac81fd2fccf8bc4365fcb8a698103224e9fc9b",
+  "cases": [
+    {
+      "name": "current-plan-independent-permissions-and-migration-origin"
+    },
+    {
+      "name": "reader-never-manages"
+    },
+    {
+      "name": "quota-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "silent-save-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "save-readback-denied-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "committed-loss-reload-manual-original-receipt-higher-current-version",
+      "posts": 1,
+      "actualForwardedCommit200": true,
+      "browserRequestAborted": true,
+      "originalCommand": {
+        "userId": 3,
+        "expectedVersion": 0,
+        "active": true,
+        "canRespond": true,
+        "canManage": false,
+        "operationKey": "e4f18b47-c2b5-456a-bbae-a26cd3a26f7e",
+        "reason": "CP113 明确成员变更"
+      },
+      "currentVersion": 2
+    },
+    {
+      "name": "own-management-revocation-original-receipt-only",
+      "ownPlanManagementRemoved": true,
+      "originalReadOnlyAck200": true
+    },
+    {
+      "name": "actual409-lock-survives-reload",
+      "actual409": 409,
+      "originalCapturedVersion": 5,
+      "versionNotRebased": true
+    },
+    {
+      "name": "actual403-lock-no-auto-retry",
+      "actual403": 403
+    },
+    {
+      "name": "fresh-read500-clears-facts-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "corrupt-intent-explicit-local-discard",
+      "posts": 0
+    },
+    {
+      "name": "late200-after-plan-change-keeps-original",
+      "committedLate200": true,
+      "originalPreserved": true
+    },
+    {
+      "name": "late200-after-spa-account-switch-keeps-new-intent",
+      "committedLate200": true,
+      "newActorDraftPreserved": true
+    },
+    {
+      "name": "late200-after-same-user-token-change-keeps-original",
+      "committedLate200": true,
+      "newTokenIdentityProtected": true
+    },
+    {
+      "name": "actual-missing-member-explicit-null-response-only-first-grant",
+      "expectedVersion": null,
+      "explicitExpectedVersionPresent": true,
+      "actualHttp200": true,
+      "version": 0,
+      "origin": "EXPLICIT",
+      "responseOnly": true
+    },
+    {
+      "name": "committed-clear-removal-failure-original-ack",
+      "actualCommit200": true,
+      "clearPhysicallyAbsent": false,
+      "manualSameOriginalBody": true,
+      "posts": 2
+    },
+    {
+      "name": "committed-clear-silent-noop-original-ack",
+      "actualCommit200": true,
+      "clearPhysicallyAbsent": false,
+      "manualSameOriginalBody": true,
+      "posts": 2
+    },
+    {
+      "name": "committed-clear-readback-denial-manual-restores-same-original",
+      "actualCommit200": true,
+      "clearPhysicallyAbsent": true,
+      "manualSameOriginalBody": true,
+      "posts": 2
+    },
+    {
+      "name": "frozen-discard-removal-failure-preserves-original",
+      "posts": 0,
+      "originalRetained": true
+    },
+    {
+      "name": "frozen-discard-silent-noop-preserves-original",
+      "posts": 0,
+      "originalRetained": true
+    },
+    {
+      "name": "contradictory-committed-receipt-retains-original",
+      "actualCommit200": true,
+      "contradictoryActorRejected": true,
+      "manualOriginalAck200": true
+    },
+    {
+      "name": "contradictory-members-get-clears-facts-zero-post",
+      "posts": 0,
+      "contradictoryFactsCleared": true
+    },
+    {
+      "name": "actual409-lock-save-failure-visible-no-auto-post",
+      "actual409": 409,
+      "lockSaveFailedWarning": true,
+      "reloadPosts": 0,
+      "originalCommandRetained": true
+    },
+    {
+      "name": "late200-real-cross-tab-actor-mismatch-preserves-original",
+      "nativeStorageEvents": true,
+      "committedLate200": true,
+      "originalRetained": true,
+      "syntheticStorageEventDispatched": false
+    },
+    {
+      "name": "late200-real-cross-tab-new-token-preserves-original",
+      "nativeStorageEvents": true,
+      "committedLate200": true,
+      "originalRetained": true,
+      "syntheticStorageEventDispatched": false
+    }
+  ],
+  "screenshots": [
+    "after-first-desktop.png",
+    "after-desktop.png",
+    "after-first-mobile.png",
+    "after-mobile.png",
+    "original-vs-current-desktop.png",
+    "locked-original-mobile.png",
+    "frozen-original-mobile.png",
+    "first-null-receipt-desktop.png",
+    "after-clear-uncertain-desktop.png",
+    "native-cross-tab-frozen-mobile.png"
+  ],
+  "pageErrors": [],
+  "console": [
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 409 (Conflict)",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 409 (Conflict)",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    }
+  ],
+  "expectedRejections": [
+    {
+      "path": "/api/v1/on-call/schedules/1/members",
+      "status": 409
+    },
+    {
+      "path": "/api/v1/on-call/schedules/1/members",
+      "status": 403
+    },
+    {
+      "path": "/api/v1/on-call/schedules/1/members",
+      "status": 500
+    },
+    {
+      "path": "/api/v1/on-call/schedules/1/members",
+      "status": 409
+    }
+  ],
+  "visualBounds": [
+    {
+      "name": "after-first-desktop.png",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "after-desktop.png",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "after-first-mobile.png",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "after-mobile.png",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "original-vs-current-desktop.png",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "locked-original-mobile.png",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "frozen-original-mobile.png",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "first-null-receipt-desktop.png",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "after-clear-uncertain-desktop.png",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "native-cross-tab-frozen-mobile.png",
+      "width": 390,
+      "documentWidth": 390
+    }
+  ],
+  "tokensPersistedToEvidence": false,
+  "userDatabaseModified": false,
+  "browserPath": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "startedPids": [
+    55016,
+    52364
+  ],
+  "stoppedPids": [
+    55016,
+    52364
+  ],
+  "sqlFixtures": [
+    {
+      "allOwnedJarsStopped": true,
+      "receipt": {
+        "actualProduct": "H2",
+        "migration39": true,
+        "mode": "SEED",
+        "newUserId": 90,
+        "changedUsers": 1,
+        "memberRows": 0,
+        "memberOperations": 0,
+        "explicitResponseOnlyVersion0": 0,
+        "explicitNullActor1Receipt": 0,
+        "businessBefore": "92b75d74bb1a95f98e25a120bb2c81305b91b71b338679b9c2318ff8860b8903",
+        "businessAfter": "92b75d74bb1a95f98e25a120bb2c81305b91b71b338679b9c2318ff8860b8903"
+      }
+    },
+    {
+      "allOwnedJarsStopped": true,
+      "receipt": {
+        "actualProduct": "H2",
+        "migration39": true,
+        "mode": "SNAPSHOT",
+        "newUserId": 90,
+        "changedUsers": 0,
+        "memberRows": 1,
+        "memberOperations": 1,
+        "explicitResponseOnlyVersion0": 1,
+        "explicitNullActor1Receipt": 1,
+        "businessBefore": "cd75af32cf74e3ddfd49376f7f43d3b26cb6981e2c927bec37b021925a9441d4",
+        "businessAfter": "cd75af32cf74e3ddfd49376f7f43d3b26cb6981e2c927bec37b021925a9441d4"
+      }
+    }
+  ],
+  "browser": "155.0.8059.39",
+  "startedPid": 52364,
+  "ownedProcessStopped": true,
+  "portsFree": true,
+  "completePoolShutdown": true,
+  "unexpectedJarErrors": 0
+}

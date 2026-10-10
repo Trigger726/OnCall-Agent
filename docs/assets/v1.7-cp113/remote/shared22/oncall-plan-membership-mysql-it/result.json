@@ -1,0 +1,61 @@
+{
+  "status": "PASS",
+  "suite": {
+    "name": "org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest",
+    "tests": 22,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "cases": [
+    "shouldBackfillOnlyPreexistingOperationalUsersAndNeverEnrolNewPlansOrAccounts",
+    "shouldSeparateManagementFromResponseAndKeepAdminRecoveryWithoutSelfClaim",
+    "shouldDenyAnotherValidPlanAndPermitItsExplicitMemberControl",
+    "shouldRejectMissingExpectedVersionButAcceptExplicitNullAndSerializeEffectivePermissions",
+    "shouldRecordActualActorIpAndOldAndNewPermissions",
+    "shouldCommitOneImmutableReceiptForConcurrentOriginalCommands",
+    "shouldRejectCrossPlanOrChangedKeyAndStaleOrOverflowedVersions",
+    "shouldPermitOriginalManagerReceiptAfterOwnPlanManagementWasRevoked",
+    "shouldRollbackFirstGrantAfterActualAuditInsertFails",
+    "shouldRollbackUpdateAfterActualAuditInsertFails",
+    "shouldRollbackRevocationAfterActualAuditInsertFails",
+    "shouldRetainAssignedCoverageAndOriginalClaimReceiptAfterMembershipRevocation",
+    "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait",
+    "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait",
+    "shouldFilterDepartedRequestersBeforeAvailableLimitAndAllowOwnWithdrawal",
+    "shouldRequireResponseForManualOverridesAndManagementForCancellation",
+    "shouldRejectNewDesignatedAcceptanceButAllowDepartedTargetRejection",
+    "shouldRequireBothParticipantsInBothPlansForBilateralSwap",
+    "shouldBlockOriginalRotationSlotsWithoutReassigningHistoryAndResumeOnlyMissingSlots",
+    "shouldNotWriteRotationWarningWhenManualScannerHasNoPlanManagement",
+    "shouldRetainBadRotationTargetErrorContractAndRejectInvalidManagementTargets",
+    "shouldRecheckCurrentRoleAndNotResurrectRevokedMembershipWhenAccountIsRestored"
+  ],
+  "executed": 22,
+  "skipped": 0,
+  "database": {
+    "case": "shouldRequireBothParticipantsInBothPlansForBilateralSwap",
+    "version": "8.4.11",
+    "product": "MySQL",
+    "migration39": true,
+    "schema": "opspilot_plan_membership_test"
+  },
+  "orderedResponsibilityRaces": [
+    {
+      "case": "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait",
+      "revocationFirst": false,
+      "databaseLockWaitObserved": true,
+      "responsibilityMatchesCommitOrder": true
+    },
+    {
+      "case": "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait",
+      "revocationFirst": true,
+      "databaseLockWaitObserved": true,
+      "responsibilityMatchesCommitOrder": true
+    }
+  ],
+  "completeMavenAndPoolShutdownVerified": true,
+  "populatedOldJarUpgradeVerified": false,
+  "fullCiMatrixVerified": false,
+  "membershipUiVerified": false
+}

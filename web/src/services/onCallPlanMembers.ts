@@ -56,6 +56,13 @@ export function readMemberIntent(storage:Pick<Storage,'getItem'>,actor:number):M
 export function clearMemberIntent(storage:Pick<Storage,'removeItem'|'getItem'>,actor:number){
   if(!id(actor))throw Error('账号无效');storage.removeItem(key(actor));if(storage.getItem(key(actor))!==null)throw Error('原意图未可靠清除，仍须保留原回执')
 }
+// Only on an explicit manual acknowledgement, never on mount/refresh or first POST.
+export function restoreMemberIntentForManualAck(storage:Pick<Storage,'getItem'|'setItem'>,i:MemberIntent){
+  const invalid=memberIntentError(i);if(invalid||i.blocked)throw Error(invalid||'原意图已锁定')
+  const raw=storage.getItem(key(i.actorId)),captured=JSON.stringify(i)
+  if(raw!==null&&raw!==captured)throw Error('本地已有不同原意图，不能覆盖或换键')
+  if(raw===null)saveMemberIntent(storage,i)
+}
 export async function listMemberPlans(){
   const data=await api<{schedules:PlanOption[]}>('/on-call/roster'),plans=data?.schedules
   if(!Array.isArray(plans)||plans.some(p=>!id(p.id)||typeof p.name!=='string'||!p.name.trim()||typeof p.resourceName!=='string')||new Set(plans.map(p=>p.id)).size!==plans.length)throw Error('计划事实异常')
@@ -67,10 +74,10 @@ export async function listPlanMembers(schedule:number){
   if(!Array.isArray(rows)||rows.some(m=>!validMember(m)||m.scheduleId!==schedule)||new Set(rows.map(m=>m.userId)).size!==rows.length)throw Error('成员身份/当前资格事实异常，旧事实已清空')
   return rows
 }
-export async function submitMemberIntent(storage:Pick<Storage,'getItem'>,i:MemberIntent){
+export async function submitMemberIntent(storage:Pick<Storage,'getItem'>,i:MemberIntent,token:string|null=localStorage.getItem('opspilot_token')){
   const invalid=memberIntentError(i);if(invalid||i.blocked)throw Error(invalid||'原意图已锁定')
   if(storage.getItem(key(i.actorId))!==JSON.stringify(i))throw Error('原意图存储与捕获内容不一致，尚未发送')
-  const result=await api<MemberResult>(`/on-call/schedules/${i.scheduleId}/members`,{method:'POST',body:JSON.stringify(i.command)})
+  const result=await api<MemberResult>(`/on-call/schedules/${i.scheduleId}/members`,{method:'POST',body:JSON.stringify(i.command)},{token,actorId:i.actorId})
   const m=result?.current,r=result?.receipt,c=i.command,committedVersion=c.expectedVersion===null?0:c.expectedVersion+1
   if(!validMember(m)||m.scheduleId!==i.scheduleId||m.userId!==c.userId||!r||r.scheduleId!==i.scheduleId||r.actorId!==i.actorId||r.resultVersion!==committedVersion
     ||!(['userId','expectedVersion','active','canRespond','canManage','operationKey','reason'] as const).every(field=>Object.prototype.hasOwnProperty.call(r,field)&&r[field]===c[field])
