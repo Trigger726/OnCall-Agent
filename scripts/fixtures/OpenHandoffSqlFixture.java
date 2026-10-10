@@ -31,7 +31,7 @@ public class OpenHandoffSqlFixture {
         } else {
         Path database = Path.of(args[0]).toAbsolutePath().normalize();
         if (!root.getFileName().toString().startsWith("run-")
-                || !java.util.List.of("oncall-open-handoff-http-it", "oncall-plan-membership-upgrade-http-it", "oncall-open-publication-upgrade-http-it", "oncall-open-notification-http-it").contains(root.getParent().getFileName().toString())
+                || !java.util.List.of("oncall-open-handoff-http-it", "oncall-plan-membership-upgrade-http-it", "oncall-open-publication-upgrade-http-it", "oncall-open-notification-http-it", "oncall-open-notification-ui-it").contains(root.getParent().getFileName().toString())
                 || !database.getParent().toRealPath().equals(root.resolve("database").toRealPath())
                 || !database.getFileName().toString().equals("opspilot")
                 || !Files.isRegularFile(Path.of(database + ".mv.db"))

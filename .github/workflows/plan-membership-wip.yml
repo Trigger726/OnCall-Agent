@@ -14,6 +14,52 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  open-notification-ui:
+    name: Read-only open notification real browser and late response fences
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            web/package-lock.json
+            scripts/browser/package-lock.json
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - name: Build fresh own-source frontend and JAR
+        run: |
+          npm ci --prefix web
+          npm test --prefix web
+          npm run build --prefix web
+          bash mvnw -B -DskipTests package
+      - name: Install pinned Chromium and inspect notification UI gates
+        run: |
+          npm ci --prefix scripts/browser
+          node scripts/browser/node_modules/playwright/cli.js install --with-deps chromium
+          node --test scripts/tests/oncall-open-notification-ui.test.cjs
+      - name: Verify five actual notification states and stale-response protections
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p target/oncall-open-notification-ui-it
+          node scripts/verify-oncall-open-notification-ui-ci.cjs 2>&1 | tee target/oncall-open-notification-ui-it/runner.log
+          node -e 'const fs=require("fs"),d="target/oncall-open-notification-ui-it";const r=JSON.parse(fs.readFileSync(d+"/runner.log","utf8").split(/\r?\n/).find(l=>l.startsWith("{")));require("child_process").execFileSync(process.execPath,["scripts/verify-oncall-open-notification-ui-evidence.cjs",r.evidenceDirectory],{stdio:"inherit"});'
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: open-notification-ui-evidence
+          path: |
+            target/oncall-open-notification-ui-it/**/*.json
+            target/oncall-open-notification-ui-it/**/*.log
+            target/oncall-open-notification-ui-it/**/*.png
+          retention-days: 30
+
   open-notification-jar:
     name: Populated V40 to V41 notification JAR HTTP and durable restart
     runs-on: ubuntu-latest

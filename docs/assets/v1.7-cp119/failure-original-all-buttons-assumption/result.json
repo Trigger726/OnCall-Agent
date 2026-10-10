@@ -1,0 +1,111 @@
+{
+  "status": "FAIL",
+  "baseline": false,
+  "previous": false,
+  "jarSha256": "1a62f06dcef29c2f28ef9232f46d3477d8ae42174b1571fa09ddb5141a4fe066",
+  "cases": [
+    {
+      "name": "actual-ui-publication-quota-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "committed-publication-loss-reload-original-ack",
+      "posts": 2,
+      "sameOriginalCommand": true,
+      "requestId": 1
+    }
+  ],
+  "screenshots": [
+    "publication-frozen-desktop.png",
+    "publication-frozen-mobile.png"
+  ],
+  "pageErrors": [],
+  "consoleLogs": [
+    "Failed to load resource: net::ERR_FAILED"
+  ],
+  "rejected": [],
+  "aborts": [
+    {
+      "action": "PUBLISH",
+      "posts": 1,
+      "actualForwardedCommit200": true,
+      "browserRequestAborted": true,
+      "removedAfterReadSettled": true
+    }
+  ],
+  "held": [],
+  "visualBounds": [
+    {
+      "name": "publication-frozen-desktop.png",
+      "left": 297,
+      "right": 1391,
+      "top": 83.765625,
+      "viewport": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "publication-frozen-mobile.png",
+      "left": 28,
+      "right": 362,
+      "top": 83.5,
+      "viewport": 390,
+      "documentWidth": 390
+    }
+  ],
+  "browserPath": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "startedPids": [
+    66484
+  ],
+  "stoppedPids": [
+    66484
+  ],
+  "sqlFixtures": [],
+  "database": "isolated runner-owned H2 file; offline fixture only with all owned JARs stopped",
+  "productionJvmPid": 66484,
+  "browser": "155.0.8059.39",
+  "consoleDetails": [
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9983/api/v1/on-call/open-handoffs"
+    }
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n1 !== 0\n\n    at verify (D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-oncall-open-handoff-ui-ci.cjs:85:197)",
+  "ownedProcessStopped": true,
+  "completeJarLogs": [
+    {
+      "file": "jar.log",
+      "unexpectedErrors": 0
+    }
+  ],
+  "unexpectedJarErrors": 0,
+  "posts": [
+    {
+      "path": "/api/v1/on-call/open-handoffs",
+      "body": {
+        "sourceShiftId": 3,
+        "sourceVersion": 0,
+        "requestKey": "aac000d3-87c6-4934-8821-156c24158bc6",
+        "startsAt": "2026-10-12T20:04:02",
+        "endsAt": "2026-10-12T22:04:02",
+        "reason": "CP99 原发布🙂"
+      }
+    },
+    {
+      "path": "/api/v1/on-call/open-handoffs",
+      "body": {
+        "sourceShiftId": 3,
+        "sourceVersion": 0,
+        "requestKey": "aac000d3-87c6-4934-8821-156c24158bc6",
+        "startsAt": "2026-10-12T20:04:02",
+        "endsAt": "2026-10-12T22:04:02",
+        "reason": "CP99 原发布🙂"
+      }
+    }
+  ]
+}

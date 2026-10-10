@@ -1,0 +1,686 @@
+{
+  "status": "LOCAL_NOTIFICATION_UI11_ORIGINAL_OPEN33_MEMBER25_PASS_OWN_REMOTE_PENDING",
+  "parent": "d929edb31f39d8d4ab8d5ed8eef1203671e30acf",
+  "sourceFiles": [
+    {
+      "file": ".gitattributes",
+      "sha256": "15e87078048be0766326c70e863ab2fcceb6a1a8f16023ec8258dd4487a9a235"
+    },
+    {
+      "file": ".github/workflows/plan-membership-wip.yml",
+      "sha256": "c28854dcba0f6126f7c881171cd6727f3fe53385076f7cbc95e19d1e7a9ef3d8"
+    },
+    {
+      "file": "scripts/tests/oncall-membership-regression-workflow.test.cjs",
+      "sha256": "4af3a85a545ffb086d3c16b8a3be4e14716f4f900c143c5d83e3c7f6d2ab991b"
+    },
+    {
+      "file": "scripts/fixtures/OpenHandoffSqlFixture.java",
+      "sha256": "fc39feaf05f8a29a4daa81fddbc840a24faa6ff5c1a9eeb5b2a094eb221983bc"
+    },
+    {
+      "file": "scripts/verify-oncall-open-handoff-ui-ci.cjs",
+      "sha256": "94f1c9626ba1f9120cd9905ecb6dc252a33f4ab96663c047b822a0322b3bbfc8"
+    },
+    {
+      "file": "scripts/verify-oncall-open-notification-ui-ci.cjs",
+      "sha256": "7d4415173695e7e84b58ad0af24e2494acecc5dcdf7f0b51170f3084e3ffa35d"
+    },
+    {
+      "file": "scripts/verify-oncall-open-notification-ui-evidence.cjs",
+      "sha256": "b07780a3dfa9973a7c59b1315f70daae8044e0ccdb988a5d7865a388c83c304a"
+    },
+    {
+      "file": "scripts/tests/oncall-open-notification-ui.test.cjs",
+      "sha256": "b14c6e01cd9e35cc1451dc36dd9a1ad0c1523eaf04cbf353fffb4ae53b55be76"
+    },
+    {
+      "file": "web/src/components/OnCallOpenHandoffPanel.vue",
+      "sha256": "98ba7f6fa4d7c202d07bc22f546426575060eed4e2764f2e1955ed2bbe561ebb"
+    },
+    {
+      "file": "web/src/components/OnCallOpenNotificationPanel.vue",
+      "sha256": "34ccbd0e88ded568c63d5d2db35699640f4ee8bbedb2a4ef9144db194d5217f6"
+    },
+    {
+      "file": "web/src/services/onCallOpenNotifications.ts",
+      "sha256": "87bf44f956510b359b5662cef68040e418f93b19713a068e0d61614013525776"
+    },
+    {
+      "file": "web/tests/onCallOpenNotifications.test.mjs",
+      "sha256": "504ce78adb3ec90a0528b3e70cb5f7160b29de1a83144f58848a39627ba4a994"
+    },
+    {
+      "file": "src/main/resources/static/index.html",
+      "sha256": "a577ad4dbf01f1d58d8acedd8f6d0147767f53b089224a9944e3626696f80830"
+    },
+    {
+      "file": "src/main/resources/static/assets/index-DmZHCixY.js",
+      "sha256": "638bf1990c8bf9df9616309e9521d99b6c9c57b3bfd9d8caf5f5e0518c5b98e1"
+    },
+    {
+      "file": "src/main/resources/static/assets/index-_gKo6Ndu.css",
+      "sha256": "1c0c0ebbc7a432549f997c1fbbcd6101361caa80e1791151c47c5afaceed63d2"
+    },
+    {
+      "file": "README.md",
+      "sha256": "52e74758dc5d57cc25704c4c70263c5d13b7cacdfaedf7d3b89a8594200d634e"
+    },
+    {
+      "file": "docs/ROADMAP.md",
+      "sha256": "08f0ccdfe7e1128cd7bdec0b7752bcfa502386beb092012c6f3d0be314b143b4"
+    },
+    {
+      "file": "docs/acceptance/README.md",
+      "sha256": "5a34c00939486f7d287637733d3d6cac0bb17dac08e1f63ae51ba5bea5e6aa1d"
+    },
+    {
+      "file": "docs/ONCALL_PLAN_MEMBERSHIP_DESIGN.md",
+      "sha256": "4f34b31b31b1430503ba050675f2b3377e7fb615e1fb39afcef26e78d039bc9c"
+    },
+    {
+      "file": "docs/acceptance/V1.7-checkpoint-118.md",
+      "sha256": "3def70561667c4e9de580b73e51e970a8e0498d4ffafcd0bffb8d1a651fd3cad"
+    },
+    {
+      "file": "docs/acceptance/V1.7-checkpoint-119.md",
+      "sha256": "e806f9fe5f9cdce597438a9b72fda67c630c3a40a379fff52ae02872f7983fe2"
+    }
+  ],
+  "files": [
+    {
+      "file": "docs/assets/v1.7-cp119/before-notification-ui/before-no-notification-desktop.png",
+      "sha256": "e50575a75ba3e4d00a428f69b7454b0828dcb87aadcf002da4bbec3d458975cd"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/before-notification-ui/before-no-notification-mobile.png",
+      "sha256": "8cd43c45619ab46459888db96c944f2c0c476a20b9529835ac215a9ff52627ea"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/before-notification-ui/first-viewport-desktop.png",
+      "sha256": "27969314e1d5c9f63b80306f977b9ec1afdf4aa2e18fb1234c8569c8c6e98bde"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/before-notification-ui/jar-1.log",
+      "sha256": "b6482f998e29ae238887285c9be26ade98b08145b1f6eb738c40ec2d8abc26eb"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/before-notification-ui/result.json",
+      "sha256": "31cd167602a14f68c6ed348b81f5a2e1485341988244c0b21f51d6f7ba288c08"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/before-notification-ui/sql-final.json",
+      "sha256": "4d7e0f8311e82fea492f6a3a19d0266ae6034ba9fdf6241abf13fb63dadf3d00"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/gate-result.json",
+      "sha256": "0b87cbe5dc173eb97cd2a45f655ca8fee9980733c3ac81e203532897c7351126"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/jar-1.log",
+      "sha256": "26f9e40a18574dc76d8a5a01083be6a88ec5f1ddb86ebbc7211862219f2dae55"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/jar-2.log",
+      "sha256": "df1001a3ce0d4a5401a7c7f65ebef8347dfab6e4e86c29f07f2005a8b28528ab"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/jar-3.log",
+      "sha256": "c11142271b71375a6fa014cfbfe3ea8e26f8d7743112f6d0286325c0ac2e668a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/jar-4.log",
+      "sha256": "c477d2e3d51691dae6a270f34ac584cf60fa389dc6595c6fe52e9eba5b85d801"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/jar-5.log",
+      "sha256": "de0e278da12b301cdcd9bb1c1fb92b9f2c09d72b77072f03dfcd8ead1fb9e233"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/jar-6.log",
+      "sha256": "af3ac5bd6734929a9f040ec8b53c6fb64d9ae60ed0546c53de112c09884dd721"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/jar-7.log",
+      "sha256": "b819e68ad8d459257a90fbc9d0559c44cc8d101178086710374e64ee66694a05"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/old-v40-jar-provenance.json",
+      "sha256": "1dcb886d8d3b433f2d98fbe9f266fe28204230b74a63232beda58cc0d33a655e"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/result.json",
+      "sha256": "da40a5825d00f5f8f33e240b4671cd56615d6ca77b7387e7c0f2aa60a4bf09b4"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/sql-0.log",
+      "sha256": "03d184639697697762bbbf92516a75d38295c86e4a80f2ece476088580a2a8ac"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/sql-1.log",
+      "sha256": "96b261313805fa98154482623b6f969c51bbb1504be77051405de4beda56d1b9"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/sql-2.log",
+      "sha256": "2939c558fb967e26f1627cc76c3f3dcb5152bece652178303087e9bfa10bb3f4"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/sql-3.log",
+      "sha256": "039c3b947e58ee3537c510423845cbe2cdc886f198326cb5b19639162d4f8c6a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/sql-4.log",
+      "sha256": "19d9e26a20345d155533e5115f4b490c083d65c5256b3cc05ed6cb5467804941"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/sql-5.log",
+      "sha256": "3ef748d266d1db861f688f719567a6ca6e9a21b3671a9f3df467ad671f6efc1f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/run-UO3ZCt/sql-6.log",
+      "sha256": "615352e230927ed5177bfdb182c5c681f0c8ef03a04031ceb35516b4524aeacc"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-jar-evidence/runner.log",
+      "sha256": "f043dd0a8ca504bdeffead48d6b0541a97d8a3f4321c63da5d474dfb18570d65"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-mysql-evidence/oncall-open-notification-mysql-it/maven.log",
+      "sha256": "ab27077efd8beb84635a5f6f34f6030c407706411a71bc081f7df06e25d55c44"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-mysql-evidence/oncall-open-notification-mysql-it/result.json",
+      "sha256": "d4509fb236ddbc10fe13c8c46ec976f7c2da8ac1fcb29c8ac0b917fc754df926"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote/open-notification-mysql-evidence/surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOnCallOpenNotificationIntegrationTest.xml",
+      "sha256": "63741466645b2c8ddae17591587aa3c9bf4d881eca9e02d29c74bfdf109502f6"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-remote-proof.json",
+      "sha256": "8678e52ec8e39234a418849a953df21c4c4ce390071e1fa272f5dba6a0646b92"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-run-38076799809.json",
+      "sha256": "2818a5b21765acb0db750aae5747934443359412917b5e1ead754489e300fc90"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/cp118-own-run-38076799990.json",
+      "sha256": "f0ca0ce079201209dd64000b187bc071e22575e3637d8f3baf5eaab732171381"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-after-missing-browser/jar-1.log",
+      "sha256": "6edf15cb8ae37c14c31290075303ace30e4d90a1602775e6598d7f155ab37dca"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-after-missing-browser/result.json",
+      "sha256": "38de8f2f3e926ecd376be89cbc9008c8b227777a0e76ac4bf4c00472c0b48fbd"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-before-layout-transition/before-no-notification-desktop.png",
+      "sha256": "2ef3b36cbd2da96ca8fbf6b37fe8bc845f41a9621f7605a745ed96b8b06a8732"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-before-layout-transition/before-no-notification-mobile.png",
+      "sha256": "41d59385bbf527f1b91fd6a1c6a03462cd39352a35dd1f10ee40db2bfbedb8c0"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-before-layout-transition/first-viewport-desktop.png",
+      "sha256": "12a73a69416a3e653ee070952fb8119325181f1d222a95a84d580d4f8ce4e13e"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-before-layout-transition/jar-1.log",
+      "sha256": "458602cd87ed51ee6e94cf4f3906faba0f29d7dab5fcb18b48964b460b08a1f0"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-before-layout-transition/result.json",
+      "sha256": "a5e57b4283951122298f2abf02ffc61de28356322cd17c633819606e529d3f6b"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-before-missing-browser/jar-1.log",
+      "sha256": "539fc28e2e97bfec299297b32fd3b4b42006d75475551f089405a2df1a4750e1"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-before-missing-browser/result.json",
+      "sha256": "c2e4dcf5c8ec26976ff5e2bbcfbf22aebdca5565d8a782c3443e2f5816fd1c5f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-held-route-already-handled/actual-503-pending-desktop.png",
+      "sha256": "70b77727b0e47325f86acaa7daf1f831ae92aba3b857c58dc182e78ef79b5d50"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-held-route-already-handled/actual-claimed-desktop.png",
+      "sha256": "4903b9b64b6dd541a096a4ea0591c8c69c321bc5447d06bfed7beb540b0216b6"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-held-route-already-handled/actual-delivered-open-desktop.png",
+      "sha256": "9dec53de0b3cfa7f493ad0d85f86345db4e4d01b3e4e844b051a64310836dc7e"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-held-route-already-handled/actual-delivered-open-mobile.png",
+      "sha256": "3df83a76b6bd2129452d65cf44bb6e98fe7f5a02b1feefda4e9b9169d9117788"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-held-route-already-handled/actual-skipped-mobile.png",
+      "sha256": "c816659bc667733e546eb27f51e95d814bd4e6658f8c488668301f2096a25555"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-held-route-already-handled/after-pending-desktop.png",
+      "sha256": "9c4c25dfdef957d5b5f19840df6f7d296cbf3ed077ed9e295e878d50ff3c416b"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-held-route-already-handled/after-pending-mobile.png",
+      "sha256": "cd1f9d0df352db425e464a1000ffa485facd257f4f3bb9fadef9925d075d2666"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-held-route-already-handled/cleanup-observation.json",
+      "sha256": "cf1e92ee71e8e97dbc0aba0ab1dc765e793709f80f1f4ee2eed2c5b957948878"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-held-route-already-handled/first-viewport-desktop.png",
+      "sha256": "6c609b4787a2389798e0a1bb63b2715a92850b42a4fef6c62cae5791601402bb"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-held-route-already-handled/jar-1.log",
+      "sha256": "babb5f0fd7cf7a0fb714ee021d6c7976dc7940f757e28a7056a3f192e3a445e8"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-held-route-already-handled/jar-2.log",
+      "sha256": "65c35f34ee37ba44513d610568a3e8fa3b751ae42f76f0a31fe7fec8cfe23547"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-held-route-already-handled/jar-3.log",
+      "sha256": "4476173e18c00cee5b1ce331d1aaee758b5966d16cf6f11b81b92e3ea1a4fc60"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-held-route-already-handled/read-failure-clears-facts-desktop.png",
+      "sha256": "8f2df311acfb961e514e72ffb3e41adb659c017672e989a33a861c497a33ecb5"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-original-all-buttons-assumption/failure-0.png",
+      "sha256": "8f71bf71f531cb8eb62533a725a58c4b7c7a29c1dbfceb63d1d1030a747765e4"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-original-all-buttons-assumption/failure-1.png",
+      "sha256": "c67005a9efb36782b6979a5fbbfdcba743d9bb91a8558709ebb7f903b5ff06dd"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-original-all-buttons-assumption/jar.log",
+      "sha256": "a94f303c83a52870de74962c0e8dfdb474444ef0f19efbad1d603302b58f267f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-original-all-buttons-assumption/publication-frozen-desktop.png",
+      "sha256": "358ba065d68fe2171ecd6aa013ef08b837b7a87391e5bc55a8a84ca8d0a3c014"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-original-all-buttons-assumption/publication-frozen-mobile.png",
+      "sha256": "17527ae9cb3876e46549d54e6877e9a749d66f7099b9f6047cc42b67dbb875d4"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/failure-original-all-buttons-assumption/result.json",
+      "sha256": "ec565a3f0091b9008d198fc2cb33093daced9396b750451048663719e7700533"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/actual-503-pending-desktop.png",
+      "sha256": "b92dece4c11124bbeb26e000b1103aa01260cd9d1862e9955177561169b65b67"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/actual-claimed-desktop.png",
+      "sha256": "19d34d5e29b610c0e44b18070bbe1c5226a2d341ebf9f75d7d38ae933abcda34"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/actual-delivered-open-desktop.png",
+      "sha256": "d6e13de6afa8ace92b3ac2f2138fba4e22051295cc3c9e5e6d88430ef4da7cec"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/actual-delivered-open-mobile.png",
+      "sha256": "47b74d1fdaba0b43818cda86bcfd915ae067dd1db69fba711adf2a2aa280e8b7"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/actual-skipped-mobile.png",
+      "sha256": "d0d804458cace66af5e709d94cce6a0dfbfaec35b0e4d3a5483031af46c72843"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/after-pending-desktop.png",
+      "sha256": "30ddbb572479b3adc6f7583944b88dbb23260de02ae844162ffd8be1e808c427"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/after-pending-mobile.png",
+      "sha256": "f143dd1c180f6a4a54a994be23f959d968ae91b1bf47bd8b5a1355b7d431bacc"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/first-viewport-desktop.png",
+      "sha256": "ca1835dea81ee55d5bf2e928dbfe828e40d849cf99839dafc2dea9dfe111aa24"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/gate-result.json",
+      "sha256": "bb655c99d8195584c4660f2f4831617dbcc07a85e496255c9faacf3e7ecefe40"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/jar-1.log",
+      "sha256": "9e6aa6314519afdf8c47ad2be460607858e626e864b96047aeb2956fc12fc430"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/jar-2.log",
+      "sha256": "d922c4de2b47854c3ac639d565ecd7c73b1b4e0b1649384f6ccebeb9e636cb5c"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/jar-3.log",
+      "sha256": "671cb9d7b8f205bd2775cce7181951ce96b8754b0d71d10af4060c0c17495adc"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/read-failure-clears-facts-desktop.png",
+      "sha256": "5636fa922715ad50383bbfa4f7d2431cecbadb26f42116dcaeeb56cf229b6342"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/result.json",
+      "sha256": "e903e7f91a7498d7e7d3ff6815ca93bc03aed9a77590d89a111e97c4b548c087"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/final-notification-ui/sql-final.json",
+      "sha256": "d6fe3978fe6d45644022678ef18a9c34063c5f5383a649bcddc3952e4b2e5ebf"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-build-final.log",
+      "sha256": "2c0baf216da2faf4a34538d4f13e0e81f06162d446bff7b2d68bb9f0b16031ea"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-build-first.log",
+      "sha256": "596ec95b318ed6bfc707c1e495934e956984f7650d6edd14a72a5ad89da723b6"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-frontend-final.log",
+      "sha256": "4ffb7a4137a4c1d6d72090e05f56bd7abfcb3400b2bf17f9c914af548c64e439"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-frontend-first.log",
+      "sha256": "28a54de77cbf6e04a1b879b654696303992de3fd99cc096fba789baa6856db5f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-node-final.log",
+      "sha256": "fd741ef8e3d793a5aaded1a0fda2c241e644b03694c69a714a932056b4e733d6"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-node-first.log",
+      "sha256": "adbbcf5329b62d7a85de2cf280da726116c84095a167ea8d2db807e3a028bf64"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-original-member-ui.log",
+      "sha256": "ce013e068a8a1c39d6e7c286e2e397445cc518a4f0989cd1f3d9df211b020ccd"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-original-open-ui-final.log",
+      "sha256": "732ab0608b6f3160f6657469b95a346c2c60ac799fb648ad726c5ab44a9f10b5"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-original-open-ui.log",
+      "sha256": "0975f4ea085778c2e0280d7e423921a2f2a03a1f3aa77198e9443a13c4ce7492"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-package-final.log",
+      "sha256": "676b09ac2adc82f2a11ed8db436487d7edf5fa87c96a562da1b036ccce9b73ee"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-ui-before-chrome.log",
+      "sha256": "98342d81aa03141b105c2541044b6e577e20ae29cdb4d8f8dbe92807e25be9dd"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-ui-before-final.log",
+      "sha256": "1c247f04c7f6ee08c01c9b6eb76b0a98d4d2f03c051cf900196223889a6e6e9d"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-ui-before.log",
+      "sha256": "03c1974663ea4dcbf3f8e8c37dc6bc89e80f7b5fa8693b17ed2bccb11c2f786f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-ui-chrome-final.log",
+      "sha256": "3d04574912f8055b263858f8b703b980ad03a0b5cb38c226f9b59cc442229d2a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-ui-chrome-first.log",
+      "sha256": "99bf03682591f3626b9bea591c404572a0fcc93f83006c900cb5cc9e31fcfabe"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-ui-first.log",
+      "sha256": "55bf627063e4e87a5545c46828508d76b8d773e4ae7018107093225ad8cc212e"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/local-logs/cp119-yaml.log",
+      "sha256": "63195489895a062759a79e297247a2dbcef94ddb549d75bab4b11073351f4d95"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/old-generated-assets/assets/index-BuICS5Gk.css",
+      "sha256": "78fe75eba9c0257fd61046750248b1061ddbee5477fb452bf41417f1aa7ba37f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/old-generated-assets/assets/index-BwzjiP8n.js",
+      "sha256": "be2037b4f6e85497b92116da7a48ecb8c91e3b0b456098278a2cf2057e817f8a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/old-generated-assets/favicon.svg",
+      "sha256": "d4bbd82afba893ba68d94d523df56c2dcea1d3fd5e7d9bff23a47747020062af"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/old-generated-assets/index.html",
+      "sha256": "5a621c26f4060934f9b1f46313541f665eb0587f87c66ebb03644fe7e53ec28b"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/after-clear-uncertain-desktop.png",
+      "sha256": "dc53c12a7c2900baaac6d67548fc3b67ae17bcd457c57e24528985f446d89216"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/after-desktop.png",
+      "sha256": "3b93946be4e9c1bb0915c130d111a21b8f96aa60465da281803a18af7cd600b4"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/after-first-desktop.png",
+      "sha256": "b3054d61a94da9b02e8e247d38d82e93c90f6dccd715f92b021759d25b3b49fd"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/after-first-mobile.png",
+      "sha256": "48595b87caf11eefba1299e2ff4730924a535045bc39cd4d376f9ee70c5bf258"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/after-mobile.png",
+      "sha256": "eb002328f9c5c47b5d0a1c0cdefe41861ad6ad0e725a50564487e3edd0fcc9f6"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/bootstrap.log",
+      "sha256": "329179431f711973b4497e9278acee3f577268fc855cb365bf72a1794176d595"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/first-null-receipt-desktop.png",
+      "sha256": "f8fc3b36bab3b42b6a1a6d8c0854289ffa802042419a2b7c1870adf42d73eae5"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/fixture-seed.json",
+      "sha256": "bbc527de9a1abbe967fd180c4f27d54fae58548b81c9cd6501cdac69c74e5e64"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/fixture-snapshot.json",
+      "sha256": "19a19d75351a928ad1ff1af7a0d0386ac649a3d0eac10845f9eadeb0589bd6fd"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/frozen-original-mobile.png",
+      "sha256": "1b519c1c98691f16c94f42bfe97a337e1d926a6f14daad77e877011e91eee758"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/gate-result.json",
+      "sha256": "23277fa8d9a0fc3982a07c844e3c3f988de28ef2d816b434380fd5ae24e2aae7"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/jar.log",
+      "sha256": "94453a5a55889c960f63d506cd979467d060a3c98253d0539c1c6e2aa44b276e"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/locked-original-mobile.png",
+      "sha256": "395dc5477ecc7e28575238d59318ce52688419fa45e6dcdf13c15d9961b0a4d9"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/native-cross-tab-frozen-mobile.png",
+      "sha256": "8ce2db16ca46102aae0087be7cdfbe5266bcfc21523f2955902f49e6f3764cbc"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/original-vs-current-desktop.png",
+      "sha256": "261f37c9e74fcbdfa89190d52de98e71a6a87f37d58b5b698a4c1a7345c1dab5"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-member-ui/result.json",
+      "sha256": "31092b38d2fc5b23d9606a3eb67c932345716293a9b7e02631c9002cd2301323"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/after-foreign-receipt-desktop.png",
+      "sha256": "e6009dfbf1e1ce0273abbbb3a5977ddef16310c7c9497cf83ad35b1f6e8764f0"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/after-foreign-receipt-mobile.png",
+      "sha256": "9a3df9df0eb0c73293d96077e4f8417f763ec2922a4839583bf19341938e5191"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/after-silent-clear-frozen-desktop.png",
+      "sha256": "2db1227106e8227dfc9ae251aa51d4821ed814b2d4241cc35deed94d31a3cc28"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/cancelled-detail-desktop.png",
+      "sha256": "b8f802a714dd1a16f3a3f2f62600f3da722fbc679a923a686eb62dde46800266"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/cancelled-detail-mobile.png",
+      "sha256": "18a780d498015edc06513d3d1d0550c0d79a09486ab1eb8469e2a88548893a19"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/cancelled-history-desktop.png",
+      "sha256": "846b1ab13250be7c1e02505546b379b2ee57c538ad9a7693b944a7cbf4a1e263"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/cancelled-history-mobile.png",
+      "sha256": "2f3a7e81feac716ef0e67b4b8566cab6a6e6555c91c80d99d7da565366d47b02"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/cross-tab-identity-mismatch-desktop.png",
+      "sha256": "74fcc9e74b442549f6d21c866ef8c19302527d557db395a40ec5112fa329e2c6"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/expired-first-claim-desktop.png",
+      "sha256": "f7d815cd9ae86e41421138569aa2ced71cbe0692b26800d0f88be16b0f4c9d0a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/jar-2.log",
+      "sha256": "f47691791b46565efce7159b5e9c7b081aa0ca3e5f0a83356b325b06e4cce47e"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/jar-3.log",
+      "sha256": "1dd33dfc5c4d9d7b274edc599a16bfe634aab3197997e0b9ba267ffbd7d75d58"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/jar.log",
+      "sha256": "49e34ed2263a2dbf708447f36e87b3f4320d4c0ac47b19de7b07d9d60c218a24"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/lock-save-failure-warning-desktop.png",
+      "sha256": "c1bd2443d74974a2f2e6e5b71124ef54224efcb3c88dbc9008eb3c7562c50b87"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/publication-frozen-desktop.png",
+      "sha256": "9389a6da87837dedc861896c95ce3b62aff39dc4d59b520ec90678d3b553314f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/publication-frozen-mobile.png",
+      "sha256": "894ecd32f0612765e60505725b45d7417bc15cb70d95ab46b145d6879160ecee"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/result.json",
+      "sha256": "ac8c12c9bf98e1cee76399b3d68a7686f628d526251e112cf7fca6afd893b851"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/role-before-original-desktop.png",
+      "sha256": "02a008b3d66c3942fa95470e661d9719548fa589687292b8a0aa14c6d6574c88"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/role-restored-locked-desktop.png",
+      "sha256": "e86fd04a2588ed6cbda26720943f4653f017778224a5d37ac8d31fa665b4b38a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/role-restored-locked-mobile.png",
+      "sha256": "b2404361c60888cf78b9cc451648c07685080e29ec34d79ce0319689ab0b5766"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/sql-0.log",
+      "sha256": "fac4b964e1e24a39c661084c982a646abb402d6d23be4f8a76acd87c1281291e"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/sql-1.log",
+      "sha256": "b1a1721e5800080c1bf698eb2c50cbf7fdd4e0937cbed11cf9e2149b8f0f5902"
+    },
+    {
+      "file": "docs/assets/v1.7-cp119/original-open-ui/sql-2.log",
+      "sha256": "2a84aca3ac088c6a7122ab21234a8df02cc1a14e0329521e94791753a0b42206"
+    }
+  ],
+  "newJarSha256": "1a62f06dcef29c2f28ef9232f46d3477d8ae42174b1571fa09ddb5141a4fe066",
+  "oldJarSha256": "810bab6a115cd073610d2c2a611f378727552d6c762e3e33f04c211aa354fbe4",
+  "notificationUi": {
+    "status": "PASS",
+    "cases": 11,
+    "database": "H2",
+    "actualConfiguredReceiverHttp": 4,
+    "allFiveStatesFromProductionServices": true,
+    "received503And200SameKeyAndPayload": true,
+    "noAutomaticHumanClaim": true,
+    "browserBusinessPosts": 0,
+    "staleFactsClearedOnReadFailure": true,
+    "requestSelectionAndNativeActorFencesVerified": true,
+    "auditorReadOnlyVerified": true,
+    "gracefulOwnedJvmShutdowns": 3,
+    "screenshots": 8,
+    "ownLinuxUiVerified": false,
+    "thirdPartyAccountDeliveryVerified": false,
+    "remindersVerified": false
+  },
+  "originalOpenUi": {
+    "cases": 33,
+    "status": "PASS"
+  },
+  "originalMemberUi": {
+    "status": "PASS",
+    "browserCases": 25,
+    "originalBrowserCaseIdsPreserved": 14,
+    "viewports": [
+      "1440x1000",
+      "390x844"
+    ],
+    "separateOriginalReceiptAndCurrentVersion": true,
+    "threeLateResponseIdentityFences": true,
+    "twoNativeCrossTabStorageFences": true,
+    "explicitNullFirstGrantAndSqlVerified": true,
+    "clearUncertaintyManualSameOriginalRecovery": true,
+    "actual403And409": true,
+    "allScreenshotsWidthVerified": true,
+    "completeTwoOwnedJvmPoolsShutdown": true,
+    "realMysqlUiVerified": false,
+    "fullMembershipDeliveryVerified": false
+  },
+  "frontendTests": {
+    "executed": 210,
+    "failures": 0
+  },
+  "nodeTests": {
+    "executed": 246,
+    "failures": 0
+  },
+  "workflow": {
+    "originalJobs": 21,
+    "wipJobs": 9,
+    "original21AndPrevious8DefinitionsUnchanged": true,
+    "duplicateNegativeRejected": true
+  },
+  "backendAndPublishedMigrationsUnchangedFiles": 178,
+  "cp118OwnMainJobs": 21,
+  "cp118OwnWipJobs": 8,
+  "cp118OwnOfficialZipReplays": 2,
+  "cp119OwnLinuxVerified": false,
+  "defaultJavaRerun": false,
+  "thirdPartyAccountDeliveryVerified": false,
+  "fullGoalComplete": false,
+  "rawAuthSecretScanPassed": true
+}

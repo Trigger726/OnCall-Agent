@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+当前CP119：[通知回执页面](acceptance/V1.7-checkpoint-119.md)。五个数据库技术状态已实页可见，失败清旧事实、切换请求/原生跨标签账号旧200围栏只读验证通过；通知成功仍须本人认领。新11/原33、前端210/Node246本地通过，第九专项Linux UI新增，自己的新CI待验。CP118自己21+8 success，MySQL22与Linux七JAR官方ZIP已独立闭合；真实渠道账户、全JAR MySQL通知、提醒/重投/保留、读隔离、容量/DST与原始OnCall全能力对照仍继续，不标100%，旧Demo/失败保持。
+
 当前CP118：[通知兼容修复与JAR闭环](acceptance/V1.7-checkpoint-118.md)。实际MySQL22揭示原SET先改状态导致错误码错误，单条生产SQL顺序已修；不把H2通过当新MySQL证明。非空V40→V41、真实503→重启→200稳定键/载荷、撤权跳过及技术送达不接班→人工明确认领已七JAR流程本地验证，加入独立Linux CI。自己的MySQL与Linux待验，后续真实渠道账户、提醒/重投/保留、全JAR MySQL和既有余项继续；旧Demo/失败保留。
 
 当前CP117：[通知适配器限定验收](acceptance/V1.7-checkpoint-117.md)。真实同事务outbox/SQL租约/资格重查/稳定载荷与键、HTTP失败策略、单worker无积压已实现，默认关闭；本地22网络共享项/Node230/Java579执行通过。自己的MySQL22/远端CI、新JAR启用投递与重启、非空V40升级待验。接下来优先实际渠道账户映射、提醒/保留/手工重投以及原业务余项；历史Demo与失败保留，完整目标active。

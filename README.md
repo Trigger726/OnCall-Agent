@@ -1,5 +1,7 @@
 # OpsPilot
 
+当前CP119：[只读开放通知回执与新旧页面验收](docs/acceptance/V1.7-checkpoint-119.md)。新增五种技术状态、刷新失败清除旧事实与请求/跨标签身份围栏；本地真实通知11、原开放33、前端210/脚本246通过。CP118自己主21+专项8 success，MySQL22/Linux JAR7官方ZIP已独立重放；CP119自己的Linux页面/完整CI仍待，不把2xx当人已接班。旧Demo、旧生成资源和首次失败均保留，整个目标继续active。下方为历史时点。
+
 当前CP118：[MySQL失败修复与独立JAR通知重启](docs/acceptance/V1.7-checkpoint-118.md)。CP117自己主21 success/专项6 success、通知MySQL22中1失败已保留；修复SET读取原状态顺序，不放宽断言。本轮七H2 JAR网络/非空V40→V41/503与200跨重启/撤权跳过/明确人工认领，原HTTP8、Java579执行与Node238通过。新增第八项独立JAR CI，修复源码自己的MySQL/Linux结果待验；旧Demo及首次失败保持，整个目标active。以下按历史时点阅读。
 
 当前开发CP117：[开放发布持久化通知/真实HTTP/技术回执](docs/acceptance/V1.7-checkpoint-117.md)。新增V41、同事务outbox、发送资格重查、稳定投递键/有界重试/租约围栏，默认关闭。共享22项实H2/14认证HTTP、默认Java579执行/258条件跳过、Node230通过；自己的实际MySQL/新JAR重启与远端CI待验。CP116自身主21/专项6 success，新增MySQL升级六项官方ZIP独立重放已验。旧Demo及失败保持，不把技术2xx当人接班，不称整个目标100%。以下保留历史时点。

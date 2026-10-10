@@ -2,6 +2,7 @@
 import { computed,nextTick,onBeforeUnmount,onMounted,ref } from 'vue'
 import { auth } from '@/stores/auth'
 import { RequestError } from '@/services/api'
+import OnCallOpenNotificationPanel from './OnCallOpenNotificationPanel.vue'
 import type { HandoffSource } from '@/services/onCallHandoffs'
 import { canPublishOpen,clearOpenIntent,getOpenCoverage,getOpenRoster,listOpenHandoffs,openActionError,openClock,openIntentError,openPreflightError,openQualified,openTime,readOpenIntent,saveOpenIntent,submitOpenIntent,type OpenCoverage,type OpenHandoff,type OpenIntent } from '@/services/onCallOpenHandoffs'
 const emit=defineEmits<{changed:[]}>()
@@ -96,7 +97,7 @@ defineExpose({refresh,open})
   <section class="content-panel open-handoff-panel" :aria-busy="busy" :data-open-id="selected">
     <div class="panel-heading"><div><h2>开放接班 · 自愿认领</h2><span>本人发布已有普通班次，合格同事自行承担；不代他人同意</span></div><button class="secondary-button" :disabled="busy" @click="refresh()">刷新开放接班</button></div>
     <div class="open-body">
-      <p class="open-note">从下方班次维护点击“发布开放接班”。新责任由服务端核验对应计划的响应权限与当前运维资格；管理权限不代表本人响应。广播与到期提醒尚未实现。</p>
+      <p class="open-note">从下方班次维护点击“发布开放接班”。新责任由服务端核验对应计划的响应权限与当前运维资格；管理权限不代表本人响应。通知默认关闭，渠道技术成功不代表接班；到期提醒尚未实现。</p>
       <p class="open-note">数据库快照：{{openClock(databaseNow)}}。输入使用数据库会话时间，不转换浏览器时区；可发布子时段，进行中认领仅覆盖数据库时间后的剩余部分。</p>
       <p v-if="error" class="open-error" role="alert">{{error}}</p><p v-if="message" role="status">{{message}}</p>
       <form class="open-filters" @submit.prevent="refresh()">
@@ -115,6 +116,7 @@ defineExpose({refresh,open})
         <p v-else>没有本次认领生成的覆盖，不假定已转移责任。</p>
         <p v-if="info.operation" class="open-receipt">{{info.operation.actorId===auth.state.user?.id?'本人操作回执':'历史操作回执 · 非本人'}}：{{info.operation.operation}} · 账号 #{{info.operation.actorId}} · {{openClock(info.operation.committedAt)}}<br>原键 {{info.operation.operationKey}} · 捕获v{{info.operation.capturedVersion}}<br>{{info.operation.reason}}</p>
         <p class="open-note">历史认领与当前责任分开。请在区间coverage选择计划 #{{info.request.scheduleId}}、原请求时段独立查询；取消后也不承诺原负责人仍可用。</p>
+        <OnCallOpenNotificationPanel :handoff-id="info.request.id" />
         <div class="open-actions"><button v-for="action in (['CLAIM','WITHDRAW'] as const)" v-show="qualified&&!openActionError(info,action,auth.state.user?.id,auth.state.user?.roleCode)" :key="action" class="secondary-button" :disabled="busy||Boolean(intent)||broken" @click="choose(action)">{{action==='CLAIM'?'我自愿认领':'本人撤回请求'}}</button></div>
         <p v-if="info.request.status==='OPEN'" class="open-note">{{openActionError(info,info.request.requesterId===auth.state.user?.id?'WITHDRAW':'CLAIM',auth.state.user?.id,auth.state.user?.roleCode)}}</p>
       </article>
