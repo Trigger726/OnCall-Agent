@@ -1,0 +1,156 @@
+{
+  "status": "PASS",
+  "cases": [
+    {
+      "name": "actual-cp119-has-no-global-operations-route",
+      "status": 404
+    },
+    {
+      "name": "actual-first-operations-jar-wrong-method-produces500",
+      "status": 500,
+      "errorCode": "INTERNAL_ERROR",
+      "expectedHistoricalMethodError": true
+    },
+    {
+      "name": "own-current-jar-default-disabled-not-fake-active-worker",
+      "view": {
+        "queue": {
+          "scope": "SHARED_DATABASE_AT_STATEMENT",
+          "enabled": false,
+          "databaseNow": "2026-10-10T19:29:28.290823",
+          "total": 0,
+          "pending": 0,
+          "pendingDue": 0,
+          "claimed": 0,
+          "expiredLeases": 0,
+          "delivered": 0,
+          "failed": 0,
+          "skipped": 0,
+          "oldestPendingCreatedAt": null
+        },
+        "worker": {
+          "scope": "THIS_PROCESS_SINCE_START",
+          "enabled": false,
+          "activeWorkers": 0,
+          "queuedTicks": 0,
+          "busyRejectedTicks": 0,
+          "failedBatches": 0,
+          "shutdown": false
+        }
+      }
+    },
+    {
+      "name": "actual-tcp-non-admin-three-roles-forbidden",
+      "statuses": [
+        403,
+        403,
+        403
+      ]
+    },
+    {
+      "name": "operations-route-has-no-business-post-command",
+      "status": 405,
+      "allowGet": true,
+      "errorCode": "METHOD_NOT_ALLOWED"
+    },
+    {
+      "name": "three-read-only-queue-observations-have-no-sensitive-fields",
+      "reads": 3
+    },
+    {
+      "name": "owned-restart-resets-local-counters-not-database-contract",
+      "view": {
+        "queue": {
+          "scope": "SHARED_DATABASE_AT_STATEMENT",
+          "enabled": false,
+          "databaseNow": "2026-10-10T19:29:44.579055",
+          "total": 0,
+          "pending": 0,
+          "pendingDue": 0,
+          "claimed": 0,
+          "expiredLeases": 0,
+          "delivered": 0,
+          "failed": 0,
+          "skipped": 0,
+          "oldestPendingCreatedAt": null
+        },
+        "worker": {
+          "scope": "THIS_PROCESS_SINCE_START",
+          "enabled": false,
+          "activeWorkers": 0,
+          "queuedTicks": 0,
+          "busyRejectedTicks": 0,
+          "failedBatches": 0,
+          "shutdown": false
+        }
+      }
+    }
+  ],
+  "startedPids": [
+    62072,
+    62048,
+    49120,
+    70504
+  ],
+  "stoppedPids": [
+    62072,
+    62048,
+    49120,
+    70504
+  ],
+  "shutdowns": [
+    {
+      "pid": 62072,
+      "httpStatus": 200,
+      "graceful": true
+    },
+    {
+      "pid": 62048,
+      "httpStatus": 200,
+      "graceful": true
+    },
+    {
+      "pid": 49120,
+      "httpStatus": 200,
+      "graceful": true
+    },
+    {
+      "pid": 70504,
+      "httpStatus": 200,
+      "graceful": true
+    }
+  ],
+  "authSecretsSaved": false,
+  "onlyOwnedDatabase": true,
+  "requestsStillRequireHumanClaim": true,
+  "ownedProcessesStopped": true,
+  "portsFree": true,
+  "completeLogs": [
+    {
+      "file": "jar-1.log",
+      "sha256": "4f9a88e43a2a50a5de24ceaaf3480277be4b6548c81aa3d82c421c979defa1e9",
+      "unexpectedErrors": 0,
+      "observedHistoricalMethodError": false
+    },
+    {
+      "file": "jar-2.log",
+      "sha256": "e46c0ed142a022544ac38db64a35a79f335936103a2798ec46bd1f95addb0a06",
+      "unexpectedErrors": 0,
+      "observedHistoricalMethodError": true
+    },
+    {
+      "file": "jar-3.log",
+      "sha256": "aef1a4a2b318d097d3e3e320bf2fa61130948d9dacae57ba38765ce9f6da698e",
+      "unexpectedErrors": 0,
+      "observedHistoricalMethodError": false
+    },
+    {
+      "file": "jar-4.log",
+      "sha256": "eb09e1ec0b5975b02def88b525908b5185d74c8227cb86edc33d5891566bb529",
+      "unexpectedErrors": 0,
+      "observedHistoricalMethodError": false
+    }
+  ],
+  "jarSha256": "8117714fcd28da726e0c0f2b9ccf3d3d1a3ff08a4c98b8b732cac5bbfa2c8656",
+  "beforeMethodFixJarSha256": "17cdca31666c24b11dc01249edf2068fd5688609212e22335572e5f6e2d7b360"
+}

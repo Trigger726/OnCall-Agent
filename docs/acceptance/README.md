@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+开发中CP120：[管理员运行观察、真实500→405与限定证据](V1.7-checkpoint-120.md)。新共享7/单位4/原22、TCP7、默认590执行/265条件跳过、Node254通过，自己的MySQL/完整CI待验。CP119自身21+9 success与Linux通知11官方ZIP已[追加闭合](V1.7-checkpoint-119.md#cp119自身远端闭合cp120追加2026-10-11)。前端及发布迁移不改，旧Demo/首失败保持，整个目标active。以下按历史时点阅读。
+
 开发中CP119：[通知技术回执页面与限定浏览器QA](V1.7-checkpoint-119.md)。真实五状态/新11/原开放33、前端210/Node246通过，旧Demo与首失败保留。CP118自己21+8 success与两个官方ZIP的MySQL22/Linux JAR7已[追加独立闭合](V1.7-checkpoint-118.md#cp118自身远端闭合cp119追加2026-10-11)；CP119自己的Linux/完整CI仍待，不把只读页面或技术2xx当全部业务完成，目标active。以下按历史时点阅读。
 
 开发中CP118：[MySQL真实失败修复、非空V40升级和启用通知JAR重启](V1.7-checkpoint-118.md)。CP117自己主21 success/专项6 success＋通知MySQL1 failure，官方ZIP/JUnit完整保留；SQL基于原状态计算错误码后再赋FAILED。七H2 JAR流程、原HTTP8、默认579执行/258条件跳过与Node238通过，第八独立Linux CI新增。自己的MySQL修复与Linux结果待验，旧Demo不覆盖，整个目标继续active。
