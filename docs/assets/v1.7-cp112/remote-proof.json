@@ -1,0 +1,331 @@
+{
+  "status": "OWN_21_CI_JOBS_SUCCESS_MEMBERSHIP_THREE_MYSQL_GATES_REPLAYED_UI_PENDING",
+  "source": "ed17c7533b355c834d18f0f9523adb5ea8cf8d02",
+  "originalCiRunId": 38052701503,
+  "membershipRunId": 38052701507,
+  "attempt": 1,
+  "checks": 83,
+  "artifacts": [
+    {
+      "id": 11670565791,
+      "name": "plan-membership-upgrade-mysql-evidence",
+      "bytes": 37769,
+      "digest": "sha256:bd6a15de47d876857a2e30d91814e4334e959411183027a2280b924faeee7acf",
+      "head_sha": "ed17c7533b355c834d18f0f9523adb5ea8cf8d02",
+      "runId": 38052701507
+    },
+    {
+      "id": 11670450934,
+      "name": "plan-membership-cross-node-mysql-evidence",
+      "bytes": 19990,
+      "digest": "sha256:88ae90f421e3411966b3d0217b47ebc52642455b5c49bfee4f207f8132ede6aa",
+      "head_sha": "ed17c7533b355c834d18f0f9523adb5ea8cf8d02",
+      "runId": 38052701507
+    },
+    {
+      "id": 11670311069,
+      "name": "plan-membership-wip-mysql-evidence",
+      "bytes": 18276,
+      "digest": "sha256:ac416c9536fe066cce1edca03f5b61c644fec81282b095835ebc43b3a967edcd",
+      "head_sha": "ed17c7533b355c834d18f0f9523adb5ea8cf8d02",
+      "runId": 38052701507
+    }
+  ],
+  "replayed": [
+    {
+      "id": 11670311069,
+      "name": "shared22",
+      "jobId": 114214909456,
+      "savedEqualsIndependentReplay": true,
+      "result": {
+        "status": "PASS",
+        "suite": {
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest",
+          "tests": 22,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "cases": [
+          "shouldBackfillOnlyPreexistingOperationalUsersAndNeverEnrolNewPlansOrAccounts",
+          "shouldSeparateManagementFromResponseAndKeepAdminRecoveryWithoutSelfClaim",
+          "shouldDenyAnotherValidPlanAndPermitItsExplicitMemberControl",
+          "shouldRejectMissingExpectedVersionButAcceptExplicitNullAndSerializeEffectivePermissions",
+          "shouldRecordActualActorIpAndOldAndNewPermissions",
+          "shouldCommitOneImmutableReceiptForConcurrentOriginalCommands",
+          "shouldRejectCrossPlanOrChangedKeyAndStaleOrOverflowedVersions",
+          "shouldPermitOriginalManagerReceiptAfterOwnPlanManagementWasRevoked",
+          "shouldRollbackFirstGrantAfterActualAuditInsertFails",
+          "shouldRollbackUpdateAfterActualAuditInsertFails",
+          "shouldRollbackRevocationAfterActualAuditInsertFails",
+          "shouldRetainAssignedCoverageAndOriginalClaimReceiptAfterMembershipRevocation",
+          "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait",
+          "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait",
+          "shouldFilterDepartedRequestersBeforeAvailableLimitAndAllowOwnWithdrawal",
+          "shouldRequireResponseForManualOverridesAndManagementForCancellation",
+          "shouldRejectNewDesignatedAcceptanceButAllowDepartedTargetRejection",
+          "shouldRequireBothParticipantsInBothPlansForBilateralSwap",
+          "shouldBlockOriginalRotationSlotsWithoutReassigningHistoryAndResumeOnlyMissingSlots",
+          "shouldNotWriteRotationWarningWhenManualScannerHasNoPlanManagement",
+          "shouldRetainBadRotationTargetErrorContractAndRejectInvalidManagementTargets",
+          "shouldRecheckCurrentRoleAndNotResurrectRevokedMembershipWhenAccountIsRestored"
+        ],
+        "executed": 22,
+        "skipped": 0,
+        "database": {
+          "case": "shouldRequireBothParticipantsInBothPlansForBilateralSwap",
+          "version": "8.4.11",
+          "product": "MySQL",
+          "migration39": true,
+          "schema": "opspilot_plan_membership_test"
+        },
+        "orderedResponsibilityRaces": [
+          {
+            "revocationFirst": false,
+            "databaseLockWaitObserved": true,
+            "responsibilityMatchesCommitOrder": true,
+            "case": "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait"
+          },
+          {
+            "revocationFirst": true,
+            "databaseLockWaitObserved": true,
+            "responsibilityMatchesCommitOrder": true,
+            "case": "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait"
+          }
+        ],
+        "completeMavenAndPoolShutdownVerified": true,
+        "populatedOldJarUpgradeVerified": false,
+        "fullCiMatrixVerified": false,
+        "membershipUiVerified": false
+      }
+    },
+    {
+      "id": 11670565791,
+      "name": "upgrade7",
+      "jobId": 114214909674,
+      "savedEqualsIndependentReplay": true,
+      "result": {
+        "status": "PASS",
+        "suite": {
+          "name": "org.trigger.opspilot.oncall.MySqlPlanMembershipUpgradeHttpIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "httpCases": 7,
+        "oldSource": "ce5fc51aee215e4eebccfd9e02bccf5271f6fea5",
+        "database": {
+          "schema": "opspilot_member_upgrade_7cd1278a062c",
+          "version": "8.4.11",
+          "product": "MySQL",
+          "serverUuid": "a5cefee5-c4a7-11f1-a9e7-2ef7b7f5cafa"
+        },
+        "nonemptyOldV38ToV39": true,
+        "all38MigrationChecksumsPreserved": true,
+        "originalCancelledReceiptRetained": true,
+        "explicitRevocationAndRestorationVerified": true,
+        "fiveJvmPoolsStopped": true,
+        "ownedContainerStopped": true,
+        "membershipUiVerified": false,
+        "fullOriginalCiMatrixVerified": false
+      }
+    },
+    {
+      "id": 11670450934,
+      "name": "crossNode6",
+      "jobId": 114214909675,
+      "savedEqualsIndependentReplay": true,
+      "result": {
+        "status": "PASS",
+        "suite": {
+          "name": "org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipCrossNodeIntegrationTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "httpCases": 6,
+        "database": {
+          "product": "MySQL",
+          "version": "8.4.11",
+          "schema": "opspilot_member_cross_059a1bc7e310",
+          "serverUuid": "9d3aade9-c4a7-11f1-9ef3-2aca3d2b3a9c"
+        },
+        "threeJvmLifecycles": true,
+        "twoLiveApplicationJvms": true,
+        "versionedMigrations": 39,
+        "allPoolsAndOwnedDatabaseStopped": true,
+        "finalSql": {
+          "memberOperations": 5,
+          "memberAudits": 5,
+          "requests": 5,
+          "claimOperations": 4,
+          "claimed": 4,
+          "open": 1
+        },
+        "crossMachineOrHaVerified": false,
+        "membershipUiVerified": false
+      }
+    }
+  ],
+  "sourceFiles": [
+    "scripts/verify-oncall-plan-membership-cross-node.cjs",
+    "src/test/java/org/trigger/opspilot/oncall/PlanMembershipCrossNodeScenarios.java",
+    "src/test/java/org/trigger/opspilot/oncall/MySqlOnCallPlanMembershipCrossNodeIntegrationTest.java",
+    "scripts/verify-oncall-plan-membership-mysql.cjs",
+    "scripts/verify-oncall-plan-membership-upgrade-mysql.cjs",
+    "scripts/verify-oncall-plan-membership-upgrade-http-ci.cjs",
+    "scripts/record-plan-membership-upgrade-baseline.cjs",
+    "src/test/java/org/trigger/opspilot/oncall/PlanMembershipScenarios.java",
+    "src/test/java/org/trigger/opspilot/oncall/MySqlOnCallPlanMembershipIntegrationTest.java",
+    "src/test/java/org/trigger/opspilot/oncall/MySqlPlanMembershipUpgradeHttpIntegrationTest.java",
+    ".github/workflows/plan-membership-wip.yml"
+  ],
+  "files": [
+    {
+      "file": "docs/assets/v1.7-cp112/remote/shared22/oncall-plan-membership-mysql-it/maven.log",
+      "bytes": 32054,
+      "sha256": "2e24e00d3f44370154c8f33334b9df40dc905a6d54d738a0c28cccff5f81f87f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/shared22/oncall-plan-membership-mysql-it/result.json",
+      "bytes": 2696,
+      "sha256": "1c5eca1dbdf248016e3c3a9d356f02af256a7bf5f81c2329035a65a7cfb92677"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/shared22/surefire-reports/org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest.txt",
+      "bytes": 387,
+      "sha256": "b91a6abf72c19b842d9d217291fd4f52a4b822f50caeddf72f0ec1b9b709238a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/shared22/surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest.xml",
+      "bytes": 82698,
+      "sha256": "5c630a525ec596a212616eca5434062dc2fa963794e179842e81e18a216897b9"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/cp110-v38-source/old-v38-jar-provenance.json",
+      "bytes": 142,
+      "sha256": "24fe272b48b8173d34c140831a9a85dba1b3dfa35838c6f4d580759fcc2b2409"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/audit-052f7bdd-fd00-4ec6-b2e5-03f180774464/audit.json",
+      "bytes": 2160,
+      "sha256": "79429bb68f1f3e7ec143a6b247f34b4a17854bec679b89a2113f45090896b887"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/audit-052f7bdd-fd00-4ec6-b2e5-03f180774464/runner.log",
+      "bytes": 34840,
+      "sha256": "538427929f85fc254e1d0de7f95d9c5cb805785bb5b323fdf786c11d1b09ea46"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/maven.log",
+      "bytes": 9980,
+      "sha256": "25c09beb0e7fb1a7d1f62b173146163806203bbee16b8bcc85bca9cbce39f9c4"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/result.json",
+      "bytes": 766,
+      "sha256": "03e4482ca5a59d6c0d30070b5ef0abd6ba5ee21ae317856b7ca70bc896bb1137"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/run-LWBcEs/jar-1.log",
+      "bytes": 17463,
+      "sha256": "8e9156ecaa1da13e7eae61d44ba7b0f17dedfc17837e1f0b3ffb8f3a1ffba40f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/run-LWBcEs/jar-2.log",
+      "bytes": 9136,
+      "sha256": "afee4aac82478ba644e22381563ba1208b7eb737a336b3a35a6749dc754be688"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/run-LWBcEs/jar-3.log",
+      "bytes": 8878,
+      "sha256": "946e0b0ad58f335a8e0540befd9b4a2711125575eb24e9de4c1395d0c6cf6e71"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/run-LWBcEs/jar-4.log",
+      "bytes": 8879,
+      "sha256": "90653401332cac0e6fd11c1e0304845815ffb63654242747d7b6de2627bb41ac"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/run-LWBcEs/jar-5.log",
+      "bytes": 8876,
+      "sha256": "0f122077bb15bf12a8ef4fa43fc6b0306af12a344676759cd6bdb5e7f4c478a1"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/run-LWBcEs/result.json",
+      "bytes": 63104,
+      "sha256": "50f063cfb9bd40ccd04af9bdc53c343b2eaab375ac4af716840df2fa7445d72d"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/run-LWBcEs/sql-0.log",
+      "bytes": 3288,
+      "sha256": "6f3cf47ec413f0cb3d803402876a28e05740a1066146762817614dae5a8f5ad6"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/run-LWBcEs/sql-1.log",
+      "bytes": 4177,
+      "sha256": "41cdc43702f52ea184298634c0f679c035062ceef532a567b6a064268014b86a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/run-LWBcEs/sql-2.log",
+      "bytes": 4177,
+      "sha256": "41cdc43702f52ea184298634c0f679c035062ceef532a567b6a064268014b86a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/run-LWBcEs/sql-3.log",
+      "bytes": 4174,
+      "sha256": "e5add4e1362f4e50a8a8546b203626ce9ca7f067b919bdade08df1e308245382"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/oncall-plan-membership-upgrade-mysql-it/run-LWBcEs/sql-4.log",
+      "bytes": 4174,
+      "sha256": "e5add4e1362f4e50a8a8546b203626ce9ca7f067b919bdade08df1e308245382"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/upgrade7/surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlPlanMembershipUpgradeHttpIntegrationTest.xml",
+      "bytes": 56713,
+      "sha256": "3a111b5185d596dc97e24a49ed7a53e90dd363291653cd8039955f0171e207f1"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/crossNode6/oncall-plan-membership-cross-node-mysql-it/gate-result.json",
+      "bytes": 754,
+      "sha256": "c8cab4637b30b4cf9c8f5e5dd4cf1414ddec21e2ed8d7daa2fc52bc8607247ed"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/crossNode6/oncall-plan-membership-cross-node-mysql-it/maven.log",
+      "bytes": 9576,
+      "sha256": "4d25b8a3308142e23c71b2c4b2fbe7bd3ddc7d5d02d5c93aa0c10b03454b7c34"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/crossNode6/oncall-plan-membership-cross-node-mysql-it/run-14108602435816996968/jar-1.log",
+      "bytes": 17884,
+      "sha256": "42ef5894329b606f7ba00c1e9638d24dcb61e64c6aa3b9c4baaf9a7d9372e393"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/crossNode6/oncall-plan-membership-cross-node-mysql-it/run-14108602435816996968/jar-2.log",
+      "bytes": 9205,
+      "sha256": "f7b6ba90d8baae0170cb518d53f93d12bb7ba937b04419e104a8822af61dbd2b"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/crossNode6/oncall-plan-membership-cross-node-mysql-it/run-14108602435816996968/jar-3.log",
+      "bytes": 9215,
+      "sha256": "1dbfdf8ddc59b424d897a2b0361616c0f3b7bb68673597c9d5b186213987bf50"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/crossNode6/oncall-plan-membership-cross-node-mysql-it/run-14108602435816996968/result.json",
+      "bytes": 2803,
+      "sha256": "3eb0640d046e14caa8356c560c1d20d0d31d5ad1c807f24cf3029ed53ff72043"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/remote/crossNode6/surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipCrossNodeIntegrationTest.xml",
+      "bytes": 56313,
+      "sha256": "f268658b3cda9f0539feed5c728ed97ccbb1689c18eeda70115d129519a7a5ac"
+    }
+  ],
+  "all21OriginalJobStatusesVerified": true,
+  "allOriginalArtifactsIndependentlyReplayed": false,
+  "membershipUiVerified": false,
+  "crossMachineOrHaVerified": false
+}

@@ -9,6 +9,7 @@ import OnCallCoveragePanel from '@/components/OnCallCoveragePanel.vue'
 import OnCallHandoffPanel from '@/components/OnCallHandoffPanel.vue'
 import OnCallSwapPanel from '@/components/OnCallSwapPanel.vue'
 import OnCallOpenHandoffPanel from '@/components/OnCallOpenHandoffPanel.vue'
+import OnCallPlanMemberPanel from '@/components/OnCallPlanMemberPanel.vue'
 
 interface Shift { scheduleId: number; scheduleName: string; resourceName: string; userName: string | null; department: string | null; startsAt: string | null; endsAt: string | null; override: boolean }
 interface Policy { policyId: number; policyName: string; severity: string | null; resourceName: string; step: number; delayMinutes: number; targetType: string; targetRef: string }
@@ -31,6 +32,7 @@ async function rotationChanged() { await load(); await rosterPanel.value?.refres
 async function handoffChanged() { await load(); await rosterPanel.value?.refresh(); await rotationPanel.value?.refresh(); await coveragePanel.value?.refresh(); await swapPanel.value?.refresh(); await openPanel.value?.refresh() }
 async function swapChanged() { await load(); await rosterPanel.value?.refresh(); await rotationPanel.value?.refresh(); await coveragePanel.value?.refresh(); await handoffPanel.value?.refresh(); await openPanel.value?.refresh() }
 async function openChanged() { await load(); await rosterPanel.value?.refresh(); await rotationPanel.value?.refresh(); await coveragePanel.value?.refresh(); await handoffPanel.value?.refresh(); await swapPanel.value?.refresh() }
+async function memberChanged() { await openChanged(); await openPanel.value?.refresh() }
 const canScan = computed(() => ['ADMIN', 'OPS_MANAGER'].includes(auth.state.user?.roleCode ?? ''))
 
 async function load() {
@@ -73,6 +75,7 @@ onMounted(load)
         <footer><span><Clock3 :size="15" />{{ formatTime(shift.startsAt, true) }}</span><ArrowDown :size="14" /><span>{{ formatTime(shift.endsAt, true) }}</span></footer>
       </article>
     </section>
+    <OnCallPlanMemberPanel @changed="memberChanged" />
     <OnCallOpenHandoffPanel ref="openPanel" @changed="openChanged" />
     <OnCallHandoffPanel ref="handoffPanel" @changed="handoffChanged" />
     <OnCallSwapPanel ref="swapPanel" @changed="swapChanged" />

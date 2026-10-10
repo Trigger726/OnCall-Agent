@@ -96,7 +96,7 @@ defineExpose({refresh,open})
   <section class="content-panel open-handoff-panel" :aria-busy="busy" :data-open-id="selected">
     <div class="panel-heading"><div><h2>开放接班 · 自愿认领</h2><span>本人发布已有普通班次，合格同事自行承担；不代他人同意</span></div><button class="secondary-button" :disabled="busy" @click="refresh()">刷新开放接班</button></div>
     <div class="open-body">
-      <p class="open-note">从下方班次维护点击“发布开放接班”。保留指定接班和双向换班；现阶段使用全局运维资格，尚无计划成员ACL、广播或到期提醒。</p>
+      <p class="open-note">从下方班次维护点击“发布开放接班”。新责任由服务端核验对应计划的响应权限与当前运维资格；管理权限不代表本人响应。广播与到期提醒尚未实现。</p>
       <p class="open-note">数据库快照：{{openClock(databaseNow)}}。输入使用数据库会话时间，不转换浏览器时区；可发布子时段，进行中认领仅覆盖数据库时间后的剩余部分。</p>
       <p v-if="error" class="open-error" role="alert">{{error}}</p><p v-if="message" role="status">{{message}}</p>
       <form class="open-filters" @submit.prevent="refresh()">

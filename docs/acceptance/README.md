@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+开发中 CP113：[成员页面限定验收](V1.7-checkpoint-113.md)/[本地proof](../assets/v1.7-cp113/local-proof.json)。CP112自身原21/成员3 success及三MySQL ZIP已[83检查限定核验](../assets/v1.7-cp112/remote-proof.json)。本轮新14/原开放33实页、前端193/Node200、新旧11图与首失败保留；页面自己的Linux/完整UI故障矩阵/权威通知仍待，不称14门禁全部闭合。下方按历史时点阅读。
+
 开发中 CP112：[成员真网络/两JVM阶段](V1.7-checkpoint-112.md)/[本地proof](../assets/v1.7-cp112/local-proof.json)。CP111自身原21/成员2 success及原MySQL24/成员22/升级7的[三个ZIP限定proof](../assets/v1.7-cp111/remote-proof.json)已核验。本轮H2 TCP六HTTP/双应用/三生命周期完整关闭、选定后端47/Node193通过；本次实际MySQL两JVM与成员页面/Demo待验，不称完整14门禁完成。首失败和历史Demo保留，下方对应历史时点。
 
 当前 CP107：[测试强化与成员契约报告](V1.7-checkpoint-107.md)。CP106自身原始attempt1已21CI success，认证与浏览器两个官方ZIP由[191检查/83文件proof](../assets/v1.7-cp106/remote-close-proof.json)限定核验；它的历史待验见[106追加](V1.7-checkpoint-106.md#5-自身-linux-ci-闭合与下一业务阶段2026-10-10追加)。CP105首次失败/旧Demo保留。新增完整取消帧门禁不是Linux超时根因修复，成员ACL仍仅[设计](../ONCALL_PLAN_MEMBERSHIP_DESIGN.md)，不能标整条路线完成。下方记录按历史时点阅读。

@@ -1,0 +1,203 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< org.trigger:opspilot >------------------------
+[INFO] Building OpsPilot 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 41 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 134 source files with javac [debug release 17] to target/classes
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java uses unchecked or unsafe operations.
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+[INFO] Copying 1 resource from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+[INFO] Changes detected - recompiling the module! :dependency
+[INFO] Compiling 111 source files with javac [debug release 17] to target/test-classes
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/investigation/AgentEventReceiverTest.java: Some input files use unchecked or unsafe operations.
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/investigation/AgentEventReceiverTest.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+12:38:58.473 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest
+12:38:58.602 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-10T12:38:58.928Z  INFO 2304 --- [opspilot] [           main] MySqlOnCallPlanMembershipIntegrationTest : Starting MySqlOnCallPlanMembershipIntegrationTest using Java 17.0.20.1 with PID 2304 (started by runner in /home/runner/work/OnCall-Agent/OnCall-Agent)
+2026-10-10T12:38:58.929Z  INFO 2304 --- [opspilot] [           main] MySqlOnCallPlanMembershipIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-10T12:39:00.339Z  INFO 2304 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-10T12:39:00.341Z  INFO 2304 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-10T12:39:00.379Z  INFO 2304 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 27 ms. Found 0 Redis repository interfaces.
+2026-10-10T12:39:00.975Z  INFO 2304 --- [opspilot] [           main] org.testcontainers.images.PullPolicy     : Image pull policy will be performed by: DefaultPullPolicy()
+2026-10-10T12:39:00.978Z  INFO 2304 --- [opspilot] [           main] o.t.utility.ImageNameSubstitutor         : Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+2026-10-10T12:39:01.001Z  INFO 2304 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : Testcontainers version: 1.21.4
+2026-10-10T12:39:01.458Z  INFO 2304 --- [opspilot] [           main] o.t.d.DockerClientProviderStrategy       : Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
+2026-10-10T12:39:01.461Z  INFO 2304 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : Docker host IP address is localhost
+2026-10-10T12:39:01.474Z  INFO 2304 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : Connected to docker: 
+  Server Version: 28.0.4
+  API Version: 1.48
+  Operating System: Ubuntu 24.04.5 LTS
+  Total Memory: 15989 MB
+2026-10-10T12:39:01.502Z  INFO 2304 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Pulling docker image: testcontainers/ryuk:0.12.0. Please be patient; this may take some time but only needs to be done once.
+2026-10-10T12:39:01.832Z  INFO 2304 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Starting to pull image
+2026-10-10T12:39:01.855Z  INFO 2304 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
+2026-10-10T12:39:02.113Z  INFO 2304 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  2 pending,  1 downloaded,  0 extracted, (142 KB/? MB)
+2026-10-10T12:39:02.114Z  INFO 2304 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  1 pending,  2 downloaded,  0 extracted, (906 KB/? MB)
+2026-10-10T12:39:02.141Z  INFO 2304 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  3 downloaded,  0 extracted, (923 KB/11 MB)
+2026-10-10T12:39:02.209Z  INFO 2304 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  3 downloaded,  1 extracted, (4 MB/11 MB)
+2026-10-10T12:39:02.533Z  INFO 2304 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  3 downloaded,  2 extracted, (4 MB/11 MB)
+2026-10-10T12:39:02.598Z  INFO 2304 --- [opspilot] [eam--1900126211] tc.testcontainers/ryuk:0.12.0            : Pulling image layers:  0 pending,  3 downloaded,  3 extracted, (11 MB/11 MB)
+2026-10-10T12:39:02.609Z  INFO 2304 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Image testcontainers/ryuk:0.12.0 pull took PT1.107146837S
+2026-10-10T12:39:02.631Z  INFO 2304 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Creating container for image: testcontainers/ryuk:0.12.0
+2026-10-10T12:39:02.747Z  INFO 2304 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Container testcontainers/ryuk:0.12.0 is starting: 8a363af8b1590ea09a9ef9a150e3ad63b8877f9f9101cc441dccbd07db202292
+2026-10-10T12:39:03.211Z  INFO 2304 --- [opspilot] [           main] tc.testcontainers/ryuk:0.12.0            : Container testcontainers/ryuk:0.12.0 started in PT0.580179627S
+2026-10-10T12:39:03.223Z  INFO 2304 --- [opspilot] [           main] o.t.utility.RyukResourceReaper           : Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+2026-10-10T12:39:03.223Z  INFO 2304 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : Checking the system...
+2026-10-10T12:39:03.223Z  INFO 2304 --- [opspilot] [           main] org.testcontainers.DockerClientFactory   : ✔︎ Docker server version should be at least 1.6.0
+2026-10-10T12:39:03.227Z  INFO 2304 --- [opspilot] [           main] tc.mysql:8.4                             : Pulling docker image: mysql:8.4. Please be patient; this may take some time but only needs to be done once.
+2026-10-10T12:39:03.653Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Starting to pull image
+2026-10-10T12:39:03.654Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
+2026-10-10T12:39:03.755Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  9 pending,  1 downloaded,  0 extracted, (16 KB/? MB)
+2026-10-10T12:39:03.765Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  8 pending,  2 downloaded,  0 extracted, (766 KB/? MB)
+2026-10-10T12:39:03.796Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  7 pending,  3 downloaded,  0 extracted, (1 MB/? MB)
+2026-10-10T12:39:03.810Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  6 pending,  4 downloaded,  0 extracted, (1 MB/? MB)
+2026-10-10T12:39:03.822Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  5 pending,  5 downloaded,  0 extracted, (1 MB/? MB)
+2026-10-10T12:39:03.848Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  4 pending,  6 downloaded,  0 extracted, (1 MB/? MB)
+2026-10-10T12:39:03.883Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  3 pending,  7 downloaded,  0 extracted, (40 MB/? MB)
+2026-10-10T12:39:03.918Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  2 pending,  8 downloaded,  0 extracted, (40 MB/? MB)
+2026-10-10T12:39:03.996Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  1 pending,  9 downloaded,  0 extracted, (108 MB/? MB)
+2026-10-10T12:39:04.210Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  0 extracted, (188 MB/227 MB)
+2026-10-10T12:39:04.996Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  1 extracted, (195 MB/227 MB)
+2026-10-10T12:39:06.767Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  2 extracted, (195 MB/227 MB)
+2026-10-10T12:39:06.795Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  3 extracted, (195 MB/227 MB)
+2026-10-10T12:39:07.205Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  4 extracted, (200 MB/227 MB)
+2026-10-10T12:39:07.217Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  5 extracted, (200 MB/227 MB)
+2026-10-10T12:39:07.223Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  6 extracted, (200 MB/227 MB)
+2026-10-10T12:39:08.971Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  7 extracted, (217 MB/227 MB)
+2026-10-10T12:39:08.980Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  8 extracted, (217 MB/227 MB)
+2026-10-10T12:39:17.560Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded,  9 extracted, (227 MB/227 MB)
+2026-10-10T12:39:17.567Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pulling image layers:  0 pending, 10 downloaded, 10 extracted, (227 MB/227 MB)
+2026-10-10T12:39:17.572Z  INFO 2304 --- [opspilot] [ream--898200810] tc.mysql:8.4                             : Pull complete. 10 layers, pulled in 13s (downloaded 227 MB at 17 MB/s)
+2026-10-10T12:39:17.572Z  INFO 2304 --- [opspilot] [           main] tc.mysql:8.4                             : Image mysql:8.4 pull took PT14.34478951S
+2026-10-10T12:39:17.574Z  INFO 2304 --- [opspilot] [           main] tc.mysql:8.4                             : Creating container for image: mysql:8.4
+2026-10-10T12:39:17.605Z  INFO 2304 --- [opspilot] [           main] tc.mysql:8.4                             : Container mysql:8.4 is starting: 6f95df498c86392d097a01de43a5d69eeeceac10c58c0e95d57b135f73d170c6
+2026-10-10T12:39:17.720Z  INFO 2304 --- [opspilot] [           main] tc.mysql:8.4                             : Waiting for database connection to become available at jdbc:mysql://localhost:32769/opspilot_plan_membership_test using query 'SELECT 1'
+2026-10-10T12:39:26.381Z  INFO 2304 --- [opspilot] [           main] tc.mysql:8.4                             : Container mysql:8.4 started in PT8.806817237S
+2026-10-10T12:39:26.381Z  INFO 2304 --- [opspilot] [           main] tc.mysql:8.4                             : Container is started (JDBC URL: jdbc:mysql://localhost:32769/opspilot_plan_membership_test)
+2026-10-10T12:39:27.232Z  INFO 2304 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
+2026-10-10T12:39:27.232Z  INFO 2304 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2026-10-10T12:39:27.232Z  INFO 2304 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : 
+2026-10-10T12:39:27.269Z  INFO 2304 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://localhost:32769/opspilot_plan_membership_test (MySQL 8.4)
+2026-10-10T12:39:27.280Z  WARN 2304 --- [opspilot] [           main] o.f.c.internal.database.base.Database    : Flyway upgrade recommended: MySQL 8.4 is newer than this version of Flyway and support has not been tested. The latest supported version of MySQL is 8.0.
+2026-10-10T12:39:27.512Z  INFO 2304 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table `opspilot_plan_membership_test`.`flyway_schema_history` does not exist yet
+2026-10-10T12:39:27.515Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 39 migrations (execution time 00:00.047s)
+2026-10-10T12:39:27.540Z  INFO 2304 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table `opspilot_plan_membership_test`.`flyway_schema_history` ...
+2026-10-10T12:39:27.719Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `opspilot_plan_membership_test`: << Empty Schema >>
+2026-10-10T12:39:27.744Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "1 - init opspilot"
+2026-10-10T12:39:28.157Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "2 - assistant conversations"
+2026-10-10T12:39:28.583Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "3 - agent investigation runs"
+2026-10-10T12:39:28.649Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "4 - observability evidence"
+2026-10-10T12:39:28.782Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "5 - agent events and remediation proposals"
+2026-10-10T12:39:28.858Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "6 - agent run controls"
+2026-10-10T12:39:29.632Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "7 - runbook knowledge base"
+2026-10-10T12:39:29.764Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "8 - hybrid runbook retrieval"
+2026-10-10T12:39:29.829Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "9 - runbook relevance feedback"
+2026-10-10T12:39:30.035Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "10 - graded runbook relevance evaluation"
+2026-10-10T12:39:30.145Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "11 - runbook judgment agreement"
+2026-10-10T12:39:30.231Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-10T12:39:30.555Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "13 - incident postmortems"
+2026-10-10T12:39:30.685Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "14 - incident analytics and follow up escalations"
+2026-10-10T12:39:30.723Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "15 - recurring incident problems"
+2026-10-10T12:39:30.852Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "16 - agent event outbox"
+2026-10-10T12:39:30.947Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "17 - outbox timestamp precision"
+2026-10-10T12:39:31.180Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "18 - outbox retention index"
+2026-10-10T12:39:31.199Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "19 - service slo objectives"
+2026-10-10T12:39:31.296Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "20 - alert ingest rejections"
+2026-10-10T12:39:31.412Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "21 - alert rejection lifecycle"
+2026-10-10T12:39:31.842Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "22 - follow up notification outbox"
+2026-10-10T12:39:31.872Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "23 - follow up owner acknowledgement"
+2026-10-10T12:39:31.977Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "24 - incident escalation execution"
+2026-10-10T12:39:32.019Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "25 - oncall roster management"
+2026-10-10T12:39:32.077Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "26 - oncall rotations"
+2026-10-10T12:39:32.226Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "27 - oncall handoff requests"
+2026-10-10T12:39:32.291Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "28 - oncall handoff revocations"
+2026-10-10T12:39:32.321Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "29 - runbook returned document count"
+2026-10-10T12:39:32.401Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "30 - runbook publication review"
+2026-10-10T12:39:32.873Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "31 - account auth version"
+2026-10-10T12:39:33.059Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "32 - assistant request idempotency"
+2026-10-10T12:39:33.107Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "33 - assistant queue and cancel"
+2026-10-10T12:39:33.158Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "34 - oncall shift swaps"
+2026-10-10T12:39:33.232Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "35 - oncall swap notification outbox"
+2026-10-10T12:39:33.270Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "36 - oncall swap notification payload retention"
+2026-10-10T12:39:33.446Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "37 - oncall swap revocations"
+2026-10-10T12:39:33.469Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "38 - oncall open handoffs"
+2026-10-10T12:39:33.544Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_plan_membership_test` to version "39 - oncall plan memberships"
+2026-10-10T12:39:33.611Z  INFO 2304 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 39 migrations to schema `opspilot_plan_membership_test`, now at version v39 (execution time 00:05.392s)
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-10-10T12:39:36.084Z  INFO 2304 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-10T12:39:36.479Z  INFO 2304 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@20f1c8ed, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1dc26de5, org.springframework.security.web.context.SecurityContextHolderFilter@45dc4d1a, org.springframework.security.web.header.HeaderWriterFilter@6988dc14, org.springframework.web.filter.CorsFilter@68628510, org.springframework.security.web.authentication.logout.LogoutFilter@458044df, org.trigger.opspilot.security.JwtAuthenticationFilter@17224bad, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@60a98fa6, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3af4b14e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@63f79099, org.springframework.security.web.session.SessionManagementFilter@2dc4b58a, org.springframework.security.web.access.ExceptionTranslationFilter@64c189d8, org.springframework.security.web.access.intercept.AuthorizationFilter@60e2b6e3]
+2026-10-10T12:39:37.764Z  INFO 2304 --- [opspilot] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-10T12:39:37.764Z  INFO 2304 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-10T12:39:37.769Z  INFO 2304 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 5 ms
+2026-10-10T12:39:37.881Z  INFO 2304 --- [opspilot] [           main] MySqlOnCallPlanMembershipIntegrationTest : Started MySqlOnCallPlanMembershipIntegrationTest in 39.288 seconds (process running for 40.34)
+2026-10-10T12:39:38.253Z  INFO 2304 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-10T12:39:38.335Z  INFO 2304 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6a76eef
+2026-10-10T12:39:38.339Z  INFO 2304 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldRequireBothParticipantsInBothPlansForBilateralSwap","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldBlockOriginalRotationSlotsWithoutReassigningHistoryAndResumeOnlyMissingSlots","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldRejectNewDesignatedAcceptanceButAllowDepartedTargetRejection","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_LOCK_ORDER {"revocationFirst":false,"databaseLockWaitObserved":true,"responsibilityMatchesCommitOrder":true,"case":"shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldRollbackRevocationAfterActualAuditInsertFails","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldDenyAnotherValidPlanAndPermitItsExplicitMemberControl","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldRollbackFirstGrantAfterActualAuditInsertFails","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldRetainAssignedCoverageAndOriginalClaimReceiptAfterMembershipRevocation","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldRejectCrossPlanOrChangedKeyAndStaleOrOverflowedVersions","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldPermitOriginalManagerReceiptAfterOwnPlanManagementWasRevoked","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldRequireResponseForManualOverridesAndManagementForCancellation","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldCommitOneImmutableReceiptForConcurrentOriginalCommands","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldNotWriteRotationWarningWhenManualScannerHasNoPlanManagement","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldSeparateManagementFromResponseAndKeepAdminRecoveryWithoutSelfClaim","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldFilterDepartedRequestersBeforeAvailableLimitAndAllowOwnWithdrawal","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_LOCK_ORDER {"revocationFirst":true,"databaseLockWaitObserved":true,"responsibilityMatchesCommitOrder":true,"case":"shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldRetainBadRotationTargetErrorContractAndRejectInvalidManagementTargets","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldRejectMissingExpectedVersionButAcceptExplicitNullAndSerializeEffectivePermissions","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldRecheckCurrentRoleAndNotResurrectRevokedMembershipWhenAccountIsRestored","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldRollbackUpdateAfterActualAuditInsertFails","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldRecordActualActorIpAndOldAndNewPermissions","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+PLAN_MEMBERSHIP_DATABASE {"case":"shouldBackfillOnlyPreexistingOperationalUsersAndNeverEnrolNewPlansOrAccounts","version":"8.4.11","product":"MySQL","migration39":true,"schema":"opspilot_plan_membership_test"}
+2026-10-10T12:39:43.181Z  INFO 2304 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-10T12:39:43.187Z  INFO 2304 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+[INFO] Tests run: 22, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 45.43 s -- in org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 22, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  59.782 s
+[INFO] Finished at: 2026-10-10T12:39:43Z
+[INFO] ------------------------------------------------------------------------

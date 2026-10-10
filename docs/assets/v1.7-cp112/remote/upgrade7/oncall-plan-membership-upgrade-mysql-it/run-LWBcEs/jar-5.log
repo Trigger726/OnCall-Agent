@@ -1,0 +1,53 @@
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-10T12:40:15.150Z  INFO 4143 --- [opspilot] [           main] o.trigger.opspilot.OpsPilotApplication   : Starting OpsPilotApplication v0.1.0-SNAPSHOT using Java 17.0.20.1 with PID 4143 (/home/runner/work/OnCall-Agent/OnCall-Agent/target/opspilot-0.1.0-SNAPSHOT.jar started by runner in /home/runner/work/OnCall-Agent/OnCall-Agent)
+2026-10-10T12:40:15.153Z  INFO 4143 --- [opspilot] [           main] o.trigger.opspilot.OpsPilotApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-10-10T12:40:16.512Z  INFO 4143 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-10T12:40:16.513Z  INFO 4143 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-10T12:40:16.550Z  INFO 4143 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 28 ms. Found 0 Redis repository interfaces.
+2026-10-10T12:40:17.094Z  INFO 4143 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9983 (http)
+2026-10-10T12:40:17.101Z  INFO 4143 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-10T12:40:17.102Z  INFO 4143 --- [opspilot] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-10-10T12:40:17.138Z  INFO 4143 --- [opspilot] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-10-10T12:40:17.139Z  INFO 4143 --- [opspilot] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1904 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-10T12:40:17.387Z  INFO 4143 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-10T12:40:17.540Z  INFO 4143 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4aa517c3
+2026-10-10T12:40:17.543Z  INFO 4143 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-10T12:40:17.642Z  INFO 4143 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
+2026-10-10T12:40:17.643Z  INFO 4143 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2026-10-10T12:40:17.643Z  INFO 4143 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : 
+2026-10-10T12:40:17.667Z  INFO 4143 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://localhost:32769/opspilot_member_upgrade_7cd1278a062c (MySQL 8.4)
+2026-10-10T12:40:17.686Z  WARN 4143 --- [opspilot] [           main] o.f.c.internal.database.base.Database    : Flyway upgrade recommended: MySQL 8.4 is newer than this version of Flyway and support has not been tested. The latest supported version of MySQL is 8.0.
+2026-10-10T12:40:17.730Z  INFO 4143 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 39 migrations (execution time 00:00.033s)
+2026-10-10T12:40:17.741Z  INFO 4143 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `opspilot_member_upgrade_7cd1278a062c`: 39
+2026-10-10T12:40:17.744Z  INFO 4143 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Schema `opspilot_member_upgrade_7cd1278a062c` is up to date. No migration necessary.
+2026-10-10T12:40:18.490Z  INFO 4143 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-10T12:40:18.675Z  INFO 4143 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6672b0ea, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1ccce165, org.springframework.security.web.context.SecurityContextHolderFilter@2cdb53d6, org.springframework.security.web.header.HeaderWriterFilter@11ec2b2f, org.springframework.web.filter.CorsFilter@943cf5, org.springframework.security.web.authentication.logout.LogoutFilter@2446be5f, org.trigger.opspilot.security.JwtAuthenticationFilter@65e92505, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@397bd46b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@d863bb, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2926f7bd, org.springframework.security.web.session.SessionManagementFilter@442151d1, org.springframework.security.web.access.ExceptionTranslationFilter@1dae9e61, org.springframework.security.web.access.intercept.AuthorizationFilter@c8ed958]
+2026-10-10T12:40:19.323Z  INFO 4143 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9983 (http) with context path ''
+2026-10-10T12:40:19.407Z  INFO 4143 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9984 (http)
+2026-10-10T12:40:19.408Z  INFO 4143 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-10T12:40:19.408Z  INFO 4143 --- [opspilot] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-10-10T12:40:19.412Z  INFO 4143 --- [opspilot] [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-10-10T12:40:19.412Z  INFO 4143 --- [opspilot] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 85 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-10T12:40:19.425Z  INFO 4143 --- [opspilot] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoint(s) beneath base path '/actuator'
+2026-10-10T12:40:19.464Z  INFO 4143 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9984 (http) with context path ''
+2026-10-10T12:40:19.484Z  INFO 4143 --- [opspilot] [           main] o.trigger.opspilot.OpsPilotApplication   : Started OpsPilotApplication in 4.746 seconds (process running for 5.126)
+2026-10-10T12:40:19.648Z  INFO 4143 --- [opspilot] [0.1-9984-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServletRegistration'
+2026-10-10T12:40:19.648Z  INFO 4143 --- [opspilot] [0.1-9984-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServletRegistration'
+2026-10-10T12:40:19.649Z  INFO 4143 --- [opspilot] [0.1-9984-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-10-10T12:40:19.776Z  INFO 4143 --- [opspilot] [0.1-9983-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-10T12:40:19.776Z  INFO 4143 --- [opspilot] [0.1-9983-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-10T12:40:19.778Z  INFO 4143 --- [opspilot] [0.1-9983-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-10-10T12:40:19.788Z  WARN 4143 --- [opspilot] [0.1-9983-exec-1] o.s.w.s.h.HandlerMappingIntrospector     : Cache miss for REQUEST dispatch to '/api/v1/auth/login' (previous null). Performing MatchableHandlerMapping lookup. This is logged once only at WARN level, and every time at TRACE.
+2026-10-10T12:40:20.380Z  INFO 4143 --- [opspilot] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-10T12:40:20.388Z  INFO 4143 --- [opspilot] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

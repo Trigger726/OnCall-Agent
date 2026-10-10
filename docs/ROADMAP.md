@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+当前 CP113：[成员实页/原回执与当前资格分离](acceptance/V1.7-checkpoint-113.md)。CP112自身21+3 CI及成员三MySQL ZIP已限定闭合；本地新14/原33、前端193/Node200、新旧桌面/390pxDemo保留。新增独立WIP浏览器作业，自己Linux待验；继续真实首次授权/清除失败/跨标签身份、权威通知接收人与完整开放广播/提醒/渠道、认领撤销、DST/日历、容量路线。不缩小目标，整体active；下方是历史记录。
+
 当前开发 CP112：[真网络/两JVM](acceptance/V1.7-checkpoint-112.md)。CP111自身原21/成员2已success，三MySQL ZIP限定核验；本轮本地H2 TCP双应用六HTTP与三池关闭通过，实际MySQL同场景第三作业待自身新CI。随后继续成员页面/桌面390px新旧Demo与权威接收人，原HTTP8/升级10/页面33不删。开放通知/提醒/渠道、认领撤销、DST/日历及生产容量继续，整体active。下方为历史时点。
 
 当前 CP107：[报告](acceptance/V1.7-checkpoint-107.md)。CP106自身原始attempt1已21作业success，两官方ZIP的[191检查/83文件](assets/v1.7-cp106/remote-close-proof.json)限定证明认证八runner和Linux原生六/后续页面；首次失败不覆盖、唯一根因不冒称。下一业务阶段按[计划成员权限14门禁](ONCALL_PLAN_MEMBERSHIP_DESIGN.md)落实迁移/权限分离/所有责任入口/续排/有数据升级与页面，再推进开放通知/提醒/渠道；认领撤销、DST/日历、生产容量与原始OnCall能力/历史Demo继续。下方‘当前/待验’是历史时点，整体active。

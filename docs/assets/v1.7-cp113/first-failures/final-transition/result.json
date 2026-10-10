@@ -1,0 +1,165 @@
+{
+  "status": "FAIL",
+  "baseline": false,
+  "jarSha256": "f4193c4947a47fcf00d3429f22295124ad1c9a5eeea9be35b118fd89ad2f1b61",
+  "cases": [
+    {
+      "name": "current-plan-independent-permissions-and-migration-origin"
+    },
+    {
+      "name": "reader-never-manages"
+    },
+    {
+      "name": "quota-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "silent-save-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "save-readback-denied-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "committed-loss-reload-manual-original-receipt-higher-current-version",
+      "posts": 1,
+      "actualForwardedCommit200": true,
+      "browserRequestAborted": true,
+      "originalCommand": {
+        "userId": 3,
+        "expectedVersion": 0,
+        "active": true,
+        "canRespond": true,
+        "canManage": false,
+        "operationKey": "f5b55629-8582-4536-bab3-f6a654b63298",
+        "reason": "CP113 明确成员变更"
+      },
+      "currentVersion": 2
+    },
+    {
+      "name": "own-management-revocation-original-receipt-only",
+      "ownPlanManagementRemoved": true,
+      "originalReadOnlyAck200": true
+    },
+    {
+      "name": "actual409-lock-survives-reload",
+      "actual409": 409,
+      "originalCapturedVersion": 5,
+      "versionNotRebased": true
+    },
+    {
+      "name": "actual403-lock-no-auto-retry",
+      "actual403": 403
+    },
+    {
+      "name": "fresh-read500-clears-facts-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "corrupt-intent-explicit-local-discard",
+      "posts": 0
+    },
+    {
+      "name": "late200-after-plan-change-keeps-original",
+      "committedLate200": true,
+      "originalPreserved": true
+    },
+    {
+      "name": "late200-after-spa-account-switch-keeps-new-intent",
+      "committedLate200": true,
+      "newActorDraftPreserved": true
+    }
+  ],
+  "screenshots": [
+    "after-first-desktop.png",
+    "after-desktop.png",
+    "after-first-mobile.png",
+    "after-mobile.png",
+    "original-vs-current-desktop.png",
+    "locked-original-mobile.png"
+  ],
+  "pageErrors": [],
+  "console": [
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 409 (Conflict)",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    }
+  ],
+  "expectedRejections": [
+    {
+      "path": "/api/v1/on-call/schedules/1/members",
+      "status": 409
+    },
+    {
+      "path": "/api/v1/on-call/schedules/1/members",
+      "status": 403
+    },
+    {
+      "path": "/api/v1/on-call/schedules/1/members",
+      "status": 500
+    }
+  ],
+  "visualBounds": [
+    {
+      "name": "after-first-desktop.png",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "after-desktop.png",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "after-first-mobile.png",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "after-mobile.png",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "original-vs-current-desktop.png",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "locked-original-mobile.png",
+      "width": 1440,
+      "documentWidth": 1440
+    }
+  ],
+  "tokensPersistedToEvidence": false,
+  "userDatabaseModified": false,
+  "browserPath": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "browser": "155.0.8059.39",
+  "startedPid": 48708,
+  "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n390 !== 571\n\n    at shot (D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-oncall-plan-membership-ui-ci.cjs:29:215)\n    at async verify (D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-oncall-plan-membership-ui-ci.cjs:71:406)",
+  "ownedProcessStopped": true,
+  "portsFree": true,
+  "completePoolShutdown": true,
+  "unexpectedJarErrors": 0
+}

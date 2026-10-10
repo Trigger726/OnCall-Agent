@@ -1,6 +1,6 @@
 name: Plan membership WIP verification
 
-# Shared cases, populated upgrade and two-JVM HTTP remain separate; not UI acceptance.
+# Shared cases, populated upgrade, two-JVM HTTP and browser evidence remain separate.
 on:
   push:
     branches: ["wip/plan-membership-v39-20261010"]
@@ -46,6 +46,53 @@ jobs:
           path: |
             target/oncall-plan-membership-mysql-it/
             target/surefire-reports/
+          retention-days: 30
+
+  membership-ui:
+    name: Plan membership real browser identity and original receipts
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            web/package-lock.json
+            scripts/browser/package-lock.json
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - name: Build fresh frontend and own-source JAR
+        run: |
+          npm ci --prefix web
+          npm test --prefix web
+          npm run build --prefix web
+          bash mvnw -B -DskipTests package
+      - name: Install repository pinned Chromium and inspect gates
+        run: |
+          npm ci --prefix scripts/browser
+          node scripts/browser/node_modules/playwright/cli.js install --with-deps chromium
+          node --test scripts/tests/oncall-plan-membership-ui.test.cjs
+      - name: Exercise actual permission receipts and late response identity fences
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p target/oncall-plan-membership-ui-it
+          node scripts/verify-oncall-plan-membership-ui-ci.cjs 2>&1 | tee target/oncall-plan-membership-ui-it/runner.log
+          folder=$(sed -n 's/^PLAN_MEMBERSHIP_UI_RESULT //p' target/oncall-plan-membership-ui-it/runner.log)
+          node scripts/verify-oncall-plan-membership-ui-evidence.cjs "$(dirname "$folder")"
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: plan-membership-ui-evidence
+          path: |
+            target/oncall-plan-membership-ui-it/**/*.json
+            target/oncall-plan-membership-ui-it/**/*.log
+            target/oncall-plan-membership-ui-it/**/*.png
           retention-days: 30
 
   membership-cross-node-mysql:

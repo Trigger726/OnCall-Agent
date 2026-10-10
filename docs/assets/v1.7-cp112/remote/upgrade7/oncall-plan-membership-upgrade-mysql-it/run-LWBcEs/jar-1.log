@@ -1,0 +1,93 @@
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-10T12:39:43.609Z  INFO 3435 --- [opspilot] [           main] o.trigger.opspilot.OpsPilotApplication   : Starting OpsPilotApplication v0.1.0-SNAPSHOT using Java 17.0.20.1 with PID 3435 (/home/runner/work/OnCall-Agent/OnCall-Agent/target/cp110-v38-source/target/opspilot-0.1.0-SNAPSHOT.jar started by runner in /home/runner/work/OnCall-Agent/OnCall-Agent)
+2026-10-10T12:39:43.613Z  INFO 3435 --- [opspilot] [           main] o.trigger.opspilot.OpsPilotApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-10-10T12:39:44.974Z  INFO 3435 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-10T12:39:44.975Z  INFO 3435 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-10T12:39:45.003Z  INFO 3435 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 20 ms. Found 0 Redis repository interfaces.
+2026-10-10T12:39:45.504Z  INFO 3435 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9983 (http)
+2026-10-10T12:39:45.523Z  INFO 3435 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-10T12:39:45.523Z  INFO 3435 --- [opspilot] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-10-10T12:39:45.556Z  INFO 3435 --- [opspilot] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-10-10T12:39:45.557Z  INFO 3435 --- [opspilot] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1859 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-10T12:39:45.837Z  INFO 3435 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-10T12:39:45.957Z  INFO 3435 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@26888c31
+2026-10-10T12:39:45.959Z  INFO 3435 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-10T12:39:46.021Z  INFO 3435 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
+2026-10-10T12:39:46.021Z  INFO 3435 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2026-10-10T12:39:46.021Z  INFO 3435 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : 
+2026-10-10T12:39:46.042Z  INFO 3435 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://localhost:32769/opspilot_member_upgrade_7cd1278a062c (MySQL 8.4)
+2026-10-10T12:39:46.061Z  WARN 3435 --- [opspilot] [           main] o.f.c.internal.database.base.Database    : Flyway upgrade recommended: MySQL 8.4 is newer than this version of Flyway and support has not been tested. The latest supported version of MySQL is 8.0.
+2026-10-10T12:39:46.093Z  INFO 3435 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table `opspilot_member_upgrade_7cd1278a062c`.`flyway_schema_history` does not exist yet
+2026-10-10T12:39:46.097Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 38 migrations (execution time 00:00.023s)
+2026-10-10T12:39:46.118Z  INFO 3435 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table `opspilot_member_upgrade_7cd1278a062c`.`flyway_schema_history` ...
+2026-10-10T12:39:46.190Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `opspilot_member_upgrade_7cd1278a062c`: << Empty Schema >>
+2026-10-10T12:39:46.213Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "1 - init opspilot"
+2026-10-10T12:39:46.529Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "2 - assistant conversations"
+2026-10-10T12:39:46.588Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "3 - agent investigation runs"
+2026-10-10T12:39:46.650Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "4 - observability evidence"
+2026-10-10T12:39:46.697Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "5 - agent events and remediation proposals"
+2026-10-10T12:39:46.747Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "6 - agent run controls"
+2026-10-10T12:39:47.008Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "7 - runbook knowledge base"
+2026-10-10T12:39:47.109Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "8 - hybrid runbook retrieval"
+2026-10-10T12:39:47.165Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "9 - runbook relevance feedback"
+2026-10-10T12:39:47.293Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "10 - graded runbook relevance evaluation"
+2026-10-10T12:39:47.361Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "11 - runbook judgment agreement"
+2026-10-10T12:39:47.552Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-10T12:39:47.673Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "13 - incident postmortems"
+2026-10-10T12:39:47.741Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "14 - incident analytics and follow up escalations"
+2026-10-10T12:39:47.774Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "15 - recurring incident problems"
+2026-10-10T12:39:47.827Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "16 - agent event outbox"
+2026-10-10T12:39:47.851Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "17 - outbox timestamp precision"
+2026-10-10T12:39:48.013Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "18 - outbox retention index"
+2026-10-10T12:39:48.033Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "19 - service slo objectives"
+2026-10-10T12:39:48.066Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "20 - alert ingest rejections"
+2026-10-10T12:39:48.107Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "21 - alert rejection lifecycle"
+2026-10-10T12:39:48.270Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "22 - follow up notification outbox"
+2026-10-10T12:39:48.292Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "23 - follow up owner acknowledgement"
+2026-10-10T12:39:48.355Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "24 - incident escalation execution"
+2026-10-10T12:39:48.466Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "25 - oncall roster management"
+2026-10-10T12:39:48.517Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "26 - oncall rotations"
+2026-10-10T12:39:48.601Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "27 - oncall handoff requests"
+2026-10-10T12:39:48.650Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "28 - oncall handoff revocations"
+2026-10-10T12:39:48.665Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "29 - runbook returned document count"
+2026-10-10T12:39:48.721Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "30 - runbook publication review"
+2026-10-10T12:39:49.045Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "31 - account auth version"
+2026-10-10T12:39:49.170Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "32 - assistant request idempotency"
+2026-10-10T12:39:49.188Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "33 - assistant queue and cancel"
+2026-10-10T12:39:49.217Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "34 - oncall shift swaps"
+2026-10-10T12:39:49.262Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "35 - oncall swap notification outbox"
+2026-10-10T12:39:49.286Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "36 - oncall swap notification payload retention"
+2026-10-10T12:39:49.326Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "37 - oncall swap revocations"
+2026-10-10T12:39:49.340Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_member_upgrade_7cd1278a062c` to version "38 - oncall open handoffs"
+2026-10-10T12:39:49.459Z  INFO 3435 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 38 migrations to schema `opspilot_member_upgrade_7cd1278a062c`, now at version v38 (execution time 00:02.915s)
+2026-10-10T12:39:50.229Z  INFO 3435 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-10T12:39:50.439Z  INFO 3435 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3b62c51e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7db679, org.springframework.security.web.context.SecurityContextHolderFilter@281028ce, org.springframework.security.web.header.HeaderWriterFilter@2a7b4bb6, org.springframework.web.filter.CorsFilter@7dc9b41a, org.springframework.security.web.authentication.logout.LogoutFilter@703947bd, org.trigger.opspilot.security.JwtAuthenticationFilter@7df5549e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@75caecf7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@62b0792, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2f97e3de, org.springframework.security.web.session.SessionManagementFilter@14af57c3, org.springframework.security.web.access.ExceptionTranslationFilter@498f1f63, org.springframework.security.web.access.intercept.AuthorizationFilter@2be208db]
+2026-10-10T12:39:51.419Z  INFO 3435 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9983 (http) with context path ''
+2026-10-10T12:39:51.477Z  INFO 3435 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9984 (http)
+2026-10-10T12:39:51.478Z  INFO 3435 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-10T12:39:51.478Z  INFO 3435 --- [opspilot] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-10-10T12:39:51.482Z  INFO 3435 --- [opspilot] [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-10-10T12:39:51.482Z  INFO 3435 --- [opspilot] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 59 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-10T12:39:51.511Z  INFO 3435 --- [opspilot] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoint(s) beneath base path '/actuator'
+2026-10-10T12:39:51.563Z  INFO 3435 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9984 (http) with context path ''
+2026-10-10T12:39:51.580Z  INFO 3435 --- [opspilot] [           main] o.trigger.opspilot.OpsPilotApplication   : Started OpsPilotApplication in 8.425 seconds (process running for 8.84)
+2026-10-10T12:39:51.748Z  INFO 3435 --- [opspilot] [0.1-9984-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServletRegistration'
+2026-10-10T12:39:51.748Z  INFO 3435 --- [opspilot] [0.1-9984-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServletRegistration'
+2026-10-10T12:39:51.749Z  INFO 3435 --- [opspilot] [0.1-9984-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-10-10T12:39:51.863Z  INFO 3435 --- [opspilot] [0.1-9983-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-10T12:39:51.863Z  INFO 3435 --- [opspilot] [0.1-9983-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-10T12:39:51.865Z  INFO 3435 --- [opspilot] [0.1-9983-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-10-10T12:39:51.874Z  WARN 3435 --- [opspilot] [0.1-9983-exec-1] o.s.w.s.h.HandlerMappingIntrospector     : Cache miss for REQUEST dispatch to '/api/v1/auth/login' (previous null). Performing MatchableHandlerMapping lookup. This is logged once only at WARN level, and every time at TRACE.
+2026-10-10T12:39:52.646Z  INFO 3435 --- [opspilot] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-10T12:39:52.652Z  INFO 3435 --- [opspilot] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

@@ -1,0 +1,175 @@
+{
+  "status": "PASS",
+  "baseline": false,
+  "jarSha256": "8736fd8a240a5a3bd77ac2c6a71f8ea9217da4f09f2a3907f699de33155ffe15",
+  "cases": [
+    {
+      "name": "current-plan-independent-permissions-and-migration-origin"
+    },
+    {
+      "name": "reader-never-manages"
+    },
+    {
+      "name": "quota-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "silent-save-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "save-readback-denied-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "committed-loss-reload-manual-original-receipt-higher-current-version",
+      "posts": 1,
+      "actualForwardedCommit200": true,
+      "browserRequestAborted": true,
+      "originalCommand": {
+        "userId": 3,
+        "expectedVersion": 0,
+        "active": true,
+        "canRespond": true,
+        "canManage": false,
+        "operationKey": "cd1c5fa2-cf4b-49be-b354-bfe14e7db25d",
+        "reason": "CP113 明确成员变更"
+      },
+      "currentVersion": 2
+    },
+    {
+      "name": "own-management-revocation-original-receipt-only",
+      "ownPlanManagementRemoved": true,
+      "originalReadOnlyAck200": true
+    },
+    {
+      "name": "actual409-lock-survives-reload",
+      "actual409": 409,
+      "originalCapturedVersion": 5,
+      "versionNotRebased": true
+    },
+    {
+      "name": "actual403-lock-no-auto-retry",
+      "actual403": 403
+    },
+    {
+      "name": "fresh-read500-clears-facts-zero-post",
+      "posts": 0
+    },
+    {
+      "name": "corrupt-intent-explicit-local-discard",
+      "posts": 0
+    },
+    {
+      "name": "late200-after-plan-change-keeps-original",
+      "committedLate200": true,
+      "originalPreserved": true
+    },
+    {
+      "name": "late200-after-spa-account-switch-keeps-new-intent",
+      "committedLate200": true,
+      "newActorDraftPreserved": true
+    },
+    {
+      "name": "late200-after-same-user-token-change-keeps-original",
+      "committedLate200": true,
+      "newTokenIdentityProtected": true
+    }
+  ],
+  "screenshots": [
+    "after-first-desktop.png",
+    "after-desktop.png",
+    "after-first-mobile.png",
+    "after-mobile.png",
+    "original-vs-current-desktop.png",
+    "locked-original-mobile.png",
+    "frozen-original-mobile.png"
+  ],
+  "pageErrors": [],
+  "console": [
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: net::ERR_FAILED",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 409 (Conflict)",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+      "url": "http://127.0.0.1:9991/api/v1/on-call/schedules/1/members"
+    }
+  ],
+  "expectedRejections": [
+    {
+      "path": "/api/v1/on-call/schedules/1/members",
+      "status": 409
+    },
+    {
+      "path": "/api/v1/on-call/schedules/1/members",
+      "status": 403
+    },
+    {
+      "path": "/api/v1/on-call/schedules/1/members",
+      "status": 500
+    }
+  ],
+  "visualBounds": [
+    {
+      "name": "after-first-desktop.png",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "after-desktop.png",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "after-first-mobile.png",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "after-mobile.png",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "original-vs-current-desktop.png",
+      "width": 1440,
+      "documentWidth": 1440
+    },
+    {
+      "name": "locked-original-mobile.png",
+      "width": 390,
+      "documentWidth": 390
+    },
+    {
+      "name": "frozen-original-mobile.png",
+      "width": 390,
+      "documentWidth": 390
+    }
+  ],
+  "tokensPersistedToEvidence": false,
+  "userDatabaseModified": false,
+  "browserPath": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "browser": "155.0.8059.39",
+  "startedPid": 46492,
+  "ownedProcessStopped": true,
+  "portsFree": true,
+  "completePoolShutdown": true,
+  "unexpectedJarErrors": 0
+}
