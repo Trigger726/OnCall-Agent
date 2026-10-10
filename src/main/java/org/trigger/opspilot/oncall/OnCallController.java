@@ -69,7 +69,7 @@ public class OnCallController {
     public ApiResponse<OnCallRosterService.ShiftView> createShift(
             @Valid @RequestBody CreateShiftRequest body,
             @AuthenticationPrincipal UserPrincipal user, HttpServletRequest request) {
-        return ApiResponse.ok(rosterService.create(new OnCallRosterService.ShiftCommand(body.scheduleId(),
+        return ApiResponse.ok(rosterService.createManaged(new OnCallRosterService.ShiftCommand(body.scheduleId(),
                 body.userId(), body.startsAt(), body.endsAt(), body.override(), body.note()),
                 user.id(), request.getRemoteAddr()));
     }
@@ -79,7 +79,7 @@ public class OnCallController {
     public ApiResponse<OnCallRosterService.ShiftView> cancelShift(
             @PathVariable long id, @Valid @RequestBody CancelShiftRequest body,
             @AuthenticationPrincipal UserPrincipal user, HttpServletRequest request) {
-        return ApiResponse.ok(rosterService.cancel(id, body.version(), body.reason(), user.id(), request.getRemoteAddr()));
+        return ApiResponse.ok(rosterService.cancelManaged(id, body.version(), body.reason(), user.id(), request.getRemoteAddr()));
     }
 
     public record CreateShiftRequest(@Min(1) long scheduleId, @Min(1) long userId,

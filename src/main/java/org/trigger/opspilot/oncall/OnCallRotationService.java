@@ -29,13 +29,15 @@ public class OnCallRotationService {
     private final OnCallRosterService roster;
     private final AuditService audit;
     private final TransactionTemplate transactions;
+    private final OnCallPlanMembershipService planMembers;
 
     public OnCallRotationService(JdbcClient jdbc, ObjectMapper json, OnCallRosterService roster,
-                                 AuditService audit, PlatformTransactionManager transactionManager) {
+                                 AuditService audit, PlatformTransactionManager transactionManager, OnCallPlanMembershipService planMembers) {
         this.jdbc = jdbc;
         this.json = json;
         this.roster = roster;
         this.audit = audit;
+        this.planMembers = planMembers;
         this.transactions = new TransactionTemplate(transactionManager);
         transactions.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         transactions.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
@@ -54,8 +56,10 @@ public class OnCallRotationService {
             throw invalid("名称 1–128 字；锚点须为整分钟且距现在不超过 31 天；单班 60–10080 分钟；1–20 名不重复成员");
         }
         if (!lockSchedule(command.scheduleId())) throw conflict("ONCALL_SCHEDULE_INACTIVE", "计划已停用");
+        lockParticipants(command.members(), actor);
+        requireManagement(command.scheduleId(), actor);
         ensureNoActiveRotation(command.scheduleId(), 0);
-        List<Long> eligible = eligibleMembers(command.members());
+        List<Long> eligible = eligibleMembers(command.scheduleId(), command.members());
         if (eligible.size() != command.members().size()) throw invalid("成员必须全部活跃且具有运维职责");
         String members;
         try { members = json.writeValueAsString(command.members()); }
@@ -79,6 +83,8 @@ public class OnCallRotationService {
         if (reason == null || reason.isBlank() || reason.length() > 500) throw invalid("变更原因须为 1–500 字");
         RotationView initial = get(id);
         boolean scheduleActive = lockSchedule(initial.scheduleId());
+        lockParticipants(initial.members(), actor);
+        requireManagement(initial.scheduleId(), actor);
         if (active) {
             if (!scheduleActive) throw conflict("ONCALL_SCHEDULE_INACTIVE", "计划已停用");
             ensureNoActiveRotation(initial.scheduleId(), id);
@@ -110,23 +116,26 @@ public class OnCallRotationService {
     }
 
     public SlotWindow slots(long id, LocalDateTime from, LocalDateTime to) {
-        get(id);
+        var rotation = get(id);
         LocalDateTime now = now();
         LocalDateTime start = from == null ? now.minusDays(1) : from;
         LocalDateTime end = to == null ? now.plusDays(14) : to;
         if (!end.isAfter(start) || end.isAfter(start.plusDays(31))) throw invalid("窗口须为正数且不超过 31 天");
         var rows = jdbc.sql("""
-                        SELECT slot.*, u.display_name, u.status AS user_status, u.role_code, shift.cancelled_at
+                        SELECT slot.*, u.display_name, u.status AS user_status, u.role_code, shift.cancelled_at,
+                          m.active AS member_active,m.can_respond AS member_respond
                         FROM oncall_rotation_slot slot JOIN sys_user u ON u.id = slot.user_id
                         LEFT JOIN oncall_shift shift ON shift.id = slot.shift_id
+                        LEFT JOIN oncall_schedule_member m ON m.schedule_id=:schedule AND m.user_id=slot.user_id
                         WHERE slot.rotation_id = :id AND slot.starts_at < :end AND slot.ends_at > :start
                         ORDER BY slot.slot_index LIMIT 201
-                        """).param("id", id).param("start", start).param("end", end)
+                        """).param("id", id).param("schedule", rotation.scheduleId()).param("start", start).param("end", end)
                 .query((rs, row) -> new SlotView(rs.getLong("slot_index"), rs.getLong("user_id"),
                         rs.getString("display_name"), rs.getObject("starts_at", LocalDateTime.class),
                         rs.getObject("ends_at", LocalDateTime.class), rs.getString("status"), rs.getString("detail"),
                         rs.getObject("shift_id", Long.class), rs.getObject("cancelled_at", LocalDateTime.class),
                         "ACTIVE".equals(rs.getString("user_status"))
+                                && rs.getBoolean("member_active") && rs.getBoolean("member_respond")
                                 && List.of("ADMIN", "OPS_MANAGER", "ON_CALL").contains(rs.getString("role_code")))).list();
         return new SlotWindow(start, end, rows.stream().limit(200).toList(), rows.size() > 200);
     }
@@ -160,11 +169,13 @@ public class OnCallRotationService {
         RotationView rotation = jdbc.sql("SELECT * FROM oncall_rotation WHERE id = :id FOR UPDATE")
                 .param("id", id).query(this::mapRotation).single();
         if (!rotation.active()) return new Counts(0, 0);
+        lockParticipants(rotation.members(), actor);
+        if (actor != null) requireManagement(schedule, actor);
         if (!scheduleActive) {
             markScan(id, "SCHEDULE_INACTIVE");
             return new Counts(0, 0);
         }
-        List<Long> eligible = eligibleMembers(rotation.members());
+        List<Long> eligible = eligibleMembers(schedule, rotation.members());
         long index = Math.max(0, Math.floorDiv(Duration.between(rotation.anchorAt(), at).getSeconds(),
                 rotation.shiftMinutes() * 60L));
         LocalDateTime horizon = at.plusDays(14);
@@ -188,7 +199,7 @@ public class OnCallRotationService {
             Long shift = null;
             if (!eligible.contains(user)) {
                 status = "MEMBER_UNAVAILABLE";
-                detail = "成员停用或不再具有运维职责；未跳过其轮次换人";
+                detail = "成员停用、不再具有运维职责或失去此计划响应权限；未跳过其轮次换人";
                 blocked++;
             } else if (!jdbc.sql("""
                             SELECT id FROM oncall_shift WHERE schedule_id = :schedule AND cancelled_at IS NULL
@@ -233,11 +244,24 @@ public class OnCallRotationService {
                 .param("id", id).param("warning", warning).update();
     }
 
-    private List<Long> eligibleMembers(List<Long> members) {
+    private void requireManagement(long schedule, Long actor) {
+        if (actor == null) throw new ApiException(HttpStatus.FORBIDDEN, "ONCALL_PLAN_MANAGEMENT_FORBIDDEN", "须提供实际管理人");
+        planMembers.requireManager(schedule, actor);
+    }
+
+    private void lockParticipants(List<Long> members, Long actor) {
+        var ids = new ArrayList<>(members);
+        if (actor != null) ids.add(actor);
+        planMembers.lockAccounts(ids.stream().mapToLong(Long::longValue).toArray());
+    }
+
+    private List<Long> eligibleMembers(long schedule, List<Long> members) {
         return jdbc.sql("""
-                        SELECT id FROM sys_user WHERE id IN (:ids) AND status = 'ACTIVE'
-                          AND role_code IN ('ADMIN','OPS_MANAGER','ON_CALL') ORDER BY id FOR UPDATE
-                        """).param("ids", members).query(Long.class).list();
+                        SELECT u.id FROM sys_user u JOIN oncall_schedule_member m ON m.user_id=u.id
+                        WHERE u.id IN (:ids) AND u.status = 'ACTIVE' AND m.schedule_id=:schedule
+                          AND m.active=TRUE AND m.can_respond=TRUE
+                          AND u.role_code IN ('ADMIN','OPS_MANAGER','ON_CALL') ORDER BY u.id FOR UPDATE
+                        """).param("ids", members).param("schedule", schedule).query(Long.class).list();
     }
 
     private void ensureNoActiveRotation(long schedule, long excludedId) {

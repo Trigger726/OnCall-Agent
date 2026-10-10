@@ -20,11 +20,13 @@ public class OnCallHandoffService {
     private final JdbcClient jdbc;
     private final OnCallRosterService roster;
     private final AuditService audit;
+    private final OnCallPlanMembershipService members;
 
-    public OnCallHandoffService(JdbcClient jdbc, OnCallRosterService roster, AuditService audit) {
+    public OnCallHandoffService(JdbcClient jdbc, OnCallRosterService roster, AuditService audit, OnCallPlanMembershipService members) {
         this.jdbc = jdbc;
         this.roster = roster;
         this.audit = audit;
+        this.members = members;
     }
 
     public ListView list(Long scheduleId) {
@@ -83,6 +85,8 @@ public class OnCallHandoffService {
         var source = source(command.sourceShiftId());
         if (source.userId() != actorId) throw forbidden("只能申请自己的普通班次");
         validateSource(source, command.sourceVersion(), command.startsAt(), command.endsAt());
+        members.requireResponder(source.scheduleId(), actorId);
+        members.requireResponder(source.scheduleId(), command.targetUserId());
         var keyHolder = new GeneratedKeyHolder();
         jdbc.sql("""
                 INSERT INTO oncall_handoff(schedule_id,source_shift_id,source_version,requester_id,
@@ -122,6 +126,8 @@ public class OnCallHandoffService {
         Long replacement = null;
         if (decision.status().equals("ACCEPTED")) {
             requireActiveSchedule(row.scheduleId());
+            members.requireResponder(row.scheduleId(), row.requesterId());
+            members.requireResponder(row.scheduleId(), row.targetUserId());
             // Both participants must still be eligible when responsibility changes.
             var source = source(row.sourceShiftId());
             if (source.userId() != row.requesterId()) throw conflict("ONCALL_HANDOFF_SOURCE_CHANGED", "原负责人已变化");
@@ -211,6 +217,7 @@ public class OnCallHandoffService {
             }
             return coverage(id); // Safe acknowledgement even after the shift has ended.
         }
+        members.requireManager(row.scheduleId(), actorId);
         if (!row.status().equals("ACCEPTED") || row.replacementShiftId() == null || row.version() != command.handoffVersion()) {
             throw conflict("ONCALL_HANDOFF_VERSION_CONFLICT", "须核对已接受请求及捕获的版本");
         }

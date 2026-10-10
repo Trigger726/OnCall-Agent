@@ -16,10 +16,12 @@ import java.util.List;
 public class OnCallRosterService {
     private final JdbcClient jdbcClient;
     private final AuditService auditService;
+    private final OnCallPlanMembershipService members;
 
-    public OnCallRosterService(JdbcClient jdbcClient, AuditService auditService) {
+    public OnCallRosterService(JdbcClient jdbcClient, AuditService auditService, OnCallPlanMembershipService members) {
         this.jdbcClient = jdbcClient;
         this.auditService = auditService;
+        this.members = members;
     }
 
     public RosterView roster(Long scheduleId, LocalDateTime from, LocalDateTime to) {
@@ -62,6 +64,22 @@ public class OnCallRosterService {
     }
 
     @Transactional
+    public ShiftView createManaged(ShiftCommand command, long actorId, String sourceIp) {
+        lockSchedule(command.scheduleId());
+        members.lockAccounts(actorId, command.userId());
+        members.requireManager(command.scheduleId(), actorId);
+        return create(command, actorId, sourceIp);
+    }
+
+    @Transactional
+    public ShiftView cancelManaged(long id, int version, String reason, long actorId, String sourceIp) {
+        lockSchedule(get(id).scheduleId());
+        members.lockAccounts(actorId);
+        members.requireManager(get(id).scheduleId(), actorId);
+        return cancel(id, version, reason, actorId, sourceIp);
+    }
+
+    @Transactional
     public ShiftView create(ShiftCommand command, Long actorId, String sourceIp) {
         if (command.startsAt() == null || command.endsAt() == null
                 || !command.endsAt().isAfter(command.startsAt())
@@ -79,6 +97,7 @@ public class OnCallRosterService {
                           AND role_code IN ('ADMIN', 'OPS_MANAGER', 'ON_CALL') FOR UPDATE
                         """).param("id", command.userId()).query(Long.class).optional().isPresent();
         if (!eligible) throw invalid("请选择活跃且有运维职责的用户");
+        members.requireResponder(command.scheduleId(), command.userId());
         // The schedule row serializes all roster writes; locking reads see the latest MySQL snapshot.
         boolean overlaps = !jdbcClient.sql("""
                         SELECT id FROM oncall_shift

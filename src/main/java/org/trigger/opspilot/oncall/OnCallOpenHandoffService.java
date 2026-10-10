@@ -20,11 +20,13 @@ public class OnCallOpenHandoffService {
     private final JdbcClient jdbc;
     private final OnCallRosterService roster;
     private final AuditService audit;
+    private final OnCallPlanMembershipService members;
 
-    public OnCallOpenHandoffService(JdbcClient jdbc, OnCallRosterService roster, AuditService audit) {
+    public OnCallOpenHandoffService(JdbcClient jdbc, OnCallRosterService roster, AuditService audit, OnCallPlanMembershipService members) {
         this.jdbc = jdbc;
         this.roster = roster;
         this.audit = audit;
+        this.members = members;
     }
 
     public ListView list(Long scheduleId, long actorId, String scope, String status) {
@@ -46,6 +48,10 @@ public class OnCallOpenHandoffService {
                       AND u.role_code IN ('ADMIN','OPS_MANAGER','ON_CALL'))
                     AND EXISTS (SELECT 1 FROM sys_user u WHERE u.id=h.requester_id AND u.status='ACTIVE'
                       AND u.role_code IN ('ADMIN','OPS_MANAGER','ON_CALL'))
+                    AND EXISTS (SELECT 1 FROM oncall_schedule_member m WHERE m.schedule_id=h.schedule_id
+                      AND m.user_id=:actor AND m.active=TRUE AND m.can_respond=TRUE)
+                    AND EXISTS (SELECT 1 FROM oncall_schedule_member m WHERE m.schedule_id=h.schedule_id
+                      AND m.user_id=h.requester_id AND m.active=TRUE AND m.can_respond=TRUE)
                     AND EXISTS (SELECT 1 FROM oncall_schedule s WHERE s.id=h.schedule_id AND s.active=TRUE)
                     AND EXISTS (SELECT 1 FROM oncall_shift s WHERE s.id=h.source_shift_id
                       AND s.schedule_id=h.schedule_id AND s.user_id=h.requester_id AND s.version=h.source_version
@@ -82,6 +88,7 @@ public class OnCallOpenHandoffService {
         requireActiveSchedule(initial.scheduleId());
         var source = source(command.sourceShiftId());
         if (source.userId() != actorId) throw forbidden("只能发布本人普通班次的开放接班请求");
+        members.requireResponder(source.scheduleId(), actorId);
         validateSource(source, command.sourceVersion(), command.startsAt(), command.endsAt());
         var generated = new GeneratedKeyHolder();
         jdbc.sql("""
@@ -134,6 +141,8 @@ public class OnCallOpenHandoffService {
         Long replacement = null;
         if (kind.equals("CLAIM")) {
             requireActiveSchedule(row.scheduleId());
+            members.requireResponder(row.scheduleId(), actorId);
+            members.requireResponder(row.scheduleId(), row.requesterId());
             var original = source(row.sourceShiftId());
             if (original.scheduleId() != row.scheduleId() || original.userId() != row.requesterId()) {
                 throw conflict("ONCALL_OPEN_HANDOFF_SOURCE_CHANGED", "原计划或负责人已变化");

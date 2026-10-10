@@ -22,9 +22,11 @@ public class OnCallSwapService {
     private final OnCallRosterService roster;
     private final AuditService audit;
     private final OnCallSwapNotifications notifications;
+    private final OnCallPlanMembershipService members;
 
-    public OnCallSwapService(JdbcClient jdbc, OnCallRosterService roster, AuditService audit, OnCallSwapNotifications notifications) {
+    public OnCallSwapService(JdbcClient jdbc, OnCallRosterService roster, AuditService audit, OnCallSwapNotifications notifications, OnCallPlanMembershipService members) {
         this.jdbc = jdbc; this.roster = roster; this.audit = audit; this.notifications = notifications;
+        this.members = members;
     }
 
     public ListView list(Long scheduleId, Long participantId, String status) {
@@ -62,6 +64,7 @@ public class OnCallSwapService {
         if (first.userId() != actorId) throw forbidden("只能申请交换自己的班次");
         if (first.userId() == second.userId()) throw invalid("双方须为不同负责人");
         validate(first, command.firstVersion()); validate(second, command.secondVersion());
+        requireBothPlans(first.scheduleId(), second.scheduleId(), actorId, second.userId());
         var holder = new GeneratedKeyHolder();
         jdbc.sql("""
                 INSERT INTO oncall_shift_swap(requester_id,target_user_id,request_key,
@@ -95,6 +98,7 @@ public class OnCallSwapService {
         if (!row.status().equals("PENDING") || row.version() != decision.version()) throw conflict("ONCALL_SWAP_VERSION_CONFLICT", "换班请求已变化，请刷新核对");
         Long firstReplacement = null, secondReplacement = null;
         if (decision.status().equals("ACCEPTED")) {
+            requireBothPlans(row.firstScheduleId(), row.secondScheduleId(), row.requesterId(), row.targetUserId());
             Source first = source(row.firstShiftId()), second = source(row.secondShiftId());
             requireSnapshot(first, row.firstScheduleId(), row.requesterId(), row.firstStartsAt(), row.firstEndsAt());
             requireSnapshot(second, row.secondScheduleId(), row.targetUserId(), row.secondStartsAt(), row.secondEndsAt());
@@ -162,6 +166,8 @@ public class OnCallSwapService {
                 throw conflict("ONCALL_SWAP_REVOCATION_KEY_REUSED", "撤销键已用于不同换班、版本或说明");
             return coverage(id); // Acknowledges the original command; never revives either replacement.
         }
+        members.requireManager(row.firstScheduleId(), actorId);
+        members.requireManager(row.secondScheduleId(), actorId);
         if (!row.status().equals("ACCEPTED") || row.version() != command.swapVersion()
                 || row.firstReplacementShiftId() == null || row.secondReplacementShiftId() == null)
             throw conflict("ONCALL_SWAP_VERSION_CONFLICT", "须核对原已接受换班及捕获版本");
@@ -221,6 +227,14 @@ public class OnCallSwapService {
 
     private void lockSchedules(long first, long second) {
         lockSchedule(Math.min(first, second)); if (first != second) lockSchedule(Math.max(first, second));
+    }
+    private void requireBothPlans(long first, long second, long requester, long target) {
+        members.requireResponder(first, requester);
+        members.requireResponder(first, target);
+        if (first != second) {
+            members.requireResponder(second, requester);
+            members.requireResponder(second, target);
+        }
     }
     private void lockSchedule(long id) {
         jdbc.sql("SELECT active FROM oncall_schedule WHERE id=:id FOR UPDATE").param("id", id).query(Boolean.class)

@@ -1,0 +1,49 @@
+{
+  "status": "WIP_SNAPSHOT_COMPILES_ROSTER_REGRESSION_FAILED",
+  "date": "2026-10-10",
+  "baseHead": "ce5fc51aee215e4eebccfd9e02bccf5271f6fea5",
+  "snapshotBranch": "wip/plan-membership-v39-20261010",
+  "cp107RemoteStatusOnly": {
+    "runId": 38047022263,
+    "attempt": 1,
+    "headSha": "ce5fc51aee215e4eebccfd9e02bccf5271f6fea5",
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": 21,
+    "successfulJobs": 21,
+    "artifactsDownloadedThisTurn": false,
+    "doesNotCoverV39Snapshot": true
+  },
+  "localPackage": {
+    "exitCode": 0,
+    "result": "BUILD SUCCESS",
+    "testsExplicitlySkipped": true,
+    "jarSha256": "372a20adcc5b1a341e3773353562f2d6dcc4692899b7da3599c3c4bee84dee70"
+  },
+  "localRosterRegression": {
+    "class": "OnCallRosterIntegrationTest",
+    "exitCode": 1,
+    "tests": 6,
+    "failures": 2,
+    "errors": 3,
+    "skipped": 0,
+    "emptyH2MigrationsApplied": 39,
+    "populatedV38ToV39Tested": false,
+    "failureSummary": [
+      "shouldEnforceRolesAndKeepAnAuditedCancellationHistory: expected HTTP 200, actual 403",
+      "shouldSerializeConcurrentOverlappingCreates: expected CREATED and ONCALL_SHIFT_OVERLAP, actual two ONCALL_PLAN_RESPONSE_FORBIDDEN",
+      "shouldRejectInvalidWindowsUsersAndStaleCancellationWithoutExtraAudit: ApiException, missing plan response permission",
+      "shouldRejectSameLayerOverlapButAllowAdjacentHandoffsAndReplacement: ApiException, missing plan response permission",
+      "shouldResumeBaseRoutingAfterAnOverrideIsCancelled: ApiException, missing plan response permission"
+    ],
+    "originalLocalLogRetained": "target/v39-wip-upload-roster-test.log",
+    "originalLogNotPublished": "Contains test authentication material; only this non-secret result summary is public"
+  },
+  "acceptance": {
+    "membershipFeatureComplete": false,
+    "fullRegressionRun": false,
+    "newMySqlUpgradeRun": false,
+    "newUiDemoCreated": false,
+    "historicalDemosDeleted": false
+  }
+}
