@@ -7,6 +7,18 @@ const { randomUUID, createHash } = require('node:crypto');
 const { setTimeout: delay } = require('node:timers/promises');
 const { requireFreePort, stopProcess, waitForHealth, redact, unexpectedLogLines } = require('./verify-oncall-browser-ci.cjs');
 
+function assertCancelledFixtureStream(held) {
+  assert.equal(held.responseStatus, 200);
+  assert.equal(held.ended, true, 'Cancellation must reach natural EOF, not just an event prefix');
+  assert.match(held.contentType, /^text\/event-stream(?:;|$)/);
+  assert.ok(Buffer.byteLength(held.body) < 32768, 'Cancellation fixture body must remain bounded');
+  assert.doesNotMatch(held.body, /(?:^|\n\n)event:done\n/);
+  const frames = [...held.body.matchAll(/(?:^|\n\n)event:cancelled\ndata:([^\n]+)(?=\n\n)/g)];
+  assert.equal(frames.length, 1, 'Exactly one complete cancellation frame is required');
+  assert.ok(held.body.endsWith('event:cancelled\ndata:' + frames[0][1] + '\n\n'), 'Cancellation must be the final complete frame');
+  assert.deepEqual(JSON.parse(frames[0][1]), { type: 'cancelled', content: '回答已取消', messageId: null, evidenceJson: null });
+}
+
 async function verify() {
   const baseline = process.env.OPSPILOT_ASSISTANT_NATIVE_BASELINE === '1';
   if (baseline && process.env.CI) throw new Error('Baseline capture cannot replace native assistant UI acceptance');
@@ -255,6 +267,7 @@ async function verify() {
       for (const held of [await hold1, await hold2]) {
         assert.equal(held.responseStatus, 200); assert.equal(held.ended, true);
         assert.ok(held.body.includes('event:cancelled')); assert.ok(!held.body.includes('event:done'));
+        assertCancelledFixtureStream(held);
       }
       await until(() => held1.transportClosed === true);
       assert.equal(held2.calls, 0); assert.equal(held1.gated, true); finish(held1); finish(held2);
@@ -319,4 +332,5 @@ async function verify() {
     if (result.status === 'FAIL') process.exitCode = 1;
   }
 }
+module.exports = { assertCancelledFixtureStream };
 if (require.main === module) verify().catch(error => { console.error(redact(error.message)); process.exitCode = 1; });

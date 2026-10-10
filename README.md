@@ -1,5 +1,7 @@
 # OpsPilot
 
+当前 CP107：[完整取消帧门禁与成员契约](docs/acceptance/V1.7-checkpoint-107.md)。CP106自身[21作业 success/两个官方ZIP的191检查证据](docs/assets/v1.7-cp106/remote-close-proof.json)已闭合：Linux原生六项/两流完整取消JSON与EOF、八认证runner及后续通知12/成对14/开放33均执行。CP105首次失败仍保留，不推断唯一根因。本轮加强测试而非改生产UI；[计划成员权限](docs/ONCALL_PLAN_MEMBERSHIP_DESIGN.md)仍是设计，未实现。以下历史待验按各检查点当时范围阅读，整体active。
+
 最新 CP106：[真实升级闭环与两处首失败](docs/acceptance/V1.7-checkpoint-106.md)/[58检查本地证据](docs/assets/v1.7-cp106/local-proof.json)。CP105自身真实MySQL五键探针/旧新JAR升级10由[274检查七ZIP证据](docs/assets/v1.7-cp105/remote-first-proof.json)限定通过；整轮18成功/2失败/1跳过，认证打包依赖解析失败、原生第六页读取超时保持原证据。只补认证构建缺失release检查/完整日志及页面测试读流观测，Node161、本机原六流程前后通过；自己新CI和Linux失败根因仍待，生产代码/DDL/页面未改，历史Demo保留，整体active。
 
 最新 CP105：[MySQL夹具精确键修复与首失败保留](docs/acceptance/V1.7-checkpoint-105.md)/[121检查本地证据](docs/assets/v1.7-cp105/local-proof.json)。Node159、默认后端518执行/196条件跳过、H2旧库升级10及默认HTTP8通过；修复后的真实MySQL需本次提交自身CI验证。CP104自己CI终态19成功/1升级失败/1跳过，七ZIP由[323检查证据](docs/assets/v1.7-cp104/remote-first-proof.json)核验，不能标整轮全绿。生产代码/DDL/页面未改，历史Demo和失败保留，整体迭代继续。

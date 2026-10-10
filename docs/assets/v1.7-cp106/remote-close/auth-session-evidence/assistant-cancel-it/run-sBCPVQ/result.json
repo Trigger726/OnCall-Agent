@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "baselineCapture": false,
+  "tokensPersistedToEvidence": false,
+  "jarSha256": "f7b8730090fdc8b2583e0886d449ab4f75ebf7f3f15d1fa678b8992d2f72fefc",
+  "upgradeFixtureExecuted": false,
+  "fixture": "owned production HTTP adapter; explicit cancellation, lost cancel response and queued SIGKILL recovery",
+  "database": "fresh owned H2 file with WRITE_DELAY=0",
+  "userFileDatabaseModified": false,
+  "startedPids": [
+    3037,
+    3146
+  ],
+  "stoppedPids": [
+    3037,
+    3146
+  ],
+  "cases": [
+    {
+      "name": "lost-queued-cancel-and-running-cancel",
+      "cancelResponseActuallyLost": true,
+      "relayBackendStatus": 200,
+      "repeatedCancelAuditRows": 1,
+      "queuedQuestionWrites": 0,
+      "freedQueueSlotReused": true,
+      "synchronousStatusBeforeProviderRelease": 409,
+      "lateAssistantMessages": 0
+    },
+    {
+      "name": "stream-cancel",
+      "cancelledEventBeforeProviderRelease": true,
+      "doneEventSent": false,
+      "lateAssistantMessages": 0,
+      "nativeHttpConnectionClosedBeforeProviderRelease": true,
+      "workerReusedBeforeProviderRelease": true,
+      "actualWorkerSettledByFreshAnswer": true
+    },
+    {
+      "name": "queued-sigkill-recovery",
+      "statusBeforeCrash": "QUEUED",
+      "statusAfterOriginalBudget": "TIMED_OUT",
+      "questionWrites": 0,
+      "modelReexecuted": false,
+      "cancelledFactsAndSingleAuditSurviveRestart": true
+    }
+  ],
+  "hardKilledPid": 3037,
+  "providerTransportCalls": 6,
+  "ownedProcessesStopped": true,
+  "ownedRelayStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}

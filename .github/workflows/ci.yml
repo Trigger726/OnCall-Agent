@@ -74,7 +74,9 @@ jobs:
       - name: Verify assistant keyed UI cancellation, response loss, queue and timeout
         run: node scripts/verify-assistant-request-ui-ci.cjs
       - name: Verify default assistant native previews, final commit and recovery
-        run: node scripts/verify-assistant-native-ui-ci.cjs
+        run: |
+          node --test scripts/tests/assistant-native-ui-cancellation.test.cjs
+          node scripts/verify-assistant-native-ui-ci.cjs
       - name: Verify swap notifications against independent receiver and real retry UI
         run: |
           node --test scripts/tests/oncall-swap-notification-ci.test.cjs

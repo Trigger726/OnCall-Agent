@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "baselineCapture": false,
+  "tokensPersistedToEvidence": false,
+  "jarSha256": "f7b8730090fdc8b2583e0886d449ab4f75ebf7f3f15d1fa678b8992d2f72fefc",
+  "fixture": "actual production DashScope HTTP adapter, dropped completed HTTP response, independent JVMs and SIGKILL",
+  "database": "fresh owned H2 file with WRITE_DELAY=0",
+  "userFileDatabaseModified": false,
+  "startedPids": [
+    2770,
+    2860,
+    2940
+  ],
+  "stoppedPids": [
+    2770,
+    2860,
+    2940
+  ],
+  "cases": [
+    {
+      "name": "lost-completed-response-and-jvm-restart",
+      "backendStatusBeforeResponseLoss": 200,
+      "actualClientResponseLost": true,
+      "sameMessageIdAfterRestart": true,
+      "changedContentStatus": 409,
+      "requestStateAfterRestart": "COMPLETED",
+      "counts": {
+        "user": 1,
+        "assistant": 1
+      },
+      "modelCallsForQuestionIncludingRetries": 1
+    },
+    {
+      "name": "keyed-timeout",
+      "inProgressDuplicateStatus": 409,
+      "timeoutStatus": 504,
+      "stateBeforeProviderRelease": "TIMED_OUT",
+      "lateAssistantMessages": 0,
+      "lateWorkerSettledByFreshKey": true
+    },
+    {
+      "name": "sigkill-accepted-request-recovery",
+      "statusBeforeCrash": "RUNNING",
+      "currentStateAfterIndependentJvmRestart": "TIMED_OUT",
+      "sameKeyRetryStatus": 409,
+      "modelReexecuted": false,
+      "counts": {
+        "user": 1,
+        "assistant": 0
+      }
+    }
+  ],
+  "hardKilledPid": 2860,
+  "providerTransportCalls": 5,
+  "ownedProcessesStopped": true,
+  "ownedRelayStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}

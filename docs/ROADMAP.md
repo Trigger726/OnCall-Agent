@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+当前 CP107：[报告](acceptance/V1.7-checkpoint-107.md)。CP106自身原始attempt1已21作业success，两官方ZIP的[191检查/83文件](assets/v1.7-cp106/remote-close-proof.json)限定证明认证八runner和Linux原生六/后续页面；首次失败不覆盖、唯一根因不冒称。下一业务阶段按[计划成员权限14门禁](ONCALL_PLAN_MEMBERSHIP_DESIGN.md)落实迁移/权限分离/所有责任入口/续排/有数据升级与页面，再推进开放通知/提醒/渠道；认领撤销、DST/日历、生产容量与原始OnCall能力/历史Demo继续。下方‘当前/待验’是历史时点，整体active。
+
 当前 CP106：[报告](acceptance/V1.7-checkpoint-106.md)。CP105自己实际MySQL旧包有数据升级10和五个精确键探针已由[自身七ZIP](assets/v1.7-cp105/remote-first-proof.json)限定闭环，不再把它当未执行；整轮两处新失败独立保留。先核验认证构建缺失release检查与原生读流观测自己的新CI，若读取再失败按实际阶段/字节追踪诊断，不提高20秒测试上限或删第六流程。随后继续开放通知/提醒/渠道、计划成员ACL、认领撤销、DST/日历和生产容量，原始OnCall能力及历史Demo对照不删，整体active。
 
 当前 CP105：[首失败与夹具修复](acceptance/V1.7-checkpoint-105.md)/[本地proof](assets/v1.7-cp105/local-proof.json)。CP104自身真实MySQL升级在离线审计查询失败，整轮19成功/1失败/1跳过；修复只改夹具精确BINARY键比较，未改生产DDL或放宽业务断言。Node159/H2升级10/HTTP8及默认518执行通过，本次真实MySQL五探针/完整10流程必须由自己的新CI证明。后续通知/提醒/渠道、成员ACL、认领撤销、DST/日历、生产容量和历史Demo对照均继续，不标整体100%。

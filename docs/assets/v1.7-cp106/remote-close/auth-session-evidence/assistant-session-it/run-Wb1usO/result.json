@@ -1,0 +1,69 @@
+{
+  "status": "PASS",
+  "baselineCapture": false,
+  "budgetBaselineCapture": false,
+  "tokensPersistedToEvidence": false,
+  "jarSha256": "f7b8730090fdc8b2583e0886d449ab4f75ebf7f3f15d1fa678b8992d2f72fefc",
+  "fixture": "actual production DashScope HTTP adapter against an owned controlled server, not model quality",
+  "database": "fresh owned H2 memory database",
+  "userFileDatabaseModified": false,
+  "cases": [
+    {
+      "name": "synchronous-logout",
+      "responseStatus": 401,
+      "lateAssistantMessages": 0,
+      "lateAnswerSent": false,
+      "closedBeforeProviderRelease": true
+    },
+    {
+      "name": "stream-logout",
+      "responseStatus": 200,
+      "lateAssistantMessages": 0,
+      "lateAnswerSent": false,
+      "closedBeforeProviderRelease": true,
+      "nativeHttpConnectionClosedBeforeProviderRelease": true,
+      "workerReusedBeforeProviderRelease": true
+    },
+    {
+      "name": "clear-messages",
+      "responseStatus": 409,
+      "lateAssistantMessages": 0,
+      "lateAnswerSent": false,
+      "closedBeforeProviderRelease": false
+    },
+    {
+      "name": "timeout",
+      "closedBeforeProviderRelease": true,
+      "explicitSafeErrorEvent": true,
+      "nativeHttpConnectionClosedBeforeProviderRelease": true,
+      "workerReusedBeforeProviderRelease": true,
+      "lateWorkerSettledByFreshStream": true,
+      "lateAssistantMessages": 0
+    },
+    {
+      "name": "mixed-capacity",
+      "responseStatus": 503,
+      "rejectedQuestionWrites": 0,
+      "queuedQuestionWritesBeforeProviderRelease": 0,
+      "simultaneousProviderCalls": 1
+    },
+    {
+      "name": "synchronous-running-and-queued-timeout",
+      "responseStatuses": [
+        504,
+        504
+      ],
+      "settledBeforeProviderRelease": true,
+      "lateAssistantMessages": 0,
+      "queuedQuestionWrites": 0,
+      "lateWorkerSettledByFreshSynchronousAnswer": true
+    }
+  ],
+  "startedPid": 2656,
+  "productionHttpAdapterPositiveControl": true,
+  "freshSessionProductionHttpAnswer": true,
+  "providerTransportCalls": 11,
+  "ownedProcessStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}

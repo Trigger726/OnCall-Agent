@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+当前 CP107：[测试强化与成员契约报告](V1.7-checkpoint-107.md)。CP106自身原始attempt1已21CI success，认证与浏览器两个官方ZIP由[191检查/83文件proof](../assets/v1.7-cp106/remote-close-proof.json)限定核验；它的历史待验见[106追加](V1.7-checkpoint-106.md#5-自身-linux-ci-闭合与下一业务阶段2026-10-10追加)。CP105首次失败/旧Demo保留。新增完整取消帧门禁不是Linux超时根因修复，成员ACL仍仅[设计](../ONCALL_PLAN_MEMBERSHIP_DESIGN.md)，不能标整条路线完成。下方记录按历史时点阅读。
+
 最新 CP106：[报告](V1.7-checkpoint-106.md)/[58检查/45文件本地proof](../assets/v1.7-cp106/local-proof.json)。CP105自己21CI实际18成功/2失败/1跳过；真实MySQL五探针/旧新JAR升级10通过，首失败由[274检查/335文件七ZIP proof](../assets/v1.7-cp105/remote-first-proof.json)保留。新增认证构建-U/-e/pipefail日志与原生六流程观察，实际Maven隔离404→缓存拒绝→-U恢复成立，但不认定GitHub唯一根因。本机原六前后/Node161通过，自己CI待验；历史Demo/失败与完整目标保留。
 
 最新 CP105：[报告](V1.7-checkpoint-105.md)/[121检查/107文件本地proof](../assets/v1.7-cp105/local-proof.json)。仅修离线MySQL审计键排序规则冲突，补五个精确字节负对照；Node159、默认Java518执行/196条件跳过、H2升级10/默认HTTP8通过，自己源码真实MySQL仍待。CP104自己CI实际19成功/1升级失败/1跳过及七ZIP已[323检查核验](../assets/v1.7-cp104/remote-first-proof.json)，原始首失败/Demo不覆盖，整体active。

@@ -1,0 +1,174 @@
+{
+  "status": "PASS",
+  "baselineCapture": false,
+  "fixture": "two independent owned JVMs, shared SQL, real DashScope HTTP",
+  "databaseMode": "H2_AUTO_SERVER",
+  "jarSha256": "f7b8730090fdc8b2583e0886d449ab4f75ebf7f3f15d1fa678b8992d2f72fefc",
+  "applicationPorts": [
+    9965,
+    9967
+  ],
+  "managementPorts": [
+    9966,
+    9968
+  ],
+  "databaseServerPort": 9970,
+  "checkDelayMs": 100,
+  "executionBudgetSeconds": 20,
+  "tokensPersistedToEvidence": false,
+  "signingKeysPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "cases": [
+    {
+      "name": "shared-sql-completed-replay",
+      "sessionId": 1,
+      "answerMessageId": 2,
+      "nodes": [
+        "A",
+        "B"
+      ],
+      "originalAnswerIdPreserved": true,
+      "modelCalls": 1
+    },
+    {
+      "name": "cancel-on-B-releases-A",
+      "sessionId": 2,
+      "duplicateStatus": 409,
+      "otherActorStatus": 404,
+      "persistedStatusBothNodes": "CANCELLED",
+      "cancelledAnswers": 0,
+      "cancellationAudits": 1,
+      "physicalHttpClosedBeforeProviderRelease": true,
+      "sameWorkerReusedBeforeProviderRelease": true
+    },
+    {
+      "name": "clear-on-B-fences-A",
+      "sessionId": 4,
+      "persistedStatus": "SUPERSEDED",
+      "questionRows": 0,
+      "answerRows": 0,
+      "physicalHttpClosedBeforeProviderRelease": true
+    },
+    {
+      "name": "revoke-on-B-fences-A",
+      "sessionId": 5,
+      "persistedStatus": "REVOKED",
+      "oldTokensRejectedBothNodes": true,
+      "noPostRevocationPayload": true,
+      "answerRows": 0,
+      "physicalHttpClosedBeforeProviderRelease": true,
+      "sameWorkerReusedBeforeProviderRelease": true
+    },
+    {
+      "name": "queued-cancel-on-B-reclaims-A",
+      "sessionId": 8,
+      "executionNode": "A",
+      "cancellationNode": "B",
+      "persistedStatusBothNodes": "CANCELLED",
+      "initialStatus": "QUEUED",
+      "modelCalls": 0,
+      "questionRows": 0,
+      "answerRows": 0,
+      "cancellationAudits": 1,
+      "duplicateStatus": 409,
+      "otherActorStatus": 404,
+      "cancelledRetryStatus": 409,
+      "cancelledStreamEvent": true,
+      "tokenOrDoneSent": false,
+      "saturationStatus": 503,
+      "rejectedKeyStatus": 404,
+      "rejectedQuestionRows": 0,
+      "rejectedModelCalls": 0,
+      "occupyingModelStillOpenBeforeReplacement": true,
+      "freedQueueSlotReusedBeforeProviderRelease": true,
+      "rejectedSessionAndKeyReused": true,
+      "replacementStatusBeforeRelease": "QUEUED",
+      "occupyingSessionId": 7,
+      "occupyingAnswerMessageId": 11,
+      "replacementSessionId": 9,
+      "replacementAnswerMessageId": 13,
+      "occupyingAndReplacementModelCalls": 2,
+      "lateCancelledModelCalls": 0
+    },
+    {
+      "name": "queued-cancel-on-A-reclaims-B",
+      "sessionId": 11,
+      "executionNode": "B",
+      "cancellationNode": "A",
+      "persistedStatusBothNodes": "CANCELLED",
+      "initialStatus": "QUEUED",
+      "modelCalls": 0,
+      "questionRows": 0,
+      "answerRows": 0,
+      "cancellationAudits": 1,
+      "duplicateStatus": 409,
+      "otherActorStatus": 404,
+      "cancelledRetryStatus": 409,
+      "cancelledStreamEvent": true,
+      "tokenOrDoneSent": false,
+      "saturationStatus": 503,
+      "rejectedKeyStatus": 404,
+      "rejectedQuestionRows": 0,
+      "rejectedModelCalls": 0,
+      "occupyingModelStillOpenBeforeReplacement": true,
+      "freedQueueSlotReusedBeforeProviderRelease": true,
+      "rejectedSessionAndKeyReused": true,
+      "replacementStatusBeforeRelease": "QUEUED",
+      "occupyingSessionId": 10,
+      "occupyingAnswerMessageId": 15,
+      "replacementSessionId": 12,
+      "replacementAnswerMessageId": 17,
+      "occupyingAndReplacementModelCalls": 2,
+      "lateCancelledModelCalls": 0
+    }
+  ],
+  "startedPids": [
+    3247,
+    3326
+  ],
+  "stoppedPids": [
+    3326,
+    3247
+  ],
+  "streamAdmissionResponses": [
+    {
+      "route": "/assistant/sessions/2/stream",
+      "status": 409,
+      "contentType": "application/json;charset=UTF-8"
+    },
+    {
+      "route": "/assistant/sessions/8/stream",
+      "status": 409,
+      "contentType": "application/json;charset=UTF-8"
+    },
+    {
+      "route": "/assistant/sessions/9/stream",
+      "status": 503,
+      "contentType": "application/json;charset=UTF-8"
+    },
+    {
+      "route": "/assistant/sessions/8/stream",
+      "status": 409,
+      "contentType": "application/json;charset=UTF-8"
+    },
+    {
+      "route": "/assistant/sessions/11/stream",
+      "status": 409,
+      "contentType": "application/json;charset=UTF-8"
+    },
+    {
+      "route": "/assistant/sessions/12/stream",
+      "status": 503,
+      "contentType": "application/json;charset=UTF-8"
+    },
+    {
+      "route": "/assistant/sessions/11/stream",
+      "status": 409,
+      "contentType": "application/json;charset=UTF-8"
+    }
+  ],
+  "providerCalls": 10,
+  "ownedProcessesStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}
