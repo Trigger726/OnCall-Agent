@@ -3,11 +3,12 @@ const {verify,suite,caseNames}=require('../verify-oncall-plan-membership-cross-n
 const directory=path.resolve(__dirname,'../../docs/assets/v1.7-cp112/h2-cross-node');
 function h2(){return {log:fs.readFileSync(directory+'/maven.log','utf8'),xml:fs.readFileSync(directory+'/TEST-'+suite.replace('MySqlOnCall','OnCall')+'.xml','utf8'),result:JSON.parse(fs.readFileSync(directory+'/result.json','utf8')),logs:[1,2,3].map(n=>fs.readFileSync(directory+'/jar-'+n+'.log','utf8'))};}
 function fixture(){const f=h2();f.xml=f.xml.replaceAll(suite.replace('MySqlOnCall','OnCall'),suite);
+ f.result.versionedMigrations=40; // Synthetic current gate shape, not an execution of V40 on the archived JAR.
  f.result.database={product:'MySQL',version:'8.4.11',schema:'opspilot_member_cross_abcdef123456',serverUuid:'12345678-1234-1234-1234-123456789abc'};
  f.logs=f.logs.map(log=>log+'\nDatabase: jdbc:mysql://127.0.0.1:3306/'+f.result.database.schema+' (MySQL 8.4)');return f;}
 const run=(f,mysql=true)=>verify(f.log,f.xml,f.result,f.logs,mysql);
 function rejects(mutations){for(const change of mutations){const f=fixture();change(f);assert.throws(()=>run(f));}}
-test('saved actual H2 TCP two-JVM run replays but does not become an actual MySQL run',()=>{assert.equal(run(h2(),false).httpCases,6);assert.throws(()=>run(h2()));});
+test('saved actual V39 H2 TCP run cannot substitute for current V40 or actual MySQL',()=>{assert.equal(h2().result.versionedMigrations,39);assert.throws(()=>run(h2(),false));assert.throws(()=>run(h2()));});
 test('synthetic MySQL gate shape is explicitly only a gate unit fixture',()=>{assert.equal(run(fixture()).database.product,'MySQL');assert.equal(run(fixture()).membershipUiVerified,false);});
 test('wrong suite skips zero tests failed truncated Maven and wrong JDBC identity are rejected',()=>rejects([
  f=>f.xml=f.xml.replace('tests="1"','tests="0"'),f=>f.xml=f.xml.replace('skipped="0"','skipped="1"'),f=>f.xml=f.xml.replace(suite,'WrongSuite'),

@@ -18,7 +18,8 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/v1/on-call/open-handoffs")
 public class OnCallOpenHandoffController {
     private final OnCallOpenHandoffService service;
-    public OnCallOpenHandoffController(OnCallOpenHandoffService service) { this.service = service; }
+    private final OnCallOpenHandoffRecipients recipients;
+    public OnCallOpenHandoffController(OnCallOpenHandoffService service, OnCallOpenHandoffRecipients recipients) { this.service = service; this.recipients = recipients; }
 
     @GetMapping
     public ApiResponse<OnCallOpenHandoffService.ListView> list(@RequestParam(required=false) Long scheduleId,
@@ -30,6 +31,8 @@ public class OnCallOpenHandoffController {
     public ApiResponse<OnCallOpenHandoffService.View> get(@PathVariable long id) { return ApiResponse.ok(service.get(id)); }
     @GetMapping("/{id}/coverage")
     public ApiResponse<OnCallOpenHandoffService.CoverageView> coverage(@PathVariable long id) { return ApiResponse.ok(service.coverage(id)); }
+    @GetMapping("/{id}/publication")
+    public ApiResponse<OnCallOpenHandoffRecipients.View> publication(@PathVariable long id) { return ApiResponse.ok(recipients.get(id)); }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER','ON_CALL')")

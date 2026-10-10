@@ -48,10 +48,11 @@ abstract class OpenHandoffScenarios {
             }
             assertThat(jdbc.sql("SELECT COUNT(*) FROM flyway_schema_history WHERE version='38' AND success=TRUE").query(Long.class).single()).isEqualTo(1);
             assertThat(jdbc.sql("SELECT COUNT(*) FROM flyway_schema_history WHERE version='39' AND success=TRUE").query(Long.class).single()).isEqualTo(1);
-            assertThat(jdbc.sql("SELECT COUNT(*) FROM flyway_schema_history WHERE version IS NOT NULL AND success=TRUE").query(Long.class).single()).isEqualTo(39);
+            assertThat(jdbc.sql("SELECT COUNT(*) FROM flyway_schema_history WHERE version='40' AND success=TRUE").query(Long.class).single()).isEqualTo(1);
+            assertThat(jdbc.sql("SELECT COUNT(*) FROM flyway_schema_history WHERE version IS NOT NULL AND success=TRUE").query(Long.class).single()).isEqualTo(40);
             System.out.println("CP97_OPEN_HANDOFF_DATABASE "+json.writeValueAsString(Map.of("case",test.getTestMethod().orElseThrow().getName(),
                     "product",metadata.getDatabaseProductName(),"version",metadata.getDatabaseProductVersion(),"schema",connection.getCatalog(),"migration38",true,
-                    "migration39",true,"versionedMigrations",39)));
+                    "migration39",true,"migration40",true,"versionedMigrations",40)));
         }
     }
     @AfterEach void resetAudit(){reset(audit);}

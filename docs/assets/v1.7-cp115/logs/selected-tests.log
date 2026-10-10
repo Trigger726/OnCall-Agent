@@ -1,0 +1,351 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< org.trigger:opspilot >------------------------
+[INFO] Building OpsPilot 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 42 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 114 source files with javac [debug release 17] to target\test-classes
+[INFO] 由于在类路径中发现了一个或多个处理程序，因此启用了
+  批注处理。未来发行版的 javac 可能会禁用批注处理，
+  除非至少按名称指定了一个处理程序 (-processor)，
+  或指定了搜索路径 (--processor-path, --processor-module-path)，
+  或显式启用了批注处理 (-proc:only, -proc:full)。
+  可使用 -Xlint:-options 隐藏此消息。
+  可使用 -proc:none 禁用批注处理。
+[INFO] /D:/Codex/国网/央国企求职/OpsPilot/src/test/java/org/trigger/opspilot/distributed/DistributedAgentEventsIntegrationTest.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /D:/Codex/国网/央国企求职/OpsPilot/src/test/java/org/trigger/opspilot/distributed/DistributedAgentEventsIntegrationTest.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.trigger.opspilot.oncall.OnCallOpenHandoffIntegrationTest
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+17:11:41.808 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.trigger.opspilot.oncall.OnCallOpenHandoffIntegrationTest]: OnCallOpenHandoffIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+17:11:42.132 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.oncall.OnCallOpenHandoffIntegrationTest
+17:11:42.318 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-10T17:11:42.694Z  INFO 48196 --- [opspilot] [           main] o.t.o.o.OnCallOpenHandoffIntegrationTest : Starting OnCallOpenHandoffIntegrationTest using Java 21.0.2 with PID 48196 (started by lenovo in D:\Codex\国网\央国企求职\OpsPilot)
+2026-10-10T17:11:42.696Z  INFO 48196 --- [opspilot] [           main] o.t.o.o.OnCallOpenHandoffIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-10T17:11:45.494Z  INFO 48196 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-10T17:11:45.497Z  INFO 48196 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-10T17:11:45.559Z  INFO 48196 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 42 ms. Found 0 Redis repository interfaces.
+2026-10-10T17:11:46.481Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-10T17:11:46.835Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:opspilot-open-handoff-test user=SA
+2026-10-10T17:11:46.837Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-10T17:11:46.940Z  INFO 48196 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
+2026-10-10T17:11:46.940Z  INFO 48196 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2026-10-10T17:11:46.940Z  INFO 48196 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : 
+2026-10-10T17:11:47.010Z  INFO 48196 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:opspilot-open-handoff-test (H2 2.2)
+2026-10-10T17:11:47.072Z  INFO 48196 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-10T17:11:47.076Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 40 migrations (execution time 00:00.047s)
+2026-10-10T17:11:47.081Z  INFO 48196 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-10T17:11:47.108Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-10T17:11:47.127Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-10T17:11:47.205Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-10T17:11:47.215Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-10T17:11:47.224Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-10T17:11:47.236Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-10T17:11:47.244Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-10T17:11:47.283Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-10T17:11:47.301Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-10T17:11:47.314Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-10T17:11:47.330Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-10T17:11:47.340Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-10T17:11:47.345Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-10T17:11:47.355Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-10T17:11:47.363Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-10T17:11:47.370Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-10T17:11:47.376Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-10T17:11:47.378Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-10T17:11:47.384Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-10T17:11:47.388Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-10T17:11:47.398Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-10T17:11:47.416Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-10T17:11:47.430Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-10T17:11:47.435Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-10T17:11:47.444Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-10T17:11:47.451Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-10T17:11:47.458Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-10T17:11:47.466Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-10T17:11:47.471Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-10T17:11:47.473Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-10T17:11:47.486Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-10T17:11:47.506Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-10T17:11:47.513Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-10T17:11:47.516Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-10T17:11:47.520Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-10T17:11:47.528Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-10T17:11:47.531Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-10T17:11:47.538Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-10T17:11:47.542Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-10T17:11:47.547Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "39 - oncall plan memberships"
+2026-10-10T17:11:47.555Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "40 - open handoff publication snapshots"
+2026-10-10T17:11:47.574Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 40 migrations to schema "public", now at version v40 (execution time 00:00.288s)
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+WARNING: A Java agent has been loaded dynamically (D:\Codex\国网\tmp\m2-repository\net\bytebuddy\byte-buddy-agent\1.14.10\byte-buddy-agent-1.14.10.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+2026-10-10T17:11:52.623Z  INFO 48196 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-10T17:11:53.279Z  INFO 48196 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@190677c6, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@62c019bb, org.springframework.security.web.context.SecurityContextHolderFilter@4377b35b, org.springframework.security.web.header.HeaderWriterFilter@4951c45f, org.springframework.web.filter.CorsFilter@7334dcbe, org.springframework.security.web.authentication.logout.LogoutFilter@6e6bb211, org.trigger.opspilot.security.JwtAuthenticationFilter@57f1fbae, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3a5922ec, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3e6b08d4, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1ca876b7, org.springframework.security.web.session.SessionManagementFilter@27b89e0a, org.springframework.security.web.access.ExceptionTranslationFilter@67b6cb6e, org.springframework.security.web.access.intercept.AuthorizationFilter@24c6a471]
+2026-10-10T17:11:55.136Z  INFO 48196 --- [opspilot] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:opspilot-open-handoff-test'
+2026-10-10T17:11:55.198Z  INFO 48196 --- [opspilot] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-10T17:11:55.200Z  INFO 48196 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-10T17:11:55.201Z  INFO 48196 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-10T17:11:55.287Z  INFO 48196 --- [opspilot] [           main] o.t.o.o.OnCallOpenHandoffIntegrationTest : Started OnCallOpenHandoffIntegrationTest in 12.979 seconds (process running for 14.792)
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldSerializeConcurrentOriginalClaimKeyAcknowledgements"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldRollbackWithdrawalReceiptAndAuditTogether"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldAcknowledgeOriginalClaimAfterCancellationAndEndWithoutRevival"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldRollbackCoverageCreationAuditFailure"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldRecheckActualPersistedDeadlineAfterScheduleLockWait"}
+CP97_OPEN_HANDOFF_TIME_BARRIER {"releasedAfterPersistedEnd":true,"releasedDatabaseNow":"2026-10-10T17:12:00.043960","requestedEnd":"2026-10-10T17:12","case":"shouldRecheckActualPersistedDeadlineAfterScheduleLockWait","persistedEnd":"2026-10-10T17:12"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldRollbackCoverageOperationAndFinalClaimAuditTogether"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldClaimOnlyRemainingSubwindowAndKeepOriginalTimes"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldAllowExactlyOneWinnerBetweenDifferentClaimants"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldRollbackWhenFinalClaimAuditCrossesPersistedDeadline"}
+CP97_OPEN_HANDOFF_TIME_BARRIER {"releasedAfterPersistedEnd":true,"releasedDatabaseNow":"2026-10-10T17:12:04.026802","requestedEnd":"2026-10-10T17:12:04","case":"shouldRollbackWhenFinalClaimAuditCrossesPersistedDeadline","persistedEnd":"2026-10-10T17:12:04"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldReadLatestQualificationAfterScheduleLockWait"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldRejectCancelledSourceButPermitExplicitOwnerWithdrawal"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldFilterAvailableAndMineInSqlBeforeBoundedInbox"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldSerializeClaimVersusOwnerWithdrawalWithoutHalfCoverage"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldRejectNewOverrideAndLegacyOrdinaryOverlap"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldRejectChangedPublicationKeyContentAndMalformedWindows"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldSerializeSameActorOperationKeyAcrossDifferentPlans"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldRollbackPublicationWhenItsAuditFails"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldRecheckCurrentClaimantQualificationEvenForOriginalReceipt"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldRejectEndedClaimWithoutInventingAutomaticExpiryStatus"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldEnforceHttpAuthenticationAndExplicitVersions"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldEnforcePersonalConsentAndOriginalOperationPayload"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldRejectInactivePlanAndPublisherWithoutChangingResponsibility"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldPublishAndClaimThroughHttpWithActualIndependentCoverage"}
+CP97_OPEN_HANDOFF_DATABASE {"product":"H2","versionedMigrations":40,"migration40":true,"version":"2.2.220 (2023-07-04)","migration39":true,"migration38":true,"schema":"opspilot-open-handoff-test","case":"shouldSerializeConcurrentPublicationOriginalKeys"}
+2026-10-10T17:12:05.918Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-10T17:12:05.921Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+[INFO] Tests run: 24, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 24.53 s -- in org.trigger.opspilot.oncall.OnCallOpenHandoffIntegrationTest
+[INFO] Running org.trigger.opspilot.oncall.OnCallOpenHandoffRecipientIntegrationTest
+2026-10-10T17:12:05.928Z  INFO 48196 --- [opspilot] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.trigger.opspilot.oncall.OnCallOpenHandoffRecipientIntegrationTest]: OnCallOpenHandoffRecipientIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-10T17:12:05.934Z  INFO 48196 --- [opspilot] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.oncall.OnCallOpenHandoffRecipientIntegrationTest
+2026-10-10T17:12:05.940Z  INFO 48196 --- [opspilot] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-10T17:12:05.983Z  INFO 48196 --- [opspilot] [           main] nCallOpenHandoffRecipientIntegrationTest : Starting OnCallOpenHandoffRecipientIntegrationTest using Java 21.0.2 with PID 48196 (started by lenovo in D:\Codex\国网\央国企求职\OpsPilot)
+2026-10-10T17:12:05.984Z  INFO 48196 --- [opspilot] [           main] nCallOpenHandoffRecipientIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-10T17:12:06.812Z  INFO 48196 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-10T17:12:06.812Z  INFO 48196 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-10T17:12:06.834Z  INFO 48196 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21 ms. Found 0 Redis repository interfaces.
+2026-10-10T17:12:06.931Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-10-10T17:12:06.936Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:opspilot-open-recipient-test user=SA
+2026-10-10T17:12:06.936Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-10-10T17:12:06.954Z  INFO 48196 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:opspilot-open-recipient-test (H2 2.2)
+2026-10-10T17:12:06.979Z  INFO 48196 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-10T17:12:06.980Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 40 migrations (execution time 00:00.024s)
+2026-10-10T17:12:06.985Z  INFO 48196 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-10T17:12:06.994Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-10T17:12:07.022Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-10T17:12:07.038Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-10T17:12:07.043Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-10T17:12:07.051Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-10T17:12:07.058Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-10T17:12:07.063Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-10T17:12:07.080Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-10T17:12:07.097Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-10T17:12:07.125Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-10T17:12:07.132Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-10T17:12:07.137Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-10T17:12:07.141Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-10T17:12:07.148Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-10T17:12:07.154Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-10T17:12:07.159Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-10T17:12:07.163Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-10T17:12:07.165Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-10T17:12:07.169Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-10T17:12:07.173Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-10T17:12:07.178Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-10T17:12:07.181Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-10T17:12:07.191Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-10T17:12:07.194Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-10T17:12:07.198Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-10T17:12:07.201Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-10T17:12:07.206Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-10T17:12:07.212Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-10T17:12:07.215Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-10T17:12:07.217Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-10T17:12:07.220Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-10T17:12:07.233Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-10T17:12:07.237Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-10T17:12:07.239Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-10T17:12:07.241Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-10T17:12:07.245Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-10T17:12:07.248Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-10T17:12:07.251Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-10T17:12:07.254Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-10T17:12:07.258Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "39 - oncall plan memberships"
+2026-10-10T17:12:07.266Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "40 - open handoff publication snapshots"
+2026-10-10T17:12:07.268Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 40 migrations to schema "public", now at version v40 (execution time 00:00.112s)
+2026-10-10T17:12:07.504Z  INFO 48196 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-10T17:12:07.564Z  INFO 48196 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@36dada39, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@71fcff54, org.springframework.security.web.context.SecurityContextHolderFilter@16974b24, org.springframework.security.web.header.HeaderWriterFilter@607229c7, org.springframework.web.filter.CorsFilter@1fffd548, org.springframework.security.web.authentication.logout.LogoutFilter@5072f264, org.trigger.opspilot.security.JwtAuthenticationFilter@25afdf7e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@38e2431b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@492f79d1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5bfe65df, org.springframework.security.web.session.SessionManagementFilter@5bddcaef, org.springframework.security.web.access.ExceptionTranslationFilter@3f52313c, org.springframework.security.web.access.intercept.AuthorizationFilter@48f1968e]
+2026-10-10T17:12:07.702Z  INFO 48196 --- [opspilot] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:opspilot-open-recipient-test'
+2026-10-10T17:12:07.712Z  INFO 48196 --- [opspilot] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-10T17:12:07.713Z  INFO 48196 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-10T17:12:07.713Z  INFO 48196 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-10-10T17:12:07.737Z  INFO 48196 --- [opspilot] [           main] nCallOpenHandoffRecipientIntegrationTest : Started OnCallOpenHandoffRecipientIntegrationTest in 1.799 seconds (process running for 27.242)
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRollbackRequestAndAuditWhenSnapshotInsertFailsAfterActualInsert"}
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldStopCandidatesWhenAnotherActualOverrideOverlapsRemainingWindow"}
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldKeepPublicationAfterWithdrawalAndOriginalKeyAcknowledgement"}
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldStopCandidatesForInactivePlanAndChangedOrCancelledSource"}
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldUseOnlyThisPlansCurrentRespondersAndExcludePublisherAndManagerOnly"}
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldKeepLegacyPublicationUnavailableWithoutInferringHistoricalRecipients"}
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldPersistEmptyOriginalAudienceAndNeverBackfillNewMembersOnReplay"}
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldFreezeOriginalMemberVersionAndNameWithoutAddingLaterGrants"}
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldStopExpiredCandidatesUsingDatabaseTimeWithoutChangingFrozenWindow"}
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldExposeAuthenticatedReadOnlySnapshotWithoutSecretsAndRequireEnclosingTransaction"}
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRecheckPublisherResponseAndAccountBeforeDeliveryObservation"}
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldKeepPublicationAfterClaimAndNeverTreatSnapshotAsActiveCoverage"}
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRecheckRecipientAccountAndNotResurrectRevokedMembership"}
+OPEN_RECIPIENT_DATABASE {"schema":"opspilot-open-recipient-test","migration40":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRollbackWholePublicationWhenAuditFailsAfterActualInsert"}
+2026-10-10T17:12:08.222Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2026-10-10T17:12:08.223Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.298 s -- in org.trigger.opspilot.oncall.OnCallOpenHandoffRecipientIntegrationTest
+[INFO] Running org.trigger.opspilot.oncall.OnCallPlanMembershipIntegrationTest
+2026-10-10T17:12:08.229Z  INFO 48196 --- [opspilot] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.trigger.opspilot.oncall.OnCallPlanMembershipIntegrationTest]: OnCallPlanMembershipIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-10T17:12:08.234Z  INFO 48196 --- [opspilot] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.oncall.OnCallPlanMembershipIntegrationTest
+2026-10-10T17:12:08.237Z  INFO 48196 --- [opspilot] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-10T17:12:08.270Z  INFO 48196 --- [opspilot] [           main] .o.o.OnCallPlanMembershipIntegrationTest : Starting OnCallPlanMembershipIntegrationTest using Java 21.0.2 with PID 48196 (started by lenovo in D:\Codex\国网\央国企求职\OpsPilot)
+2026-10-10T17:12:08.270Z  INFO 48196 --- [opspilot] [           main] .o.o.OnCallPlanMembershipIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-10T17:12:08.878Z  INFO 48196 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-10T17:12:08.878Z  INFO 48196 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-10T17:12:08.897Z  INFO 48196 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17 ms. Found 0 Redis repository interfaces.
+2026-10-10T17:12:08.949Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2026-10-10T17:12:08.952Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection conn20: url=jdbc:h2:mem:opspilot-plan-membership-test user=SA
+2026-10-10T17:12:08.952Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2026-10-10T17:12:08.964Z  INFO 48196 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:opspilot-plan-membership-test (H2 2.2)
+2026-10-10T17:12:08.989Z  INFO 48196 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-10T17:12:08.990Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 40 migrations (execution time 00:00.024s)
+2026-10-10T17:12:08.990Z  INFO 48196 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-10T17:12:08.995Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-10T17:12:08.999Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-10T17:12:09.010Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-10T17:12:09.013Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-10T17:12:09.024Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-10T17:12:09.031Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-10T17:12:09.046Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-10T17:12:09.057Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-10T17:12:09.062Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-10T17:12:09.066Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-10T17:12:09.071Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-10T17:12:09.074Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-10T17:12:09.077Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-10T17:12:09.080Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-10T17:12:09.084Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-10T17:12:09.088Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-10T17:12:09.091Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-10T17:12:09.094Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-10T17:12:09.097Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-10T17:12:09.099Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-10T17:12:09.103Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-10T17:12:09.106Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-10T17:12:09.112Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-10T17:12:09.114Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-10T17:12:09.119Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-10T17:12:09.122Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-10T17:12:09.128Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-10T17:12:09.132Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-10T17:12:09.136Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-10T17:12:09.137Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-10T17:12:09.140Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-10T17:12:09.149Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-10T17:12:09.153Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-10T17:12:09.154Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-10T17:12:09.156Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-10T17:12:09.160Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-10T17:12:09.162Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-10T17:12:09.165Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-10T17:12:09.167Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-10T17:12:09.170Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "39 - oncall plan memberships"
+2026-10-10T17:12:09.173Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "40 - open handoff publication snapshots"
+2026-10-10T17:12:09.173Z  INFO 48196 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 40 migrations to schema "public", now at version v40 (execution time 00:00.065s)
+2026-10-10T17:12:09.339Z  INFO 48196 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-10T17:12:09.398Z  INFO 48196 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@34289043, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@728594e9, org.springframework.security.web.context.SecurityContextHolderFilter@7c77f8a9, org.springframework.security.web.header.HeaderWriterFilter@64d05e02, org.springframework.web.filter.CorsFilter@56598806, org.springframework.security.web.authentication.logout.LogoutFilter@6ca549d6, org.trigger.opspilot.security.JwtAuthenticationFilter@db3b170, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@44eb4740, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@22ad2191, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6947e7a9, org.springframework.security.web.session.SessionManagementFilter@768f6f7e, org.springframework.security.web.access.ExceptionTranslationFilter@24c39ce3, org.springframework.security.web.access.intercept.AuthorizationFilter@3980d430]
+2026-10-10T17:12:09.531Z  INFO 48196 --- [opspilot] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:opspilot-plan-membership-test'
+2026-10-10T17:12:09.541Z  INFO 48196 --- [opspilot] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-10T17:12:09.541Z  INFO 48196 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-10T17:12:09.541Z  INFO 48196 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2026-10-10T17:12:09.561Z  INFO 48196 --- [opspilot] [           main] .o.o.OnCallPlanMembershipIntegrationTest : Started OnCallPlanMembershipIntegrationTest in 1.325 seconds (process running for 29.066)
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRequireBothParticipantsInBothPlansForBilateralSwap"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldBlockOriginalRotationSlotsWithoutReassigningHistoryAndResumeOnlyMissingSlots"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRejectNewDesignatedAcceptanceButAllowDepartedTargetRejection"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait"}
+PLAN_MEMBERSHIP_LOCK_ORDER {"responsibilityMatchesCommitOrder":true,"databaseLockWaitObserved":true,"revocationFirst":false,"case":"shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRollbackRevocationAfterActualAuditInsertFails"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldDenyAnotherValidPlanAndPermitItsExplicitMemberControl"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRollbackFirstGrantAfterActualAuditInsertFails"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRetainAssignedCoverageAndOriginalClaimReceiptAfterMembershipRevocation"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRejectCrossPlanOrChangedKeyAndStaleOrOverflowedVersions"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldPermitOriginalManagerReceiptAfterOwnPlanManagementWasRevoked"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRequireResponseForManualOverridesAndManagementForCancellation"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldCommitOneImmutableReceiptForConcurrentOriginalCommands"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldNotWriteRotationWarningWhenManualScannerHasNoPlanManagement"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldSeparateManagementFromResponseAndKeepAdminRecoveryWithoutSelfClaim"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldFilterDepartedRequestersBeforeAvailableLimitAndAllowOwnWithdrawal"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait"}
+PLAN_MEMBERSHIP_LOCK_ORDER {"responsibilityMatchesCommitOrder":true,"databaseLockWaitObserved":true,"revocationFirst":true,"case":"shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRetainBadRotationTargetErrorContractAndRejectInvalidManagementTargets"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRejectMissingExpectedVersionButAcceptExplicitNullAndSerializeEffectivePermissions"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRecheckCurrentRoleAndNotResurrectRevokedMembershipWhenAccountIsRestored"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRollbackUpdateAfterActualAuditInsertFails"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRecordActualActorIpAndOldAndNewPermissions"}
+PLAN_MEMBERSHIP_DATABASE {"schema":"opspilot-plan-membership-test","migration39":true,"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldBackfillOnlyPreexistingOperationalUsersAndNeverEnrolNewPlansOrAccounts"}
+2026-10-10T17:12:10.255Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2026-10-10T17:12:10.256Z  INFO 48196 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+[INFO] Tests run: 22, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.029 s -- in org.trigger.opspilot.oncall.OnCallPlanMembershipIntegrationTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 60, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  41.553 s
+[INFO] Finished at: 2026-10-10T17:12:10Z
+[INFO] ------------------------------------------------------------------------

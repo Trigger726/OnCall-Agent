@@ -11,18 +11,25 @@ test('synthetic SQL equality shape rejects missing extra duplicated and half-com
   const expected=[{id:1,status:'CLAIMED',operations:1,audits:2,overrides:1},{id:2,status:'OPEN',operations:0,audits:1,overrides:0}];
   assertSqlRows(expected,expected);for(const actual of [expected.slice(0,1),[...expected,expected[0]],[expected[0],expected[0]],[{...expected[0],operations:0},expected[1]],[{...expected[0],audits:3},expected[1]]])assert.throws(()=>assertSqlRows(actual,expected));});
 test('migration evidence includes TABLE and both JDBC migrations without confusing history count with version',()=>{
-  const f=()=>({migrationCount:38,successfulHistoryRows:39,migration38:true,migration39:false,history:[{version:null,type:'TABLE',success:true},
+  const f=()=>({migrationCount:38,successfulHistoryRows:39,migration38:true,migration39:false,migration40:false,history:[{version:null,type:'TABLE',success:true},
     ...Array.from({length:38},(_,i)=>({version:String(i+1),type:[29,33].includes(i+1)?'JDBC':'SQL',success:true}))]});
   assertMigrations(f(),38);
   for(const mutate of [x=>x.migrationCount=39,x=>x.history.splice(29,1),x=>x.history[33].type='SQL',x=>x.history[38].success=false,x=>x.history[38].version='37',x=>x.migration38=false]){
     const x=f();mutate(x);assert.throws(()=>assertMigrations(x,38));}});
 test('current V39 requires all 39 exact versions and both explicit migration markers',()=>{
-  const f=()=>({actualProduct:'MySQL',migrationCount:39,successfulHistoryRows:39,migration38:true,migration39:true,
+  const f=()=>({actualProduct:'MySQL',migrationCount:39,successfulHistoryRows:39,migration38:true,migration39:true,migration40:false,
     history:Array.from({length:39},(_,i)=>({version:String(i+1),type:[29,33].includes(i+1)?'JDBC':'SQL',success:true}))});
   assertMigrations(f(),39);
   for(const mutate of [x=>x.migration39=false,x=>x.migration38=false,x=>x.history.pop(),x=>x.history[38].type='JDBC',x=>x.history[38].success=false,x=>x.migrationCount=38]){
     const x=f();mutate(x);assert.throws(()=>assertMigrations(x,39));}
   assert.throws(()=>assertMigrations(f(),40));
+});
+test('current V40 requires exact 40 versions and rejects missing markers or unexpected 41',()=>{
+  const f=()=>({actualProduct:'MySQL',migrationCount:40,successfulHistoryRows:40,migration38:true,migration39:true,migration40:true,
+    history:Array.from({length:40},(_,i)=>({version:String(i+1),type:[29,33].includes(i+1)?'JDBC':'SQL',success:true}))});
+  assertMigrations(f(),40);
+  for(const mutate of [x=>delete x.migration40,x=>x.migration40=false,x=>x.migration39=false,x=>x.history.pop(),x=>x.history[39].type='JDBC',x=>x.history[39].success=false,x=>x.migrationCount=39]){const x=f();mutate(x);assert.throws(()=>assertMigrations(x,40));}
+  assert.throws(()=>assertMigrations(f(),41));
 });
 test('own-source CI runs the full HTTP command and retains actual logs without archive mode',()=>{
   const yaml=fs.readFileSync(path.join(__dirname,'../../.github/workflows/ci.yml'),'utf8');

@@ -90,7 +90,7 @@ async function verify(mysql=configuration(process.env)) {
     result.cases.push({name:caseNames[0],before,oldMemberApi404:true,threeStates:true,cancelledOriginalReceipt:true});
     await start(jar);await accounts();assert.deepEqual(parts(await api(route(claimed.request.id)+'/claims',claimant,oldClaim)),cancelled);
     assert.deepEqual(parts(await api(route(withdrawn.request.id)+'/withdrawals',owner,oldWithdraw)),withdrawnReceipt);
-    await stop();const after=sql();assertMigrations(after,39);
+    await stop();const after=sql();assertMigrations(after,40);
     for(const key of ['shifts','shiftHash','designatedHash','swapHash','swapRevocationHash','onCallAuditHash','openRequestHash','openOperationHash','v38MigrationHash'])assert.equal(after[key],before[key]);
     assert.deepEqual(after.requests,before.requests);
     result.cases.push({name:caseNames[1],after,allOldBusinessRowsPreserved:true,all38MigrationChecksumsPreserved:true});
@@ -114,7 +114,7 @@ async function verify(mysql=configuration(process.env)) {
     await stop();const committed=sql();await start(jar);await accounts();
     assert.deepEqual(parts(await api(route(pending.request.id)+'/claims',claimant,newClaim)),newReceipt);
     assert.deepEqual(parts(await api(route(claimed.request.id)+'/claims',claimant,oldClaim)),cancelled);
-    await stop();const final=sql();assert.deepEqual(final,committed);assertMigrations(final,39);
+    await stop();const final=sql();assert.deepEqual(final,committed);assertMigrations(final,40);
     assert.deepEqual(final.requests.map(r=>r.status).sort(),['CLAIMED','CLAIMED','WITHDRAWN']);
     result.cases.push({name:caseNames[6],snapshotUnchanged:true,originalReceiptsUnchanged:true,final});
     assert.deepEqual(result.cases.map(r=>r.name),caseNames);result.status='PASS';

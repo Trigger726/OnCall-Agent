@@ -66,6 +66,7 @@ public class OpenHandoffSqlFixture {
             }
             boolean migrated = count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version='38' AND success=TRUE") == 1;
             boolean memberMigrated = count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version='39' AND success=TRUE") == 1;
+            boolean publicationMigrated = count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version='40' AND success=TRUE") == 1;
             var history = new ArrayList<String>();
             try (var statement = connection.createStatement(); var rows = statement.executeQuery("SELECT version,type,success FROM flyway_schema_history ORDER BY installed_rank")) {
                 while (rows.next()) history.add("{\"version\":" + quote(rows.getString("version"))
@@ -88,6 +89,8 @@ public class OpenHandoffSqlFixture {
             }
             String currentHash = migrated ? fingerprint(connection, "SELECT * FROM oncall_open_handoff ORDER BY id") : null;
             String operationHash = migrated ? fingerprint(connection, "SELECT * FROM oncall_open_handoff_operation ORDER BY handoff_id") : null;
+            long publicationRows = publicationMigrated ? count(connection, "SELECT COUNT(*) FROM oncall_open_handoff_publication") : 0;
+            String publicationHash = publicationMigrated ? fingerprint(connection, "SELECT * FROM oncall_open_handoff_publication ORDER BY handoff_id") : null;
             var members = new ArrayList<String>();
             if (memberMigrated) try (var statement = connection.createStatement(); var rows = statement.executeQuery("SELECT * FROM oncall_schedule_member ORDER BY schedule_id,user_id")) {
                 while (rows.next()) members.add("{\"scheduleId\":" + rows.getLong("schedule_id") + ",\"userId\":" + rows.getLong("user_id")
@@ -98,7 +101,8 @@ public class OpenHandoffSqlFixture {
                     + ",\"migrationCount\":" + count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE AND version IS NOT NULL")
                     + ",\"successfulHistoryRows\":" + count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE")
                     + ",\"history\":[" + String.join(",", history) + "]"
-                    + ",\"migration38\":" + migrated + ",\"migration39\":" + memberMigrated + ",\"shifts\":" + count(connection, "SELECT COUNT(*) FROM oncall_shift")
+                    + ",\"migration38\":" + migrated + ",\"migration39\":" + memberMigrated + ",\"migration40\":" + publicationMigrated
+                    + ",\"publicationRows\":" + publicationRows + ",\"publicationHash\":" + quote(publicationHash) + ",\"shifts\":" + count(connection, "SELECT COUNT(*) FROM oncall_shift")
                     + ",\"shiftHash\":" + quote(fingerprint(connection, "SELECT * FROM oncall_shift ORDER BY id"))
                     + ",\"designatedHash\":" + quote(fingerprint(connection, "SELECT * FROM oncall_handoff ORDER BY id"))
                     + ",\"swapHash\":" + quote(fingerprint(connection, "SELECT * FROM oncall_shift_swap ORDER BY id"))

@@ -79,7 +79,7 @@ class MySqlPlanMembershipUpgradeHttpIntegrationTest {
                         "members","SELECT COUNT(*) FROM oncall_schedule_member","memberOperations","SELECT COUNT(*) FROM oncall_schedule_member_operation").entrySet()) {
                     try(var rows=statement.executeQuery(entry.getValue())){assertThat(rows.next()).isTrue();counts.put(entry.getKey(),rows.getLong(1));}
                 }
-                assertThat(counts).containsExactlyInAnyOrderEntriesOf(Map.of("versionedMigrations",39L,"requests",3L,"claimed",2L,"withdrawn",1L,"operations",3L,"members",6L,"memberOperations",2L));
+                assertThat(counts).containsExactlyInAnyOrderEntriesOf(Map.of("versionedMigrations",40L,"requests",3L,"claimed",2L,"withdrawn",1L,"operations",3L,"members",6L,"memberOperations",2L));
                 audit.put("finalJdbcCounts",counts);
             }
             audit.put("nodeConnections",connections);audit.put("recordedJvmPidsVerifiedAbsent",true);audit.put("twoScopedPortsVerifiedFree",true);

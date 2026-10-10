@@ -9,7 +9,7 @@ function verify(log,xml,result,jarLogs,mysql=true){const name=mysql?suite:suite.
  assert.match(xml,/name="shouldVerifyCurrentMembershipAndOriginalReceiptsAcrossTwoIndependentJvms"/);assert.match(log,/\[INFO\]\s+BUILD SUCCESS/);
  assert.doesNotMatch(log,/(?:^|\s)(?:ERROR|\[ERROR\])(?:\s|$)|Surefire is going to kill/im);assert.equal(result.status,'PASS');assert.match(result.jarSha256,/^[a-f0-9]{64}$/);
  assert.equal(result.database.product,mysql?'MySQL':'H2');if(mysql){assert.match(result.database.version,/^8\.4\./);assert.match(result.database.schema,/^opspilot_member_cross_[a-f0-9]{12}$/);assert.match(result.database.serverUuid,/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/);}
- else assert.equal(result.database.schema,'owned-h2-tcp');assert.equal(result.versionedMigrations,39);assert.deepEqual(result.cases.map(c=>c.name),caseNames);
+ else assert.equal(result.database.schema,'owned-h2-tcp');assert.equal(result.versionedMigrations,40);assert.deepEqual(result.cases.map(c=>c.name),caseNames);
  const facts=[['sameOriginalOperation','oneReceipt','oneAudit'],['claim403','management403','originalOperationRetained','changedAndCrossPlanKey409','staleVersion409','noWrites'],
  ['statusLine200BeforeSocketClosed','bodyNotRead','cancelledCoverageNotRevived','snapshotUnchangedAfterRestartAck'],
  ['ownOriginalKey200','newManagement403','bothOldJwtAfterRoleLoss403','roleRestorationDoesNotRestorePlanManagement'],
@@ -25,7 +25,7 @@ function verify(log,xml,result,jarLogs,mysql=true){const name=mysql?suite:suite.
  for(const [i,text] of jarLogs.entries()){assert.equal(result.pools[i].pid,result.startedPids[i]);assert.equal(result.pools[i].file,'jar-'+(i+1)+'.log');assert.equal(result.pools[i].completePoolShutdown,true);
  const start='HikariPool-1 - Start completed.',stop='HikariPool-1 - Shutdown completed.';assert.equal(text.split(start).length,2);assert.equal(text.split(stop).length,2);assert.ok(text.indexOf(stop)>text.indexOf(start));assert.equal(unexpectedLogLines(text),0);
  assert.ok(text.includes(mysql?'/'+result.database.schema+' (MySQL 8.4)':'jdbc:h2:tcp://127.0.0.1:'));}
- return {status:'PASS',suite:counts,httpCases:6,database:result.database,threeJvmLifecycles:true,twoLiveApplicationJvms:true,versionedMigrations:39,
+ return {status:'PASS',suite:counts,httpCases:6,database:result.database,threeJvmLifecycles:true,twoLiveApplicationJvms:true,versionedMigrations:40,
   allPoolsAndOwnedDatabaseStopped:true,finalSql:result.finalSql,crossMachineOrHaVerified:false,membershipUiVerified:false};
 }
 module.exports={verify,suite,caseNames};

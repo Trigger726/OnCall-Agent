@@ -18,6 +18,8 @@ import java.util.UUID;
 
 @Service
 public class OnCallPlanMembershipService {
+    // The same current plan/account qualification is shared by claims and notification candidates.
+    static final String RESPONSE_ELIGIBILITY = "m.active=TRUE AND m.can_respond=TRUE AND u.status='ACTIVE' AND u.role_code IN ('ADMIN','OPS_MANAGER','ON_CALL')";
     private final JdbcClient jdbc;
     private final AuditService audit;
 
@@ -102,9 +104,8 @@ public class OnCallPlanMembershipService {
     void requireResponder(long schedule, long user) {
         if (jdbc.sql("""
                 SELECT m.user_id FROM oncall_schedule_member m JOIN sys_user u ON u.id=m.user_id
-                WHERE m.schedule_id=:schedule AND m.user_id=:user AND m.active=TRUE AND m.can_respond=TRUE
-                  AND u.status='ACTIVE' AND u.role_code IN ('ADMIN','OPS_MANAGER','ON_CALL') FOR UPDATE
-                """).param("schedule", schedule).param("user", user).query(Long.class).optional().isEmpty())
+                WHERE m.schedule_id=:schedule AND m.user_id=:user AND %s FOR UPDATE
+                """.formatted(RESPONSE_ELIGIBILITY)).param("schedule", schedule).param("user", user).query(Long.class).optional().isEmpty())
             throw new ApiException(HttpStatus.FORBIDDEN, "ONCALL_PLAN_RESPONSE_FORBIDDEN", "当前用户没有此计划的响应权限");
     }
 
