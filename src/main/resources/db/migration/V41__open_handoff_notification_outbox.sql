@@ -1,0 +1,26 @@
+CREATE TABLE oncall_open_handoff_notification (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    handoff_id BIGINT NOT NULL,
+    event_version INT NOT NULL,
+    recipient_id BIGINT NOT NULL,
+    delivery_key VARCHAR(36) NOT NULL,
+    payload_json TEXT NOT NULL,
+    status VARCHAR(16) NOT NULL DEFAULT 'PENDING',
+    version INT NOT NULL DEFAULT 0,
+    attempts INT NOT NULL DEFAULT 0,
+    next_attempt_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    lease_token VARCHAR(36),
+    lease_until TIMESTAMP(6),
+    last_http_status INT,
+    last_error_code VARCHAR(64),
+    delivered_at TIMESTAMP(6),
+    created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    CONSTRAINT uq_open_notification_event UNIQUE (handoff_id,event_version,recipient_id),
+    CONSTRAINT uq_open_notification_key UNIQUE (delivery_key),
+    CONSTRAINT fk_open_notification_publication FOREIGN KEY (handoff_id) REFERENCES oncall_open_handoff_publication(handoff_id),
+    CONSTRAINT fk_open_notification_recipient FOREIGN KEY (recipient_id) REFERENCES sys_user(id),
+    CONSTRAINT ck_open_notification_event CHECK (event_version=0),
+    CONSTRAINT ck_open_notification_status CHECK (status IN ('PENDING','CLAIMED','DELIVERED','FAILED','SKIPPED')),
+    CONSTRAINT ck_open_notification_attempts CHECK (attempts>=0 AND version>=0)
+);
+CREATE INDEX idx_open_notification_due ON oncall_open_handoff_notification(status,next_attempt_at,lease_until);

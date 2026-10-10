@@ -68,6 +68,7 @@ public class OpenHandoffSqlFixture {
             boolean migrated = count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version='38' AND success=TRUE") == 1;
             boolean memberMigrated = count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version='39' AND success=TRUE") == 1;
             boolean publicationMigrated = count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version='40' AND success=TRUE") == 1;
+            boolean notificationMigrated = count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version='41' AND success=TRUE") == 1;
             var history = new ArrayList<String>();
             try (var statement = connection.createStatement(); var rows = statement.executeQuery("SELECT version,type,success FROM flyway_schema_history ORDER BY installed_rank")) {
                 while (rows.next()) history.add("{\"version\":" + quote(rows.getString("version"))
@@ -108,6 +109,9 @@ public class OpenHandoffSqlFixture {
                     + ",\"successfulHistoryRows\":" + count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE")
                     + ",\"history\":[" + String.join(",", history) + "]"
                     + ",\"migration38\":" + migrated + ",\"migration39\":" + memberMigrated + ",\"migration40\":" + publicationMigrated
+                    + ",\"migration41\":" + notificationMigrated
+                    + ",\"notificationRows\":" + (notificationMigrated ? count(connection,"SELECT COUNT(*) FROM oncall_open_handoff_notification") : 0)
+                    + ",\"notificationHash\":" + quote(notificationMigrated ? fingerprint(connection,"SELECT * FROM oncall_open_handoff_notification ORDER BY id") : null)
                     + ",\"publicationRows\":" + publicationRows + ",\"publicationHash\":" + quote(publicationHash) + ",\"shifts\":" + count(connection, "SELECT COUNT(*) FROM oncall_shift")
                     + ",\"publications\":[" + String.join(",", publications) + "]"
                     + ",\"shiftHash\":" + quote(fingerprint(connection, "SELECT * FROM oncall_shift ORDER BY id"))

@@ -1,0 +1,778 @@
+{
+  "status": "LOCAL_OPEN_NOTIFICATION_22_REAL_HTTP_PASS_OWN_MYSQL_AND_JAR_RUNTIME_PENDING",
+  "parent": "83a6842f2218427fa4de401ff0f3af40d96f9b97",
+  "sourceFiles": [
+    {
+      "file": ".github/workflows/plan-membership-wip.yml",
+      "sha256": "a9fca54edd9d054f89a18dbec2fdd63a82a6e8437d5d2175ab67efbac4b03b0c"
+    },
+    {
+      "file": "docs/acceptance/V1.7-checkpoint-116.md",
+      "sha256": "a3ae309f4a41977d33ca62bc86478d0a9110406bf99606988f0fa10e6438132e"
+    },
+    {
+      "file": "docs/acceptance/V1.7-checkpoint-117.md",
+      "sha256": "7eeb8731f71611bc0e1c81b95d00bb726215aea96346728137605589a6ad0eaf"
+    },
+    {
+      "file": "scripts/tests/oncall-membership-regression-workflow.test.cjs",
+      "sha256": "21f7d155870775c9b3f343dda0afc06f19dc4b747c66fd222cdb34fd85669051"
+    },
+    {
+      "file": "scripts/tests/oncall-open-handoff-recipients.test.cjs",
+      "sha256": "b0361a621e1e43a02c2e8e79d1f8bca4c41a4662d81583fe7c1518aa1b44d142"
+    },
+    {
+      "file": "scripts/tests/oncall-open-notifications.test.cjs",
+      "sha256": "2e128a09ebe213a69ded2f65b31c688b15b375ad0b2bbcfb4f5c178103c22b50"
+    },
+    {
+      "file": "scripts/tests/oncall-open-publication-upgrade.test.cjs",
+      "sha256": "51c501a3492b70b99627909af5196d09571af6a3bf57263cf9aedfa77f7c2d0c"
+    },
+    {
+      "file": "scripts/tests/oncall-plan-membership-cross-node.test.cjs",
+      "sha256": "2b164d10468bcc0499b83f5a8ddf91cac297c75ec73fc66884afe5f4c5bea913"
+    },
+    {
+      "file": "scripts/tests/oncall-plan-membership-upgrade-mysql.test.cjs",
+      "sha256": "17a6106b37815741a8c6c583f4ffdaf087458c8a10f81ed60a940152ad2478ba"
+    },
+    {
+      "file": "scripts/verify-oncall-open-handoff-recipients.cjs",
+      "sha256": "990f1491479f0342d30e503ae49f2fad52e08c088082bff6b3b72f09f2aa65fb"
+    },
+    {
+      "file": "scripts/verify-oncall-open-notifications.cjs",
+      "sha256": "9579b1ed4735482dcc38728202f992162468ff247e44efc699ef101e6c0de029"
+    },
+    {
+      "file": "scripts/verify-oncall-open-publication-upgrade-evidence.cjs",
+      "sha256": "9910a30950f2a4b1a1244e44ec9a6f920648f62f610d27efd270b59350cab067"
+    },
+    {
+      "file": "scripts/verify-oncall-open-publication-upgrade-http-ci.cjs",
+      "sha256": "f7c42bf3a1f1487167e9e66e1e3f2aee03bfc69d1d88b1d01f88956c4d1eb7d4"
+    },
+    {
+      "file": "scripts/verify-oncall-open-publication-upgrade-mysql.cjs",
+      "sha256": "26bdbc2e66c429f65986dab2bea11f9b4b472111f14cb3294e8de07872b1cbdd"
+    },
+    {
+      "file": "scripts/verify-oncall-plan-membership-cross-node.cjs",
+      "sha256": "adf5e39b455ec8a9eb6af4fb90e1b6befdadf8e446354301e99322940428d151"
+    },
+    {
+      "file": "scripts/verify-oncall-plan-membership-upgrade-http-ci.cjs",
+      "sha256": "041487a283f4f3847f05fafff1e5d3fb72255dc1869dc789628939949d5ccbf3"
+    },
+    {
+      "file": "scripts/verify-oncall-plan-membership-upgrade-mysql.cjs",
+      "sha256": "339a47d8f538cda25aaa659d32fc1d55da63b295c54dcf15434a6cf87fcaf82b"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallOpenHandoffRecipients.java",
+      "sha256": "f61a0492257e073770082d72f2c5a83b53d1fcd72c55bc7578871d24663e6217"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallOpenNotificationJob.java",
+      "sha256": "6fb03e1cdd22786a552468f949a8082bbe5ed599e0aee5b225b816200f12370e"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallOpenNotificationProperties.java",
+      "sha256": "c2b9a6c6c49deed87347b7bcb83d17d8d1734590426b9900fe93b07a8d172468"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallOpenNotifications.java",
+      "sha256": "3bc3a393a5c79e06478e363f92cf0fbdd61528248b5ecfc6988d5d03d61f2732"
+    },
+    {
+      "file": "src/main/resources/db/migration/V41__open_handoff_notification_outbox.sql",
+      "sha256": "a38f978b526942debd7c47ece0a767b9be1828bd3d11d8cac3ed9f2e058b611e"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/MySqlOnCallOpenNotificationIntegrationTest.java",
+      "sha256": "889f9c7850eabac132b874ceab0c35c930780d782a5663e1d05871afa176dad5"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/MySqlOpenPublicationUpgradeHttpIntegrationTest.java",
+      "sha256": "d0cbb24839e27f4f13b37233a615be72f849483b5257ae5cae8ccc2f0828f9e9"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/MySqlPlanMembershipUpgradeHttpIntegrationTest.java",
+      "sha256": "b0ad076e0a09d9c1187093b3eedce400f9628b5a7c9b2af6fcee8ace0f5de120"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OnCallOpenNotificationConfigurationTest.java",
+      "sha256": "eb5967c0248eec665afa56c649953d5e2f685db68ab10cb8696b03e681450ffb"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OnCallOpenNotificationIntegrationTest.java",
+      "sha256": "749cac3c54d9e3d14fbac322fb5d29e13829b372635daa80340cbe064163fb8f"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OpenHandoffRecipientScenarios.java",
+      "sha256": "a182c63f76e9cc82488da06986d596ee68fec3b0b4accf24fbcde18cd852bd42"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OpenNotificationScenarios.java",
+      "sha256": "61a438ad7605825f76eaba06c79f1d9346171752cabc88068f7261af15ad17b5"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/PlanMembershipCrossNodeScenarios.java",
+      "sha256": "f201b18e2e49fc1c08b4675e42adfb7663a01170ee66c1979449f3a8faa773d8"
+    },
+    {
+      "file": ".gitattributes",
+      "sha256": "e50fd69549321de7bd6a9cc1fd7e12cf87032064064386832c9750c99a8da781"
+    },
+    {
+      "file": "README.md",
+      "sha256": "783d7445fdc9b78e0f2d9867b3c4030a4bb069d1abda49763c48a79df85bc672"
+    },
+    {
+      "file": "docs/ONCALL_PLAN_MEMBERSHIP_DESIGN.md",
+      "sha256": "a5e9f8a144ba560dbfb254a1a20dc9b1a0b2ec5361825282fc6bd28fa0e9e2e9"
+    },
+    {
+      "file": "docs/ROADMAP.md",
+      "sha256": "8ece3740473385d501d425547e3a7a2b50ceb0fab8ea48df5e493b555f041c84"
+    },
+    {
+      "file": "docs/acceptance/README.md",
+      "sha256": "e4270d6ae5c5c879fb2755293bc8a3c008c7c7112ad12573a983703874895642"
+    },
+    {
+      "file": "scripts/fixtures/OpenHandoffSqlFixture.java",
+      "sha256": "5f152093f6fb7e9934140c777c7d177bdf89ee4a47edf7df4f1f201c2d7eb619"
+    },
+    {
+      "file": "scripts/tests/oncall-open-handoff-mysql.test.cjs",
+      "sha256": "6090cacb5c8d0fa0008fc6608c3640513be21e78eb85fa7147c846378619ef87"
+    },
+    {
+      "file": "scripts/tests/oncall-open-handoff-upgrade-mysql.test.cjs",
+      "sha256": "dd2a457abf4c91f8d97fb8be195fcd68cdaa6eb276e4797ec2e51860f1e3159a"
+    },
+    {
+      "file": "scripts/verify-oncall-open-handoff-http-ci.cjs",
+      "sha256": "b3ef0eca4fe6cd148f79c59507d01d486cf999ec5d5451473fd8f002ef40820d"
+    },
+    {
+      "file": "scripts/verify-oncall-open-handoff-mysql.cjs",
+      "sha256": "0c9fe79df02c59abbe5d5434cf97b201813ef9347b64dbf9a8c98b5d2e9ad893"
+    },
+    {
+      "file": "scripts/verify-oncall-open-handoff-upgrade-mysql.cjs",
+      "sha256": "1dc369ec8a5a466995953432537bbcfce6580543b4c4ea70a1a62fd0fcd202f3"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/OpsPilotApplication.java",
+      "sha256": "d4ee6059f06b3ef0dd7c9c2172df8a2f134063fa15d99eab2b6f26b49c4e094a"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallOpenHandoffController.java",
+      "sha256": "8101bda3cd6769325a7517b0e1e6f1ef12265d5dcdb2a4e238ed3c26ca0b3237"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallOpenHandoffService.java",
+      "sha256": "c7e6110bfe0206283ca3dc02c1703ae2d5bc2b92dda8615e01293c903dd16587"
+    },
+    {
+      "file": "src/main/resources/application.yml",
+      "sha256": "0f42874650cbc1c3d993beae4f5a1b3b4f8f95bf2001e0e6ecc5fe8c7c2a6cb4"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/MySqlOpenHandoffUpgradeHttpIntegrationTest.java",
+      "sha256": "d05010835d7f40ba79101bbf8e476c20f01b5e9bc9e8aacefd32692b9b39d8d7"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OpenHandoffScenarios.java",
+      "sha256": "b8ca3ef37e2502d3f387fa1b5c93ae7656d2b1fd90431b1437794cdffbe3a7fe"
+    }
+  ],
+  "files": [
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-ci-status.json",
+      "sha256": "adfdcce20cdcb60df29acbafda84d797a35d1b47b02550607e368c1909a98fac"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/cp116-v39-source/old-v39-jar-provenance.json",
+      "sha256": "9fb495b8f84036922707d8709e97a543a2314d23c2546a146bb84f64135ce763"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/oncall-open-publication-upgrade-mysql-it/audit-3da85c23-2a7c-43cc-8a00-5971d929883e/audit.json",
+      "sha256": "a608117e9b6502a15b1bdf1aa5ce81ce7665bced1ce34e008ab4bf6377e3ac77"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/oncall-open-publication-upgrade-mysql-it/audit-3da85c23-2a7c-43cc-8a00-5971d929883e/runner.log",
+      "sha256": "e0786ef578648979b725391c2f8565dcc7c1f468374cf42608ac62d984b66b32"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/oncall-open-publication-upgrade-mysql-it/maven.log",
+      "sha256": "ae24791830d19429a8001a546360dc4525b0913e405ccaf527950c42409c6b49"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/oncall-open-publication-upgrade-mysql-it/result.json",
+      "sha256": "6574f501d57af71a2e744e4708aa2a4abe67b210823929e091d4fdc6d2df2bef"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/oncall-open-publication-upgrade-mysql-it/run-pMjP27/jar-1.log",
+      "sha256": "708f059b5aa35a6acd61344fae49d1c27f562aa254d74180679547cc2fedf210"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/oncall-open-publication-upgrade-mysql-it/run-pMjP27/jar-2.log",
+      "sha256": "e8e24753223af64132d93d7e86ce9c4505e36f7d63085bbb7f19f0a1984f3994"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/oncall-open-publication-upgrade-mysql-it/run-pMjP27/jar-3.log",
+      "sha256": "6592d85aac75558dfa0d18cbff22f2f48d877726ca1887d675450f8deaf6ce68"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/oncall-open-publication-upgrade-mysql-it/run-pMjP27/jar-4.log",
+      "sha256": "5f15c6b1ab3966352ca8c3a783325102acc162658459ae9f4cd4ba161732377c"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/oncall-open-publication-upgrade-mysql-it/run-pMjP27/result.json",
+      "sha256": "67d4831607e189a370b09067f21bdf666430f7f27056a83b026c13ba478ec393"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/oncall-open-publication-upgrade-mysql-it/run-pMjP27/sql-0.log",
+      "sha256": "24a7f994dbc72a48376c65095ee74d2d6b4de9e2f7d3050d8b335bb82d8b19b9"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/oncall-open-publication-upgrade-mysql-it/run-pMjP27/sql-1.log",
+      "sha256": "0558920d8d3a92dd057d9ca521505f2a7e5490c12666152f72aff74584ee5d3d"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/oncall-open-publication-upgrade-mysql-it/run-pMjP27/sql-2.log",
+      "sha256": "e55165253fac52b644f12797bce01a4b6f4a306261c015449a54b0fbd8ae396f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/oncall-open-publication-upgrade-mysql-it/run-pMjP27/sql-3.log",
+      "sha256": "e55165253fac52b644f12797bce01a4b6f4a306261c015449a54b0fbd8ae396f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-publication-upgrade/surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOpenPublicationUpgradeHttpIntegrationTest.xml",
+      "sha256": "5f207333cadb8fcb72bc07cf3dfdd2b94ba952d34255f621ea6cc6a8dd7e0474"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/cp116-upgrade-remote-proof.json",
+      "sha256": "e594eb1a109a60259aaede9fa82150b9c38ae7f4ef82d154aaee5e73bad4277a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.alert.AlertmanagerRejectionLifecycleIntegrationTest.xml",
+      "sha256": "8f477b20de941026b1c8bb4e5490e1a5ba5e7a0b6b4466edebd34d0d67d31616"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.alert.AlertmanagerWebhookDisabledIntegrationTest.xml",
+      "sha256": "6894afa2964bb9c7dd0e1c1b041e449c175408c557939d27514e5f5753491b91"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.alert.AlertmanagerWebhookIntegrationTest.xml",
+      "sha256": "409ddcb49b7ab1df282c4d40badb36e3899655c8fe2e9f1cbd9382d8a67ba2f6"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.analytics.IncidentAnalyticsIntegrationTest.xml",
+      "sha256": "6a30d6956293045c486b28901652834c68e326dd91fbd645bd5d49e721d4a389"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.assistant.AssistantAiStreamingTest.xml",
+      "sha256": "fc2272403ab698bbf31fc53d6505e1826ced4f80f34e48378a7a3c3241b75d18"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest.xml",
+      "sha256": "2be575e463094a715db1ad4f7865eb840cdcbf0ed803c4dd5b25591c5272b5e9"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.assistant.AssistantExecutionManagerTest.xml",
+      "sha256": "2227709a3f9af5de576674076cdbbc7b97bf38c41280ec00301ca9c5e5f9402e"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest.xml",
+      "sha256": "9844b85d02c261af516720eb5adceffcc485b7a14eb8ac5e98f5625820d28954"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.assistant.AssistantNativeHttpClientTest.xml",
+      "sha256": "bcec6902247eadbc2ba581aaeb577cab8ba3fa4031031af24d2c04a216de9960"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest.xml",
+      "sha256": "a8193e4c06f7c7feb2edba5e2d9eced0567f1655f727dfc394f93f7de29a3e2e"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.assistant.AssistantNativeTransportTest.xml",
+      "sha256": "200e4f172f1c22b9b617a9b6bc64451d431a34cc9362fa827eeb2bc3280b37a2"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.assistant.AssistantSessionRevocationIntegrationTest.xml",
+      "sha256": "ad98dd8847ff910f1ba2a3eb354afbe9600e0cf59102cbc6fbc1bf3bf4c8fcf4"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.assistant.AssistantStreamReaderTest.xml",
+      "sha256": "0868bebefe68190d373b87e618e8b3463dcefb8ff2073eba76e8ddff90fa3ee2"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.assistant.AssistantStreamTransportTest.xml",
+      "sha256": "e202f42c361df6ef93a51356057d4fac3c7f391e2768f25b828b40e836357ac7"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest.xml",
+      "sha256": "abe41ce537c2d1c63151858d80928204ea12d88c113513a610c26ecc6dcdc661"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.common.GlobalExceptionHandlerDisconnectTest.xml",
+      "sha256": "a35d15ceaf859ef9b16ca89013cd84b5628b1fe817029eaa8f07d83f8aa10965"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.common.GlobalExceptionHandlerStreamResponseTest.xml",
+      "sha256": "35d85f656fc5b1a6b54f84f2e8d02d705c1a02ec043bcc90afd8f87fe9698569"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.distributed.DistributedAgentEventsIntegrationTest.xml",
+      "sha256": "0cef88d3c87b7b836d999298152740fde1ce762f2cbce54b0fba336b5a949208"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.incident.IncidentStatusTest.xml",
+      "sha256": "199e7b032c75f87d5696158e1e3eee8abbad9fe2e3e864a044793c02e0a22d87"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.investigation.AgentEventReceiverTest.xml",
+      "sha256": "5fd032291c5e77a9665e6afbc48f38d15327ea2140b7fc0d680e613a69344f98"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.investigation.AgentEventStreamIntegrationTest.xml",
+      "sha256": "7f0caa7cc1e79b7c4ffd2953cf2263d66207608d8221032dd979ab1c49b296e7"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.investigation.AgentEventSubscriptionsTest.xml",
+      "sha256": "00d925fc6202f992c2ea4b47dc0c0ed6402469e5bff845b24358677d7c4ed9ad"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.investigation.AgentEventTransactionIntegrationTest.xml",
+      "sha256": "90178addab5f28f166c04508e2fdffbe22739890911993ae5ff7167f25fa4327"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.investigation.AgentExecutionManagerTest.xml",
+      "sha256": "f042e69511c2ba44d040c2c2234e7ca5ddf4d3bb5730faacca00148ebc49c39b"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.investigation.AgentRunCancellationIntegrationTest.xml",
+      "sha256": "b4dd57fe7ea2f98039f888bbd64f54b4908b16dc4b82c56eb5401216297cf53b"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.investigation.AgentRunRecoveryIntegrationTest.xml",
+      "sha256": "76a9de36e17ae8a21a8ac2f28ccbfc5e88f79f69004a7e624ec672b4bd2aebe2"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.investigation.AgentSessionRevocationIntegrationTest.xml",
+      "sha256": "596bce9e799781002739ed5f8dd3d9de8bb31b895e573d42d0ed5ffe6c802e4c"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.investigation.InvestigationControllerDisconnectTest.xml",
+      "sha256": "e88621e96eed73949dafcf3c12dd5522fd2fce8791ac1efb9d3e4ac7873a2d42"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.investigation.RedisRelayIntegrationTest.xml",
+      "sha256": "27cefab375bae8d6a3f46d854c32e88f9a679f2ab029b5e06d283f8866603348"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.MySqlCompatibilityIntegrationTest.xml",
+      "sha256": "4027043412abd85a1be733cafd944ed586e246d6da7199a8ea1be8e0c3b29d80"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.observability.LogRedactorTest.xml",
+      "sha256": "7add92452a153b674564347e3c3795dcfa9b0479eba215efea9d9b111d9c8896"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.observability.logs.LogsProviderRouterTest.xml",
+      "sha256": "df869aaa838618c24a72855254c393542cea1a129d9f2592dd9a442e18f48eda"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.observability.logs.LokiLogsProviderContractTest.xml",
+      "sha256": "0611ea748ff890ef7b26755c72035434644f47ab991fd572360ea6b2687a3234"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.observability.metrics.PrometheusMetricsProviderContractTest.xml",
+      "sha256": "5a0c917fc02ad5c2556133701efc89791b3607f2a0974a315a8893d31630a1b2"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.observability.ProviderGuardTest.xml",
+      "sha256": "0a86d1112bb1cace63741f69c40e3d6cc5ef89cc0dcd6833330d14ea8e74e5df"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.observability.tracing.AgentTraceIntegrationTest.xml",
+      "sha256": "97657bf8b9190361b28933620b3f8279dc6d254a529eff39795d2c33c1eee363"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.observability.tracing.HttpTracePropagationIntegrationTest.xml",
+      "sha256": "26ab834a35728aae9febde6ca1b6a9724fbb36fb7ea7ed9f50a75716dd4a354e"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.observability.tracing.OpenTelemetryBridgeTest.xml",
+      "sha256": "c5b6de1b9d55b65c58412a6fc09769ea5f176ce6373a6de3474535062d4a64f3"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.observability.tracing.OpsPilotTracingTest.xml",
+      "sha256": "ee2c1040915e9a48074857ac4ad24572bc36d8e91e3cf91d182be6e5892db2b8"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.IncidentEscalationIntegrationTest.xml",
+      "sha256": "dfd1d98770b2e94ede8c4d652280a1c6e72c8672f305571395b5783d321125f5"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest.xml",
+      "sha256": "750304a5461f1535a33698d2943ca731ed1dfd2751d98294d7078d5a30dd175b"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest.xml",
+      "sha256": "2ac097989f421d71f10d9f790763741d443bb1c7baf3165b4351b82cee9181c2"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOnCallOpenHandoffIntegrationTest.xml",
+      "sha256": "f67d5ff35a9003708593956b4f780ea025603f507cef0bfc09f62bc45da7c29e"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOnCallOpenHandoffRecipientIntegrationTest.xml",
+      "sha256": "33311d148d2e51e5202432a7cf3a0a289ec7c0210963420595f13b2ab760ab2b"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOnCallOpenNotificationIntegrationTest.xml",
+      "sha256": "e897ef893007e53eecbd9b49a42adfc68eaca4121bec7dbb606c3d922d6be231"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipCrossNodeIntegrationTest.xml",
+      "sha256": "030160c0925713da8982f57c0878b9ca8d75f30ff7ea91eff5e2f0eabde5d645"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest.xml",
+      "sha256": "b52390a5568b01ae54111e414cecc74742b874d940edbe99aad71fd517715674"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest.xml",
+      "sha256": "daeb9698b881b8b0018fe184cc0666406ac23ce89b1a1fb39e6bf87fe4e9f106"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest.xml",
+      "sha256": "901c4134a918bed00f037d2e98d4d8ab902f18d813139bf2f6502565e3c183d3"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOnCallSwapIntegrationTest.xml",
+      "sha256": "dd6cda0140357df6aceae091da293deb3100c2186dcef2b6d957c2dceba108eb"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationIntegrationTest.xml",
+      "sha256": "2a33124d4588a4d3b3b286aadcdd4ec4ad05e57e13423dc38d7ed711d47ecd12"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationMigrationTest.xml",
+      "sha256": "c4579358f69377c49c19916e754e3e4d9614a6b61b25ce728979ea73d7e5ae39"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOnCallSwapRevocationIntegrationTest.xml",
+      "sha256": "3c851eb1b481983a20dd695b3257f9708dd89453114a4b2d919c3b39194b5d09"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOpenHandoffUpgradeHttpIntegrationTest.xml",
+      "sha256": "b87aea4f6d6ea1a47018c1536be8a6054a641f3e712b7982936d5e6d599db479"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlOpenPublicationUpgradeHttpIntegrationTest.xml",
+      "sha256": "4b813b907dd7b56fd4b245b0ea33a4f1788f848cbbc3f9dc56586ce0f160e528"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.MySqlPlanMembershipUpgradeHttpIntegrationTest.xml",
+      "sha256": "17765917ccb137c9e1f6ce55fcad2850945e3889e1491af4101c2b7ad456dff2"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallCoverageIntegrationTest.xml",
+      "sha256": "936c9e389bbfa0ed1d7113a36fd648fc091412c872f341e3ef1f723242374785"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallHandoffIntegrationTest.xml",
+      "sha256": "d5b57047303bbb8b3ac89eb32984845d3f5733d7e5b4f104c2a88b46beba397a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallOpenHandoffIntegrationTest.xml",
+      "sha256": "93a0a7e9fd70ec6cb519d176d5ce9de5a87774d21653692620995dc3baf38205"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallOpenHandoffRecipientIntegrationTest.xml",
+      "sha256": "739300beb75cb85d961c5a5a6f2a298f1c3010e6f29b92861d6ae7e420f69047"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallOpenNotificationConfigurationTest.xml",
+      "sha256": "741663926a2240b9eebadc109f9e7b1388a0f3ef211afd5d03e5ee47f8125bc3"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallOpenNotificationIntegrationTest.xml",
+      "sha256": "1780e82bd201cea93e9b1a30a9a8d721ad6ed31be8894065c2c2ea0615c995a6"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallPlanMembershipCrossNodeIntegrationTest.xml",
+      "sha256": "a3ff3c82e6d8ee6513ebeec6d47ee466caf83a0a1bc7ffb479eb90b415b075af"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallPlanMembershipIntegrationTest.xml",
+      "sha256": "aeb8739b662eb1caab450cd88074ba1cb8dfacbceae49ec666cefe419b45d098"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallRosterIntegrationTest.xml",
+      "sha256": "6737c3fb9d22a736b57e94a7aeac6b56a86f5572a073c8550d6666dd4be6fa4a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallRotationIntegrationTest.xml",
+      "sha256": "e6b6b8cd3591c25b7454ea7fecdc6efec293e595461b3c39eb94840292afd3a5"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallRotationJobIntegrationTest.xml",
+      "sha256": "b7d732bb501d1981c8d423bb0c529404723b99a6be9c6c02b71361fe6d1b94f8"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallRoutingSnapshotIntegrationTest.xml",
+      "sha256": "ad51d7ed9ad61ed17b0f5de02fda321758f145a09922523e95e8533c29df35d2"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallSwapIntegrationTest.xml",
+      "sha256": "83950260dc3882bcfd5f697aafa500c88062ca8f6959c1b5faccd2111edb040f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallSwapNotificationIntegrationTest.xml",
+      "sha256": "724d16788ec4919b0c6e67d933098340025b4d39056325113b15b5bd49c10a6b"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallSwapNotificationMigrationTest.xml",
+      "sha256": "c386abf0744aeef26135c050939f38a98d0f704ed0714c500db152241006bccd"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.oncall.OnCallSwapRevocationIntegrationTest.xml",
+      "sha256": "9137db76951ade5d4c167de5b8fe52ac8cbbb7354a765a23764ce52917f01713"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.OpsPilotApiIntegrationTest.xml",
+      "sha256": "4d74f50e098eb1516e9bc15685fb0e32e2275ddccff68452e0fffe605aac8662"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.postmortem.FollowUpNotificationIntegrationTest.xml",
+      "sha256": "78f7e02ab4753343acecefe1f58e4a00cedfd8022c147c6819aab74c3e994dcd"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.postmortem.FollowUpOperationsIntegrationTest.xml",
+      "sha256": "ee83aae5bb8b3563b8cca3e00dec0b72510fb9fbd5358d39ced4ded7fbb4978d"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.postmortem.PostmortemIntegrationTest.xml",
+      "sha256": "1dd5931d8e88ae49dd30a891ac02f0b18cf3f5c642c07d047cd6bb8dd36be075"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.problem.ProblemCreationConcurrencyIntegrationTest.xml",
+      "sha256": "432bfd50ddace6c4aa086f254b63be8660752c9d0c614c5091c14395c8dcb088"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.problem.ProblemManagementIntegrationTest.xml",
+      "sha256": "74f94c731f225b5cca54213be2ebcd705b9565bd7f79096ff9915f6029bd13fc"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.runbook.Bm25RetrieverTest.xml",
+      "sha256": "0aa00327ee1646b27d41eef8a343109d0363a608f4ec15ea985ca5f4df2cb12a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.runbook.ReciprocalRankFusionTest.xml",
+      "sha256": "809ce7d1cda6bac279ac1a9cd8b016e7bed0587db290255667ea08ffeecf7d8d"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.runbook.RunbookHybridRetrievalIntegrationTest.xml",
+      "sha256": "f0ecd0b7013d11dddb07712d461d25be84ef3b921ad96e5a60172af1646bd15f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.runbook.RunbookJudgmentAgreementTest.xml",
+      "sha256": "67d8ffbbef736b995f5771b2e9803a849163cdb794a3a2b560358a9ed830bb76"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.runbook.RunbookKnowledgeIntegrationTest.xml",
+      "sha256": "560216ba1e647e33ee7f6fd948dc2d529d8d4f3d18549de156df8eaa1b6c6abe"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.runbook.RunbookPublicationConcurrencyTest.xml",
+      "sha256": "9b51bcbda28420a8f4cfb5dd4b7f4f488de02acbd42594e4bdbc0181b870961e"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.runbook.RunbookPublicationIntegrationTest.xml",
+      "sha256": "733d1e588f00d47e2d34a7be5982425f162ec04da702d61fea780422626a5197"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.runbook.RunbookPublicationMigrationTest.xml",
+      "sha256": "993e125768a41e8d75e5e934d311a1d6989812f3cfb60b01b4478b8a6faaffda"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.runbook.RunbookRelevanceFeedbackIntegrationTest.xml",
+      "sha256": "5422f1d9b5df27bc095d95168f735fecd317b6603bfce2b1c5e68fe5c7166d61"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.runbook.RunbookRetrievalLifecycleIntegrationTest.xml",
+      "sha256": "41d3901aac99e3d1a43cc61251bbd480b2fb1784d66f100cc8a2bfdb750f6c4b"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.runbook.RunbookRetrievalTrendIntegrationTest.xml",
+      "sha256": "0f22b2c582ab5a9e47dd33b25c1e8760d99bc6bbd832fc828a705cd9845dcd82"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.runbook.RunbookReturnedCountMigrationTest.xml",
+      "sha256": "8d8ed7325183ec8c3c78e53e23980bf1e26b6488c559ce53e24f366710ca0c5b"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.security.AccountStatusHttpIntegrationTest.xml",
+      "sha256": "c2292381a83a1ef7a353e1b39699540d04a9b4c7f94d12db71000e0a0b743aa1"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.security.AuthSessionHttpIntegrationTest.xml",
+      "sha256": "b3fd61777bd75b225b2e61b58c219663a8f1609969c7255a0391418569902167"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.security.AuthSessionMigrationTest.xml",
+      "sha256": "e6529123abf63778788254f5ee2b27b7f708a21c1d152a5e46eafd3e4293ff81"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.security.JwtServiceIdentityTest.xml",
+      "sha256": "a5fa70e66e526e47d5a9561489e2d591e22b55035dd339fa95450061993f0ca1"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.security.ManagementPortIsolationIntegrationTest.xml",
+      "sha256": "6a4169d5a215983cc4b243a94023e03a26729b03519f98e9f08730f926c53917"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.slo.PrometheusSloClientContractTest.xml",
+      "sha256": "ac511b35d654e2a4a076ed626f3882e63219b9c0e46150245babba4347165974"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.slo.ServiceSloIntegrationTest.xml",
+      "sha256": "ddc02e044547043bf9881ae8a469b11e21ba18c347a7d443309114626d716a00"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/default-release-junit/TEST-org.trigger.opspilot.slo.SloBurnRateCalculatorTest.xml",
+      "sha256": "5ace4bc6a2570a42601c5e48a9b5c201f7c6be1772c6ad4dc680295e1a5b040c"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/logs/cp117-default-first-java.log",
+      "sha256": "93513426b74e28a7f080577f514e4ec97bf7b4767302be49beb94ff4baab5cde"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/logs/cp117-default-release-java.log",
+      "sha256": "cd21c2b8e3a525afa416d8c279a3196d2d73f5458a2c9d6ad97b85f0f2984ca3"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/logs/cp117-default-second-java.log",
+      "sha256": "7d880b87016114b40642dd49c50be0df8427c594308b8d2f82027934c5310d1d"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/logs/cp117-node-upload.log",
+      "sha256": "597c5bf810b946817df1d6336ac8afcb349618a2ccb7f4da7765b9a83d06aa0c"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/logs/cp117-notifications-first.log",
+      "sha256": "4c35b2c2452bd177b2c72695ac74a7e955117a3f5e71675fb23dd8567d98fe4c"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/logs/cp117-package-upload.log",
+      "sha256": "8aee7d3f46410082b7bf9974c00465059e485ef3a56be71c0e65199051ef2e05"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/logs/cp117-yaml.log",
+      "sha256": "40e76143bd03903fd48d040f24401d6a6c749489cd3908c05c57a6ab5f20423d"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/notification-h2/maven.log",
+      "sha256": "79ef340c83ef67cdaf52e40de11d4c6a40f9646d3403f34362043f722e03429d"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/notification-h2/result.json",
+      "sha256": "a30a650db61ecf8f1f2c0c175c2308b6ee6c2060af1e56c7e7c3866a1c1061c0"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/notification-h2/TEST-org.trigger.opspilot.oncall.OnCallOpenNotificationIntegrationTest.xml",
+      "sha256": "34c6ddb076f9236f8ae8205c00e24119c258dbb3ed45982640c72c9981a84e51"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/notification-h2-21-historical/maven.log",
+      "sha256": "cc2cad2a0de50ebea1f05117445c5ae3c7adbf745ee202d6fb778d9e3946b94b"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/notification-h2-21-historical/result.json",
+      "sha256": "66472e3b7dd9b67084cee9b2ea606cfb403d3310e5c40336c8457414b7c992aa"
+    },
+    {
+      "file": "docs/assets/v1.7-cp117/notification-h2-21-historical/TEST-org.trigger.opspilot.oncall.OnCallOpenNotificationIntegrationTest.xml",
+      "sha256": "34371c1d7de3d3f91d1e253701ee43c665f68d16710fda819ee4a05170c40faa"
+    }
+  ],
+  "defaultJava": {
+    "discovered": 837,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 258,
+    "executed": 579,
+    "freshXml": 98
+  },
+  "nodeTests": {
+    "executed": 230,
+    "failed": 0,
+    "skipped": 0
+  },
+  "notification": {
+    "status": "PASS",
+    "suite": {
+      "name": "org.trigger.opspilot.oncall.OnCallOpenNotificationIntegrationTest",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "executed": 22,
+    "skipped": 0,
+    "database": "H2",
+    "migration41VerifiedPerCase": true,
+    "observedAuthenticatedHttpRequests": 14,
+    "frozenRetryPayloadAndKeyVerified": true,
+    "revocationAndClosureSkipped": true,
+    "lateLeaseReceiptFenced": true,
+    "busyWorkerHasNoMemoryBacklog": true,
+    "allObservedPoolsStopped": 1,
+    "humanAcceptanceVerified": false,
+    "remindersVerified": false,
+    "actualThirdPartyAccountDeliveryVerified": false,
+    "populatedV40JarUpgradeVerified": false
+  },
+  "workflow": {
+    "originalJobs": 21,
+    "everyOriginalJobDefinitionUnchanged": true,
+    "wipJobs": 7,
+    "previousSixWipExecutableDefinitionsUnchanged": true,
+    "twoUpgradeDisplayNamesUpdatedForV41": true,
+    "fullHistoryForMemberUiAndPublicationUpgrade": true,
+    "duplicateNegativeRejected": true
+  },
+  "builtJarSha256": "d5ab7d7d1aea630f9abb3ef24e8c3506fde906057f75705ee29ef2bc83475c00",
+  "cp116OriginalJarSha256": "3c655c318a0cd4b2f2a5839fa12fd4101e8ce4e22759097d593655b3eea9dc83",
+  "unchangedPublishedMigrationMaximum": 40,
+  "unchangedHistoricalDemoFiles": 2495,
+  "frontendAndStaticUnchanged": true,
+  "secretPatternScanPassed": true,
+  "scope": {
+    "ownActualMysqlNotificationVerified": false,
+    "ownFullCiVerified": false,
+    "wholeJarEnabledDeliveryAndRestartVerified": false,
+    "populatedV40JarUpgradeVerified": false,
+    "cp116MainJobsApiStatusVerified": 21,
+    "cp116WipJobsApiStatusVerified": 6,
+    "cp116OwnMysqlPublicationUpgradeOfficialZipIndependentlyReplayed": true,
+    "thirdPartyAccountDeliveryVerified": false,
+    "humanAcceptanceVerified": false,
+    "remindersVerified": false,
+    "manualRetryVerified": false,
+    "globalQueueCapacityVerified": false,
+    "crossMachineHaVerified": false,
+    "newVisualRedesign": false
+  },
+  "historicalDemosAndFirstFailuresPreserved": true,
+  "goalComplete": false
+}

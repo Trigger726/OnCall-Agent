@@ -28,7 +28,7 @@ function verify(log,xml,audit,result,jarLogs){
   const [omitted,upgrade,...cases]=result.cases;
   assert.equal(omitted.get404,true);assert.equal(omitted.post404,true);assert.equal(upgrade.legacyRowsPreserved,true);
   assert.equal(upgrade.oldBilateralReceiptAndResponsibilitiesPreserved,true);
-  assertMigrations(upgrade.before,37);assertMigrations(upgrade.after,40);
+  assertMigrations(upgrade.before,37);assertMigrations(upgrade.after,41);
   for(const key of fingerprints){assert.match(upgrade.before[key]||'',/^[a-f0-9]{64}$/);assert.equal(upgrade.before[key],upgrade.after[key]);}
   assert.equal(upgrade.before.shifts,upgrade.after.shifts);assert.deepEqual(upgrade.after.requests,[]);
   for(const key of ['designatedRows','swapRows','swapRevocationRows'])assert.ok(upgrade.before[key]>0);
@@ -38,7 +38,7 @@ function verify(log,xml,audit,result,jarLogs){
     assert.equal(r.serverUuid,identity.serverUuid);assert.equal(r.ownerConfirmed,true);}
   assert.deepEqual(result.sqlFixtures[0].receipt,upgrade.before);assert.deepEqual(result.sqlFixtures[1].receipt,upgrade.after);
   assert.deepEqual(result.sqlFixtures[2].receipt,result.sqlFixtures[4].receipt);assert.deepEqual(result.finalSql,result.sqlFixtures[4].receipt);
-  assertMigrations(result.finalSql,40);
+  assertMigrations(result.finalSql,41);
   for(const key of [...fingerprints,'openRequestHash','openOperationHash'])assert.match(result.finalSql[key]||'',/^[a-f0-9]{64}$/);
   assert.equal(result.sqlFixtures[3].receipt.actorId,3);assert.equal(result.sqlFixtures[3].receipt.changed,1);assert.equal(result.sqlFixtures[3].receipt.role,'AUDITOR');
   assertSqlRows(result.finalSql.requests,result.sqlExpectations);assert.equal(result.finalSql.requests.length,5);
@@ -51,7 +51,7 @@ function verify(log,xml,audit,result,jarLogs){
   assert.equal(result.startedPids.length,5);assert.equal(new Set(result.startedPids).size,5);
   assert.deepEqual([...result.stoppedPids].sort(),[...result.startedPids].sort());
   for(const field of ['recordedJvmPidsVerifiedAbsent','twoScopedPortsVerifiedFree','ownedContainerStopped'])assert.equal(audit[field],true);
-  assert.deepEqual(audit.finalJdbcCounts,{versionedMigrations:40,openRequests:5,claimed:3,withdrawn:1,open:1,operations:4,oldBilateralRevocations:1});
+  assert.deepEqual(audit.finalJdbcCounts,{versionedMigrations:41,openRequests:5,claimed:3,withdrawn:1,open:1,operations:4,oldBilateralRevocations:1});
   assert.equal(jarLogs.length,5);assert.equal(audit.nodeConnections.length,5);
   for(const [i,raw] of jarLogs.entries()){
     const connection=audit.nodeConnections[i];assert.equal(connection.jar,i+1);assert.equal(connection.pid,result.startedPids[i]);assert.equal(connection.poolStartedAndStopped,true);

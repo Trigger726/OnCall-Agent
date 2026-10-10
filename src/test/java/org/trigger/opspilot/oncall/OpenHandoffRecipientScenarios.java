@@ -50,9 +50,10 @@ abstract class OpenHandoffRecipientScenarios {
                 assertThat(connection.getCatalog()).isEqualTo("opspilot_open_recipient_test");
             }
             assertThat(count("flyway_schema_history","version='40' AND success=TRUE")).isEqualTo(1);
-            assertThat(count("flyway_schema_history","version IS NOT NULL AND success=TRUE")).isEqualTo(40);
+            assertThat(count("flyway_schema_history","version='41' AND success=TRUE")).isEqualTo(1);
+            assertThat(count("flyway_schema_history","version IS NOT NULL AND success=TRUE")).isEqualTo(41);
             System.out.println("OPEN_RECIPIENT_DATABASE "+json.writeValueAsString(Map.of("case",test.getTestMethod().orElseThrow().getName(),
-                    "product",metadata.getDatabaseProductName(),"version",metadata.getDatabaseProductVersion(),"schema",connection.getCatalog(),"migration40",true)));
+                    "product",metadata.getDatabaseProductName(),"version",metadata.getDatabaseProductVersion(),"schema",connection.getCatalog(),"migration40",true,"migration41",true)));
         }
     }
     @AfterEach void resetSpies() { reset(audit);reset(AopTestUtils.<OnCallOpenHandoffRecipients>getUltimateTargetObject(recipients)); }
@@ -74,7 +75,7 @@ abstract class OpenHandoffRecipientScenarios {
         long target=user("ON_CALL"), other=user("ON_CALL"), later=user("ON_CALL");var f=fixture(target,other);var row=publish(f);var saved=recipients.get(row.id()).publication();String raw=payload(row.id());
         account(target,"display_name","changed after publication");revoke(f.plan(),target);grant(f.plan(),later,true,false);
         var current=recipients.get(row.id());assertThat(current.publication()).isEqualTo(saved);assertThat(payload(row.id())).isEqualTo(raw);
-        assertThat(current.eligibleOriginalRecipientIds()).containsExactly(other);assertThat(current.deliveryImplemented()).isFalse();
+        assertThat(current.eligibleOriginalRecipientIds()).containsExactly(other);assertThat(current.deliveryImplemented()).isTrue();
         assertThat(saved.recipients()).allSatisfy(r->assertThat(r.memberVersion()).isZero());
         assertThat(open.list(f.plan(),other,"AVAILABLE",null).requests()).extracting(OnCallOpenHandoffService.View::id).contains(row.id());
         denied(()->open.claim(row.id(),operation(),target,"test"),"ONCALL_PLAN_RESPONSE_FORBIDDEN");
@@ -118,7 +119,7 @@ abstract class OpenHandoffRecipientScenarios {
         long target=user("ON_CALL");var f=fixture(target);var row=publish(f);var saved=recipients.get(row.id()).publication();
         var claimed=open.claim(row.id(),operation(),target,"test");var view=recipients.get(row.id());
         assertThat(view.currentRequestStatus()).isEqualTo("CLAIMED");assertThat(view.currentRequestVersion()).isEqualTo(1);assertThat(view.eligibleOriginalRecipientIds()).isEmpty();assertThat(view.publication()).isEqualTo(saved);
-        assertThat(claimed.replacement()).isNotNull();assertThat(saved.eventVersion()).isZero();assertThat(view.deliveryImplemented()).isFalse();
+        assertThat(claimed.replacement()).isNotNull();assertThat(saved.eventVersion()).isZero();assertThat(view.deliveryImplemented()).isTrue();
     }
 
     @Test void shouldKeepPublicationAfterWithdrawalAndOriginalKeyAcknowledgement() {
@@ -169,7 +170,7 @@ abstract class OpenHandoffRecipientScenarios {
         var login=mvc.perform(post("/api/v1/auth/login").contentType(MediaType.APPLICATION_JSON).content(json.writeValueAsString(Map.of("username","auditor","password","OpsPilot@2026")))).andExpect(status().isOk()).andReturn().getResponse();
         String token=json.readTree(login.getContentAsString()).path("data").path("accessToken").asText();
         var response=mvc.perform(get("/api/v1/on-call/open-handoffs/"+row.id()+"/publication").header("Authorization","Bearer "+token))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.data.deliveryImplemented").value(false)).andExpect(jsonPath("$.data.publicationSnapshotAvailable").value(true)).andReturn().getResponse();
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.deliveryImplemented").value(true)).andExpect(jsonPath("$.data.publicationSnapshotAvailable").value(true)).andReturn().getResponse();
         assertThat(response.getContentAsString()).doesNotContain("password","requestKey","reason","accessToken");
         assertThatThrownBy(()->recipients.freeze(row)).isInstanceOf(IllegalTransactionStateException.class);assertThat(count("oncall_open_handoff_publication","1=1")).isEqualTo(before);
     }

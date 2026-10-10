@@ -44,7 +44,7 @@ async function verify(mysql=configuration(process.env)) {
         '--spring.datasource.url=jdbc:h2:file:'+path.join(database,'opspilot').replaceAll('\\','/')+';MODE=MySQL;DATABASE_TO_LOWER=TRUE;WRITE_DELAY=0',
         '--spring.datasource.username=sa','--spring.datasource.password=','--spring.datasource.driver-class-name=org.h2.Driver']),
       '--spring.h2.console.enabled=false','--opspilot.ai.enabled=false','--opspilot.agent.recovery.enabled=false',
-      '--opspilot.oncall.rotation.enabled=false','--opspilot.oncall.escalation.enabled=false','--opspilot.oncall.swap.notification.enabled=false'],
+      '--opspilot.oncall.rotation.enabled=false','--opspilot.oncall.escalation.enabled=false','--opspilot.oncall.swap.notification.enabled=false','--opspilot.oncall.open.notification.enabled=false'],
       {cwd:root,env:{...process.env,JWT_SECRET:secret,...(mysql?{SPRING_DATASOURCE_URL:mysql.url,SPRING_DATASOURCE_USERNAME:mysql.user,SPRING_DATASOURCE_PASSWORD:mysql.password}:{})},stdio:['ignore',fd,fd],windowsHide:true});
     child.once('error',error=>{child.launchError=error;});children.push(child);result.startedPids.push(child.pid);current=child;
     await waitForHealth('http://127.0.0.1:9984/actuator/health',child);
@@ -90,7 +90,7 @@ async function verify(mysql=configuration(process.env)) {
     result.cases.push({name:caseNames[0],before,oldMemberApi404:true,threeStates:true,cancelledOriginalReceipt:true});
     await start(jar);await accounts();assert.deepEqual(parts(await api(route(claimed.request.id)+'/claims',claimant,oldClaim)),cancelled);
     assert.deepEqual(parts(await api(route(withdrawn.request.id)+'/withdrawals',owner,oldWithdraw)),withdrawnReceipt);
-    await stop();const after=sql();assertMigrations(after,40);
+    await stop();const after=sql();assertMigrations(after,41);
     for(const key of ['shifts','shiftHash','designatedHash','swapHash','swapRevocationHash','onCallAuditHash','openRequestHash','openOperationHash','v38MigrationHash'])assert.equal(after[key],before[key]);
     assert.deepEqual(after.requests,before.requests);
     result.cases.push({name:caseNames[1],after,allOldBusinessRowsPreserved:true,all38MigrationChecksumsPreserved:true});
@@ -114,7 +114,7 @@ async function verify(mysql=configuration(process.env)) {
     await stop();const committed=sql();await start(jar);await accounts();
     assert.deepEqual(parts(await api(route(pending.request.id)+'/claims',claimant,newClaim)),newReceipt);
     assert.deepEqual(parts(await api(route(claimed.request.id)+'/claims',claimant,oldClaim)),cancelled);
-    await stop();const final=sql();assert.deepEqual(final,committed);assertMigrations(final,40);
+    await stop();const final=sql();assert.deepEqual(final,committed);assertMigrations(final,41);
     assert.deepEqual(final.requests.map(r=>r.status).sort(),['CLAIMED','CLAIMED','WITHDRAWN']);
     result.cases.push({name:caseNames[6],snapshotUnchanged:true,originalReceiptsUnchanged:true,final});
     assert.deepEqual(result.cases.map(r=>r.name),caseNames);result.status='PASS';

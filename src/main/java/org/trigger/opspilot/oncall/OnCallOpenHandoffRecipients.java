@@ -23,7 +23,7 @@ public class OnCallOpenHandoffRecipients {
     public OnCallOpenHandoffRecipients(JdbcClient jdbc, ObjectMapper json) { this.jdbc = jdbc; this.json = json; }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public void freeze(OnCallOpenHandoffService.View row) {
+    public Snapshot freeze(OnCallOpenHandoffService.View row) {
         // Called once in the publisher's transaction, after its plan/source/actor checks.
         // An original-key acknowledgement never invokes this and never adds newly granted accounts.
         if (!row.status().equals("OPEN") || row.version() != 0) throw new IllegalArgumentException("Require original open publication");
@@ -33,10 +33,13 @@ public class OnCallOpenHandoffRecipients {
         String payload;
         try { payload = json.writeValueAsString(snapshot); }
         catch (JsonProcessingException error) { throw new IllegalStateException("Unable to freeze open publication"); }
+        if(snapshot.recipients().size()>500||payload.getBytes(java.nio.charset.StandardCharsets.UTF_8).length>60000)
+            throw new ApiException(HttpStatus.PAYLOAD_TOO_LARGE,"ONCALL_OPEN_PUBLICATION_TOO_LARGE","发布候选或快照载荷超出上限，未保存请求或通知");
         jdbc.sql("""
                 INSERT INTO oncall_open_handoff_publication(handoff_id,event_version,captured_at,snapshot_json)
                 VALUES (:id,0,:at,:payload)
                 """).param("id", row.id()).param("at", at).param("payload", payload).update();
+        return snapshot;
     }
 
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
@@ -47,14 +50,14 @@ public class OnCallOpenHandoffRecipients {
         var payload = jdbc.sql("SELECT snapshot_json FROM oncall_open_handoff_publication WHERE handoff_id=:id")
                 .param("id", id).query(String.class).optional();
         var at = now();
-        if (payload.isEmpty()) return new View(at,current.version(),current.status(),false,null,List.of(),false);
+        if (payload.isEmpty()) return new View(at,current.version(),current.status(),false,null,List.of(),true);
         Snapshot saved;
         try { saved = json.readValue(payload.get(), Snapshot.class); }
         catch (JsonProcessingException error) { throw new IllegalStateException("Invalid frozen open publication"); }
         if (saved.handoffId() != id || saved.eventVersion() != 0) throw new IllegalStateException("Invalid frozen open publication identity");
         var capturedIds = saved.recipients().stream().map(Recipient::userId).toList();
         var eligible = candidates(id, at).stream().map(Recipient::userId).filter(capturedIds::contains).toList();
-        return new View(at,current.version(),current.status(),true,saved,eligible,false);
+        return new View(at,current.version(),current.status(),true,saved,eligible,true);
     }
 
     // One SQL statement checks the current plan, both accounts/members and the same

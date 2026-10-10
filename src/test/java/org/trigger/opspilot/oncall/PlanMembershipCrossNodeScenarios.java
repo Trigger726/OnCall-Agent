@@ -67,8 +67,9 @@ abstract class PlanMembershipCrossNodeScenarios {
             admin=login(0,"admin");owner=login(0,"zhangwei");manager=login(0,"lina");
             now=LocalDateTime.parse(api(0,"/on-call/roster",admin,null,200,null).path("databaseNow").asText());
             assertThat(count("SELECT COUNT(*) FROM flyway_schema_history WHERE version='40' AND success=TRUE")).isEqualTo(1);
-            assertThat(count("SELECT COUNT(*) FROM flyway_schema_history WHERE version IS NOT NULL AND success=TRUE")).isEqualTo(40);
-            receipt.put("versionedMigrations",40);
+            assertThat(count("SELECT COUNT(*) FROM flyway_schema_history WHERE version='41' AND success=TRUE")).isEqualTo(1);
+            assertThat(count("SELECT COUNT(*) FROM flyway_schema_history WHERE version IS NOT NULL AND success=TRUE")).isEqualTo(41);
+            receipt.put("versionedMigrations",41);
             var member=memberCommand(0,true,true,false);long before=count("SELECT COUNT(*) FROM audit_log WHERE action='ONCALL_MEMBER_CHANGED'");
             var pair=concurrent("/on-call/schedules/1/members",admin,member);
             assertThat(pair.get(0).path("receipt").isObject()).isTrue();assertThat(pair.get(0).path("receipt")).isEqualTo(pair.get(1).path("receipt"));
@@ -147,7 +148,7 @@ abstract class PlanMembershipCrossNodeScenarios {
                 "--management.endpoints.web.exposure.include=health,prometheus,shutdown","--management.endpoint.shutdown.enabled=true",
                 "--spring.datasource.driver-class-name="+(db.product().equals("MySQL")?"com.mysql.cj.jdbc.Driver":"org.h2.Driver"),
                 "--spring.h2.console.enabled=false","--opspilot.ai.enabled=false","--opspilot.agent.recovery.enabled=false","--opspilot.oncall.rotation.enabled=false",
-                "--opspilot.oncall.escalation.enabled=false","--opspilot.oncall.swap.notification.enabled=false"));
+                "--opspilot.oncall.escalation.enabled=false","--opspilot.oncall.swap.notification.enabled=false","--opspilot.oncall.open.notification.enabled=false"));
         var builder=new ProcessBuilder(command).redirectErrorStream(true).redirectOutput(log.toFile());
         builder.environment().putAll(Map.of("JWT_SECRET",secret,"SPRING_DATASOURCE_URL",db.url(),"SPRING_DATASOURCE_USERNAME",db.user(),"SPRING_DATASOURCE_PASSWORD",db.password()));
         var child=builder.start();children.add(child);long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(50);

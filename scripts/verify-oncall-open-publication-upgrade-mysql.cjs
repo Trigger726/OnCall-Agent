@@ -14,7 +14,7 @@ function verify(log,xml,audit,result,read) {
   for(const text of [log,xml]){assert.deepEqual(markers(text,'OPEN_PUBLICATION_UPGRADE_DATABASE'),[identity]);assert.deepEqual(markers(text,'OPEN_PUBLICATION_UPGRADE_CONTAINER_STOPPED'),[{stopped:true}]);}
   for(const s of result.sqlFixtures){assert.equal(s.actualVersion,identity.version);assert.equal(s.serverUuid,identity.serverUuid);}
   for(const key of ['ownedContainerStopped','twoScopedPortsVerifiedFree','recordedJvmPidsVerifiedAbsent'])assert.equal(audit[key],true);
-  assert.deepEqual(audit.finalJdbcCounts,{versionedMigrations:40,requests:4,withdrawn:2,operations:2,publications:2,memberOperations:4});
+  assert.deepEqual(audit.finalJdbcCounts,{versionedMigrations:41,requests:4,withdrawn:2,operations:2,publications:2,memberOperations:4});
   return {...verifyEvidence(result,read,true),suite:counts,ownedContainerStopped:true};
 }
 module.exports={verify,suite,testName};

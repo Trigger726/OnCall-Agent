@@ -17,7 +17,7 @@ function verify(log,xml,mysql=true){
   const names=[],identities=[];
   for(const match of xml.matchAll(/<testcase\b([^>]*)>([\s\S]*?)<\/testcase>/g)){
     const caseName=match[1].match(/\bname="([^"]+)"/)?.[1];assert.ok(cases.includes(caseName));assert.ok(match[1].includes('classname="'+name+'"'));names.push(caseName);
-    const own=markers(match[2]);assert.equal(own.length,1);const d=own[0];assert.equal(d.case,caseName);assert.equal(d.migration40,true);
+    const own=markers(match[2]);assert.equal(own.length,1);const d=own[0];assert.equal(d.case,caseName);assert.equal(d.migration40,true);assert.equal(d.migration41,true);
     assert.equal(d.product,mysql?'MySQL':'H2');assert.match(d.version,mysql?/^8\.4\./:/^2\.2\.220/);assert.equal(d.schema,mysql?'opspilot_open_recipient_test':'opspilot-open-recipient-test');identities.push(d);
   }
   assert.deepEqual(names.sort(),[...cases].sort());assert.deepEqual(sorted(markers(log)),sorted(identities));assert.equal(new Set(identities.map(i=>i.version)).size,1);

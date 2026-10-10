@@ -56,7 +56,7 @@ async function verify(mysql=configuration(process.env)) {
         '--spring.datasource.url=jdbc:h2:file:'+path.join(database,'opspilot').replaceAll('\\','/')+';MODE=MySQL;DATABASE_TO_LOWER=TRUE;WRITE_DELAY=0',
         '--spring.datasource.username=sa','--spring.datasource.password=','--spring.datasource.driver-class-name=org.h2.Driver']),
       '--spring.h2.console.enabled=false','--opspilot.ai.enabled=false','--opspilot.agent.recovery.enabled=false',
-      '--opspilot.oncall.rotation.enabled=false','--opspilot.oncall.escalation.enabled=false','--opspilot.oncall.swap.notification.enabled=false'],
+      '--opspilot.oncall.rotation.enabled=false','--opspilot.oncall.escalation.enabled=false','--opspilot.oncall.swap.notification.enabled=false','--opspilot.oncall.open.notification.enabled=false'],
       {cwd:root,env:{...process.env,JWT_SECRET:secret,...(mysql?{SPRING_DATASOURCE_URL:mysql.url,SPRING_DATASOURCE_USERNAME:mysql.user,SPRING_DATASOURCE_PASSWORD:mysql.password}:{})},stdio:['ignore',fd,fd],windowsHide:true});
     child.once('error',error=>{child.launchError=error;});children.push(child);result.startedPids.push(child.pid);current=child;
     await waitForHealth('http://127.0.0.1:9962/actuator/health',child);
@@ -111,9 +111,9 @@ async function verify(mysql=configuration(process.env)) {
     await start(jar);await accounts();
     const missing=await api(publication(legacy.request.id),auditor);
     assert.equal(missing.publicationSnapshotAvailable,false);assert.equal(missing.publication,null);assert.deepEqual(missing.eligibleOriginalRecipientIds,[]);
-    assert.equal(missing.deliveryImplemented,false);assert.deepEqual(await api('/on-call/open-handoffs',owner,legacy.draft),legacy.request);
+    assert.equal(missing.deliveryImplemented,true);assert.deepEqual(await api('/on-call/open-handoffs',owner,legacy.draft),legacy.request);
     assert.deepEqual(receipt(await api(route(closed.request.id)+'/withdrawals',owner,withdraw)),oldClosed);
-    await stop();const upgraded=sql();assertMigrations(upgraded,40);for(const key of preservedKeys)assert.equal(upgraded[key],before[key],key);
+    await stop();const upgraded=sql();assertMigrations(upgraded,41);for(const key of preservedKeys)assert.equal(upgraded[key],before[key],key);
     assert.deepEqual(upgraded.requests,before.requests);assert.deepEqual(upgraded.members,before.members);assert.equal(upgraded.publicationRows,0);
     result.cases.push({name:caseNames[1],legacyPublication:missing,upgraded});
     await start(jar);await accounts();const first=await create(2),firstView=await api(publication(first.request.id),auditor);
@@ -142,7 +142,7 @@ async function verify(mysql=configuration(process.env)) {
     await start(jar);await accounts();const restarted=[];
     for(const entry of [first,second]){await api('/on-call/open-handoffs',owner,entry.draft);restarted.push(await api(publication(entry.request.id),auditor));}
     assert.deepEqual(restarted.map(v=>v.publication),[firstView.publication,secondView.publication]);assert.deepEqual(restarted.map(v=>v.eligibleOriginalRecipientIds),[[],[]]);
-    await stop();const final=sql();assert.deepEqual(final,committed);assert.equal(final.v39MigrationHash,before.v39MigrationHash);assertMigrations(final,40);
+    await stop();const final=sql();assert.deepEqual(final,committed);assert.equal(final.v39MigrationHash,before.v39MigrationHash);assertMigrations(final,41);
     result.cases.push({name:caseNames[5],restarted,final});assert.deepEqual(result.cases.map(c=>c.name),caseNames);result.status='PASS';
   } catch(error){result.status='FAIL';result.failure=redact(error.stack);throw error;}
   finally {

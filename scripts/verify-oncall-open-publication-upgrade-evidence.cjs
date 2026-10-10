@@ -2,7 +2,8 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 const {caseNames,preservedKeys,oldSource}=require('./verify-oncall-open-publication-upgrade-http-ci.cjs');
 const {assertMigrations}=require('./verify-oncall-open-handoff-http-ci.cjs');
 const {unexpectedLogLines}=require('./verify-oncall-browser-ci.cjs');
-function verify(result,read,mysql=true) {
+function verify(result,read,mysql=true,maximum=41) {
+  assert.ok([40,41].includes(maximum),'Only explicit historical/current publication boundary');
   assert.equal(result.status,'PASS');assert.equal(result.oldSource,oldSource);
   for(const key of ['oldJarSha256','jarSha256'])assert.match(result[key],/^[a-f0-9]{64}$/);assert.notEqual(result.jarSha256,result.oldJarSha256);
   assert.equal(result.databaseMode,mysql?'MYSQL_TESTCONTAINER':'H2_OWNED_FILE');assert.equal(result.tokensPersistedToEvidence,false);
@@ -10,7 +11,7 @@ function verify(result,read,mysql=true) {
   assert.deepEqual(result.cases.map(c=>c.name),caseNames);assert.equal(result.sqlFixtures.length,4);
   const [before,upgraded,committed,final]=result.sqlFixtures;
   for(const [i,s] of result.sqlFixtures.entries()) {
-    assertMigrations(s,i===0?39:40);assert.equal(s.actualProduct,mysql?'MySQL':'H2');assert.match(s.actualVersion,mysql?/^8\.4\./:/^2\.2\.220/);
+    assertMigrations(s,i===0?39:maximum);assert.equal(s.actualProduct,mysql?'MySQL':'H2');assert.match(s.actualVersion,mysql?/^8\.4\./:/^2\.2\.220/);
     if(mysql){assert.equal(s.ownerConfirmed,true);assert.equal(s.schema,result.mysqlSchema);assert.match(s.schema,/^opspilot_publication_upgrade_[a-f0-9]{12}$/);assert.equal(s.serverUuid,before.serverUuid);}
     assert.deepEqual(JSON.parse(read('sql-'+i+'.log').trim()),s);
   }
@@ -30,7 +31,7 @@ function verify(result,read,mysql=true) {
   assert.equal(ended.currentRequestStatus,'WITHDRAWN');assert.equal(ended.currentRequestVersion,1);assert.deepEqual(ended.eligibleOriginalRecipientIds,[]);assert.deepEqual(ended.publication,second.publication);
   assert.equal(committed.publicationRows,2);assert.equal(committed.publications.length,2);assert.equal(committed.requests.length,4);
   for(const view of [first,later,second,revoked,publisherRevoked,ended,...result.cases[5].restarted]) {
-    assert.equal(view.publicationSnapshotAvailable,true);assert.equal(view.deliveryImplemented,false);assert.equal(view.publication.eventVersion,0);
+    assert.equal(view.publicationSnapshotAvailable,true);assert.equal(view.deliveryImplemented,maximum===41);assert.equal(view.publication.eventVersion,0);
     assert.equal(view.publication.timeBasis,'DATABASE_SESSION_LOCAL');assert.ok(view.publication.recipients.every(r=>r.userId!==view.publication.requesterId));
     const stored=committed.publications.find(p=>p.handoffId===view.publication.handoffId);assert.ok(stored);assert.equal(stored.eventVersion,0);
     assert.deepEqual(JSON.parse(stored.snapshotJson),view.publication);
@@ -53,7 +54,7 @@ function verify(result,read,mysql=true) {
     assert.match(log,mysql?/Database: jdbc:mysql:\/\/(?:localhost|127\.0\.0\.1):\d+\/opspilot_publication_upgrade_[a-f0-9]{12}.*\(MySQL 8\.4\)/:/Database: jdbc:h2:file:.*\/database\/opspilot \(H2 2\.2\)/);
     if(mysql)assert.ok(log.includes('/'+result.mysqlSchema));
   }
-  return {status:'PASS',cases:6,database:before.actualProduct,original39ChecksumsPreserved:true,nonemptyBusinessUpgradeVerified:true,
+  return {status:'PASS',cases:6,database:before.actualProduct,versionedMigrations:maximum,original39ChecksumsPreserved:true,nonemptyBusinessUpgradeVerified:true,
     actualPublicationTcpVerified:true,storedPayloadsMatchHttp:2,ownedGracefulJvmShutdowns:4,restartPreserved:true,actualDeliveryVerified:false,remindersVerified:false};
 }
 module.exports={verify};

@@ -1,6 +1,6 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {verify,suite,cases}=require('../verify-oncall-open-handoff-recipients.cjs');
-function fixture(){const ids=cases.map(name=>'OPEN_RECIPIENT_DATABASE '+JSON.stringify({case:name,product:'MySQL',version:'8.4.11',schema:'opspilot_open_recipient_test',migration40:true}));
+function fixture(){const ids=cases.map(name=>'OPEN_RECIPIENT_DATABASE '+JSON.stringify({case:name,product:'MySQL',version:'8.4.11',schema:'opspilot_open_recipient_test',migration40:true,migration41:true}));
   return{log:'INFO HikariPool-1 - Start completed.\n'+ids.join('\n')+'\nINFO HikariPool-1 - Shutdown completed.\n[INFO] BUILD SUCCESS\n',
     xml:'<testsuite name="'+suite+'" tests="14" failures="0" errors="0" skipped="0">'+cases.map((name,i)=>'<testcase classname="'+suite+'" name="'+name+'"><system-out><![CDATA['+ids[i]+']]></system-out></testcase>').join('')+'</testsuite>'};}
 const run=f=>verify(f.log,f.xml);

@@ -9,7 +9,9 @@ function fixture(mysql=false) {
   const identity={product:'MySQL',version:'8.4.11',schema:'opspilot_publication_upgrade_012345abcdef',serverUuid:'01234567-0123-4567-89ab-0123456789ab'};
   if(mysql){result.databaseMode='MYSQL_TESTCONTAINER';result.mysqlSchema=identity.schema;
     for(const s of result.sqlFixtures){Object.assign(s,{actualProduct:'MySQL',actualVersion:identity.version,schema:identity.schema,serverUuid:identity.serverUuid,ownerConfirmed:true});
+      if(s.migrationCount===40){s.migrationCount=41;s.migration41=true;s.history.push({version:'41',type:'SQL',success:true});}
       s.history=s.history.filter(h=>h.version!==null);s.successfulHistoryRows=s.migrationCount;}}
+  if(mysql)for(const view of [result.cases[2].first,result.cases[2].later,result.cases[2].second,result.cases[3].revoked,result.cases[3].publisherRevoked,result.cases[3].ended,...result.cases[5].restarted])view.deliveryImplemented=true;
   result.cases[0].before=result.sqlFixtures[0];result.cases[1].upgraded=result.sqlFixtures[1];result.cases[4].committed=result.sqlFixtures[2];result.cases[5].final=result.sqlFixtures[3];
   for(let i=1;i<=4;i++) {
     let text=fs.readFileSync(path.join(folder,'jar-'+i+'.log'),'utf8');
@@ -18,12 +20,12 @@ function fixture(mysql=false) {
   }
   const read=name=>/^sql-\d+\.log$/.test(name)?JSON.stringify(result.sqlFixtures[Number(name.match(/\d+/)[0])]):files[name];
   const audit={status:'PASS',database:identity,ownedContainerStopped:true,twoScopedPortsVerifiedFree:true,recordedJvmPidsVerifiedAbsent:true,
-    finalJdbcCounts:{versionedMigrations:40,requests:4,withdrawn:2,operations:2,publications:2,memberOperations:4}};
+    finalJdbcCounts:{versionedMigrations:41,requests:4,withdrawn:2,operations:2,publications:2,memberOperations:4}};
   const markers='OPEN_PUBLICATION_UPGRADE_DATABASE '+JSON.stringify(identity)+'\nOPEN_PUBLICATION_UPGRADE_CONTAINER_STOPPED {"stopped":true}\n';
   const xml='<testsuite name="'+mysqlGate.suite+'" tests="1" failures="0" errors="0" skipped="0"><testcase name="'+mysqlGate.testName+'" classname="'+mysqlGate.suite+'"><system-out><![CDATA['+markers+']]></system-out></testcase></testsuite>';
   return {result,files,read,audit,xml,log:markers+'[INFO] BUILD SUCCESS\n'};
 }
-const run=f=>verify(f.result,f.read,false),runMysql=f=>mysqlGate.verify(f.log,f.xml,f.audit,f.result,f.read);
+const run=f=>verify(f.result,f.read,false,40),runMysql=f=>mysqlGate.verify(f.log,f.xml,f.audit,f.result,f.read);
 const rejects=changes=>{for(const change of changes){const f=fixture();change(f);assert.throws(()=>run(f));}};
 test('saved real H2 upgrade evidence replays with six cases and four gracefully stopped JARs',()=>{
   const r=run(fixture());assert.equal(r.cases,6);assert.equal(r.database,'H2');assert.equal(r.actualDeliveryVerified,false);

@@ -63,6 +63,18 @@ management:
 
 opspilot:
   oncall:
+    open:
+      notification:
+        enabled: ${ONCALL_OPEN_NOTIFICATION_ENABLED:false}
+        url: ${ONCALL_OPEN_NOTIFICATION_URL:}
+        token: ${ONCALL_OPEN_NOTIFICATION_TOKEN:}
+        connect-timeout: ${ONCALL_OPEN_NOTIFICATION_CONNECT_TIMEOUT:2s}
+        read-timeout: ${ONCALL_OPEN_NOTIFICATION_READ_TIMEOUT:4s}
+        lease: ${ONCALL_OPEN_NOTIFICATION_LEASE:30s}
+        retry-base-delay: ${ONCALL_OPEN_NOTIFICATION_RETRY_BASE_DELAY:1m}
+        retry-max-delay: ${ONCALL_OPEN_NOTIFICATION_RETRY_MAX_DELAY:1h}
+        max-attempts: ${ONCALL_OPEN_NOTIFICATION_MAX_ATTEMPTS:5}
+        batch-size: ${ONCALL_OPEN_NOTIFICATION_BATCH_SIZE:20}
     swap:
       notification:
         enabled: ${ONCALL_SWAP_NOTIFICATION_ENABLED:false}

@@ -71,7 +71,7 @@ class MySqlOpenPublicationUpgradeHttpIntegrationTest {
                         "memberOperations","SELECT COUNT(*) FROM oncall_schedule_member_operation").entrySet()) {
                     try(var rows=statement.executeQuery(entry.getValue())){assertThat(rows.next()).isTrue();counts.put(entry.getKey(),rows.getLong(1));}
                 }
-                assertThat(counts).containsExactlyInAnyOrderEntriesOf(Map.of("versionedMigrations",40L,"requests",4L,"withdrawn",2L,"operations",2L,"publications",2L,"memberOperations",4L));
+                assertThat(counts).containsExactlyInAnyOrderEntriesOf(Map.of("versionedMigrations",41L,"requests",4L,"withdrawn",2L,"operations",2L,"publications",2L,"memberOperations",4L));
                 audit.put("finalJdbcCounts",counts);
             }
             audit.put("recordedJvmPidsVerifiedAbsent",true);audit.put("twoScopedPortsVerifiedFree",true);

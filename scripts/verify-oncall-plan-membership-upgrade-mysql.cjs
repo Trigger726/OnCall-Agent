@@ -16,7 +16,7 @@ function verify(log,xml,audit,result,jarLogs) {
   for(const text of [log,xml]){assert.deepEqual(markers(text,'PLAN_MEMBERSHIP_UPGRADE_DATABASE'),[identity]);assert.deepEqual(markers(text,'PLAN_MEMBERSHIP_UPGRADE_CONTAINER_STOPPED'),[{stopped:true}]);}
   assert.deepEqual(result.cases.map(c=>c.name),caseNames);const [old,upgrade,backfill,restart,revocation,restore,final]=result.cases;
   assert.equal(old.oldMemberApi404,true);assert.equal(old.threeStates,true);assert.equal(old.cancelledOriginalReceipt,true);
-  assertMigrations(old.before,38);assertMigrations(upgrade.after,40);assertMigrations(final.final,40);
+  assertMigrations(old.before,38);assertMigrations(upgrade.after,41);assertMigrations(final.final,41);
   assert.deepEqual(old.before.requests.map(r=>r.status).sort(),['CLAIMED','OPEN','WITHDRAWN']);assert.deepEqual(upgrade.after.requests,old.before.requests);
   for(const key of ['shiftHash','designatedHash','swapHash','swapRevocationHash','onCallAuditHash','openRequestHash','openOperationHash','v38MigrationHash']){
     assert.match(old.before[key],/^[a-f0-9]{64}$/);assert.equal(upgrade.after[key],old.before[key]);}
@@ -32,7 +32,7 @@ function verify(log,xml,audit,result,jarLogs) {
   assert.deepEqual(result.sqlFixtures[0],old.before);assert.deepEqual(result.sqlFixtures[1],upgrade.after);assert.deepEqual(result.sqlFixtures[2],upgrade.after);
   assert.deepEqual(result.sqlFixtures[3],final.final);assert.deepEqual(result.sqlFixtures[4],final.final);
   assert.equal(final.final.v38MigrationHash,old.before.v38MigrationHash);assert.deepEqual(final.final.requests.map(r=>r.status).sort(),['CLAIMED','CLAIMED','WITHDRAWN']);
-  assert.deepEqual(audit.finalJdbcCounts,{versionedMigrations:40,requests:3,claimed:2,withdrawn:1,operations:3,members:6,memberOperations:2});
+  assert.deepEqual(audit.finalJdbcCounts,{versionedMigrations:41,requests:3,claimed:2,withdrawn:1,operations:3,members:6,memberOperations:2});
   assert.equal(result.tokensPersistedToEvidence,false);assert.equal(result.userFileDatabaseModified,false);assert.equal(result.ownedProcessesStopped,true);assert.equal(result.unexpectedJarErrors,0);
   assert.equal(result.startedPids.length,5);assert.equal(new Set(result.startedPids).size,5);assert.deepEqual([...result.stoppedPids].sort(),[...result.startedPids].sort());
   for(const key of ['ownedContainerStopped','twoScopedPortsVerifiedFree','recordedJvmPidsVerifiedAbsent'])assert.equal(audit[key],true);

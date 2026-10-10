@@ -7,14 +7,14 @@ function fixture() {
   const identity={product:'MySQL',version:'8.4.11',schema:'opspilot_member_upgrade_012345abcdef',serverUuid:'01234567-0123-4567-89ab-0123456789ab'};
   const patch=snapshot=>{snapshot.actualProduct='MySQL';snapshot.actualVersion=identity.version;snapshot.schema=identity.schema;snapshot.serverUuid=identity.serverUuid;
     snapshot.ownerConfirmed=true;snapshot.history=snapshot.history.filter(r=>r.version!==null);snapshot.migration40=snapshot.migrationCount===39;
-    if(snapshot.migrationCount===39){snapshot.migrationCount=40;snapshot.history.push({version:'40',type:'SQL',success:true});}
+    if(snapshot.migrationCount===39){snapshot.migrationCount=41;snapshot.migration41=true;snapshot.history.push({version:'40',type:'SQL',success:true},{version:'41',type:'SQL',success:true});}
     snapshot.successfulHistoryRows=snapshot.migrationCount;return snapshot;};
   for(const row of result.sqlFixtures)patch(row);
   for(const row of result.cases){if(row.before)patch(row.before);if(row.after)patch(row.after);if(row.final)patch(row.final);}
   result.databaseMode='MYSQL_TESTCONTAINER';result.mysqlSchema=identity.schema;
   const line='INFO Database: jdbc:mysql://localhost:33101/'+identity.schema+' (MySQL 8.4)';
   const audit={status:'PASS',database:identity,ownedContainerStopped:true,twoScopedPortsVerifiedFree:true,recordedJvmPidsVerifiedAbsent:true,
-    finalJdbcCounts:{versionedMigrations:40,requests:3,claimed:2,withdrawn:1,operations:3,members:6,memberOperations:2},
+    finalJdbcCounts:{versionedMigrations:41,requests:3,claimed:2,withdrawn:1,operations:3,members:6,memberOperations:2},
     nodeConnections:result.startedPids.map((pid,i)=>({jar:i+1,pid,flywayDatabaseLine:line,poolStartedAndStopped:true}))};
   const markers='PLAN_MEMBERSHIP_UPGRADE_DATABASE '+JSON.stringify(identity)+'\nPLAN_MEMBERSHIP_UPGRADE_CONTAINER_STOPPED {"stopped":true}\n';
   return{result,audit,log:markers+'[INFO] BUILD SUCCESS\n',

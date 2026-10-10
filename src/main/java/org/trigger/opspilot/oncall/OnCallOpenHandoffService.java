@@ -22,13 +22,15 @@ public class OnCallOpenHandoffService {
     private final AuditService audit;
     private final OnCallPlanMembershipService members;
     private final OnCallOpenHandoffRecipients recipients;
+    private final OnCallOpenNotifications notifications;
 
-    public OnCallOpenHandoffService(JdbcClient jdbc, OnCallRosterService roster, AuditService audit, OnCallPlanMembershipService members, OnCallOpenHandoffRecipients recipients) {
+    public OnCallOpenHandoffService(JdbcClient jdbc, OnCallRosterService roster, AuditService audit, OnCallPlanMembershipService members, OnCallOpenHandoffRecipients recipients,OnCallOpenNotifications notifications) {
         this.jdbc = jdbc;
         this.roster = roster;
         this.audit = audit;
         this.members = members;
         this.recipients = recipients;
+        this.notifications = notifications;
     }
 
     public ListView list(Long scheduleId, long actorId, String scope, String status) {
@@ -102,7 +104,7 @@ public class OnCallOpenHandoffService {
         long id = generated.getKey().longValue();
         audit.recordAs(actorId, ip, "ONCALL_OPEN_HANDOFF_REQUESTED", "ONCALL_OPEN_HANDOFF", id, reason);
         var published = get(id);
-        recipients.freeze(published);
+        notifications.enqueue(recipients.freeze(published));
         if (!command.endsAt().isAfter(now())) throw expired();
         return published;
     }

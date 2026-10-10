@@ -17,14 +17,15 @@ function configuration(env){const comparison=env.OPSPILOT_OPEN_HANDOFF_UPGRADE==
 function assertSqlRows(actual,expected){assert.equal(actual.length,expected.length);
   for(const row of expected)assert.deepEqual(actual.find(item=>item.id===row.id),row);}
 function assertMigrations(snapshot,maximum){const versioned=snapshot.history.filter(row=>row.version!==null);
-  assert.ok([37,38,39,40].includes(maximum),'Require explicitly supported migration boundary');
+  assert.ok([37,38,39,40,41].includes(maximum),'Require explicitly supported migration boundary');
   assert.ok(snapshot.history.every(row=>row.success===true));assert.equal(snapshot.migrationCount,maximum);
   assert.deepEqual(versioned.map(row=>row.version),Array.from({length:maximum},(_,i)=>String(i+1)));
   for(const row of versioned)assert.equal(row.type,['29','33'].includes(row.version)?'JDBC':'SQL');
   const nonversioned=snapshot.actualProduct==='MySQL'?[]:[{version:null,type:'TABLE',success:true}];
   assert.deepEqual(snapshot.history.filter(row=>row.version===null),nonversioned);
   assert.equal(snapshot.successfulHistoryRows,maximum+nonversioned.length);assert.equal(snapshot.migration38,maximum>=38);
-  assert.equal(snapshot.migration39,maximum>=39);assert.equal(snapshot.migration40,maximum===40);}
+  assert.equal(snapshot.migration39,maximum>=39);assert.equal(snapshot.migration40,maximum>=40);
+  if(maximum===41)assert.equal(snapshot.migration41,true);}
 async function verify(mysql){
   // MySQL is supplied only by the separate Testcontainers entry point. Default CI remains fresh H2.
   const {comparison}=mysql?{comparison:true}:configuration(process.env),root=path.resolve(__dirname,'..');
@@ -49,7 +50,7 @@ async function verify(mysql){
       '--spring.datasource.url=jdbc:h2:file:'+path.join(database,'opspilot').replaceAll('\\','/')+';MODE=MySQL;DATABASE_TO_LOWER=TRUE;WRITE_DELAY=0',
       '--spring.datasource.username=sa','--spring.datasource.password=','--spring.datasource.driver-class-name=org.h2.Driver']),
       '--spring.h2.console.enabled=false','--opspilot.ai.enabled=false','--opspilot.agent.recovery.enabled=false',
-      '--opspilot.oncall.rotation.enabled=false','--opspilot.oncall.escalation.enabled=false','--opspilot.oncall.swap.notification.enabled=false'],
+      '--opspilot.oncall.rotation.enabled=false','--opspilot.oncall.escalation.enabled=false','--opspilot.oncall.swap.notification.enabled=false','--opspilot.oncall.open.notification.enabled=false'],
       {cwd:root,env:{...process.env,JWT_SECRET:secret,...(mysql?{SPRING_DATASOURCE_URL:mysql.url,SPRING_DATASOURCE_USERNAME:mysql.user,SPRING_DATASOURCE_PASSWORD:mysql.password}:{})},stdio:['ignore',fd,fd],windowsHide:true});
     child.once('error',error=>{child.launchError=error;});children.push(child);result.startedPids.push(child.pid);
     await waitForHealth('http://127.0.0.1:9982/actuator/health',child);return child;}
@@ -126,7 +127,7 @@ async function verify(mysql){
       for(const key of ['accepted','firstReplacement','secondReplacement','revocation'])assert.deepEqual(replayedSwap[key],swapReceipt[key]);
       assert.deepEqual(await api('/on-call/swaps',owner,swapDraft),swap);assert.deepEqual(await api('/on-call/swaps/'+swap.id+'/decisions',claimant,swapDecision),swap);
       await responsibility(first,2);await responsibility(second,3);
-      await stop();const after=sql('SNAPSHOT');assertMigrations(after,40);
+      await stop();const after=sql('SNAPSHOT');assertMigrations(after,41);
       for(const key of ['shifts','shiftHash','designatedHash','swapHash','swapRevocationHash','onCallAuditHash','legacyMigrationHash'])assert.equal(after[key],before[key]);
       assert.ok(before.designatedRows>0&&before.swapRows>0&&before.swapRevocationRows>0);
       assert.deepEqual(after.requests,[]);result.cases.push({name:'populated-v37-upgrade-preserves-source-designated-receipts-and-cancelled-coverage',before,after,legacyRowsPreserved:true,oldBilateralReceiptAndResponsibilitiesPreserved:true});
@@ -184,7 +185,7 @@ async function verify(mysql){
     await responsibility({...ongoingSource,startsAt:ongoingDraft.endsAt},2);result.sqlExpectations.push(expectation(ongoingFacts));
     result.cases.push({name:caseNames[6],originalTimesPreserved:true,remainingWholeSecondsOnly:true,pastOwner:2,remainingOwner:3,futureOwner:2});
     assert.deepEqual((await api('/on-call/handoffs?scope=MINE',owner)).requests.find(row=>row.id===legacy.id),legacy);assert.deepEqual((await api('/on-call/roster'+window(legacySource),auditor)).shifts,legacyRows);
-    await stop();const beforeRole=sql('SNAPSHOT');assertMigrations(beforeRole,40);assertSqlRows(beforeRole.requests,result.sqlExpectations);
+    await stop();const beforeRole=sql('SNAPSHOT');assertMigrations(beforeRole,41);assertSqlRows(beforeRole.requests,result.sqlExpectations);
     const staleClaimant=claimant,demotion=sql('DEMOTE');assert.equal(demotion.actorId,3);assert.equal(demotion.changed,1);assert.equal(demotion.role,'AUDITOR');
     current=await start(jar);admin=(await api('/auth/login',null,{username:'admin',password:'OpsPilot@2026'})).accessToken;
     assert.equal((await api('/auth/me',staleClaimant)).roleCode,'AUDITOR');
