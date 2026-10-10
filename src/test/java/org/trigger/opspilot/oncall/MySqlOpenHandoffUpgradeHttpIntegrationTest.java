@@ -115,13 +115,13 @@ class MySqlOpenHandoffUpgradeHttpIntegrationTest {
             }
             try(var connection=DriverManager.getConnection(url,mysql.getUsername(),mysql.getPassword())){
                 assertThat(identity(connection,schema)).isEqualTo(identity);
-                assertThat(count(connection,"SELECT COUNT(*) FROM flyway_schema_history WHERE version IS NOT NULL AND success=TRUE")).isEqualTo(38);
+                assertThat(count(connection,"SELECT COUNT(*) FROM flyway_schema_history WHERE version IS NOT NULL AND success=TRUE")).isEqualTo(39);
                 assertThat(count(connection,"SELECT COUNT(*) FROM oncall_open_handoff")).isEqualTo(5);
                 assertThat(count(connection,"SELECT COUNT(*) FROM oncall_open_handoff WHERE status='CLAIMED'")).isEqualTo(3);
                 assertThat(count(connection,"SELECT COUNT(*) FROM oncall_open_handoff WHERE status='WITHDRAWN'")).isEqualTo(1);
                 assertThat(count(connection,"SELECT COUNT(*) FROM oncall_open_handoff_operation")).isEqualTo(4);
                 assertThat(count(connection,"SELECT COUNT(*) FROM oncall_swap_revocation")).isEqualTo(1);
-                audit.put("finalJdbcCounts",Map.of("versionedMigrations",38,"openRequests",5,"claimed",3,"withdrawn",1,"open",1,"operations",4,"oldBilateralRevocations",1));
+                audit.put("finalJdbcCounts",Map.of("versionedMigrations",39,"openRequests",5,"claimed",3,"withdrawn",1,"open",1,"operations",4,"oldBilateralRevocations",1));
             }
             audit.put("nodeConnections",connections);
             audit.put("runnerResultFile",root.relativize(run.resolve("result.json")).toString().replace('\\','/'));

@@ -7,11 +7,11 @@ const digest=value=>createHash('sha256').update(value).digest('hex');
 const identity={product:'MySQL',version:'8.4.11',schema:'opspilot_open_upgrade_012345abcdef',serverUuid:'01234567-0123-4567-89ab-0123456789ab'};
 function fixture(){
   const snapshot=maximum=>({actualProduct:identity.product,actualVersion:identity.version,schema:identity.schema,serverUuid:identity.serverUuid,ownerConfirmed:true,
-    migrationCount:maximum,successfulHistoryRows:maximum,migration38:maximum===38,
+    migrationCount:maximum,successfulHistoryRows:maximum,migration38:maximum>=38,migration39:maximum===39,
     history:Array.from({length:maximum},(_,i)=>({version:String(i+1),type:[29,33].includes(i+1)?'JDBC':'SQL',success:true})),
     shifts:9,shiftHash:digest('shifts'),designatedHash:digest('designated'),swapHash:digest('swaps'),swapRevocationHash:digest('revocations'),onCallAuditHash:digest('audits'),legacyMigrationHash:digest('checksums'),
     designatedRows:1,swapRows:1,swapRevocationRows:1,requests:[]});
-  const before=snapshot(37),after=snapshot(38),final=snapshot(38);
+  const before=snapshot(37),after=snapshot(39),final=snapshot(39);
   final.openRequestHash=digest('open requests');final.openOperationHash=digest('operations');
   final.requests=Array.from({length:5},(_,i)=>({id:i+1,status:'CLAIMED',operations:1}));
   const original=caseNames.map(name=>({name}));
@@ -29,7 +29,7 @@ function fixture(){
   const line='INFO Database: jdbc:mysql://localhost:33061/'+identity.schema+' (MySQL 8.4)';
   const audit={status:'PASS',database:identity,ownedContainerStopped:true,recordedJvmPidsVerifiedAbsent:true,twoScopedPortsVerifiedFree:true,
     binaryAuditKeyProbe:{exactId:true,leadingZero:false,differentId:false,trailingSpace:false,numericAlias:false},
-    finalJdbcCounts:{versionedMigrations:38,openRequests:5,claimed:3,withdrawn:1,open:1,operations:4,oldBilateralRevocations:1},
+    finalJdbcCounts:{versionedMigrations:39,openRequests:5,claimed:3,withdrawn:1,open:1,operations:4,oldBilateralRevocations:1},
     nodeConnections:result.startedPids.map((pid,i)=>({jar:i+1,pid,flywayDatabaseLine:line,poolStartedAndStopped:true}))};
   const markers='CP104_OPEN_UPGRADE_DATABASE '+JSON.stringify(identity)+'\nCP105_OPEN_UPGRADE_BINARY_COMPARE '+JSON.stringify(audit.binaryAuditKeyProbe)+'\nCP104_OPEN_UPGRADE_CONTAINER_STOPPED {"stopped":true}\n';
   const log=markers+'[INFO] BUILD SUCCESS\n';

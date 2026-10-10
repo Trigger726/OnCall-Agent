@@ -1,6 +1,6 @@
 # OpsPilot
 
-开发中 CP109：[计划成员权限后端阶段](docs/acceptance/V1.7-checkpoint-109.md)。V39/权限分离/原键与审计、各责任入口及共享22场景已进入独立 WIP 分支，不是已验收版本；本地结果与自身真实 MySQL CI 分开记录。旧最高V38门禁、非空升级、成员页面与新旧Demo仍待，原验收分支不重置。下方 CP107 等状态按历史时点阅读。
+开发中 CP110：[非空旧 V38→V39 升级与原 HTTP 回归](docs/acceptance/V1.7-checkpoint-110.md)。CP109 自身实际 MySQL22/0跳过已[限定闭合](docs/assets/v1.7-cp109/remote-proof.json)；本轮本地升级7/原HTTP8/原升级10/选定后端46/Node184通过。新源码实际MySQL升级、完整原CI与成员页面/新旧Demo仍待，独立WIP不合入已验收分支，所有未提交改动保留。下方状态按历史时点阅读。
 
 当前 CP107：[完整取消帧门禁与成员契约](docs/acceptance/V1.7-checkpoint-107.md)。CP106自身[21作业 success/两个官方ZIP的191检查证据](docs/assets/v1.7-cp106/remote-close-proof.json)已闭合：Linux原生六项/两流完整取消JSON与EOF、八认证runner及后续通知12/成对14/开放33均执行。CP105首次失败仍保留，不推断唯一根因。本轮加强测试而非改生产UI；[计划成员权限](docs/ONCALL_PLAN_MEMBERSHIP_DESIGN.md)仍是设计，未实现。以下历史待验按各检查点当时范围阅读，整体active。
 

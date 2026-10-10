@@ -1,6 +1,6 @@
 # OpsPilot 高价值迭代路线
 
-当前开发 CP109：[成员权限后端阶段](acceptance/V1.7-checkpoint-109.md)。先核验独立WIP自己的实际MySQL22与原回归，再显式接入V39门禁、非空旧V38→V39升级、真网络/两JVM和成员页面/新旧Demo；不能删原HTTP8/升级10/页面33。开放通知/提醒/渠道、认领撤销、DST/日历和生产容量继续，整体active。下方为历史时点。
+当前开发 CP110：[非空 V38→V39 升级](acceptance/V1.7-checkpoint-110.md)。CP109自己的实际MySQL22已核验；本地新升级7/原HTTP8/原升级10通过，明确V39门禁已接入。先核验本次独立MySQL升级与共享22自身CI，再补完整原矩阵、真网络/两JVM和成员页面/新旧Demo；原页面33保留。开放通知/提醒/渠道、认领撤销、DST/日历和生产容量继续，整体active。下方为历史时点。
 
 当前 CP107：[报告](acceptance/V1.7-checkpoint-107.md)。CP106自身原始attempt1已21作业success，两官方ZIP的[191检查/83文件](assets/v1.7-cp106/remote-close-proof.json)限定证明认证八runner和Linux原生六/后续页面；首次失败不覆盖、唯一根因不冒称。下一业务阶段按[计划成员权限14门禁](ONCALL_PLAN_MEMBERSHIP_DESIGN.md)落实迁移/权限分离/所有责任入口/续排/有数据升级与页面，再推进开放通知/提醒/渠道；认领撤销、DST/日历、生产容量与原始OnCall能力/历史Demo继续。下方‘当前/待验’是历史时点，整体active。
 

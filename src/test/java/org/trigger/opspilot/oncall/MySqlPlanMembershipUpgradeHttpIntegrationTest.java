@@ -1,0 +1,93 @@
+package org.trigger.opspilot.oncall;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.testcontainers.containers.MySQLContainer;
+
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.DriverManager;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+/** Nonempty old V38/new V39 JARs on an independent, owned actual MySQL, not Flyway-only. */
+@EnabledIfSystemProperty(named="opspilot.oncall.membership.upgrade.mysql.enabled",matches="true")
+class MySqlPlanMembershipUpgradeHttpIntegrationTest {
+    private static final ObjectMapper JSON = new ObjectMapper();
+
+    @Test @Timeout(value=8,unit=TimeUnit.MINUTES)
+    void shouldUpgradePopulatedV38AndRetainOriginalReceiptsAndMembershipAcrossRestarts() throws Exception {
+        Path root=Path.of("").toAbsolutePath(),parent=root.resolve("target/oncall-plan-membership-upgrade-mysql-it");
+        Path evidence=parent.resolve("audit-"+UUID.randomUUID());Files.createDirectories(evidence);
+        String schema="opspilot_member_upgrade_"+UUID.randomUUID().toString().replace("-","").substring(0,12);
+        var audit=new LinkedHashMap<String,Object>();
+        var mysql=new MySQLContainer<>("mysql:8.4").withDatabaseName(schema).withUsername("opspilot").withPassword(UUID.randomUUID().toString())
+                .withUrlParam("connectionTimeZone","UTC").withUrlParam("forceConnectionTimeZoneToSession","true")
+                .withUrlParam("useSSL","false").withUrlParam("allowPublicKeyRetrieval","true")
+                .withCommand("--character-set-server=utf8mb4","--collation-server=utf8mb4_unicode_ci","--default-time-zone=+00:00");
+        try(mysql) {
+            mysql.start();Map<String,Object> identity;
+            try(var connection=DriverManager.getConnection(mysql.getJdbcUrl(),mysql.getUsername(),mysql.getPassword());var statement=connection.createStatement()) {
+                var metadata=connection.getMetaData();assertThat(metadata.getDatabaseProductName()).isEqualTo("MySQL");
+                assertThat(metadata.getDatabaseProductVersion()).startsWith("8.4.");assertThat(connection.getCatalog()).isEqualTo(schema);
+                try(var rows=statement.executeQuery("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE()")) {assertThat(rows.next()).isTrue();assertThat(rows.getLong(1)).isZero();}
+                try(var rows=statement.executeQuery("SELECT @@server_uuid")) {assertThat(rows.next()).isTrue();identity=Map.of("product","MySQL","version",metadata.getDatabaseProductVersion(),"schema",schema,"serverUuid",rows.getString(1));}
+            }
+            audit.put("database",identity);System.out.println("PLAN_MEMBERSHIP_UPGRADE_DATABASE "+JSON.writeValueAsString(identity));
+            Path output=evidence.resolve("runner.log");
+            var builder=new ProcessBuilder(System.getenv().getOrDefault("OPSPILOT_NODE_EXECUTABLE","node"),"scripts/verify-oncall-plan-membership-upgrade-http-ci.cjs")
+                    .directory(root.toFile()).redirectErrorStream(true).redirectOutput(output.toFile());
+            builder.environment().put("OPSPILOT_MEMBER_UPGRADE_MYSQL_OWNER","TESTCONTAINERS");
+            builder.environment().put("OPSPILOT_UPGRADE_SCHEMA",schema);builder.environment().put("OPSPILOT_UPGRADE_JDBC_URL",mysql.getJdbcUrl());
+            builder.environment().put("OPSPILOT_UPGRADE_DB_USER",mysql.getUsername());builder.environment().put("OPSPILOT_UPGRADE_DB_PASSWORD",mysql.getPassword());
+            builder.environment().put("OPSPILOT_UPGRADE_SERVER_UUID",identity.get("serverUuid").toString());
+            var runner=builder.start();
+            try {assertThat(runner.waitFor(6,TimeUnit.MINUTES)).isTrue();assertThat(runner.exitValue()).as("full owned old/new JAR runner, see %s",output).isZero();}
+            finally {if(runner.isAlive()){runner.destroy();if(!runner.waitFor(20,TimeUnit.SECONDS)){runner.descendants().forEach(ProcessHandle::destroyForcibly);runner.destroyForcibly();runner.waitFor(5,TimeUnit.SECONDS);}}}
+            var lines=Files.readString(output).lines().filter(line->line.startsWith("{\"status\":")).toList();assertThat(lines).hasSize(1);
+            var result=JSON.readTree(lines.get(0));assertThat(result.path("status").asText()).isEqualTo("PASS");
+            assertThat(result.path("databaseMode").asText()).isEqualTo("MYSQL_TESTCONTAINER");assertThat(result.path("mysqlSchema").asText()).isEqualTo(schema);
+            assertThat(result.path("oldSource").asText()).isEqualTo("ce5fc51aee215e4eebccfd9e02bccf5271f6fea5");
+            assertThat(result.path("cases").size()).isEqualTo(7);assertThat(result.path("startedPids").size()).isEqualTo(5);
+            for(var pid:result.path("startedPids"))assertThat(ProcessHandle.of(pid.asLong()).map(ProcessHandle::isAlive).orElse(false)).isFalse();
+            for(int port:List.of(9983,9984))try(var socket=new ServerSocket()){socket.bind(new InetSocketAddress("127.0.0.1",port));}
+            Path run=root.resolve(result.path("evidenceDirectory").asText()).normalize();assertThat(run.startsWith(parent)).isTrue();
+            var connections=new ArrayList<Map<String,Object>>();
+            for(int i=1;i<=5;i++) {
+                String log=Files.readString(run.resolve("jar-"+i+".log")),start="HikariPool-1 - Start completed.",stop="HikariPool-1 - Shutdown completed.";
+                assertThat(log.split(java.util.regex.Pattern.quote(start),-1)).hasSize(2);assertThat(log.split(java.util.regex.Pattern.quote(stop),-1)).hasSize(2);assertThat(log.indexOf(stop)).isGreaterThan(log.indexOf(start));
+                String line=log.lines().filter(s->s.contains("Database: "+mysql.getJdbcUrl().split("\\?")[0])&&s.contains("(MySQL 8.4)")).findFirst().orElseThrow();
+                connections.add(Map.of("jar",i,"pid",result.path("startedPids").get(i-1).asLong(),"flywayDatabaseLine",line,"poolStartedAndStopped",true));
+            }
+            try(var connection=DriverManager.getConnection(mysql.getJdbcUrl(),mysql.getUsername(),mysql.getPassword());var statement=connection.createStatement()) {
+                assertThat(connection.getCatalog()).isEqualTo(schema);
+                try(var rows=statement.executeQuery("SELECT @@server_uuid")){assertThat(rows.next()).isTrue();assertThat(rows.getString(1)).isEqualTo(identity.get("serverUuid"));}
+                var counts=new LinkedHashMap<String,Long>();
+                for(var entry:Map.of("versionedMigrations","SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE AND version IS NOT NULL",
+                        "requests","SELECT COUNT(*) FROM oncall_open_handoff","claimed","SELECT COUNT(*) FROM oncall_open_handoff WHERE status='CLAIMED'",
+                        "withdrawn","SELECT COUNT(*) FROM oncall_open_handoff WHERE status='WITHDRAWN'","operations","SELECT COUNT(*) FROM oncall_open_handoff_operation",
+                        "members","SELECT COUNT(*) FROM oncall_schedule_member","memberOperations","SELECT COUNT(*) FROM oncall_schedule_member_operation").entrySet()) {
+                    try(var rows=statement.executeQuery(entry.getValue())){assertThat(rows.next()).isTrue();counts.put(entry.getKey(),rows.getLong(1));}
+                }
+                assertThat(counts).containsExactlyInAnyOrderEntriesOf(Map.of("versionedMigrations",39L,"requests",3L,"claimed",2L,"withdrawn",1L,"operations",3L,"members",6L,"memberOperations",2L));
+                audit.put("finalJdbcCounts",counts);
+            }
+            audit.put("nodeConnections",connections);audit.put("recordedJvmPidsVerifiedAbsent",true);audit.put("twoScopedPortsVerifiedFree",true);
+            audit.put("runnerResultFile",root.relativize(run.resolve("result.json")).toString().replace('\\','/'));
+        }
+        assertThat(mysql.isRunning()).isFalse();audit.put("ownedContainerStopped",true);audit.put("status","PASS");
+        Files.writeString(evidence.resolve("audit.json"),JSON.writerWithDefaultPrettyPrinter().writeValueAsString(audit));
+        System.out.println("PLAN_MEMBERSHIP_UPGRADE_AUDIT "+root.relativize(evidence.resolve("audit.json")).toString().replace('\\','/'));
+        System.out.println("PLAN_MEMBERSHIP_UPGRADE_CONTAINER_STOPPED {\"stopped\":true}");
+    }
+}

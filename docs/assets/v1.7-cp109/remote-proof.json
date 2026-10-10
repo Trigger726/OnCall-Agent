@@ -1,0 +1,99 @@
+{
+  "status": "OWN_MYSQL_22_CASES_REPLAYED_FULL_V39_DELIVERY_PENDING",
+  "source": "8cbce893e4d7d64149702828cd3779394e49eba2",
+  "runId": 38049260430,
+  "attempt": 1,
+  "runStatus": "completed",
+  "runConclusion": "success",
+  "jobId": 114204911339,
+  "jobConclusion": "success",
+  "artifactId": 11668649190,
+  "archiveBytes": 18350,
+  "archiveSha256": "e684c8988192477c03337564685a892ec29dbd4a296fd1290a4faee0703baefd",
+  "ownSourceGateAndSharedTestsMatched": true,
+  "savedGateEqualsIndependentReplay": true,
+  "replayed": {
+    "status": "PASS",
+    "suite": {
+      "name": "org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest",
+      "tests": 22,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cases": [
+      "shouldBackfillOnlyPreexistingOperationalUsersAndNeverEnrolNewPlansOrAccounts",
+      "shouldSeparateManagementFromResponseAndKeepAdminRecoveryWithoutSelfClaim",
+      "shouldDenyAnotherValidPlanAndPermitItsExplicitMemberControl",
+      "shouldRejectMissingExpectedVersionButAcceptExplicitNullAndSerializeEffectivePermissions",
+      "shouldRecordActualActorIpAndOldAndNewPermissions",
+      "shouldCommitOneImmutableReceiptForConcurrentOriginalCommands",
+      "shouldRejectCrossPlanOrChangedKeyAndStaleOrOverflowedVersions",
+      "shouldPermitOriginalManagerReceiptAfterOwnPlanManagementWasRevoked",
+      "shouldRollbackFirstGrantAfterActualAuditInsertFails",
+      "shouldRollbackUpdateAfterActualAuditInsertFails",
+      "shouldRollbackRevocationAfterActualAuditInsertFails",
+      "shouldRetainAssignedCoverageAndOriginalClaimReceiptAfterMembershipRevocation",
+      "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait",
+      "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait",
+      "shouldFilterDepartedRequestersBeforeAvailableLimitAndAllowOwnWithdrawal",
+      "shouldRequireResponseForManualOverridesAndManagementForCancellation",
+      "shouldRejectNewDesignatedAcceptanceButAllowDepartedTargetRejection",
+      "shouldRequireBothParticipantsInBothPlansForBilateralSwap",
+      "shouldBlockOriginalRotationSlotsWithoutReassigningHistoryAndResumeOnlyMissingSlots",
+      "shouldNotWriteRotationWarningWhenManualScannerHasNoPlanManagement",
+      "shouldRetainBadRotationTargetErrorContractAndRejectInvalidManagementTargets",
+      "shouldRecheckCurrentRoleAndNotResurrectRevokedMembershipWhenAccountIsRestored"
+    ],
+    "executed": 22,
+    "skipped": 0,
+    "database": {
+      "version": "8.4.11",
+      "product": "MySQL",
+      "migration39": true,
+      "schema": "opspilot_plan_membership_test",
+      "case": "shouldRequireBothParticipantsInBothPlansForBilateralSwap"
+    },
+    "orderedResponsibilityRaces": [
+      {
+        "revocationFirst": false,
+        "databaseLockWaitObserved": true,
+        "responsibilityMatchesCommitOrder": true,
+        "case": "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait"
+      },
+      {
+        "revocationFirst": true,
+        "databaseLockWaitObserved": true,
+        "responsibilityMatchesCommitOrder": true,
+        "case": "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait"
+      }
+    ],
+    "completeMavenAndPoolShutdownVerified": true,
+    "populatedOldJarUpgradeVerified": false,
+    "fullCiMatrixVerified": false,
+    "membershipUiVerified": false
+  },
+  "files": [
+    {
+      "file": "docs/assets/v1.7-cp109/remote/maven.log",
+      "bytes": 32240,
+      "sha256": "f7a381c09926d7dc62ac8f3e59aed262defa42a79bc6ab9115fd441a8774d94f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp109/remote/result.json",
+      "bytes": 2696,
+      "sha256": "ba37f3626d03e8199650ba1266fbe7e751063a269b2dd7596875a89fbe8328e0"
+    },
+    {
+      "file": "docs/assets/v1.7-cp109/remote/TEST-org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest.xml",
+      "bytes": 82886,
+      "sha256": "8c11383a200309c2ac5dac5d7563a9ee70936cf72d9148ee49c307227056effb"
+    },
+    {
+      "file": "docs/assets/v1.7-cp109/remote/org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest.txt",
+      "bytes": 387,
+      "sha256": "ce6dfe7eac58b0d21894b345396d6d1662b4fe089eebc0e5950cae466ecaa174"
+    }
+  ],
+  "doesNotProveOriginal21JobsOrPopulatedUpgradeOrMembershipUi": true
+}

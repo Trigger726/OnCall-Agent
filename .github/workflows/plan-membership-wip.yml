@@ -1,6 +1,6 @@
 name: Plan membership WIP verification
 
-# This phase is not the full CI matrix, populated upgrade, network or UI acceptance.
+# Shared cases and populated upgrade remain separate jobs; not the full CI matrix or UI acceptance.
 on:
   push:
     branches: ["wip/plan-membership-v39-20261010"]
@@ -46,4 +46,52 @@ jobs:
           path: |
             target/oncall-plan-membership-mysql-it/
             target/surefire-reports/
+          retention-days: 30
+
+  membership-upgrade-mysql:
+    name: Populated V38 to V39 JAR upgrade on owned MySQL 8.4
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Verify strict upgrade evidence gate
+        run: node --test scripts/tests/oncall-plan-membership-upgrade-mysql.test.cjs
+      - name: Build fresh own-source JAR
+        run: |
+          chmod +x mvnw
+          ./mvnw -B -DskipTests package
+      - name: Immutable original V38 checkout
+        uses: actions/checkout@v5
+        with:
+          ref: ce5fc51aee215e4eebccfd9e02bccf5271f6fea5
+          path: target/cp110-v38-source
+      - name: Build actual old V38 JAR and verify provenance
+        run: |
+          (cd target/cp110-v38-source && bash mvnw -B -DskipTests package)
+          node scripts/record-plan-membership-upgrade-baseline.cjs
+      - name: Execute nonempty original V38 to fresh V39 on owned MySQL
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p target/oncall-plan-membership-upgrade-mysql-it
+          ./mvnw -B -Duser.timezone=UTC -Dopspilot.oncall.membership.upgrade.mysql.enabled=true -Dtest=MySqlPlanMembershipUpgradeHttpIntegrationTest test 2>&1 | tee target/oncall-plan-membership-upgrade-mysql-it/maven.log
+      - name: Inspect JDBC, all 38 checksums, receipts, five JVM pools and owned container shutdown
+        run: node scripts/verify-oncall-plan-membership-upgrade-mysql.cjs
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: plan-membership-upgrade-mysql-evidence
+          path: |
+            target/oncall-plan-membership-upgrade-mysql-it/**/*.json
+            target/oncall-plan-membership-upgrade-mysql-it/**/*.log
+            target/surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlPlanMembershipUpgradeHttpIntegrationTest.xml
+            target/cp110-v38-source/old-v38-jar-provenance.json
           retention-days: 30

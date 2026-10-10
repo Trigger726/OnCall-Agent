@@ -1,6 +1,6 @@
 # OpsPilot 验收记录
 
-开发中 CP109：[成员权限后端阶段](V1.7-checkpoint-109.md)/[本地证据](../assets/v1.7-cp109/local-proof.json)。新增共享22场景与独立MySQL WIP门禁；完整V39升级/网络/页面/Demo未交付，不称全功能验收。CP108 [上传与首失败](V1.7-checkpoint-108-wip-upload.md)保留，旧 CP107 等内容对应各历史时点。
+开发中 CP110：[非空旧 V38→V39 升级与原 HTTP 回归](V1.7-checkpoint-110.md)/[本地证据](../assets/v1.7-cp110/local-proof.json)。CP109自身实际MySQL22由[官方工件重放](../assets/v1.7-cp109/remote-proof.json)限定闭合；本轮本地升级7/原HTTP8/原升级10/选定后端46/Node184通过，新源码实际MySQL升级及完整CI/页面/Demo仍待，不称全功能验收。CP108首失败及历史Demo保留，下方对应历史时点。
 
 当前 CP107：[测试强化与成员契约报告](V1.7-checkpoint-107.md)。CP106自身原始attempt1已21CI success，认证与浏览器两个官方ZIP由[191检查/83文件proof](../assets/v1.7-cp106/remote-close-proof.json)限定核验；它的历史待验见[106追加](V1.7-checkpoint-106.md#5-自身-linux-ci-闭合与下一业务阶段2026-10-10追加)。CP105首次失败/旧Demo保留。新增完整取消帧门禁不是Linux超时根因修复，成员ACL仍仅[设计](../ONCALL_PLAN_MEMBERSHIP_DESIGN.md)，不能标整条路线完成。下方记录按历史时点阅读。
 
