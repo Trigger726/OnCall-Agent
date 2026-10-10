@@ -1,5 +1,7 @@
 # 开放接班认领：阶段契约与验收矩阵
 
+CP106追加：[CP105自身七ZIP证据](assets/v1.7-cp105/remote-first-proof.json)已限定证明实际MySQL8.4.11五个精确键探针、固定旧源码真实非空V37历史→新JAR V38迁移/重启原回执的完整10流程；不能再将这项称为未执行。同轮认证构建与原生页面第六项仍失败，整轮非全绿，详见[106](acceptance/V1.7-checkpoint-106.md)。开放广播/提醒、计划成员ACL、认领撤销、DST/日历、生产容量及历史Demo对照仍按下面完整要求继续。
+
 CP101追加：原24+新9完整实页本地通过，真实回执关系、可靠清除及两种跨标签页身份变化见[报告](acceptance/V1.7-checkpoint-101.md)/[proof](assets/v1.7-cp101/local-proof.json)。旧关闭/取消回执不重建覆盖；读后验证null才能视为本地清除。自己的Linux待验，原生助手回归FAIL及CP100远端首次failure保留；剩余矩阵和整体路线不缩减。
 
 最新 CP104：[旧包有数据升级门禁](acceptance/V1.7-checkpoint-104.md)已接入独立实际MySQL旧/新JAR作业，旧指定/非空双向撤销、责任覆盖和迁移校验和均须保留，新执行待自己CI。增强H210/默认HTTP8与Node158通过不替代它。CP103自己Linux开放33/助手9/原生6和实际MySQL开放24/原生18由[六ZIP证据](assets/v1.7-cp103/remote-first-proof.json)限定核验；仍不包含完整广播/提醒/成员ACL/撤销/DST/生产容量，全部历史Demo/失败保持，下方按各时点阅读。

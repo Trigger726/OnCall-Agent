@@ -132,7 +132,10 @@ jobs:
           node-version: 22
       - run: chmod +x mvnw
       - name: Package real application
-        run: ./mvnw -B -DskipTests package
+        run: |
+          mkdir -p target/auth-build-it
+          set -o pipefail
+          ./mvnw -B -U -e -DskipTests package 2>&1 | tee target/auth-build-it/maven.log
       - name: Verify actual HTTP revocation across owned JVM restart
         run: node scripts/verify-auth-session-ci.cjs
       - name: Verify existing Agent streams and late real HTTP Provider results
@@ -160,6 +163,7 @@ jobs:
         with:
           name: auth-session-evidence
           path: |
+            target/auth-build-it/**/*.log
             target/auth-session-it/**/*.json
             target/auth-session-it/**/*.log
             target/agent-session-it/**/*.json

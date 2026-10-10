@@ -1,0 +1,736 @@
+﻿2026-10-08T12:38:12.0344046Z Current runner version: '2.337.0'
+2026-10-08T12:38:12.0370379Z ##[group]Runner Image Provisioner
+2026-10-08T12:38:12.0371293Z Hosted Compute Agent
+2026-10-08T12:38:12.0371974Z Version: 20261002.596
+2026-10-08T12:38:12.0372621Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-08T12:38:12.0373433Z Build Date: 2026-10-02T22:28:27Z
+2026-10-08T12:38:12.0374180Z Worker ID: {4e293f7f-02be-4efe-b475-ba2f4e07f2f5}
+2026-10-08T12:38:12.0374894Z Region: westus2
+2026-10-08T12:38:12.0375486Z Cloud: Azure
+2026-10-08T12:38:12.0376029Z ##[endgroup]
+2026-10-08T12:38:12.0377982Z ##[group]Operating System
+2026-10-08T12:38:12.0378764Z Ubuntu
+2026-10-08T12:38:12.0379281Z 24.04.5
+2026-10-08T12:38:12.0380199Z LTS
+2026-10-08T12:38:12.0380744Z ##[endgroup]
+2026-10-08T12:38:12.0381375Z ##[group]Runner Image
+2026-10-08T12:38:12.0382087Z Image: ubuntu-24.04
+2026-10-08T12:38:12.0382671Z Version: 20261004.327.1
+2026-10-08T12:38:12.0384008Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-08T12:38:12.0385563Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-08T12:38:12.0386639Z ##[endgroup]
+2026-10-08T12:38:12.0388009Z ##[group]GITHUB_TOKEN Permissions
+2026-10-08T12:38:12.0390300Z Contents: read
+2026-10-08T12:38:12.0390913Z Metadata: read
+2026-10-08T12:38:12.0391564Z ##[endgroup]
+2026-10-08T12:38:12.0393761Z Secret source: Actions
+2026-10-08T12:38:12.0394799Z Cache mode: write
+2026-10-08T12:38:12.0395523Z Prepare workflow directory
+2026-10-08T12:38:12.0748460Z Prepare all required actions
+2026-10-08T12:38:12.0799445Z Getting action download info
+2026-10-08T12:38:12.4403638Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+2026-10-08T12:38:12.5411207Z Download action repository 'actions/setup-node@v5' (SHA:a0853c24544627f65ddf259abe73b1d18a591444)
+2026-10-08T12:38:12.6770414Z Download action repository 'actions/setup-java@v5' (SHA:b6effb05e454b25005698d916606bdc6ffcbf961)
+2026-10-08T12:38:13.0079616Z Download action repository 'actions/upload-artifact@v5' (SHA:330a01c490aca151604b8cf639adc76d48f6c5d4)
+2026-10-08T12:38:13.2366850Z Complete job name: On-call real browser integration
+2026-10-08T12:38:13.3209451Z ##[group]Run actions/checkout@v5
+2026-10-08T12:38:13.3210434Z with:
+2026-10-08T12:38:13.3210958Z   repository: Trigger726/OnCall-Agent
+2026-10-08T12:38:13.3214917Z   token: ***
+2026-10-08T12:38:13.3215351Z   ssh-strict: true
+2026-10-08T12:38:13.3215792Z   ssh-user: git
+2026-10-08T12:38:13.3216228Z   persist-credentials: true
+2026-10-08T12:38:13.3216711Z   clean: true
+2026-10-08T12:38:13.3217369Z   sparse-checkout-cone-mode: true
+2026-10-08T12:38:13.3217894Z   fetch-depth: 1
+2026-10-08T12:38:13.3218317Z   fetch-tags: false
+2026-10-08T12:38:13.3218752Z   show-progress: true
+2026-10-08T12:38:13.3219185Z   lfs: false
+2026-10-08T12:38:13.3219586Z   submodules: false
+2026-10-08T12:38:13.3220031Z   set-safe-directory: true
+2026-10-08T12:38:13.3220550Z   allow-unsafe-pr-checkout: false
+2026-10-08T12:38:13.3221421Z ##[endgroup]
+2026-10-08T12:38:13.4293593Z Syncing repository: Trigger726/OnCall-Agent
+2026-10-08T12:38:13.4295776Z ##[group]Getting Git version info
+2026-10-08T12:38:13.4296671Z Working directory is '/home/runner/work/OnCall-Agent/OnCall-Agent'
+2026-10-08T12:38:13.4298248Z [command]/usr/bin/git version
+2026-10-08T12:38:13.4383525Z git version 2.55.0
+2026-10-08T12:38:13.4425543Z ##[endgroup]
+2026-10-08T12:38:13.4435261Z Temporarily overriding HOME='/home/runner/work/_temp/aefa5906-80db-475e-b23d-264d786a193f' before making global git config changes
+2026-10-08T12:38:13.4438721Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-08T12:38:13.4440000Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-08T12:38:13.4500645Z Deleting the contents of '/home/runner/work/OnCall-Agent/OnCall-Agent'
+2026-10-08T12:38:13.4505343Z ##[group]Initializing the repository
+2026-10-08T12:38:13.4510487Z [command]/usr/bin/git init /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-08T12:38:13.4654782Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-08T12:38:13.4657474Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-08T12:38:13.4659523Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-08T12:38:13.4660947Z hint: call:
+2026-10-08T12:38:13.4662027Z hint:
+2026-10-08T12:38:13.4663017Z hint: 	git config --global init.defaultBranch <name>
+2026-10-08T12:38:13.4664499Z hint:
+2026-10-08T12:38:13.4665613Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-08T12:38:13.4667672Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-08T12:38:13.4668942Z hint:
+2026-10-08T12:38:13.4669399Z hint: 	git branch -m <name>
+2026-10-08T12:38:13.4669892Z hint:
+2026-10-08T12:38:13.4670538Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-08T12:38:13.4671613Z Initialized empty Git repository in /home/runner/work/OnCall-Agent/OnCall-Agent/.git/
+2026-10-08T12:38:13.4673445Z [command]/usr/bin/git remote add origin https://github.com/Trigger726/OnCall-Agent
+2026-10-08T12:38:13.4731778Z ##[endgroup]
+2026-10-08T12:38:13.4733106Z ##[group]Disabling automatic garbage collection
+2026-10-08T12:38:13.4737312Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-08T12:38:13.4846295Z ##[endgroup]
+2026-10-08T12:38:13.4847783Z ##[group]Setting up auth
+2026-10-08T12:38:13.4848991Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-08T12:38:13.4852706Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-08T12:38:13.5271043Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-08T12:38:13.5312070Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-08T12:38:13.5545173Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-08T12:38:13.5585300Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-08T12:38:13.5822919Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-08T12:38:13.5866389Z ##[endgroup]
+2026-10-08T12:38:13.5867906Z ##[group]Fetching the repository
+2026-10-08T12:38:13.5877325Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e32418003631a5852d6143c3dd2dfd61516c6916:refs/remotes/origin/feat/opspilot-v1
+2026-10-08T12:38:14.5351334Z From https://github.com/Trigger726/OnCall-Agent
+2026-10-08T12:38:14.5352686Z  * [new ref]         e32418003631a5852d6143c3dd2dfd61516c6916 -> origin/feat/opspilot-v1
+2026-10-08T12:38:14.5356390Z ##[endgroup]
+2026-10-08T12:38:14.5357695Z ##[group]Determining the checkout info
+2026-10-08T12:38:14.5360708Z ##[endgroup]
+2026-10-08T12:38:14.5367415Z [command]/usr/bin/git sparse-checkout disable
+2026-10-08T12:38:14.5426335Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-08T12:38:14.5461294Z ##[group]Checking out the ref
+2026-10-08T12:38:14.5466279Z [command]/usr/bin/git checkout --progress --force -B feat/opspilot-v1 refs/remotes/origin/feat/opspilot-v1
+2026-10-08T12:38:14.8652596Z Switched to a new branch 'feat/opspilot-v1'
+2026-10-08T12:38:14.8657457Z branch 'feat/opspilot-v1' set up to track 'origin/feat/opspilot-v1'.
+2026-10-08T12:38:14.8686074Z ##[endgroup]
+2026-10-08T12:38:14.8739279Z [command]/usr/bin/git log -1 --format=%H
+2026-10-08T12:38:14.8770475Z e32418003631a5852d6143c3dd2dfd61516c6916
+2026-10-08T12:38:14.9054463Z ##[group]Run actions/setup-node@v5
+2026-10-08T12:38:14.9054861Z with:
+2026-10-08T12:38:14.9055107Z   node-version: 22
+2026-10-08T12:38:14.9055355Z   cache: npm
+2026-10-08T12:38:14.9055770Z   cache-dependency-path: web/package-lock.json
+scripts/browser/package-lock.json
+
+2026-10-08T12:38:14.9056264Z   always-auth: false
+2026-10-08T12:38:14.9056533Z   check-latest: false
+2026-10-08T12:38:14.9059537Z   token: ***
+2026-10-08T12:38:14.9059830Z   package-manager-cache: true
+2026-10-08T12:38:14.9060126Z ##[endgroup]
+2026-10-08T12:38:15.0588509Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+2026-10-08T12:38:15.0593956Z (node:2312) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-08T12:38:15.0594849Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-08T12:38:15.0596686Z ##[group]Environment details
+2026-10-08T12:38:15.4929422Z node: v22.23.3
+2026-10-08T12:38:15.4930866Z npm: 10.9.9
+2026-10-08T12:38:15.4931212Z yarn: 1.22.22
+2026-10-08T12:38:15.4932528Z ##[endgroup]
+2026-10-08T12:38:15.4955595Z [command]/opt/hostedtoolcache/node/22.23.3/x64/bin/npm config get cache
+2026-10-08T12:38:15.6122965Z /home/runner/.npm
+2026-10-08T12:38:15.8880300Z Cache hit for: node-cache-Linux-x64-npm-9ead35d51aa4f51ca0c3e8ac786759dce8c6a2f1fe87762f38c169b016091347
+2026-10-08T12:38:15.8994495Z (node:2312) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-08T12:38:17.1591361Z Received 6094734 of 22871950 (26.6%), 5.8 MBs/sec
+2026-10-08T12:38:17.5775354Z Received 22871950 of 22871950 (100.0%), 15.4 MBs/sec
+2026-10-08T12:38:17.5776042Z Cache Size: ~22 MB (22871950 B)
+2026-10-08T12:38:17.5808773Z [command]/usr/bin/tar -xf /home/runner/work/_temp/7be7e031-42d6-413f-a9ca-282f2744fbd7/cache.tzst -P -C /home/runner/work/OnCall-Agent/OnCall-Agent --use-compress-program unzstd
+2026-10-08T12:38:17.6293805Z Cache restored successfully
+2026-10-08T12:38:17.6305461Z Cache restored from key: node-cache-Linux-x64-npm-9ead35d51aa4f51ca0c3e8ac786759dce8c6a2f1fe87762f38c169b016091347
+2026-10-08T12:38:17.6552723Z ##[group]Run actions/setup-java@v5
+2026-10-08T12:38:17.6553076Z with:
+2026-10-08T12:38:17.6553290Z   distribution: temurin
+2026-10-08T12:38:17.6553526Z   java-version: 17
+2026-10-08T12:38:17.6553740Z   cache: maven
+2026-10-08T12:38:17.6553966Z   java-package: jdk
+2026-10-08T12:38:17.6554183Z   check-latest: false
+2026-10-08T12:38:17.6554400Z   set-default: true
+2026-10-08T12:38:17.6554619Z   verify-signature: false
+2026-10-08T12:38:17.6554863Z   server-id: github
+2026-10-08T12:38:17.6555081Z   server-username: GITHUB_ACTOR
+2026-10-08T12:38:17.6555355Z   server-password: GITHUB_TOKEN
+2026-10-08T12:38:17.6555615Z   overwrite-settings: true
+2026-10-08T12:38:17.6555855Z   job-status: success
+2026-10-08T12:38:17.6558673Z   token: ***
+2026-10-08T12:38:17.6558913Z   show-download-progress: false
+2026-10-08T12:38:17.6559222Z ##[endgroup]
+2026-10-08T12:38:17.8148810Z ##[group]Installed distributions
+2026-10-08T12:38:17.8229547Z Resolved Java 17.0.20+1 from tool-cache
+2026-10-08T12:38:17.8230196Z Setting Java 17.0.20+1 as the default
+2026-10-08T12:38:17.8236321Z Creating toolchains.xml for JDK version 17 from temurin
+2026-10-08T12:38:17.8316095Z Writing to /home/runner/.m2/toolchains.xml
+2026-10-08T12:38:17.8316623Z 
+2026-10-08T12:38:17.8317199Z Java configuration:
+2026-10-08T12:38:17.8317733Z   Distribution: temurin
+2026-10-08T12:38:17.8318124Z   Version: 17.0.20+1
+2026-10-08T12:38:17.8318578Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:17.8319156Z 
+2026-10-08T12:38:17.8319573Z ##[endgroup]
+2026-10-08T12:38:17.8325467Z Creating settings.xml with server-id: github
+2026-10-08T12:38:17.8342522Z Writing to /home/runner/.m2/settings.xml
+2026-10-08T12:38:17.8346300Z Configured MAVEN_ARGS to include -ntp to suppress Maven transfer progress logs. Set 'show-download-progress: true' to keep the download progress output.
+2026-10-08T12:38:18.4015209Z Cache hit for: setup-java-Linux-x64-maven-d32cb843aa19f08330bb1496da7a1a49cc2deb22a4e49d97b309eae19c7fe74e
+2026-10-08T12:38:19.7079008Z Received 8388608 of 97722820 (8.6%), 8.0 MBs/sec
+2026-10-08T12:38:20.5216810Z Received 97722820 of 97722820 (100.0%), 51.4 MBs/sec
+2026-10-08T12:38:20.5217885Z Cache Size: ~93 MB (97722820 B)
+2026-10-08T12:38:20.5333342Z [command]/usr/bin/tar -xf /home/runner/work/_temp/54720f22-652c-4b53-bdea-4481ac72d430/cache.tzst -P -C /home/runner/work/OnCall-Agent/OnCall-Agent --use-compress-program unzstd
+2026-10-08T12:38:20.7688959Z Cache restored successfully
+2026-10-08T12:38:20.7742972Z Cache restored from key: setup-java-Linux-x64-maven-d32cb843aa19f08330bb1496da7a1a49cc2deb22a4e49d97b309eae19c7fe74e
+2026-10-08T12:38:21.2264712Z Cache hit for: setup-java-Linux-x64-maven-wrapper-4010b7b513ce627636150913aad6edbf72eda4862fdc6f4a8c75796c51ae597a
+2026-10-08T12:38:22.5149001Z Received 544441 of 8933049 (6.1%), 0.5 MBs/sec
+2026-10-08T12:38:22.7214093Z Received 8933049 of 8933049 (100.0%), 7.1 MBs/sec
+2026-10-08T12:38:22.7214794Z Cache Size: ~9 MB (8933049 B)
+2026-10-08T12:38:22.7321317Z [command]/usr/bin/tar -xf /home/runner/work/_temp/008046ca-b981-4397-8e3e-cf17573053bf/cache.tzst -P -C /home/runner/work/OnCall-Agent/OnCall-Agent --use-compress-program unzstd
+2026-10-08T12:38:22.7547714Z Cache restored successfully
+2026-10-08T12:38:22.7555730Z maven-wrapper cache restored from key: setup-java-Linux-x64-maven-wrapper-4010b7b513ce627636150913aad6edbf72eda4862fdc6f4a8c75796c51ae597a
+2026-10-08T12:38:22.7734962Z ##[group]Run npm ci --prefix web
+2026-10-08T12:38:22.7735357Z [36;1mnpm ci --prefix web[0m
+2026-10-08T12:38:22.7735651Z [36;1mnpm run build --prefix web[0m
+2026-10-08T12:38:22.7735934Z [36;1mchmod +x mvnw[0m
+2026-10-08T12:38:22.7736196Z [36;1m./mvnw -B -DskipTests package[0m
+2026-10-08T12:38:22.8011622Z shell: /usr/bin/bash -e {0}
+2026-10-08T12:38:22.8011949Z env:
+2026-10-08T12:38:22.8012339Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:22.8012943Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:22.8013426Z   MAVEN_ARGS: -ntp
+2026-10-08T12:38:22.8013675Z ##[endgroup]
+2026-10-08T12:38:25.7349477Z 
+2026-10-08T12:38:25.7350476Z added 56 packages, and audited 57 packages in 3s
+2026-10-08T12:38:25.7350844Z 
+2026-10-08T12:38:25.7351056Z 8 packages are looking for funding
+2026-10-08T12:38:25.7351411Z   run `npm fund` for details
+2026-10-08T12:38:25.7360535Z 
+2026-10-08T12:38:25.7360942Z found 0 vulnerabilities
+2026-10-08T12:38:25.8792122Z 
+2026-10-08T12:38:25.8792875Z > opspilot-web@0.1.0 build
+2026-10-08T12:38:25.8793523Z > vue-tsc -b && vite build
+2026-10-08T12:38:25.8793739Z 
+2026-10-08T12:38:32.5961984Z [36mvite v6.4.3 [32mbuilding for production...[36m[39m
+2026-10-08T12:38:32.7080924Z transforming...
+2026-10-08T12:38:35.8483717Z [32m✓[39m 1660 modules transformed.
+2026-10-08T12:38:36.1185707Z rendering chunks...
+2026-10-08T12:38:36.1262951Z computing gzip size...
+2026-10-08T12:38:36.1399424Z [2m../src/main/resources/static/[22m[32mindex.html                 [39m[1m[2m  0.53 kB[22m[1m[22m[2m │ gzip:   0.36 kB[22m
+2026-10-08T12:38:36.1400613Z [2m../src/main/resources/static/[22m[2massets/[22m[35mindex-CoC3e_3H.css  [39m[1m[2m127.65 kB[22m[1m[22m[2m │ gzip:  22.39 kB[22m
+2026-10-08T12:38:36.1401899Z [2m../src/main/resources/static/[22m[2massets/[22m[36mindex-DUZVnTnQ.js   [39m[1m[2m437.42 kB[22m[1m[22m[2m │ gzip: 136.67 kB[22m
+2026-10-08T12:38:36.1403128Z [32m✓ built in 3.52s[39m
+2026-10-08T12:38:37.5650776Z [INFO] Scanning for projects...
+2026-10-08T12:38:37.8373452Z [INFO] 
+2026-10-08T12:38:37.8374907Z [INFO] ------------------------< org.trigger:opspilot >------------------------
+2026-10-08T12:38:37.8383018Z [INFO] Building OpsPilot 0.1.0-SNAPSHOT
+2026-10-08T12:38:37.8383929Z [INFO]   from pom.xml
+2026-10-08T12:38:37.8384923Z [INFO] --------------------------------[ jar ]---------------------------------
+2026-10-08T12:38:39.2336129Z [INFO] 
+2026-10-08T12:38:39.2359047Z [INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+2026-10-08T12:38:39.3268636Z [INFO] Copying 1 resource from src/main/resources to target/classes
+2026-10-08T12:38:39.3498417Z [INFO] Copying 40 resources from src/main/resources to target/classes
+2026-10-08T12:38:39.3562510Z [INFO] 
+2026-10-08T12:38:39.3598715Z [INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+2026-10-08T12:38:39.4624805Z [INFO] Changes detected - recompiling the module! :source
+2026-10-08T12:38:39.4654037Z [INFO] Compiling 132 source files with javac [debug release 17] to target/classes
+2026-10-08T12:38:45.0077421Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java uses unchecked or unsafe operations.
+2026-10-08T12:38:45.0094868Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: Recompile with -Xlint:unchecked for details.
+2026-10-08T12:38:45.0096630Z [INFO] 
+2026-10-08T12:38:45.0097984Z [INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+2026-10-08T12:38:45.0126912Z [INFO] Copying 1 resource from src/test/resources to target/test-classes
+2026-10-08T12:38:45.0139866Z [INFO] 
+2026-10-08T12:38:45.0180985Z [INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+2026-10-08T12:38:45.0255534Z [INFO] Changes detected - recompiling the module! :dependency
+2026-10-08T12:38:45.0257402Z [INFO] Compiling 103 source files with javac [debug release 17] to target/test-classes
+2026-10-08T12:38:52.9513567Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/investigation/AgentEventReceiverTest.java: Some input files use unchecked or unsafe operations.
+2026-10-08T12:38:52.9533394Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/investigation/AgentEventReceiverTest.java: Recompile with -Xlint:unchecked for details.
+2026-10-08T12:38:52.9548114Z [INFO] 
+2026-10-08T12:38:52.9549050Z [INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+2026-10-08T12:38:53.0986326Z [INFO] Tests are skipped.
+2026-10-08T12:38:53.0987559Z [INFO] 
+2026-10-08T12:38:53.0988166Z [INFO] --- jar:3.3.0:jar (default-jar) @ opspilot ---
+2026-10-08T12:38:53.9109050Z [INFO] Building jar: /home/runner/work/OnCall-Agent/OnCall-Agent/target/opspilot-0.1.0-SNAPSHOT.jar
+2026-10-08T12:38:54.0438207Z [INFO] 
+2026-10-08T12:38:54.0439560Z [INFO] --- spring-boot:3.2.0:repackage (repackage) @ opspilot ---
+2026-10-08T12:38:56.3499385Z [INFO] Replacing main artifact /home/runner/work/OnCall-Agent/OnCall-Agent/target/opspilot-0.1.0-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+2026-10-08T12:38:56.3509057Z [INFO] The original artifact has been renamed to /home/runner/work/OnCall-Agent/OnCall-Agent/target/opspilot-0.1.0-SNAPSHOT.jar.original
+2026-10-08T12:38:56.3510836Z [INFO] ------------------------------------------------------------------------
+2026-10-08T12:38:56.3511958Z [INFO] BUILD SUCCESS
+2026-10-08T12:38:56.3512928Z [INFO] ------------------------------------------------------------------------
+2026-10-08T12:38:56.3513835Z [INFO] Total time:  18.809 s
+2026-10-08T12:38:56.3514540Z [INFO] Finished at: 2026-10-08T12:38:56Z
+2026-10-08T12:38:56.3515534Z [INFO] ------------------------------------------------------------------------
+2026-10-08T12:38:56.3957396Z ##[group]Run npm ci --prefix scripts/browser
+2026-10-08T12:38:56.3957831Z [36;1mnpm ci --prefix scripts/browser[0m
+2026-10-08T12:38:56.3959074Z [36;1mnode scripts/browser/node_modules/playwright/cli.js install --with-deps chromium[0m
+2026-10-08T12:38:56.3959577Z [36;1mnpm test --prefix scripts/browser[0m
+2026-10-08T12:38:56.4026470Z shell: /usr/bin/bash -e {0}
+2026-10-08T12:38:56.4026753Z env:
+2026-10-08T12:38:56.4027566Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:56.4028117Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:56.4028540Z   MAVEN_ARGS: -ntp
+2026-10-08T12:38:56.4028763Z ##[endgroup]
+2026-10-08T12:38:56.9231576Z 
+2026-10-08T12:38:56.9232446Z added 2 packages, and audited 3 packages in 459ms
+2026-10-08T12:38:56.9240049Z 
+2026-10-08T12:38:56.9240608Z found 0 vulnerabilities
+2026-10-08T12:38:57.4538055Z Installing dependencies...
+2026-10-08T12:38:57.4602998Z Switching to root user to install dependencies...
+2026-10-08T12:38:57.5668516Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-08T12:38:57.6029771Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-10-08T12:38:57.6031744Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-10-08T12:38:57.6034896Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-10-08T12:38:57.6078217Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-10-08T12:38:57.6089900Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-10-08T12:38:57.7371063Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [531 kB]
+2026-10-08T12:38:57.7544388Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.3 kB]
+2026-10-08T12:38:57.7560645Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [640 B]
+2026-10-08T12:38:57.7624863Z Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [475 kB]
+2026-10-08T12:38:57.7891593Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1375 kB]
+2026-10-08T12:38:57.7969185Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [306 kB]
+2026-10-08T12:38:57.8028549Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1702 kB]
+2026-10-08T12:38:57.8093015Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [341 kB]
+2026-10-08T12:38:57.8114868Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1761 kB]
+2026-10-08T12:38:57.8202630Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [401 kB]
+2026-10-08T12:38:57.8225442Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [55.0 kB]
+2026-10-08T12:38:57.8233420Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.3 kB]
+2026-10-08T12:38:57.9051027Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1074 kB]
+2026-10-08T12:38:57.9103380Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [223 kB]
+2026-10-08T12:38:57.9542939Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1218 kB]
+2026-10-08T12:38:57.9599625Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [245 kB]
+2026-10-08T12:38:57.9614687Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [11.6 kB]
+2026-10-08T12:39:00.8811445Z Fetched 10.1 MB in 1s (9386 kB/s)
+2026-10-08T12:39:01.8142487Z Reading package lists...
+2026-10-08T12:39:01.8387669Z Reading package lists...
+2026-10-08T12:39:02.0670675Z Building dependency tree...
+2026-10-08T12:39:02.0679033Z Reading state information...
+2026-10-08T12:39:02.2763000Z libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+2026-10-08T12:39:02.2764217Z libasound2t64 set to manually installed.
+2026-10-08T12:39:02.2765232Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-08T12:39:02.2766240Z libatk-bridge2.0-0t64 set to manually installed.
+2026-10-08T12:39:02.2768392Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-08T12:39:02.2769109Z libatk1.0-0t64 set to manually installed.
+2026-10-08T12:39:02.2769915Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-08T12:39:02.2770409Z libatspi2.0-0t64 set to manually installed.
+2026-10-08T12:39:02.2770895Z libcairo2 is already the newest version (1.18.0-3build1).
+2026-10-08T12:39:02.2771537Z libcairo2 set to manually installed.
+2026-10-08T12:39:02.2772040Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+2026-10-08T12:39:02.2772526Z libcups2t64 set to manually installed.
+2026-10-08T12:39:02.2773012Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+2026-10-08T12:39:02.2773595Z libdbus-1-3 set to manually installed.
+2026-10-08T12:39:02.2774093Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+2026-10-08T12:39:02.2774559Z libdrm2 set to manually installed.
+2026-10-08T12:39:02.2775035Z libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.4).
+2026-10-08T12:39:02.2775573Z libgbm1 set to manually installed.
+2026-10-08T12:39:02.2776059Z libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.9).
+2026-10-08T12:39:02.2776554Z libglib2.0-0t64 set to manually installed.
+2026-10-08T12:39:02.2777199Z libnspr4 is already the newest version (2:4.35-1.1build1).
+2026-10-08T12:39:02.2777651Z libnspr4 set to manually installed.
+2026-10-08T12:39:02.2778099Z libnss3 is already the newest version (2:3.98-1ubuntu0.2).
+2026-10-08T12:39:02.2778491Z libnss3 set to manually installed.
+2026-10-08T12:39:02.2778916Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+2026-10-08T12:39:02.2779341Z libpango-1.0-0 set to manually installed.
+2026-10-08T12:39:02.2779862Z libx11-6 is already the newest version (2:1.8.7-1build1).
+2026-10-08T12:39:02.2780246Z libx11-6 set to manually installed.
+2026-10-08T12:39:02.2780627Z libxcb1 is already the newest version (1.15-1ubuntu2).
+2026-10-08T12:39:02.2781010Z libxcb1 set to manually installed.
+2026-10-08T12:39:02.2781441Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+2026-10-08T12:39:02.2781880Z libxcomposite1 set to manually installed.
+2026-10-08T12:39:02.2782319Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+2026-10-08T12:39:02.2782726Z libxdamage1 set to manually installed.
+2026-10-08T12:39:02.2783219Z libxext6 is already the newest version (2:1.3.4-1build2).
+2026-10-08T12:39:02.2783604Z libxext6 set to manually installed.
+2026-10-08T12:39:02.2784012Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+2026-10-08T12:39:02.2784412Z libxfixes3 set to manually installed.
+2026-10-08T12:39:02.2784831Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+2026-10-08T12:39:02.2785246Z libxkbcommon0 set to manually installed.
+2026-10-08T12:39:02.2785665Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+2026-10-08T12:39:02.2786066Z libxrandr2 set to manually installed.
+2026-10-08T12:39:02.2786471Z xvfb is already the newest version (2:21.1.12-1ubuntu1.8).
+2026-10-08T12:39:02.2787345Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+2026-10-08T12:39:02.2787939Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+2026-10-08T12:39:02.2788375Z libfontconfig1 set to manually installed.
+2026-10-08T12:39:02.2788807Z fonts-liberation is already the newest version (1:2.1.5-3).
+2026-10-08T12:39:02.2789228Z fonts-liberation set to manually installed.
+2026-10-08T12:39:02.2789644Z The following additional packages will be installed:
+2026-10-08T12:39:02.2790015Z   xfonts-encodings xfonts-utils
+2026-10-08T12:39:02.2790314Z Recommended packages:
+2026-10-08T12:39:02.2790605Z   fonts-ipafont-mincho fonts-tlwg-loma
+2026-10-08T12:39:02.3001428Z The following NEW packages will be installed:
+2026-10-08T12:39:02.3002028Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+2026-10-08T12:39:02.3011546Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+2026-10-08T12:39:02.3011978Z   xfonts-utils
+2026-10-08T12:39:02.3018811Z The following packages will be upgraded:
+2026-10-08T12:39:02.3025789Z   libfreetype6
+2026-10-08T12:39:02.3213554Z 1 upgraded, 9 newly installed, 0 to remove and 16 not upgraded.
+2026-10-08T12:39:02.3214668Z Need to get 21.5 MB of archives.
+2026-10-08T12:39:02.3215478Z After this operation, 79.5 MB of additional disk space will be used.
+2026-10-08T12:39:02.3216376Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-08T12:39:02.4094414Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+2026-10-08T12:39:02.5583921Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+2026-10-08T12:39:02.7649478Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+2026-10-08T12:39:02.8408730Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+2026-10-08T12:39:02.9799461Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+2026-10-08T12:39:03.1993615Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libfreetype6 amd64 2.13.2+dfsg-1ubuntu0.2 [403 kB]
+2026-10-08T12:39:03.2713540Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+2026-10-08T12:39:03.3462713Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+2026-10-08T12:39:03.4209598Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+2026-10-08T12:39:03.4934337Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+2026-10-08T12:39:03.7783328Z Fetched 21.5 MB in 1s (18.1 MB/s)
+2026-10-08T12:39:03.8054641Z Selecting previously unselected package fonts-ipafont-gothic.
+2026-10-08T12:39:03.8384801Z (Reading database ... 
+2026-10-08T12:39:03.8385370Z (Reading database ... 5%
+2026-10-08T12:39:03.8386033Z (Reading database ... 10%
+2026-10-08T12:39:03.8386564Z (Reading database ... 15%
+2026-10-08T12:39:03.8387425Z (Reading database ... 20%
+2026-10-08T12:39:03.8387914Z (Reading database ... 25%
+2026-10-08T12:39:03.8388379Z (Reading database ... 30%
+2026-10-08T12:39:03.8388831Z (Reading database ... 35%
+2026-10-08T12:39:03.8389290Z (Reading database ... 40%
+2026-10-08T12:39:03.8389760Z (Reading database ... 45%
+2026-10-08T12:39:03.8390207Z (Reading database ... 50%
+2026-10-08T12:39:03.8447515Z (Reading database ... 55%
+2026-10-08T12:39:03.9649167Z (Reading database ... 60%
+2026-10-08T12:39:04.1723779Z (Reading database ... 65%
+2026-10-08T12:39:04.3808231Z (Reading database ... 70%
+2026-10-08T12:39:04.5292739Z (Reading database ... 75%
+2026-10-08T12:39:04.7234759Z (Reading database ... 80%
+2026-10-08T12:39:04.9135826Z (Reading database ... 85%
+2026-10-08T12:39:05.1193967Z (Reading database ... 90%
+2026-10-08T12:39:05.2915112Z (Reading database ... 95%
+2026-10-08T12:39:05.2915594Z (Reading database ... 100%
+2026-10-08T12:39:05.2916228Z (Reading database ... 203191 files and directories currently installed.)
+2026-10-08T12:39:05.2960696Z Preparing to unpack .../0-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+2026-10-08T12:39:05.3053767Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-08T12:39:05.5424069Z Selecting previously unselected package fonts-freefont-ttf.
+2026-10-08T12:39:05.5550421Z Preparing to unpack .../1-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+2026-10-08T12:39:05.5557635Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-08T12:39:05.6372961Z Selecting previously unselected package fonts-tlwg-loma-otf.
+2026-10-08T12:39:05.6498616Z Preparing to unpack .../2-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+2026-10-08T12:39:05.6505906Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-08T12:39:05.6717082Z Selecting previously unselected package fonts-unifont.
+2026-10-08T12:39:05.6843851Z Preparing to unpack .../3-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+2026-10-08T12:39:05.6851327Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+2026-10-08T12:39:05.7916633Z Selecting previously unselected package fonts-wqy-zenhei.
+2026-10-08T12:39:05.8043067Z Preparing to unpack .../4-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+2026-10-08T12:39:05.8143730Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-08T12:39:06.2931183Z Preparing to unpack .../5-libfreetype6_2.13.2+dfsg-1ubuntu0.2_amd64.deb ...
+2026-10-08T12:39:06.2961212Z Unpacking libfreetype6:amd64 (2.13.2+dfsg-1ubuntu0.2) over (2.13.2+dfsg-1ubuntu0.1) ...
+2026-10-08T12:39:06.3212329Z Selecting previously unselected package xfonts-encodings.
+2026-10-08T12:39:06.3341476Z Preparing to unpack .../6-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+2026-10-08T12:39:06.3349370Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-08T12:39:06.3645971Z Selecting previously unselected package xfonts-utils.
+2026-10-08T12:39:06.3774801Z Preparing to unpack .../7-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+2026-10-08T12:39:06.3782487Z Unpacking xfonts-utils (1:7.7+6build3) ...
+2026-10-08T12:39:06.4168476Z Selecting previously unselected package xfonts-cyrillic.
+2026-10-08T12:39:06.4296520Z Preparing to unpack .../8-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+2026-10-08T12:39:06.4303899Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-08T12:39:06.4648677Z Selecting previously unselected package xfonts-scalable.
+2026-10-08T12:39:06.4778064Z Preparing to unpack .../9-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+2026-10-08T12:39:06.4785648Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-08T12:39:06.5249603Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-08T12:39:06.5366425Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-08T12:39:06.5382215Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-08T12:39:06.5398872Z Setting up libfreetype6:amd64 (2.13.2+dfsg-1ubuntu0.2) ...
+2026-10-08T12:39:06.5415618Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-08T12:39:06.5433450Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-08T12:39:06.5500601Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+2026-10-08T12:39:06.5516559Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+2026-10-08T12:39:06.5532733Z Setting up xfonts-utils (1:7.7+6build3) ...
+2026-10-08T12:39:06.5576094Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-08T12:39:06.5864900Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-08T12:39:06.6146302Z Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+2026-10-08T12:39:06.6498080Z Processing triggers for man-db (2.12.0-4build2) ...
+2026-10-08T12:39:06.6520716Z Not building database; man-db/auto-update is not 'true'.
+2026-10-08T12:39:06.6535036Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+2026-10-08T12:39:07.3776849Z 
+2026-10-08T12:39:07.3778073Z Running kernel seems to be up-to-date.
+2026-10-08T12:39:07.3778613Z 
+2026-10-08T12:39:07.3778945Z Restarting services...
+2026-10-08T12:39:07.3862330Z  systemctl restart php8.3-fpm.service
+2026-10-08T12:39:07.4953821Z 
+2026-10-08T12:39:07.4956444Z No containers need to be restarted.
+2026-10-08T12:39:07.4957172Z 
+2026-10-08T12:39:07.4968422Z No user sessions are running outdated binaries.
+2026-10-08T12:39:07.4968864Z 
+2026-10-08T12:39:07.4969298Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-10-08T12:39:08.6165162Z Downloading Chrome for Testing 153.0.8010.12 (playwright chromium v1243) from https://cdn.playwright.dev/builds/cft/153.0.8010.12/linux64/chrome-linux64.zip
+2026-10-08T12:39:09.1064763Z |                                                                                |   0% of 186.8 MiB
+2026-10-08T12:39:09.3164952Z |■■■■■■■■                                                                        |  10% of 186.8 MiB
+2026-10-08T12:39:09.4253374Z |■■■■■■■■■■■■■■■■                                                                |  20% of 186.8 MiB
+2026-10-08T12:39:09.5086637Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 186.8 MiB
+2026-10-08T12:39:09.6063790Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 186.8 MiB
+2026-10-08T12:39:09.7186454Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 186.8 MiB
+2026-10-08T12:39:09.8284324Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 186.8 MiB
+2026-10-08T12:39:09.9535682Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 186.8 MiB
+2026-10-08T12:39:10.0745612Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 186.8 MiB
+2026-10-08T12:39:10.1994273Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 186.8 MiB
+2026-10-08T12:39:10.3092098Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 186.8 MiB
+2026-10-08T12:39:13.1260392Z Chrome for Testing 153.0.8010.12 (playwright chromium v1243) downloaded to /home/runner/.cache/ms-playwright/chromium-1243
+2026-10-08T12:39:13.1264944Z Downloading FFmpeg (playwright ffmpeg v1011) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux.zip
+2026-10-08T12:39:13.5073515Z |                                                                                |   0% of 2.3 MiB
+2026-10-08T12:39:13.5207701Z |■■■■■■■■                                                                        |  10% of 2.3 MiB
+2026-10-08T12:39:13.5303821Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.3 MiB
+2026-10-08T12:39:13.5358995Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.3 MiB
+2026-10-08T12:39:13.5414417Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.3 MiB
+2026-10-08T12:39:13.5428233Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.3 MiB
+2026-10-08T12:39:13.5477453Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.3 MiB
+2026-10-08T12:39:13.5521415Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.3 MiB
+2026-10-08T12:39:13.5538189Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.3 MiB
+2026-10-08T12:39:13.5550341Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.3 MiB
+2026-10-08T12:39:13.5569549Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.3 MiB
+2026-10-08T12:39:13.6195775Z FFmpeg (playwright ffmpeg v1011) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1011
+2026-10-08T12:39:13.6200142Z Downloading Chrome Headless Shell 153.0.8010.12 (playwright chromium-headless-shell v1243) from https://cdn.playwright.dev/builds/cft/153.0.8010.12/linux64/chrome-headless-shell-linux64.zip
+2026-10-08T12:39:14.0357886Z |                                                                                |   0% of 114.3 MiB
+2026-10-08T12:39:14.1688813Z |■■■■■■■■                                                                        |  10% of 114.3 MiB
+2026-10-08T12:39:14.2405593Z |■■■■■■■■■■■■■■■■                                                                |  20% of 114.3 MiB
+2026-10-08T12:39:14.3405798Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 114.3 MiB
+2026-10-08T12:39:14.4088259Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 114.3 MiB
+2026-10-08T12:39:14.4685240Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 114.3 MiB
+2026-10-08T12:39:14.5427896Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 114.3 MiB
+2026-10-08T12:39:14.5981932Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 114.3 MiB
+2026-10-08T12:39:14.6505351Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 114.3 MiB
+2026-10-08T12:39:14.7038201Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 114.3 MiB
+2026-10-08T12:39:14.7593975Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 114.3 MiB
+2026-10-08T12:39:16.7494719Z Chrome Headless Shell 153.0.8010.12 (playwright chromium-headless-shell v1243) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1243
+2026-10-08T12:39:16.8711763Z 
+2026-10-08T12:39:16.8712494Z > opspilot-browser-acceptance@0.1.0 test
+2026-10-08T12:39:16.8713006Z > node --test tests/*.test.cjs
+2026-10-08T12:39:16.8713216Z 
+2026-10-08T12:39:16.9175021Z TAP version 13
+2026-10-08T12:39:16.9910522Z # Subtest: OPSPILOT_SWAP_BASELINE cannot bypass full browser CI or launch a process
+2026-10-08T12:39:16.9916209Z ok 1 - OPSPILOT_SWAP_BASELINE cannot bypass full browser CI or launch a process
+2026-10-08T12:39:16.9917154Z   ---
+2026-10-08T12:39:16.9917595Z   duration_ms: 33.160704
+2026-10-08T12:39:16.9918017Z   type: 'test'
+2026-10-08T12:39:16.9918371Z   ...
+2026-10-08T12:39:17.0226054Z # Subtest: OPSPILOT_SWAP_ONLY cannot bypass full browser CI or launch a process
+2026-10-08T12:39:17.0227847Z ok 2 - OPSPILOT_SWAP_ONLY cannot bypass full browser CI or launch a process
+2026-10-08T12:39:17.0228510Z   ---
+2026-10-08T12:39:17.0228759Z   duration_ms: 32.015287
+2026-10-08T12:39:17.0229028Z   type: 'test'
+2026-10-08T12:39:17.0229248Z   ...
+2026-10-08T12:39:17.0569383Z # Subtest: archived swap comparison cannot replace acceptance or launch an old JAR in CI
+2026-10-08T12:39:17.0570797Z ok 3 - archived swap comparison cannot replace acceptance or launch an old JAR in CI
+2026-10-08T12:39:17.0571463Z   ---
+2026-10-08T12:39:17.0571983Z   duration_ms: 34.133785
+2026-10-08T12:39:17.0572501Z   type: 'test'
+2026-10-08T12:39:17.0572978Z   ...
+2026-10-08T12:39:17.0955326Z # Subtest: cross-node assistant baseline cannot replace acceptance or launch an archived JAR in CI
+2026-10-08T12:39:17.0959956Z ok 4 - cross-node assistant baseline cannot replace acceptance or launch an archived JAR in CI
+2026-10-08T12:39:17.0960902Z   ---
+2026-10-08T12:39:17.0961338Z   duration_ms: 38.236046
+2026-10-08T12:39:17.0961780Z   type: 'test'
+2026-10-08T12:39:17.0962149Z   ...
+2026-10-08T12:39:17.1319681Z # Subtest: slow-consumer investigation probe cannot replace acceptance or launch a baseline JAR in CI
+2026-10-08T12:39:17.1321337Z ok 5 - slow-consumer investigation probe cannot replace acceptance or launch a baseline JAR in CI
+2026-10-08T12:39:17.1322221Z   ---
+2026-10-08T12:39:17.1322608Z   duration_ms: 36.872424
+2026-10-08T12:39:17.1323044Z   type: 'test'
+2026-10-08T12:39:17.1323407Z   ...
+2026-10-08T12:39:17.1693294Z # Subtest: slow-consumer acceptance rejects baseline mode before ports or JAR access
+2026-10-08T12:39:17.1694751Z ok 6 - slow-consumer acceptance rejects baseline mode before ports or JAR access
+2026-10-08T12:39:17.1695322Z   ---
+2026-10-08T12:39:17.1695606Z   duration_ms: 37.117106
+2026-10-08T12:39:17.1695878Z   type: 'test'
+2026-10-08T12:39:17.1696113Z   ...
+2026-10-08T12:39:17.2063494Z # Subtest: assistant UI baseline cannot replace acceptance or launch an archived JAR in CI
+2026-10-08T12:39:17.2065028Z ok 7 - assistant UI baseline cannot replace acceptance or launch an archived JAR in CI
+2026-10-08T12:39:17.2065587Z   ---
+2026-10-08T12:39:17.2065842Z   duration_ms: 37.078496
+2026-10-08T12:39:17.2066128Z   type: 'test'
+2026-10-08T12:39:17.2066366Z   ...
+2026-10-08T12:39:17.2432892Z # Subtest: assistant baseline cannot replace CI acceptance or launch the archived JAR
+2026-10-08T12:39:17.2434271Z ok 8 - assistant baseline cannot replace CI acceptance or launch the archived JAR
+2026-10-08T12:39:17.2435008Z   ---
+2026-10-08T12:39:17.2435399Z   duration_ms: 36.668543
+2026-10-08T12:39:17.2435840Z   type: 'test'
+2026-10-08T12:39:17.2436207Z   ...
+2026-10-08T12:39:17.2759241Z # Subtest: OPSPILOT_STREAM_SESSION_BASELINE cannot replace full CI acceptance
+2026-10-08T12:39:17.2760922Z ok 9 - OPSPILOT_STREAM_SESSION_BASELINE cannot replace full CI acceptance
+2026-10-08T12:39:17.2762242Z   ---
+2026-10-08T12:39:17.2762966Z   duration_ms: 32.207865
+2026-10-08T12:39:17.2763483Z   type: 'test'
+2026-10-08T12:39:17.2763875Z   ...
+2026-10-08T12:39:17.3104212Z # Subtest: OPSPILOT_STREAM_SESSION_ONLY cannot replace full CI acceptance
+2026-10-08T12:39:17.3105505Z ok 10 - OPSPILOT_STREAM_SESSION_ONLY cannot replace full CI acceptance
+2026-10-08T12:39:17.3106146Z   ---
+2026-10-08T12:39:17.3106412Z   duration_ms: 34.592071
+2026-10-08T12:39:17.3106722Z   type: 'test'
+2026-10-08T12:39:17.3107521Z   ...
+2026-10-08T12:39:17.3416415Z # Subtest: account baseline cannot replace CI acceptance or launch the archived JAR
+2026-10-08T12:39:17.3418927Z ok 11 - account baseline cannot replace CI acceptance or launch the archived JAR
+2026-10-08T12:39:17.3419672Z   ---
+2026-10-08T12:39:17.3419934Z   duration_ms: 31.468686
+2026-10-08T12:39:17.3420195Z   type: 'test'
+2026-10-08T12:39:17.3420416Z   ...
+2026-10-08T12:39:17.3740048Z # Subtest: SLO baseline cannot replace CI acceptance or launch the archived JAR
+2026-10-08T12:39:17.3741429Z ok 12 - SLO baseline cannot replace CI acceptance or launch the archived JAR
+2026-10-08T12:39:17.3742066Z   ---
+2026-10-08T12:39:17.3742314Z   duration_ms: 32.306409
+2026-10-08T12:39:17.3742583Z   type: 'test'
+2026-10-08T12:39:17.3742798Z   ...
+2026-10-08T12:39:17.4070731Z # Subtest: publication baseline cannot replace CI acceptance or launch the old published-immediately JAR
+2026-10-08T12:39:17.4072946Z ok 13 - publication baseline cannot replace CI acceptance or launch the old published-immediately JAR
+2026-10-08T12:39:17.4073530Z   ---
+2026-10-08T12:39:17.4073781Z   duration_ms: 33.044871
+2026-10-08T12:39:17.4074042Z   type: 'test'
+2026-10-08T12:39:17.4074263Z   ...
+2026-10-08T12:39:17.4443558Z # Subtest: trend baseline cannot replace CI acceptance or launch an old JAR
+2026-10-08T12:39:17.4449846Z ok 14 - trend baseline cannot replace CI acceptance or launch an old JAR
+2026-10-08T12:39:17.4451498Z   ---
+2026-10-08T12:39:17.4452170Z   duration_ms: 31.749057
+2026-10-08T12:39:17.4452530Z   type: 'test'
+2026-10-08T12:39:17.4452770Z   ...
+2026-10-08T12:39:17.4461633Z # Subtest: occupied port is rejected without stopping the original listener
+2026-10-08T12:39:17.4465309Z ok 15 - occupied port is rejected without stopping the original listener
+2026-10-08T12:39:17.4466237Z   ---
+2026-10-08T12:39:17.4466790Z   duration_ms: 8.571332
+2026-10-08T12:39:17.4467720Z   type: 'test'
+2026-10-08T12:39:17.4468282Z   ...
+2026-10-08T12:39:17.4477517Z # Subtest: strict log scan includes shutdown errors and does not count a disconnected-client debug line
+2026-10-08T12:39:17.4708237Z ok 16 - strict log scan includes shutdown errors and does not count a disconnected-client debug line
+2026-10-08T12:39:17.4709696Z   ---
+2026-10-08T12:39:17.4710315Z   duration_ms: 0.39611
+2026-10-08T12:39:17.4711020Z   type: 'test'
+2026-10-08T12:39:17.4711548Z   ...
+2026-10-08T12:39:17.4712359Z # Subtest: free port probe closes its own listener
+2026-10-08T12:39:17.4713366Z ok 17 - free port probe closes its own listener
+2026-10-08T12:39:17.4714310Z   ---
+2026-10-08T12:39:17.4714889Z   duration_ms: 1.495924
+2026-10-08T12:39:17.4715468Z   type: 'test'
+2026-10-08T12:39:17.4716059Z   ...
+2026-10-08T12:39:17.6890107Z # Subtest: readiness waits for a real UP response
+2026-10-08T12:39:17.6894168Z ok 18 - readiness waits for a real UP response
+2026-10-08T12:39:17.6894787Z   ---
+2026-10-08T12:39:17.6895222Z   duration_ms: 239.882165
+2026-10-08T12:39:17.6895698Z   type: 'test'
+2026-10-08T12:39:17.6896199Z   ...
+2026-10-08T12:39:17.6897213Z # Subtest: terminal or failed-launch child cannot be mistaken for readiness
+2026-10-08T12:39:17.6898150Z ok 19 - terminal or failed-launch child cannot be mistaken for readiness
+2026-10-08T12:39:17.6898716Z   ---
+2026-10-08T12:39:17.6899231Z   duration_ms: 0.40681
+2026-10-08T12:39:17.6899669Z   type: 'test'
+2026-10-08T12:39:17.6900070Z   ...
+2026-10-08T12:39:17.8978708Z # Subtest: readiness deadline is bounded and a non-UP service is not accepted
+2026-10-08T12:39:17.8980041Z ok 20 - readiness deadline is bounded and a non-UP service is not accepted
+2026-10-08T12:39:17.8980665Z   ---
+2026-10-08T12:39:17.8980922Z   duration_ms: 207.271523
+2026-10-08T12:39:17.8981205Z   type: 'test'
+2026-10-08T12:39:17.8981436Z   ...
+2026-10-08T12:39:17.9023511Z # Subtest: cleanup stops only the child passed by its owner
+2026-10-08T12:39:17.9024052Z ok 21 - cleanup stops only the child passed by its owner
+2026-10-08T12:39:17.9024397Z   ---
+2026-10-08T12:39:17.9024622Z   duration_ms: 4.639722
+2026-10-08T12:39:17.9024900Z   type: 'test'
+2026-10-08T12:39:17.9025112Z   ...
+2026-10-08T12:39:17.9254904Z # Subtest: already exited child cleanup is a no-op
+2026-10-08T12:39:17.9268409Z ok 22 - already exited child cleanup is a no-op
+2026-10-08T12:39:17.9277150Z   ---
+2026-10-08T12:39:17.9278300Z   duration_ms: 24.087726
+2026-10-08T12:39:17.9278609Z   type: 'test'
+2026-10-08T12:39:17.9278843Z   ...
+2026-10-08T12:39:17.9279311Z # Subtest: diagnostics redact bearer tokens while preserving business identifiers
+2026-10-08T12:39:17.9280003Z ok 23 - diagnostics redact bearer tokens while preserving business identifiers
+2026-10-08T12:39:17.9280416Z   ---
+2026-10-08T12:39:17.9280635Z   duration_ms: 0.467444
+2026-10-08T12:39:17.9280885Z   type: 'test'
+2026-10-08T12:39:17.9281101Z   ...
+2026-10-08T12:39:17.9390678Z 1..23
+2026-10-08T12:39:17.9391093Z # tests 23
+2026-10-08T12:39:17.9391445Z # suites 0
+2026-10-08T12:39:17.9391784Z # pass 23
+2026-10-08T12:39:17.9392117Z # fail 0
+2026-10-08T12:39:17.9392722Z # cancelled 0
+2026-10-08T12:39:17.9393636Z # skipped 0
+2026-10-08T12:39:17.9394005Z # todo 0
+2026-10-08T12:39:17.9394475Z # duration_ms 1034.162416
+2026-10-08T12:39:17.9560295Z ##[group]Run node scripts/verify-oncall-browser-ci.cjs
+2026-10-08T12:39:17.9560744Z [36;1mnode scripts/verify-oncall-browser-ci.cjs[0m
+2026-10-08T12:39:17.9624273Z shell: /usr/bin/bash -e {0}
+2026-10-08T12:39:17.9624548Z env:
+2026-10-08T12:39:17.9624872Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:39:17.9625596Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:39:17.9625996Z   MAVEN_ARGS: -ntp
+2026-10-08T12:39:17.9626221Z ##[endgroup]
+2026-10-08T12:41:01.0891088Z {"status":"PASS","evidenceDirectory":"target/oncall-browser-it/run-PMV9vG","database":"isolated unique H2 memory","url":"http://127.0.0.1:9917/on-call","jarTimezone":"UTC","scanDelayMs":200,"defaultScanDelayMs":60000,"scripts":[{"name":"verify-oncall-rotation-ui.cjs","exitCode":0},{"name":"verify-oncall-rotation-boundaries.cjs","exitCode":0},{"name":"verify-oncall-coverage-ui.cjs","exitCode":0},{"name":"verify-oncall-handoff-http.cjs","exitCode":0},{"name":"verify-oncall-handoff-ui.cjs","exitCode":0},{"name":"verify-oncall-handoff-revocation-http.cjs","exitCode":0},{"name":"verify-oncall-handoff-revocation-ui.cjs","exitCode":0},{"name":"verify-runbook-trend-ui.cjs","exitCode":0},{"name":"verify-runbook-publication-ui.cjs","exitCode":0},{"name":"verify-slo-rules-ui.cjs","exitCode":0},{"name":"verify-jwt-numeric-date-http.cjs","exitCode":0},{"name":"verify-stream-session-ui.cjs","exitCode":0},{"name":"verify-oncall-swap-ui.cjs","exitCode":0},{"name":"verify-account-security-ui.cjs","exitCode":0}],"browserCi":true,"publicationBaselineCapture":false,"trendBaselineCapture":false,"revocationBaselineCapture":false,"userFileDatabaseModified":false,"originalProcessesNotStopped":true,"ownedProcessStopped":true,"accountBaselineCapture":false,"sloBaselineCapture":false,"streamSessionBaselineCapture":false,"streamSessionOnly":false,"swapBaselineCapture":false,"swapOnly":false,"unexpectedJarErrors":0}
+2026-10-08T12:41:01.0986360Z ##[group]Run node scripts/verify-assistant-request-ui-ci.cjs
+2026-10-08T12:41:01.0986868Z [36;1mnode scripts/verify-assistant-request-ui-ci.cjs[0m
+2026-10-08T12:41:01.1051541Z shell: /usr/bin/bash -e {0}
+2026-10-08T12:41:01.1051817Z env:
+2026-10-08T12:41:01.1052144Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:41:01.1052680Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:41:01.1053079Z   MAVEN_ARGS: -ntp
+2026-10-08T12:41:01.1053296Z ##[endgroup]
+2026-10-08T12:41:51.8755439Z {"status":"PASS","evidenceDirectory":"target/assistant-request-ui-it/run-5ss2Ki","cases":[{"name":"composer-waits-for-real-session-context","heldActualSessionStatus":200,"inputDisabledBeforeContext":true,"noEarlyPosts":true,"noEarlyModelCalls":true,"sendEnabledAfterContext":true},{"name":"explicit-running-cancel","originalKeyUsed":true,"serverState":"CANCELLED","lateAnswers":0,"actualWorkerSettledByFreshAnswer":true},{"name":"lost-completed-response-refresh-query","actualCompletedResponseLost":true,"originalAnswerIdPreserved":true,"streamPostsIncludingRecovery":1,"modelCallsIncludingRecovery":1},{"name":"lost-cancel-response","backendCancelResponseActuallyLost":true,"noFalseCancelledBeforeQuery":true,"queriedServerState":"CANCELLED","cancelAuditRows":1,"lateAnswers":0},{"name":"not-admitted-manual-retry","serverLookupStatus":404,"noAutomaticPost":true,"exactOriginalKeyAndContent":true,"actualModelCalls":1},{"name":"queued-ui-cancel","queriedStateBeforeCancel":"QUEUED","questionAndAnswerRows":0,"modelCallsForQueuedQuestion":0},{"name":"real-capacity-feedback","serverCapacity":"one worker and one queue slot","actualRejectedStatus":503,"actualJsonErrorResponse":true,"rejectedQuestionRows":0,"noAutomaticPost":true,"lookupStatus":404,"manualRecoveryWithOriginalKeyAndQuestion":true},{"name":"real-budget-timeout","serverBudgetSeconds":30,"queriedTerminal":"TIMED_OUT","originalRequestNotRerun":true,"lateAnswers":0,"actualWorkerSettledByFreshAnswer":true},{"name":"late-successful-clear-after-account-change","actualOldClearStatus":200,"actualOldLogoutStatus":200,"replacementTokenPreserved":true,"replacementServerStatus":200,"oldPrivateMessagesNotReintroduced":true}]}
+2026-10-08T12:41:51.8924165Z ##[group]Run node scripts/verify-assistant-native-ui-ci.cjs
+2026-10-08T12:41:51.8925010Z [36;1mnode scripts/verify-assistant-native-ui-ci.cjs[0m
+2026-10-08T12:41:51.8998079Z shell: /usr/bin/bash -e {0}
+2026-10-08T12:41:51.8998364Z env:
+2026-10-08T12:41:51.8998695Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:41:51.8999269Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:41:51.8999668Z   MAVEN_ARGS: -ntp
+2026-10-08T12:41:51.8999892Z ##[endgroup]
+2026-10-08T12:42:40.3474133Z {"status":"FAIL","evidenceDirectory":"target/assistant-native-ui-it/run-muCASl","cases":[{"name":"preview-before-final-commit","native":true,"incremental":true,"previewVisibleBeforeProviderRelease":true,"databaseAnswersBeforeRelease":0,"finalAnswers":1,"modelCalls":1},{"name":"explicit-cancel-after-preview","status":"CANCELLED","cancelledAnswers":0,"originalKeyUsed":true,"workerReusedBeforeOldProviderRelease":true,"nativeHttpConnectionClosedBeforeProviderRelease":true},{"name":"truncated-preview","status":"FAILED","partialAnswersCommitted":0,"modelCalls":1},{"name":"idle-after-preview","status":"TIMED_OUT","executionBudgetSeconds":12,"partialAnswersCommitted":0,"nativeHttpConnectionClosedBeforeProviderRelease":true},{"name":"disconnect-after-preview-manual-query","status":"COMPLETED","originalAnswerIdPreserved":true,"streamPosts":1,"modelCalls":1}]}
+2026-10-08T12:42:40.3478098Z The operation was aborted due to timeout
+2026-10-08T12:42:40.3605049Z ##[error]Process completed with exit code 1.
+2026-10-08T12:42:40.3695859Z ##[group]Run actions/upload-artifact@v5
+2026-10-08T12:42:40.3696195Z with:
+2026-10-08T12:42:40.3696423Z   name: oncall-browser-evidence
+2026-10-08T12:42:40.3699492Z   path: target/oncall-browser-it/
+target/assistant-request-ui-it/**/*.json
+target/assistant-request-ui-it/**/*.log
+target/assistant-request-ui-it/**/*.png
+target/assistant-native-ui-it/**/*.json
+target/assistant-native-ui-it/**/*.log
+target/assistant-native-ui-it/**/*.png
+target/oncall-swap-notification-it/**/*.json
+target/oncall-swap-notification-it/**/*.log
+target/oncall-swap-notification-it/**/*.png
+target/oncall-swap-revocation-http-it/**/*.json
+target/oncall-swap-revocation-http-it/**/*.log
+target/oncall-swap-revocation-ui-it/**/*.json
+target/oncall-swap-revocation-ui-it/**/*.log
+target/oncall-swap-revocation-ui-it/**/*.png
+target/oncall-open-handoff-ui-it/**/*.json
+target/oncall-open-handoff-ui-it/**/*.log
+target/oncall-open-handoff-ui-it/**/*.png
+
+2026-10-08T12:42:40.3702263Z   retention-days: 30
+2026-10-08T12:42:40.3702538Z   if-no-files-found: warn
+2026-10-08T12:42:40.3702783Z   compression-level: 6
+2026-10-08T12:42:40.3703008Z   overwrite: false
+2026-10-08T12:42:40.3703233Z   include-hidden-files: false
+2026-10-08T12:42:40.3703472Z env:
+2026-10-08T12:42:40.3703780Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:42:40.3704282Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:42:40.3704673Z   MAVEN_ARGS: -ntp
+2026-10-08T12:42:40.3704889Z ##[endgroup]
+2026-10-08T12:42:40.5411290Z (node:5044) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-08T12:42:40.5412740Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-08T12:42:40.5833231Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-08T12:42:40.5893142Z The least common ancestor is /home/runner/work/OnCall-Agent/OnCall-Agent/target. This will be the root directory of the artifact
+2026-10-08T12:42:40.5900051Z With the provided path, there will be 117 files uploaded
+2026-10-08T12:42:40.5901537Z Artifact name is valid!
+2026-10-08T12:42:40.5902345Z Root directory input is valid!
+2026-10-08T12:42:40.9685901Z Beginning upload of artifact content to blob storage
+2026-10-08T12:42:41.3379417Z (node:5044) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-08T12:42:42.2432618Z Uploaded bytes 8388608
+2026-10-08T12:42:42.3322351Z Uploaded bytes 8750816
+2026-10-08T12:42:42.4088349Z Finished uploading artifact content to blob storage!
+2026-10-08T12:42:42.4089686Z SHA256 digest of uploaded artifact zip is 40eef7cdcf7a97f61bafc0d1cc4eac803db9e5a31f2eb6492dbe8ecb08d5f340
+2026-10-08T12:42:42.4091957Z Finalizing artifact upload
+2026-10-08T12:42:42.6580916Z Artifact oncall-browser-evidence.zip successfully finalized. Artifact ID 11550962403
+2026-10-08T12:42:42.6582881Z Artifact oncall-browser-evidence has been successfully uploaded! Final size is 8750816 bytes. Artifact ID is 11550962403
+2026-10-08T12:42:42.6588325Z Artifact download URL: https://github.com/Trigger726/OnCall-Agent/actions/runs/37778250400/artifacts/11550962403
+2026-10-08T12:42:42.6797294Z Post job cleanup.
+2026-10-08T12:42:42.8275014Z Post job cleanup.
+2026-10-08T12:42:42.9335182Z [command]/usr/bin/git version
+2026-10-08T12:42:42.9384709Z git version 2.55.0
+2026-10-08T12:42:42.9430872Z Temporarily overriding HOME='/home/runner/work/_temp/948e1e28-dcdb-4c84-bd28-fdce28f573e5' before making global git config changes
+2026-10-08T12:42:42.9432776Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-08T12:42:42.9440609Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-08T12:42:42.9490535Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-08T12:42:42.9529124Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-08T12:42:42.9820841Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-08T12:42:42.9851260Z http.https://github.com/.extraheader
+2026-10-08T12:42:42.9864007Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-08T12:42:42.9907854Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-08T12:42:43.0227124Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-08T12:42:43.0272428Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-08T12:42:43.0692959Z Cleaning up orphan processes
+2026-10-08T12:42:43.1022262Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/upload-artifact@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

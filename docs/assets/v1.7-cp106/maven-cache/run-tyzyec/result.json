@@ -1,0 +1,619 @@
+{
+  "status": "PASS",
+  "scope": "Isolated real Maven 3.9.9 negative-cache experiment. No production JAR/build/repository modifications, no third-party repository requests. Does not prove the historical GitHub failure had a cached miss.",
+  "checks": [
+    {
+      "name": "first-missing-release bounded",
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "First synthetic HTTP404 blocks Maven",
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "First log plugin resolution error",
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "Actual first target 404 observed",
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "Actual negative cache file exists",
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "available-but-cached-missing bounded",
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "Without -U cached missing release still fails",
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "Cached miss explicitly diagnosed",
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "Without -U no target network check",
+      "actual": 2,
+      "expected": 2
+    },
+    {
+      "name": "force-missing-release-check bounded",
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "With -U real plugin goal succeeds",
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Complete plugin help build success",
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "Downloaded plugin bytes match pinned actual Apache JAR",
+      "actual": "17edc5d0289dc0a9b61bd5db15fdb5804b5fb73d7dbe458771e33fbc1d51fa94",
+      "expected": "17edc5d0289dc0a9b61bd5db15fdb5804b5fb73d7dbe458771e33fbc1d51fa94"
+    },
+    {
+      "name": "No outside-mirror target",
+      "actual": true,
+      "expected": true
+    }
+  ],
+  "runs": [
+    {
+      "name": "first-missing-release",
+      "args": [
+        "-B",
+        "-e",
+        "-f",
+        "target/cp106-maven-probe-pom.xml",
+        "-s",
+        "target/cp106-maven-probe-settings.xml",
+        "-Dmaven.repo.local=D:\\Codex\\国网\\央国企求职\\OpsPilot\\target\\cp106-maven-cache-it\\run-tyzyec\\repository",
+        "org.apache.maven.plugins:maven-jar-plugin:3.3.0:help"
+      ],
+      "exitCode": 1,
+      "timeout": false
+    },
+    {
+      "name": "available-but-cached-missing",
+      "args": [
+        "-B",
+        "-e",
+        "-f",
+        "target/cp106-maven-probe-pom.xml",
+        "-s",
+        "target/cp106-maven-probe-settings.xml",
+        "-Dmaven.repo.local=D:\\Codex\\国网\\央国企求职\\OpsPilot\\target\\cp106-maven-cache-it\\run-tyzyec\\repository",
+        "org.apache.maven.plugins:maven-jar-plugin:3.3.0:help"
+      ],
+      "exitCode": 1,
+      "timeout": false
+    },
+    {
+      "name": "force-missing-release-check",
+      "args": [
+        "-B",
+        "-e",
+        "-U",
+        "-f",
+        "target/cp106-maven-probe-pom.xml",
+        "-s",
+        "target/cp106-maven-probe-settings.xml",
+        "-Dmaven.repo.local=D:\\Codex\\国网\\央国企求职\\OpsPilot\\target\\cp106-maven-cache-it\\run-tyzyec\\repository",
+        "org.apache.maven.plugins:maven-jar-plugin:3.3.0:help"
+      ],
+      "exitCode": 0,
+      "timeout": false
+    }
+  ],
+  "requests": [
+    {
+      "run": 1,
+      "path": "org/apache/maven/plugins/maven-jar-plugin/3.3.0/maven-jar-plugin-3.3.0.pom",
+      "method": "GET",
+      "status": 404
+    },
+    {
+      "run": 1,
+      "path": "org/apache/maven/plugins/maven-jar-plugin/3.3.0/maven-jar-plugin-3.3.0.jar",
+      "method": "GET",
+      "status": 404
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/plugins/maven-jar-plugin/3.3.0/maven-jar-plugin-3.3.0.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/plugins/maven-jar-plugin/3.3.0/maven-jar-plugin-3.3.0.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/plugins/maven-plugins/37/maven-plugins-37.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/plugins/maven-plugins/37/maven-plugins-37.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/maven-parent/37/maven-parent-37.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/maven-parent/37/maven-parent-37.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/apache/27/apache-27.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/apache/27/apache-27.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/plugins/maven-jar-plugin/3.3.0/maven-jar-plugin-3.3.0.jar",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/plugins/maven-jar-plugin/3.3.0/maven-jar-plugin-3.3.0.jar.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/shared/file-management/3.1.0/file-management-3.1.0.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/shared/file-management/3.1.0/file-management-3.1.0.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/shared/maven-shared-components/36/maven-shared-components-36.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/shared/maven-shared-components/36/maven-shared-components-36.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/maven-parent/36/maven-parent-36.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/maven-parent/36/maven-parent-36.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/apache/26/apache-26.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/apache/26/apache-26.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/slf4j/slf4j-parent/1.7.36/slf4j-parent-1.7.36.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/slf4j/slf4j-parent/1.7.36/slf4j-parent-1.7.36.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-utils/3.3.0/plexus-utils-3.3.0.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-utils/3.3.0/plexus-utils-3.3.0.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus/5.1/plexus-5.1.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus/5.1/plexus-5.1.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "commons-io/commons-io/2.11.0/commons-io-2.11.0.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "commons-io/commons-io/2.11.0/commons-io-2.11.0.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/commons/commons-parent/52/commons-parent-52.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/commons/commons-parent/52/commons-parent-52.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/apache/23/apache-23.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/apache/23/apache-23.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/junit/junit-bom/5.7.2/junit-bom-5.7.2.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/junit/junit-bom/5.7.2/junit-bom-5.7.2.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/maven-archiver/3.6.0/maven-archiver-3.6.0.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/maven-archiver/3.6.0/maven-archiver-3.6.0.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-io/3.4.0/plexus-io-3.4.0.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-io/3.4.0/plexus-io-3.4.0.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus/10/plexus-10.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus/10/plexus-10.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "javax/inject/javax.inject/1/javax.inject-1.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "javax/inject/javax.inject/1/javax.inject-1.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-archiver/4.4.0/plexus-archiver-4.4.0.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-archiver/4.4.0/plexus-archiver-4.4.0.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/commons/commons-compress/1.21/commons-compress-1.21.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/commons/commons-compress/1.21/commons-compress-1.21.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/iq80/snappy/snappy/0.4/snappy-0.4.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/iq80/snappy/snappy/0.4/snappy-0.4.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/tukaani/xz/1.9/xz-1.9.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/tukaani/xz/1.9/xz-1.9.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-interpolation/1.26/plexus-interpolation-1.26.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-interpolation/1.26/plexus-interpolation-1.26.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-utils/3.4.2/plexus-utils-3.4.2.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-utils/3.4.2/plexus-utils-3.4.2.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus/8/plexus-8.pom",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus/8/plexus-8.pom.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/shared/file-management/3.1.0/file-management-3.1.0.jar",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/shared/file-management/3.1.0/file-management-3.1.0.jar.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "commons-io/commons-io/2.11.0/commons-io-2.11.0.jar",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "javax/inject/javax.inject/1/javax.inject-1.jar",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/maven-archiver/3.6.0/maven-archiver-3.6.0.jar",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-io/3.4.0/plexus-io-3.4.0.jar",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "commons-io/commons-io/2.11.0/commons-io-2.11.0.jar.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "javax/inject/javax.inject/1/javax.inject-1.jar.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/maven/maven-archiver/3.6.0/maven-archiver-3.6.0.jar.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-io/3.4.0/plexus-io-3.4.0.jar.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-archiver/4.4.0/plexus-archiver-4.4.0.jar",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/commons/commons-compress/1.21/commons-compress-1.21.jar",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/iq80/snappy/snappy/0.4/snappy-0.4.jar",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/tukaani/xz/1.9/xz-1.9.jar",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-interpolation/1.26/plexus-interpolation-1.26.jar",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-archiver/4.4.0/plexus-archiver-4.4.0.jar.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/apache/commons/commons-compress/1.21/commons-compress-1.21.jar.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/iq80/snappy/snappy/0.4/snappy-0.4.jar.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/tukaani/xz/1.9/xz-1.9.jar.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-interpolation/1.26/plexus-interpolation-1.26.jar.sha1",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-utils/3.4.2/plexus-utils-3.4.2.jar",
+      "method": "GET",
+      "status": 200
+    },
+    {
+      "run": 3,
+      "path": "org/codehaus/plexus/plexus-utils/3.4.2/plexus-utils-3.4.2.jar.sha1",
+      "method": "GET",
+      "status": 200
+    }
+  ],
+  "ownedServerStopped": true
+}

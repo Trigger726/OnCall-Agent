@@ -1,0 +1,44 @@
+[INFO] Error stacktraces are turned on.
+[INFO] Scanning for projects...
+[WARNING] The POM for org.apache.maven.plugins:maven-jar-plugin:jar:3.3.0 is missing, no dependency information available
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.102 s
+[INFO] Finished at: 2026-10-08T20:44:31+08:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Plugin org.apache.maven.plugins:maven-jar-plugin:3.3.0 or one of its dependencies could not be resolved:
+[ERROR] 	org.apache.maven.plugins:maven-jar-plugin:jar:3.3.0 was not found in http://127.0.0.1:9937/repository/ during a previous attempt. This failure was cached in the local repository and resolution is not reattempted until the update interval of owned-loopback has elapsed or updates are forced
+[ERROR] -> [Help 1]
+org.apache.maven.plugin.PluginResolutionException: Plugin org.apache.maven.plugins:maven-jar-plugin:3.3.0 or one of its dependencies could not be resolved:
+	org.apache.maven.plugins:maven-jar-plugin:jar:3.3.0 was not found in http://127.0.0.1:9937/repository/ during a previous attempt. This failure was cached in the local repository and resolution is not reattempted until the update interval of owned-loopback has elapsed or updates are forced
+
+    at org.apache.maven.plugin.internal.DefaultPluginDependenciesResolver.resolve (DefaultPluginDependenciesResolver.java:144)
+    at org.apache.maven.plugin.internal.DefaultMavenPluginManager.lambda$getPluginDescriptor$0 (DefaultMavenPluginManager.java:183)
+    at org.apache.maven.plugin.DefaultPluginDescriptorCache.lambda$get$0 (DefaultPluginDescriptorCache.java:72)
+    at java.util.concurrent.ConcurrentHashMap.computeIfAbsent (ConcurrentHashMap.java:1708)
+    at org.apache.maven.plugin.DefaultPluginDescriptorCache.get (DefaultPluginDescriptorCache.java:70)
+    at org.apache.maven.plugin.internal.DefaultMavenPluginManager.getPluginDescriptor (DefaultMavenPluginManager.java:181)
+    at org.apache.maven.plugin.internal.DefaultMavenPluginManager.getMojoDescriptor (DefaultMavenPluginManager.java:271)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.getMojoDescriptor (DefaultBuildPluginManager.java:214)
+    at org.apache.maven.lifecycle.internal.MojoDescriptorCreator.getMojoDescriptor (MojoDescriptorCreator.java:226)
+    at org.apache.maven.lifecycle.internal.DefaultLifecycleTaskSegmentCalculator.calculateTaskSegments (DefaultLifecycleTaskSegmentCalculator.java:94)
+    at org.apache.maven.lifecycle.internal.DefaultLifecycleTaskSegmentCalculator.calculateTaskSegments (DefaultLifecycleTaskSegmentCalculator.java:76)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:84)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:261)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:173)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:101)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:906)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:283)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:206)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:103)
+    at java.lang.reflect.Method.invoke (Method.java:580)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:255)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:201)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:361)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:314)
+[ERROR] 
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/PluginResolutionException

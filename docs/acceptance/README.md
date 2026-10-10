@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+最新 CP106：[报告](V1.7-checkpoint-106.md)/[58检查/45文件本地proof](../assets/v1.7-cp106/local-proof.json)。CP105自己21CI实际18成功/2失败/1跳过；真实MySQL五探针/旧新JAR升级10通过，首失败由[274检查/335文件七ZIP proof](../assets/v1.7-cp105/remote-first-proof.json)保留。新增认证构建-U/-e/pipefail日志与原生六流程观察，实际Maven隔离404→缓存拒绝→-U恢复成立，但不认定GitHub唯一根因。本机原六前后/Node161通过，自己CI待验；历史Demo/失败与完整目标保留。
+
 最新 CP105：[报告](V1.7-checkpoint-105.md)/[121检查/107文件本地proof](../assets/v1.7-cp105/local-proof.json)。仅修离线MySQL审计键排序规则冲突，补五个精确字节负对照；Node159、默认Java518执行/196条件跳过、H2升级10/默认HTTP8通过，自己源码真实MySQL仍待。CP104自己CI实际19成功/1升级失败/1跳过及七ZIP已[323检查核验](../assets/v1.7-cp104/remote-first-proof.json)，原始首失败/Demo不覆盖，整体active。
 
 最新 CP104：[报告](V1.7-checkpoint-104.md)/[128检查/113文件proof](../assets/v1.7-cp104/local-proof.json)。新增实际旧/新JAR与MySQL独立升级门禁，H2升级10/默认HTTP8、Node158、默认Java518执行/196条件跳过已验；新MySQL本地条件跳过、自己源码CI待验。CP103自己20success/六ZIP/实际原生18和开放24/双时区各518执行/页面由[289检查proof](../assets/v1.7-cp103/remote-first-proof.json)限定闭合。无新视觉变化，旧Demo/首失败保持，整体active。

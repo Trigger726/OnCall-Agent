@@ -1,0 +1,281 @@
+﻿2026-10-08T12:38:01.0714515Z Current runner version: '2.337.0'
+2026-10-08T12:38:01.0737224Z ##[group]Runner Image Provisioner
+2026-10-08T12:38:01.0738070Z Hosted Compute Agent
+2026-10-08T12:38:01.0738603Z Version: 20261002.596
+2026-10-08T12:38:01.0739168Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-08T12:38:01.0739870Z Build Date: 2026-10-02T22:28:27Z
+2026-10-08T12:38:01.0740500Z Worker ID: {43c15ae3-4fe1-4202-b8ef-5a4078e952d4}
+2026-10-08T12:38:01.0741118Z Region: westus3
+2026-10-08T12:38:01.0741597Z Cloud: Azure
+2026-10-08T12:38:01.0742368Z ##[endgroup]
+2026-10-08T12:38:01.0743689Z ##[group]Operating System
+2026-10-08T12:38:01.0744499Z Ubuntu
+2026-10-08T12:38:01.0744934Z 24.04.5
+2026-10-08T12:38:01.0745331Z LTS
+2026-10-08T12:38:01.0745806Z ##[endgroup]
+2026-10-08T12:38:01.0746297Z ##[group]Runner Image
+2026-10-08T12:38:01.0746797Z Image: ubuntu-24.04
+2026-10-08T12:38:01.0747255Z Version: 20261004.327.1
+2026-10-08T12:38:01.0748325Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-08T12:38:01.0749561Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-08T12:38:01.0750356Z ##[endgroup]
+2026-10-08T12:38:01.0751266Z ##[group]GITHUB_TOKEN Permissions
+2026-10-08T12:38:01.0753568Z Contents: read
+2026-10-08T12:38:01.0754092Z Metadata: read
+2026-10-08T12:38:01.0754567Z ##[endgroup]
+2026-10-08T12:38:01.0756402Z Secret source: Actions
+2026-10-08T12:38:01.0757193Z Cache mode: write
+2026-10-08T12:38:01.0757850Z Prepare workflow directory
+2026-10-08T12:38:01.2326481Z Prepare all required actions
+2026-10-08T12:38:01.2392928Z Getting action download info
+2026-10-08T12:38:01.5996709Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+2026-10-08T12:38:01.6882989Z Download action repository 'actions/setup-java@v5' (SHA:b6effb05e454b25005698d916606bdc6ffcbf961)
+2026-10-08T12:38:02.6188134Z Download action repository 'actions/setup-node@v5' (SHA:a0853c24544627f65ddf259abe73b1d18a591444)
+2026-10-08T12:38:02.7626834Z Download action repository 'actions/upload-artifact@v5' (SHA:330a01c490aca151604b8cf639adc76d48f6c5d4)
+2026-10-08T12:38:03.0684830Z Complete job name: Persistent auth session revocation and JVM restart
+2026-10-08T12:38:03.1551097Z ##[group]Run actions/checkout@v5
+2026-10-08T12:38:03.1552563Z with:
+2026-10-08T12:38:03.1553449Z   repository: Trigger726/OnCall-Agent
+2026-10-08T12:38:03.1561432Z   token: ***
+2026-10-08T12:38:03.1562450Z   ssh-strict: true
+2026-10-08T12:38:03.1563281Z   ssh-user: git
+2026-10-08T12:38:03.1564115Z   persist-credentials: true
+2026-10-08T12:38:03.1565041Z   clean: true
+2026-10-08T12:38:03.1565897Z   sparse-checkout-cone-mode: true
+2026-10-08T12:38:03.1566908Z   fetch-depth: 1
+2026-10-08T12:38:03.1567717Z   fetch-tags: false
+2026-10-08T12:38:03.1568548Z   show-progress: true
+2026-10-08T12:38:03.1569447Z   lfs: false
+2026-10-08T12:38:03.1570237Z   submodules: false
+2026-10-08T12:38:03.1571155Z   set-safe-directory: true
+2026-10-08T12:38:03.1572485Z   allow-unsafe-pr-checkout: false
+2026-10-08T12:38:03.1573667Z ##[endgroup]
+2026-10-08T12:38:03.2537551Z Syncing repository: Trigger726/OnCall-Agent
+2026-10-08T12:38:03.2541308Z ##[group]Getting Git version info
+2026-10-08T12:38:03.2543753Z Working directory is '/home/runner/work/OnCall-Agent/OnCall-Agent'
+2026-10-08T12:38:03.2546880Z [command]/usr/bin/git version
+2026-10-08T12:38:03.2550787Z git version 2.55.0
+2026-10-08T12:38:03.2571340Z ##[endgroup]
+2026-10-08T12:38:03.2586364Z Temporarily overriding HOME='/home/runner/work/_temp/f82ed726-5032-4566-98c6-a648ccc4ae39' before making global git config changes
+2026-10-08T12:38:03.2590441Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-08T12:38:03.2594010Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-08T12:38:03.2650350Z Deleting the contents of '/home/runner/work/OnCall-Agent/OnCall-Agent'
+2026-10-08T12:38:03.2657371Z ##[group]Initializing the repository
+2026-10-08T12:38:03.2663495Z [command]/usr/bin/git init /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-08T12:38:03.2768308Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-08T12:38:03.2771067Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-08T12:38:03.2773659Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-08T12:38:03.2775128Z hint: call:
+2026-10-08T12:38:03.2776135Z hint:
+2026-10-08T12:38:03.2777333Z hint: 	git config --global init.defaultBranch <name>
+2026-10-08T12:38:03.2778772Z hint:
+2026-10-08T12:38:03.2780003Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-08T12:38:03.2781982Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-08T12:38:03.2783604Z hint:
+2026-10-08T12:38:03.2785128Z hint: 	git branch -m <name>
+2026-10-08T12:38:03.2786427Z hint:
+2026-10-08T12:38:03.2787984Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-08T12:38:03.2790730Z Initialized empty Git repository in /home/runner/work/OnCall-Agent/OnCall-Agent/.git/
+2026-10-08T12:38:03.2799188Z [command]/usr/bin/git remote add origin https://github.com/Trigger726/OnCall-Agent
+2026-10-08T12:38:03.2948932Z ##[endgroup]
+2026-10-08T12:38:03.2950416Z ##[group]Disabling automatic garbage collection
+2026-10-08T12:38:03.2953354Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-08T12:38:03.2987269Z ##[endgroup]
+2026-10-08T12:38:03.2990508Z ##[group]Setting up auth
+2026-10-08T12:38:03.2993383Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-08T12:38:03.3023706Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-08T12:38:03.3360479Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-08T12:38:03.3390536Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-08T12:38:03.3579962Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-08T12:38:03.3609465Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-08T12:38:03.3791167Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-08T12:38:03.3832719Z ##[endgroup]
+2026-10-08T12:38:03.3834374Z ##[group]Fetching the repository
+2026-10-08T12:38:03.3845372Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +e32418003631a5852d6143c3dd2dfd61516c6916:refs/remotes/origin/feat/opspilot-v1
+2026-10-08T12:38:06.0424927Z From https://github.com/Trigger726/OnCall-Agent
+2026-10-08T12:38:06.0426160Z  * [new ref]         e32418003631a5852d6143c3dd2dfd61516c6916 -> origin/feat/opspilot-v1
+2026-10-08T12:38:06.0428823Z ##[endgroup]
+2026-10-08T12:38:06.0430080Z ##[group]Determining the checkout info
+2026-10-08T12:38:06.0431456Z ##[endgroup]
+2026-10-08T12:38:06.0438775Z [command]/usr/bin/git sparse-checkout disable
+2026-10-08T12:38:06.0488623Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-08T12:38:06.0517105Z ##[group]Checking out the ref
+2026-10-08T12:38:06.0543121Z [command]/usr/bin/git checkout --progress --force -B feat/opspilot-v1 refs/remotes/origin/feat/opspilot-v1
+2026-10-08T12:38:06.3428895Z Switched to a new branch 'feat/opspilot-v1'
+2026-10-08T12:38:06.3431233Z branch 'feat/opspilot-v1' set up to track 'origin/feat/opspilot-v1'.
+2026-10-08T12:38:06.3448108Z ##[endgroup]
+2026-10-08T12:38:06.3486832Z [command]/usr/bin/git log -1 --format=%H
+2026-10-08T12:38:06.3511122Z e32418003631a5852d6143c3dd2dfd61516c6916
+2026-10-08T12:38:06.3772712Z ##[group]Run actions/setup-java@v5
+2026-10-08T12:38:06.3773085Z with:
+2026-10-08T12:38:06.3773403Z   distribution: temurin
+2026-10-08T12:38:06.3773700Z   java-version: 17
+2026-10-08T12:38:06.3773982Z   cache: maven
+2026-10-08T12:38:06.3774312Z   java-package: jdk
+2026-10-08T12:38:06.3774603Z   check-latest: false
+2026-10-08T12:38:06.3774953Z   set-default: true
+2026-10-08T12:38:06.3775243Z   verify-signature: false
+2026-10-08T12:38:06.3775548Z   server-id: github
+2026-10-08T12:38:06.3775874Z   server-username: GITHUB_ACTOR
+2026-10-08T12:38:06.3776200Z   server-password: GITHUB_TOKEN
+2026-10-08T12:38:06.3776531Z   overwrite-settings: true
+2026-10-08T12:38:06.3776841Z   job-status: success
+2026-10-08T12:38:06.3779657Z   token: ***
+2026-10-08T12:38:06.3780015Z   show-download-progress: false
+2026-10-08T12:38:06.3780373Z ##[endgroup]
+2026-10-08T12:38:06.5233686Z ##[group]Installed distributions
+2026-10-08T12:38:06.5382033Z Resolved Java 17.0.20+1 from tool-cache
+2026-10-08T12:38:06.5382982Z Setting Java 17.0.20+1 as the default
+2026-10-08T12:38:06.5390816Z Creating toolchains.xml for JDK version 17 from temurin
+2026-10-08T12:38:06.5452027Z Writing to /home/runner/.m2/toolchains.xml
+2026-10-08T12:38:06.5452579Z 
+2026-10-08T12:38:06.5452783Z Java configuration:
+2026-10-08T12:38:06.5453171Z   Distribution: temurin
+2026-10-08T12:38:06.5453608Z   Version: 17.0.20+1
+2026-10-08T12:38:06.5454168Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:06.5462735Z 
+2026-10-08T12:38:06.5464099Z ##[endgroup]
+2026-10-08T12:38:06.5501728Z Creating settings.xml with server-id: github
+2026-10-08T12:38:06.5502739Z Writing to /home/runner/.m2/settings.xml
+2026-10-08T12:38:06.5503770Z Configured MAVEN_ARGS to include -ntp to suppress Maven transfer progress logs. Set 'show-download-progress: true' to keep the download progress output.
+2026-10-08T12:38:06.9900860Z Cache hit for: setup-java-Linux-x64-maven-d32cb843aa19f08330bb1496da7a1a49cc2deb22a4e49d97b309eae19c7fe74e
+2026-10-08T12:38:08.2306561Z Received 29360128 of 97722820 (30.0%), 28.0 MBs/sec
+2026-10-08T12:38:08.6346690Z Received 97722820 of 97722820 (100.0%), 66.4 MBs/sec
+2026-10-08T12:38:08.6347538Z Cache Size: ~93 MB (97722820 B)
+2026-10-08T12:38:08.6420248Z [command]/usr/bin/tar -xf /home/runner/work/_temp/1ced9d9a-aea1-416d-922f-2df97aa61642/cache.tzst -P -C /home/runner/work/OnCall-Agent/OnCall-Agent --use-compress-program unzstd
+2026-10-08T12:38:08.7851890Z Cache restored successfully
+2026-10-08T12:38:08.7895996Z Cache restored from key: setup-java-Linux-x64-maven-d32cb843aa19f08330bb1496da7a1a49cc2deb22a4e49d97b309eae19c7fe74e
+2026-10-08T12:38:09.1412854Z Cache hit for: setup-java-Linux-x64-maven-wrapper-4010b7b513ce627636150913aad6edbf72eda4862fdc6f4a8c75796c51ae597a
+2026-10-08T12:38:10.1391148Z Received 8933049 of 8933049 (100.0%), 10.9 MBs/sec
+2026-10-08T12:38:10.1391719Z Cache Size: ~9 MB (8933049 B)
+2026-10-08T12:38:10.1406879Z [command]/usr/bin/tar -xf /home/runner/work/_temp/1447c312-ae87-4239-a297-1c49ac5bea78/cache.tzst -P -C /home/runner/work/OnCall-Agent/OnCall-Agent --use-compress-program unzstd
+2026-10-08T12:38:10.1580604Z Cache restored successfully
+2026-10-08T12:38:10.1587091Z maven-wrapper cache restored from key: setup-java-Linux-x64-maven-wrapper-4010b7b513ce627636150913aad6edbf72eda4862fdc6f4a8c75796c51ae597a
+2026-10-08T12:38:10.1775547Z ##[group]Run actions/setup-node@v5
+2026-10-08T12:38:10.1775934Z with:
+2026-10-08T12:38:10.1776281Z   node-version: 22
+2026-10-08T12:38:10.1776599Z   always-auth: false
+2026-10-08T12:38:10.1776934Z   check-latest: false
+2026-10-08T12:38:10.1779801Z   token: ***
+2026-10-08T12:38:10.1780175Z   package-manager-cache: true
+2026-10-08T12:38:10.1780489Z env:
+2026-10-08T12:38:10.1780895Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:10.1781477Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:10.1782309Z   MAVEN_ARGS: -ntp
+2026-10-08T12:38:10.1782667Z ##[endgroup]
+2026-10-08T12:38:10.3228359Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+2026-10-08T12:38:10.3232490Z (node:2117) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-08T12:38:10.3233588Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-08T12:38:10.3234836Z ##[group]Environment details
+2026-10-08T12:38:14.0794348Z node: v22.23.3
+2026-10-08T12:38:14.0794980Z npm: 10.9.9
+2026-10-08T12:38:14.0795570Z yarn: 1.22.22
+2026-10-08T12:38:14.0796488Z ##[endgroup]
+2026-10-08T12:38:14.0909577Z ##[group]Run chmod +x mvnw
+2026-10-08T12:38:14.0910074Z [36;1mchmod +x mvnw[0m
+2026-10-08T12:38:14.1142927Z shell: /usr/bin/bash -e {0}
+2026-10-08T12:38:14.1143441Z env:
+2026-10-08T12:38:14.1143838Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:14.1144394Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:14.1144870Z   MAVEN_ARGS: -ntp
+2026-10-08T12:38:14.1145169Z ##[endgroup]
+2026-10-08T12:38:14.1278158Z ##[group]Run ./mvnw -B -DskipTests package
+2026-10-08T12:38:14.1278590Z [36;1m./mvnw -B -DskipTests package[0m
+2026-10-08T12:38:14.1318401Z shell: /usr/bin/bash -e {0}
+2026-10-08T12:38:14.1318764Z env:
+2026-10-08T12:38:14.1319211Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:14.1319793Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:14.1320269Z   MAVEN_ARGS: -ntp
+2026-10-08T12:38:14.1320576Z ##[endgroup]
+2026-10-08T12:38:16.6992569Z [INFO] Scanning for projects...
+2026-10-08T12:38:16.9031183Z [INFO] 
+2026-10-08T12:38:16.9047808Z [INFO] ------------------------< org.trigger:opspilot >------------------------
+2026-10-08T12:38:16.9048850Z [INFO] Building OpsPilot 0.1.0-SNAPSHOT
+2026-10-08T12:38:16.9052890Z [INFO]   from pom.xml
+2026-10-08T12:38:16.9056114Z [INFO] --------------------------------[ jar ]---------------------------------
+2026-10-08T12:38:18.1843772Z [WARNING] The POM for org.apache.maven.plugins:maven-jar-plugin:jar:3.3.0 is missing, no dependency information available
+2026-10-08T12:38:18.2001585Z [INFO] ------------------------------------------------------------------------
+2026-10-08T12:38:18.2002396Z [INFO] BUILD FAILURE
+2026-10-08T12:38:18.2002938Z [INFO] ------------------------------------------------------------------------
+2026-10-08T12:38:18.2010329Z [INFO] Total time:  1.527 s
+2026-10-08T12:38:18.2012772Z [INFO] Finished at: 2026-10-08T12:38:18Z
+2026-10-08T12:38:18.2013349Z [INFO] ------------------------------------------------------------------------
+2026-10-08T12:38:18.2023770Z [ERROR] Plugin org.apache.maven.plugins:maven-jar-plugin:3.3.0 or one of its dependencies could not be resolved:
+2026-10-08T12:38:18.2045018Z [ERROR] 	Could not find artifact org.apache.maven.plugins:maven-jar-plugin:jar:3.3.0 in central (https://repo.maven.apache.org/maven2)
+2026-10-08T12:38:18.2046237Z [ERROR] -> [Help 1]
+2026-10-08T12:38:18.2046732Z [ERROR] 
+2026-10-08T12:38:18.2047576Z [ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+2026-10-08T12:38:18.2048632Z [ERROR] Re-run Maven using the -X switch to enable full debug logging.
+2026-10-08T12:38:18.2049870Z [ERROR] 
+2026-10-08T12:38:18.2050977Z [ERROR] For more information about the errors and possible solutions, please read the following articles:
+2026-10-08T12:38:18.2052417Z [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/PluginResolutionException
+2026-10-08T12:38:18.2228855Z ##[error]Process completed with exit code 1.
+2026-10-08T12:38:18.2345053Z ##[group]Run actions/upload-artifact@v5
+2026-10-08T12:38:18.2345425Z with:
+2026-10-08T12:38:18.2345737Z   name: auth-session-evidence
+2026-10-08T12:38:18.2348076Z   path: target/auth-session-it/**/*.json
+target/auth-session-it/**/*.log
+target/agent-session-it/**/*.json
+target/agent-session-it/**/*.log
+target/assistant-session-it/**/*.json
+target/assistant-session-it/**/*.log
+target/assistant-idempotency-it/**/*.json
+target/assistant-idempotency-it/**/*.log
+target/assistant-cancel-it/**/*.json
+target/assistant-cancel-it/**/*.log
+target/assistant-cross-node-it/**/*.json
+target/assistant-cross-node-it/**/*.log
+target/assistant-slow-consumer-it/**/*.json
+target/assistant-slow-consumer-it/**/*.log
+target/assistant-slow-consumer-it/**/*.txt
+target/oncall-swap-http-it/**/*.json
+target/oncall-swap-http-it/**/*.log
+
+2026-10-08T12:38:18.2350363Z   retention-days: 30
+2026-10-08T12:38:18.2350776Z   if-no-files-found: warn
+2026-10-08T12:38:18.2351349Z   compression-level: 6
+2026-10-08T12:38:18.2352224Z   overwrite: false
+2026-10-08T12:38:18.2352832Z   include-hidden-files: false
+2026-10-08T12:38:18.2353180Z env:
+2026-10-08T12:38:18.2353736Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:18.2354687Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-08T12:38:18.2355293Z   MAVEN_ARGS: -ntp
+2026-10-08T12:38:18.2355682Z ##[endgroup]
+2026-10-08T12:38:18.3860552Z (node:2299) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-08T12:38:18.3861431Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-08T12:38:18.3914794Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-08T12:38:18.3919600Z The least common ancestor is /home/runner/work/OnCall-Agent/OnCall-Agent/target. This will be the root directory of the artifact
+2026-10-08T12:38:18.3939597Z ##[warning]No files were found with the provided path: target/auth-session-it/**/*.json
+target/auth-session-it/**/*.log
+target/agent-session-it/**/*.json
+target/agent-session-it/**/*.log
+target/assistant-session-it/**/*.json
+target/assistant-session-it/**/*.log
+target/assistant-idempotency-it/**/*.json
+target/assistant-idempotency-it/**/*.log
+target/assistant-cancel-it/**/*.json
+target/assistant-cancel-it/**/*.log
+target/assistant-cross-node-it/**/*.json
+target/assistant-cross-node-it/**/*.log
+target/assistant-slow-consumer-it/**/*.json
+target/assistant-slow-consumer-it/**/*.log
+target/assistant-slow-consumer-it/**/*.txt
+target/oncall-swap-http-it/**/*.json
+target/oncall-swap-http-it/**/*.log. No artifacts will be uploaded.
+2026-10-08T12:38:18.4111421Z Post job cleanup.
+2026-10-08T12:38:18.6287189Z Post job cleanup.
+2026-10-08T12:38:18.7076459Z [command]/usr/bin/git version
+2026-10-08T12:38:18.7113620Z git version 2.55.0
+2026-10-08T12:38:18.7147308Z Temporarily overriding HOME='/home/runner/work/_temp/088b037a-cba5-48c0-b19d-b6a07ddcf9ac' before making global git config changes
+2026-10-08T12:38:18.7148547Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-08T12:38:18.7153137Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-08T12:38:18.7793338Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-08T12:38:18.7830673Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-08T12:38:18.8050080Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-08T12:38:18.8074847Z http.https://github.com/.extraheader
+2026-10-08T12:38:18.8083383Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-08T12:38:18.8111710Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-08T12:38:18.8282587Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-08T12:38:18.8310723Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-08T12:38:18.8619944Z Cleaning up orphan processes
+2026-10-08T12:38:18.8840826Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/upload-artifact@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

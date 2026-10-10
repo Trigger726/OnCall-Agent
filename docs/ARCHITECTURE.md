@@ -1,5 +1,7 @@
 # OpsPilot 架构设计
 
+CP106生产架构/DDL/页面未改：[报告](acceptance/V1.7-checkpoint-106.md)。CP105自身实际MySQL8.4.11完整旧新包升级10/五探针/五池与容器关闭由[274检查proof](assets/v1.7-cp105/remote-first-proof.json)证明；同轮认证打包失败与原生第六页面读流超时不是整轮全绿。认证CI只加-U缺失release检查/-e日志，pipefail保留真实失败退出；原生测试只记录响应头、受控正文、读取阶段/字节和EOF，20秒上限及所有业务断言不变。自己的新CI待验，不推导生产容量或唯一Linux失败根因。
+
 CP104只新增[实际旧/新包 MySQL 升级验证](acceptance/V1.7-checkpoint-104.md)，不改生产架构或V38：Java测试拥有随机独占Testcontainer/schema，Node复用完整HTTP流程并拥有五次JAR启动，离线SQL只在全部自有JAR停止后运行，核对实际JDBC产品/版本/schema/server UUID。旧包固定源码单独构建，业务全行摘要/37版校验和/重启原回执与五池完整关闭进入独立门禁；实际MySQL新执行仍待自己CI。CP103传输修复已由[自身六ZIP证据](assets/v1.7-cp103/remote-first-proof.json)限定闭合，不推导生产容量。
 
 CP103[错误表示与页面就绪](acceptance/V1.7-checkpoint-103.md)：GlobalExceptionHandler的ApiResponse错误正文显式application/json，成功SSE保持原produces/有界池/原预算/幂等与提交边界；前端偏好纯SSE但仍解析真实JSON拒绝，不将已开始的流切换JSON。requestLocked加入loading/!active以阻止上下文未就绪发送。无DDL/Provider SDK升级或系统代理改动，原生6/助手原8+新1本地通过，自身远端与生产容量待验。

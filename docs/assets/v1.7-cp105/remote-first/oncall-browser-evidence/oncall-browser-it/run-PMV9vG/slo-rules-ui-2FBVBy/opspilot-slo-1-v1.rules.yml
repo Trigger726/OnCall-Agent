@@ -1,0 +1,246 @@
+{
+  "groups" : [ {
+    "name" : "opspilot-slo-1-v1",
+    "interval" : "30s",
+    "rules" : [ {
+      "record" : "opspilot:slo_1_v1:good_5m",
+      "expr" : "sum(increase(opspilot_http_requests_good_total{service_code=\"APP-SETTLEMENT\"}[5m]))",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "5m"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:total_5m",
+      "expr" : "sum(increase(opspilot_http_requests_total{service_code=\"APP-SETTLEMENT\"}[5m]))",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "5m"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:burn_5m",
+      "expr" : "vector((scalar(opspilot:slo_1_v1:total_5m) - scalar(opspilot:slo_1_v1:good_5m)) / scalar(opspilot:slo_1_v1:total_5m) / 9.999999999999432E-4) and on() (vector(scalar(opspilot:slo_1_v1:total_5m)) > 0) and on() (vector(scalar(opspilot:slo_1_v1:good_5m)) >= 0) and on() (vector(scalar(opspilot:slo_1_v1:good_5m)) <= scalar(opspilot:slo_1_v1:total_5m)) and on() (vector(scalar(opspilot:slo_1_v1:good_5m) - scalar(opspilot:slo_1_v1:good_5m)) == 0) and on() (vector(scalar(opspilot:slo_1_v1:total_5m) - scalar(opspilot:slo_1_v1:total_5m)) == 0) and on() (vector(time() - scalar(timestamp(opspilot:slo_1_v1:good_5m))) <= 60) and on() (vector(time() - scalar(timestamp(opspilot:slo_1_v1:total_5m))) <= 60)",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "5m"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:good_1h",
+      "expr" : "sum(increase(opspilot_http_requests_good_total{service_code=\"APP-SETTLEMENT\"}[1h]))",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "1h"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:total_1h",
+      "expr" : "sum(increase(opspilot_http_requests_total{service_code=\"APP-SETTLEMENT\"}[1h]))",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "1h"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:burn_1h",
+      "expr" : "vector((scalar(opspilot:slo_1_v1:total_1h) - scalar(opspilot:slo_1_v1:good_1h)) / scalar(opspilot:slo_1_v1:total_1h) / 9.999999999999432E-4) and on() (vector(scalar(opspilot:slo_1_v1:total_1h)) > 0) and on() (vector(scalar(opspilot:slo_1_v1:good_1h)) >= 0) and on() (vector(scalar(opspilot:slo_1_v1:good_1h)) <= scalar(opspilot:slo_1_v1:total_1h)) and on() (vector(scalar(opspilot:slo_1_v1:good_1h) - scalar(opspilot:slo_1_v1:good_1h)) == 0) and on() (vector(scalar(opspilot:slo_1_v1:total_1h) - scalar(opspilot:slo_1_v1:total_1h)) == 0) and on() (vector(time() - scalar(timestamp(opspilot:slo_1_v1:good_1h))) <= 60) and on() (vector(time() - scalar(timestamp(opspilot:slo_1_v1:total_1h))) <= 60)",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "1h"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:good_30m",
+      "expr" : "sum(increase(opspilot_http_requests_good_total{service_code=\"APP-SETTLEMENT\"}[30m]))",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "30m"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:total_30m",
+      "expr" : "sum(increase(opspilot_http_requests_total{service_code=\"APP-SETTLEMENT\"}[30m]))",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "30m"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:burn_30m",
+      "expr" : "vector((scalar(opspilot:slo_1_v1:total_30m) - scalar(opspilot:slo_1_v1:good_30m)) / scalar(opspilot:slo_1_v1:total_30m) / 9.999999999999432E-4) and on() (vector(scalar(opspilot:slo_1_v1:total_30m)) > 0) and on() (vector(scalar(opspilot:slo_1_v1:good_30m)) >= 0) and on() (vector(scalar(opspilot:slo_1_v1:good_30m)) <= scalar(opspilot:slo_1_v1:total_30m)) and on() (vector(scalar(opspilot:slo_1_v1:good_30m) - scalar(opspilot:slo_1_v1:good_30m)) == 0) and on() (vector(scalar(opspilot:slo_1_v1:total_30m) - scalar(opspilot:slo_1_v1:total_30m)) == 0) and on() (vector(time() - scalar(timestamp(opspilot:slo_1_v1:good_30m))) <= 60) and on() (vector(time() - scalar(timestamp(opspilot:slo_1_v1:total_30m))) <= 60)",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "30m"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:good_6h",
+      "expr" : "sum(increase(opspilot_http_requests_good_total{service_code=\"APP-SETTLEMENT\"}[6h]))",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "6h"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:total_6h",
+      "expr" : "sum(increase(opspilot_http_requests_total{service_code=\"APP-SETTLEMENT\"}[6h]))",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "6h"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:burn_6h",
+      "expr" : "vector((scalar(opspilot:slo_1_v1:total_6h) - scalar(opspilot:slo_1_v1:good_6h)) / scalar(opspilot:slo_1_v1:total_6h) / 9.999999999999432E-4) and on() (vector(scalar(opspilot:slo_1_v1:total_6h)) > 0) and on() (vector(scalar(opspilot:slo_1_v1:good_6h)) >= 0) and on() (vector(scalar(opspilot:slo_1_v1:good_6h)) <= scalar(opspilot:slo_1_v1:total_6h)) and on() (vector(scalar(opspilot:slo_1_v1:good_6h) - scalar(opspilot:slo_1_v1:good_6h)) == 0) and on() (vector(scalar(opspilot:slo_1_v1:total_6h) - scalar(opspilot:slo_1_v1:total_6h)) == 0) and on() (vector(time() - scalar(timestamp(opspilot:slo_1_v1:good_6h))) <= 60) and on() (vector(time() - scalar(timestamp(opspilot:slo_1_v1:total_6h))) <= 60)",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "6h"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:good_3d",
+      "expr" : "sum(increase(opspilot_http_requests_good_total{service_code=\"APP-SETTLEMENT\"}[3d]))",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "3d"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:total_3d",
+      "expr" : "sum(increase(opspilot_http_requests_total{service_code=\"APP-SETTLEMENT\"}[3d]))",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "3d"
+      }
+    }, {
+      "record" : "opspilot:slo_1_v1:burn_3d",
+      "expr" : "vector((scalar(opspilot:slo_1_v1:total_3d) - scalar(opspilot:slo_1_v1:good_3d)) / scalar(opspilot:slo_1_v1:total_3d) / 9.999999999999432E-4) and on() (vector(scalar(opspilot:slo_1_v1:total_3d)) > 0) and on() (vector(scalar(opspilot:slo_1_v1:good_3d)) >= 0) and on() (vector(scalar(opspilot:slo_1_v1:good_3d)) <= scalar(opspilot:slo_1_v1:total_3d)) and on() (vector(scalar(opspilot:slo_1_v1:good_3d) - scalar(opspilot:slo_1_v1:good_3d)) == 0) and on() (vector(scalar(opspilot:slo_1_v1:total_3d) - scalar(opspilot:slo_1_v1:total_3d)) == 0) and on() (vector(time() - scalar(timestamp(opspilot:slo_1_v1:good_3d))) <= 60) and on() (vector(time() - scalar(timestamp(opspilot:slo_1_v1:total_3d))) <= 60)",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "3d"
+      }
+    }, {
+      "alert" : "OpsPilotSloFastPage",
+      "expr" : "((opspilot:slo_1_v1:burn_1h and (time() - timestamp(opspilot:slo_1_v1:burn_1h) <= 60)) >= 13.44) and on() ((opspilot:slo_1_v1:burn_5m and (time() - timestamp(opspilot:slo_1_v1:burn_5m) <= 60)) >= 13.44)",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "lane" : "FAST_PAGE",
+        "severity" : "P1"
+      },
+      "annotations" : {
+        "summary" : "APP-SETTLEMENT SLO FAST_PAGE"
+      }
+    }, {
+      "alert" : "OpsPilotSloSlowPage",
+      "expr" : "((opspilot:slo_1_v1:burn_6h and (time() - timestamp(opspilot:slo_1_v1:burn_6h) <= 60)) >= 5.6000000000000005) and on() ((opspilot:slo_1_v1:burn_30m and (time() - timestamp(opspilot:slo_1_v1:burn_30m) <= 60)) >= 5.6000000000000005) unless on() ((((opspilot:slo_1_v1:burn_1h and (time() - timestamp(opspilot:slo_1_v1:burn_1h) <= 60)) >= 13.44) and on() ((opspilot:slo_1_v1:burn_5m and (time() - timestamp(opspilot:slo_1_v1:burn_5m) <= 60)) >= 13.44)))",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "lane" : "SLOW_PAGE",
+        "severity" : "P2"
+      },
+      "annotations" : {
+        "summary" : "APP-SETTLEMENT SLO SLOW_PAGE"
+      }
+    }, {
+      "alert" : "OpsPilotSloTicket",
+      "expr" : "((opspilot:slo_1_v1:burn_3d and (time() - timestamp(opspilot:slo_1_v1:burn_3d) <= 60)) >= 0.9333333333333335) and on() ((opspilot:slo_1_v1:burn_6h and (time() - timestamp(opspilot:slo_1_v1:burn_6h) <= 60)) >= 0.9333333333333335) unless on() ((((opspilot:slo_1_v1:burn_1h and (time() - timestamp(opspilot:slo_1_v1:burn_1h) <= 60)) >= 13.44) and on() ((opspilot:slo_1_v1:burn_5m and (time() - timestamp(opspilot:slo_1_v1:burn_5m) <= 60)) >= 13.44)) or on() (((opspilot:slo_1_v1:burn_6h and (time() - timestamp(opspilot:slo_1_v1:burn_6h) <= 60)) >= 5.6000000000000005) and on() ((opspilot:slo_1_v1:burn_30m and (time() - timestamp(opspilot:slo_1_v1:burn_30m) <= 60)) >= 5.6000000000000005)))",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "lane" : "TICKET",
+        "severity" : "P3"
+      },
+      "annotations" : {
+        "summary" : "APP-SETTLEMENT SLO TICKET"
+      }
+    }, {
+      "alert" : "OpsPilotSloDataUnavailable",
+      "expr" : "absent(opspilot:slo_1_v1:burn_5m) or (time() - timestamp(opspilot:slo_1_v1:burn_5m) > 60)",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "5m",
+        "severity" : "P3"
+      },
+      "annotations" : {
+        "summary" : "APP-SETTLEMENT SLO 5m 数据不可用"
+      }
+    }, {
+      "alert" : "OpsPilotSloDataUnavailable",
+      "expr" : "absent(opspilot:slo_1_v1:burn_1h) or (time() - timestamp(opspilot:slo_1_v1:burn_1h) > 60)",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "1h",
+        "severity" : "P3"
+      },
+      "annotations" : {
+        "summary" : "APP-SETTLEMENT SLO 1h 数据不可用"
+      }
+    }, {
+      "alert" : "OpsPilotSloDataUnavailable",
+      "expr" : "absent(opspilot:slo_1_v1:burn_30m) or (time() - timestamp(opspilot:slo_1_v1:burn_30m) > 60)",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "30m",
+        "severity" : "P3"
+      },
+      "annotations" : {
+        "summary" : "APP-SETTLEMENT SLO 30m 数据不可用"
+      }
+    }, {
+      "alert" : "OpsPilotSloDataUnavailable",
+      "expr" : "absent(opspilot:slo_1_v1:burn_6h) or (time() - timestamp(opspilot:slo_1_v1:burn_6h) > 60)",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "6h",
+        "severity" : "P3"
+      },
+      "annotations" : {
+        "summary" : "APP-SETTLEMENT SLO 6h 数据不可用"
+      }
+    }, {
+      "alert" : "OpsPilotSloDataUnavailable",
+      "expr" : "absent(opspilot:slo_1_v1:burn_3d) or (time() - timestamp(opspilot:slo_1_v1:burn_3d) > 60)",
+      "labels" : {
+        "resource_code" : "APP-SETTLEMENT",
+        "slo_id" : "1",
+        "slo_version" : "1",
+        "window" : "3d",
+        "severity" : "P3"
+      },
+      "annotations" : {
+        "summary" : "APP-SETTLEMENT SLO 3d 数据不可用"
+      }
+    } ]
+  } ]
+}

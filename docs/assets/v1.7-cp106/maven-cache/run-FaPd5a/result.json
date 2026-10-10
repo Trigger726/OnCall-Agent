@@ -1,0 +1,36 @@
+{
+  "status": "FAIL",
+  "scope": "Isolated real Maven 3.9.9 negative-cache experiment. No production JAR/build/repository modifications, no third-party repository requests. Does not prove the historical GitHub failure had a cached miss.",
+  "checks": [
+    {
+      "name": "first-missing-release bounded",
+      "actual": false,
+      "expected": false
+    },
+    {
+      "name": "First synthetic HTTP404 blocks Maven",
+      "actual": false,
+      "expected": false
+    }
+  ],
+  "runs": [
+    {
+      "name": "first-missing-release",
+      "args": [
+        "-B",
+        "-e",
+        "-f",
+        "target/cp106-maven-probe-pom.xml",
+        "-s",
+        "target/cp106-maven-probe-settings.xml",
+        "-Dmaven.repo.local=D:\\Codex\\国网\\央国企求职\\OpsPilot\\target\\cp106-maven-cache-it\\run-FaPd5a\\repository",
+        "org.apache.maven.plugins:maven-jar-plugin:3.3.0:help"
+      ],
+      "exitCode": 255,
+      "timeout": false
+    }
+  ],
+  "requests": [],
+  "error": "First log plugin resolution error\n\nfalse !== true\n",
+  "ownedServerStopped": true
+}

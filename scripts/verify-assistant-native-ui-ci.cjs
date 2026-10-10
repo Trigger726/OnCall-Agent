@@ -189,6 +189,7 @@ async function verify() {
       result.cases.push({ name: 'disconnect-after-preview-manual-query', status: 'COMPLETED', originalAnswerIdPreserved: true, streamPosts: 1, modelCalls: 1 });
 
       // Occupy the two reserved output slots, then prove a real typed 503 and fixed-key manual recovery in the page.
+      result.capacityPhase = 'create-fixture-sessions';
       const held1 = { question: 'cp77-output-held-' + randomUUID(), gated: true, calls: 0 };
       const held2 = { question: 'cp77-output-queued-' + randomUUID(), gated: true, calls: 0 };
       controls.set(held1.question, held1); controls.set(held2.question, held2);
@@ -196,20 +197,31 @@ async function verify() {
       const heldId2 = (await api('/assistant/sessions', 'POST', {})).session.id;
       const heldKey1 = randomUUID(), heldKey2 = randomUUID();
       const hold = async (sessionId, key, item) => {
-        const held = { sessionId, responseStatus: null, body: '', ended: false }; heldStreams.push(held);
+        const held = { sessionId, responseStatus: null, body: '', ended: false, startedAt: Date.now(), observations: [] }; heldStreams.push(held);
+        const observe = phase => held.observations.push({ phase, elapsedMs: Date.now() - held.startedAt,
+          observedBytes: Buffer.byteLength(held.body) });
+        observe('request-started');
+        try {
         const response = await fetch(base + '/api/v1/assistant/sessions/' + sessionId + '/stream', {
           method: 'POST', headers: { Authorization: 'Bearer ' + token, 'Idempotency-Key': key,
             Accept: 'text/event-stream, application/json', 'Content-Type': 'application/json' },
           body: JSON.stringify({ content: item.question }), signal: AbortSignal.timeout(20000) });
         held.responseStatus = response.status;
+        held.contentType = response.headers.get('content-type'); observe('headers-received');
         const decoder = new TextDecoder();
         for await (const chunk of response.body) {
           held.body += decoder.decode(chunk, { stream: true });
           assert.ok(held.body.length < 32768, 'Capacity fixture must not produce an unbounded body');
+          if (held.observations.length < 32) observe('chunk-received');
         }
-        held.body += decoder.decode(); held.ended = true; return held;
+        held.body += decoder.decode(); held.ended = true; observe('body-ended'); return held;
+        } catch (error) {
+          held.failure = redact(error.message); held.failurePhase = result.capacityPhase; observe('reader-failed'); throw error;
+        }
       };
+      result.capacityPhase = 'hold-running-request';
       const hold1 = hold(heldId1, heldKey1, held1); hold1.catch(() => {}); await until(() => held1.entered);
+      result.capacityPhase = 'hold-queued-request';
       const hold2 = hold(heldId2, heldKey2, held2); hold2.catch(() => {});
       await until(async () => {
         const response = await context.request.get(base + '/api/v1/assistant/sessions/' + heldId2 + '/request', {
@@ -220,6 +232,7 @@ async function verify() {
         }
         assert.equal(response.status(), 200); return body.data.status === 'QUEUED';
       });
+      result.capacityPhase = 'page-typed-503';
       const rejectedId = await fresh(), rejected = { question: 'cp77-output-rejected-' + randomUUID(), gated: false, calls: 0 }; controls.set(rejected.question, rejected);
       const priorPosts = posts.length;
       const rejectedResponse = page.waitForResponse(response => response.url() === base + '/api/v1/assistant/sessions/' + rejectedId + '/stream'
@@ -235,14 +248,17 @@ async function verify() {
       const missing = await context.request.get(base + '/api/v1/assistant/sessions/' + rejectedId + '/request', {
         headers: { Authorization: 'Bearer ' + token, 'Idempotency-Key': rejectedKey } }); assert.equal(missing.status(), 404);
       await snapshot('output-saturated-desktop'); await page.setViewportSize({ width: 390, height: 844 }); await snapshot('output-saturated-mobile');
+      result.capacityPhase = 'cancel-owned-fixture-requests';
       await api('/assistant/sessions/' + heldId2 + '/request/cancel', 'POST', undefined, heldKey2);
       await api('/assistant/sessions/' + heldId1 + '/request/cancel', 'POST', undefined, heldKey1);
+      result.capacityPhase = 'await-both-cancelled-stream-eofs';
       for (const held of [await hold1, await hold2]) {
         assert.equal(held.responseStatus, 200); assert.equal(held.ended, true);
         assert.ok(held.body.includes('event:cancelled')); assert.ok(!held.body.includes('event:done'));
       }
       await until(() => held1.transportClosed === true);
       assert.equal(held2.calls, 0); assert.equal(held1.gated, true); finish(held1); finish(held2);
+      result.capacityPhase = 'manual-original-key-recovery';
       const missingResponse = page.waitForResponse(response => response.url() === base + '/api/v1/assistant/sessions/' + rejectedId + '/request'
         && response.request().method() === 'GET');
       await page.getByRole('button', { name: '查询原请求', exact: true }).click();
@@ -257,6 +273,7 @@ async function verify() {
       result.cases.push({ name: 'output-capacity-503-and-fixed-key-manual-recovery', actualErrorCode: 'ASSISTANT_STREAM_SATURATED',
         errorMessageVisible: true, rejectedQuestionRows: 0, rejectedModelCalls: 0, rejectedKeyStatus: 404, noAutomaticRetry: true,
         sameKeyAndQuestionOnManualRetry: true, recoveredAnswerRows: 1, fixtureCancelPosts: 2 });
+      result.capacityPhase = 'complete';
     }
     // Keep every raw browser error. Accept at most one resource log for each independently verified fault response.
     const remaining = [...expectedConsoleResponses];
@@ -280,8 +297,9 @@ async function verify() {
     throw error;
   }
   finally {
-    result.fixtureHeldStreams = heldStreams.map(({ sessionId, responseStatus, body, ended }) => ({ sessionId, responseStatus, ended,
-      cancelledEvent: body.includes('event:cancelled'), doneEvent: body.includes('event:done'), observedBytes: Buffer.byteLength(body) }));
+    result.fixtureHeldStreams = heldStreams.map(({ sessionId, responseStatus, body, ended, contentType, observations, failure, failurePhase }) => ({ sessionId, responseStatus, ended,
+      cancelledEvent: body.includes('event:cancelled'), doneEvent: body.includes('event:done'), observedBytes: Buffer.byteLength(body),
+      contentType, observations, failure, failurePhase, controlledFixtureBody: redact(body) }));
     result.providerRequests = [...controls.values()].map(({ question, calls, native, incremental, transportClosed }) => ({ question, calls, native, incremental, transportClosed }));
     result.streamPosts = posts.length; result.explicitCancelPosts = cancellations.length;
     process.off('SIGINT', interrupt); process.off('SIGTERM', interrupt); controls.forEach(finish);
