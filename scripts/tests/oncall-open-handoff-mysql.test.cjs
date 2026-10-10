@@ -5,7 +5,7 @@ const path = require('node:path');
 const { verify, suite, cases, timeCases } = require('../verify-oncall-open-handoff-mysql.cjs');
 function fixture() {
   const identities = cases.map(name => 'CP97_OPEN_HANDOFF_DATABASE ' + JSON.stringify({ case: name,
-    product: 'MySQL', version: '8.4.11', schema: 'opspilot_open_handoff_test', migration38: true }));
+    product: 'MySQL', version: '8.4.11', schema: 'opspilot_open_handoff_test', migration38: true, migration39: true, versionedMigrations: 39 }));
   const barriers = timeCases.map(name => 'CP97_OPEN_HANDOFF_TIME_BARRIER ' + JSON.stringify({ case: name,
     requestedEnd: '2026-10-04T14:20:01', persistedEnd: '2026-10-04T14:20:01',
     releasedDatabaseNow: '2026-10-04T14:20:01.012345', releasedAfterPersistedEnd: true }));
@@ -27,12 +27,16 @@ test('zero tests conditional skips failures errors and skipped children fail clo
   ...['skipped', 'errors', 'failures'].map(key => f => f.xml = f.xml.replace(key + '="0"', key + '="1"')),
   f => f.xml = f.xml.replace('<system-out>', '<skipped/><system-out>')
 ]));
-test('every testcase must identify real owned MySQL V38', () => rejects([
+test('every testcase must identify real owned MySQL V38 and V39', () => rejects([
   f => f.xml = f.xml.replace('CP97_OPEN_HANDOFF_DATABASE', 'missing'),
   f => f.xml = f.xml.replace('"product":"MySQL"', '"product":"H2"'),
   f => f.xml = f.xml.replace('8.4.11', '8.0.1'),
   f => f.xml = f.xml.replace('opspilot_open_handoff_test', 'production'),
-  f => f.xml = f.xml.replace('"migration38":true', '"migration38":false')
+  f => f.xml = f.xml.replace('"migration38":true', '"migration38":false'),
+  f => f.xml = f.xml.replace(',"migration39":true', ''),
+  f => f.xml = f.xml.replace('"migration39":true', '"migration39":false'),
+  f => f.xml = f.xml.replace('"versionedMigrations":39', '"versionedMigrations":38'),
+  f => f.xml = f.xml.replace('"versionedMigrations":39', '"versionedMigrations":40')
 ]));
 test('duplicate renamed cases and log/XML divergence fail closed', () => rejects([
   f => f.xml = f.xml.replace('name="' + cases[13] + '"', 'name="' + cases[0] + '"'),

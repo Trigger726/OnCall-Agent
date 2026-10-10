@@ -52,6 +52,7 @@ function verify(log, xml) {
     const identity = own[0]; assert.equal(identity.case, name);
     assert.equal(identity.product, 'MySQL'); assert.match(identity.version, /^8\.4\./);
     assert.equal(identity.schema, 'opspilot_open_handoff_test'); assert.equal(identity.migration38, true);
+    assert.equal(identity.migration39, true); assert.equal(identity.versionedMigrations, 39);
     identities.push(identity);
     const time = markers(testcase, 'CP97_OPEN_HANDOFF_TIME_BARRIER');
     assert.equal(time.length, timeCases.includes(name) ? 1 : 0);
@@ -73,7 +74,7 @@ function verify(log, xml) {
   assert.equal(starts[0][1], stops[0][1]); assert.ok(stops[0].index > starts[0].index);
   return { status: 'PASS', suite: result, executed: cases.length, skipped: 0, cases,
     database: 'MySQL', databaseVersion: identities[0].version, actualJdbcIdentityPerTest: true,
-    migration38VerifiedPerTest: true, persistedWholeSecondDeadlineBarriers: sorted(barriers),
+    migration38VerifiedPerTest: true, migration39VerifiedPerTest: true, versionedMigrations: 39, persistedWholeSecondDeadlineBarriers: sorted(barriers),
     fullMavenAndOrderedPoolShutdownVerified: true };
 }
 module.exports = { verify, suite, cases, timeCases };
