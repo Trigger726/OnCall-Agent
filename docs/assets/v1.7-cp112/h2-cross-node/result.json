@@ -1,0 +1,89 @@
+{
+  "status" : "PASS",
+  "jarSha256" : "8e71d49ac0a16e64759944784988db374eaed4f35fcd11858e1639decefd1841",
+  "database" : {
+    "product" : "H2",
+    "version" : "2.2.220 (2023-07-04)",
+    "schema" : "owned-h2-tcp"
+  },
+  "twoApplicationJvmsObservedAliveTogether" : true,
+  "versionedMigrations" : 39,
+  "finalSql" : {
+    "memberAudits" : 5,
+    "memberOperations" : 5,
+    "open" : 1,
+    "claimed" : 4,
+    "claimOperations" : 4,
+    "requests" : 5
+  },
+  "databaseOwnerStopped" : true,
+  "cases" : [ {
+    "oneAudit" : true,
+    "oneReceipt" : true,
+    "sameOriginalOperation" : true,
+    "name" : "two-live-jvms-concurrent-original-membership-command"
+  }, {
+    "originalOperationRetained" : true,
+    "noWrites" : true,
+    "changedAndCrossPlanKey409" : true,
+    "claim403" : true,
+    "staleVersion409" : true,
+    "management403" : true,
+    "name" : "remote-revocation-and-immutable-member-ack-without-rebase"
+  }, {
+    "bodyNotRead" : true,
+    "statusLine200BeforeSocketClosed" : true,
+    "cancelledCoverageNotRevived" : true,
+    "snapshotUnchangedAfterRestartAck" : true,
+    "originalOperation" : {
+      "handoffId" : 2,
+      "actorId" : 3,
+      "operationKey" : "21e050a1-9a35-496e-ae40-4f82687698d6",
+      "operation" : "CLAIM",
+      "capturedVersion" : 0,
+      "reason" : "captured cross-node voluntary claim",
+      "committedAt" : "2026-10-10T12:31:10.516887"
+    },
+    "requestId" : 2,
+    "name" : "committed-http-response-loss-remote-manual-ack-cancel-and-jvm-restart"
+  }, {
+    "newManagement403" : true,
+    "bothOldJwtAfterRoleLoss403" : true,
+    "ownOriginalKey200" : true,
+    "roleRestorationDoesNotRestorePlanManagement" : true,
+    "name" : "manager-own-revocation-current-role-and-restoration-fences"
+  }, {
+    "bothPlansValid" : true,
+    "plan2SameActor403" : true,
+    "plan2QualifiedControl200" : true,
+    "plan1Accepted" : true,
+    "name" : "two-valid-plans-response-isolation-and-qualified-control"
+  }, {
+    "exactlyTwoResponsibilityAudits" : true,
+    "oneReceipt" : true,
+    "oneReplacement" : true,
+    "sameOriginalOperation" : true,
+    "requestId" : 5,
+    "name" : "two-jvm-concurrent-original-claim-one-responsibility"
+  } ],
+  "startedPids" : [ 43996, 53928, 55032 ],
+  "allApplicationPidsAbsent" : true,
+  "applicationPorts" : [ 36533, 30049, 30286 ],
+  "managementPorts" : [ 36534, 30050, 30287 ],
+  "portsFree" : true,
+  "pools" : [ {
+    "file" : "jar-1.log",
+    "completePoolShutdown" : true,
+    "pid" : 43996
+  }, {
+    "file" : "jar-2.log",
+    "completePoolShutdown" : true,
+    "pid" : 53928
+  }, {
+    "file" : "jar-3.log",
+    "completePoolShutdown" : true,
+    "pid" : 55032
+  } ],
+  "crossMachineOrHaClaimed" : false,
+  "tokensPersistedToEvidence" : false
+}

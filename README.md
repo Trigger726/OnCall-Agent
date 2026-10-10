@@ -1,6 +1,6 @@
 # OpsPilot
 
-开发中 CP111：[实际 MySQL 闭合与完整原回归接入](docs/acceptance/V1.7-checkpoint-111.md)。CP110 自身实际MySQL共享22/非空旧V38→V39升级7已由[两个官方ZIP重放](docs/assets/v1.7-cp110/remote-proof.json)核验。本轮加强原24的V39证据、保留原21CI全部定义并允许精确WIP分支运行；新源码全CI、成员两JVM/页面/新旧Demo仍待，所有未提交改动保留。下方按历史时点阅读，整体active。
+开发中 CP112：[成员真网络与两JVM阶段](docs/acceptance/V1.7-checkpoint-112.md)。CP111自身原21/成员2 CI已success，原MySQL24/成员22/升级7由[三个官方ZIP重放](docs/assets/v1.7-cp111/remote-proof.json)限定核验。本轮自有H2 TCP六HTTP流程/两应用JVM/三次生命周期与完整关闭、选定后端47/Node193通过；本次实际MySQL两JVM、页面/新旧Demo仍待。首失败和所有未提交改动保留，下方按历史时点阅读，整体active。
 
 当前 CP107：[完整取消帧门禁与成员契约](docs/acceptance/V1.7-checkpoint-107.md)。CP106自身[21作业 success/两个官方ZIP的191检查证据](docs/assets/v1.7-cp106/remote-close-proof.json)已闭合：Linux原生六项/两流完整取消JSON与EOF、八认证runner及后续通知12/成对14/开放33均执行。CP105首次失败仍保留，不推断唯一根因。本轮加强测试而非改生产UI；[计划成员权限](docs/ONCALL_PLAN_MEMBERSHIP_DESIGN.md)仍是设计，未实现。以下历史待验按各检查点当时范围阅读，整体active。
 

@@ -1,0 +1,377 @@
+{
+  "status": "LOCAL_H2_TCP_TWO_LIVE_JVMS_SIX_HTTP_CASES_PASS_OWN_MYSQL_PENDING",
+  "checks": 196,
+  "previousSource": "a8a2d92c953f196fc25c9b9a826cebdd92423808",
+  "previousRemoteProof": "docs/assets/v1.7-cp111/remote-proof.json",
+  "selectedBackend": {
+    "discovered": 48,
+    "executed": 47,
+    "skipped": 1,
+    "suites": [
+      {
+        "name": "OnCallOpenHandoffIntegrationTest",
+        "tests": 24,
+        "skipped": 0,
+        "executed": 24,
+        "file": "target/surefire-reports/TEST-org.trigger.opspilot.oncall.OnCallOpenHandoffIntegrationTest.xml",
+        "sha256": "e438ac1cbea7ad61f7a283814cf24e91e39377d587fec085692a9e1689bbf5e0"
+      },
+      {
+        "name": "OnCallPlanMembershipIntegrationTest",
+        "tests": 22,
+        "skipped": 0,
+        "executed": 22,
+        "file": "target/surefire-reports/TEST-org.trigger.opspilot.oncall.OnCallPlanMembershipIntegrationTest.xml",
+        "sha256": "51bbbe63b8faae6f3a211a6f06f2c2c682dca5c0a7dcb522575abf852023c045"
+      },
+      {
+        "name": "OnCallPlanMembershipCrossNodeIntegrationTest",
+        "tests": 1,
+        "skipped": 0,
+        "executed": 1,
+        "file": "target/surefire-reports/TEST-org.trigger.opspilot.oncall.OnCallPlanMembershipCrossNodeIntegrationTest.xml",
+        "sha256": "161ff52002b786a1f286c04eb04d1a6b9e6ba391c37ba768f973b1145a675196"
+      },
+      {
+        "name": "MySqlOnCallPlanMembershipCrossNodeIntegrationTest",
+        "tests": 1,
+        "skipped": 1,
+        "executed": 0,
+        "file": "target/surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipCrossNodeIntegrationTest.xml",
+        "sha256": "906f6986044b1b8a3657f07a5d3ebbb3e4d2b4498ca92ae5eb18fbaf6d1b27cf"
+      }
+    ]
+  },
+  "node": {
+    "executed": 193,
+    "skipped": 0
+  },
+  "yaml": {
+    "originalJobs": 21,
+    "everyOriginalJobDefinitionUnchanged": true,
+    "wipJobs": 3,
+    "duplicateNegativeRejected": true
+  },
+  "replay": {
+    "status": "PASS",
+    "suite": {
+      "name": "org.trigger.opspilot.oncall.OnCallPlanMembershipCrossNodeIntegrationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "httpCases": 6,
+    "database": {
+      "product": "H2",
+      "version": "2.2.220 (2023-07-04)",
+      "schema": "owned-h2-tcp"
+    },
+    "threeJvmLifecycles": true,
+    "twoLiveApplicationJvms": true,
+    "versionedMigrations": 39,
+    "allPoolsAndOwnedDatabaseStopped": true,
+    "finalSql": {
+      "memberAudits": 5,
+      "memberOperations": 5,
+      "open": 1,
+      "claimed": 4,
+      "claimOperations": 4,
+      "requests": 5
+    },
+    "crossMachineOrHaVerified": false,
+    "membershipUiVerified": false
+  },
+  "productionChangedSincePrevious": false,
+  "ownActualMysqlCrossNodeVerified": false,
+  "crossMachineHaVerified": false,
+  "membershipUiVerified": false,
+  "newVisualDemo": false,
+  "sourceFiles": [
+    {
+      "file": ".gitattributes",
+      "sha256": "3dd119a71f507a7617ea6617b583c1be6f8df06e8bbecae86a186e058163c340"
+    },
+    {
+      "file": ".github/workflows/ci.yml",
+      "sha256": "6bedb4ad08f13f1bfacd20870e18430021bda8068add20963ccac15293e7df13"
+    },
+    {
+      "file": "README.md",
+      "sha256": "17ea6d5d8424acf55b960dd9c7f903c3b0e07a5766fabb02e47b0fb4b943d166"
+    },
+    {
+      "file": "docs/ONCALL_PLAN_MEMBERSHIP_DESIGN.md",
+      "sha256": "3ad4693b9477782a6a9016e21effed3b63c684cfcb9a197bb9f8289b0c317c98"
+    },
+    {
+      "file": "docs/ROADMAP.md",
+      "sha256": "bc9a118aebb420994fe78d2ffa489b00a34ca9e4728fce7560d8f399fffacc5f"
+    },
+    {
+      "file": "docs/acceptance/README.md",
+      "sha256": "f01ddf308ecc5647dc98bc21b20242999d7154e6dd14b7f9891978f074c30eff"
+    },
+    {
+      "file": "scripts/fixtures/OpenHandoffSqlFixture.java",
+      "sha256": "4f0cbf5ee750647ca24cfb3d6c8dbc039b24c8984dd8455d990bbb1df9b6f940"
+    },
+    {
+      "file": "scripts/tests/oncall-open-handoff-http-ci.test.cjs",
+      "sha256": "1c77ee5ecb12e1dde88711aeb6c1ad0a6e8396aad4eba0df99aa67c30cf7154a"
+    },
+    {
+      "file": "scripts/tests/oncall-open-handoff-mysql.test.cjs",
+      "sha256": "92c5d6c9bb03c00c2ac4aef6e9d736c65255f63dae4a4c2568f07a2df058b067"
+    },
+    {
+      "file": "scripts/tests/oncall-open-handoff-upgrade-mysql.test.cjs",
+      "sha256": "8b118109f8cb7c72a23b12bf8d54f48264143b2a8ae4f727d0bc605e53d461bb"
+    },
+    {
+      "file": "scripts/verify-oncall-open-handoff-http-ci.cjs",
+      "sha256": "2e250ef5063e47853f7880fbde0715b35a76161f3bbc013b1ea0cd762ced4dd7"
+    },
+    {
+      "file": "scripts/verify-oncall-open-handoff-mysql.cjs",
+      "sha256": "c2c3777b5bfcee6c833364e758a33bd401630e07adacb946fe74c684692af19e"
+    },
+    {
+      "file": "scripts/verify-oncall-open-handoff-upgrade-mysql.cjs",
+      "sha256": "dbda7953f91b44c0165403c8eeaee914c36828f1bfcb20057e57a1a4685c96b2"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallController.java",
+      "sha256": "2b18602337a516e51e9c8f025e76ee30fca63ed368bfa1fb78cde10149e0a3bb"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallHandoffService.java",
+      "sha256": "125157b58fe2f14d8f6750732c9dff477ffd0130e32f4ae89396d6f79275bc42"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallOpenHandoffService.java",
+      "sha256": "97a796d701aea11b14f928f24bd3f350ea39ad274fe161c69be49991a371f6d9"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallRosterService.java",
+      "sha256": "5d74379d487555c7a8aa0b7274deedb499a81c803d2b725ca210bd617be9e94d"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallRotationService.java",
+      "sha256": "3c72fe3749b2133789d679f1d7ddad1c4db704c15329d882f7ad2765f22ff363"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallSwapService.java",
+      "sha256": "ec3f62982790a646e036af2bacb73b7098e05003d973264ee74da652b0450ca9"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/MySqlCompatibilityIntegrationTest.java",
+      "sha256": "a384fec59a7a4a7daeb4245ba7ff447f299db4009376a044b0060c56f91582d9"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/CoverageScenarios.java",
+      "sha256": "684a1113b787568ed9c2d99f8175b059fd97439169f0579b396750fedfbd9fb2"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/HandoffScenarios.java",
+      "sha256": "9ccb324c89c02de4be469f6a1bd97a03cb63ef910097296eabf15b128d27a207"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/MySqlOpenHandoffUpgradeHttpIntegrationTest.java",
+      "sha256": "29d3db55ba937340b21586e55fea035fdfafac1e4e620add41cd0b0c8b11d03b"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OnCallRosterIntegrationTest.java",
+      "sha256": "218d7d98902f82c84035169d6b886fb0379acfdc6b6f6432c2e574f99d9d3083"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OnCallRotationJobIntegrationTest.java",
+      "sha256": "e1c9e7532d38f8a27e225fca08cc7f8dc40f8a17e58f16d51f3ba6701c3d2bef"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OpenHandoffScenarios.java",
+      "sha256": "a42105c37f181bed9f3711e6e490126a0145a548732b50f18337a31f2f513db2"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/RotationScenarios.java",
+      "sha256": "c0ece8a2b8bf1d4f5bb8cce0669aeb3a57c550c3932082f8631eeb5ef0e7709f"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/RoutingSnapshotScenarios.java",
+      "sha256": "14e4b265c95bb4fe3fd6d11a0076a173fd8c624fb633b0003b7ae4a44a9f6063"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/SwapNotificationScenarios.java",
+      "sha256": "6791586393771ff53a89152b598795b058ec66baa925b3a3b3a74451f5921422"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/SwapRevocationScenarios.java",
+      "sha256": "2d59bd87cba1a22785de39d675a80ee1f35ce4cac5adae81f408b66f82c44e06"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/SwapScenarios.java",
+      "sha256": "fd56ab04dd7604be0ae00d9d6623b446fc1ff680c352d45ce608055f4ec6de25"
+    },
+    {
+      "file": ".github/workflows/plan-membership-wip.yml",
+      "sha256": "c19d76eecbe61620873912209add83f86663e4e70bcff44350cca28a82ec68ba"
+    },
+    {
+      "file": "docs/acceptance/V1.7-checkpoint-108-wip-upload.md",
+      "sha256": "d55c6cd5c9761c2ea1f1aeb251a3ea134fb261a982e028c512c66d50fbaa0730"
+    },
+    {
+      "file": "docs/acceptance/V1.7-checkpoint-109.md",
+      "sha256": "dfdc606cfda0867a094e0ba6b1de6de2bb93a217feac63979a2c5e8ac5de154e"
+    },
+    {
+      "file": "docs/acceptance/V1.7-checkpoint-110.md",
+      "sha256": "a2d1847676f8fe1d75811ed8438c72fe8da8be0b72911c6f528b0e26e0222387"
+    },
+    {
+      "file": "docs/acceptance/V1.7-checkpoint-111.md",
+      "sha256": "59c91c7e658f1716761b827ac3a75baafb575b05b2e77be5e2a617a2d18f8cec"
+    },
+    {
+      "file": "docs/acceptance/V1.7-checkpoint-112.md",
+      "sha256": "b451b90a3a1562c2deae2c1beadbc40ab5edac425d54643c58f40495608f21dd"
+    },
+    {
+      "file": "scripts/record-plan-membership-upgrade-baseline.cjs",
+      "sha256": "e5f08275c093683c0fd711a8003b299157c1c1d6092a39bc2ce737fd90b4d1c0"
+    },
+    {
+      "file": "scripts/tests/oncall-membership-regression-workflow.test.cjs",
+      "sha256": "9962538a872c53b254b66c70be67a3dd3ed9b0a3b373205e8a13218dc9aaef3f"
+    },
+    {
+      "file": "scripts/tests/oncall-plan-membership-cross-node.test.cjs",
+      "sha256": "6c372296a98b66e8647290d53e5abd2f055b732933590dee6448690ad85236c0"
+    },
+    {
+      "file": "scripts/tests/oncall-plan-membership-mysql.test.cjs",
+      "sha256": "f222c566f4a3623e757edd3870802945960714f282e040a6f4c831b013f6d7bd"
+    },
+    {
+      "file": "scripts/tests/oncall-plan-membership-upgrade-mysql.test.cjs",
+      "sha256": "a257cd7cb04cf35b348a2e62621fc9ceb9d4ab51056d504348a1bdce91673a1b"
+    },
+    {
+      "file": "scripts/verify-oncall-plan-membership-cross-node.cjs",
+      "sha256": "808a00d4736348d3303c2eea141274b8abfefdcf578a2d9c7bccd967f6d5f80d"
+    },
+    {
+      "file": "scripts/verify-oncall-plan-membership-mysql.cjs",
+      "sha256": "3167a911d46d33eef397170e7c43a1b6c42ac505a2f5c8bc31535f39d3f7ed2a"
+    },
+    {
+      "file": "scripts/verify-oncall-plan-membership-upgrade-http-ci.cjs",
+      "sha256": "63ee4a9d67b71f7dc9e364463b584ec236ac3fbdce8fe77ddc44b2f7dbd6567f"
+    },
+    {
+      "file": "scripts/verify-oncall-plan-membership-upgrade-mysql.cjs",
+      "sha256": "1840acc5c10119aa8fc78e1419b8ac201f8cbf7a769e1a1664d767f7575c6fdf"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallPlanMembershipController.java",
+      "sha256": "17d64146d078cdee2f670d63f3ed4af9c2f648e90a50e58185cf79e10381ff96"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallPlanMembershipService.java",
+      "sha256": "9906b07c35bddc72b36b84d383de4b60d52662d7da4c291f8755e02a9c2933a8"
+    },
+    {
+      "file": "src/main/resources/db/migration/V39__oncall_plan_memberships.sql",
+      "sha256": "87b7f21eb16e07ac9ba148178c229faf2f355037cac6d898092e320a5973979b"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/MySqlOnCallPlanMembershipCrossNodeIntegrationTest.java",
+      "sha256": "73120349f29cb15d0217379fc6cdbe5d7ea00d8c9e4faa9a69ab1dc87417428a"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/MySqlOnCallPlanMembershipIntegrationTest.java",
+      "sha256": "9ad9f41ac4c4f88ee74e1fb63883e10f44015f31dc29f1a885807d9c316835e2"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/MySqlPlanMembershipUpgradeHttpIntegrationTest.java",
+      "sha256": "faf369ba3fe4039e18e7a9296e06ae38c2c9328e41e7f963903bacaf6e5d8581"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OnCallPlanMembershipCrossNodeIntegrationTest.java",
+      "sha256": "d7a7fe073e4e95ed524682f478bf1686bf4961d4477fbd306219f3282ee06a80"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OnCallPlanMembershipIntegrationTest.java",
+      "sha256": "cd540c2997f846e00135c35c3256393f00ed0a83eefce0f9a65750f77c2671be"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/PlanMembershipCrossNodeScenarios.java",
+      "sha256": "22c9a0edef951b79929e848e64e63792ec9520eed5bb028ab3035dcca5700e5e"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/PlanMembershipFixtures.java",
+      "sha256": "b5a098136bd4ce662ed22146d8cf76eaae83623c72448f7f7e8fa9acdab683b3"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/PlanMembershipScenarios.java",
+      "sha256": "668428b65b268e6d9645dc33dfad7602df0cb81e3f7c5388f94b13742ce9fa87"
+    }
+  ],
+  "rawFiles": [
+    {
+      "file": "docs/assets/v1.7-cp112/first-failures/first.log",
+      "bytes": 3367,
+      "sha256": "1a6aaae97dc52733b816dfaa9496f1d2e0e4dfc6e3cd207bb1b2a1261990704f"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/first-failures/fourth.log",
+      "bytes": 4786,
+      "sha256": "d41f1f637cb9ffb6695ccb436a58e23fbcbf98ff667a38f95ad2c155d6696ecb"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/first-failures/second.log",
+      "bytes": 3638,
+      "sha256": "fbbd55a2db5a04a5d7c72327debaf2a43e5547a93fca40fdd0b8af40fdb59d13"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/first-failures/third.log",
+      "bytes": 5171,
+      "sha256": "245c5a65e295cb0f8c5a412970d6709de013e67dab9d5590caa0334b16132147"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/h2-cross-node/gate-result.json",
+      "bytes": 680,
+      "sha256": "0c647ec249eebe54a01e458ae544a466d2feda566300a9619a155cd067d6d17e"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/h2-cross-node/jar-1.log",
+      "bytes": 16575,
+      "sha256": "29547e8e45eb082702cf7a5fcec67dd4e1abab924735134b853d84b71ed96609"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/h2-cross-node/jar-2.log",
+      "bytes": 8961,
+      "sha256": "5e7346665936a15fee3415bcc021070037243713267a42563f2cb8d0fddde199"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/h2-cross-node/jar-3.log",
+      "bytes": 8970,
+      "sha256": "125f0fd20fa121525ca35d0654f56b78020e2091a84a7449f4b35ec43e16af8a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/h2-cross-node/maven.log",
+      "bytes": 43117,
+      "sha256": "68a90482b836daaf46281f6c200be1380099b39799a1cadc6ecc0472e671fc99"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/h2-cross-node/result.json",
+      "bytes": 2827,
+      "sha256": "bacc70a2fc4ff10869a3e0680841e9418d031d18097871687a9f589ea775093a"
+    },
+    {
+      "file": "docs/assets/v1.7-cp112/h2-cross-node/TEST-org.trigger.opspilot.oncall.OnCallPlanMembershipCrossNodeIntegrationTest.xml",
+      "bytes": 53911,
+      "sha256": "161ff52002b786a1f286c04eb04d1a6b9e6ba391c37ba768f973b1145a675196"
+    }
+  ]
+}

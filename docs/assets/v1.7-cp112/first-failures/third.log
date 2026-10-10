@@ -1,0 +1,79 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< org.trigger:opspilot >------------------------
+[INFO] Building OpsPilot 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 41 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 111 source files with javac [debug release 17] to target\test-classes
+[INFO] 由于在类路径中发现了一个或多个处理程序，因此启用了
+  批注处理。未来发行版的 javac 可能会禁用批注处理，
+  除非至少按名称指定了一个处理程序 (-processor)，
+  或指定了搜索路径 (--processor-path, --processor-module-path)，
+  或显式启用了批注处理 (-proc:only, -proc:full)。
+  可使用 -Xlint:-options 隐藏此消息。
+  可使用 -proc:none 禁用批注处理。
+[INFO] /D:/Codex/国网/央国企求职/OpsPilot/src/test/java/org/trigger/opspilot/distributed/DistributedAgentEventsIntegrationTest.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /D:/Codex/国网/央国企求职/OpsPilot/src/test/java/org/trigger/opspilot/distributed/DistributedAgentEventsIntegrationTest.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.trigger.opspilot.oncall.OnCallPlanMembershipCrossNodeIntegrationTest
+PLAN_MEMBERSHIP_CROSS_NODE_RESULT target/oncall-plan-membership-cross-node-h2-it/run-6121016539666217187/result.json
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 23.47 s <<< FAILURE! -- in org.trigger.opspilot.oncall.OnCallPlanMembershipCrossNodeIntegrationTest
+[ERROR] org.trigger.opspilot.oncall.OnCallPlanMembershipCrossNodeIntegrationTest.shouldVerifyCurrentMembershipAndOriginalReceiptsAcrossTwoIndependentJvms -- Time elapsed: 23.15 s <<< FAILURE!
+org.opentest4j.AssertionFailedError: 
+[HTTP status for node 0 route /auth/login] 
+expected: 200
+ but was: 401
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+	at org.trigger.opspilot.oncall.PlanMembershipCrossNodeScenarios.api(PlanMembershipCrossNodeScenarios.java:156)
+	at org.trigger.opspilot.oncall.PlanMembershipCrossNodeScenarios.login(PlanMembershipCrossNodeScenarios.java:152)
+	at org.trigger.opspilot.oncall.PlanMembershipCrossNodeScenarios.shouldVerifyCurrentMembershipAndOriginalReceiptsAcrossTwoIndependentJvms(PlanMembershipCrossNodeScenarios.java:67)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+[INFO] 
+[INFO] Results:
+[INFO] 
+[ERROR] Failures: 
+[ERROR]   OnCallPlanMembershipCrossNodeIntegrationTest>PlanMembershipCrossNodeScenarios.shouldVerifyCurrentMembershipAndOriginalReceiptsAcrossTwoIndependentJvms:67->PlanMembershipCrossNodeScenarios.login:152->PlanMembershipCrossNodeScenarios.api:156 [HTTP status for node 0 route /auth/login] 
+expected: 200
+ but was: 401
+[INFO] 
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  37.721 s
+[INFO] Finished at: 2026-10-10T12:24:50Z
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:3.1.2:test (default-test) on project opspilot: There are test failures.
+[ERROR] 
+[ERROR] Please refer to D:\Codex\国网\央国企求职\OpsPilot\target\surefire-reports for the individual test results.
+[ERROR] Please refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

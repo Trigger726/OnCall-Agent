@@ -1,6 +1,6 @@
 name: Plan membership WIP verification
 
-# Shared cases and populated upgrade remain separate jobs; not the full CI matrix or UI acceptance.
+# Shared cases, populated upgrade and two-JVM HTTP remain separate; not UI acceptance.
 on:
   push:
     branches: ["wip/plan-membership-v39-20261010"]
@@ -46,6 +46,44 @@ jobs:
           path: |
             target/oncall-plan-membership-mysql-it/
             target/surefire-reports/
+          retention-days: 30
+
+  membership-cross-node-mysql:
+    name: Two JVM plan membership on owned MySQL 8.4
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Verify positive and negative two-node evidence gates
+        run: node --test scripts/tests/oncall-plan-membership-cross-node.test.cjs
+      - name: Build actual own-source executable JAR
+        run: |
+          chmod +x mvnw
+          ./mvnw -B -DskipTests package
+      - name: Execute shared real HTTP scenarios on two live JVMs and owned MySQL
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p target/oncall-plan-membership-cross-node-mysql-it
+          ./mvnw -B -Duser.timezone=UTC -Dopspilot.oncall.membership.cross-node.mysql.enabled=true -Dtest=MySqlOnCallPlanMembershipCrossNodeIntegrationTest test 2>&1 | tee target/oncall-plan-membership-cross-node-mysql-it/maven.log
+      - name: Verify six HTTP cases original receipts SQL counts and three pool shutdowns
+        run: node scripts/verify-oncall-plan-membership-cross-node.cjs
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: plan-membership-cross-node-mysql-evidence
+          path: |
+            target/oncall-plan-membership-cross-node-mysql-it/**/*.json
+            target/oncall-plan-membership-cross-node-mysql-it/**/*.log
+            target/surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipCrossNodeIntegrationTest.xml
           retention-days: 30
 
   membership-upgrade-mysql:
