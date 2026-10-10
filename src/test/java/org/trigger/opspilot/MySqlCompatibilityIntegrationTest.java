@@ -932,6 +932,7 @@ class MySqlCompatibilityIntegrationTest {
         jdbcClient.sql("INSERT INTO oncall_schedule(service_resource_id, name) VALUES (3, 'MySQL 班次并发')")
                 .update(key, "id");
         long scheduleId = key.getKey().longValue();
+        org.trigger.opspilot.oncall.PlanMembershipFixtures.grant(jdbcClient, scheduleId, 1, 2, 3);
         LocalDateTime at = jdbcClient.sql("SELECT CURRENT_TIMESTAMP")
                 .query((rs, row) -> rs.getObject(1, LocalDateTime.class)).single()
                 .plusDays(1).truncatedTo(java.time.temporal.ChronoUnit.SECONDS);

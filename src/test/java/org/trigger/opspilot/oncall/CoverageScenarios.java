@@ -170,6 +170,7 @@ abstract class CoverageScenarios {
     private long schedule() {
         var key = new GeneratedKeyHolder();
         jdbc.sql("INSERT INTO oncall_schedule(service_resource_id,name) VALUES (3,:name)").param("name", "覆盖-"+UUID.randomUUID()).update(key,"id");
+        PlanMembershipFixtures.grant(jdbc, key.getKey().longValue(), 1, 2, 3);
         return key.getKey().longValue();
     }
     private OnCallRosterService.ShiftView shift(long schedule,long user,LocalDateTime start,LocalDateTime end,boolean override) {

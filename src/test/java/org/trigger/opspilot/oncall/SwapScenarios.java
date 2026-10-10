@@ -228,7 +228,7 @@ abstract class SwapScenarios {
         var second=roster.create(new OnCallRosterService.ShiftCommand(secondSchedule,3,start.plusDays(1),start.plusDays(1).plusHours(4),false,"对方班次"),1L,"test");
         return new Fixture(first,second);
     }
-    private long schedule() { long resource=insert(jdbc.sql("INSERT INTO cmdb_resource(resource_code,resource_type,name,environment,status) VALUES (:code,'APPLICATION','换班独立服务','TEST','RUNNING')").param("code","SWAP-"+UUID.randomUUID()));return insert(jdbc.sql("INSERT INTO oncall_schedule(service_resource_id,name) VALUES (:id,'换班计划')").param("id",resource)); }
+    private long schedule() { long resource=insert(jdbc.sql("INSERT INTO cmdb_resource(resource_code,resource_type,name,environment,status) VALUES (:code,'APPLICATION','换班独立服务','TEST','RUNNING')").param("code","SWAP-"+UUID.randomUUID()));long schedule=insert(jdbc.sql("INSERT INTO oncall_schedule(service_resource_id,name) VALUES (:id,'换班计划')").param("id",resource));PlanMembershipFixtures.grant(jdbc,schedule,1,2,3);return schedule; }
     private OnCallSwapService.Command command(Fixture f) { return new OnCallSwapService.Command(f.first().id(),0,f.second().id(),0,UUID.randomUUID().toString(),"双方互换未来班次"); }
     private OnCallSwapService.Decision decision(String status) { return new OnCallSwapService.Decision(0,status,"双方决定"); }
     private String outcome(long id,String status,long actor) { try{return swaps.decide(id,decision(status),actor,"test").status();}catch(ApiException error){return error.code();} }

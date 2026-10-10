@@ -153,6 +153,8 @@ public class OnCallRotationService {
                 blocked += counts.blocked();
             } catch (RuntimeException error) {
                 failed.add(id);
+                // A denied management command must not mutate even diagnostic state.
+                if (error instanceof ApiException api && api.status() == HttpStatus.FORBIDDEN) continue;
                 log.warn("On-call rotation {} generation failed", id, error);
                 try {
                     jdbc.sql("UPDATE oncall_rotation SET last_scan_at = CURRENT_TIMESTAMP, last_warning = 'GENERATION_FAILED' WHERE id = :id")
@@ -252,7 +254,9 @@ public class OnCallRotationService {
     private void lockParticipants(List<Long> members, Long actor) {
         var ids = new ArrayList<>(members);
         if (actor != null) ids.add(actor);
-        planMembers.lockAccounts(ids.stream().mapToLong(Long::longValue).toArray());
+        // Missing targets retain rotation's existing 400 validation, not member-command 404.
+        jdbc.sql("SELECT id FROM sys_user WHERE id IN (:ids) ORDER BY id FOR UPDATE")
+                .param("ids", ids.stream().distinct().sorted().toList()).query(Long.class).list();
     }
 
     private List<Long> eligibleMembers(long schedule, List<Long> members) {

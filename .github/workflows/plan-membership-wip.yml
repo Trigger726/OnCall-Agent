@@ -1,0 +1,49 @@
+name: Plan membership WIP verification
+
+# This phase is not the full CI matrix, populated upgrade, network or UI acceptance.
+on:
+  push:
+    branches: ["wip/plan-membership-v39-20261010"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: plan-membership-wip-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  membership-mysql:
+    name: Plan membership shared cases on owned MySQL 8.4
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Check positive and negative evidence gates
+        run: node --test scripts/tests/oncall-plan-membership-mysql.test.cjs
+      - name: Execute all membership cases against independent MySQL
+        shell: bash
+        run: |
+          set -o pipefail
+          chmod +x mvnw
+          mkdir -p target/oncall-plan-membership-mysql-it
+          ./mvnw -B -Duser.timezone=UTC -Dopspilot.mysql.it.enabled=true -Dtest=MySqlOnCallPlanMembershipIntegrationTest test 2>&1 | tee target/oncall-plan-membership-mysql-it/maven.log
+      - name: Verify cases, V39, actual SQL lock waits and complete pool shutdown
+        run: node scripts/verify-oncall-plan-membership-mysql.cjs
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: plan-membership-wip-mysql-evidence
+          path: |
+            target/oncall-plan-membership-mysql-it/
+            target/surefire-reports/
+          retention-days: 30

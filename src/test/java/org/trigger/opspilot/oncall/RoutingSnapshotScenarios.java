@@ -92,6 +92,7 @@ abstract class RoutingSnapshotScenarios {
         long schedule = insert(jdbc.sql("""
                         INSERT INTO oncall_schedule(service_resource_id, name) VALUES (:resource, '快照班次')
                         """).param("resource", resource));
+        PlanMembershipFixtures.grant(jdbc, schedule, 1, 2, 3, user);
         long policy = insert(jdbc.sql("""
                         INSERT INTO escalation_policy(service_resource_id, name, severity)
                         VALUES (:resource, '快照策略', 'P1')

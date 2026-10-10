@@ -30,6 +30,7 @@ class OnCallRotationJobIntegrationTest {
         var key = new GeneratedKeyHolder();
         jdbc.sql("INSERT INTO oncall_schedule(service_resource_id, name) VALUES (3, '定时轮转验收')").update(key, "id");
         long schedule = key.getKey().longValue();
+        PlanMembershipFixtures.grant(jdbc, schedule, 1, 2, 3);
         LocalDateTime at = jdbc.sql("SELECT CURRENT_TIMESTAMP")
                 .query((rs, row) -> rs.getObject(1, LocalDateTime.class)).single()
                 .truncatedTo(ChronoUnit.MINUTES).minusMinutes(1);

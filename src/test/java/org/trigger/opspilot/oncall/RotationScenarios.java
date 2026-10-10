@@ -110,6 +110,7 @@ abstract class RotationScenarios {
         long member = insert(jdbc.sql("INSERT INTO sys_user(username, password_hash, display_name, role_code) SELECT :name, password_hash, '轮转用户', 'ON_CALL' FROM sys_user WHERE id = 2")
                 .param("name", username));
         long schedule = schedule();
+        PlanMembershipFixtures.grant(jdbc, schedule, member);
         LocalDateTime at = now().plusDays(20);
         var rotation = rotations.create(command(schedule, at, 1440, List.of(member, 2L)), 1L, "test");
         jdbc.sql("UPDATE sys_user SET status = 'DISABLED' WHERE id = :id").param("id", member).update();
@@ -233,6 +234,7 @@ abstract class RotationScenarios {
         long user = insert(jdbc.sql("INSERT INTO sys_user(username, password_hash, display_name, role_code) SELECT :name, password_hash, '资格变更验收', 'ON_CALL' FROM sys_user WHERE id = 2")
                 .param("name", "revoked-" + UUID.randomUUID()));
         long schedule = schedule();
+        PlanMembershipFixtures.grant(jdbc, schedule, user);
         var rotation = rotations.create(command(schedule, now().minusMinutes(1), 1440, List.of(user)), 1L, "test");
         var first = rotations.slots(rotation.id(), null, null).slots().get(0);
         jdbc.sql("UPDATE sys_user SET role_code = 'AUDITOR' WHERE id = :id").param("id", user).update();
@@ -255,8 +257,12 @@ abstract class RotationScenarios {
         jdbc.sql("UPDATE escalation_policy SET active = FALSE WHERE id = :id").param("id", policy).update();
     }
 
-    protected long schedule() { return insert(jdbc.sql("INSERT INTO oncall_schedule(service_resource_id, name) VALUES (3, :name)")
-            .param("name", "轮转-" + UUID.randomUUID())); }
+    protected long schedule() {
+        long schedule = insert(jdbc.sql("INSERT INTO oncall_schedule(service_resource_id, name) VALUES (3, :name)")
+                .param("name", "轮转-" + UUID.randomUUID()));
+        PlanMembershipFixtures.grant(jdbc, schedule, 1, 2, 3);
+        return schedule;
+    }
     protected LocalDateTime now() { return jdbc.sql("SELECT CURRENT_TIMESTAMP")
             .query((rs, row) -> rs.getObject(1, LocalDateTime.class)).single().truncatedTo(ChronoUnit.MINUTES); }
     protected OnCallRotationService.Command command(long schedule, LocalDateTime anchor, int minutes, List<Long> members) {

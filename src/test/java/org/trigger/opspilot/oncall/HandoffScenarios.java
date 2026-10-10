@@ -573,6 +573,7 @@ abstract class HandoffScenarios {
         String code = "HANDOFF-"+UUID.randomUUID();
         long resource = insert(jdbc.sql("INSERT INTO cmdb_resource(resource_code,resource_type,name,environment,status) VALUES (:code,'APPLICATION','接班独立服务','TEST','RUNNING')").param("code",code));
         long schedule = insert(jdbc.sql("INSERT INTO oncall_schedule(service_resource_id,name) VALUES (:id,'接班独立计划')").param("id",resource));
+        PlanMembershipFixtures.grant(jdbc, schedule, 1, 2, 3);
         var at = now().truncatedTo(ChronoUnit.SECONDS);
         var start = ongoing ? at.minusHours(1) : at.plusDays(1);
         var source = roster.create(new OnCallRosterService.ShiftCommand(schedule,2,start,start.plusHours(4),false,"接班源班次"),1L,"test");

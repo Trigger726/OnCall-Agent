@@ -251,7 +251,7 @@ abstract class SwapRevocationScenarios {
         var pending=swaps.request(command,2,"test");var accepted=swaps.decide(pending.id(),new OnCallSwapService.Decision(0,"ACCEPTED","本人明确接受"),3,"test");
         return new Fixture(first,second,accepted,command);
     }
-    private long schedule(){long resource=insert(jdbc.sql("INSERT INTO cmdb_resource(resource_code,resource_type,name,environment,status) VALUES (:code,'APPLICATION','撤销独立服务','TEST','RUNNING')").param("code","REVOKE-"+UUID.randomUUID()));return insert(jdbc.sql("INSERT INTO oncall_schedule(service_resource_id,name) VALUES (:id,'双覆盖计划')").param("id",resource));}
+    private long schedule(){long resource=insert(jdbc.sql("INSERT INTO cmdb_resource(resource_code,resource_type,name,environment,status) VALUES (:code,'APPLICATION','撤销独立服务','TEST','RUNNING')").param("code","REVOKE-"+UUID.randomUUID()));long schedule=insert(jdbc.sql("INSERT INTO oncall_schedule(service_resource_id,name) VALUES (:id,'双覆盖计划')").param("id",resource));PlanMembershipFixtures.grant(jdbc,schedule,1,2,3);return schedule;}
     private long insert(JdbcClient.StatementSpec statement){var key=new GeneratedKeyHolder();statement.update(key,"id");return key.getKey().longValue();}
     void assertOwner(OnCallRosterService.ShiftView source,long user){assertThat(coverage.coverage(source.scheduleId(),source.startsAt(),source.endsAt()).segments()).isNotEmpty().allSatisfy(s->assertThat(s.userId()).isEqualTo(user));}
     LocalDateTime now(){return jdbc.sql("SELECT CURRENT_TIMESTAMP(6)").query((rs,n)->rs.getObject(1,LocalDateTime.class)).single();}

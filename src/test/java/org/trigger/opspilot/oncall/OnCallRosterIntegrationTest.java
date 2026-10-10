@@ -199,7 +199,9 @@ class OnCallRosterIntegrationTest {
     }
 
     private long schedule() {
-        return insert("INSERT INTO oncall_schedule(service_resource_id, name) VALUES (3, '排班-" + UUID.randomUUID() + "')");
+        long schedule = insert("INSERT INTO oncall_schedule(service_resource_id, name) VALUES (3, '排班-" + UUID.randomUUID() + "')");
+        PlanMembershipFixtures.grant(jdbc, schedule, 1, 2, 3);
+        return schedule;
     }
 
     private long insert(String sql) {

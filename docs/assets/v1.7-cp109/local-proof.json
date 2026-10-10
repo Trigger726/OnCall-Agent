@@ -1,0 +1,3648 @@
+{
+  "status": "LOCAL_BACKEND_PHASE_PASS_OWN_MYSQL_AND_FULL_V39_DELIVERY_PENDING",
+  "checks": 2217,
+  "baseHead": "ce5fc51aee215e4eebccfd9e02bccf5271f6fea5",
+  "snapshotBranch": "wip/plan-membership-v39-20261010",
+  "utcFull": {
+    "logFile": "target/cp109-backend-full-utc.log",
+    "logSha256": "651cf5bfa1f292fcaa0aa7bc301692ba3f2376e5916803872598f0b3f1d27ee9",
+    "totals": {
+      "tests": 758,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 218,
+      "executed": 540
+    },
+    "reports": [
+      {
+        "name": "org.trigger.opspilot.alert.AlertmanagerRejectionLifecycleIntegrationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldClaimDueRejectionOnlyOnceAcrossConcurrentWorkers",
+          "shouldKeepOriginalErrorAlignedWithImmutableReplayPayload",
+          "shouldExhaustAutomaticAttemptsButAllowManualReplayAfterFix",
+          "shouldPurgeOnlyExpiredUnleasedPayloadAndReviveOnRedelivery",
+          "shouldApplyJitterWithinExponentialAndMaximumBounds",
+          "shouldBoundAutomaticReplayAndNotResetAttemptsOnDuplicateDelivery"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.alert.AlertmanagerWebhookDisabledIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRefuseWebhookWhenSecretIsNotConfigured"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.alert.AlertmanagerWebhookIntegrationTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPersistDeduplicateAndRedactRejectedDeliveryWithReadOnlyAuditAccess",
+          "shouldAcceptValidAlertAndIsolatePermanentBadItem",
+          "shouldMakeRetryIdempotentAndRecordResolvedTransitionOnce",
+          "shouldReplayOnceAfterCmdbFixAcrossConcurrentRequests",
+          "shouldRequireDedicatedWebhookCredentialAndBoundBatchSize"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.analytics.IncidentAnalyticsIntegrationTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldSplitMetricsByOwningServiceWithoutInventingMissingMilestones",
+          "shouldExposeConfiguredSloWithoutInventingMeasurementsWhenPrometheusIsDisabled",
+          "shouldExposeHonestMilestoneDenominatorsMedianAndDrilldown"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantAiStreamingTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldBoundResponseCountIncludingEmptyFramesAndCancelSource",
+          "shouldCancelIdleUpstreamWithoutClaimingNormalCompletion",
+          "shouldPreserveExactIncrementalWhitespaceAndUnicodeWithEmptyStopFrame",
+          "shouldAcceptExactCharacterBoundaryAndRejectOverflowBeforeDelivery",
+          "shouldKeepValidationStateIsolatedForEachColdSubscription",
+          "shouldPropagateLateProviderFailureWithoutRetryOrFallbackEvenAfterStop",
+          "shouldRejectEmptyOrWhitespaceOnlyAnswerEvenWithStop",
+          "shouldAcceptExactResponseCountBoundary",
+          "shouldRejectUnknownFilteredOrToolTerminalWithoutEmittingItsContent",
+          "shouldRejectActualToolCallPayloadAndDisableSdkToolExecutionInPrompt",
+          "shouldRejectEmptyStreamAndNonterminalEof",
+          "shouldNotMergeMultipleAlternativeGenerations",
+          "shouldRejectMoreContentOrDuplicateTerminalAfterStop"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1,
+        "cases": [
+          "shouldVerifyNativeReplayRemoteCancelClearAndRevocationOnOwnedMySql"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantExecutionManagerTest",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPlaceEnvironmentOverridesUnderTheExecutionManagersConfigurationPrefix",
+          "shouldRejectFullQueueAndRemoveRevokedQueuedWorkWithoutInterruptingRunningProvider",
+          "shouldFailClosedWhenAuthorizationLookupFails",
+          "shouldIncludeQueueTimeInBudgetAndStopLateWorkerBeforeAnyMoreAuthorizationQueries",
+          "shouldNeverExecuteWorkerAfterAdmissionTransactionFails",
+          "shouldCloseTransportWhenWorkerFailsUnexpectedly",
+          "shouldRejectInvalidExecutionLimits",
+          "shouldGateWorkerAndPublishCancellationOnceAfterAdmissionSettles",
+          "shouldRejectCapacityBeforeCallingAdmission",
+          "shouldObserveDurableCancellationWithoutInterruptingModel",
+          "shouldStopOnShutdownWithoutInterruptingWorkerOrTouchingAuthorizationAfterward"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "browserDisconnectShouldContinueOriginalDurableRequestWithoutAnotherPost",
+          "shouldTimeoutAnIdleProviderAfterPreviewWithoutCommittingPartialAnswer",
+          "shouldStopRevokedNativePreviewWithoutLateAnswerOrErrorPayload",
+          "shouldNotResurrectClearedNativePreviewWhenModelCompletesLate",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldRejectNativeQueueSaturationBeforeAdmissionAndReuseCancelledSlot",
+          "nativeDoneMustNotEscapeAFailedFinalAuditTransaction",
+          "shouldDeliverRealNativeTokenBeforeCompletionAndCommitExactAnswer",
+          "shouldCancelAfterPreviewAndReuseWorkerBeforeOldProviderIsReleased"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantNativeHttpClientTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "cancellationSettlesSubscriberBeforeJdkWrappedCancellationArrives",
+          "successIsExactAndCancellingOneExchangeCannotCancelAnother",
+          "clientDelegatesBothAsyncOverloadsSyncAndConfiguration",
+          "ordinaryProviderFailureIsPropagatedWithoutBeingReclassifiedOrIgnored",
+          "lateSuccessCannotReplaceCancellationEvenWhenUnderlyingFutureCannotBeCancelled"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRejectRealHttpEofWithoutStopRatherThanAcceptingPartialAnswer",
+          "shouldRequestNativeIncrementalProtocolRatherThanACompleteJsonAnswer",
+          "shouldRejectRealHttpLengthTerminationWithoutRetryOrRuleFallback",
+          "shouldDeliverFirstRealHttpDeltaBeforeProviderCanFinish"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantNativeTransportTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "requestsWithoutAssistantScopeKeepTheirResponseUnmodified",
+          "cancellationBeforeHeadersClosesRetainedPendingExchange",
+          "scopedNonNativeRequestsKeepTheirResponseUnmodified",
+          "cancellationClosesBodyEvenWhenIntermediatePublisherRetainsItsUpstream",
+          "validationFailureAlsoClosesRetainedBodyWithoutRetry",
+          "eachColdSubscriptionHasItsOwnCancellationSignal",
+          "originalConnectorIsPreservedOutsideNativeAssistantScope",
+          "onlyNativeContextSelectsDedicatedConnector"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantSessionRevocationIntegrationTest",
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRejectSynchronousRequestWhenStreamCapacityIsFullWithoutWrites",
+          "shouldReplayCompletedKeyAcrossSyncAndStreamWithoutWrites",
+          "shouldNotResurrectDeletedSessionWhenLateProviderReturns",
+          "shouldPersistQueuedKeyAndCancelItWithoutQuestionWrites",
+          "shouldKeepClearedKeyTombstoneWithoutResurrectingMessages",
+          "shouldRejectInvalidKeysAndOtherOwnersStatusWithoutWrites",
+          "shouldRejectDuplicateInFlightKeyWithoutCallingProvider",
+          "shouldPreserveCompletedAnswerWhenCancellationArrivesLate",
+          "shouldCloseExpiredStreamBeforeProviderReleaseWithoutPersistingItsAnswer",
+          "shouldExposeKeyedTimeoutBeforeProviderReleaseAndNeverRetryItAutomatically",
+          "shouldNotSendCommittedAnswerAfterLogoutCompletesBeforeControllerReturns",
+          "shouldIncludeSynchronousWorkInStreamCapacityAndAllowReplacement",
+          "shouldReplayCompletedKeyWithoutTakingSaturatedCapacity",
+          "shouldDiscardLateStreamAnswerAfterCommittedLogoutAndAllowFreshLogin",
+          "shouldReturnSafeTimeoutBeforeProviderReleaseAndDiscardItsLateAnswer",
+          "shouldCancelRunningKeyBeforeProviderReleaseWithoutLateAnswer",
+          "shouldTimeoutRunningAndQueuedSynchronousRequestsBeforeProviderRelease",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectReusedKeyWithDifferentQuestionWithoutWrites",
+          "shouldPersistQueuedTimeoutWithoutAcceptingQuestionOrRetryingKey",
+          "shouldSendCancelledEventWithoutDoneForRunningStream",
+          "shouldNotResurrectClearedMessagesWhenLateProviderReturns",
+          "shouldRejectLateSynchronousAnswerAfterCommittedLogoutAndAllowFreshLogin",
+          "shouldNotSendCommittedAnswerAfterLeaseExpiresBeforeControllerReturns",
+          "shouldExposeRevokedKeyToFreshOwnerWithoutRevivingItsOriginalWork"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantStreamReaderTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "previewCallbackFailureCancelsTheProvider",
+          "upstreamFailureCannotReturnAnAnswer",
+          "idleProviderStillChecksStopAndCancelsSubscription",
+          "stoppedBeforeStartNeverSubscribes",
+          "preservesExactFragmentsAndRequestsOnlyOneAtATime",
+          "sizeLimitIsCheckedBeforePublishingAnOversizedFragment",
+          "emptyOrWhitespaceOnlyCannotCommit"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantStreamTransportTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPreserveNativeOrderAndPublishOnlyTheCommittedAnswerId",
+          "disconnectedBrowserShouldNotCancelTheDurableWorkerOrSkipItsCheckpoints",
+          "rejectedReplayLeaseShouldCloseItsWriterWithoutLeakingAnIdleReservation",
+          "shouldCheckOriginalFencesWhileWriteIsBlockedAndStopWithoutWaitingForItsLock",
+          "shouldBoundReservedWritersAndRejectBeforeAnyModelAdmission",
+          "terminalEventMustRecheckOriginalLeaseRatherThanReuseAnEarlierAuthorizationResult",
+          "shouldRemoveAnAbortedReservationFromTheBoundedWriterQueue",
+          "shouldRejectUnboundedConfigurationAndExposeScopedEnvironmentOverrides"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRollbackKeyedAssistantCompletionStateWithAnswerAndAudit",
+          "shouldRollbackAssistantCancellationWhenAuditInsertFails",
+          "shouldRecheckAssistantLeaseExpiryAfterFinalLockWait",
+          "shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence",
+          "shouldFenceAssistantCompletionAfterCancellationCommit",
+          "shouldRollbackAssistantAnswerWhenCompletionAuditInsertFails",
+          "shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt",
+          "shouldFenceAssistantFinalCommitAgainstConcurrentRevocation",
+          "shouldReplayCompletedAssistantKeyWithCaseSensitiveSessionScope",
+          "shouldPreserveAssistantCompletionWhenCancellationWaitsForCommit",
+          "shouldRollbackAssistantCompletionWhenFinalStopCheckFails"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.common.GlobalExceptionHandlerDisconnectTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldResolveTheSpecificContainerExceptionBeforeTheGenericHandler",
+          "shouldLeaveAnAlreadyCommittedResponseUnchanged",
+          "shouldNotWriteAnotherBodyToADisconnectedSocketOrReportSuccess",
+          "shouldNotHideOutboundProviderIOFailuresBasedOnTheirMessage"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.common.GlobalExceptionHandlerStreamResponseTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[1]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[2]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[3]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[4]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[5]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[6]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[7]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[8]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[9]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[10]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[11]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[12]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[13]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[14]"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.distributed.DistributedAgentEventsIntegrationTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3,
+        "cases": [
+          "shouldCompleteDuringRedisOutageAndDrainOutboxAfterRecovery",
+          "shouldBroadcastCommittedEventsAcrossTwoJvmsAndResumeOnTheOtherNode",
+          "shouldSettleExpiredRunAfterExecutingJvmCrashes"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.incident.IncidentStatusTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldAllowOnlyExplicitStateTransitions"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentEventReceiverTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[1]",
+          "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[2]",
+          "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[3]",
+          "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[4]",
+          "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[5]",
+          "shouldNotRewindUnchangedTailOrCheckTailDuringActiveReads",
+          "shouldPreserveCursorWhenTailInspectionFails",
+          "shouldRewindAfterObservingEmptyOrMissingStream"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentEventStreamIntegrationTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldResumeViaHeaderAndCloseWhenTerminalAlreadyConsumed",
+          "shouldCatchUpActiveSubscriptionWithoutRedisAndHonorQueryCursor",
+          "shouldWriteSecurityHeadersBeforeSseWorkStartsAndRetainStreamCachePolicy",
+          "shouldProtectEndpointAndRejectForeignOrInvalidCursors",
+          "shouldAllowRecoveryHeadersAcrossConfiguredOrigin"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentEventSubscriptionsTest",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRejectInvalidSessionBeforeCursorLookupOrSlotAllocation",
+          "shouldRecoverWithoutNotificationsAndReleaseDisconnectedSlots",
+          "shouldFailClosedWhenOngoingAuthorizationReadFails",
+          "shouldMergeRegistrationReplayAndConcurrentDuplicateNotifications",
+          "shouldKeepNotificationThreadResponsiveWhileOutputIsBlocked",
+          "shouldRetryRejectedWorkerWithoutSendingOnNotificationThread",
+          "shouldCloseAlreadyConsumedTerminalAndIsolateBrokenOutput",
+          "shouldStopInsideBatchWhenSessionIsRevokedAfterFirstSend",
+          "shouldBoundConnectionsAndRejectBeforeSchedulingMoreWork",
+          "shouldCloseAtStreamBudgetAndPermitCursorResume",
+          "shouldCloseIdleRevokedConnectionAndReleaseItsSlotAtCatchup"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentEventTransactionIntegrationTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPurgeOnlyExpiredDeliveredRowsInBoundedBatches",
+          "shouldRejectOutboxOperationsInsideCallerTransaction",
+          "shouldKeepCommittedEventsAndNotifyLaterSubscribersWhenOneSinkFails",
+          "shouldPublishOnlyAfterOuterCommitAndReplayTheSameEvent",
+          "shouldReclaimExpiredLeaseAndFenceOldOwner",
+          "shouldNotPublishOrConsumeSequenceWhenOuterTransactionRollsBack",
+          "shouldFinishInvestigationWhenEveryLiveDeliveryFails"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentExecutionManagerTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldFailClosedWithoutInterruptingActiveAuthenticatedWorker",
+          "shouldRejectBeyondRunningAndQueuedCapacityWithoutStartingRejectedTask",
+          "shouldExposeSaturationAndInterruptActiveTask",
+          "shouldReleaseRevokedQueuedSlotWhileAnotherWorkerRemainsBlocked"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentRunCancellationIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldFinishAsCancelledWhenToolReturnsAfterCancellationRequest"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentRunRecoveryIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldSettleExpiredRunningTaskOnceAndFenceLateToolResult"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentSessionRevocationIntegrationTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRefuseFinalReportCommitWhenSessionIsRevokedAfterLastCheckpoint",
+          "shouldPersistCancellationWhenToolReturnsWithInterruptFlag",
+          "shouldCloseIdleSubscriptionAfterPasswordChangeAndKeepOtherAccountValid",
+          "shouldStopExistingHttpSubscriptionAfterCommittedLogoutWithoutLeakingNewEvent",
+          "shouldCloseAlreadyEstablishedSubscriptionWhenSignedTokenExpires",
+          "shouldCancelQueuedInvestigationAfterRoleDowngradeButKeepAuthorizedRead",
+          "shouldNotStartQueuedRunAfterItsCapturedSessionIsRevoked",
+          "shouldDiscardLateToolResultAfterRealPostStreamSessionIsRevoked",
+          "shouldCloseIdleSubscriptionWhenAccountIsDisabled"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.InvestigationControllerDisconnectTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldIsolateClientDisconnectFromBackgroundEventPublishing"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.RedisRelayIntegrationTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 4,
+        "cases": [
+          "shouldRetryRedisFailureAndPreserveEventIdentityAcrossDuplicateDelivery",
+          "shouldBoundRecoveryReadsAndAvoidReplayingAnUnchangedTrimmedTail",
+          "shouldRecoverRegressedReusedAndMissingStreamWithoutRestartingReceiver",
+          "shouldBroadcastWithIndependentCursorsAndRetryListenerFailure"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.MySqlCompatibilityIntegrationTest",
+        "tests": 46,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 46,
+        "cases": [
+          "shouldApplyAllMigrationsAndRunIdempotentInvestigationOnMySql",
+          "shouldPromoteOneProblemAcrossTwoRepeatableReadTransactions",
+          "shouldClaimOutboxOnceAcrossConcurrentRelays",
+          "shouldSettleExpiredRunOnceAcrossConcurrentMySqlReconcilers",
+          "shouldPreserveAutomaticReplayBudgetAndPurgePayloadOnMySql",
+          "shouldKeepDraftFollowUpsOutOfMySqlEscalationAndNotification",
+          "shouldReadBoundedEvaluationHistoryOnMySql",
+          "shouldRouteOneUnacknowledgedIncidentStepAcrossConcurrentMySqlScans",
+          "shouldSerializeRosterWritesAndKeepCancelledHistoryOnMySql",
+          "shouldAggregatePersistedRetrievalCohortsOnMySql",
+          "shouldKeepUnapprovedRunbooksOutOfRetrievalOnMySql",
+          "shouldFenceAndReplayRunbookPublicationOnMySql",
+          "shouldBindImportIdentityAndCurrentManagerRoleOnMySql",
+          "shouldSerializeIndependentPublicationTransactionsOnMySql",
+          "shouldRollbackRunbookPublicationAndAuditOnMySql",
+          "shouldRejectDisabledReadsAndLogin",
+          "shouldRejectDisabledWriteWithoutAuditOrTimeline",
+          "shouldRejectOldJwtAfterAccountRemoval",
+          "shouldReloadCurrentRoleButKeepActiveAuthentication",
+          "shouldUseRealServletRequestForAuthenticatedHttpWrite",
+          "shouldRejectOldJwtWhenUsernameIsRecreated",
+          "shouldRejectMalformedSignedIdentityWithoutBusinessWrites",
+          "shouldRejectOutOfRangeJwtDatesWithoutServerErrors",
+          "shouldRevokeAllIssuedTokensWithoutFreshLoginRevivingThem",
+          "shouldChangePasswordAndRevokeTokensAtomically",
+          "shouldRejectInvalidPasswordChangesWithoutWrites",
+          "shouldFenceConcurrentLogoutRequests",
+          "shouldOnlyRevokeAuthenticatedActorsOwnSessions",
+          "shouldRejectLegacyAndMalformedSessionVersions",
+          "shouldSupportUnicodeWithoutAllowingUnchangedPassword",
+          "shouldRejectSessionVersionExhaustionWithoutWrapping",
+          "shouldRollbackPasswordAndVersionWhenAuditFails",
+          "shouldRejectBcryptByteTruncationAliasesAtLogin",
+          "shouldFenceFinalAuthorizationAgainstConcurrentRevocationCommit",
+          "shouldRecheckLeaseExpiryAfterFinalAuthorizationLockWait",
+          "shouldRollbackAssistantAnswerWhenCompletionAuditInsertFails",
+          "shouldRollbackAssistantCompletionWhenFinalStopCheckFails",
+          "shouldFenceAssistantFinalCommitAgainstConcurrentRevocation",
+          "shouldRecheckAssistantLeaseExpiryAfterFinalLockWait",
+          "shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence",
+          "shouldReplayCompletedAssistantKeyWithCaseSensitiveSessionScope",
+          "shouldRollbackKeyedAssistantCompletionStateWithAnswerAndAudit",
+          "shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt",
+          "shouldRollbackAssistantCancellationWhenAuditInsertFails",
+          "shouldFenceAssistantCompletionAfterCancellationCommit",
+          "shouldPreserveAssistantCompletionWhenCancellationWaitsForCommit"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.LogRedactorTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRedactSecretsAndPersonalIdentifiersFromMessagesAndMetadata"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.logs.LogsProviderRouterTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldFallBackAndPreserveExternalProviderFailureAsWarning"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.logs.LokiLogsProviderContractTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldCallRangeQueryMapStructuredLogAndRedactBeforeReturningEvidence"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.metrics.PrometheusMetricsProviderContractTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldCallInstantQueryAndMapVectorResponseToProviderContract"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.ProviderGuardTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRetryOpenCircuitAndRecoverThroughHalfOpenProbe"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.tracing.AgentTraceIntegrationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldAttachCreatedAlertAndIncidentIdentifiersToRequestTrace",
+          "shouldKeepHttpParentAcrossExecutorAndCreateToolAndProviderChildren"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.tracing.HttpTracePropagationIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPropagateW3cTraceContextToPrometheusAndLoki"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.tracing.OpenTelemetryBridgeTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldExportCapturedAsyncHierarchyThroughRealOtelBridge"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.tracing.OpsPilotTracingTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldTraceAlertResultWithoutTaggingPayloadText",
+          "shouldRunCapturedTaskWithoutAParentSpan",
+          "shouldPreserveTraceHierarchyAcrossCapturedThreadAndTagBusinessIdentifiers",
+          "shouldMarkFailedProviderSpan"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.IncidentEscalationIntegrationTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRouteFirstStepAsPartOfNewAlertTransaction",
+          "shouldRouteOverrideThenStopAfterAcknowledgement",
+          "shouldExposeHistoryButRestrictManualScan",
+          "shouldExecuteEachStepOnceAcrossConcurrentScans",
+          "shouldRecordMissingShiftWithoutClaimingDeliveryAndThenRouteLaterSteps"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 8,
+        "cases": [
+          "shouldMatchCurrentSelectionAndExcludeCancelledCoverage",
+          "shouldRevealLegacySameLayerOverlapAndUseExactRoutingTieBreaks",
+          "shouldAllowAuthenticatedReadOnlyApiAndValidateWindowsWithoutWrites",
+          "shouldPartitionGapsOverridesAndHalfOpenHandoffsWithoutDoubleCounting",
+          "shouldRecomputeCoverageFromCurrentAccountStatusAndRole",
+          "shouldRejectDenseInputRatherThanReturnTruncatedHealthyCoverage",
+          "shouldFallbackFromIneligibleOverrideAndReportUnavailableGapsAndInactivePlans",
+          "shouldNotForecastUnmaterializedOrPausedRotations"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 27,
+        "cases": [
+          "shouldRevokeCoverageOnceWithoutRewritingAcceptedConsentOrSource",
+          "shouldAcceptExactlyOnceAndPreserveSourceAndCoverageHistory",
+          "shouldSerializeDifferentManagerRevocationsWithoutDoubleAudits",
+          "shouldAllowOnlyOneWinnerBetweenAcceptAndWithdraw",
+          "shouldSerializeConcurrentRequestRetriesAndAcceptRetries",
+          "shouldObserveSourceCancellationCommittedBeforeScheduleLock",
+          "shouldSerializeConcurrentSameKeyRevocationWithOnlyOneChange",
+          "shouldExposeListTruncationInsteadOfSilentlyDroppingRequests",
+          "shouldRejectInvalidListFiltersInsteadOfSilentlyBroadeningTheQuery",
+          "shouldRejectChangedPayloadForSameKeyAndInvalidWindows",
+          "shouldRejectInvalidRevocationAndStaleVersionsBeforeMutation",
+          "shouldRefuseNewRevocationAfterEndButAcknowledgePreviouslyCommittedCommand",
+          "shouldRejectInactivePlanOrRequesterAndAllowTargetRejection",
+          "shouldExposeExternalCancellationWithoutInventingARevocationRecord",
+          "shouldRollbackCancellationLedgerAndBothAuditsTogether",
+          "shouldNotPromiseOriginalCoverageWhenOriginalShiftWasAlsoCancelled",
+          "shouldRollBackOverrideDecisionAndAuditsTogether",
+          "shouldRestrictRevocationToCurrentActiveManagersIncludingOldJwt",
+          "shouldEnforceParticipantIdentityEvenForAdminsAndFreshRoles",
+          "shouldRejectNewOverrideAndLegacyOrdinaryOverlapWithoutPartialWrites",
+          "shouldRejectExpiredRequestsWithoutMutatingTheirHistory",
+          "shouldRejectReusedRevocationKeyAndDifferentIntentAfterCancellation",
+          "shouldRejectSourceCancellationAndStillAllowWithdrawal",
+          "shouldNotAcceptTwoDifferentRequestsForTheSameSourceWindow",
+          "shouldClampOngoingCoverageAfterActualLockWaitAndRouteOnlyNewIncidents",
+          "shouldFilterParticipantsAndStatusBeforeTheListLimit",
+          "shouldEnforceHttpRolesAndParticipantIdentity"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallOpenHandoffIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 24,
+        "cases": [
+          "shouldSerializeConcurrentOriginalClaimKeyAcknowledgements",
+          "shouldRollbackWithdrawalReceiptAndAuditTogether",
+          "shouldAcknowledgeOriginalClaimAfterCancellationAndEndWithoutRevival",
+          "shouldRollbackCoverageCreationAuditFailure",
+          "shouldRecheckActualPersistedDeadlineAfterScheduleLockWait",
+          "shouldRollbackCoverageOperationAndFinalClaimAuditTogether",
+          "shouldClaimOnlyRemainingSubwindowAndKeepOriginalTimes",
+          "shouldAllowExactlyOneWinnerBetweenDifferentClaimants",
+          "shouldRollbackWhenFinalClaimAuditCrossesPersistedDeadline",
+          "shouldReadLatestQualificationAfterScheduleLockWait",
+          "shouldRejectCancelledSourceButPermitExplicitOwnerWithdrawal",
+          "shouldFilterAvailableAndMineInSqlBeforeBoundedInbox",
+          "shouldSerializeClaimVersusOwnerWithdrawalWithoutHalfCoverage",
+          "shouldRejectNewOverrideAndLegacyOrdinaryOverlap",
+          "shouldRejectChangedPublicationKeyContentAndMalformedWindows",
+          "shouldSerializeSameActorOperationKeyAcrossDifferentPlans",
+          "shouldRollbackPublicationWhenItsAuditFails",
+          "shouldRecheckCurrentClaimantQualificationEvenForOriginalReceipt",
+          "shouldRejectEndedClaimWithoutInventingAutomaticExpiryStatus",
+          "shouldEnforceHttpAuthenticationAndExplicitVersions",
+          "shouldEnforcePersonalConsentAndOriginalOperationPayload",
+          "shouldRejectInactivePlanAndPublisherWithoutChangingResponsibility",
+          "shouldPublishAndClaimThroughHttpWithActualIndependentCoverage",
+          "shouldSerializeConcurrentPublicationOriginalKeys"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 22,
+        "cases": [
+          "shouldRequireBothParticipantsInBothPlansForBilateralSwap",
+          "shouldBlockOriginalRotationSlotsWithoutReassigningHistoryAndResumeOnlyMissingSlots",
+          "shouldRejectNewDesignatedAcceptanceButAllowDepartedTargetRejection",
+          "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait",
+          "shouldRollbackRevocationAfterActualAuditInsertFails",
+          "shouldDenyAnotherValidPlanAndPermitItsExplicitMemberControl",
+          "shouldRollbackFirstGrantAfterActualAuditInsertFails",
+          "shouldRetainAssignedCoverageAndOriginalClaimReceiptAfterMembershipRevocation",
+          "shouldRejectCrossPlanOrChangedKeyAndStaleOrOverflowedVersions",
+          "shouldPermitOriginalManagerReceiptAfterOwnPlanManagementWasRevoked",
+          "shouldRequireResponseForManualOverridesAndManagementForCancellation",
+          "shouldCommitOneImmutableReceiptForConcurrentOriginalCommands",
+          "shouldNotWriteRotationWarningWhenManualScannerHasNoPlanManagement",
+          "shouldSeparateManagementFromResponseAndKeepAdminRecoveryWithoutSelfClaim",
+          "shouldFilterDepartedRequestersBeforeAvailableLimitAndAllowOwnWithdrawal",
+          "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait",
+          "shouldRetainBadRotationTargetErrorContractAndRejectInvalidManagementTargets",
+          "shouldRejectMissingExpectedVersionButAcceptExplicitNullAndSerializeEffectivePermissions",
+          "shouldRecheckCurrentRoleAndNotResurrectRevokedMembershipWhenAccountIsRestored",
+          "shouldRollbackUpdateAfterActualAuditInsertFails",
+          "shouldRecordActualActorIpAndOldAndNewPermissions",
+          "shouldBackfillOnlyPreexistingOperationalUsersAndNeverEnrolNewPlansOrAccounts"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 10,
+        "cases": [
+          "shouldSerializeConcurrentScansAndConcurrentRotationCreation",
+          "shouldRequireManagementRolesForWritesAndAuditTheHttpActor",
+          "shouldExposeBoundedSlotWindowAndStopWhenScheduleIsDisabled",
+          "shouldRecordUnavailableMemberWithoutSilentlyChangingTheMemberOrder",
+          "shouldRespectManualConflictAndRetryWithoutRevivingCancelledGeneratedShift",
+          "shouldRollBackOneFailedRotationAndContinueOtherRotations",
+          "shouldGenerateStableRoundRobinAndRouteTheActualFirstOwner",
+          "shouldReportMemberRevocationAfterGenerationWithoutReassigningHistoricalFacts",
+          "shouldKeepOverridePriorityAndPauseOnlyFutureGeneration",
+          "shouldRejectInvalidRulesAndKeepHistoricalDemoUntouched"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 8,
+        "cases": [
+          "shouldObserveNewOverrideDuringScan",
+          "shouldObserveDisabledScheduleDuringScan",
+          "shouldObserveDisabledUserDuringScan",
+          "shouldObserveChangedRoleDuringScan",
+          "shouldObserveCommittedCancellationDuringScan",
+          "shouldObserveCommittedCancellationDuringAlertIntake",
+          "shouldObserveDisabledPolicyDuringScan",
+          "shouldRollBackIntakeAndItsRoutedFactsTogether"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallSwapIntegrationTest",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 17,
+        "cases": [
+          "shouldFilterParticipantAndEitherScheduleBeforeLimitAndExposeTruncation",
+          "shouldHaveOneWinnerBetweenAcceptanceAndWithdrawal",
+          "shouldRejectEitherInactiveScheduleAndStillAllowTargetRejection",
+          "shouldRejectExistingOverridesAndLegacyOrdinaryOverlapWithoutHalfSwap",
+          "shouldRecheckBothParticipantsAndPermitRejectionWhenRequesterIsDisabled",
+          "shouldSerializeReverseCrossScheduleRequestsWithoutDeadlockOrDoubleExchange",
+          "shouldRejectEitherStaleSourceAndStillAllowWithdrawal",
+          "shouldRequireActualParticipantsEvenForAdministrators",
+          "shouldExchangeBothFutureShiftsAtomicallyAndPreserveOrdinaryHistory",
+          "shouldSerializeConcurrentSameKeyRequestsAndAcceptRetries",
+          "shouldEnforceHttpRolesParticipantAndExplicitVersions",
+          "shouldRejectStartedShiftsAndOverrideSources",
+          "shouldExchangeAcrossSchedulesWithoutChangingEitherRotation",
+          "shouldAcknowledgeAcceptedHistoryWithoutRevivingCancelledCoverage",
+          "shouldRollbackBothOverridesDecisionAndAuditsWhenFinalAuditFails",
+          "shouldRollbackBothOverridesWhenSecondCreationAuditFails",
+          "shouldRejectSelfExchangeInvalidKeysAndChangedIdempotentPayload"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 27,
+        "cases": [
+          "shouldRollbackRequestAuditAndNotificationTogether",
+          "shouldRollbackBothOverridesAndNotificationRowsWhenEnqueueFails",
+          "shouldSkipIneligibleRecipientWithoutExposingPayload",
+          "shouldRejectRetryForForeignSwapIneligibleActorOrSupersededEvent",
+          "shouldEraseExpiredLeaseWithoutHttpAndFenceItsLateReceipt",
+          "shouldSkipSupersededRequestButNotifyBothParticipantsOfRejection",
+          "shouldRollbackManualRetryWhenAuditFails",
+          "shouldCleanWithSendingDisabledWithoutOccupyingSharedScheduler",
+          "shouldSerializeConcurrentDispatchersWithoutDuplicateLiveClaim",
+          "shouldKeepFrozenPayloadAndStableKeyAcrossRealTransientRetry",
+          "shouldSerializeConcurrentCleanupWithoutDoubleErasureOrAuditChanges",
+          "shouldEraseDeliveredPayloadButPreserveTechnicalReceiptAndOriginalRetryAcknowledgement",
+          "shouldEnforceAuthenticatedHttpRolesAndExplicitRetryVersion",
+          "shouldAllowOptOutButNeverReviveErasedPayloadAfterDisablingRetention",
+          "shouldRejectRedirectAndPermanentFailureWithoutForwardingCredential",
+          "shouldPreventExternalDeliveryFromInsideBusinessTransactionAndPreserveDisabledHistory",
+          "shouldEnqueueRequestAndBothDecisionRecipientsOnceWithoutDecidingFromReceipt",
+          "shouldDeferErasureWhileValidLeaseIsInFlightThenPreserveItsReceipt",
+          "shouldRunOneUnqueuedWorkerWithoutBlockingSharedSchedulerTicks",
+          "shouldFreezeDatabaseDeadlineAcrossRetryAndRejectUnsafeRetentionConfiguration",
+          "shouldManuallyRetryOriginalVersionAndAcknowledgeLostReceiptWithoutNewAudit",
+          "shouldFenceExpiredOldReceiptAndReuseSameFrozenKey",
+          "shouldSkipStartedCancelledOrCoveredRequestSourcesBeforeSending",
+          "shouldStopReclaimingExhaustedExpiredLeaseWithoutAnotherHttp",
+          "shouldBlockExpiredClaimsBeforeBoundedCleanupAndKeepNotificationHistory",
+          "shouldRejectNewManualRetryAfterPayloadRetentionWithoutChangingHistory",
+          "shouldBoundAttemptsAndNotPersistSensitiveReceiverBody"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationMigrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1,
+        "cases": [
+          "shouldFreezeLegacyDeadlineWithoutErasingV35PayloadOrTechnicalHistory"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallSwapRevocationIntegrationTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 19,
+        "cases": [
+          "shouldSerializeLegacySingleCancellationAgainstAtomicPairWithoutHalfCommit",
+          "shouldRevokeBothCoveragesInOneHttpCommandAndKeepAcceptedHistory",
+          "shouldRejectEitherIndependentCancellationWithoutCancellingCounterpart",
+          "shouldRejectEachStaleCapturedVersionAndOverflowWithoutWrites",
+          "shouldRejectNewKeyOrOtherManagerAfterRevocation",
+          "shouldAllowCleanupOfInactiveSchedulesWithoutPromisingRestoredCoverage",
+          "shouldRejectChangedOriginalKeyPayloadAndCrossSwapReuseWithoutWrites",
+          "shouldRollbackBothCancellationsWhenSecondCancellationAuditFails",
+          "shouldSerializeConcurrentOriginalKeyAcknowledgementsAndDifferentKeyRace",
+          "shouldEnforceHttpAuthenticationRolesAndAllThreeExplicitVersions",
+          "shouldRecheckActualDatabaseEndAfterWaitingForScheduleLock",
+          "shouldRejectNonAcceptedStatusesMissingRequestAndMalformedCommand",
+          "shouldRollbackBothCancellationsRevocationAndAuditsWhenFinalAuditFails",
+          "shouldRejectChangedReplacementSnapshotOrOrdinaryFlagWithoutHalfCancellation",
+          "shouldRejectEitherEndedCoverageButAllowAlreadyStartedRemainingPair",
+          "shouldRecheckCurrentManagerQualificationBeforeOriginalAcknowledgement",
+          "shouldAcknowledgeOriginalKeyAfterEndWithoutNewAuditOrCancellation",
+          "shouldRollbackAfterFinalAuditCrossesActualDatabaseEnd",
+          "shouldRevokeSameSchedulePairAndAcknowledgeOriginalCommandsWithoutReviving"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOpenHandoffUpgradeHttpIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1,
+        "cases": [
+          "shouldUpgradePopulatedV37AndRecoverOriginalClaimsAfterRestartOnOwnedMySql"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallCoverageIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldMatchCurrentSelectionAndExcludeCancelledCoverage",
+          "shouldRevealLegacySameLayerOverlapAndUseExactRoutingTieBreaks",
+          "shouldAllowAuthenticatedReadOnlyApiAndValidateWindowsWithoutWrites",
+          "shouldPartitionGapsOverridesAndHalfOpenHandoffsWithoutDoubleCounting",
+          "shouldRecomputeCoverageFromCurrentAccountStatusAndRole",
+          "shouldRejectDenseInputRatherThanReturnTruncatedHealthyCoverage",
+          "shouldFallbackFromIneligibleOverrideAndReportUnavailableGapsAndInactivePlans",
+          "shouldNotForecastUnmaterializedOrPausedRotations"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallHandoffIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRevokeCoverageOnceWithoutRewritingAcceptedConsentOrSource",
+          "shouldAcceptExactlyOnceAndPreserveSourceAndCoverageHistory",
+          "shouldSerializeDifferentManagerRevocationsWithoutDoubleAudits",
+          "shouldAllowOnlyOneWinnerBetweenAcceptAndWithdraw",
+          "shouldSerializeConcurrentRequestRetriesAndAcceptRetries",
+          "shouldObserveSourceCancellationCommittedBeforeScheduleLock",
+          "shouldSerializeConcurrentSameKeyRevocationWithOnlyOneChange",
+          "shouldExposeListTruncationInsteadOfSilentlyDroppingRequests",
+          "shouldRejectInvalidListFiltersInsteadOfSilentlyBroadeningTheQuery",
+          "shouldRejectChangedPayloadForSameKeyAndInvalidWindows",
+          "shouldRejectInvalidRevocationAndStaleVersionsBeforeMutation",
+          "shouldRefuseNewRevocationAfterEndButAcknowledgePreviouslyCommittedCommand",
+          "shouldRejectInactivePlanOrRequesterAndAllowTargetRejection",
+          "shouldExposeExternalCancellationWithoutInventingARevocationRecord",
+          "shouldRollbackCancellationLedgerAndBothAuditsTogether",
+          "shouldNotPromiseOriginalCoverageWhenOriginalShiftWasAlsoCancelled",
+          "shouldRollBackOverrideDecisionAndAuditsTogether",
+          "shouldRestrictRevocationToCurrentActiveManagersIncludingOldJwt",
+          "shouldEnforceParticipantIdentityEvenForAdminsAndFreshRoles",
+          "shouldRejectNewOverrideAndLegacyOrdinaryOverlapWithoutPartialWrites",
+          "shouldRejectExpiredRequestsWithoutMutatingTheirHistory",
+          "shouldRejectReusedRevocationKeyAndDifferentIntentAfterCancellation",
+          "shouldRejectSourceCancellationAndStillAllowWithdrawal",
+          "shouldNotAcceptTwoDifferentRequestsForTheSameSourceWindow",
+          "shouldClampOngoingCoverageAfterActualLockWaitAndRouteOnlyNewIncidents",
+          "shouldFilterParticipantsAndStatusBeforeTheListLimit",
+          "shouldEnforceHttpRolesAndParticipantIdentity"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallOpenHandoffIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldSerializeConcurrentOriginalClaimKeyAcknowledgements",
+          "shouldRollbackWithdrawalReceiptAndAuditTogether",
+          "shouldAcknowledgeOriginalClaimAfterCancellationAndEndWithoutRevival",
+          "shouldRollbackCoverageCreationAuditFailure",
+          "shouldRecheckActualPersistedDeadlineAfterScheduleLockWait",
+          "shouldRollbackCoverageOperationAndFinalClaimAuditTogether",
+          "shouldClaimOnlyRemainingSubwindowAndKeepOriginalTimes",
+          "shouldAllowExactlyOneWinnerBetweenDifferentClaimants",
+          "shouldRollbackWhenFinalClaimAuditCrossesPersistedDeadline",
+          "shouldReadLatestQualificationAfterScheduleLockWait",
+          "shouldRejectCancelledSourceButPermitExplicitOwnerWithdrawal",
+          "shouldFilterAvailableAndMineInSqlBeforeBoundedInbox",
+          "shouldSerializeClaimVersusOwnerWithdrawalWithoutHalfCoverage",
+          "shouldRejectNewOverrideAndLegacyOrdinaryOverlap",
+          "shouldRejectChangedPublicationKeyContentAndMalformedWindows",
+          "shouldSerializeSameActorOperationKeyAcrossDifferentPlans",
+          "shouldRollbackPublicationWhenItsAuditFails",
+          "shouldRecheckCurrentClaimantQualificationEvenForOriginalReceipt",
+          "shouldRejectEndedClaimWithoutInventingAutomaticExpiryStatus",
+          "shouldEnforceHttpAuthenticationAndExplicitVersions",
+          "shouldEnforcePersonalConsentAndOriginalOperationPayload",
+          "shouldRejectInactivePlanAndPublisherWithoutChangingResponsibility",
+          "shouldPublishAndClaimThroughHttpWithActualIndependentCoverage",
+          "shouldSerializeConcurrentPublicationOriginalKeys"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallPlanMembershipIntegrationTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRequireBothParticipantsInBothPlansForBilateralSwap",
+          "shouldBlockOriginalRotationSlotsWithoutReassigningHistoryAndResumeOnlyMissingSlots",
+          "shouldRejectNewDesignatedAcceptanceButAllowDepartedTargetRejection",
+          "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait",
+          "shouldRollbackRevocationAfterActualAuditInsertFails",
+          "shouldDenyAnotherValidPlanAndPermitItsExplicitMemberControl",
+          "shouldRollbackFirstGrantAfterActualAuditInsertFails",
+          "shouldRetainAssignedCoverageAndOriginalClaimReceiptAfterMembershipRevocation",
+          "shouldRejectCrossPlanOrChangedKeyAndStaleOrOverflowedVersions",
+          "shouldPermitOriginalManagerReceiptAfterOwnPlanManagementWasRevoked",
+          "shouldRequireResponseForManualOverridesAndManagementForCancellation",
+          "shouldCommitOneImmutableReceiptForConcurrentOriginalCommands",
+          "shouldNotWriteRotationWarningWhenManualScannerHasNoPlanManagement",
+          "shouldSeparateManagementFromResponseAndKeepAdminRecoveryWithoutSelfClaim",
+          "shouldFilterDepartedRequestersBeforeAvailableLimitAndAllowOwnWithdrawal",
+          "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait",
+          "shouldRetainBadRotationTargetErrorContractAndRejectInvalidManagementTargets",
+          "shouldRejectMissingExpectedVersionButAcceptExplicitNullAndSerializeEffectivePermissions",
+          "shouldRecheckCurrentRoleAndNotResurrectRevokedMembershipWhenAccountIsRestored",
+          "shouldRollbackUpdateAfterActualAuditInsertFails",
+          "shouldRecordActualActorIpAndOldAndNewPermissions",
+          "shouldBackfillOnlyPreexistingOperationalUsersAndNeverEnrolNewPlansOrAccounts"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallRosterIntegrationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRejectSameLayerOverlapButAllowAdjacentHandoffsAndReplacement",
+          "shouldUseHalfOpenQueryWindowsAndMakeTruncationExplicit",
+          "shouldEnforceRolesAndKeepAnAuditedCancellationHistory",
+          "shouldSerializeConcurrentOverlappingCreates",
+          "shouldResumeBaseRoutingAfterAnOverrideIsCancelled",
+          "shouldRejectInvalidWindowsUsersAndStaleCancellationWithoutExtraAudit"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallRotationIntegrationTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldSerializeConcurrentScansAndConcurrentRotationCreation",
+          "shouldRequireManagementRolesForWritesAndAuditTheHttpActor",
+          "shouldExposeBoundedSlotWindowAndStopWhenScheduleIsDisabled",
+          "shouldRecordUnavailableMemberWithoutSilentlyChangingTheMemberOrder",
+          "shouldRespectManualConflictAndRetryWithoutRevivingCancelledGeneratedShift",
+          "shouldRollBackOneFailedRotationAndContinueOtherRotations",
+          "shouldGenerateStableRoundRobinAndRouteTheActualFirstOwner",
+          "shouldReportMemberRevocationAfterGenerationWithoutReassigningHistoricalFacts",
+          "shouldKeepOverridePriorityAndPauseOnlyFutureGeneration",
+          "shouldRejectInvalidRulesAndKeepHistoricalDemoUntouched"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallRotationJobIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldGenerateTheBlockedSlotThroughTheRealSchedulerAfterConflictIsRemoved"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallRoutingSnapshotIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldObserveNewOverrideDuringScan",
+          "shouldObserveDisabledScheduleDuringScan",
+          "shouldObserveDisabledUserDuringScan",
+          "shouldObserveChangedRoleDuringScan",
+          "shouldObserveCommittedCancellationDuringScan",
+          "shouldObserveCommittedCancellationDuringAlertIntake",
+          "shouldObserveDisabledPolicyDuringScan",
+          "shouldRollBackIntakeAndItsRoutedFactsTogether"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallSwapIntegrationTest",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldFilterParticipantAndEitherScheduleBeforeLimitAndExposeTruncation",
+          "shouldHaveOneWinnerBetweenAcceptanceAndWithdrawal",
+          "shouldRejectEitherInactiveScheduleAndStillAllowTargetRejection",
+          "shouldRejectExistingOverridesAndLegacyOrdinaryOverlapWithoutHalfSwap",
+          "shouldRecheckBothParticipantsAndPermitRejectionWhenRequesterIsDisabled",
+          "shouldSerializeReverseCrossScheduleRequestsWithoutDeadlockOrDoubleExchange",
+          "shouldRejectEitherStaleSourceAndStillAllowWithdrawal",
+          "shouldRequireActualParticipantsEvenForAdministrators",
+          "shouldExchangeBothFutureShiftsAtomicallyAndPreserveOrdinaryHistory",
+          "shouldSerializeConcurrentSameKeyRequestsAndAcceptRetries",
+          "shouldEnforceHttpRolesParticipantAndExplicitVersions",
+          "shouldRejectStartedShiftsAndOverrideSources",
+          "shouldExchangeAcrossSchedulesWithoutChangingEitherRotation",
+          "shouldAcknowledgeAcceptedHistoryWithoutRevivingCancelledCoverage",
+          "shouldRollbackBothOverridesDecisionAndAuditsWhenFinalAuditFails",
+          "shouldRollbackBothOverridesWhenSecondCreationAuditFails",
+          "shouldRejectSelfExchangeInvalidKeysAndChangedIdempotentPayload"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallSwapNotificationIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRollbackRequestAuditAndNotificationTogether",
+          "shouldRollbackBothOverridesAndNotificationRowsWhenEnqueueFails",
+          "shouldSkipIneligibleRecipientWithoutExposingPayload",
+          "shouldRejectRetryForForeignSwapIneligibleActorOrSupersededEvent",
+          "shouldEraseExpiredLeaseWithoutHttpAndFenceItsLateReceipt",
+          "shouldSkipSupersededRequestButNotifyBothParticipantsOfRejection",
+          "shouldRollbackManualRetryWhenAuditFails",
+          "shouldCleanWithSendingDisabledWithoutOccupyingSharedScheduler",
+          "shouldSerializeConcurrentDispatchersWithoutDuplicateLiveClaim",
+          "shouldKeepFrozenPayloadAndStableKeyAcrossRealTransientRetry",
+          "shouldSerializeConcurrentCleanupWithoutDoubleErasureOrAuditChanges",
+          "shouldEraseDeliveredPayloadButPreserveTechnicalReceiptAndOriginalRetryAcknowledgement",
+          "shouldEnforceAuthenticatedHttpRolesAndExplicitRetryVersion",
+          "shouldAllowOptOutButNeverReviveErasedPayloadAfterDisablingRetention",
+          "shouldRejectRedirectAndPermanentFailureWithoutForwardingCredential",
+          "shouldPreventExternalDeliveryFromInsideBusinessTransactionAndPreserveDisabledHistory",
+          "shouldEnqueueRequestAndBothDecisionRecipientsOnceWithoutDecidingFromReceipt",
+          "shouldDeferErasureWhileValidLeaseIsInFlightThenPreserveItsReceipt",
+          "shouldRunOneUnqueuedWorkerWithoutBlockingSharedSchedulerTicks",
+          "shouldFreezeDatabaseDeadlineAcrossRetryAndRejectUnsafeRetentionConfiguration",
+          "shouldManuallyRetryOriginalVersionAndAcknowledgeLostReceiptWithoutNewAudit",
+          "shouldFenceExpiredOldReceiptAndReuseSameFrozenKey",
+          "shouldSkipStartedCancelledOrCoveredRequestSourcesBeforeSending",
+          "shouldStopReclaimingExhaustedExpiredLeaseWithoutAnotherHttp",
+          "shouldBlockExpiredClaimsBeforeBoundedCleanupAndKeepNotificationHistory",
+          "shouldRejectNewManualRetryAfterPayloadRetentionWithoutChangingHistory",
+          "shouldBoundAttemptsAndNotPersistSensitiveReceiverBody"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallSwapNotificationMigrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldFreezeLegacyDeadlineWithoutErasingV35PayloadOrTechnicalHistory"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallSwapRevocationIntegrationTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldSerializeLegacySingleCancellationAgainstAtomicPairWithoutHalfCommit",
+          "shouldRevokeBothCoveragesInOneHttpCommandAndKeepAcceptedHistory",
+          "shouldRejectEitherIndependentCancellationWithoutCancellingCounterpart",
+          "shouldRejectEachStaleCapturedVersionAndOverflowWithoutWrites",
+          "shouldRejectNewKeyOrOtherManagerAfterRevocation",
+          "shouldAllowCleanupOfInactiveSchedulesWithoutPromisingRestoredCoverage",
+          "shouldRejectChangedOriginalKeyPayloadAndCrossSwapReuseWithoutWrites",
+          "shouldRollbackBothCancellationsWhenSecondCancellationAuditFails",
+          "shouldSerializeConcurrentOriginalKeyAcknowledgementsAndDifferentKeyRace",
+          "shouldEnforceHttpAuthenticationRolesAndAllThreeExplicitVersions",
+          "shouldRecheckActualDatabaseEndAfterWaitingForScheduleLock",
+          "shouldRejectNonAcceptedStatusesMissingRequestAndMalformedCommand",
+          "shouldRollbackBothCancellationsRevocationAndAuditsWhenFinalAuditFails",
+          "shouldRejectChangedReplacementSnapshotOrOrdinaryFlagWithoutHalfCancellation",
+          "shouldRejectEitherEndedCoverageButAllowAlreadyStartedRemainingPair",
+          "shouldRecheckCurrentManagerQualificationBeforeOriginalAcknowledgement",
+          "shouldAcknowledgeOriginalKeyAfterEndWithoutNewAuditOrCancellation",
+          "shouldRollbackAfterFinalAuditCrossesActualDatabaseEnd",
+          "shouldRevokeSameSchedulePairAndAcknowledgeOriginalCommandsWithoutReviving"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.OpsPilotApiIntegrationTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldReturnStructuredUnauthorizedResponse",
+          "shouldPersistInspectableAgentInvestigationTrace",
+          "shouldStreamAndReplayPersistedAgentRunEvents",
+          "shouldRequireIndependentVersionedReviewForHighRiskProposal",
+          "shouldDedupeFingerprintAndAttachBothEventsToOneIncident",
+          "shouldAuthenticateAndLoadCoreOperationalViews",
+          "shouldPersistRunCancellationTimeoutAndQueueRejection",
+          "shouldPersistIncidentAwareAssistantConversationAndIsolateUsers",
+          "shouldEnforceRoleAndOptimisticIncidentTransition"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.postmortem.FollowUpNotificationIntegrationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "deliversOnceWithStableKeyRetriesTransientFailureAndSkipsResolvedEscalation",
+          "shouldNeverSendHistoricalDraftNotificationAndAllowRetryAfterPublication"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.postmortem.FollowUpOperationsIntegrationTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldCreateOneEscalationAndResolveItWhenOwnerCompletesFollowUp",
+          "shouldNotEscalateOrCompleteDraftActionUntilPostmortemIsPublished",
+          "shouldKeepOwnerAcknowledgementSeparateFromDeliveryAndCompletion"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.postmortem.PostmortemIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldCreateReviewPublishAndCompleteEvidenceBackedPostmortem"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.problem.ProblemCreationConcurrencyIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldCreateOneProblemWhenSameCandidateIsPromotedConcurrently"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.problem.ProblemManagementIntegrationTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldServeEverySpaRouteThroughOneUnambiguousForwarder",
+          "shouldTurnExactCrossIncidentRecurrenceIntoAuditedProblemLifecycle",
+          "shouldPromoteMaximumLengthEvidenceWithoutLosingOriginalTitles"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.Bm25RetrieverTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldSplitLongMarkdownIntoBoundedOverlappingChunks",
+          "shouldTokenizeChineseBigramsAndRankTheRelevantChunk"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.ReciprocalRankFusionTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldBreakEqualFusionScoresByStableChunkId",
+          "shouldFuseRanksWithoutMixingRawScoreScales"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookHybridRetrievalIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldBuildIdempotentIndexFuseRankingsEvaluateAndPreserveOldIndexOnFailure"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookJudgmentAgreementTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldReportEmptyAgreementDataset",
+          "shouldCalculateLinearWeightedKappaForOrdinalGrades",
+          "shouldReturnUndefinedKappaWithoutLabelVariation"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookKnowledgeIntegrationTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldExtractAndIndexPdfText",
+          "shouldKeepEvaluationHistoryVersionedAndBounded",
+          "shouldSearchMigratedRunbooksAndPersistDeterministicEvaluation",
+          "shouldCreateImmutableMarkdownVersionsAndEnforceDocumentAcl",
+          "shouldRejectUnsupportedRunbookFileType"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookPublicationConcurrencyTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRollbackSupersedePublicationAndAuditTogether",
+          "shouldSerializeTwoIndependentReviewerTransactions"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookPublicationIntegrationTest",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldFencePublicationAgainstNewerApprovedBaselineAndReplayExactDecision",
+          "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[1]",
+          "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[2]",
+          "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[3]",
+          "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[4]",
+          "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[5]",
+          "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[6]",
+          "shouldEnforceHttpRolesIndependentReviewerAndCurrentDatabaseRole",
+          "shouldKeepUnapprovedVersionsOutOfConsoleAgentAndHistory",
+          "shouldDeduplicateOnlyIdenticalSubmissionAndCheckCurrentRole",
+          "shouldFilterQueueBeforeLimitAndExposeTruncationWithoutContent",
+          "shouldValidateAndFreezeHttpDecisionIdentityBeforeRedaction"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookPublicationMigrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPreservePublishedV29ContentAndHistory"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookRelevanceFeedbackIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldCaptureSearchEnforceIndependentReviewAndPromoteOnlyPositiveJudgments"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookRetrievalLifecycleIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRedactPurgeAuditAndPreservePromotedQrel"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookRetrievalTrendIntegrationTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldKeepQualityCardinalityAfterRealRetentionAndAssignLateReviewsToQueryDate",
+          "shouldPersistDistinctDocumentsNotChunkCountAndNotTrackOfflineSearch",
+          "shouldSeparateCompletePartialPurgedEmptyAndSourceEngineKCohorts",
+          "shouldRestrictAggregateEndpointAndExposeNoQueryOrActorText"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookReturnedCountMigrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldBackfillOnlyRecoverableActiveV28SnapshotsWithoutRewritingThem"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.security.AccountStatusHttpIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldReloadCurrentRoleButKeepActiveAuthentication",
+          "shouldRejectDisabledWriteWithoutAuditOrTimeline",
+          "shouldRejectMalformedSignedIdentityWithoutBusinessWrites",
+          "shouldRejectOldJwtWhenUsernameIsRecreated",
+          "shouldRejectOldJwtAfterAccountRemoval",
+          "shouldRejectOutOfRangeJwtDatesWithoutServerErrors",
+          "shouldRejectDisabledReadsAndLogin",
+          "shouldUseRealServletRequestForAuthenticatedHttpWrite"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.security.AuthSessionHttpIntegrationTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldOnlyRevokeAuthenticatedActorsOwnSessions",
+          "shouldRejectBcryptByteTruncationAliasesAtLogin",
+          "shouldFenceConcurrentLogoutRequests",
+          "shouldSupportUnicodeWithoutAllowingUnchangedPassword",
+          "shouldRejectLegacyAndMalformedSessionVersions",
+          "shouldRollbackPasswordAndVersionWhenAuditFails",
+          "shouldRejectInvalidPasswordChangesWithoutWrites",
+          "shouldRejectSessionVersionExhaustionWithoutWrapping",
+          "shouldRevokeAllIssuedTokensWithoutFreshLoginRevivingThem",
+          "shouldRecheckLeaseExpiryAfterFinalAuthorizationLockWait",
+          "shouldChangePasswordAndRevokeTokensAtomically",
+          "shouldServeAccountSpaDeepLinkButKeepApiProtected",
+          "shouldFenceFinalAuthorizationAgainstConcurrentRevocationCommit"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.security.AuthSessionMigrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPreserveV30AccountsAndOnlyInitializeRevocationVersion"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.security.JwtServiceIdentityTest",
+        "tests": 56,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPreserveExactIssuedSessionVersion(long)[1]",
+          "shouldPreserveExactIssuedSessionVersion(long)[2]",
+          "shouldPreserveExactIssuedSessionVersion(long)[3]",
+          "shouldPreserveExactIssuedSessionVersion(long)[4]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[1]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[2]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[3]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[4]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[5]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[6]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[7]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[8]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[1]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[2]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[3]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[4]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[5]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[6]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[7]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[8]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[9]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[10]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[11]",
+          "shouldRequireRealIntegralExpiry(String)[1]",
+          "shouldRequireRealIntegralExpiry(String)[2]",
+          "shouldRequireRealIntegralExpiry(String)[3]",
+          "shouldRequireRealIntegralExpiry(String)[4]",
+          "shouldRequireRealIntegralExpiry(String)[5]",
+          "shouldRequireRealIntegralExpiry(String)[6]",
+          "shouldRequireRealIntegralExpiry(String)[7]",
+          "shouldRequireRealIntegralExpiry(String)[8]",
+          "shouldRequireRealIntegralExpiry(String)[9]",
+          "shouldRequireRealIntegralExpiry(String)[10]",
+          "shouldPreserveExactIssuedLongIdentity(long)[1]",
+          "shouldPreserveExactIssuedLongIdentity(long)[2]",
+          "shouldPreserveExactIssuedLongIdentity(long)[3]",
+          "shouldPreserveExactIssuedLongIdentity(long)[4]",
+          "shouldUseUnicodeCharactersRatherThanUtf16UnitsForSubjectLimit",
+          "shouldIssueDistinctIdentifiersForIndependentLogins",
+          "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[1]",
+          "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[2]",
+          "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[3]",
+          "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[4]",
+          "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[5]",
+          "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[6]",
+          "shouldRejectOversizedSubjectExpiredWrongIssuerAndWrongSignature",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[1]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[2]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[3]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[4]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[5]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[6]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[7]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[8]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[9]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[10]"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.security.ManagementPortIsolationIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldServeMetricsOnlyOnSeparateManagementListener"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.slo.PrometheusSloClientContractTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldQuerySingleScalarAtRequestedEvaluationTime",
+          "shouldRejectAmbiguousMultiSeriesVector"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.slo.ServiceSloIntegrationTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRefuseToCalculateFromZeroDenominatorOrContradictoryCounts",
+          "shouldExportDeterministicVersionBoundRulesWithoutQueryingOrWriting",
+          "shouldRequireManagerAndOptimisticVersionWhenUpdatingObjective",
+          "shouldRequireCurrentActiveManagementRoleForExport",
+          "shouldPreservePositiveFractionalEventsUntilBurnRateDecision",
+          "shouldCalculateRealEventRatioAndErrorBudget",
+          "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[1]",
+          "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[2]",
+          "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[3]",
+          "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[4]",
+          "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[5]",
+          "shouldRejectStaleDisabledMissingOrInvalidRuleExport",
+          "shouldChangeAlertDecisionWithTheCapturedObjectivePeriod(int, String, String)[1]",
+          "shouldChangeAlertDecisionWithTheCapturedObjectivePeriod(int, String, String)[2]",
+          "shouldRejectQueryThatDoesNotUseConfiguredWindow"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.slo.SloBurnRateCalculatorTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPrioritizeFastPageWhenBothWindowsBurnAboveFourteenPointFour",
+          "shouldExposeMissingOrContradictoryWindowInsteadOfCalculating",
+          "shouldRequireBothFastPageWindowsToExceedThreshold",
+          "shouldDistinguishSlowPageAndTicketPolicies"
+        ]
+      }
+    ]
+  },
+  "shanghaiFull": {
+    "logFile": "target/cp109-backend-full-shanghai.log",
+    "logSha256": "3b68948cf4a35c39f00a2b851c2e9d238f494e1d089f633d5ecd8b30a80c0ffd",
+    "totals": {
+      "tests": 758,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 218,
+      "executed": 540
+    },
+    "reports": [
+      {
+        "name": "org.trigger.opspilot.alert.AlertmanagerRejectionLifecycleIntegrationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldClaimDueRejectionOnlyOnceAcrossConcurrentWorkers",
+          "shouldKeepOriginalErrorAlignedWithImmutableReplayPayload",
+          "shouldExhaustAutomaticAttemptsButAllowManualReplayAfterFix",
+          "shouldPurgeOnlyExpiredUnleasedPayloadAndReviveOnRedelivery",
+          "shouldApplyJitterWithinExponentialAndMaximumBounds",
+          "shouldBoundAutomaticReplayAndNotResetAttemptsOnDuplicateDelivery"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.alert.AlertmanagerWebhookDisabledIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRefuseWebhookWhenSecretIsNotConfigured"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.alert.AlertmanagerWebhookIntegrationTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPersistDeduplicateAndRedactRejectedDeliveryWithReadOnlyAuditAccess",
+          "shouldAcceptValidAlertAndIsolatePermanentBadItem",
+          "shouldMakeRetryIdempotentAndRecordResolvedTransitionOnce",
+          "shouldReplayOnceAfterCmdbFixAcrossConcurrentRequests",
+          "shouldRequireDedicatedWebhookCredentialAndBoundBatchSize"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.analytics.IncidentAnalyticsIntegrationTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldSplitMetricsByOwningServiceWithoutInventingMissingMilestones",
+          "shouldExposeConfiguredSloWithoutInventingMeasurementsWhenPrometheusIsDisabled",
+          "shouldExposeHonestMilestoneDenominatorsMedianAndDrilldown"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantAiStreamingTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldBoundResponseCountIncludingEmptyFramesAndCancelSource",
+          "shouldCancelIdleUpstreamWithoutClaimingNormalCompletion",
+          "shouldPreserveExactIncrementalWhitespaceAndUnicodeWithEmptyStopFrame",
+          "shouldAcceptExactCharacterBoundaryAndRejectOverflowBeforeDelivery",
+          "shouldKeepValidationStateIsolatedForEachColdSubscription",
+          "shouldPropagateLateProviderFailureWithoutRetryOrFallbackEvenAfterStop",
+          "shouldRejectEmptyOrWhitespaceOnlyAnswerEvenWithStop",
+          "shouldAcceptExactResponseCountBoundary",
+          "shouldRejectUnknownFilteredOrToolTerminalWithoutEmittingItsContent",
+          "shouldRejectActualToolCallPayloadAndDisableSdkToolExecutionInPrompt",
+          "shouldRejectEmptyStreamAndNonterminalEof",
+          "shouldNotMergeMultipleAlternativeGenerations",
+          "shouldRejectMoreContentOrDuplicateTerminalAfterStop"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantCrossNodeMySqlIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1,
+        "cases": [
+          "shouldVerifyNativeReplayRemoteCancelClearAndRevocationOnOwnedMySql"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantExecutionManagerTest",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPlaceEnvironmentOverridesUnderTheExecutionManagersConfigurationPrefix",
+          "shouldRejectFullQueueAndRemoveRevokedQueuedWorkWithoutInterruptingRunningProvider",
+          "shouldFailClosedWhenAuthorizationLookupFails",
+          "shouldIncludeQueueTimeInBudgetAndStopLateWorkerBeforeAnyMoreAuthorizationQueries",
+          "shouldNeverExecuteWorkerAfterAdmissionTransactionFails",
+          "shouldCloseTransportWhenWorkerFailsUnexpectedly",
+          "shouldRejectInvalidExecutionLimits",
+          "shouldGateWorkerAndPublishCancellationOnceAfterAdmissionSettles",
+          "shouldRejectCapacityBeforeCallingAdmission",
+          "shouldObserveDurableCancellationWithoutInterruptingModel",
+          "shouldStopOnShutdownWithoutInterruptingWorkerOrTouchingAuthorizationAfterward"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "browserDisconnectShouldContinueOriginalDurableRequestWithoutAnotherPost",
+          "shouldTimeoutAnIdleProviderAfterPreviewWithoutCommittingPartialAnswer",
+          "shouldStopRevokedNativePreviewWithoutLateAnswerOrErrorPayload",
+          "shouldNotResurrectClearedNativePreviewWhenModelCompletesLate",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+          "shouldRejectNativeQueueSaturationBeforeAdmissionAndReuseCancelledSlot",
+          "nativeDoneMustNotEscapeAFailedFinalAuditTransaction",
+          "shouldDeliverRealNativeTokenBeforeCompletionAndCommitExactAnswer",
+          "shouldCancelAfterPreviewAndReuseWorkerBeforeOldProviderIsReleased"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantNativeHttpClientTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "cancellationSettlesSubscriberBeforeJdkWrappedCancellationArrives",
+          "successIsExactAndCancellingOneExchangeCannotCancelAnother",
+          "clientDelegatesBothAsyncOverloadsSyncAndConfiguration",
+          "ordinaryProviderFailureIsPropagatedWithoutBeingReclassifiedOrIgnored",
+          "lateSuccessCannotReplaceCancellationEvenWhenUnderlyingFutureCannotBeCancelled"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantNativeStreamHttpTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRejectRealHttpEofWithoutStopRatherThanAcceptingPartialAnswer",
+          "shouldRequestNativeIncrementalProtocolRatherThanACompleteJsonAnswer",
+          "shouldRejectRealHttpLengthTerminationWithoutRetryOrRuleFallback",
+          "shouldDeliverFirstRealHttpDeltaBeforeProviderCanFinish"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantNativeTransportTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "requestsWithoutAssistantScopeKeepTheirResponseUnmodified",
+          "cancellationBeforeHeadersClosesRetainedPendingExchange",
+          "scopedNonNativeRequestsKeepTheirResponseUnmodified",
+          "cancellationClosesBodyEvenWhenIntermediatePublisherRetainsItsUpstream",
+          "validationFailureAlsoClosesRetainedBodyWithoutRetry",
+          "eachColdSubscriptionHasItsOwnCancellationSignal",
+          "originalConnectorIsPreservedOutsideNativeAssistantScope",
+          "onlyNativeContextSelectsDedicatedConnector"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantSessionRevocationIntegrationTest",
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRejectSynchronousRequestWhenStreamCapacityIsFullWithoutWrites",
+          "shouldReplayCompletedKeyAcrossSyncAndStreamWithoutWrites",
+          "shouldNotResurrectDeletedSessionWhenLateProviderReturns",
+          "shouldPersistQueuedKeyAndCancelItWithoutQuestionWrites",
+          "shouldKeepClearedKeyTombstoneWithoutResurrectingMessages",
+          "shouldRejectInvalidKeysAndOtherOwnersStatusWithoutWrites",
+          "shouldRejectDuplicateInFlightKeyWithoutCallingProvider",
+          "shouldPreserveCompletedAnswerWhenCancellationArrivesLate",
+          "shouldCloseExpiredStreamBeforeProviderReleaseWithoutPersistingItsAnswer",
+          "shouldExposeKeyedTimeoutBeforeProviderReleaseAndNeverRetryItAutomatically",
+          "shouldNotSendCommittedAnswerAfterLogoutCompletesBeforeControllerReturns",
+          "shouldIncludeSynchronousWorkInStreamCapacityAndAllowReplacement",
+          "shouldReplayCompletedKeyWithoutTakingSaturatedCapacity",
+          "shouldDiscardLateStreamAnswerAfterCommittedLogoutAndAllowFreshLogin",
+          "shouldReturnSafeTimeoutBeforeProviderReleaseAndDiscardItsLateAnswer",
+          "shouldCancelRunningKeyBeforeProviderReleaseWithoutLateAnswer",
+          "shouldTimeoutRunningAndQueuedSynchronousRequestsBeforeProviderRelease",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+          "shouldRejectReusedKeyWithDifferentQuestionWithoutWrites",
+          "shouldPersistQueuedTimeoutWithoutAcceptingQuestionOrRetryingKey",
+          "shouldSendCancelledEventWithoutDoneForRunningStream",
+          "shouldNotResurrectClearedMessagesWhenLateProviderReturns",
+          "shouldRejectLateSynchronousAnswerAfterCommittedLogoutAndAllowFreshLogin",
+          "shouldNotSendCommittedAnswerAfterLeaseExpiresBeforeControllerReturns",
+          "shouldExposeRevokedKeyToFreshOwnerWithoutRevivingItsOriginalWork"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantStreamReaderTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "previewCallbackFailureCancelsTheProvider",
+          "upstreamFailureCannotReturnAnAnswer",
+          "idleProviderStillChecksStopAndCancelsSubscription",
+          "stoppedBeforeStartNeverSubscribes",
+          "preservesExactFragmentsAndRequestsOnlyOneAtATime",
+          "sizeLimitIsCheckedBeforePublishingAnOversizedFragment",
+          "emptyOrWhitespaceOnlyCannotCommit"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantStreamTransportTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPreserveNativeOrderAndPublishOnlyTheCommittedAnswerId",
+          "disconnectedBrowserShouldNotCancelTheDurableWorkerOrSkipItsCheckpoints",
+          "rejectedReplayLeaseShouldCloseItsWriterWithoutLeakingAnIdleReservation",
+          "shouldCheckOriginalFencesWhileWriteIsBlockedAndStopWithoutWaitingForItsLock",
+          "shouldBoundReservedWritersAndRejectBeforeAnyModelAdmission",
+          "terminalEventMustRecheckOriginalLeaseRatherThanReuseAnEarlierAuthorizationResult",
+          "shouldRemoveAnAbortedReservationFromTheBoundedWriterQueue",
+          "shouldRejectUnboundedConfigurationAndExposeScopedEnvironmentOverrides"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRollbackKeyedAssistantCompletionStateWithAnswerAndAudit",
+          "shouldRollbackAssistantCancellationWhenAuditInsertFails",
+          "shouldRecheckAssistantLeaseExpiryAfterFinalLockWait",
+          "shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence",
+          "shouldFenceAssistantCompletionAfterCancellationCommit",
+          "shouldRollbackAssistantAnswerWhenCompletionAuditInsertFails",
+          "shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt",
+          "shouldFenceAssistantFinalCommitAgainstConcurrentRevocation",
+          "shouldReplayCompletedAssistantKeyWithCaseSensitiveSessionScope",
+          "shouldPreserveAssistantCompletionWhenCancellationWaitsForCommit",
+          "shouldRollbackAssistantCompletionWhenFinalStopCheckFails"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.common.GlobalExceptionHandlerDisconnectTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldResolveTheSpecificContainerExceptionBeforeTheGenericHandler",
+          "shouldLeaveAnAlreadyCommittedResponseUnchanged",
+          "shouldNotWriteAnotherBodyToADisconnectedSocketOrReportSuccess",
+          "shouldNotHideOutboundProviderIOFailuresBasedOnTheirMessage"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.common.GlobalExceptionHandlerStreamResponseTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[1]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[2]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[3]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[4]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[5]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[6]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[7]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[8]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[9]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[10]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[11]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[12]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[13]",
+          "shouldPreserveTypedJsonRejectionBeforeSseAdmission(Rejection, String)[14]"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.distributed.DistributedAgentEventsIntegrationTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 3,
+        "cases": [
+          "shouldCompleteDuringRedisOutageAndDrainOutboxAfterRecovery",
+          "shouldBroadcastCommittedEventsAcrossTwoJvmsAndResumeOnTheOtherNode",
+          "shouldSettleExpiredRunAfterExecutingJvmCrashes"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.incident.IncidentStatusTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldAllowOnlyExplicitStateTransitions"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentEventReceiverTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[1]",
+          "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[2]",
+          "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[3]",
+          "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[4]",
+          "shouldRewindOnRegressedOrReusedTailIdentity(String, String)[5]",
+          "shouldNotRewindUnchangedTailOrCheckTailDuringActiveReads",
+          "shouldPreserveCursorWhenTailInspectionFails",
+          "shouldRewindAfterObservingEmptyOrMissingStream"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentEventStreamIntegrationTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldResumeViaHeaderAndCloseWhenTerminalAlreadyConsumed",
+          "shouldCatchUpActiveSubscriptionWithoutRedisAndHonorQueryCursor",
+          "shouldWriteSecurityHeadersBeforeSseWorkStartsAndRetainStreamCachePolicy",
+          "shouldProtectEndpointAndRejectForeignOrInvalidCursors",
+          "shouldAllowRecoveryHeadersAcrossConfiguredOrigin"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentEventSubscriptionsTest",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRejectInvalidSessionBeforeCursorLookupOrSlotAllocation",
+          "shouldRecoverWithoutNotificationsAndReleaseDisconnectedSlots",
+          "shouldFailClosedWhenOngoingAuthorizationReadFails",
+          "shouldMergeRegistrationReplayAndConcurrentDuplicateNotifications",
+          "shouldKeepNotificationThreadResponsiveWhileOutputIsBlocked",
+          "shouldRetryRejectedWorkerWithoutSendingOnNotificationThread",
+          "shouldCloseAlreadyConsumedTerminalAndIsolateBrokenOutput",
+          "shouldStopInsideBatchWhenSessionIsRevokedAfterFirstSend",
+          "shouldBoundConnectionsAndRejectBeforeSchedulingMoreWork",
+          "shouldCloseAtStreamBudgetAndPermitCursorResume",
+          "shouldCloseIdleRevokedConnectionAndReleaseItsSlotAtCatchup"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentEventTransactionIntegrationTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPurgeOnlyExpiredDeliveredRowsInBoundedBatches",
+          "shouldRejectOutboxOperationsInsideCallerTransaction",
+          "shouldKeepCommittedEventsAndNotifyLaterSubscribersWhenOneSinkFails",
+          "shouldPublishOnlyAfterOuterCommitAndReplayTheSameEvent",
+          "shouldReclaimExpiredLeaseAndFenceOldOwner",
+          "shouldNotPublishOrConsumeSequenceWhenOuterTransactionRollsBack",
+          "shouldFinishInvestigationWhenEveryLiveDeliveryFails"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentExecutionManagerTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldFailClosedWithoutInterruptingActiveAuthenticatedWorker",
+          "shouldRejectBeyondRunningAndQueuedCapacityWithoutStartingRejectedTask",
+          "shouldExposeSaturationAndInterruptActiveTask",
+          "shouldReleaseRevokedQueuedSlotWhileAnotherWorkerRemainsBlocked"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentRunCancellationIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldFinishAsCancelledWhenToolReturnsAfterCancellationRequest"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentRunRecoveryIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldSettleExpiredRunningTaskOnceAndFenceLateToolResult"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.AgentSessionRevocationIntegrationTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRefuseFinalReportCommitWhenSessionIsRevokedAfterLastCheckpoint",
+          "shouldPersistCancellationWhenToolReturnsWithInterruptFlag",
+          "shouldCloseIdleSubscriptionAfterPasswordChangeAndKeepOtherAccountValid",
+          "shouldStopExistingHttpSubscriptionAfterCommittedLogoutWithoutLeakingNewEvent",
+          "shouldCloseAlreadyEstablishedSubscriptionWhenSignedTokenExpires",
+          "shouldCancelQueuedInvestigationAfterRoleDowngradeButKeepAuthorizedRead",
+          "shouldNotStartQueuedRunAfterItsCapturedSessionIsRevoked",
+          "shouldDiscardLateToolResultAfterRealPostStreamSessionIsRevoked",
+          "shouldCloseIdleSubscriptionWhenAccountIsDisabled"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.InvestigationControllerDisconnectTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldIsolateClientDisconnectFromBackgroundEventPublishing"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.investigation.RedisRelayIntegrationTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 4,
+        "cases": [
+          "shouldRetryRedisFailureAndPreserveEventIdentityAcrossDuplicateDelivery",
+          "shouldBoundRecoveryReadsAndAvoidReplayingAnUnchangedTrimmedTail",
+          "shouldRecoverRegressedReusedAndMissingStreamWithoutRestartingReceiver",
+          "shouldBroadcastWithIndependentCursorsAndRetryListenerFailure"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.MySqlCompatibilityIntegrationTest",
+        "tests": 46,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 46,
+        "cases": [
+          "shouldApplyAllMigrationsAndRunIdempotentInvestigationOnMySql",
+          "shouldPromoteOneProblemAcrossTwoRepeatableReadTransactions",
+          "shouldClaimOutboxOnceAcrossConcurrentRelays",
+          "shouldSettleExpiredRunOnceAcrossConcurrentMySqlReconcilers",
+          "shouldPreserveAutomaticReplayBudgetAndPurgePayloadOnMySql",
+          "shouldKeepDraftFollowUpsOutOfMySqlEscalationAndNotification",
+          "shouldReadBoundedEvaluationHistoryOnMySql",
+          "shouldRouteOneUnacknowledgedIncidentStepAcrossConcurrentMySqlScans",
+          "shouldSerializeRosterWritesAndKeepCancelledHistoryOnMySql",
+          "shouldAggregatePersistedRetrievalCohortsOnMySql",
+          "shouldKeepUnapprovedRunbooksOutOfRetrievalOnMySql",
+          "shouldFenceAndReplayRunbookPublicationOnMySql",
+          "shouldBindImportIdentityAndCurrentManagerRoleOnMySql",
+          "shouldSerializeIndependentPublicationTransactionsOnMySql",
+          "shouldRollbackRunbookPublicationAndAuditOnMySql",
+          "shouldRejectDisabledReadsAndLogin",
+          "shouldRejectDisabledWriteWithoutAuditOrTimeline",
+          "shouldRejectOldJwtAfterAccountRemoval",
+          "shouldReloadCurrentRoleButKeepActiveAuthentication",
+          "shouldUseRealServletRequestForAuthenticatedHttpWrite",
+          "shouldRejectOldJwtWhenUsernameIsRecreated",
+          "shouldRejectMalformedSignedIdentityWithoutBusinessWrites",
+          "shouldRejectOutOfRangeJwtDatesWithoutServerErrors",
+          "shouldRevokeAllIssuedTokensWithoutFreshLoginRevivingThem",
+          "shouldChangePasswordAndRevokeTokensAtomically",
+          "shouldRejectInvalidPasswordChangesWithoutWrites",
+          "shouldFenceConcurrentLogoutRequests",
+          "shouldOnlyRevokeAuthenticatedActorsOwnSessions",
+          "shouldRejectLegacyAndMalformedSessionVersions",
+          "shouldSupportUnicodeWithoutAllowingUnchangedPassword",
+          "shouldRejectSessionVersionExhaustionWithoutWrapping",
+          "shouldRollbackPasswordAndVersionWhenAuditFails",
+          "shouldRejectBcryptByteTruncationAliasesAtLogin",
+          "shouldFenceFinalAuthorizationAgainstConcurrentRevocationCommit",
+          "shouldRecheckLeaseExpiryAfterFinalAuthorizationLockWait",
+          "shouldRollbackAssistantAnswerWhenCompletionAuditInsertFails",
+          "shouldRollbackAssistantCompletionWhenFinalStopCheckFails",
+          "shouldFenceAssistantFinalCommitAgainstConcurrentRevocation",
+          "shouldRecheckAssistantLeaseExpiryAfterFinalLockWait",
+          "shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence",
+          "shouldReplayCompletedAssistantKeyWithCaseSensitiveSessionScope",
+          "shouldRollbackKeyedAssistantCompletionStateWithAnswerAndAudit",
+          "shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt",
+          "shouldRollbackAssistantCancellationWhenAuditInsertFails",
+          "shouldFenceAssistantCompletionAfterCancellationCommit",
+          "shouldPreserveAssistantCompletionWhenCancellationWaitsForCommit"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.LogRedactorTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRedactSecretsAndPersonalIdentifiersFromMessagesAndMetadata"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.logs.LogsProviderRouterTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldFallBackAndPreserveExternalProviderFailureAsWarning"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.logs.LokiLogsProviderContractTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldCallRangeQueryMapStructuredLogAndRedactBeforeReturningEvidence"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.metrics.PrometheusMetricsProviderContractTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldCallInstantQueryAndMapVectorResponseToProviderContract"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.ProviderGuardTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRetryOpenCircuitAndRecoverThroughHalfOpenProbe"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.tracing.AgentTraceIntegrationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldAttachCreatedAlertAndIncidentIdentifiersToRequestTrace",
+          "shouldKeepHttpParentAcrossExecutorAndCreateToolAndProviderChildren"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.tracing.HttpTracePropagationIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPropagateW3cTraceContextToPrometheusAndLoki"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.tracing.OpenTelemetryBridgeTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldExportCapturedAsyncHierarchyThroughRealOtelBridge"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.observability.tracing.OpsPilotTracingTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldTraceAlertResultWithoutTaggingPayloadText",
+          "shouldRunCapturedTaskWithoutAParentSpan",
+          "shouldPreserveTraceHierarchyAcrossCapturedThreadAndTagBusinessIdentifiers",
+          "shouldMarkFailedProviderSpan"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.IncidentEscalationIntegrationTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRouteFirstStepAsPartOfNewAlertTransaction",
+          "shouldRouteOverrideThenStopAfterAcknowledgement",
+          "shouldExposeHistoryButRestrictManualScan",
+          "shouldExecuteEachStepOnceAcrossConcurrentScans",
+          "shouldRecordMissingShiftWithoutClaimingDeliveryAndThenRouteLaterSteps"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallCoverageIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 8,
+        "cases": [
+          "shouldMatchCurrentSelectionAndExcludeCancelledCoverage",
+          "shouldRevealLegacySameLayerOverlapAndUseExactRoutingTieBreaks",
+          "shouldAllowAuthenticatedReadOnlyApiAndValidateWindowsWithoutWrites",
+          "shouldPartitionGapsOverridesAndHalfOpenHandoffsWithoutDoubleCounting",
+          "shouldRecomputeCoverageFromCurrentAccountStatusAndRole",
+          "shouldRejectDenseInputRatherThanReturnTruncatedHealthyCoverage",
+          "shouldFallbackFromIneligibleOverrideAndReportUnavailableGapsAndInactivePlans",
+          "shouldNotForecastUnmaterializedOrPausedRotations"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallHandoffIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 27,
+        "cases": [
+          "shouldRevokeCoverageOnceWithoutRewritingAcceptedConsentOrSource",
+          "shouldAcceptExactlyOnceAndPreserveSourceAndCoverageHistory",
+          "shouldSerializeDifferentManagerRevocationsWithoutDoubleAudits",
+          "shouldAllowOnlyOneWinnerBetweenAcceptAndWithdraw",
+          "shouldSerializeConcurrentRequestRetriesAndAcceptRetries",
+          "shouldObserveSourceCancellationCommittedBeforeScheduleLock",
+          "shouldSerializeConcurrentSameKeyRevocationWithOnlyOneChange",
+          "shouldExposeListTruncationInsteadOfSilentlyDroppingRequests",
+          "shouldRejectInvalidListFiltersInsteadOfSilentlyBroadeningTheQuery",
+          "shouldRejectChangedPayloadForSameKeyAndInvalidWindows",
+          "shouldRejectInvalidRevocationAndStaleVersionsBeforeMutation",
+          "shouldRefuseNewRevocationAfterEndButAcknowledgePreviouslyCommittedCommand",
+          "shouldRejectInactivePlanOrRequesterAndAllowTargetRejection",
+          "shouldExposeExternalCancellationWithoutInventingARevocationRecord",
+          "shouldRollbackCancellationLedgerAndBothAuditsTogether",
+          "shouldNotPromiseOriginalCoverageWhenOriginalShiftWasAlsoCancelled",
+          "shouldRollBackOverrideDecisionAndAuditsTogether",
+          "shouldRestrictRevocationToCurrentActiveManagersIncludingOldJwt",
+          "shouldEnforceParticipantIdentityEvenForAdminsAndFreshRoles",
+          "shouldRejectNewOverrideAndLegacyOrdinaryOverlapWithoutPartialWrites",
+          "shouldRejectExpiredRequestsWithoutMutatingTheirHistory",
+          "shouldRejectReusedRevocationKeyAndDifferentIntentAfterCancellation",
+          "shouldRejectSourceCancellationAndStillAllowWithdrawal",
+          "shouldNotAcceptTwoDifferentRequestsForTheSameSourceWindow",
+          "shouldClampOngoingCoverageAfterActualLockWaitAndRouteOnlyNewIncidents",
+          "shouldFilterParticipantsAndStatusBeforeTheListLimit",
+          "shouldEnforceHttpRolesAndParticipantIdentity"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallOpenHandoffIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 24,
+        "cases": [
+          "shouldSerializeConcurrentOriginalClaimKeyAcknowledgements",
+          "shouldRollbackWithdrawalReceiptAndAuditTogether",
+          "shouldAcknowledgeOriginalClaimAfterCancellationAndEndWithoutRevival",
+          "shouldRollbackCoverageCreationAuditFailure",
+          "shouldRecheckActualPersistedDeadlineAfterScheduleLockWait",
+          "shouldRollbackCoverageOperationAndFinalClaimAuditTogether",
+          "shouldClaimOnlyRemainingSubwindowAndKeepOriginalTimes",
+          "shouldAllowExactlyOneWinnerBetweenDifferentClaimants",
+          "shouldRollbackWhenFinalClaimAuditCrossesPersistedDeadline",
+          "shouldReadLatestQualificationAfterScheduleLockWait",
+          "shouldRejectCancelledSourceButPermitExplicitOwnerWithdrawal",
+          "shouldFilterAvailableAndMineInSqlBeforeBoundedInbox",
+          "shouldSerializeClaimVersusOwnerWithdrawalWithoutHalfCoverage",
+          "shouldRejectNewOverrideAndLegacyOrdinaryOverlap",
+          "shouldRejectChangedPublicationKeyContentAndMalformedWindows",
+          "shouldSerializeSameActorOperationKeyAcrossDifferentPlans",
+          "shouldRollbackPublicationWhenItsAuditFails",
+          "shouldRecheckCurrentClaimantQualificationEvenForOriginalReceipt",
+          "shouldRejectEndedClaimWithoutInventingAutomaticExpiryStatus",
+          "shouldEnforceHttpAuthenticationAndExplicitVersions",
+          "shouldEnforcePersonalConsentAndOriginalOperationPayload",
+          "shouldRejectInactivePlanAndPublisherWithoutChangingResponsibility",
+          "shouldPublishAndClaimThroughHttpWithActualIndependentCoverage",
+          "shouldSerializeConcurrentPublicationOriginalKeys"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallPlanMembershipIntegrationTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 22,
+        "cases": [
+          "shouldRequireBothParticipantsInBothPlansForBilateralSwap",
+          "shouldBlockOriginalRotationSlotsWithoutReassigningHistoryAndResumeOnlyMissingSlots",
+          "shouldRejectNewDesignatedAcceptanceButAllowDepartedTargetRejection",
+          "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait",
+          "shouldRollbackRevocationAfterActualAuditInsertFails",
+          "shouldDenyAnotherValidPlanAndPermitItsExplicitMemberControl",
+          "shouldRollbackFirstGrantAfterActualAuditInsertFails",
+          "shouldRetainAssignedCoverageAndOriginalClaimReceiptAfterMembershipRevocation",
+          "shouldRejectCrossPlanOrChangedKeyAndStaleOrOverflowedVersions",
+          "shouldPermitOriginalManagerReceiptAfterOwnPlanManagementWasRevoked",
+          "shouldRequireResponseForManualOverridesAndManagementForCancellation",
+          "shouldCommitOneImmutableReceiptForConcurrentOriginalCommands",
+          "shouldNotWriteRotationWarningWhenManualScannerHasNoPlanManagement",
+          "shouldSeparateManagementFromResponseAndKeepAdminRecoveryWithoutSelfClaim",
+          "shouldFilterDepartedRequestersBeforeAvailableLimitAndAllowOwnWithdrawal",
+          "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait",
+          "shouldRetainBadRotationTargetErrorContractAndRejectInvalidManagementTargets",
+          "shouldRejectMissingExpectedVersionButAcceptExplicitNullAndSerializeEffectivePermissions",
+          "shouldRecheckCurrentRoleAndNotResurrectRevokedMembershipWhenAccountIsRestored",
+          "shouldRollbackUpdateAfterActualAuditInsertFails",
+          "shouldRecordActualActorIpAndOldAndNewPermissions",
+          "shouldBackfillOnlyPreexistingOperationalUsersAndNeverEnrolNewPlansOrAccounts"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallRotationIntegrationTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 10,
+        "cases": [
+          "shouldSerializeConcurrentScansAndConcurrentRotationCreation",
+          "shouldRequireManagementRolesForWritesAndAuditTheHttpActor",
+          "shouldExposeBoundedSlotWindowAndStopWhenScheduleIsDisabled",
+          "shouldRecordUnavailableMemberWithoutSilentlyChangingTheMemberOrder",
+          "shouldRespectManualConflictAndRetryWithoutRevivingCancelledGeneratedShift",
+          "shouldRollBackOneFailedRotationAndContinueOtherRotations",
+          "shouldGenerateStableRoundRobinAndRouteTheActualFirstOwner",
+          "shouldReportMemberRevocationAfterGenerationWithoutReassigningHistoricalFacts",
+          "shouldKeepOverridePriorityAndPauseOnlyFutureGeneration",
+          "shouldRejectInvalidRulesAndKeepHistoricalDemoUntouched"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallRoutingSnapshotIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 8,
+        "cases": [
+          "shouldObserveNewOverrideDuringScan",
+          "shouldObserveDisabledScheduleDuringScan",
+          "shouldObserveDisabledUserDuringScan",
+          "shouldObserveChangedRoleDuringScan",
+          "shouldObserveCommittedCancellationDuringScan",
+          "shouldObserveCommittedCancellationDuringAlertIntake",
+          "shouldObserveDisabledPolicyDuringScan",
+          "shouldRollBackIntakeAndItsRoutedFactsTogether"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallSwapIntegrationTest",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 17,
+        "cases": [
+          "shouldFilterParticipantAndEitherScheduleBeforeLimitAndExposeTruncation",
+          "shouldHaveOneWinnerBetweenAcceptanceAndWithdrawal",
+          "shouldRejectEitherInactiveScheduleAndStillAllowTargetRejection",
+          "shouldRejectExistingOverridesAndLegacyOrdinaryOverlapWithoutHalfSwap",
+          "shouldRecheckBothParticipantsAndPermitRejectionWhenRequesterIsDisabled",
+          "shouldSerializeReverseCrossScheduleRequestsWithoutDeadlockOrDoubleExchange",
+          "shouldRejectEitherStaleSourceAndStillAllowWithdrawal",
+          "shouldRequireActualParticipantsEvenForAdministrators",
+          "shouldExchangeBothFutureShiftsAtomicallyAndPreserveOrdinaryHistory",
+          "shouldSerializeConcurrentSameKeyRequestsAndAcceptRetries",
+          "shouldEnforceHttpRolesParticipantAndExplicitVersions",
+          "shouldRejectStartedShiftsAndOverrideSources",
+          "shouldExchangeAcrossSchedulesWithoutChangingEitherRotation",
+          "shouldAcknowledgeAcceptedHistoryWithoutRevivingCancelledCoverage",
+          "shouldRollbackBothOverridesDecisionAndAuditsWhenFinalAuditFails",
+          "shouldRollbackBothOverridesWhenSecondCreationAuditFails",
+          "shouldRejectSelfExchangeInvalidKeysAndChangedIdempotentPayload"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 27,
+        "cases": [
+          "shouldRollbackRequestAuditAndNotificationTogether",
+          "shouldRollbackBothOverridesAndNotificationRowsWhenEnqueueFails",
+          "shouldSkipIneligibleRecipientWithoutExposingPayload",
+          "shouldRejectRetryForForeignSwapIneligibleActorOrSupersededEvent",
+          "shouldEraseExpiredLeaseWithoutHttpAndFenceItsLateReceipt",
+          "shouldSkipSupersededRequestButNotifyBothParticipantsOfRejection",
+          "shouldRollbackManualRetryWhenAuditFails",
+          "shouldCleanWithSendingDisabledWithoutOccupyingSharedScheduler",
+          "shouldSerializeConcurrentDispatchersWithoutDuplicateLiveClaim",
+          "shouldKeepFrozenPayloadAndStableKeyAcrossRealTransientRetry",
+          "shouldSerializeConcurrentCleanupWithoutDoubleErasureOrAuditChanges",
+          "shouldEraseDeliveredPayloadButPreserveTechnicalReceiptAndOriginalRetryAcknowledgement",
+          "shouldEnforceAuthenticatedHttpRolesAndExplicitRetryVersion",
+          "shouldAllowOptOutButNeverReviveErasedPayloadAfterDisablingRetention",
+          "shouldRejectRedirectAndPermanentFailureWithoutForwardingCredential",
+          "shouldPreventExternalDeliveryFromInsideBusinessTransactionAndPreserveDisabledHistory",
+          "shouldEnqueueRequestAndBothDecisionRecipientsOnceWithoutDecidingFromReceipt",
+          "shouldDeferErasureWhileValidLeaseIsInFlightThenPreserveItsReceipt",
+          "shouldRunOneUnqueuedWorkerWithoutBlockingSharedSchedulerTicks",
+          "shouldFreezeDatabaseDeadlineAcrossRetryAndRejectUnsafeRetentionConfiguration",
+          "shouldManuallyRetryOriginalVersionAndAcknowledgeLostReceiptWithoutNewAudit",
+          "shouldFenceExpiredOldReceiptAndReuseSameFrozenKey",
+          "shouldSkipStartedCancelledOrCoveredRequestSourcesBeforeSending",
+          "shouldStopReclaimingExhaustedExpiredLeaseWithoutAnotherHttp",
+          "shouldBlockExpiredClaimsBeforeBoundedCleanupAndKeepNotificationHistory",
+          "shouldRejectNewManualRetryAfterPayloadRetentionWithoutChangingHistory",
+          "shouldBoundAttemptsAndNotPersistSensitiveReceiverBody"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallSwapNotificationMigrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1,
+        "cases": [
+          "shouldFreezeLegacyDeadlineWithoutErasingV35PayloadOrTechnicalHistory"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOnCallSwapRevocationIntegrationTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 19,
+        "cases": [
+          "shouldSerializeLegacySingleCancellationAgainstAtomicPairWithoutHalfCommit",
+          "shouldRevokeBothCoveragesInOneHttpCommandAndKeepAcceptedHistory",
+          "shouldRejectEitherIndependentCancellationWithoutCancellingCounterpart",
+          "shouldRejectEachStaleCapturedVersionAndOverflowWithoutWrites",
+          "shouldRejectNewKeyOrOtherManagerAfterRevocation",
+          "shouldAllowCleanupOfInactiveSchedulesWithoutPromisingRestoredCoverage",
+          "shouldRejectChangedOriginalKeyPayloadAndCrossSwapReuseWithoutWrites",
+          "shouldRollbackBothCancellationsWhenSecondCancellationAuditFails",
+          "shouldSerializeConcurrentOriginalKeyAcknowledgementsAndDifferentKeyRace",
+          "shouldEnforceHttpAuthenticationRolesAndAllThreeExplicitVersions",
+          "shouldRecheckActualDatabaseEndAfterWaitingForScheduleLock",
+          "shouldRejectNonAcceptedStatusesMissingRequestAndMalformedCommand",
+          "shouldRollbackBothCancellationsRevocationAndAuditsWhenFinalAuditFails",
+          "shouldRejectChangedReplacementSnapshotOrOrdinaryFlagWithoutHalfCancellation",
+          "shouldRejectEitherEndedCoverageButAllowAlreadyStartedRemainingPair",
+          "shouldRecheckCurrentManagerQualificationBeforeOriginalAcknowledgement",
+          "shouldAcknowledgeOriginalKeyAfterEndWithoutNewAuditOrCancellation",
+          "shouldRollbackAfterFinalAuditCrossesActualDatabaseEnd",
+          "shouldRevokeSameSchedulePairAndAcknowledgeOriginalCommandsWithoutReviving"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.MySqlOpenHandoffUpgradeHttpIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1,
+        "cases": [
+          "shouldUpgradePopulatedV37AndRecoverOriginalClaimsAfterRestartOnOwnedMySql"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallCoverageIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldMatchCurrentSelectionAndExcludeCancelledCoverage",
+          "shouldRevealLegacySameLayerOverlapAndUseExactRoutingTieBreaks",
+          "shouldAllowAuthenticatedReadOnlyApiAndValidateWindowsWithoutWrites",
+          "shouldPartitionGapsOverridesAndHalfOpenHandoffsWithoutDoubleCounting",
+          "shouldRecomputeCoverageFromCurrentAccountStatusAndRole",
+          "shouldRejectDenseInputRatherThanReturnTruncatedHealthyCoverage",
+          "shouldFallbackFromIneligibleOverrideAndReportUnavailableGapsAndInactivePlans",
+          "shouldNotForecastUnmaterializedOrPausedRotations"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallHandoffIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRevokeCoverageOnceWithoutRewritingAcceptedConsentOrSource",
+          "shouldAcceptExactlyOnceAndPreserveSourceAndCoverageHistory",
+          "shouldSerializeDifferentManagerRevocationsWithoutDoubleAudits",
+          "shouldAllowOnlyOneWinnerBetweenAcceptAndWithdraw",
+          "shouldSerializeConcurrentRequestRetriesAndAcceptRetries",
+          "shouldObserveSourceCancellationCommittedBeforeScheduleLock",
+          "shouldSerializeConcurrentSameKeyRevocationWithOnlyOneChange",
+          "shouldExposeListTruncationInsteadOfSilentlyDroppingRequests",
+          "shouldRejectInvalidListFiltersInsteadOfSilentlyBroadeningTheQuery",
+          "shouldRejectChangedPayloadForSameKeyAndInvalidWindows",
+          "shouldRejectInvalidRevocationAndStaleVersionsBeforeMutation",
+          "shouldRefuseNewRevocationAfterEndButAcknowledgePreviouslyCommittedCommand",
+          "shouldRejectInactivePlanOrRequesterAndAllowTargetRejection",
+          "shouldExposeExternalCancellationWithoutInventingARevocationRecord",
+          "shouldRollbackCancellationLedgerAndBothAuditsTogether",
+          "shouldNotPromiseOriginalCoverageWhenOriginalShiftWasAlsoCancelled",
+          "shouldRollBackOverrideDecisionAndAuditsTogether",
+          "shouldRestrictRevocationToCurrentActiveManagersIncludingOldJwt",
+          "shouldEnforceParticipantIdentityEvenForAdminsAndFreshRoles",
+          "shouldRejectNewOverrideAndLegacyOrdinaryOverlapWithoutPartialWrites",
+          "shouldRejectExpiredRequestsWithoutMutatingTheirHistory",
+          "shouldRejectReusedRevocationKeyAndDifferentIntentAfterCancellation",
+          "shouldRejectSourceCancellationAndStillAllowWithdrawal",
+          "shouldNotAcceptTwoDifferentRequestsForTheSameSourceWindow",
+          "shouldClampOngoingCoverageAfterActualLockWaitAndRouteOnlyNewIncidents",
+          "shouldFilterParticipantsAndStatusBeforeTheListLimit",
+          "shouldEnforceHttpRolesAndParticipantIdentity"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallOpenHandoffIntegrationTest",
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldSerializeConcurrentOriginalClaimKeyAcknowledgements",
+          "shouldRollbackWithdrawalReceiptAndAuditTogether",
+          "shouldAcknowledgeOriginalClaimAfterCancellationAndEndWithoutRevival",
+          "shouldRollbackCoverageCreationAuditFailure",
+          "shouldRecheckActualPersistedDeadlineAfterScheduleLockWait",
+          "shouldRollbackCoverageOperationAndFinalClaimAuditTogether",
+          "shouldClaimOnlyRemainingSubwindowAndKeepOriginalTimes",
+          "shouldAllowExactlyOneWinnerBetweenDifferentClaimants",
+          "shouldRollbackWhenFinalClaimAuditCrossesPersistedDeadline",
+          "shouldReadLatestQualificationAfterScheduleLockWait",
+          "shouldRejectCancelledSourceButPermitExplicitOwnerWithdrawal",
+          "shouldFilterAvailableAndMineInSqlBeforeBoundedInbox",
+          "shouldSerializeClaimVersusOwnerWithdrawalWithoutHalfCoverage",
+          "shouldRejectNewOverrideAndLegacyOrdinaryOverlap",
+          "shouldRejectChangedPublicationKeyContentAndMalformedWindows",
+          "shouldSerializeSameActorOperationKeyAcrossDifferentPlans",
+          "shouldRollbackPublicationWhenItsAuditFails",
+          "shouldRecheckCurrentClaimantQualificationEvenForOriginalReceipt",
+          "shouldRejectEndedClaimWithoutInventingAutomaticExpiryStatus",
+          "shouldEnforceHttpAuthenticationAndExplicitVersions",
+          "shouldEnforcePersonalConsentAndOriginalOperationPayload",
+          "shouldRejectInactivePlanAndPublisherWithoutChangingResponsibility",
+          "shouldPublishAndClaimThroughHttpWithActualIndependentCoverage",
+          "shouldSerializeConcurrentPublicationOriginalKeys"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallPlanMembershipIntegrationTest",
+        "tests": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRequireBothParticipantsInBothPlansForBilateralSwap",
+          "shouldBlockOriginalRotationSlotsWithoutReassigningHistoryAndResumeOnlyMissingSlots",
+          "shouldRejectNewDesignatedAcceptanceButAllowDepartedTargetRejection",
+          "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait",
+          "shouldRollbackRevocationAfterActualAuditInsertFails",
+          "shouldDenyAnotherValidPlanAndPermitItsExplicitMemberControl",
+          "shouldRollbackFirstGrantAfterActualAuditInsertFails",
+          "shouldRetainAssignedCoverageAndOriginalClaimReceiptAfterMembershipRevocation",
+          "shouldRejectCrossPlanOrChangedKeyAndStaleOrOverflowedVersions",
+          "shouldPermitOriginalManagerReceiptAfterOwnPlanManagementWasRevoked",
+          "shouldRequireResponseForManualOverridesAndManagementForCancellation",
+          "shouldCommitOneImmutableReceiptForConcurrentOriginalCommands",
+          "shouldNotWriteRotationWarningWhenManualScannerHasNoPlanManagement",
+          "shouldSeparateManagementFromResponseAndKeepAdminRecoveryWithoutSelfClaim",
+          "shouldFilterDepartedRequestersBeforeAvailableLimitAndAllowOwnWithdrawal",
+          "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait",
+          "shouldRetainBadRotationTargetErrorContractAndRejectInvalidManagementTargets",
+          "shouldRejectMissingExpectedVersionButAcceptExplicitNullAndSerializeEffectivePermissions",
+          "shouldRecheckCurrentRoleAndNotResurrectRevokedMembershipWhenAccountIsRestored",
+          "shouldRollbackUpdateAfterActualAuditInsertFails",
+          "shouldRecordActualActorIpAndOldAndNewPermissions",
+          "shouldBackfillOnlyPreexistingOperationalUsersAndNeverEnrolNewPlansOrAccounts"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallRosterIntegrationTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRejectSameLayerOverlapButAllowAdjacentHandoffsAndReplacement",
+          "shouldUseHalfOpenQueryWindowsAndMakeTruncationExplicit",
+          "shouldEnforceRolesAndKeepAnAuditedCancellationHistory",
+          "shouldSerializeConcurrentOverlappingCreates",
+          "shouldResumeBaseRoutingAfterAnOverrideIsCancelled",
+          "shouldRejectInvalidWindowsUsersAndStaleCancellationWithoutExtraAudit"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallRotationIntegrationTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldSerializeConcurrentScansAndConcurrentRotationCreation",
+          "shouldRequireManagementRolesForWritesAndAuditTheHttpActor",
+          "shouldExposeBoundedSlotWindowAndStopWhenScheduleIsDisabled",
+          "shouldRecordUnavailableMemberWithoutSilentlyChangingTheMemberOrder",
+          "shouldRespectManualConflictAndRetryWithoutRevivingCancelledGeneratedShift",
+          "shouldRollBackOneFailedRotationAndContinueOtherRotations",
+          "shouldGenerateStableRoundRobinAndRouteTheActualFirstOwner",
+          "shouldReportMemberRevocationAfterGenerationWithoutReassigningHistoricalFacts",
+          "shouldKeepOverridePriorityAndPauseOnlyFutureGeneration",
+          "shouldRejectInvalidRulesAndKeepHistoricalDemoUntouched"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallRotationJobIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldGenerateTheBlockedSlotThroughTheRealSchedulerAfterConflictIsRemoved"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallRoutingSnapshotIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldObserveNewOverrideDuringScan",
+          "shouldObserveDisabledScheduleDuringScan",
+          "shouldObserveDisabledUserDuringScan",
+          "shouldObserveChangedRoleDuringScan",
+          "shouldObserveCommittedCancellationDuringScan",
+          "shouldObserveCommittedCancellationDuringAlertIntake",
+          "shouldObserveDisabledPolicyDuringScan",
+          "shouldRollBackIntakeAndItsRoutedFactsTogether"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallSwapIntegrationTest",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldFilterParticipantAndEitherScheduleBeforeLimitAndExposeTruncation",
+          "shouldHaveOneWinnerBetweenAcceptanceAndWithdrawal",
+          "shouldRejectEitherInactiveScheduleAndStillAllowTargetRejection",
+          "shouldRejectExistingOverridesAndLegacyOrdinaryOverlapWithoutHalfSwap",
+          "shouldRecheckBothParticipantsAndPermitRejectionWhenRequesterIsDisabled",
+          "shouldSerializeReverseCrossScheduleRequestsWithoutDeadlockOrDoubleExchange",
+          "shouldRejectEitherStaleSourceAndStillAllowWithdrawal",
+          "shouldRequireActualParticipantsEvenForAdministrators",
+          "shouldExchangeBothFutureShiftsAtomicallyAndPreserveOrdinaryHistory",
+          "shouldSerializeConcurrentSameKeyRequestsAndAcceptRetries",
+          "shouldEnforceHttpRolesParticipantAndExplicitVersions",
+          "shouldRejectStartedShiftsAndOverrideSources",
+          "shouldExchangeAcrossSchedulesWithoutChangingEitherRotation",
+          "shouldAcknowledgeAcceptedHistoryWithoutRevivingCancelledCoverage",
+          "shouldRollbackBothOverridesDecisionAndAuditsWhenFinalAuditFails",
+          "shouldRollbackBothOverridesWhenSecondCreationAuditFails",
+          "shouldRejectSelfExchangeInvalidKeysAndChangedIdempotentPayload"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallSwapNotificationIntegrationTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRollbackRequestAuditAndNotificationTogether",
+          "shouldRollbackBothOverridesAndNotificationRowsWhenEnqueueFails",
+          "shouldSkipIneligibleRecipientWithoutExposingPayload",
+          "shouldRejectRetryForForeignSwapIneligibleActorOrSupersededEvent",
+          "shouldEraseExpiredLeaseWithoutHttpAndFenceItsLateReceipt",
+          "shouldSkipSupersededRequestButNotifyBothParticipantsOfRejection",
+          "shouldRollbackManualRetryWhenAuditFails",
+          "shouldCleanWithSendingDisabledWithoutOccupyingSharedScheduler",
+          "shouldSerializeConcurrentDispatchersWithoutDuplicateLiveClaim",
+          "shouldKeepFrozenPayloadAndStableKeyAcrossRealTransientRetry",
+          "shouldSerializeConcurrentCleanupWithoutDoubleErasureOrAuditChanges",
+          "shouldEraseDeliveredPayloadButPreserveTechnicalReceiptAndOriginalRetryAcknowledgement",
+          "shouldEnforceAuthenticatedHttpRolesAndExplicitRetryVersion",
+          "shouldAllowOptOutButNeverReviveErasedPayloadAfterDisablingRetention",
+          "shouldRejectRedirectAndPermanentFailureWithoutForwardingCredential",
+          "shouldPreventExternalDeliveryFromInsideBusinessTransactionAndPreserveDisabledHistory",
+          "shouldEnqueueRequestAndBothDecisionRecipientsOnceWithoutDecidingFromReceipt",
+          "shouldDeferErasureWhileValidLeaseIsInFlightThenPreserveItsReceipt",
+          "shouldRunOneUnqueuedWorkerWithoutBlockingSharedSchedulerTicks",
+          "shouldFreezeDatabaseDeadlineAcrossRetryAndRejectUnsafeRetentionConfiguration",
+          "shouldManuallyRetryOriginalVersionAndAcknowledgeLostReceiptWithoutNewAudit",
+          "shouldFenceExpiredOldReceiptAndReuseSameFrozenKey",
+          "shouldSkipStartedCancelledOrCoveredRequestSourcesBeforeSending",
+          "shouldStopReclaimingExhaustedExpiredLeaseWithoutAnotherHttp",
+          "shouldBlockExpiredClaimsBeforeBoundedCleanupAndKeepNotificationHistory",
+          "shouldRejectNewManualRetryAfterPayloadRetentionWithoutChangingHistory",
+          "shouldBoundAttemptsAndNotPersistSensitiveReceiverBody"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallSwapNotificationMigrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldFreezeLegacyDeadlineWithoutErasingV35PayloadOrTechnicalHistory"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.oncall.OnCallSwapRevocationIntegrationTest",
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldSerializeLegacySingleCancellationAgainstAtomicPairWithoutHalfCommit",
+          "shouldRevokeBothCoveragesInOneHttpCommandAndKeepAcceptedHistory",
+          "shouldRejectEitherIndependentCancellationWithoutCancellingCounterpart",
+          "shouldRejectEachStaleCapturedVersionAndOverflowWithoutWrites",
+          "shouldRejectNewKeyOrOtherManagerAfterRevocation",
+          "shouldAllowCleanupOfInactiveSchedulesWithoutPromisingRestoredCoverage",
+          "shouldRejectChangedOriginalKeyPayloadAndCrossSwapReuseWithoutWrites",
+          "shouldRollbackBothCancellationsWhenSecondCancellationAuditFails",
+          "shouldSerializeConcurrentOriginalKeyAcknowledgementsAndDifferentKeyRace",
+          "shouldEnforceHttpAuthenticationRolesAndAllThreeExplicitVersions",
+          "shouldRecheckActualDatabaseEndAfterWaitingForScheduleLock",
+          "shouldRejectNonAcceptedStatusesMissingRequestAndMalformedCommand",
+          "shouldRollbackBothCancellationsRevocationAndAuditsWhenFinalAuditFails",
+          "shouldRejectChangedReplacementSnapshotOrOrdinaryFlagWithoutHalfCancellation",
+          "shouldRejectEitherEndedCoverageButAllowAlreadyStartedRemainingPair",
+          "shouldRecheckCurrentManagerQualificationBeforeOriginalAcknowledgement",
+          "shouldAcknowledgeOriginalKeyAfterEndWithoutNewAuditOrCancellation",
+          "shouldRollbackAfterFinalAuditCrossesActualDatabaseEnd",
+          "shouldRevokeSameSchedulePairAndAcknowledgeOriginalCommandsWithoutReviving"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.OpsPilotApiIntegrationTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldReturnStructuredUnauthorizedResponse",
+          "shouldPersistInspectableAgentInvestigationTrace",
+          "shouldStreamAndReplayPersistedAgentRunEvents",
+          "shouldRequireIndependentVersionedReviewForHighRiskProposal",
+          "shouldDedupeFingerprintAndAttachBothEventsToOneIncident",
+          "shouldAuthenticateAndLoadCoreOperationalViews",
+          "shouldPersistRunCancellationTimeoutAndQueueRejection",
+          "shouldPersistIncidentAwareAssistantConversationAndIsolateUsers",
+          "shouldEnforceRoleAndOptimisticIncidentTransition"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.postmortem.FollowUpNotificationIntegrationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "deliversOnceWithStableKeyRetriesTransientFailureAndSkipsResolvedEscalation",
+          "shouldNeverSendHistoricalDraftNotificationAndAllowRetryAfterPublication"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.postmortem.FollowUpOperationsIntegrationTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldCreateOneEscalationAndResolveItWhenOwnerCompletesFollowUp",
+          "shouldNotEscalateOrCompleteDraftActionUntilPostmortemIsPublished",
+          "shouldKeepOwnerAcknowledgementSeparateFromDeliveryAndCompletion"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.postmortem.PostmortemIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldCreateReviewPublishAndCompleteEvidenceBackedPostmortem"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.problem.ProblemCreationConcurrencyIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldCreateOneProblemWhenSameCandidateIsPromotedConcurrently"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.problem.ProblemManagementIntegrationTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldServeEverySpaRouteThroughOneUnambiguousForwarder",
+          "shouldTurnExactCrossIncidentRecurrenceIntoAuditedProblemLifecycle",
+          "shouldPromoteMaximumLengthEvidenceWithoutLosingOriginalTitles"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.Bm25RetrieverTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldSplitLongMarkdownIntoBoundedOverlappingChunks",
+          "shouldTokenizeChineseBigramsAndRankTheRelevantChunk"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.ReciprocalRankFusionTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldBreakEqualFusionScoresByStableChunkId",
+          "shouldFuseRanksWithoutMixingRawScoreScales"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookHybridRetrievalIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldBuildIdempotentIndexFuseRankingsEvaluateAndPreserveOldIndexOnFailure"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookJudgmentAgreementTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldReportEmptyAgreementDataset",
+          "shouldCalculateLinearWeightedKappaForOrdinalGrades",
+          "shouldReturnUndefinedKappaWithoutLabelVariation"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookKnowledgeIntegrationTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldExtractAndIndexPdfText",
+          "shouldKeepEvaluationHistoryVersionedAndBounded",
+          "shouldSearchMigratedRunbooksAndPersistDeterministicEvaluation",
+          "shouldCreateImmutableMarkdownVersionsAndEnforceDocumentAcl",
+          "shouldRejectUnsupportedRunbookFileType"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookPublicationConcurrencyTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRollbackSupersedePublicationAndAuditTogether",
+          "shouldSerializeTwoIndependentReviewerTransactions"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookPublicationIntegrationTest",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldFencePublicationAgainstNewerApprovedBaselineAndReplayExactDecision",
+          "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[1]",
+          "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[2]",
+          "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[3]",
+          "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[4]",
+          "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[5]",
+          "shouldRequireAnExplicitCapturedHttpReviewVersion(String, boolean)[6]",
+          "shouldEnforceHttpRolesIndependentReviewerAndCurrentDatabaseRole",
+          "shouldKeepUnapprovedVersionsOutOfConsoleAgentAndHistory",
+          "shouldDeduplicateOnlyIdenticalSubmissionAndCheckCurrentRole",
+          "shouldFilterQueueBeforeLimitAndExposeTruncationWithoutContent",
+          "shouldValidateAndFreezeHttpDecisionIdentityBeforeRedaction"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookPublicationMigrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPreservePublishedV29ContentAndHistory"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookRelevanceFeedbackIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldCaptureSearchEnforceIndependentReviewAndPromoteOnlyPositiveJudgments"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookRetrievalLifecycleIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRedactPurgeAuditAndPreservePromotedQrel"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookRetrievalTrendIntegrationTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldKeepQualityCardinalityAfterRealRetentionAndAssignLateReviewsToQueryDate",
+          "shouldPersistDistinctDocumentsNotChunkCountAndNotTrackOfflineSearch",
+          "shouldSeparateCompletePartialPurgedEmptyAndSourceEngineKCohorts",
+          "shouldRestrictAggregateEndpointAndExposeNoQueryOrActorText"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.runbook.RunbookReturnedCountMigrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldBackfillOnlyRecoverableActiveV28SnapshotsWithoutRewritingThem"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.security.AccountStatusHttpIntegrationTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldReloadCurrentRoleButKeepActiveAuthentication",
+          "shouldRejectDisabledWriteWithoutAuditOrTimeline",
+          "shouldRejectMalformedSignedIdentityWithoutBusinessWrites",
+          "shouldRejectOldJwtWhenUsernameIsRecreated",
+          "shouldRejectOldJwtAfterAccountRemoval",
+          "shouldRejectOutOfRangeJwtDatesWithoutServerErrors",
+          "shouldRejectDisabledReadsAndLogin",
+          "shouldUseRealServletRequestForAuthenticatedHttpWrite"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.security.AuthSessionHttpIntegrationTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldOnlyRevokeAuthenticatedActorsOwnSessions",
+          "shouldRejectBcryptByteTruncationAliasesAtLogin",
+          "shouldFenceConcurrentLogoutRequests",
+          "shouldSupportUnicodeWithoutAllowingUnchangedPassword",
+          "shouldRejectLegacyAndMalformedSessionVersions",
+          "shouldRollbackPasswordAndVersionWhenAuditFails",
+          "shouldRejectInvalidPasswordChangesWithoutWrites",
+          "shouldRejectSessionVersionExhaustionWithoutWrapping",
+          "shouldRevokeAllIssuedTokensWithoutFreshLoginRevivingThem",
+          "shouldRecheckLeaseExpiryAfterFinalAuthorizationLockWait",
+          "shouldChangePasswordAndRevokeTokensAtomically",
+          "shouldServeAccountSpaDeepLinkButKeepApiProtected",
+          "shouldFenceFinalAuthorizationAgainstConcurrentRevocationCommit"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.security.AuthSessionMigrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPreserveV30AccountsAndOnlyInitializeRevocationVersion"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.security.JwtServiceIdentityTest",
+        "tests": 56,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPreserveExactIssuedSessionVersion(long)[1]",
+          "shouldPreserveExactIssuedSessionVersion(long)[2]",
+          "shouldPreserveExactIssuedSessionVersion(long)[3]",
+          "shouldPreserveExactIssuedSessionVersion(long)[4]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[1]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[2]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[3]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[4]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[5]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[6]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[7]",
+          "shouldRejectMissingBlankOrNonTextSubject(String)[8]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[1]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[2]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[3]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[4]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[5]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[6]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[7]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[8]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[9]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[10]",
+          "shouldRejectMissingOrNonPositiveIntegralUid(String)[11]",
+          "shouldRequireRealIntegralExpiry(String)[1]",
+          "shouldRequireRealIntegralExpiry(String)[2]",
+          "shouldRequireRealIntegralExpiry(String)[3]",
+          "shouldRequireRealIntegralExpiry(String)[4]",
+          "shouldRequireRealIntegralExpiry(String)[5]",
+          "shouldRequireRealIntegralExpiry(String)[6]",
+          "shouldRequireRealIntegralExpiry(String)[7]",
+          "shouldRequireRealIntegralExpiry(String)[8]",
+          "shouldRequireRealIntegralExpiry(String)[9]",
+          "shouldRequireRealIntegralExpiry(String)[10]",
+          "shouldPreserveExactIssuedLongIdentity(long)[1]",
+          "shouldPreserveExactIssuedLongIdentity(long)[2]",
+          "shouldPreserveExactIssuedLongIdentity(long)[3]",
+          "shouldPreserveExactIssuedLongIdentity(long)[4]",
+          "shouldUseUnicodeCharactersRatherThanUtf16UnitsForSubjectLimit",
+          "shouldIssueDistinctIdentifiersForIndependentLogins",
+          "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[1]",
+          "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[2]",
+          "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[3]",
+          "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[4]",
+          "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[5]",
+          "shouldRejectOutOfRangeNumericDateAsVerificationFailure(String, long)[6]",
+          "shouldRejectOversizedSubjectExpiredWrongIssuerAndWrongSignature",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[1]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[2]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[3]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[4]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[5]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[6]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[7]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[8]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[9]",
+          "shouldRequirePresentNonNegativeIntegralSessionVersion(String)[10]"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.security.ManagementPortIsolationIntegrationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldServeMetricsOnlyOnSeparateManagementListener"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.slo.PrometheusSloClientContractTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldQuerySingleScalarAtRequestedEvaluationTime",
+          "shouldRejectAmbiguousMultiSeriesVector"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.slo.ServiceSloIntegrationTest",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldRefuseToCalculateFromZeroDenominatorOrContradictoryCounts",
+          "shouldExportDeterministicVersionBoundRulesWithoutQueryingOrWriting",
+          "shouldRequireManagerAndOptimisticVersionWhenUpdatingObjective",
+          "shouldRequireCurrentActiveManagementRoleForExport",
+          "shouldPreservePositiveFractionalEventsUntilBurnRateDecision",
+          "shouldCalculateRealEventRatioAndErrorBudget",
+          "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[1]",
+          "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[2]",
+          "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[3]",
+          "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[4]",
+          "shouldDeriveBudgetThresholdsAndTicketWindowsFromConfiguredPeriod(int)[5]",
+          "shouldRejectStaleDisabledMissingOrInvalidRuleExport",
+          "shouldChangeAlertDecisionWithTheCapturedObjectivePeriod(int, String, String)[1]",
+          "shouldChangeAlertDecisionWithTheCapturedObjectivePeriod(int, String, String)[2]",
+          "shouldRejectQueryThatDoesNotUseConfiguredWindow"
+        ]
+      },
+      {
+        "name": "org.trigger.opspilot.slo.SloBurnRateCalculatorTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "cases": [
+          "shouldPrioritizeFastPageWhenBothWindowsBurnAboveFourteenPointFour",
+          "shouldExposeMissingOrContradictoryWindowInsteadOfCalculating",
+          "shouldRequireBothFastPageWindowsToExceedThreshold",
+          "shouldDistinguishSlowPageAndTicketPolicies"
+        ]
+      }
+    ]
+  },
+  "utcFullCompiledBeforeTwoLaterMemberAssertionStrengthenings": true,
+  "finalUtcMember": {
+    "name": "org.trigger.opspilot.oncall.OnCallPlanMembershipIntegrationTest",
+    "tests": 22,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "cases": [
+      "shouldRequireBothParticipantsInBothPlansForBilateralSwap",
+      "shouldBlockOriginalRotationSlotsWithoutReassigningHistoryAndResumeOnlyMissingSlots",
+      "shouldRejectNewDesignatedAcceptanceButAllowDepartedTargetRejection",
+      "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait",
+      "shouldRollbackRevocationAfterActualAuditInsertFails",
+      "shouldDenyAnotherValidPlanAndPermitItsExplicitMemberControl",
+      "shouldRollbackFirstGrantAfterActualAuditInsertFails",
+      "shouldRetainAssignedCoverageAndOriginalClaimReceiptAfterMembershipRevocation",
+      "shouldRejectCrossPlanOrChangedKeyAndStaleOrOverflowedVersions",
+      "shouldPermitOriginalManagerReceiptAfterOwnPlanManagementWasRevoked",
+      "shouldRequireResponseForManualOverridesAndManagementForCancellation",
+      "shouldCommitOneImmutableReceiptForConcurrentOriginalCommands",
+      "shouldNotWriteRotationWarningWhenManualScannerHasNoPlanManagement",
+      "shouldSeparateManagementFromResponseAndKeepAdminRecoveryWithoutSelfClaim",
+      "shouldFilterDepartedRequestersBeforeAvailableLimitAndAllowOwnWithdrawal",
+      "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait",
+      "shouldRetainBadRotationTargetErrorContractAndRejectInvalidManagementTargets",
+      "shouldRejectMissingExpectedVersionButAcceptExplicitNullAndSerializeEffectivePermissions",
+      "shouldRecheckCurrentRoleAndNotResurrectRevokedMembershipWhenAccountIsRestored",
+      "shouldRollbackUpdateAfterActualAuditInsertFails",
+      "shouldRecordActualActorIpAndOldAndNewPermissions",
+      "shouldBackfillOnlyPreexistingOperationalUsersAndNeverEnrolNewPlansOrAccounts"
+    ],
+    "lockOrders": [
+      {
+        "case": "shouldPreserveClaimBeforeRevocationWithObservedDatabaseLockWait",
+        "revocationFirst": false,
+        "databaseLockWaitObserved": true,
+        "responsibilityMatchesCommitOrder": true
+      },
+      {
+        "case": "shouldSerializeRevocationBeforeClaimWithObservedDatabaseLockWait",
+        "revocationFirst": true,
+        "databaseLockWaitObserved": true,
+        "responsibilityMatchesCommitOrder": true
+      }
+    ]
+  },
+  "node": {
+    "tests": 174,
+    "passed": 174,
+    "failed": 0,
+    "skipped": 0
+  },
+  "publishedMigrationsUnchanged": 38,
+  "originalWorkflowUnchanged": true,
+  "originalCases": [
+    {
+      "file": "src/test/java/org/trigger/opspilot/MySqlCompatibilityIntegrationTest.java",
+      "caseIds": [
+        "shouldAggregatePersistedRetrievalCohortsOnMySql",
+        "shouldApplyAllMigrationsAndRunIdempotentInvestigationOnMySql",
+        "shouldBindImportIdentityAndCurrentManagerRoleOnMySql",
+        "shouldChangePasswordAndRevokeTokensAtomically",
+        "shouldClaimOutboxOnceAcrossConcurrentRelays",
+        "shouldFenceAndReplayRunbookPublicationOnMySql",
+        "shouldFenceAssistantCompletionAfterCancellationCommit",
+        "shouldFenceAssistantFinalCommitAgainstConcurrentRevocation",
+        "shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt",
+        "shouldFenceConcurrentLogoutRequests",
+        "shouldFenceFinalAuthorizationAgainstConcurrentRevocationCommit",
+        "shouldKeepDraftFollowUpsOutOfMySqlEscalationAndNotification",
+        "shouldKeepUnapprovedRunbooksOutOfRetrievalOnMySql",
+        "shouldOnlyRevokeAuthenticatedActorsOwnSessions",
+        "shouldPreserveAssistantCompletionWhenCancellationWaitsForCommit",
+        "shouldPreserveAutomaticReplayBudgetAndPurgePayloadOnMySql",
+        "shouldPromoteOneProblemAcrossTwoRepeatableReadTransactions",
+        "shouldReadBoundedEvaluationHistoryOnMySql",
+        "shouldRecheckAssistantLeaseExpiryAfterFinalLockWait",
+        "shouldRecheckLeaseExpiryAfterFinalAuthorizationLockWait",
+        "shouldRejectBcryptByteTruncationAliasesAtLogin",
+        "shouldRejectDisabledReadsAndLogin",
+        "shouldRejectDisabledWriteWithoutAuditOrTimeline",
+        "shouldRejectInvalidPasswordChangesWithoutWrites",
+        "shouldRejectLegacyAndMalformedSessionVersions",
+        "shouldRejectMalformedSignedIdentityWithoutBusinessWrites",
+        "shouldRejectOldJwtAfterAccountRemoval",
+        "shouldRejectOldJwtWhenUsernameIsRecreated",
+        "shouldRejectOutOfRangeJwtDatesWithoutServerErrors",
+        "shouldRejectSessionVersionExhaustionWithoutWrapping",
+        "shouldReloadCurrentRoleButKeepActiveAuthentication",
+        "shouldReplayCompletedAssistantKeyWithCaseSensitiveSessionScope",
+        "shouldRevokeAllIssuedTokensWithoutFreshLoginRevivingThem",
+        "shouldRollbackAssistantAnswerWhenCompletionAuditInsertFails",
+        "shouldRollbackAssistantCancellationWhenAuditInsertFails",
+        "shouldRollbackAssistantCompletionWhenFinalStopCheckFails",
+        "shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence",
+        "shouldRollbackKeyedAssistantCompletionStateWithAnswerAndAudit",
+        "shouldRollbackPasswordAndVersionWhenAuditFails",
+        "shouldRollbackRunbookPublicationAndAuditOnMySql",
+        "shouldRouteOneUnacknowledgedIncidentStepAcrossConcurrentMySqlScans",
+        "shouldSerializeIndependentPublicationTransactionsOnMySql",
+        "shouldSerializeRosterWritesAndKeepCancelledHistoryOnMySql",
+        "shouldSettleExpiredRunOnceAcrossConcurrentMySqlReconcilers",
+        "shouldSupportUnicodeWithoutAllowingUnchangedPassword",
+        "shouldUseRealServletRequestForAuthenticatedHttpWrite"
+      ]
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/CoverageScenarios.java",
+      "caseIds": [
+        "shouldAllowAuthenticatedReadOnlyApiAndValidateWindowsWithoutWrites",
+        "shouldFallbackFromIneligibleOverrideAndReportUnavailableGapsAndInactivePlans",
+        "shouldMatchCurrentSelectionAndExcludeCancelledCoverage",
+        "shouldNotForecastUnmaterializedOrPausedRotations",
+        "shouldPartitionGapsOverridesAndHalfOpenHandoffsWithoutDoubleCounting",
+        "shouldRecomputeCoverageFromCurrentAccountStatusAndRole",
+        "shouldRejectDenseInputRatherThanReturnTruncatedHealthyCoverage",
+        "shouldRevealLegacySameLayerOverlapAndUseExactRoutingTieBreaks"
+      ]
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/HandoffScenarios.java",
+      "caseIds": [
+        "shouldAcceptExactlyOnceAndPreserveSourceAndCoverageHistory",
+        "shouldAllowOnlyOneWinnerBetweenAcceptAndWithdraw",
+        "shouldClampOngoingCoverageAfterActualLockWaitAndRouteOnlyNewIncidents",
+        "shouldEnforceHttpRolesAndParticipantIdentity",
+        "shouldEnforceParticipantIdentityEvenForAdminsAndFreshRoles",
+        "shouldExposeExternalCancellationWithoutInventingARevocationRecord",
+        "shouldExposeListTruncationInsteadOfSilentlyDroppingRequests",
+        "shouldFilterParticipantsAndStatusBeforeTheListLimit",
+        "shouldNotAcceptTwoDifferentRequestsForTheSameSourceWindow",
+        "shouldNotPromiseOriginalCoverageWhenOriginalShiftWasAlsoCancelled",
+        "shouldObserveSourceCancellationCommittedBeforeScheduleLock",
+        "shouldRefuseNewRevocationAfterEndButAcknowledgePreviouslyCommittedCommand",
+        "shouldRejectChangedPayloadForSameKeyAndInvalidWindows",
+        "shouldRejectExpiredRequestsWithoutMutatingTheirHistory",
+        "shouldRejectInactivePlanOrRequesterAndAllowTargetRejection",
+        "shouldRejectInvalidListFiltersInsteadOfSilentlyBroadeningTheQuery",
+        "shouldRejectInvalidRevocationAndStaleVersionsBeforeMutation",
+        "shouldRejectNewOverrideAndLegacyOrdinaryOverlapWithoutPartialWrites",
+        "shouldRejectReusedRevocationKeyAndDifferentIntentAfterCancellation",
+        "shouldRejectSourceCancellationAndStillAllowWithdrawal",
+        "shouldRestrictRevocationToCurrentActiveManagersIncludingOldJwt",
+        "shouldRevokeCoverageOnceWithoutRewritingAcceptedConsentOrSource",
+        "shouldRollBackOverrideDecisionAndAuditsTogether",
+        "shouldRollbackCancellationLedgerAndBothAuditsTogether",
+        "shouldSerializeConcurrentRequestRetriesAndAcceptRetries",
+        "shouldSerializeConcurrentSameKeyRevocationWithOnlyOneChange",
+        "shouldSerializeDifferentManagerRevocationsWithoutDoubleAudits"
+      ]
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OpenHandoffScenarios.java",
+      "caseIds": [
+        "shouldAcknowledgeOriginalClaimAfterCancellationAndEndWithoutRevival",
+        "shouldAllowExactlyOneWinnerBetweenDifferentClaimants",
+        "shouldClaimOnlyRemainingSubwindowAndKeepOriginalTimes",
+        "shouldEnforceHttpAuthenticationAndExplicitVersions",
+        "shouldEnforcePersonalConsentAndOriginalOperationPayload",
+        "shouldFilterAvailableAndMineInSqlBeforeBoundedInbox",
+        "shouldPublishAndClaimThroughHttpWithActualIndependentCoverage",
+        "shouldReadLatestQualificationAfterScheduleLockWait",
+        "shouldRecheckActualPersistedDeadlineAfterScheduleLockWait",
+        "shouldRecheckCurrentClaimantQualificationEvenForOriginalReceipt",
+        "shouldRejectCancelledSourceButPermitExplicitOwnerWithdrawal",
+        "shouldRejectChangedPublicationKeyContentAndMalformedWindows",
+        "shouldRejectEndedClaimWithoutInventingAutomaticExpiryStatus",
+        "shouldRejectInactivePlanAndPublisherWithoutChangingResponsibility",
+        "shouldRejectNewOverrideAndLegacyOrdinaryOverlap",
+        "shouldRollbackCoverageCreationAuditFailure",
+        "shouldRollbackCoverageOperationAndFinalClaimAuditTogether",
+        "shouldRollbackPublicationWhenItsAuditFails",
+        "shouldRollbackWhenFinalClaimAuditCrossesPersistedDeadline",
+        "shouldRollbackWithdrawalReceiptAndAuditTogether",
+        "shouldSerializeClaimVersusOwnerWithdrawalWithoutHalfCoverage",
+        "shouldSerializeConcurrentOriginalClaimKeyAcknowledgements",
+        "shouldSerializeConcurrentPublicationOriginalKeys",
+        "shouldSerializeSameActorOperationKeyAcrossDifferentPlans"
+      ]
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/RotationScenarios.java",
+      "caseIds": [
+        "shouldExposeBoundedSlotWindowAndStopWhenScheduleIsDisabled",
+        "shouldGenerateStableRoundRobinAndRouteTheActualFirstOwner",
+        "shouldKeepOverridePriorityAndPauseOnlyFutureGeneration",
+        "shouldRecordUnavailableMemberWithoutSilentlyChangingTheMemberOrder",
+        "shouldRejectInvalidRulesAndKeepHistoricalDemoUntouched",
+        "shouldReportMemberRevocationAfterGenerationWithoutReassigningHistoricalFacts",
+        "shouldRequireManagementRolesForWritesAndAuditTheHttpActor",
+        "shouldRespectManualConflictAndRetryWithoutRevivingCancelledGeneratedShift",
+        "shouldRollBackOneFailedRotationAndContinueOtherRotations",
+        "shouldSerializeConcurrentScansAndConcurrentRotationCreation"
+      ]
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/RoutingSnapshotScenarios.java",
+      "caseIds": [
+        "shouldObserveChangedRoleDuringScan",
+        "shouldObserveCommittedCancellationDuringAlertIntake",
+        "shouldObserveCommittedCancellationDuringScan",
+        "shouldObserveDisabledPolicyDuringScan",
+        "shouldObserveDisabledScheduleDuringScan",
+        "shouldObserveDisabledUserDuringScan",
+        "shouldObserveNewOverrideDuringScan",
+        "shouldRollBackIntakeAndItsRoutedFactsTogether"
+      ]
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/SwapScenarios.java",
+      "caseIds": [
+        "shouldAcknowledgeAcceptedHistoryWithoutRevivingCancelledCoverage",
+        "shouldEnforceHttpRolesParticipantAndExplicitVersions",
+        "shouldExchangeAcrossSchedulesWithoutChangingEitherRotation",
+        "shouldExchangeBothFutureShiftsAtomicallyAndPreserveOrdinaryHistory",
+        "shouldFilterParticipantAndEitherScheduleBeforeLimitAndExposeTruncation",
+        "shouldHaveOneWinnerBetweenAcceptanceAndWithdrawal",
+        "shouldRecheckBothParticipantsAndPermitRejectionWhenRequesterIsDisabled",
+        "shouldRejectEitherInactiveScheduleAndStillAllowTargetRejection",
+        "shouldRejectEitherStaleSourceAndStillAllowWithdrawal",
+        "shouldRejectExistingOverridesAndLegacyOrdinaryOverlapWithoutHalfSwap",
+        "shouldRejectSelfExchangeInvalidKeysAndChangedIdempotentPayload",
+        "shouldRejectStartedShiftsAndOverrideSources",
+        "shouldRequireActualParticipantsEvenForAdministrators",
+        "shouldRollbackBothOverridesDecisionAndAuditsWhenFinalAuditFails",
+        "shouldRollbackBothOverridesWhenSecondCreationAuditFails",
+        "shouldSerializeConcurrentSameKeyRequestsAndAcceptRetries",
+        "shouldSerializeReverseCrossScheduleRequestsWithoutDeadlockOrDoubleExchange"
+      ]
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/SwapNotificationScenarios.java",
+      "caseIds": [
+        "shouldAllowOptOutButNeverReviveErasedPayloadAfterDisablingRetention",
+        "shouldBlockExpiredClaimsBeforeBoundedCleanupAndKeepNotificationHistory",
+        "shouldBoundAttemptsAndNotPersistSensitiveReceiverBody",
+        "shouldCleanWithSendingDisabledWithoutOccupyingSharedScheduler",
+        "shouldDeferErasureWhileValidLeaseIsInFlightThenPreserveItsReceipt",
+        "shouldEnforceAuthenticatedHttpRolesAndExplicitRetryVersion",
+        "shouldEnqueueRequestAndBothDecisionRecipientsOnceWithoutDecidingFromReceipt",
+        "shouldEraseDeliveredPayloadButPreserveTechnicalReceiptAndOriginalRetryAcknowledgement",
+        "shouldEraseExpiredLeaseWithoutHttpAndFenceItsLateReceipt",
+        "shouldFenceExpiredOldReceiptAndReuseSameFrozenKey",
+        "shouldFreezeDatabaseDeadlineAcrossRetryAndRejectUnsafeRetentionConfiguration",
+        "shouldKeepFrozenPayloadAndStableKeyAcrossRealTransientRetry",
+        "shouldManuallyRetryOriginalVersionAndAcknowledgeLostReceiptWithoutNewAudit",
+        "shouldPreventExternalDeliveryFromInsideBusinessTransactionAndPreserveDisabledHistory",
+        "shouldRejectNewManualRetryAfterPayloadRetentionWithoutChangingHistory",
+        "shouldRejectRedirectAndPermanentFailureWithoutForwardingCredential",
+        "shouldRejectRetryForForeignSwapIneligibleActorOrSupersededEvent",
+        "shouldRollbackBothOverridesAndNotificationRowsWhenEnqueueFails",
+        "shouldRollbackManualRetryWhenAuditFails",
+        "shouldRollbackRequestAuditAndNotificationTogether",
+        "shouldRunOneUnqueuedWorkerWithoutBlockingSharedSchedulerTicks",
+        "shouldSerializeConcurrentCleanupWithoutDoubleErasureOrAuditChanges",
+        "shouldSerializeConcurrentDispatchersWithoutDuplicateLiveClaim",
+        "shouldSkipIneligibleRecipientWithoutExposingPayload",
+        "shouldSkipStartedCancelledOrCoveredRequestSourcesBeforeSending",
+        "shouldSkipSupersededRequestButNotifyBothParticipantsOfRejection",
+        "shouldStopReclaimingExhaustedExpiredLeaseWithoutAnotherHttp"
+      ]
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/SwapRevocationScenarios.java",
+      "caseIds": [
+        "shouldAcknowledgeOriginalKeyAfterEndWithoutNewAuditOrCancellation",
+        "shouldAllowCleanupOfInactiveSchedulesWithoutPromisingRestoredCoverage",
+        "shouldEnforceHttpAuthenticationRolesAndAllThreeExplicitVersions",
+        "shouldRecheckActualDatabaseEndAfterWaitingForScheduleLock",
+        "shouldRecheckCurrentManagerQualificationBeforeOriginalAcknowledgement",
+        "shouldRejectChangedOriginalKeyPayloadAndCrossSwapReuseWithoutWrites",
+        "shouldRejectChangedReplacementSnapshotOrOrdinaryFlagWithoutHalfCancellation",
+        "shouldRejectEachStaleCapturedVersionAndOverflowWithoutWrites",
+        "shouldRejectEitherEndedCoverageButAllowAlreadyStartedRemainingPair",
+        "shouldRejectEitherIndependentCancellationWithoutCancellingCounterpart",
+        "shouldRejectNewKeyOrOtherManagerAfterRevocation",
+        "shouldRejectNonAcceptedStatusesMissingRequestAndMalformedCommand",
+        "shouldRevokeBothCoveragesInOneHttpCommandAndKeepAcceptedHistory",
+        "shouldRevokeSameSchedulePairAndAcknowledgeOriginalCommandsWithoutReviving",
+        "shouldRollbackAfterFinalAuditCrossesActualDatabaseEnd",
+        "shouldRollbackBothCancellationsRevocationAndAuditsWhenFinalAuditFails",
+        "shouldRollbackBothCancellationsWhenSecondCancellationAuditFails",
+        "shouldSerializeConcurrentOriginalKeyAcknowledgementsAndDifferentKeyRace",
+        "shouldSerializeLegacySingleCancellationAgainstAtomicPairWithoutHalfCommit"
+      ]
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OnCallRosterIntegrationTest.java",
+      "caseIds": [
+        "shouldEnforceRolesAndKeepAnAuditedCancellationHistory",
+        "shouldRejectInvalidWindowsUsersAndStaleCancellationWithoutExtraAudit",
+        "shouldRejectSameLayerOverlapButAllowAdjacentHandoffsAndReplacement",
+        "shouldResumeBaseRoutingAfterAnOverrideIsCancelled",
+        "shouldSerializeConcurrentOverlappingCreates",
+        "shouldUseHalfOpenQueryWindowsAndMakeTruncationExplicit"
+      ]
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OnCallRotationJobIntegrationTest.java",
+      "caseIds": [
+        "shouldGenerateTheBlockedSlotThroughTheRealSchedulerAfterConflictIsRemoved"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "file": "README.md",
+      "bytes": 79852,
+      "sha256": "cf47ef703760783e3e54f2babf6ef8c49569ed317a78f22eebbf18161d3e592e"
+    },
+    {
+      "file": "docs/ONCALL_PLAN_MEMBERSHIP_DESIGN.md",
+      "bytes": 10668,
+      "sha256": "58f2ea87a1271d0cf0a9a1f0e4b5785628329c020f3092dc57845a47068a45aa"
+    },
+    {
+      "file": "docs/ROADMAP.md",
+      "bytes": 62200,
+      "sha256": "fde70a23af62812e48a91b1e643488af4a44d77d932df013135d7d72aea9ea6d"
+    },
+    {
+      "file": "docs/acceptance/README.md",
+      "bytes": 57452,
+      "sha256": "d92975c34371cc546e23b1b86ed567a6f2be09210bbd2218bcec4adf431dc703"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallController.java",
+      "bytes": 4950,
+      "sha256": "2b18602337a516e51e9c8f025e76ee30fca63ed368bfa1fb78cde10149e0a3bb"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallHandoffService.java",
+      "bytes": 21658,
+      "sha256": "125157b58fe2f14d8f6750732c9dff477ffd0130e32f4ae89396d6f79275bc42"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallOpenHandoffService.java",
+      "bytes": 19884,
+      "sha256": "97a796d701aea11b14f928f24bd3f350ea39ad274fe161c69be49991a371f6d9"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallRosterService.java",
+      "bytes": 11539,
+      "sha256": "5d74379d487555c7a8aa0b7274deedb499a81c803d2b725ca210bd617be9e94d"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallRotationService.java",
+      "bytes": 19882,
+      "sha256": "3c72fe3749b2133789d679f1d7ddad1c4db704c15329d882f7ad2765f22ff363"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallSwapService.java",
+      "bytes": 23769,
+      "sha256": "ec3f62982790a646e036af2bacb73b7098e05003d973264ee74da652b0450ca9"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/MySqlCompatibilityIntegrationTest.java",
+      "bytes": 61257,
+      "sha256": "a384fec59a7a4a7daeb4245ba7ff447f299db4009376a044b0060c56f91582d9"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/CoverageScenarios.java",
+      "bytes": 12019,
+      "sha256": "684a1113b787568ed9c2d99f8175b059fd97439169f0579b396750fedfbd9fb2"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/HandoffScenarios.java",
+      "bytes": 40094,
+      "sha256": "9ccb324c89c02de4be469f6a1bd97a03cb63ef910097296eabf15b128d27a207"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OnCallRosterIntegrationTest.java",
+      "bytes": 13729,
+      "sha256": "218d7d98902f82c84035169d6b886fb0379acfdc6b6f6432c2e574f99d9d3083"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OnCallRotationJobIntegrationTest.java",
+      "bytes": 3521,
+      "sha256": "e1c9e7532d38f8a27e225fca08cc7f8dc40f8a17e58f16d51f3ba6701c3d2bef"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OpenHandoffScenarios.java",
+      "bytes": 28112,
+      "sha256": "4402d99437676c41f98f344591ad7c115c7e34cf6b21c146e4bcbbcc38562c2f"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/RotationScenarios.java",
+      "bytes": 19291,
+      "sha256": "c0ece8a2b8bf1d4f5bb8cce0669aeb3a57c550c3932082f8631eeb5ef0e7709f"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/RoutingSnapshotScenarios.java",
+      "bytes": 13448,
+      "sha256": "14e4b265c95bb4fe3fd6d11a0076a173fd8c624fb633b0003b7ae4a44a9f6063"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/SwapNotificationScenarios.java",
+      "bytes": 34672,
+      "sha256": "6791586393771ff53a89152b598795b058ec66baa925b3a3b3a74451f5921422"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/SwapRevocationScenarios.java",
+      "bytes": 27670,
+      "sha256": "2d59bd87cba1a22785de39d675a80ee1f35ce4cac5adae81f408b66f82c44e06"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/SwapScenarios.java",
+      "bytes": 21246,
+      "sha256": "fd56ab04dd7604be0ae00d9d6623b446fc1ff680c352d45ce608055f4ec6de25"
+    },
+    {
+      "file": ".github/workflows/plan-membership-wip.yml",
+      "bytes": 1661,
+      "sha256": "3fbb1a542c63acdf2d081727b371f80f98b8543404b729dec7f629ac6eb9c7ca"
+    },
+    {
+      "file": "docs/acceptance/V1.7-checkpoint-108-wip-upload.md",
+      "bytes": 3522,
+      "sha256": "d55c6cd5c9761c2ea1f1aeb251a3ea134fb261a982e028c512c66d50fbaa0730"
+    },
+    {
+      "file": "docs/acceptance/V1.7-checkpoint-109.md",
+      "bytes": 6278,
+      "sha256": "92a96c0b36d430e393c175c42ee3698b2e79d445c3266552c92ff464cb522a53"
+    },
+    {
+      "file": "docs/assets/v1.7-cp108-wip/upload-observations.json",
+      "bytes": 1958,
+      "sha256": "ce215db82fcb25edf521ebb8bb824e30a442d87313216e82dde77b3ba1553bdc"
+    },
+    {
+      "file": "scripts/tests/oncall-plan-membership-mysql.test.cjs",
+      "bytes": 4989,
+      "sha256": "f222c566f4a3623e757edd3870802945960714f282e040a6f4c831b013f6d7bd"
+    },
+    {
+      "file": "scripts/verify-oncall-plan-membership-mysql.cjs",
+      "bytes": 5191,
+      "sha256": "3167a911d46d33eef397170e7c43a1b6c42ac505a2f5c8bc31535f39d3f7ed2a"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallPlanMembershipController.java",
+      "bytes": 2053,
+      "sha256": "17d64146d078cdee2f670d63f3ed4af9c2f648e90a50e58185cf79e10381ff96"
+    },
+    {
+      "file": "src/main/java/org/trigger/opspilot/oncall/OnCallPlanMembershipService.java",
+      "bytes": 12561,
+      "sha256": "9906b07c35bddc72b36b84d383de4b60d52662d7da4c291f8755e02a9c2933a8"
+    },
+    {
+      "file": "src/main/resources/db/migration/V39__oncall_plan_memberships.sql",
+      "bytes": 2272,
+      "sha256": "87b7f21eb16e07ac9ba148178c229faf2f355037cac6d898092e320a5973979b"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/MySqlOnCallPlanMembershipIntegrationTest.java",
+      "bytes": 2246,
+      "sha256": "9ad9f41ac4c4f88ee74e1fb63883e10f44015f31dc29f1a885807d9c316835e2"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/OnCallPlanMembershipIntegrationTest.java",
+      "bytes": 836,
+      "sha256": "cd540c2997f846e00135c35c3256393f00ed0a83eefce0f9a65750f77c2671be"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/PlanMembershipFixtures.java",
+      "bytes": 865,
+      "sha256": "b5a098136bd4ce662ed22146d8cf76eaae83623c72448f7f7e8fa9acdab683b3"
+    },
+    {
+      "file": "src/test/java/org/trigger/opspilot/oncall/PlanMembershipScenarios.java",
+      "bytes": 29427,
+      "sha256": "668428b65b268e6d9645dc33dfad7602df0cb81e3f7c5388f94b13742ce9fa87"
+    }
+  ],
+  "firstFailures": {
+    "compileFixturePrivateGet": true,
+    "incorrectTokenFixtureTwo401": true,
+    "authCorrectedProductFailures": 4,
+    "first20PlusOriginal147Pass": 167
+  },
+  "yaml": {
+    "originalJobs": 21,
+    "wipJobs": 1,
+    "actualDuplicateNegativeFixtureRejected": true
+  },
+  "pending": {
+    "actualMysqlThisSource": true,
+    "fullOriginalCiMatrix": true,
+    "populatedV38ToV39": true,
+    "originalHttp8AndUpgrade10AtV39": true,
+    "twoJvmNetwork": true,
+    "membershipPageAndNewOldDemos": true
+  },
+  "historicalDemosDeleted": false,
+  "newVisualDemoCreated": false,
+  "rawAuthBearingLogsNotPublished": true
+}

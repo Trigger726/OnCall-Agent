@@ -1,5 +1,6 @@
 package org.trigger.opspilot.oncall;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -55,12 +56,13 @@ public class OnCallPlanMembershipService {
             if (!List.of("ADMIN", "OPS_MANAGER", "ON_CALL").contains(role)
                     || command.canManage() && !List.of("ADMIN", "OPS_MANAGER").contains(role)) throw invalid("响应目标须有运维职责，管理目标须为管理员或运维经理");
         }
-        var old = jdbc.sql("SELECT version FROM oncall_schedule_member WHERE schedule_id=:schedule AND user_id=:user FOR UPDATE")
-                .param("schedule", schedule).param("user", command.userId()).query(Integer.class).optional();
-        if (!Objects.equals(old.orElse(null), command.expectedVersion()) || old.orElse(-1) == Integer.MAX_VALUE)
+        var old = jdbc.sql("SELECT m.*,u.display_name,u.status,u.role_code FROM oncall_schedule_member m JOIN sys_user u ON u.id=m.user_id WHERE m.schedule_id=:schedule AND m.user_id=:user FOR UPDATE")
+                .param("schedule", schedule).param("user", command.userId()).query(memberMapper).optional();
+        Integer oldVersion = old.map(MemberView::version).orElse(null);
+        if (!Objects.equals(oldVersion, command.expectedVersion()) || Objects.equals(oldVersion, Integer.MAX_VALUE))
             throw conflict("ONCALL_MEMBER_VERSION_CONFLICT", "成员关系已变化，不自动更新捕获版本");
         var committed = now();
-        int version = old.isEmpty() ? 0 : old.get() + 1;
+        int version = old.isEmpty() ? 0 : old.get().version() + 1;
         if (old.isEmpty()) {
             jdbc.sql("""
                     INSERT INTO oncall_schedule_member(schedule_id,user_id,active,can_respond,can_manage,version,origin,created_at,updated_at)
@@ -82,8 +84,9 @@ public class OnCallPlanMembershipService {
                 .param("expected", command.expectedVersion()).param("version", version).param("active", command.active())
                 .param("respond", command.canRespond()).param("manage", command.canManage()).param("reason", reason).param("at", committed).update();
         audit.recordAs(actor, ip, "ONCALL_MEMBER_CHANGED", "ONCALL_SCHEDULE", schedule,
-                "成员 " + command.userId() + "，版本 " + old.orElse(null) + " -> " + version + "，active=" + command.active()
-                        + "，respond=" + command.canRespond() + "，manage=" + command.canManage() + "；" + reason);
+                "成员 " + command.userId() + "，版本 " + oldVersion + " -> " + version
+                        + "，old" + old.map(m -> permissions(m.active(), m.canRespond(), m.canManage())).orElse("[absent]")
+                        + "，new" + permissions(command.active(), command.canRespond(), command.canManage()) + "；" + reason);
         var receipt = jdbc.sql("SELECT * FROM oncall_schedule_member_operation WHERE actor_id=:actor AND operation_key=:key")
                 .param("actor", actor).param("key", key).query(operationMapper).single();
         return new ChangeResult(member(schedule, command.userId()), receipt);
@@ -132,6 +135,7 @@ public class OnCallPlanMembershipService {
         catch (NullPointerException | IllegalArgumentException error) { throw invalid("操作键须为规范UUID"); }
     }
     private static String text(String value) { if (value == null || value.isBlank() || value.length() > 500) throw invalid("说明须为1–500字"); return value.strip(); }
+    private static String permissions(boolean active, boolean respond, boolean manage) { return "[active=" + active + ",respond=" + respond + ",manage=" + manage + "]"; }
     private static ApiException invalid(String message) { return new ApiException(HttpStatus.BAD_REQUEST, "ONCALL_MEMBER_INVALID", message); }
     private static ApiException conflict(String code, String message) { return new ApiException(HttpStatus.CONFLICT, code, message); }
     private static final RowMapper<MemberView> memberMapper = (rs,n) -> new MemberView(rs.getLong("schedule_id"), rs.getLong("user_id"), rs.getString("display_name"),
@@ -142,8 +146,8 @@ public class OnCallPlanMembershipService {
     public record Command(long userId, Integer expectedVersion, boolean active, boolean canRespond, boolean canManage, String operationKey, String reason) {}
     public record MemberView(long scheduleId,long userId,String userName,boolean active,boolean canRespond,boolean canManage,int version,String origin,
                              String accountStatus,String roleCode,LocalDateTime createdAt,LocalDateTime updatedAt) {
-        public boolean effectiveResponse() { return active && canRespond && accountStatus.equals("ACTIVE") && List.of("ADMIN","OPS_MANAGER","ON_CALL").contains(roleCode); }
-        public boolean effectiveManagement() { return active && canManage && accountStatus.equals("ACTIVE") && List.of("ADMIN","OPS_MANAGER").contains(roleCode); }
+        @JsonProperty public boolean effectiveResponse() { return active && canRespond && accountStatus.equals("ACTIVE") && List.of("ADMIN","OPS_MANAGER","ON_CALL").contains(roleCode); }
+        @JsonProperty public boolean effectiveManagement() { return active && canManage && accountStatus.equals("ACTIVE") && List.of("ADMIN","OPS_MANAGER").contains(roleCode); }
     }
     public record Operation(long scheduleId,long userId,long actorId,String operationKey,Integer expectedVersion,int resultVersion,boolean active,boolean canRespond,boolean canManage,String reason,LocalDateTime committedAt) {}
     public record ChangeResult(MemberView current,Operation receipt) {}
