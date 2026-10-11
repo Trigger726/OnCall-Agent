@@ -1,0 +1,6024 @@
+{
+  "status": "PASS",
+  "oldSource": "2730e307c542f3c71f0adea2c354dd9a6118ba4e",
+  "oldJarSha256": "51f999d0a6f681c85df7ac3cf829ad36e7443174d738f34d3d4c2d1e186aa67e",
+  "jarSha256": "714295510a343f5a8369cb252c0f79049859d1566369d6b979f94524cc875353",
+  "databaseMode": "H2_OWNED_FILE",
+  "cases": [
+    {
+      "name": "old-v41-failed-event-and-missing-manual-api",
+      "request": {
+        "id": 1,
+        "scheduleId": 1,
+        "sourceShiftId": 3,
+        "sourceVersion": 0,
+        "requesterId": 2,
+        "requestKey": "b6934166-a671-49c5-bb80-fcebd9e62cb0",
+        "startsAt": "2026-10-13T08:54:19",
+        "endsAt": "2026-10-13T12:54:19",
+        "reason": "explicit original event",
+        "status": "OPEN",
+        "version": 0,
+        "createdAt": "2026-10-11T08:54:19.491676",
+        "closedAt": null,
+        "claimedBy": null,
+        "replacementShiftId": null
+      },
+      "failed": {
+        "id": 1,
+        "handoffId": 1,
+        "eventVersion": 0,
+        "recipientId": 1,
+        "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+        "status": "FAILED",
+        "version": 2,
+        "attempts": 1,
+        "nextAttemptAt": "2026-10-11T08:54:38.835034",
+        "leaseUntil": null,
+        "lastHttpStatus": 400,
+        "lastErrorCode": "HTTP_400",
+        "deliveredAt": null
+      },
+      "frozen": {
+        "databaseNow": "2026-10-11T08:54:19.527071",
+        "currentRequestVersion": 0,
+        "currentRequestStatus": "OPEN",
+        "publicationSnapshotAvailable": true,
+        "publication": {
+          "handoffId": 1,
+          "scheduleId": 1,
+          "sourceShiftId": 3,
+          "sourceVersion": 0,
+          "requesterId": 2,
+          "startsAt": "2026-10-13T08:54:19",
+          "endsAt": "2026-10-13T12:54:19",
+          "eventVersion": 0,
+          "capturedAt": "2026-10-11T08:54:19.495083",
+          "timeBasis": "DATABASE_SESSION_LOCAL",
+          "recipients": [
+            {
+              "userId": 1,
+              "memberVersion": 0,
+              "displayName": "系统管理员",
+              "roleCode": "ADMIN"
+            }
+          ]
+        },
+        "eligibleOriginalRecipientIds": [
+          1
+        ],
+        "deliveryImplemented": true
+      },
+      "manualApiStatus": 404,
+      "before": {
+        "actualProduct": "H2",
+        "actualVersion": "2.2.220 (2023-07-04)",
+        "migrationCount": 41,
+        "successfulHistoryRows": 42,
+        "history": [
+          {
+            "version": null,
+            "type": "TABLE",
+            "success": true
+          },
+          {
+            "version": "1",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "2",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "3",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "4",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "5",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "6",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "7",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "8",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "9",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "10",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "11",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "12",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "13",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "14",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "15",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "16",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "17",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "18",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "19",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "20",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "21",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "22",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "23",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "24",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "25",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "26",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "27",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "28",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "29",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "30",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "31",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "32",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "33",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "34",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "35",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "36",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "37",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "38",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "39",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "40",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "41",
+            "type": "SQL",
+            "success": true
+          }
+        ],
+        "migration38": true,
+        "migration39": true,
+        "migration40": true,
+        "migration41": true,
+        "migration42": false,
+        "redriveReceipts": [],
+        "notificationCycleStarts": [],
+        "redriveAudits": 0,
+        "notificationRows": 1,
+        "notificationHash": "505ccf4a55a4a9b72746168a0b5f882b4429ef8d403b9d88f045d338649a75fc",
+        "notifications": [
+          {
+            "id": 1,
+            "handoffId": 1,
+            "eventVersion": 0,
+            "recipientId": 1,
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+            "status": "FAILED",
+            "version": 2,
+            "attempts": 1,
+            "lastHttpStatus": 400,
+            "lastErrorCode": "HTTP_400",
+            "leaseOwnerPresent": false,
+            "leaseUntil": null,
+            "deliveredAt": null
+          }
+        ],
+        "publicationRows": 1,
+        "publicationHash": "59e2813b8760e91ef5fb014275d302efa6e185f6c27fa86a68b58fce5ab4d2c9",
+        "shifts": 3,
+        "publications": [
+          {
+            "handoffId": 1,
+            "eventVersion": 0,
+            "snapshotJson": "{\"handoffId\":1,\"scheduleId\":1,\"sourceShiftId\":3,\"sourceVersion\":0,\"requesterId\":2,\"startsAt\":\"2026-10-13T08:54:19\",\"endsAt\":\"2026-10-13T12:54:19\",\"eventVersion\":0,\"capturedAt\":\"2026-10-11T08:54:19.495083\",\"timeBasis\":\"DATABASE_SESSION_LOCAL\",\"recipients\":[{\"userId\":1,\"memberVersion\":0,\"displayName\":\"系统管理员\",\"roleCode\":\"ADMIN\"}]}"
+          }
+        ],
+        "shiftHash": "72fc4d7ad2f1a1cd2323afcc4006b86477b4d0e10d52595391cbde32141a1576",
+        "designatedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "designatedRows": 0,
+        "swapRows": 0,
+        "swapRevocationRows": 0,
+        "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+        "onCallAuditHash": "f25b499c22facb76598ea6626f6aa9077e3e955a06b8c19c38531447da279247",
+        "v38MigrationHash": "8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820",
+        "v39MigrationHash": "7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a",
+        "v40MigrationHash": "c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702",
+        "v41MigrationHash": "b4dc17170eee1809a7689e62ee8de4be7ea8a15850a326e75060ea4e9673663e",
+        "memberHash": "b63740a7529b17c492fde6b2b08c3d95a92e9cadd971eb08942b5b29e6744e1d",
+        "memberOperationHash": "b6ae11cd78fe6057540f54b918ea04f8baaaf603ab20b5e9f3f1d724d8005232",
+        "members": [
+          {
+            "scheduleId": 1,
+            "userId": 1,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 1,
+            "userId": 2,
+            "active": true,
+            "canRespond": true,
+            "canManage": false,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 1,
+            "userId": 3,
+            "active": false,
+            "canRespond": false,
+            "canManage": false,
+            "version": 1,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 1,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 2,
+            "active": true,
+            "canRespond": true,
+            "canManage": false,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 3,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          }
+        ],
+        "openRequestHash": "4795309b32d0d770377c6a235e7d196dc25ecdfe2e78d1f1d7c45d7fd422cf3a",
+        "openOperationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "requests": [
+          {
+            "id": 1,
+            "sourceShiftId": 3,
+            "status": "OPEN",
+            "version": 0,
+            "claimedBy": null,
+            "replacementShiftId": null,
+            "operations": 0,
+            "audits": 1,
+            "overrides": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "actual-redrive-response-loss-and-original-receipt",
+      "loss": {
+        "httpStatus": 200,
+        "bodyRead": false,
+        "actualSocketDestroyed": true
+      },
+      "original": {
+        "receipt": {
+          "id": 1,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 3,
+          "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+          "capturedVersion": 2,
+          "queuedVersion": 3,
+          "priorAttempts": 1,
+          "priorHttpStatus": 400,
+          "priorErrorCode": "HTTP_400",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned lost-response manual authorization",
+          "acceptedAt": "2026-10-11T08:54:54.258888"
+        },
+        "currentDelivery": {
+          "id": 1,
+          "handoffId": 1,
+          "eventVersion": 0,
+          "recipientId": 1,
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "status": "PENDING",
+          "version": 3,
+          "attempts": 1,
+          "nextAttemptAt": "2026-10-11T08:54:54.258888",
+          "leaseUntil": null,
+          "lastHttpStatus": 400,
+          "lastErrorCode": "HTTP_400",
+          "deliveredAt": null
+        },
+        "replayed": true
+      },
+      "queued": {
+        "actualProduct": "H2",
+        "actualVersion": "2.2.220 (2023-07-04)",
+        "migrationCount": 42,
+        "successfulHistoryRows": 43,
+        "history": [
+          {
+            "version": null,
+            "type": "TABLE",
+            "success": true
+          },
+          {
+            "version": "1",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "2",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "3",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "4",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "5",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "6",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "7",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "8",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "9",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "10",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "11",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "12",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "13",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "14",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "15",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "16",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "17",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "18",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "19",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "20",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "21",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "22",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "23",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "24",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "25",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "26",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "27",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "28",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "29",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "30",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "31",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "32",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "33",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "34",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "35",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "36",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "37",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "38",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "39",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "40",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "41",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "42",
+            "type": "SQL",
+            "success": true
+          }
+        ],
+        "migration38": true,
+        "migration39": true,
+        "migration40": true,
+        "migration41": true,
+        "migration42": true,
+        "redriveReceipts": [
+          {
+            "id": 1,
+            "notificationId": 1,
+            "handoffId": 1,
+            "actorId": 3,
+            "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+            "capturedVersion": 2,
+            "queuedVersion": 3,
+            "priorAttempts": 1,
+            "priorHttpStatus": 400,
+            "priorErrorCode": "HTTP_400",
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "reason": "owned lost-response manual authorization",
+            "acceptedAt": "2026-10-11T08:54:54.258888"
+          }
+        ],
+        "notificationCycleStarts": [
+          {
+            "id": 1,
+            "cycleStartAttempts": 1
+          }
+        ],
+        "redriveAudits": 1,
+        "notificationRows": 1,
+        "notificationHash": "f4416e1e79ed47b5f60cfa05740276163b957eb031a510ef0b3bbccb42f72fdc",
+        "notifications": [
+          {
+            "id": 1,
+            "handoffId": 1,
+            "eventVersion": 0,
+            "recipientId": 1,
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+            "status": "PENDING",
+            "version": 3,
+            "attempts": 1,
+            "lastHttpStatus": 400,
+            "lastErrorCode": "HTTP_400",
+            "leaseOwnerPresent": false,
+            "leaseUntil": null,
+            "deliveredAt": null
+          }
+        ],
+        "publicationRows": 1,
+        "publicationHash": "59e2813b8760e91ef5fb014275d302efa6e185f6c27fa86a68b58fce5ab4d2c9",
+        "shifts": 3,
+        "publications": [
+          {
+            "handoffId": 1,
+            "eventVersion": 0,
+            "snapshotJson": "{\"handoffId\":1,\"scheduleId\":1,\"sourceShiftId\":3,\"sourceVersion\":0,\"requesterId\":2,\"startsAt\":\"2026-10-13T08:54:19\",\"endsAt\":\"2026-10-13T12:54:19\",\"eventVersion\":0,\"capturedAt\":\"2026-10-11T08:54:19.495083\",\"timeBasis\":\"DATABASE_SESSION_LOCAL\",\"recipients\":[{\"userId\":1,\"memberVersion\":0,\"displayName\":\"系统管理员\",\"roleCode\":\"ADMIN\"}]}"
+          }
+        ],
+        "shiftHash": "72fc4d7ad2f1a1cd2323afcc4006b86477b4d0e10d52595391cbde32141a1576",
+        "designatedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "designatedRows": 0,
+        "swapRows": 0,
+        "swapRevocationRows": 0,
+        "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+        "onCallAuditHash": "2445dcaa29a8105c951311dde4cbb8cc5623bec6c6b2de220485abf71d67155f",
+        "v38MigrationHash": "8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820",
+        "v39MigrationHash": "7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a",
+        "v40MigrationHash": "c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702",
+        "v41MigrationHash": "b4dc17170eee1809a7689e62ee8de4be7ea8a15850a326e75060ea4e9673663e",
+        "memberHash": "33f08cf10e84f4fe047cf44d84fc98f5fec456b67f0dd3eefee7db68cc269afd",
+        "memberOperationHash": "eda6e07ff395c67fd5171987100f45c29101ffd1ffbdc9fb93ac619698631abc",
+        "members": [
+          {
+            "scheduleId": 1,
+            "userId": 1,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 1,
+            "userId": 2,
+            "active": true,
+            "canRespond": true,
+            "canManage": false,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 1,
+            "userId": 3,
+            "active": true,
+            "canRespond": false,
+            "canManage": true,
+            "version": 2,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 1,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 2,
+            "active": true,
+            "canRespond": true,
+            "canManage": false,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 3,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          }
+        ],
+        "openRequestHash": "4795309b32d0d770377c6a235e7d196dc25ecdfe2e78d1f1d7c45d7fd422cf3a",
+        "openOperationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "requests": [
+          {
+            "id": 1,
+            "sourceShiftId": 3,
+            "status": "OPEN",
+            "version": 0,
+            "claimedBy": null,
+            "replacementShiftId": null,
+            "operations": 0,
+            "audits": 1,
+            "overrides": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "disabled-restart-preserves-queue-and-original-ack",
+      "disabled": {
+        "receipt": {
+          "id": 1,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 3,
+          "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+          "capturedVersion": 2,
+          "queuedVersion": 3,
+          "priorAttempts": 1,
+          "priorHttpStatus": 400,
+          "priorErrorCode": "HTTP_400",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned lost-response manual authorization",
+          "acceptedAt": "2026-10-11T08:54:54.258888"
+        },
+        "currentDelivery": {
+          "id": 1,
+          "handoffId": 1,
+          "eventVersion": 0,
+          "recipientId": 1,
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "status": "PENDING",
+          "version": 3,
+          "attempts": 1,
+          "nextAttemptAt": "2026-10-11T08:54:54.258888",
+          "leaseUntil": null,
+          "lastHttpStatus": 400,
+          "lastErrorCode": "HTTP_400",
+          "deliveredAt": null
+        },
+        "replayed": true
+      },
+      "disabledSql": {
+        "actualProduct": "H2",
+        "actualVersion": "2.2.220 (2023-07-04)",
+        "migrationCount": 42,
+        "successfulHistoryRows": 43,
+        "history": [
+          {
+            "version": null,
+            "type": "TABLE",
+            "success": true
+          },
+          {
+            "version": "1",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "2",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "3",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "4",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "5",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "6",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "7",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "8",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "9",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "10",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "11",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "12",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "13",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "14",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "15",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "16",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "17",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "18",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "19",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "20",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "21",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "22",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "23",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "24",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "25",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "26",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "27",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "28",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "29",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "30",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "31",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "32",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "33",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "34",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "35",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "36",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "37",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "38",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "39",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "40",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "41",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "42",
+            "type": "SQL",
+            "success": true
+          }
+        ],
+        "migration38": true,
+        "migration39": true,
+        "migration40": true,
+        "migration41": true,
+        "migration42": true,
+        "redriveReceipts": [
+          {
+            "id": 1,
+            "notificationId": 1,
+            "handoffId": 1,
+            "actorId": 3,
+            "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+            "capturedVersion": 2,
+            "queuedVersion": 3,
+            "priorAttempts": 1,
+            "priorHttpStatus": 400,
+            "priorErrorCode": "HTTP_400",
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "reason": "owned lost-response manual authorization",
+            "acceptedAt": "2026-10-11T08:54:54.258888"
+          }
+        ],
+        "notificationCycleStarts": [
+          {
+            "id": 1,
+            "cycleStartAttempts": 1
+          }
+        ],
+        "redriveAudits": 1,
+        "notificationRows": 1,
+        "notificationHash": "f4416e1e79ed47b5f60cfa05740276163b957eb031a510ef0b3bbccb42f72fdc",
+        "notifications": [
+          {
+            "id": 1,
+            "handoffId": 1,
+            "eventVersion": 0,
+            "recipientId": 1,
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+            "status": "PENDING",
+            "version": 3,
+            "attempts": 1,
+            "lastHttpStatus": 400,
+            "lastErrorCode": "HTTP_400",
+            "leaseOwnerPresent": false,
+            "leaseUntil": null,
+            "deliveredAt": null
+          }
+        ],
+        "publicationRows": 1,
+        "publicationHash": "59e2813b8760e91ef5fb014275d302efa6e185f6c27fa86a68b58fce5ab4d2c9",
+        "shifts": 3,
+        "publications": [
+          {
+            "handoffId": 1,
+            "eventVersion": 0,
+            "snapshotJson": "{\"handoffId\":1,\"scheduleId\":1,\"sourceShiftId\":3,\"sourceVersion\":0,\"requesterId\":2,\"startsAt\":\"2026-10-13T08:54:19\",\"endsAt\":\"2026-10-13T12:54:19\",\"eventVersion\":0,\"capturedAt\":\"2026-10-11T08:54:19.495083\",\"timeBasis\":\"DATABASE_SESSION_LOCAL\",\"recipients\":[{\"userId\":1,\"memberVersion\":0,\"displayName\":\"系统管理员\",\"roleCode\":\"ADMIN\"}]}"
+          }
+        ],
+        "shiftHash": "72fc4d7ad2f1a1cd2323afcc4006b86477b4d0e10d52595391cbde32141a1576",
+        "designatedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "designatedRows": 0,
+        "swapRows": 0,
+        "swapRevocationRows": 0,
+        "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+        "onCallAuditHash": "2445dcaa29a8105c951311dde4cbb8cc5623bec6c6b2de220485abf71d67155f",
+        "v38MigrationHash": "8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820",
+        "v39MigrationHash": "7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a",
+        "v40MigrationHash": "c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702",
+        "v41MigrationHash": "b4dc17170eee1809a7689e62ee8de4be7ea8a15850a326e75060ea4e9673663e",
+        "memberHash": "33f08cf10e84f4fe047cf44d84fc98f5fec456b67f0dd3eefee7db68cc269afd",
+        "memberOperationHash": "eda6e07ff395c67fd5171987100f45c29101ffd1ffbdc9fb93ac619698631abc",
+        "members": [
+          {
+            "scheduleId": 1,
+            "userId": 1,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 1,
+            "userId": 2,
+            "active": true,
+            "canRespond": true,
+            "canManage": false,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 1,
+            "userId": 3,
+            "active": true,
+            "canRespond": false,
+            "canManage": true,
+            "version": 2,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 1,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 2,
+            "active": true,
+            "canRespond": true,
+            "canManage": false,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 3,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          }
+        ],
+        "openRequestHash": "4795309b32d0d770377c6a235e7d196dc25ecdfe2e78d1f1d7c45d7fd422cf3a",
+        "openOperationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "requests": [
+          {
+            "id": 1,
+            "sourceShiftId": 3,
+            "status": "OPEN",
+            "version": 0,
+            "claimedBy": null,
+            "replacementShiftId": null,
+            "operations": 0,
+            "audits": 1,
+            "overrides": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "enabled-restart-real503-keeps-original-event-and-total",
+      "retry": {
+        "id": 1,
+        "handoffId": 1,
+        "eventVersion": 0,
+        "recipientId": 1,
+        "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+        "status": "PENDING",
+        "version": 5,
+        "attempts": 2,
+        "nextAttemptAt": "2026-10-11T08:55:23.050431",
+        "leaseUntil": null,
+        "lastHttpStatus": 503,
+        "lastErrorCode": "HTTP_503",
+        "deliveredAt": null
+      },
+      "retrySql": {
+        "actualProduct": "H2",
+        "actualVersion": "2.2.220 (2023-07-04)",
+        "migrationCount": 42,
+        "successfulHistoryRows": 43,
+        "history": [
+          {
+            "version": null,
+            "type": "TABLE",
+            "success": true
+          },
+          {
+            "version": "1",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "2",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "3",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "4",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "5",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "6",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "7",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "8",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "9",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "10",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "11",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "12",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "13",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "14",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "15",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "16",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "17",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "18",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "19",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "20",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "21",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "22",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "23",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "24",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "25",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "26",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "27",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "28",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "29",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "30",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "31",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "32",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "33",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "34",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "35",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "36",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "37",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "38",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "39",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "40",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "41",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "42",
+            "type": "SQL",
+            "success": true
+          }
+        ],
+        "migration38": true,
+        "migration39": true,
+        "migration40": true,
+        "migration41": true,
+        "migration42": true,
+        "redriveReceipts": [
+          {
+            "id": 1,
+            "notificationId": 1,
+            "handoffId": 1,
+            "actorId": 3,
+            "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+            "capturedVersion": 2,
+            "queuedVersion": 3,
+            "priorAttempts": 1,
+            "priorHttpStatus": 400,
+            "priorErrorCode": "HTTP_400",
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "reason": "owned lost-response manual authorization",
+            "acceptedAt": "2026-10-11T08:54:54.258888"
+          }
+        ],
+        "notificationCycleStarts": [
+          {
+            "id": 1,
+            "cycleStartAttempts": 1
+          }
+        ],
+        "redriveAudits": 1,
+        "notificationRows": 1,
+        "notificationHash": "06c1006607f173364fe25eefa6268b55074fb27b3aebbddf5b5ada124d3f4bf8",
+        "notifications": [
+          {
+            "id": 1,
+            "handoffId": 1,
+            "eventVersion": 0,
+            "recipientId": 1,
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+            "status": "PENDING",
+            "version": 5,
+            "attempts": 2,
+            "lastHttpStatus": 503,
+            "lastErrorCode": "HTTP_503",
+            "leaseOwnerPresent": false,
+            "leaseUntil": null,
+            "deliveredAt": null
+          }
+        ],
+        "publicationRows": 1,
+        "publicationHash": "59e2813b8760e91ef5fb014275d302efa6e185f6c27fa86a68b58fce5ab4d2c9",
+        "shifts": 3,
+        "publications": [
+          {
+            "handoffId": 1,
+            "eventVersion": 0,
+            "snapshotJson": "{\"handoffId\":1,\"scheduleId\":1,\"sourceShiftId\":3,\"sourceVersion\":0,\"requesterId\":2,\"startsAt\":\"2026-10-13T08:54:19\",\"endsAt\":\"2026-10-13T12:54:19\",\"eventVersion\":0,\"capturedAt\":\"2026-10-11T08:54:19.495083\",\"timeBasis\":\"DATABASE_SESSION_LOCAL\",\"recipients\":[{\"userId\":1,\"memberVersion\":0,\"displayName\":\"系统管理员\",\"roleCode\":\"ADMIN\"}]}"
+          }
+        ],
+        "shiftHash": "72fc4d7ad2f1a1cd2323afcc4006b86477b4d0e10d52595391cbde32141a1576",
+        "designatedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "designatedRows": 0,
+        "swapRows": 0,
+        "swapRevocationRows": 0,
+        "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+        "onCallAuditHash": "2445dcaa29a8105c951311dde4cbb8cc5623bec6c6b2de220485abf71d67155f",
+        "v38MigrationHash": "8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820",
+        "v39MigrationHash": "7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a",
+        "v40MigrationHash": "c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702",
+        "v41MigrationHash": "b4dc17170eee1809a7689e62ee8de4be7ea8a15850a326e75060ea4e9673663e",
+        "memberHash": "33f08cf10e84f4fe047cf44d84fc98f5fec456b67f0dd3eefee7db68cc269afd",
+        "memberOperationHash": "eda6e07ff395c67fd5171987100f45c29101ffd1ffbdc9fb93ac619698631abc",
+        "members": [
+          {
+            "scheduleId": 1,
+            "userId": 1,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 1,
+            "userId": 2,
+            "active": true,
+            "canRespond": true,
+            "canManage": false,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 1,
+            "userId": 3,
+            "active": true,
+            "canRespond": false,
+            "canManage": true,
+            "version": 2,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 1,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 2,
+            "active": true,
+            "canRespond": true,
+            "canManage": false,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 3,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          }
+        ],
+        "openRequestHash": "4795309b32d0d770377c6a235e7d196dc25ecdfe2e78d1f1d7c45d7fd422cf3a",
+        "openOperationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "requests": [
+          {
+            "id": 1,
+            "sourceShiftId": 3,
+            "status": "OPEN",
+            "version": 0,
+            "claimedBy": null,
+            "replacementShiftId": null,
+            "operations": 0,
+            "audits": 1,
+            "overrides": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "second-restart-exhausts-cycle-and-concurrent-new-redrive-has-one-winner",
+      "exhausted": {
+        "id": 1,
+        "handoffId": 1,
+        "eventVersion": 0,
+        "recipientId": 1,
+        "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+        "status": "FAILED",
+        "version": 7,
+        "attempts": 3,
+        "nextAttemptAt": "2026-10-11T08:55:37.97373",
+        "leaseUntil": null,
+        "lastHttpStatus": 503,
+        "lastErrorCode": "HTTP_503",
+        "deliveredAt": null
+      },
+      "exhaustedAck": {
+        "receipt": {
+          "id": 1,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 3,
+          "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+          "capturedVersion": 2,
+          "queuedVersion": 3,
+          "priorAttempts": 1,
+          "priorHttpStatus": 400,
+          "priorErrorCode": "HTTP_400",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned lost-response manual authorization",
+          "acceptedAt": "2026-10-11T08:54:54.258888"
+        },
+        "currentDelivery": {
+          "id": 1,
+          "handoffId": 1,
+          "eventVersion": 0,
+          "recipientId": 1,
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "status": "FAILED",
+          "version": 7,
+          "attempts": 3,
+          "nextAttemptAt": "2026-10-11T08:55:37.97373",
+          "leaseUntil": null,
+          "lastHttpStatus": 503,
+          "lastErrorCode": "HTTP_503",
+          "deliveredAt": null
+        },
+        "replayed": true
+      },
+      "actualRaceStatuses": [
+        409,
+        200
+      ],
+      "second": {
+        "receipt": {
+          "id": 2,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 1,
+          "operationKey": "4d4a0bfb-59a8-43d7-88a4-9340dfb33a60",
+          "capturedVersion": 7,
+          "queuedVersion": 8,
+          "priorAttempts": 3,
+          "priorHttpStatus": 503,
+          "priorErrorCode": "HTTP_503",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned concurrent second manual authorization",
+          "acceptedAt": "2026-10-11T08:55:37.894395"
+        },
+        "currentDelivery": {
+          "id": 1,
+          "handoffId": 1,
+          "eventVersion": 0,
+          "recipientId": 1,
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "status": "PENDING",
+          "version": 8,
+          "attempts": 3,
+          "nextAttemptAt": "2026-10-11T08:55:37.894395",
+          "leaseUntil": null,
+          "lastHttpStatus": 503,
+          "lastErrorCode": "HTTP_503",
+          "deliveredAt": null
+        },
+        "replayed": false
+      },
+      "duplicateAcks": [
+        {
+          "receipt": {
+            "id": 2,
+            "notificationId": 1,
+            "handoffId": 1,
+            "actorId": 1,
+            "operationKey": "4d4a0bfb-59a8-43d7-88a4-9340dfb33a60",
+            "capturedVersion": 7,
+            "queuedVersion": 8,
+            "priorAttempts": 3,
+            "priorHttpStatus": 503,
+            "priorErrorCode": "HTTP_503",
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "reason": "owned concurrent second manual authorization",
+            "acceptedAt": "2026-10-11T08:55:37.894395"
+          },
+          "currentDelivery": {
+            "id": 1,
+            "handoffId": 1,
+            "eventVersion": 0,
+            "recipientId": 1,
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "status": "PENDING",
+            "version": 8,
+            "attempts": 3,
+            "nextAttemptAt": "2026-10-11T08:55:37.894395",
+            "leaseUntil": null,
+            "lastHttpStatus": 503,
+            "lastErrorCode": "HTTP_503",
+            "deliveredAt": null
+          },
+          "replayed": true
+        },
+        {
+          "receipt": {
+            "id": 2,
+            "notificationId": 1,
+            "handoffId": 1,
+            "actorId": 1,
+            "operationKey": "4d4a0bfb-59a8-43d7-88a4-9340dfb33a60",
+            "capturedVersion": 7,
+            "queuedVersion": 8,
+            "priorAttempts": 3,
+            "priorHttpStatus": 503,
+            "priorErrorCode": "HTTP_503",
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "reason": "owned concurrent second manual authorization",
+            "acceptedAt": "2026-10-11T08:55:37.894395"
+          },
+          "currentDelivery": {
+            "id": 1,
+            "handoffId": 1,
+            "eventVersion": 0,
+            "recipientId": 1,
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "status": "PENDING",
+            "version": 8,
+            "attempts": 3,
+            "nextAttemptAt": "2026-10-11T08:55:37.894395",
+            "leaseUntil": null,
+            "lastHttpStatus": 503,
+            "lastErrorCode": "HTTP_503",
+            "deliveredAt": null
+          },
+          "replayed": true
+        }
+      ],
+      "requeued": {
+        "actualProduct": "H2",
+        "actualVersion": "2.2.220 (2023-07-04)",
+        "migrationCount": 42,
+        "successfulHistoryRows": 43,
+        "history": [
+          {
+            "version": null,
+            "type": "TABLE",
+            "success": true
+          },
+          {
+            "version": "1",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "2",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "3",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "4",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "5",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "6",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "7",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "8",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "9",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "10",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "11",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "12",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "13",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "14",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "15",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "16",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "17",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "18",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "19",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "20",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "21",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "22",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "23",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "24",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "25",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "26",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "27",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "28",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "29",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "30",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "31",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "32",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "33",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "34",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "35",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "36",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "37",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "38",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "39",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "40",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "41",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "42",
+            "type": "SQL",
+            "success": true
+          }
+        ],
+        "migration38": true,
+        "migration39": true,
+        "migration40": true,
+        "migration41": true,
+        "migration42": true,
+        "redriveReceipts": [
+          {
+            "id": 1,
+            "notificationId": 1,
+            "handoffId": 1,
+            "actorId": 3,
+            "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+            "capturedVersion": 2,
+            "queuedVersion": 3,
+            "priorAttempts": 1,
+            "priorHttpStatus": 400,
+            "priorErrorCode": "HTTP_400",
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "reason": "owned lost-response manual authorization",
+            "acceptedAt": "2026-10-11T08:54:54.258888"
+          },
+          {
+            "id": 2,
+            "notificationId": 1,
+            "handoffId": 1,
+            "actorId": 1,
+            "operationKey": "4d4a0bfb-59a8-43d7-88a4-9340dfb33a60",
+            "capturedVersion": 7,
+            "queuedVersion": 8,
+            "priorAttempts": 3,
+            "priorHttpStatus": 503,
+            "priorErrorCode": "HTTP_503",
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "reason": "owned concurrent second manual authorization",
+            "acceptedAt": "2026-10-11T08:55:37.894395"
+          }
+        ],
+        "notificationCycleStarts": [
+          {
+            "id": 1,
+            "cycleStartAttempts": 3
+          }
+        ],
+        "redriveAudits": 2,
+        "notificationRows": 1,
+        "notificationHash": "2d6705448a7c30d1b73825da82449814e5c47bedba16801495be5a0ec5ff292f",
+        "notifications": [
+          {
+            "id": 1,
+            "handoffId": 1,
+            "eventVersion": 0,
+            "recipientId": 1,
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+            "status": "PENDING",
+            "version": 8,
+            "attempts": 3,
+            "lastHttpStatus": 503,
+            "lastErrorCode": "HTTP_503",
+            "leaseOwnerPresent": false,
+            "leaseUntil": null,
+            "deliveredAt": null
+          }
+        ],
+        "publicationRows": 1,
+        "publicationHash": "59e2813b8760e91ef5fb014275d302efa6e185f6c27fa86a68b58fce5ab4d2c9",
+        "shifts": 3,
+        "publications": [
+          {
+            "handoffId": 1,
+            "eventVersion": 0,
+            "snapshotJson": "{\"handoffId\":1,\"scheduleId\":1,\"sourceShiftId\":3,\"sourceVersion\":0,\"requesterId\":2,\"startsAt\":\"2026-10-13T08:54:19\",\"endsAt\":\"2026-10-13T12:54:19\",\"eventVersion\":0,\"capturedAt\":\"2026-10-11T08:54:19.495083\",\"timeBasis\":\"DATABASE_SESSION_LOCAL\",\"recipients\":[{\"userId\":1,\"memberVersion\":0,\"displayName\":\"系统管理员\",\"roleCode\":\"ADMIN\"}]}"
+          }
+        ],
+        "shiftHash": "72fc4d7ad2f1a1cd2323afcc4006b86477b4d0e10d52595391cbde32141a1576",
+        "designatedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "designatedRows": 0,
+        "swapRows": 0,
+        "swapRevocationRows": 0,
+        "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+        "onCallAuditHash": "7337f0bb95f6653bb19d777db468be5af9355354a0921d3aef4a8a4be061006c",
+        "v38MigrationHash": "8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820",
+        "v39MigrationHash": "7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a",
+        "v40MigrationHash": "c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702",
+        "v41MigrationHash": "b4dc17170eee1809a7689e62ee8de4be7ea8a15850a326e75060ea4e9673663e",
+        "memberHash": "33f08cf10e84f4fe047cf44d84fc98f5fec456b67f0dd3eefee7db68cc269afd",
+        "memberOperationHash": "eda6e07ff395c67fd5171987100f45c29101ffd1ffbdc9fb93ac619698631abc",
+        "members": [
+          {
+            "scheduleId": 1,
+            "userId": 1,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 1,
+            "userId": 2,
+            "active": true,
+            "canRespond": true,
+            "canManage": false,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 1,
+            "userId": 3,
+            "active": true,
+            "canRespond": false,
+            "canManage": true,
+            "version": 2,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 1,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 2,
+            "active": true,
+            "canRespond": true,
+            "canManage": false,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 3,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          }
+        ],
+        "openRequestHash": "4795309b32d0d770377c6a235e7d196dc25ecdfe2e78d1f1d7c45d7fd422cf3a",
+        "openOperationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "requests": [
+          {
+            "id": 1,
+            "sourceShiftId": 3,
+            "status": "OPEN",
+            "version": 0,
+            "claimedBy": null,
+            "replacementShiftId": null,
+            "operations": 0,
+            "audits": 1,
+            "overrides": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "third-enabled-restart-delivers-without-human-claim",
+      "delivered": {
+        "id": 1,
+        "handoffId": 1,
+        "eventVersion": 0,
+        "recipientId": 1,
+        "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+        "status": "DELIVERED",
+        "version": 10,
+        "attempts": 4,
+        "nextAttemptAt": "2026-10-11T08:55:52.742726",
+        "leaseUntil": null,
+        "lastHttpStatus": 200,
+        "lastErrorCode": null,
+        "deliveredAt": "2026-10-11T08:55:52.542726"
+      },
+      "stillOpen": {
+        "databaseNow": "2026-10-11T08:55:52.575327",
+        "currentRequestVersion": 0,
+        "currentRequestStatus": "OPEN",
+        "publicationSnapshotAvailable": true,
+        "publication": {
+          "handoffId": 1,
+          "scheduleId": 1,
+          "sourceShiftId": 3,
+          "sourceVersion": 0,
+          "requesterId": 2,
+          "startsAt": "2026-10-13T08:54:19",
+          "endsAt": "2026-10-13T12:54:19",
+          "eventVersion": 0,
+          "capturedAt": "2026-10-11T08:54:19.495083",
+          "timeBasis": "DATABASE_SESSION_LOCAL",
+          "recipients": [
+            {
+              "userId": 1,
+              "memberVersion": 0,
+              "displayName": "系统管理员",
+              "roleCode": "ADMIN"
+            }
+          ]
+        },
+        "eligibleOriginalRecipientIds": [
+          1
+        ],
+        "deliveryImplemented": true
+      }
+    },
+    {
+      "name": "old-receipts-immutable-after-delivery-and-withdrawal",
+      "firstDeliveredAck": {
+        "receipt": {
+          "id": 1,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 3,
+          "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+          "capturedVersion": 2,
+          "queuedVersion": 3,
+          "priorAttempts": 1,
+          "priorHttpStatus": 400,
+          "priorErrorCode": "HTTP_400",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned lost-response manual authorization",
+          "acceptedAt": "2026-10-11T08:54:54.258888"
+        },
+        "currentDelivery": {
+          "id": 1,
+          "handoffId": 1,
+          "eventVersion": 0,
+          "recipientId": 1,
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "status": "DELIVERED",
+          "version": 10,
+          "attempts": 4,
+          "nextAttemptAt": "2026-10-11T08:55:52.742726",
+          "leaseUntil": null,
+          "lastHttpStatus": 200,
+          "lastErrorCode": null,
+          "deliveredAt": "2026-10-11T08:55:52.542726"
+        },
+        "replayed": true
+      },
+      "secondDeliveredAck": {
+        "receipt": {
+          "id": 2,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 1,
+          "operationKey": "4d4a0bfb-59a8-43d7-88a4-9340dfb33a60",
+          "capturedVersion": 7,
+          "queuedVersion": 8,
+          "priorAttempts": 3,
+          "priorHttpStatus": 503,
+          "priorErrorCode": "HTTP_503",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned concurrent second manual authorization",
+          "acceptedAt": "2026-10-11T08:55:37.894395"
+        },
+        "currentDelivery": {
+          "id": 1,
+          "handoffId": 1,
+          "eventVersion": 0,
+          "recipientId": 1,
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "status": "DELIVERED",
+          "version": 10,
+          "attempts": 4,
+          "nextAttemptAt": "2026-10-11T08:55:52.742726",
+          "leaseUntil": null,
+          "lastHttpStatus": 200,
+          "lastErrorCode": null,
+          "deliveredAt": "2026-10-11T08:55:52.542726"
+        },
+        "replayed": true
+      },
+      "withdrawal": {
+        "databaseNow": "2026-10-11T08:55:52.674494",
+        "request": {
+          "id": 1,
+          "scheduleId": 1,
+          "sourceShiftId": 3,
+          "sourceVersion": 0,
+          "requesterId": 2,
+          "requestKey": "b6934166-a671-49c5-bb80-fcebd9e62cb0",
+          "startsAt": "2026-10-13T08:54:19",
+          "endsAt": "2026-10-13T12:54:19",
+          "reason": "explicit original event",
+          "status": "WITHDRAWN",
+          "version": 1,
+          "createdAt": "2026-10-11T08:54:19.491676",
+          "closedAt": "2026-10-11T08:55:52.666011",
+          "claimedBy": null,
+          "replacementShiftId": null
+        },
+        "replacement": null,
+        "operation": {
+          "handoffId": 1,
+          "actorId": 2,
+          "operationKey": "8ee7f0ad-ea81-4ffc-9acd-5eef4a5ee04d",
+          "operation": "WITHDRAW",
+          "capturedVersion": 0,
+          "reason": "human withdraws original request",
+          "committedAt": "2026-10-11T08:55:52.666011"
+        }
+      },
+      "closedAck": {
+        "receipt": {
+          "id": 2,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 1,
+          "operationKey": "4d4a0bfb-59a8-43d7-88a4-9340dfb33a60",
+          "capturedVersion": 7,
+          "queuedVersion": 8,
+          "priorAttempts": 3,
+          "priorHttpStatus": 503,
+          "priorErrorCode": "HTTP_503",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned concurrent second manual authorization",
+          "acceptedAt": "2026-10-11T08:55:37.894395"
+        },
+        "currentDelivery": {
+          "id": 1,
+          "handoffId": 1,
+          "eventVersion": 0,
+          "recipientId": 1,
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "status": "DELIVERED",
+          "version": 10,
+          "attempts": 4,
+          "nextAttemptAt": "2026-10-11T08:55:52.742726",
+          "leaseUntil": null,
+          "lastHttpStatus": 200,
+          "lastErrorCode": null,
+          "deliveredAt": "2026-10-11T08:55:52.542726"
+        },
+        "replayed": true
+      }
+    },
+    {
+      "name": "revoked-manager-cannot-ack-old-operation",
+      "actualOldKeyStatus": 403,
+      "currentPlanManagementRemoved": true
+    },
+    {
+      "name": "actual-http-denials-have-no-extra-ledger-or-delivery",
+      "deniedHttpStatuses": [
+        401,
+        403,
+        403,
+        403,
+        400,
+        404,
+        409
+      ],
+      "final": {
+        "actualProduct": "H2",
+        "actualVersion": "2.2.220 (2023-07-04)",
+        "migrationCount": 42,
+        "successfulHistoryRows": 43,
+        "history": [
+          {
+            "version": null,
+            "type": "TABLE",
+            "success": true
+          },
+          {
+            "version": "1",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "2",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "3",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "4",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "5",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "6",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "7",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "8",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "9",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "10",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "11",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "12",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "13",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "14",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "15",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "16",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "17",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "18",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "19",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "20",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "21",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "22",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "23",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "24",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "25",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "26",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "27",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "28",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "29",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "30",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "31",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "32",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "33",
+            "type": "JDBC",
+            "success": true
+          },
+          {
+            "version": "34",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "35",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "36",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "37",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "38",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "39",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "40",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "41",
+            "type": "SQL",
+            "success": true
+          },
+          {
+            "version": "42",
+            "type": "SQL",
+            "success": true
+          }
+        ],
+        "migration38": true,
+        "migration39": true,
+        "migration40": true,
+        "migration41": true,
+        "migration42": true,
+        "redriveReceipts": [
+          {
+            "id": 1,
+            "notificationId": 1,
+            "handoffId": 1,
+            "actorId": 3,
+            "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+            "capturedVersion": 2,
+            "queuedVersion": 3,
+            "priorAttempts": 1,
+            "priorHttpStatus": 400,
+            "priorErrorCode": "HTTP_400",
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "reason": "owned lost-response manual authorization",
+            "acceptedAt": "2026-10-11T08:54:54.258888"
+          },
+          {
+            "id": 2,
+            "notificationId": 1,
+            "handoffId": 1,
+            "actorId": 1,
+            "operationKey": "4d4a0bfb-59a8-43d7-88a4-9340dfb33a60",
+            "capturedVersion": 7,
+            "queuedVersion": 8,
+            "priorAttempts": 3,
+            "priorHttpStatus": 503,
+            "priorErrorCode": "HTTP_503",
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "reason": "owned concurrent second manual authorization",
+            "acceptedAt": "2026-10-11T08:55:37.894395"
+          }
+        ],
+        "notificationCycleStarts": [
+          {
+            "id": 1,
+            "cycleStartAttempts": 3
+          }
+        ],
+        "redriveAudits": 2,
+        "notificationRows": 1,
+        "notificationHash": "4f04f41af327765c6822b0d35bebd7d69a08cad86ebdbe91a6ca7935fb729222",
+        "notifications": [
+          {
+            "id": 1,
+            "handoffId": 1,
+            "eventVersion": 0,
+            "recipientId": 1,
+            "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+            "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+            "status": "DELIVERED",
+            "version": 10,
+            "attempts": 4,
+            "lastHttpStatus": 200,
+            "lastErrorCode": null,
+            "leaseOwnerPresent": false,
+            "leaseUntil": null,
+            "deliveredAt": "2026-10-11 08:55:52.542726"
+          }
+        ],
+        "publicationRows": 1,
+        "publicationHash": "59e2813b8760e91ef5fb014275d302efa6e185f6c27fa86a68b58fce5ab4d2c9",
+        "shifts": 3,
+        "publications": [
+          {
+            "handoffId": 1,
+            "eventVersion": 0,
+            "snapshotJson": "{\"handoffId\":1,\"scheduleId\":1,\"sourceShiftId\":3,\"sourceVersion\":0,\"requesterId\":2,\"startsAt\":\"2026-10-13T08:54:19\",\"endsAt\":\"2026-10-13T12:54:19\",\"eventVersion\":0,\"capturedAt\":\"2026-10-11T08:54:19.495083\",\"timeBasis\":\"DATABASE_SESSION_LOCAL\",\"recipients\":[{\"userId\":1,\"memberVersion\":0,\"displayName\":\"系统管理员\",\"roleCode\":\"ADMIN\"}]}"
+          }
+        ],
+        "shiftHash": "72fc4d7ad2f1a1cd2323afcc4006b86477b4d0e10d52595391cbde32141a1576",
+        "designatedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "designatedRows": 0,
+        "swapRows": 0,
+        "swapRevocationRows": 0,
+        "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+        "onCallAuditHash": "49aeaea39ea3d817b8080f482080777d8d2f7717fec4ab90efe7aca83bf63b19",
+        "v38MigrationHash": "8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820",
+        "v39MigrationHash": "7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a",
+        "v40MigrationHash": "c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702",
+        "v41MigrationHash": "b4dc17170eee1809a7689e62ee8de4be7ea8a15850a326e75060ea4e9673663e",
+        "memberHash": "6b6feb1a3b1e9b9d3dd973380933fbe4f1a19a8cbd8a5bd3247c9ba8ace8f14c",
+        "memberOperationHash": "15b01818ec0eb9b11c44a31f61928b59f5d4a4f61d6e7c18094014710417c982",
+        "members": [
+          {
+            "scheduleId": 1,
+            "userId": 1,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 1,
+            "userId": 2,
+            "active": true,
+            "canRespond": true,
+            "canManage": false,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 1,
+            "userId": 3,
+            "active": false,
+            "canRespond": false,
+            "canManage": false,
+            "version": 3,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 1,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 2,
+            "active": true,
+            "canRespond": true,
+            "canManage": false,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          },
+          {
+            "scheduleId": 2,
+            "userId": 3,
+            "active": true,
+            "canRespond": true,
+            "canManage": true,
+            "version": 0,
+            "origin": "MIGRATED_GLOBAL_V38"
+          }
+        ],
+        "openRequestHash": "56fece4d58816a72f75a2a885f4a7acdb87356e7de2c29b88865cd534b8424e1",
+        "openOperationHash": "6979748c51cbce8ebbc35cf33242c9d97677cb9c0923ea066e489067c8215f6a",
+        "requests": [
+          {
+            "id": 1,
+            "sourceShiftId": 3,
+            "status": "WITHDRAWN",
+            "version": 1,
+            "claimedBy": null,
+            "replacementShiftId": null,
+            "operations": 1,
+            "audits": 2,
+            "overrides": 0
+          }
+        ]
+      }
+    }
+  ],
+  "startedPids": [
+    41320,
+    62632,
+    60560,
+    43200,
+    67956,
+    70688
+  ],
+  "stoppedPids": [
+    41320,
+    62632,
+    60560,
+    43200,
+    67956,
+    70688
+  ],
+  "shutdowns": [
+    {
+      "pid": 41320,
+      "httpStatus": 200,
+      "graceful": true
+    },
+    {
+      "pid": 62632,
+      "httpStatus": 200,
+      "graceful": true
+    },
+    {
+      "pid": 60560,
+      "httpStatus": 200,
+      "graceful": true
+    },
+    {
+      "pid": 43200,
+      "httpStatus": 200,
+      "graceful": true
+    },
+    {
+      "pid": 67956,
+      "httpStatus": 200,
+      "graceful": true
+    },
+    {
+      "pid": 70688,
+      "httpStatus": 200,
+      "graceful": true
+    }
+  ],
+  "sqlFixtures": [
+    {
+      "actualProduct": "H2",
+      "actualVersion": "2.2.220 (2023-07-04)",
+      "migrationCount": 41,
+      "successfulHistoryRows": 42,
+      "history": [
+        {
+          "version": null,
+          "type": "TABLE",
+          "success": true
+        },
+        {
+          "version": "1",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "2",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "3",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "4",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "5",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "6",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "7",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "8",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "9",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "10",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "11",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "12",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "13",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "14",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "15",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "16",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "17",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "18",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "19",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "20",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "21",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "22",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "23",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "24",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "25",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "26",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "27",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "28",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "29",
+          "type": "JDBC",
+          "success": true
+        },
+        {
+          "version": "30",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "31",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "32",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "33",
+          "type": "JDBC",
+          "success": true
+        },
+        {
+          "version": "34",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "35",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "36",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "37",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "38",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "39",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "40",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "41",
+          "type": "SQL",
+          "success": true
+        }
+      ],
+      "migration38": true,
+      "migration39": true,
+      "migration40": true,
+      "migration41": true,
+      "migration42": false,
+      "redriveReceipts": [],
+      "notificationCycleStarts": [],
+      "redriveAudits": 0,
+      "notificationRows": 1,
+      "notificationHash": "505ccf4a55a4a9b72746168a0b5f882b4429ef8d403b9d88f045d338649a75fc",
+      "notifications": [
+        {
+          "id": 1,
+          "handoffId": 1,
+          "eventVersion": 0,
+          "recipientId": 1,
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+          "status": "FAILED",
+          "version": 2,
+          "attempts": 1,
+          "lastHttpStatus": 400,
+          "lastErrorCode": "HTTP_400",
+          "leaseOwnerPresent": false,
+          "leaseUntil": null,
+          "deliveredAt": null
+        }
+      ],
+      "publicationRows": 1,
+      "publicationHash": "59e2813b8760e91ef5fb014275d302efa6e185f6c27fa86a68b58fce5ab4d2c9",
+      "shifts": 3,
+      "publications": [
+        {
+          "handoffId": 1,
+          "eventVersion": 0,
+          "snapshotJson": "{\"handoffId\":1,\"scheduleId\":1,\"sourceShiftId\":3,\"sourceVersion\":0,\"requesterId\":2,\"startsAt\":\"2026-10-13T08:54:19\",\"endsAt\":\"2026-10-13T12:54:19\",\"eventVersion\":0,\"capturedAt\":\"2026-10-11T08:54:19.495083\",\"timeBasis\":\"DATABASE_SESSION_LOCAL\",\"recipients\":[{\"userId\":1,\"memberVersion\":0,\"displayName\":\"系统管理员\",\"roleCode\":\"ADMIN\"}]}"
+        }
+      ],
+      "shiftHash": "72fc4d7ad2f1a1cd2323afcc4006b86477b4d0e10d52595391cbde32141a1576",
+      "designatedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "designatedRows": 0,
+      "swapRows": 0,
+      "swapRevocationRows": 0,
+      "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+      "onCallAuditHash": "f25b499c22facb76598ea6626f6aa9077e3e955a06b8c19c38531447da279247",
+      "v38MigrationHash": "8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820",
+      "v39MigrationHash": "7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a",
+      "v40MigrationHash": "c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702",
+      "v41MigrationHash": "b4dc17170eee1809a7689e62ee8de4be7ea8a15850a326e75060ea4e9673663e",
+      "memberHash": "b63740a7529b17c492fde6b2b08c3d95a92e9cadd971eb08942b5b29e6744e1d",
+      "memberOperationHash": "b6ae11cd78fe6057540f54b918ea04f8baaaf603ab20b5e9f3f1d724d8005232",
+      "members": [
+        {
+          "scheduleId": 1,
+          "userId": 1,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 1,
+          "userId": 2,
+          "active": true,
+          "canRespond": true,
+          "canManage": false,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 1,
+          "userId": 3,
+          "active": false,
+          "canRespond": false,
+          "canManage": false,
+          "version": 1,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 1,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 2,
+          "active": true,
+          "canRespond": true,
+          "canManage": false,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 3,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        }
+      ],
+      "openRequestHash": "4795309b32d0d770377c6a235e7d196dc25ecdfe2e78d1f1d7c45d7fd422cf3a",
+      "openOperationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "requests": [
+        {
+          "id": 1,
+          "sourceShiftId": 3,
+          "status": "OPEN",
+          "version": 0,
+          "claimedBy": null,
+          "replacementShiftId": null,
+          "operations": 0,
+          "audits": 1,
+          "overrides": 0
+        }
+      ]
+    },
+    {
+      "actualProduct": "H2",
+      "actualVersion": "2.2.220 (2023-07-04)",
+      "migrationCount": 42,
+      "successfulHistoryRows": 43,
+      "history": [
+        {
+          "version": null,
+          "type": "TABLE",
+          "success": true
+        },
+        {
+          "version": "1",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "2",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "3",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "4",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "5",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "6",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "7",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "8",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "9",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "10",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "11",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "12",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "13",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "14",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "15",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "16",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "17",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "18",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "19",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "20",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "21",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "22",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "23",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "24",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "25",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "26",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "27",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "28",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "29",
+          "type": "JDBC",
+          "success": true
+        },
+        {
+          "version": "30",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "31",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "32",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "33",
+          "type": "JDBC",
+          "success": true
+        },
+        {
+          "version": "34",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "35",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "36",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "37",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "38",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "39",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "40",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "41",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "42",
+          "type": "SQL",
+          "success": true
+        }
+      ],
+      "migration38": true,
+      "migration39": true,
+      "migration40": true,
+      "migration41": true,
+      "migration42": true,
+      "redriveReceipts": [
+        {
+          "id": 1,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 3,
+          "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+          "capturedVersion": 2,
+          "queuedVersion": 3,
+          "priorAttempts": 1,
+          "priorHttpStatus": 400,
+          "priorErrorCode": "HTTP_400",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned lost-response manual authorization",
+          "acceptedAt": "2026-10-11T08:54:54.258888"
+        }
+      ],
+      "notificationCycleStarts": [
+        {
+          "id": 1,
+          "cycleStartAttempts": 1
+        }
+      ],
+      "redriveAudits": 1,
+      "notificationRows": 1,
+      "notificationHash": "f4416e1e79ed47b5f60cfa05740276163b957eb031a510ef0b3bbccb42f72fdc",
+      "notifications": [
+        {
+          "id": 1,
+          "handoffId": 1,
+          "eventVersion": 0,
+          "recipientId": 1,
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+          "status": "PENDING",
+          "version": 3,
+          "attempts": 1,
+          "lastHttpStatus": 400,
+          "lastErrorCode": "HTTP_400",
+          "leaseOwnerPresent": false,
+          "leaseUntil": null,
+          "deliveredAt": null
+        }
+      ],
+      "publicationRows": 1,
+      "publicationHash": "59e2813b8760e91ef5fb014275d302efa6e185f6c27fa86a68b58fce5ab4d2c9",
+      "shifts": 3,
+      "publications": [
+        {
+          "handoffId": 1,
+          "eventVersion": 0,
+          "snapshotJson": "{\"handoffId\":1,\"scheduleId\":1,\"sourceShiftId\":3,\"sourceVersion\":0,\"requesterId\":2,\"startsAt\":\"2026-10-13T08:54:19\",\"endsAt\":\"2026-10-13T12:54:19\",\"eventVersion\":0,\"capturedAt\":\"2026-10-11T08:54:19.495083\",\"timeBasis\":\"DATABASE_SESSION_LOCAL\",\"recipients\":[{\"userId\":1,\"memberVersion\":0,\"displayName\":\"系统管理员\",\"roleCode\":\"ADMIN\"}]}"
+        }
+      ],
+      "shiftHash": "72fc4d7ad2f1a1cd2323afcc4006b86477b4d0e10d52595391cbde32141a1576",
+      "designatedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "designatedRows": 0,
+      "swapRows": 0,
+      "swapRevocationRows": 0,
+      "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+      "onCallAuditHash": "2445dcaa29a8105c951311dde4cbb8cc5623bec6c6b2de220485abf71d67155f",
+      "v38MigrationHash": "8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820",
+      "v39MigrationHash": "7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a",
+      "v40MigrationHash": "c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702",
+      "v41MigrationHash": "b4dc17170eee1809a7689e62ee8de4be7ea8a15850a326e75060ea4e9673663e",
+      "memberHash": "33f08cf10e84f4fe047cf44d84fc98f5fec456b67f0dd3eefee7db68cc269afd",
+      "memberOperationHash": "eda6e07ff395c67fd5171987100f45c29101ffd1ffbdc9fb93ac619698631abc",
+      "members": [
+        {
+          "scheduleId": 1,
+          "userId": 1,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 1,
+          "userId": 2,
+          "active": true,
+          "canRespond": true,
+          "canManage": false,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 1,
+          "userId": 3,
+          "active": true,
+          "canRespond": false,
+          "canManage": true,
+          "version": 2,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 1,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 2,
+          "active": true,
+          "canRespond": true,
+          "canManage": false,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 3,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        }
+      ],
+      "openRequestHash": "4795309b32d0d770377c6a235e7d196dc25ecdfe2e78d1f1d7c45d7fd422cf3a",
+      "openOperationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "requests": [
+        {
+          "id": 1,
+          "sourceShiftId": 3,
+          "status": "OPEN",
+          "version": 0,
+          "claimedBy": null,
+          "replacementShiftId": null,
+          "operations": 0,
+          "audits": 1,
+          "overrides": 0
+        }
+      ]
+    },
+    {
+      "actualProduct": "H2",
+      "actualVersion": "2.2.220 (2023-07-04)",
+      "migrationCount": 42,
+      "successfulHistoryRows": 43,
+      "history": [
+        {
+          "version": null,
+          "type": "TABLE",
+          "success": true
+        },
+        {
+          "version": "1",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "2",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "3",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "4",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "5",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "6",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "7",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "8",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "9",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "10",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "11",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "12",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "13",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "14",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "15",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "16",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "17",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "18",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "19",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "20",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "21",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "22",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "23",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "24",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "25",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "26",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "27",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "28",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "29",
+          "type": "JDBC",
+          "success": true
+        },
+        {
+          "version": "30",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "31",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "32",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "33",
+          "type": "JDBC",
+          "success": true
+        },
+        {
+          "version": "34",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "35",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "36",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "37",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "38",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "39",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "40",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "41",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "42",
+          "type": "SQL",
+          "success": true
+        }
+      ],
+      "migration38": true,
+      "migration39": true,
+      "migration40": true,
+      "migration41": true,
+      "migration42": true,
+      "redriveReceipts": [
+        {
+          "id": 1,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 3,
+          "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+          "capturedVersion": 2,
+          "queuedVersion": 3,
+          "priorAttempts": 1,
+          "priorHttpStatus": 400,
+          "priorErrorCode": "HTTP_400",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned lost-response manual authorization",
+          "acceptedAt": "2026-10-11T08:54:54.258888"
+        }
+      ],
+      "notificationCycleStarts": [
+        {
+          "id": 1,
+          "cycleStartAttempts": 1
+        }
+      ],
+      "redriveAudits": 1,
+      "notificationRows": 1,
+      "notificationHash": "f4416e1e79ed47b5f60cfa05740276163b957eb031a510ef0b3bbccb42f72fdc",
+      "notifications": [
+        {
+          "id": 1,
+          "handoffId": 1,
+          "eventVersion": 0,
+          "recipientId": 1,
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+          "status": "PENDING",
+          "version": 3,
+          "attempts": 1,
+          "lastHttpStatus": 400,
+          "lastErrorCode": "HTTP_400",
+          "leaseOwnerPresent": false,
+          "leaseUntil": null,
+          "deliveredAt": null
+        }
+      ],
+      "publicationRows": 1,
+      "publicationHash": "59e2813b8760e91ef5fb014275d302efa6e185f6c27fa86a68b58fce5ab4d2c9",
+      "shifts": 3,
+      "publications": [
+        {
+          "handoffId": 1,
+          "eventVersion": 0,
+          "snapshotJson": "{\"handoffId\":1,\"scheduleId\":1,\"sourceShiftId\":3,\"sourceVersion\":0,\"requesterId\":2,\"startsAt\":\"2026-10-13T08:54:19\",\"endsAt\":\"2026-10-13T12:54:19\",\"eventVersion\":0,\"capturedAt\":\"2026-10-11T08:54:19.495083\",\"timeBasis\":\"DATABASE_SESSION_LOCAL\",\"recipients\":[{\"userId\":1,\"memberVersion\":0,\"displayName\":\"系统管理员\",\"roleCode\":\"ADMIN\"}]}"
+        }
+      ],
+      "shiftHash": "72fc4d7ad2f1a1cd2323afcc4006b86477b4d0e10d52595391cbde32141a1576",
+      "designatedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "designatedRows": 0,
+      "swapRows": 0,
+      "swapRevocationRows": 0,
+      "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+      "onCallAuditHash": "2445dcaa29a8105c951311dde4cbb8cc5623bec6c6b2de220485abf71d67155f",
+      "v38MigrationHash": "8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820",
+      "v39MigrationHash": "7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a",
+      "v40MigrationHash": "c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702",
+      "v41MigrationHash": "b4dc17170eee1809a7689e62ee8de4be7ea8a15850a326e75060ea4e9673663e",
+      "memberHash": "33f08cf10e84f4fe047cf44d84fc98f5fec456b67f0dd3eefee7db68cc269afd",
+      "memberOperationHash": "eda6e07ff395c67fd5171987100f45c29101ffd1ffbdc9fb93ac619698631abc",
+      "members": [
+        {
+          "scheduleId": 1,
+          "userId": 1,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 1,
+          "userId": 2,
+          "active": true,
+          "canRespond": true,
+          "canManage": false,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 1,
+          "userId": 3,
+          "active": true,
+          "canRespond": false,
+          "canManage": true,
+          "version": 2,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 1,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 2,
+          "active": true,
+          "canRespond": true,
+          "canManage": false,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 3,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        }
+      ],
+      "openRequestHash": "4795309b32d0d770377c6a235e7d196dc25ecdfe2e78d1f1d7c45d7fd422cf3a",
+      "openOperationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "requests": [
+        {
+          "id": 1,
+          "sourceShiftId": 3,
+          "status": "OPEN",
+          "version": 0,
+          "claimedBy": null,
+          "replacementShiftId": null,
+          "operations": 0,
+          "audits": 1,
+          "overrides": 0
+        }
+      ]
+    },
+    {
+      "actualProduct": "H2",
+      "actualVersion": "2.2.220 (2023-07-04)",
+      "migrationCount": 42,
+      "successfulHistoryRows": 43,
+      "history": [
+        {
+          "version": null,
+          "type": "TABLE",
+          "success": true
+        },
+        {
+          "version": "1",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "2",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "3",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "4",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "5",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "6",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "7",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "8",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "9",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "10",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "11",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "12",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "13",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "14",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "15",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "16",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "17",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "18",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "19",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "20",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "21",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "22",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "23",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "24",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "25",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "26",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "27",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "28",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "29",
+          "type": "JDBC",
+          "success": true
+        },
+        {
+          "version": "30",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "31",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "32",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "33",
+          "type": "JDBC",
+          "success": true
+        },
+        {
+          "version": "34",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "35",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "36",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "37",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "38",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "39",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "40",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "41",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "42",
+          "type": "SQL",
+          "success": true
+        }
+      ],
+      "migration38": true,
+      "migration39": true,
+      "migration40": true,
+      "migration41": true,
+      "migration42": true,
+      "redriveReceipts": [
+        {
+          "id": 1,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 3,
+          "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+          "capturedVersion": 2,
+          "queuedVersion": 3,
+          "priorAttempts": 1,
+          "priorHttpStatus": 400,
+          "priorErrorCode": "HTTP_400",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned lost-response manual authorization",
+          "acceptedAt": "2026-10-11T08:54:54.258888"
+        }
+      ],
+      "notificationCycleStarts": [
+        {
+          "id": 1,
+          "cycleStartAttempts": 1
+        }
+      ],
+      "redriveAudits": 1,
+      "notificationRows": 1,
+      "notificationHash": "06c1006607f173364fe25eefa6268b55074fb27b3aebbddf5b5ada124d3f4bf8",
+      "notifications": [
+        {
+          "id": 1,
+          "handoffId": 1,
+          "eventVersion": 0,
+          "recipientId": 1,
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+          "status": "PENDING",
+          "version": 5,
+          "attempts": 2,
+          "lastHttpStatus": 503,
+          "lastErrorCode": "HTTP_503",
+          "leaseOwnerPresent": false,
+          "leaseUntil": null,
+          "deliveredAt": null
+        }
+      ],
+      "publicationRows": 1,
+      "publicationHash": "59e2813b8760e91ef5fb014275d302efa6e185f6c27fa86a68b58fce5ab4d2c9",
+      "shifts": 3,
+      "publications": [
+        {
+          "handoffId": 1,
+          "eventVersion": 0,
+          "snapshotJson": "{\"handoffId\":1,\"scheduleId\":1,\"sourceShiftId\":3,\"sourceVersion\":0,\"requesterId\":2,\"startsAt\":\"2026-10-13T08:54:19\",\"endsAt\":\"2026-10-13T12:54:19\",\"eventVersion\":0,\"capturedAt\":\"2026-10-11T08:54:19.495083\",\"timeBasis\":\"DATABASE_SESSION_LOCAL\",\"recipients\":[{\"userId\":1,\"memberVersion\":0,\"displayName\":\"系统管理员\",\"roleCode\":\"ADMIN\"}]}"
+        }
+      ],
+      "shiftHash": "72fc4d7ad2f1a1cd2323afcc4006b86477b4d0e10d52595391cbde32141a1576",
+      "designatedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "designatedRows": 0,
+      "swapRows": 0,
+      "swapRevocationRows": 0,
+      "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+      "onCallAuditHash": "2445dcaa29a8105c951311dde4cbb8cc5623bec6c6b2de220485abf71d67155f",
+      "v38MigrationHash": "8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820",
+      "v39MigrationHash": "7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a",
+      "v40MigrationHash": "c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702",
+      "v41MigrationHash": "b4dc17170eee1809a7689e62ee8de4be7ea8a15850a326e75060ea4e9673663e",
+      "memberHash": "33f08cf10e84f4fe047cf44d84fc98f5fec456b67f0dd3eefee7db68cc269afd",
+      "memberOperationHash": "eda6e07ff395c67fd5171987100f45c29101ffd1ffbdc9fb93ac619698631abc",
+      "members": [
+        {
+          "scheduleId": 1,
+          "userId": 1,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 1,
+          "userId": 2,
+          "active": true,
+          "canRespond": true,
+          "canManage": false,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 1,
+          "userId": 3,
+          "active": true,
+          "canRespond": false,
+          "canManage": true,
+          "version": 2,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 1,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 2,
+          "active": true,
+          "canRespond": true,
+          "canManage": false,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 3,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        }
+      ],
+      "openRequestHash": "4795309b32d0d770377c6a235e7d196dc25ecdfe2e78d1f1d7c45d7fd422cf3a",
+      "openOperationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "requests": [
+        {
+          "id": 1,
+          "sourceShiftId": 3,
+          "status": "OPEN",
+          "version": 0,
+          "claimedBy": null,
+          "replacementShiftId": null,
+          "operations": 0,
+          "audits": 1,
+          "overrides": 0
+        }
+      ]
+    },
+    {
+      "actualProduct": "H2",
+      "actualVersion": "2.2.220 (2023-07-04)",
+      "migrationCount": 42,
+      "successfulHistoryRows": 43,
+      "history": [
+        {
+          "version": null,
+          "type": "TABLE",
+          "success": true
+        },
+        {
+          "version": "1",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "2",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "3",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "4",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "5",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "6",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "7",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "8",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "9",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "10",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "11",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "12",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "13",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "14",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "15",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "16",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "17",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "18",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "19",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "20",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "21",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "22",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "23",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "24",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "25",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "26",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "27",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "28",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "29",
+          "type": "JDBC",
+          "success": true
+        },
+        {
+          "version": "30",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "31",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "32",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "33",
+          "type": "JDBC",
+          "success": true
+        },
+        {
+          "version": "34",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "35",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "36",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "37",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "38",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "39",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "40",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "41",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "42",
+          "type": "SQL",
+          "success": true
+        }
+      ],
+      "migration38": true,
+      "migration39": true,
+      "migration40": true,
+      "migration41": true,
+      "migration42": true,
+      "redriveReceipts": [
+        {
+          "id": 1,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 3,
+          "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+          "capturedVersion": 2,
+          "queuedVersion": 3,
+          "priorAttempts": 1,
+          "priorHttpStatus": 400,
+          "priorErrorCode": "HTTP_400",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned lost-response manual authorization",
+          "acceptedAt": "2026-10-11T08:54:54.258888"
+        },
+        {
+          "id": 2,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 1,
+          "operationKey": "4d4a0bfb-59a8-43d7-88a4-9340dfb33a60",
+          "capturedVersion": 7,
+          "queuedVersion": 8,
+          "priorAttempts": 3,
+          "priorHttpStatus": 503,
+          "priorErrorCode": "HTTP_503",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned concurrent second manual authorization",
+          "acceptedAt": "2026-10-11T08:55:37.894395"
+        }
+      ],
+      "notificationCycleStarts": [
+        {
+          "id": 1,
+          "cycleStartAttempts": 3
+        }
+      ],
+      "redriveAudits": 2,
+      "notificationRows": 1,
+      "notificationHash": "2d6705448a7c30d1b73825da82449814e5c47bedba16801495be5a0ec5ff292f",
+      "notifications": [
+        {
+          "id": 1,
+          "handoffId": 1,
+          "eventVersion": 0,
+          "recipientId": 1,
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+          "status": "PENDING",
+          "version": 8,
+          "attempts": 3,
+          "lastHttpStatus": 503,
+          "lastErrorCode": "HTTP_503",
+          "leaseOwnerPresent": false,
+          "leaseUntil": null,
+          "deliveredAt": null
+        }
+      ],
+      "publicationRows": 1,
+      "publicationHash": "59e2813b8760e91ef5fb014275d302efa6e185f6c27fa86a68b58fce5ab4d2c9",
+      "shifts": 3,
+      "publications": [
+        {
+          "handoffId": 1,
+          "eventVersion": 0,
+          "snapshotJson": "{\"handoffId\":1,\"scheduleId\":1,\"sourceShiftId\":3,\"sourceVersion\":0,\"requesterId\":2,\"startsAt\":\"2026-10-13T08:54:19\",\"endsAt\":\"2026-10-13T12:54:19\",\"eventVersion\":0,\"capturedAt\":\"2026-10-11T08:54:19.495083\",\"timeBasis\":\"DATABASE_SESSION_LOCAL\",\"recipients\":[{\"userId\":1,\"memberVersion\":0,\"displayName\":\"系统管理员\",\"roleCode\":\"ADMIN\"}]}"
+        }
+      ],
+      "shiftHash": "72fc4d7ad2f1a1cd2323afcc4006b86477b4d0e10d52595391cbde32141a1576",
+      "designatedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "designatedRows": 0,
+      "swapRows": 0,
+      "swapRevocationRows": 0,
+      "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+      "onCallAuditHash": "7337f0bb95f6653bb19d777db468be5af9355354a0921d3aef4a8a4be061006c",
+      "v38MigrationHash": "8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820",
+      "v39MigrationHash": "7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a",
+      "v40MigrationHash": "c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702",
+      "v41MigrationHash": "b4dc17170eee1809a7689e62ee8de4be7ea8a15850a326e75060ea4e9673663e",
+      "memberHash": "33f08cf10e84f4fe047cf44d84fc98f5fec456b67f0dd3eefee7db68cc269afd",
+      "memberOperationHash": "eda6e07ff395c67fd5171987100f45c29101ffd1ffbdc9fb93ac619698631abc",
+      "members": [
+        {
+          "scheduleId": 1,
+          "userId": 1,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 1,
+          "userId": 2,
+          "active": true,
+          "canRespond": true,
+          "canManage": false,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 1,
+          "userId": 3,
+          "active": true,
+          "canRespond": false,
+          "canManage": true,
+          "version": 2,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 1,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 2,
+          "active": true,
+          "canRespond": true,
+          "canManage": false,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 3,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        }
+      ],
+      "openRequestHash": "4795309b32d0d770377c6a235e7d196dc25ecdfe2e78d1f1d7c45d7fd422cf3a",
+      "openOperationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "requests": [
+        {
+          "id": 1,
+          "sourceShiftId": 3,
+          "status": "OPEN",
+          "version": 0,
+          "claimedBy": null,
+          "replacementShiftId": null,
+          "operations": 0,
+          "audits": 1,
+          "overrides": 0
+        }
+      ]
+    },
+    {
+      "actualProduct": "H2",
+      "actualVersion": "2.2.220 (2023-07-04)",
+      "migrationCount": 42,
+      "successfulHistoryRows": 43,
+      "history": [
+        {
+          "version": null,
+          "type": "TABLE",
+          "success": true
+        },
+        {
+          "version": "1",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "2",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "3",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "4",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "5",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "6",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "7",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "8",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "9",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "10",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "11",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "12",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "13",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "14",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "15",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "16",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "17",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "18",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "19",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "20",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "21",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "22",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "23",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "24",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "25",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "26",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "27",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "28",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "29",
+          "type": "JDBC",
+          "success": true
+        },
+        {
+          "version": "30",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "31",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "32",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "33",
+          "type": "JDBC",
+          "success": true
+        },
+        {
+          "version": "34",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "35",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "36",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "37",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "38",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "39",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "40",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "41",
+          "type": "SQL",
+          "success": true
+        },
+        {
+          "version": "42",
+          "type": "SQL",
+          "success": true
+        }
+      ],
+      "migration38": true,
+      "migration39": true,
+      "migration40": true,
+      "migration41": true,
+      "migration42": true,
+      "redriveReceipts": [
+        {
+          "id": 1,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 3,
+          "operationKey": "d960e4c4-5f4a-40a1-bd1f-f4331485936a",
+          "capturedVersion": 2,
+          "queuedVersion": 3,
+          "priorAttempts": 1,
+          "priorHttpStatus": 400,
+          "priorErrorCode": "HTTP_400",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned lost-response manual authorization",
+          "acceptedAt": "2026-10-11T08:54:54.258888"
+        },
+        {
+          "id": 2,
+          "notificationId": 1,
+          "handoffId": 1,
+          "actorId": 1,
+          "operationKey": "4d4a0bfb-59a8-43d7-88a4-9340dfb33a60",
+          "capturedVersion": 7,
+          "queuedVersion": 8,
+          "priorAttempts": 3,
+          "priorHttpStatus": 503,
+          "priorErrorCode": "HTTP_503",
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "reason": "owned concurrent second manual authorization",
+          "acceptedAt": "2026-10-11T08:55:37.894395"
+        }
+      ],
+      "notificationCycleStarts": [
+        {
+          "id": 1,
+          "cycleStartAttempts": 3
+        }
+      ],
+      "redriveAudits": 2,
+      "notificationRows": 1,
+      "notificationHash": "4f04f41af327765c6822b0d35bebd7d69a08cad86ebdbe91a6ca7935fb729222",
+      "notifications": [
+        {
+          "id": 1,
+          "handoffId": 1,
+          "eventVersion": 0,
+          "recipientId": 1,
+          "deliveryKey": "523016c2-bf56-4b84-8b19-1df719706b57",
+          "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+          "status": "DELIVERED",
+          "version": 10,
+          "attempts": 4,
+          "lastHttpStatus": 200,
+          "lastErrorCode": null,
+          "leaseOwnerPresent": false,
+          "leaseUntil": null,
+          "deliveredAt": "2026-10-11 08:55:52.542726"
+        }
+      ],
+      "publicationRows": 1,
+      "publicationHash": "59e2813b8760e91ef5fb014275d302efa6e185f6c27fa86a68b58fce5ab4d2c9",
+      "shifts": 3,
+      "publications": [
+        {
+          "handoffId": 1,
+          "eventVersion": 0,
+          "snapshotJson": "{\"handoffId\":1,\"scheduleId\":1,\"sourceShiftId\":3,\"sourceVersion\":0,\"requesterId\":2,\"startsAt\":\"2026-10-13T08:54:19\",\"endsAt\":\"2026-10-13T12:54:19\",\"eventVersion\":0,\"capturedAt\":\"2026-10-11T08:54:19.495083\",\"timeBasis\":\"DATABASE_SESSION_LOCAL\",\"recipients\":[{\"userId\":1,\"memberVersion\":0,\"displayName\":\"系统管理员\",\"roleCode\":\"ADMIN\"}]}"
+        }
+      ],
+      "shiftHash": "72fc4d7ad2f1a1cd2323afcc4006b86477b4d0e10d52595391cbde32141a1576",
+      "designatedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "designatedRows": 0,
+      "swapRows": 0,
+      "swapRevocationRows": 0,
+      "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+      "onCallAuditHash": "49aeaea39ea3d817b8080f482080777d8d2f7717fec4ab90efe7aca83bf63b19",
+      "v38MigrationHash": "8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820",
+      "v39MigrationHash": "7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a",
+      "v40MigrationHash": "c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702",
+      "v41MigrationHash": "b4dc17170eee1809a7689e62ee8de4be7ea8a15850a326e75060ea4e9673663e",
+      "memberHash": "6b6feb1a3b1e9b9d3dd973380933fbe4f1a19a8cbd8a5bd3247c9ba8ace8f14c",
+      "memberOperationHash": "15b01818ec0eb9b11c44a31f61928b59f5d4a4f61d6e7c18094014710417c982",
+      "members": [
+        {
+          "scheduleId": 1,
+          "userId": 1,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 1,
+          "userId": 2,
+          "active": true,
+          "canRespond": true,
+          "canManage": false,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 1,
+          "userId": 3,
+          "active": false,
+          "canRespond": false,
+          "canManage": false,
+          "version": 3,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 1,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 2,
+          "active": true,
+          "canRespond": true,
+          "canManage": false,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        },
+        {
+          "scheduleId": 2,
+          "userId": 3,
+          "active": true,
+          "canRespond": true,
+          "canManage": true,
+          "version": 0,
+          "origin": "MIGRATED_GLOBAL_V38"
+        }
+      ],
+      "openRequestHash": "56fece4d58816a72f75a2a885f4a7acdb87356e7de2c29b88865cd534b8424e1",
+      "openOperationHash": "6979748c51cbce8ebbc35cf33242c9d97677cb9c0923ea066e489067c8215f6a",
+      "requests": [
+        {
+          "id": 1,
+          "sourceShiftId": 3,
+          "status": "WITHDRAWN",
+          "version": 1,
+          "claimedBy": null,
+          "replacementShiftId": null,
+          "operations": 1,
+          "audits": 2,
+          "overrides": 0
+        }
+      ]
+    }
+  ],
+  "httpObservations": [
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/roster",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/schedules/1/members",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/shifts",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/publication",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 404,
+      "errorCode": "NOT_FOUND"
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/publication",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 401,
+      "errorCode": "AUTHENTICATION_REQUIRED"
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 403,
+      "errorCode": "ACCESS_DENIED"
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 403,
+      "errorCode": "ACCESS_DENIED"
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 403,
+      "errorCode": "ONCALL_PLAN_MANAGEMENT_FORBIDDEN"
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 400,
+      "errorCode": "VALIDATION_ERROR"
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1000001/notifications/1/redrives",
+      "status": 404,
+      "errorCode": "ONCALL_OPEN_NOTIFICATION_NOT_FOUND"
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/schedules/1/members",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 200,
+      "responseBodyRead": false
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 409,
+      "errorCode": "ONCALL_OPEN_NOTIFICATION_OPERATION_KEY_REUSED"
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 409,
+      "errorCode": "ONCALL_OPEN_NOTIFICATION_DISABLED"
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 409,
+      "errorCode": "ONCALL_OPEN_NOTIFICATION_VERSION_CONFLICT"
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/notifications",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/open-handoffs/1/publication",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/withdrawals",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/schedules/1/members",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/open-handoffs/1/notifications/1/redrives",
+      "status": 403,
+      "errorCode": "ONCALL_PLAN_MANAGEMENT_FORBIDDEN"
+    }
+  ],
+  "received": [
+    {
+      "method": "POST",
+      "path": "/notify",
+      "status": 400,
+      "authenticated": true,
+      "key": "oncall-open-notification:523016c2-bf56-4b84-8b19-1df719706b57",
+      "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+      "handoffId": 1,
+      "recipientId": 1,
+      "eventVersion": 0,
+      "humanConfirmationRequired": true
+    },
+    {
+      "method": "POST",
+      "path": "/notify",
+      "status": 503,
+      "authenticated": true,
+      "key": "oncall-open-notification:523016c2-bf56-4b84-8b19-1df719706b57",
+      "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+      "handoffId": 1,
+      "recipientId": 1,
+      "eventVersion": 0,
+      "humanConfirmationRequired": true
+    },
+    {
+      "method": "POST",
+      "path": "/notify",
+      "status": 503,
+      "authenticated": true,
+      "key": "oncall-open-notification:523016c2-bf56-4b84-8b19-1df719706b57",
+      "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+      "handoffId": 1,
+      "recipientId": 1,
+      "eventVersion": 0,
+      "humanConfirmationRequired": true
+    },
+    {
+      "method": "POST",
+      "path": "/notify",
+      "status": 200,
+      "authenticated": true,
+      "key": "oncall-open-notification:523016c2-bf56-4b84-8b19-1df719706b57",
+      "payloadSha256": "d707e05dc5bb68208588f0465c0935b51d814faadf7ef0ee298fdfe18fe931cf",
+      "handoffId": 1,
+      "recipientId": 1,
+      "eventVersion": 0,
+      "humanConfirmationRequired": true
+    }
+  ],
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "thirdPartyAccountVerified": false,
+  "remindersVerified": false,
+  "unexpectedJarErrors": 0,
+  "completeJarLogs": [
+    {
+      "file": "target/oncall-open-notification-redrive-http-it/run-56bOVW/jar-1.log",
+      "sha256": "90fcabd0afda3e0f99aba0021ecbb08f7aff6f2f20f8354505d69ec529dc2ea6"
+    },
+    {
+      "file": "target/oncall-open-notification-redrive-http-it/run-56bOVW/jar-2.log",
+      "sha256": "6a63e347e6e4cfd292be5f9e05d5c2296367e5e17dd73b31f57f01c3ad2d2f5a"
+    },
+    {
+      "file": "target/oncall-open-notification-redrive-http-it/run-56bOVW/jar-3.log",
+      "sha256": "9ac49682dc66b2aae8b353b5c424f69c2d33025636bedb365db4a14a087b1ddd"
+    },
+    {
+      "file": "target/oncall-open-notification-redrive-http-it/run-56bOVW/jar-4.log",
+      "sha256": "daf32a0c44c0a32ab7a0b61a357b0062b2f7e2469ebf716b1ab9571ab8bd7eb7"
+    },
+    {
+      "file": "target/oncall-open-notification-redrive-http-it/run-56bOVW/jar-5.log",
+      "sha256": "20698f18af65872d49d89de217e8360bbd87550f730b6e9eb0f07832fa6c0b7b"
+    },
+    {
+      "file": "target/oncall-open-notification-redrive-http-it/run-56bOVW/jar-6.log",
+      "sha256": "89e662b779ea482ab66de6785323d5a71651c1730c7b37874ffd71e9839b301d"
+    }
+  ],
+  "ownedProcessesStopped": true,
+  "receiverStopped": true
+}

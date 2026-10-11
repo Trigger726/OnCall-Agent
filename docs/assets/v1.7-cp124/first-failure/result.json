@@ -1,0 +1,64 @@
+{
+  "status": "FAIL",
+  "oldSource": "2730e307c542f3c71f0adea2c354dd9a6118ba4e",
+  "oldJarSha256": "51f999d0a6f681c85df7ac3cf829ad36e7443174d738f34d3d4c2d1e186aa67e",
+  "jarSha256": "714295510a343f5a8369cb252c0f79049859d1566369d6b979f94524cc875353",
+  "databaseMode": "H2_OWNED_FILE",
+  "cases": [],
+  "startedPids": [
+    35436
+  ],
+  "stoppedPids": [
+    35436
+  ],
+  "shutdowns": [],
+  "sqlFixtures": [],
+  "httpObservations": [
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/auth/login",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "route": "/on-call/roster",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "route": "/on-call/schedules/1/members",
+      "status": 400,
+      "errorCode": "ONCALL_MEMBER_INVALID"
+    }
+  ],
+  "received": [],
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "thirdPartyAccountVerified": false,
+  "remindersVerified": false,
+  "failure": "AssertionError [ERR_ASSERTION]: /on-call/schedules/1/members ONCALL_MEMBER_INVALID\n\n400 !== 200\n\n    at api (D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-oncall-open-notification-redrive-http-ci.cjs:40:132)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async verify (D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-oncall-open-notification-redrive-http-ci.cjs:57:5)",
+  "unexpectedJarErrors": 0,
+  "completeJarLogs": [
+    {
+      "file": "target/oncall-open-notification-redrive-http-it/run-dk0Xes/jar-1.log",
+      "sha256": "7f3947f93c3c8311ba49071635059bf0375ee87a63c8594ab7d0d42326c0d82c"
+    }
+  ],
+  "ownedProcessesStopped": true,
+  "receiverStopped": true
+}

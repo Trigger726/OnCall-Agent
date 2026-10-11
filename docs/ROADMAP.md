@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+当前CP124：[已有人工重投的TCP/重启验收收尾](acceptance/V1.7-checkpoint-124.md)。9整包场景/6有序JVM/4真实HTTP、Node283/test-compile通过，无生产/页面/迁移改动；CP123自己21＋12 success及MySQL37/五状态官方包独立闭合。同9步MySQL加入已有作业、自己的新结果待验。用户要求控制token，先收尾现有成果，不自动扩大范围，暂停/封版选择待明确；旧Demo/dirty保留。
+
 当前CP123：[FAILED通知的显式人工重投](acceptance/V1.7-checkpoint-123.md)。V42持久原回执、稳定原事件、累计次数保留，POST只排队。606实际Java/282条件跳过、Node275/前端223、原JAR7/页面11通过；CP122自身21＋12及新MySQL七步已独立闭合。本轮自身MySQL/新CI、人工重投整包矩阵及前端写入口继续，目标active，旧Demo/未提交改动保留。
 
 当前CP122：[完整通知JAR的独立MySQL升级门禁](acceptance/V1.7-checkpoint-122.md)。原七步H2真实升级/503与200跨重启/撤权跳过/人工认领通过；本轮Java856发现/590执行/266条件跳过、Node270通过。新增第十二自有MySQL作业，真实新MySQL仍待，合成门禁不是实际运行。CP121自身主21＋专项11 success、新Linux12官方UI工件已独立重放；生产Java/前端/V1–V41与旧Demo不改，整个目标active、不称100%。以下按历史时点阅读。

@@ -22,17 +22,18 @@ public class OpenHandoffSqlFixture {
             boolean memberUpgrade = parent.equals("oncall-plan-membership-upgrade-mysql-it");
             boolean publicationUpgrade = parent.equals("oncall-open-publication-upgrade-mysql-it");
             boolean notificationUpgrade = parent.equals("oncall-open-notification-upgrade-mysql-it");
-            if (!memberUpgrade && !publicationUpgrade && !notificationUpgrade && !parent.equals("oncall-open-handoff-upgrade-mysql-it")) throw new IllegalArgumentException("Require MySQL runner root");
+            boolean notificationRedrive = parent.equals("oncall-open-notification-redrive-mysql-it");
+            if (!memberUpgrade && !publicationUpgrade && !notificationUpgrade && !notificationRedrive && !parent.equals("oncall-open-handoff-upgrade-mysql-it")) throw new IllegalArgumentException("Require MySQL runner root");
             url = System.getenv("OPSPILOT_UPGRADE_JDBC_URL");
             String schema = System.getenv("OPSPILOT_UPGRADE_SCHEMA");
-            if (schema == null || !schema.matches((memberUpgrade ? "opspilot_member_upgrade_" : publicationUpgrade ? "opspilot_publication_upgrade_" : notificationUpgrade ? "opspilot_notification_upgrade_" : "opspilot_open_upgrade_") + "[a-f0-9]{12}") || url == null
+            if (schema == null || !schema.matches((memberUpgrade ? "opspilot_member_upgrade_" : publicationUpgrade ? "opspilot_publication_upgrade_" : notificationUpgrade ? "opspilot_notification_upgrade_" : notificationRedrive ? "opspilot_notification_redrive_" : "opspilot_open_upgrade_") + "[a-f0-9]{12}") || url == null
                     || !url.matches("jdbc:mysql://(?:localhost|127\\.0\\.0\\.1):[0-9]+/" + schema + "\\?[^\\s]+")) {
                 throw new IllegalArgumentException("Require dedicated loopback Testcontainer schema");
             }
         } else {
         Path database = Path.of(args[0]).toAbsolutePath().normalize();
         if (!root.getFileName().toString().startsWith("run-")
-                || !java.util.List.of("oncall-open-handoff-http-it", "oncall-plan-membership-upgrade-http-it", "oncall-open-publication-upgrade-http-it", "oncall-open-notification-http-it", "oncall-open-notification-ui-it", "oncall-open-notification-operations-ui-it").contains(root.getParent().getFileName().toString())
+                || !java.util.List.of("oncall-open-handoff-http-it", "oncall-plan-membership-upgrade-http-it", "oncall-open-publication-upgrade-http-it", "oncall-open-notification-http-it", "oncall-open-notification-ui-it", "oncall-open-notification-operations-ui-it", "oncall-open-notification-redrive-http-it").contains(root.getParent().getFileName().toString())
                 || !database.getParent().toRealPath().equals(root.resolve("database").toRealPath())
                 || !database.getFileName().toString().equals("opspilot")
                 || !Files.isRegularFile(Path.of(database + ".mv.db"))
@@ -115,6 +116,20 @@ public class OpenHandoffSqlFixture {
                         + ",\"lastHttpStatus\":" + rows.getObject(10) + ",\"lastErrorCode\":" + quote(rows.getString(11))
                         + ",\"leaseOwnerPresent\":" + (rows.getString(12) != null) + ",\"leaseUntil\":" + quote(rows.getString(13)) + ",\"deliveredAt\":" + quote(rows.getString(14)) + "}");
             }
+            var redrives = new ArrayList<String>();
+            var cycleStarts = new ArrayList<String>();
+            if (redriveMigrated) {
+                try(var statement=connection.createStatement();var rows=statement.executeQuery("SELECT id,cycle_start_attempts FROM oncall_open_handoff_notification ORDER BY id")) {
+                    while(rows.next())cycleStarts.add("{\"id\":"+rows.getLong(1)+",\"cycleStartAttempts\":"+rows.getInt(2)+"}");
+                }
+                try(var statement=connection.createStatement();var rows=statement.executeQuery("SELECT * FROM oncall_open_notification_redrive ORDER BY id")) {
+                    while(rows.next())redrives.add("{\"id\":"+rows.getLong("id")+",\"notificationId\":"+rows.getLong("notification_id")+",\"handoffId\":"+rows.getLong("handoff_id")
+                            +",\"actorId\":"+rows.getLong("actor_id")+",\"operationKey\":"+quote(rows.getString("operation_key"))+",\"capturedVersion\":"+rows.getInt("captured_version")
+                            +",\"queuedVersion\":"+rows.getInt("queued_version")+",\"priorAttempts\":"+rows.getInt("prior_attempts")+",\"priorHttpStatus\":"+rows.getObject("prior_http_status")
+                            +",\"priorErrorCode\":"+quote(rows.getString("prior_error_code"))+",\"deliveryKey\":"+quote(rows.getString("delivery_key"))+",\"reason\":"+quote(rows.getString("reason"))
+                            +",\"acceptedAt\":"+quote(rows.getObject("accepted_at",java.time.LocalDateTime.class).toString())+"}");
+                }
+            }
             System.out.println("{" + identity
                     + ",\"migrationCount\":" + count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE AND version IS NOT NULL")
                     + ",\"successfulHistoryRows\":" + count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE success=TRUE")
@@ -122,6 +137,9 @@ public class OpenHandoffSqlFixture {
                     + ",\"migration38\":" + migrated + ",\"migration39\":" + memberMigrated + ",\"migration40\":" + publicationMigrated
                     + ",\"migration41\":" + notificationMigrated
                     + ",\"migration42\":" + redriveMigrated
+                    + ",\"redriveReceipts\":[" + String.join(",",redrives) + "]"
+                    + ",\"notificationCycleStarts\":[" + String.join(",",cycleStarts) + "]"
+                    + ",\"redriveAudits\":" + count(connection,"SELECT COUNT(*) FROM audit_log WHERE action='ONCALL_OPEN_NOTIFICATION_REDRIVE'")
                     + ",\"notificationRows\":" + (notificationMigrated ? count(connection,"SELECT COUNT(*) FROM oncall_open_handoff_notification") : 0)
                     + ",\"notificationHash\":" + quote(notificationMigrated ? fingerprint(connection,"SELECT * FROM oncall_open_handoff_notification ORDER BY id") : null)
                     + ",\"notifications\":[" + String.join(",", notifications) + "]"
@@ -139,6 +157,7 @@ public class OpenHandoffSqlFixture {
                     + ",\"v38MigrationHash\":" + quote(fingerprint(connection, "SELECT version,type,script,checksum,success FROM flyway_schema_history WHERE version IS NOT NULL AND CAST(version AS INTEGER)<=38 ORDER BY installed_rank".replace("CAST(version AS INTEGER)", mysql ? "CAST(version AS UNSIGNED)" : "CAST(version AS INTEGER)")))
                     + ",\"v39MigrationHash\":" + quote(fingerprint(connection, "SELECT version,type,script,checksum,success FROM flyway_schema_history WHERE version IS NOT NULL AND CAST(version AS INTEGER)<=39 ORDER BY installed_rank".replace("CAST(version AS INTEGER)", mysql ? "CAST(version AS UNSIGNED)" : "CAST(version AS INTEGER)")))
                     + ",\"v40MigrationHash\":" + quote(fingerprint(connection, "SELECT version,type,script,checksum,success FROM flyway_schema_history WHERE version IS NOT NULL AND CAST(version AS INTEGER)<=40 ORDER BY installed_rank".replace("CAST(version AS INTEGER)", mysql ? "CAST(version AS UNSIGNED)" : "CAST(version AS INTEGER)")))
+                    + ",\"v41MigrationHash\":" + quote(fingerprint(connection, "SELECT version,type,script,checksum,success FROM flyway_schema_history WHERE version IS NOT NULL AND CAST(version AS INTEGER)<=41 ORDER BY installed_rank".replace("CAST(version AS INTEGER)", mysql ? "CAST(version AS UNSIGNED)" : "CAST(version AS INTEGER)")))
                     + ",\"memberHash\":" + quote(memberMigrated ? fingerprint(connection, "SELECT * FROM oncall_schedule_member ORDER BY schedule_id,user_id") : null)
                     + ",\"memberOperationHash\":" + quote(memberMigrated ? fingerprint(connection, "SELECT * FROM oncall_schedule_member_operation ORDER BY id") : null)
                     + ",\"members\":[" + String.join(",", members) + "]"
