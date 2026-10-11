@@ -367,7 +367,7 @@ public class AssistantService {
         if (end < question.length() && Character.isHighSurrogate(question.charAt(end - 1))) end--;
         RunbookService.SearchResponse result;
         try {
-            var scope = context == null ? null : runbookScope(context.id());
+            var scope = context == null ? null : runbookScope(context);
             result = runbooks.searchTracked(question.substring(0, end), role, lease.userId(), 3, "AUTO", "ASSISTANT", scope);
         } catch (ApiException exception) {
             if (!"RUNBOOK_ROLE_UNSUPPORTED".equals(exception.code())) throw exception;
@@ -380,7 +380,7 @@ public class AssistantService {
         return result;
     }
 
-    private RunbookService.SearchScope runbookScope(long incidentId) {
+    private RunbookService.SearchScope runbookScope(IncidentContext context) {
         var resources = jdbcClient.sql("""
                         SELECT DISTINCT r.resource_code, r.resource_type
                         FROM cmdb_resource r JOIN incident i ON i.id=:id
@@ -389,12 +389,13 @@ public class AssistantService {
                             WHERE (relation.source_resource_id=i.service_resource_id AND relation.target_resource_id=r.id)
                                OR (relation.target_resource_id=i.service_resource_id AND relation.source_resource_id=r.id))
                         ORDER BY r.resource_code
-                        """).param("id", incidentId)
+                        """).param("id", context.id())
                 .query((rs, row) -> new RunbookResource(rs.getString("resource_code"), rs.getString("resource_type"))).list();
         var types = new HashSet<String>();
         resources.forEach(resource -> types.add(resource.type()));
         types.add("SERVICE"); // Explicitly unscoped generic service procedures remain eligible.
-        return new RunbookService.SearchScope(resources.stream().map(RunbookResource::code).toList(), types.stream().sorted().toList());
+        return new RunbookService.SearchScope(resources.stream().map(RunbookResource::code).toList(), types.stream().sorted().toList(),
+                context.id(), context.incidentCode(), context.title());
     }
 
     private Answer generateAnswer(IncidentContext context, List<MessageView> history, String question,

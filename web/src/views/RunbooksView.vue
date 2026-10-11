@@ -83,6 +83,15 @@ interface PendingJudgment {
   citation: string
   versionNo: number
   createdAt: string
+  scope?: { type: string; filter: { incidentId: number | null; incidentCode: string | null; incidentTitle: string | null; serviceCodes: string[]; resourceTypes: string[] } | null }
+}
+
+function scopeLabel(scope: PendingJudgment['scope']) {
+  if (!scope || scope.type === 'UNKNOWN') return '历史范围未知：可复核，但不进入固定评测集'
+  if (scope.type === 'GLOBAL') return '全库检索'
+  const filter = scope.filter
+  if (!filter) return '范围快照无效'
+  return `原范围快照：${filter.incidentCode ?? '指定资源'}${filter.incidentTitle ? ` · ${filter.incidentTitle}` : ''}；serviceCode=${filter.serviceCodes.join(',') || '空'}；通用类型=${filter.resourceTypes.join(',') || '空'}`
 }
 
 interface Agreement {
@@ -521,10 +530,10 @@ function retentionLabel(value: string) {
     </section>
 
     <section v-if="canManage" class="content-panel judgment-panel">
-      <header class="panel-heading"><div><h2>待复核相关性判断</h2><span>原始等级对复核人隐藏；复核等级 ≥ 2 才进入固定评测集</span></div><div class="agreement-summary"><span class="keyword-tag">{{ pendingJudgments.length }} PENDING</span><span v-if="agreement" :title="agreement.note">κ {{ kappa(agreement.linearWeightedKappa) }} · 精确 {{ metric(agreement.exactAgreementRate) }} · {{ agreement.sampleCount }} 对</span></div></header>
+      <header class="panel-heading"><div><h2>待复核相关性判断</h2><span>原始等级隐藏；独立复核 ≥ 2 且范围已知才进入固定评测集</span></div><div class="agreement-summary"><span class="keyword-tag">{{ pendingJudgments.length }} PENDING</span><span v-if="agreement" :title="agreement.note">κ {{ kappa(agreement.linearWeightedKappa) }} · 精确 {{ metric(agreement.exactAgreementRate) }} · {{ agreement.sampleCount }} 对</span></div></header>
       <div v-if="pendingJudgments.length" class="judgment-list">
         <article v-for="judgment in pendingJudgments" :key="judgment.id">
-          <div><strong>{{ judgment.query }}</strong><span>{{ judgment.documentTitle }} · {{ judgment.actualEngine }} · {{ formatTime(judgment.createdAt, true) }}</span><p>{{ judgment.documentExcerpt }}</p><code>{{ judgment.citation }}</code></div>
+          <div><strong>{{ judgment.query }}</strong><span>{{ judgment.documentTitle }} · {{ judgment.actualEngine }} · {{ formatTime(judgment.createdAt, true) }}</span><p class="judgment-scope">{{ scopeLabel(judgment.scope) }}</p><p>{{ judgment.documentExcerpt }}</p><code>{{ judgment.citation }}</code></div>
           <div class="judgment-actions">
             <button v-for="grade in [3, 2, 1, 0]" :key="grade" type="button" :class="grade >= 2 ? 'primary-button' : 'secondary-button'" :disabled="feedbackLoadingKey === `review-${judgment.id}`" @click="reviewJudgment(judgment, 'APPROVE', grade)">{{ grade }} {{ ['不相关', '弱相关', '部分相关', '高度相关'][grade] }}</button>
             <button type="button" class="secondary-button" :disabled="feedbackLoadingKey === `review-${judgment.id}`" @click="reviewJudgment(judgment, 'REJECT')"><XCircle :size="14" />拒绝样本</button>
@@ -629,7 +638,8 @@ function retentionLabel(value: string) {
 .judgment-list article > div:first-child { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .judgment-list strong { font-size: 11px; }
 .judgment-list code, .judgment-list span { color: var(--text-muted); font-size: 9px; }
-.judgment-list p { max-width: 680px; margin: 2px 0; color: #55555a; font-size: 9px; line-height: 1.5; }
+.judgment-list p { max-width: 680px; margin: 2px 0; color: var(--text-muted); font-size: 11px; line-height: 1.6; }
+.judgment-list .judgment-scope { color: var(--text); overflow-wrap: anywhere; }
 .agreement-summary { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 9px; }
 .judgment-actions { flex: 0 0 auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
 .retention-panel { overflow: hidden; }

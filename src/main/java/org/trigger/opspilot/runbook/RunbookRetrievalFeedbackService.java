@@ -57,29 +57,46 @@ public class RunbookRetrievalFeedbackService {
                       String roleCode, String semanticStatus, java.math.BigDecimal semanticCoverage,
                        int candidateChunkCount, int topK, long latencyMs,
                        List<RunbookService.SearchResult> results, Long actorId) {
+        return recordSearch(query, sourceType, requestedMode, actualEngine, roleCode, semanticStatus, semanticCoverage,
+                candidateChunkCount, topK, latencyMs, results, actorId, null);
+    }
+
+    Long recordSearch(String query, String sourceType, String requestedMode, String actualEngine,
+                      String roleCode, String semanticStatus, java.math.BigDecimal semanticCoverage,
+                      int candidateChunkCount, int topK, long latencyMs,
+                      List<RunbookService.SearchResult> results, Long actorId, RunbookService.SearchScope scope) {
         try {
             SnapshotPayload snapshot = sanitizeSnapshot(query, results);
+            String scopeJson = scope == null ? null : objectMapper.writeValueAsString(scope);
+            String scopeType = scope == null ? "GLOBAL" : "SCOPED";
+            int scopeRedactions = 0;
+            if (scopeJson != null && !scopeJson.equals(logRedactor.redact(scopeJson))) {
+                // Redacted metadata cannot reproduce the original filter. Do not store secrets or pretend it is global.
+                scopeJson = null; scopeType = "UNKNOWN"; scopeRedactions = 1;
+            }
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcClient.sql("""
                             INSERT INTO runbook_retrieval_query(
                               query_text, query_hash, source_type, requested_mode, actual_engine, role_code,
                               semantic_status, semantic_coverage, candidate_chunk_count, top_k, latency_ms,
-                              results_json, created_by, redacted_fields, returned_document_count)
+                              results_json, created_by, redacted_fields, returned_document_count, scope_type, scope_json)
                             VALUES (:query, :queryHash, :sourceType, :requestedMode, :actualEngine, :roleCode,
                               :semanticStatus, :semanticCoverage, :candidateCount, :topK, :latencyMs,
-                              :results, :createdBy, :redactedFields, :returnedDocuments)
+                              :results, :createdBy, :redactedFields, :returnedDocuments, :scopeType, :scopeJson)
                             """)
-                    .param("query", snapshot.query()).param("queryHash", sha256(snapshot.query()))
+                    .param("query", snapshot.query()).param("queryHash", sha256(snapshot.query()
+                            + ("GLOBAL".equals(scopeType) ? "" : "|" + scopeType + "|" + scopeJson)))
                     .param("sourceType", sourceType).param("requestedMode", requestedMode)
                     .param("actualEngine", actualEngine).param("roleCode", roleCode)
                     .param("semanticStatus", semanticStatus).param("semanticCoverage", semanticCoverage)
                     .param("candidateCount", candidateChunkCount).param("topK", topK)
                     .param("latencyMs", latencyMs).param("results", snapshot.resultsJson())
-                    .param("redactedFields", snapshot.redactedFields())
+                    .param("redactedFields", snapshot.redactedFields() + scopeRedactions)
+                    .param("scopeType", scopeType).param("scopeJson", scopeJson)
                     .param("returnedDocuments", results.stream().map(RunbookService.SearchResult::stableKey).distinct().count())
                     .param("createdBy", actorId).update(keyHolder, "id");
             return keyHolder.getKey() == null ? null : keyHolder.getKey().longValue();
-        } catch (RuntimeException exception) {
+        } catch (RuntimeException | JsonProcessingException exception) {
             log.warn("Runbook retrieval telemetry persistence failed: {}", exception.getClass().getSimpleName());
             return null;
         }
@@ -150,7 +167,7 @@ public class RunbookRetrievalFeedbackService {
 
     public List<PendingJudgmentView> pending(Long reviewerId) {
         return jdbcClient.sql("""
-                        SELECT j.id, j.search_id, q.query_text, q.source_type, q.actual_engine,
+                        SELECT j.id, j.search_id, q.query_text, q.source_type, q.actual_engine, q.scope_type, q.scope_json,
                                q.results_json, j.document_stable_key, j.version_no, j.created_at
                         FROM runbook_relevance_judgment j
                         JOIN runbook_retrieval_query q ON q.id = j.search_id
@@ -166,7 +183,8 @@ public class RunbookRetrievalFeedbackService {
                             rs.getString("query_text"), rs.getString("source_type"),
                             rs.getString("actual_engine"), rs.getString("document_stable_key"),
                             document.title(), document.excerpt(), document.citation(),
-                            rs.getInt("version_no"), rs.getObject("created_at", LocalDateTime.class));
+                            rs.getInt("version_no"), rs.getObject("created_at", LocalDateTime.class),
+                            RunbookRetrievalScope.read(rs.getString("scope_type"), rs.getString("scope_json"), objectMapper));
                 }).list();
     }
 
@@ -187,6 +205,7 @@ public class RunbookRetrievalFeedbackService {
                     "reviewerGrade 必须在 0-3 之间");
         }
         JudgmentRow judgment = judgmentRow(judgmentId);
+        var scope = RunbookRetrievalScope.read(judgment.scopeType(), judgment.scopeJson(), objectMapper);
         if (reviewerId != null && reviewerId.equals(judgment.judgedBy())) {
             throw new ApiException(HttpStatus.CONFLICT, "RUNBOOK_JUDGMENT_SELF_REVIEW_FORBIDDEN",
                     "提交人不能复核自己的相关性判断");
@@ -207,22 +226,24 @@ public class RunbookRetrievalFeedbackService {
                     "相关性判断已被其他复核人更新，请刷新后重试");
         }
         String promotedCaseKey = null;
-        if ("APPROVED".equals(status) && reviewerGrade >= 2) {
+        if ("APPROVED".equals(status) && reviewerGrade >= 2 && !"UNKNOWN".equals(scope.type())) {
             promotedCaseKey = "human-judgment-" + judgmentId;
             jdbcClient.sql("""
                             INSERT INTO runbook_retrieval_eval_case(
                               case_key, query_text, expected_stable_key, enabled,
-                              source_type, judgment_id, reviewed_by, relevance_grade)
+                              source_type, judgment_id, reviewed_by, relevance_grade, scope_type, scope_json)
                             VALUES (:caseKey, :query, :stableKey, TRUE, 'HUMAN_JUDGMENT',
-                              :judgmentId, :reviewerId, :grade)
+                              :judgmentId, :reviewerId, :grade, :scopeType, :scopeJson)
                             """).param("caseKey", promotedCaseKey).param("query", judgment.query())
                     .param("stableKey", judgment.stableKey()).param("judgmentId", judgmentId)
-                    .param("reviewerId", reviewerId).param("grade", reviewerGrade).update();
+                    .param("reviewerId", reviewerId).param("grade", reviewerGrade)
+                    .param("scopeType", scope.type()).param("scopeJson", judgment.scopeJson()).update();
         }
         auditService.record("RUNBOOK_RELEVANCE_REVIEW", "RUNBOOK_JUDGMENT", judgmentId,
                 status + "；提交等级 " + judgment.relevanceGrade()
                         + (reviewerGrade == null ? "" : "；复核等级 " + reviewerGrade)
-                        + (promotedCaseKey == null ? "；未进入正相关评测集" : "；评测 case " + promotedCaseKey));
+                        + (promotedCaseKey == null ? "；未进入正相关评测集" : "；评测 case " + promotedCaseKey)
+                        + "；范围 " + scope.type());
         return judgmentById(judgmentId, promotedCaseKey);
     }
 
@@ -299,7 +320,8 @@ public class RunbookRetrievalFeedbackService {
         int purgedSnapshots = jdbcClient.sql("""
                         UPDATE runbook_retrieval_query
                         SET query_text = '[PURGED]', query_hash = :purgedHash,
-                            results_json = '[]', created_by = NULL,
+                            results_json = '[]', created_by = NULL, scope_json = NULL,
+                            scope_type = CASE WHEN scope_type='SCOPED' THEN 'UNKNOWN' ELSE scope_type END,
                             snapshot_status = 'PURGED', purged_at = CURRENT_TIMESTAMP
                         WHERE id IN (:searchIds) AND snapshot_status = 'ACTIVE'
                         """).param("purgedHash", sha256("PURGED"))
@@ -335,14 +357,14 @@ public class RunbookRetrievalFeedbackService {
 
     private JudgmentRow judgmentRow(long id) {
         return jdbcClient.sql("""
-                        SELECT j.id, q.query_text, j.document_stable_key, j.relevance_grade, j.judged_by
+                        SELECT j.id, q.query_text, j.document_stable_key, j.relevance_grade, j.judged_by, q.scope_type, q.scope_json
                         FROM runbook_relevance_judgment j
                         JOIN runbook_retrieval_query q ON q.id = j.search_id
                         WHERE j.id = :id
                         """).param("id", id)
                 .query((rs, rowNum) -> new JudgmentRow(rs.getLong("id"), rs.getString("query_text"),
                         rs.getString("document_stable_key"), rs.getInt("relevance_grade"),
-                        rs.getLong("judged_by")))
+                        rs.getLong("judged_by"), rs.getString("scope_type"), rs.getString("scope_json")))
                 .optional().orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND,
                         "RUNBOOK_JUDGMENT_NOT_FOUND", "相关性判断不存在"));
     }
@@ -352,7 +374,7 @@ public class RunbookRetrievalFeedbackService {
                         SELECT j.id, j.search_id, q.query_text, q.source_type, q.actual_engine,
                                j.document_stable_key, j.relevance_grade, j.comment, j.review_status,
                                j.version_no, j.judged_by, u.display_name AS judged_by_name, j.created_at,
-                               j.reviewed_by, j.reviewed_at, j.reviewer_grade, j.review_note
+                               j.reviewed_by, j.reviewed_at, j.reviewer_grade, j.review_note, q.scope_type, q.scope_json
                         FROM runbook_relevance_judgment j
                         JOIN runbook_retrieval_query q ON q.id = j.search_id
                         JOIN sys_user u ON u.id = j.judged_by
@@ -367,7 +389,8 @@ public class RunbookRetrievalFeedbackService {
                 rs.getString("review_status"), rs.getInt("version_no"), rs.getLong("judged_by"),
                 rs.getString("judged_by_name"), rs.getObject("created_at", LocalDateTime.class),
                 rs.getObject("reviewed_by", Long.class), rs.getObject("reviewed_at", LocalDateTime.class),
-                rs.getObject("reviewer_grade", Integer.class), rs.getString("review_note"), promotedCaseKey);
+                rs.getObject("reviewer_grade", Integer.class), rs.getString("review_note"), promotedCaseKey,
+                RunbookRetrievalScope.read(rs.getString("scope_type"), rs.getString("scope_json"), objectMapper));
     }
 
     private SnapshotDocument snapshotDocument(String resultsJson, String stableKey) {
@@ -503,13 +526,13 @@ public class RunbookRetrievalFeedbackService {
                                String documentStableKey, int relevanceGrade, String comment,
                                String reviewStatus, int versionNo, long judgedBy, String judgedByName,
                                LocalDateTime createdAt, Long reviewedBy, LocalDateTime reviewedAt,
-                               Integer reviewerGrade, String reviewNote, String promotedCaseKey) {
+                               Integer reviewerGrade, String reviewNote, String promotedCaseKey, RunbookRetrievalScope.View scope) {
     }
 
     public record PendingJudgmentView(long id, long searchId, String query, String sourceType,
                                       String actualEngine, String documentStableKey, String documentTitle,
                                       String documentExcerpt, String citation, int versionNo,
-                                      LocalDateTime createdAt) {
+                                      LocalDateTime createdAt, RunbookRetrievalScope.View scope) {
     }
 
     public record AgreementView(int sampleCount, BigDecimal exactAgreementRate,
@@ -532,7 +555,8 @@ public class RunbookRetrievalFeedbackService {
                                   String snapshotStatus) {
     }
 
-    private record JudgmentRow(long id, String query, String stableKey, int relevanceGrade, long judgedBy) {
+    private record JudgmentRow(long id, String query, String stableKey, int relevanceGrade, long judgedBy,
+                               String scopeType, String scopeJson) {
     }
 
     record GradePair(int submittedGrade, int reviewerGrade) {

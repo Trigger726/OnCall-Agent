@@ -212,7 +212,7 @@ public class RunbookService {
         Long searchId = sourceType == null ? null : feedbackService.recordSearch(
                 query, sourceType, mode, engine, role, semanticStatus, semanticCoverage,
                 candidates.size(), topK, (System.nanoTime() - startedNanos) / 1_000_000,
-                results, actorId);
+                results, actorId, scope);
         return new SearchResponse(searchId, query, mode, engine, topK, candidates.size(), semanticStatus,
                 semanticCoverage, warnings, results);
     }
@@ -265,18 +265,21 @@ public class RunbookService {
 
     public EvaluationView evaluate(Long actorId) {
         List<EvalJudgment> judgments = jdbcClient.sql("""
-                        SELECT case_key, query_text, expected_stable_key, relevance_grade
+                        SELECT case_key, query_text, expected_stable_key, relevance_grade, scope_type, scope_json
                         FROM runbook_retrieval_eval_case
-                        WHERE enabled = TRUE
-                        ORDER BY query_text, expected_stable_key, case_key
+                        WHERE enabled = TRUE AND scope_type <> 'UNKNOWN'
+                        ORDER BY query_text, scope_type, scope_json, expected_stable_key, case_key
                         """)
                 .query((rs, rowNum) -> new EvalJudgment(rs.getString("case_key"),
                         rs.getString("query_text"), rs.getString("expected_stable_key"),
-                        rs.getInt("relevance_grade")))
+                        rs.getInt("relevance_grade"), RunbookRetrievalScope.read(rs.getString("scope_type"),
+                                rs.getString("scope_json"), objectMapper).filter()))
                 .list();
         if (judgments.isEmpty()) {
             throw new ApiException(HttpStatus.CONFLICT, "RUNBOOK_EVAL_DATASET_EMPTY", "Runbook 评测集为空");
         }
+        int unknownCases = jdbcClient.sql("SELECT COUNT(*) FROM runbook_retrieval_eval_case WHERE enabled=TRUE AND scope_type='UNKNOWN'")
+                .query(Integer.class).single();
         List<EvalQuery> queries = groupEvalQueries(judgments);
         int qrelCount = queries.stream().mapToInt(query -> query.expectedDocuments().size()).sum();
         List<LegacyRunbook> legacyRunbooks = jdbcClient.sql("""
@@ -291,17 +294,20 @@ public class RunbookService {
         boolean hybridAvailable = "READY".equals(semanticIndex.state());
         String hybridNote = hybridAvailable ? null : semanticIndex.note();
         for (EvalQuery evalQuery : queries) {
+            Set<String> scopedKeys = evalQuery.scope() == null ? null : loadCandidates("ON_CALL", evalQuery.scope()).stream()
+                    .map(SearchCandidate::stableKey).collect(java.util.stream.Collectors.toSet());
             List<String> baselineResults = legacyRunbooks.stream()
+                    .filter(item -> scopedKeys == null || scopedKeys.contains("legacy-runbook-" + item.id()))
                     .filter(item -> evalQuery.query().toLowerCase(Locale.ROOT)
                             .contains(item.keyword().toLowerCase(Locale.ROOT)))
                     .map(item -> "legacy-runbook-" + item.id())
                     .toList();
             baseline.add(evalQuery, baselineResults, false);
 
-            SearchResponse bm25Response = search(evalQuery.query(), "ON_CALL", 3, "BM25");
+            SearchResponse bm25Response = searchInternal(evalQuery.query(), "ON_CALL", 3, "BM25", null, null, evalQuery.scope());
             bm25.add(evalQuery, stableKeys(bm25Response), hasTopCitation(evalQuery, bm25Response));
             if (hybridAvailable) {
-                SearchResponse hybridResponse = search(evalQuery.query(), "ON_CALL", 3, "HYBRID");
+                SearchResponse hybridResponse = searchInternal(evalQuery.query(), "ON_CALL", 3, "HYBRID", null, null, evalQuery.scope());
                 if (!ReciprocalRankFusion.ENGINE.equals(hybridResponse.engine())) {
                     hybridAvailable = false;
                     hybridNote = hybridResponse.warnings().isEmpty()
@@ -321,7 +327,8 @@ public class RunbookService {
         String evaluationNote = hybridAvailable
                 ? "Hybrid 在完整向量覆盖下完成全部固定样例"
                 : "Hybrid 未计分：" + hybridNote;
-        String datasetVersion = datasetVersion(queries);
+        evaluationNote += "；按问题 + 原范围快照分组并重放；排除范围未知的 enabled qrel " + unknownCases + " 条";
+        String datasetVersion = datasetVersion(queries, unknownCases);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcClient.sql("""
                         INSERT INTO runbook_retrieval_eval_run(
@@ -342,7 +349,7 @@ public class RunbookService {
                 .param("recall", selected.recallAt3()).param("mrr", selected.mrr())
                 .param("ndcg", selected.ndcgAt3())
                 .param("citationRate", selected.citationHitRate()).param("failures", json(selected.failures()))
-                .param("comparison", json(new EvaluationComparison(metrics, semanticIndex, evaluationNote)))
+                .param("comparison", json(new EvaluationComparison(metrics, semanticIndex, evaluationNote, "SCOPE_SNAPSHOT_V1")))
                 .param("createdBy", actorId).update(keyHolder, "id");
         long id = requiredKey(keyHolder, "RUNBOOK_EVAL_SAVE_FAILED", "无法保存 Runbook 评测结果");
         auditService.record("RUNBOOK_RETRIEVAL_EVALUATE", "RUNBOOK_EVAL", id,
@@ -562,7 +569,8 @@ public class RunbookService {
                             rs.getBigDecimal("baseline_ndcg_at_3"), rs.getBigDecimal("recall_at_3"),
                             rs.getBigDecimal("mrr"), rs.getBigDecimal("ndcg_at_3"),
                             rs.getBigDecimal("citation_hit_rate"), rs.getString("failures_json"),
-                            comparison.metrics(), comparison.semanticIndex(), comparison.note(),
+                            comparison.metrics(), comparison.semanticIndex(), comparison.scopePolicy() == null
+                                    ? comparison.note() + "；历史评测未记录范围策略，不能视为 scoped 验证" : comparison.note(),
                             rs.getObject("created_by", Long.class), rs.getObject("created_at", LocalDateTime.class));
                 })
                 .single();
@@ -585,9 +593,9 @@ public class RunbookService {
     }
 
     private static List<EvalQuery> groupEvalQueries(List<EvalJudgment> judgments) {
-        Map<String, Map<String, List<EvalJudgment>>> byQuery = new LinkedHashMap<>();
+        Map<EvalIdentity, Map<String, List<EvalJudgment>>> byQuery = new LinkedHashMap<>();
         for (EvalJudgment judgment : judgments) {
-            byQuery.computeIfAbsent(judgment.query(), ignored -> new LinkedHashMap<>())
+            byQuery.computeIfAbsent(new EvalIdentity(judgment.query(), judgment.scope()), ignored -> new LinkedHashMap<>())
                     .computeIfAbsent(judgment.expectedStableKey(), ignored -> new ArrayList<>())
                     .add(judgment);
         }
@@ -601,19 +609,19 @@ public class RunbookService {
                         BigDecimal.valueOf(averageGrade).setScale(6, RoundingMode.HALF_UP),
                         documentJudgments.stream().map(EvalJudgment::caseKey).sorted().toList()));
             });
-            queries.add(new EvalQuery(query, List.copyOf(expectedDocuments)));
+            queries.add(new EvalQuery(query.query(), query.scope(), List.copyOf(expectedDocuments)));
         });
         return List.copyOf(queries);
     }
 
-    private String datasetVersion(List<EvalQuery> queries) {
+    private String datasetVersion(List<EvalQuery> queries, int unknownCases) {
         String documents = jdbcClient.sql("""
                         SELECT stable_key, version_no FROM runbook_document
                         WHERE status = 'PUBLISHED' ORDER BY stable_key
                         """)
                 .query((rs, rowNum) -> rs.getString("stable_key") + ":" + rs.getInt("version_no"))
                 .list().toString();
-        return sha256(queries.toString() + documents).substring(0, 16);
+        return sha256(queries.toString() + documents + "|SCOPE_SNAPSHOT_V1|unknown=" + unknownCases).substring(0, 16);
     }
 
     private String json(Object value) {
@@ -775,13 +783,15 @@ public class RunbookService {
                                Integer semanticRank, Double semanticScore) {
     }
 
-    private record EvalJudgment(String caseKey, String query, String expectedStableKey, int relevanceGrade) {
+    private record EvalJudgment(String caseKey, String query, String expectedStableKey, int relevanceGrade, SearchScope scope) {
     }
 
     private record ExpectedDocument(String stableKey, BigDecimal relevanceGrade, List<String> caseKeys) {
     }
 
-    private record EvalQuery(String query, List<ExpectedDocument> expectedDocuments) {
+    private record EvalIdentity(String query, SearchScope scope) { }
+
+    private record EvalQuery(String query, SearchScope scope, List<ExpectedDocument> expectedDocuments) {
     }
 
     private record LegacyRunbook(long id, String keyword) {
@@ -813,10 +823,19 @@ public class RunbookService {
     }
 
     /** Programmatic scope, not a user/model query expression. null means explicit global search. */
-    public record SearchScope(List<String> serviceCodes, List<String> resourceTypes) {
+    public record SearchScope(List<String> serviceCodes, List<String> resourceTypes,
+                              Long incidentId, String incidentCode, String incidentTitle) {
+        public SearchScope(List<String> serviceCodes, List<String> resourceTypes) {
+            this(serviceCodes, resourceTypes, null, null, null);
+        }
         public SearchScope {
-            serviceCodes = List.copyOf(serviceCodes);
-            resourceTypes = List.copyOf(resourceTypes);
+            serviceCodes = serviceCodes.stream().distinct().sorted().toList();
+            resourceTypes = resourceTypes.stream().distinct().sorted().toList();
+            if (serviceCodes.stream().anyMatch(s -> s.isBlank() || s.length() > 80)
+                    || resourceTypes.stream().anyMatch(s -> s.isBlank() || s.length() > 32)
+                    || (incidentId != null && incidentId <= 0)
+                    || (incidentCode != null && incidentCode.length() > 80)
+                    || (incidentTitle != null && incidentTitle.length() > 200)) throw new IllegalArgumentException("Invalid retrieval scope");
         }
     }
 
@@ -829,7 +848,7 @@ public class RunbookService {
 
     public record EvaluationFailure(String caseKey, String query, String expectedStableKey,
                                     List<String> expectedStableKeys, Map<String, BigDecimal> expectedGrades,
-                                    List<String> returnedStableKeys) {
+                                    List<String> returnedStableKeys, SearchScope scope) {
     }
 
     public record EngineMetric(String engine, boolean available, BigDecimal recallAt3, BigDecimal mrr,
@@ -842,7 +861,10 @@ public class RunbookService {
 
     public record EvaluationComparison(List<EngineMetric> metrics,
                                        RunbookSemanticIndexService.IndexStatus semanticIndex,
-                                       String note) {
+                                       String note, String scopePolicy) {
+        public EvaluationComparison(List<EngineMetric> metrics, RunbookSemanticIndexService.IndexStatus semanticIndex, String note) {
+            this(metrics, semanticIndex, note, null);
+        }
     }
 
     public record EvaluationView(long id, String engine, String baselineEngine,
@@ -900,7 +922,7 @@ public class RunbookService {
                 List<String> expectedStableKeys = List.copyOf(expectedGrades.keySet());
                 failures.add(new EvaluationFailure(caseKeys.get(0), evalQuery.query(),
                         expectedStableKeys.get(0), expectedStableKeys, Map.copyOf(expectedGrades),
-                        returnedStableKeys));
+                        returnedStableKeys, evalQuery.scope()));
             }
         }
 

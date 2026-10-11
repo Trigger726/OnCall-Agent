@@ -1,6 +1,6 @@
 # OpsPilot 高价值迭代路线
 
-当前已验增量：[V1.8 CP04 Incident 范围检索与多会话布局修复](acceptance/V1.8-checkpoint-04-assistant-scope.md)，接续 [CP03 真实指标/日志取证](acceptance/V1.8-checkpoint-03-assistant-observations.md)。131 项相关 Java、231 项前端及旧/新 JAR 同题/SSE/只读 SQL/桌面手机验证通过；范围外引用 7→0，但 Precision@3 仅 50%→54.17%，不能把范围匹配当根因或语义质量证明。保留 [V1.7 封版交付](releases/V1.7-DELIVERY.md)、双主题/字体及八个既有 Demo，不称长期目标完成。下一候选是冻结更广相关性题集后评价排序，不默认引入新模型/外部工具。
+当前已验增量：[V1.8 CP05 保留范围的人工反馈与评测](acceptance/V1.8-checkpoint-05-scoped-evaluation.md)，接续 [CP04 Incident 范围检索](acceptance/V1.8-checkpoint-04-assistant-scope.md)。144 项相关 Java、231 项前端、真实非空 V42→V43/原键恢复/四次 JAR 生命周期/独立复核与桌面手机通过。先修正“同题不同范围合并、再全库计分”的实际评测缺陷，未调整 BM25/RRF 或宣称排序提高；原范围未知标签保留但显式排除。保留 [V1.7 封版交付](releases/V1.7-DELIVERY.md)、双主题/字体及十个既有 Demo，长期目标继续。下一候选仍是更广、按实际信息需求分层的冻结题集，不以 13 个全库种子＋2 个 scoped 样本代替生产质量证明。
 
 用户指定的 [Claude frontend-design skill 精修](acceptance/V1.7-ui-claude-design.md)仅调整既有 UI 层级与尺度；不重新开启业务迭代。
 

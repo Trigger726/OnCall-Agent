@@ -1,6 +1,8 @@
 # OpsPilot 验收记录
 
-当前：[V1.8 CP04 Incident 范围检索与多会话布局修复](V1.8-checkpoint-04-assistant-scope.md)。131 项相关 Java、231 项前端、冻结 10 题同语料旧/新 JAR 与真实页面/SSE/保存/幂等/退出后只读 SQL 通过；范围外引用 7→0，四题未绑定排名不变，11 条会话下输入框可见且列表独立滚动。八个既有 Demo 保留，无新 MySQL/云模型/完整 CI 证明，不称长期目标完成。
+当前：[V1.8 CP05 保留范围的人工反馈与评测](V1.8-checkpoint-05-scoped-evaluation.md)。144 项相关 Java、231 项前端、旧/新 JAR 真实非空 V42→V43/四次生命周期/SSE/原键恢复/独立复核、只读 SQL 与桌面手机通过；同题不同范围分组，未知历史标签明确排除，审核页披露范围且暗色正文可读。首轮测试/实页失败保留，十个既有 Demo 不覆盖；没有新 MySQL/云模型/完整 CI 或普遍排序提升证明。
+
+上一增量：[V1.8 CP04 Incident 范围检索与多会话布局修复](V1.8-checkpoint-04-assistant-scope.md)。131 项相关 Java、231 项前端、冻结 10 题同语料旧/新 JAR 与真实页面/SSE/保存/幂等/退出后只读 SQL 通过；范围外引用 7→0，四题未绑定排名不变，11 条会话下输入框可见且列表独立滚动。按该报告当时范围阅读。
 
 上一增量：[V1.8 CP03 助手真实指标/日志取证](V1.8-checkpoint-03-assistant-observations.md)。121 项相关 Java、真实 Prometheus/Loki HTTP、旧/新 JAR 的页面/SSE/保存/幂等、无权限/无绑定/空数据/降级通过；首轮 Java 失败保留。按该报告当时的范围阅读。
 

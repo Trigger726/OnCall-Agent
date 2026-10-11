@@ -1,6 +1,6 @@
 # OpsPilot
 
-当前增量：[V1.8 CP04 Incident 范围检索与多会话布局修复](docs/acceptance/V1.8-checkpoint-04-assistant-scope.md)，接续 [CP03 真实指标/日志](docs/acceptance/V1.8-checkpoint-03-assistant-observations.md)。131 项相关 Java、231 项前端及旧/新整包同题对照通过：限定题集的范围外引用 7→0，未绑定排名不变，11 条会话下输入框保持可见。V1.7 标签、OKX 双主题/字体及八个既有 Demo 保留；检索相关性仍有限，不称全目标 100%。
+当前增量：[V1.8 CP05 保留范围的人工反馈与评测](docs/acceptance/V1.8-checkpoint-05-scoped-evaluation.md)，接续 [CP04 Incident 范围检索](docs/acceptance/V1.8-checkpoint-04-assistant-scope.md)。144 项相关 Java、231 项前端及旧/新 JAR 非空 V42→V43、四次真实生命周期/SSE/原键恢复/独立复核通过：同题不同 Incident 不混并，未知历史范围不伪装成全库标签，审核页面披露原范围并修复暗色正文可读性。V1.7 标签、OKX 双主题/字体及十个既有 Demo 保留；未改排序算法，不称全目标 100%。
 
 V1.7 稳定交付：[封版版本、UI 分支与 Demo 启动指南](docs/releases/V1.7-DELIVERY.md)。UI 在 `ui/opspilot-okx-20261011`；下方旧 checkpoint 已折叠，不能当作当前待办。
 
