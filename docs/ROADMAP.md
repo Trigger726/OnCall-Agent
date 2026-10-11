@@ -1,6 +1,6 @@
 # OpsPilot 高价值迭代路线
 
-当前限定任务：[V1.8 CP01 助手按问题检索 Runbook](acceptance/V1.8-checkpoint-01-assistant-runbook.md)，由用户最新“继续吧”恢复业务迭代。优先复用已有检索、权限和持久化，保留 [V1.7 封版交付](releases/V1.7-DELIVERY.md)及 UI，不自动扩展原版全部工具/历史路线。
+当前限定任务：[V1.8 CP02 模型引用围栏与历史上下文权限](acceptance/V1.8-checkpoint-02-assistant-grounding.md)，接续用户恢复后的 [CP01 Runbook 问答](acceptance/V1.8-checkpoint-01-assistant-runbook.md)。优先提升已有业务链路的真实可靠性，保留 [V1.7 封版交付](releases/V1.7-DELIVERY.md)及 UI，不自动扩展原版全部工具/历史路线。
 
 用户指定的 [Claude frontend-design skill 精修](acceptance/V1.7-ui-claude-design.md)仅调整既有 UI 层级与尺度；不重新开启业务迭代。
 

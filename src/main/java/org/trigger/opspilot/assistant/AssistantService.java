@@ -20,6 +20,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.stream.Collectors;
 
 @Service
 public class AssistantService {
@@ -160,14 +163,25 @@ public class AssistantService {
             requireAuthorization(lease, false);
             // Never hold the account/session row locks over an external model call.
             var knowledge = retrieveRunbooks(question, lease, checkpoint);
+            var history = aiService.isPresent() ? modelHistory(prepared.history(), knowledge, lease) : prepared.history();
+            checkpoint.run();
+            requireAuthorization(lease, false);
             var evidence = new ArrayList<EvidenceRef>();
             if (prepared.context() != null) evidence.addAll(collectEvidence(prepared.context()));
             knowledge.results().forEach(item -> evidence.add(new EvidenceRef(item.citation(), "RUNBOOK",
                     item.title() + " · v" + item.versionNo() + " · " + item.heading())));
-            Answer answer = onDelta == null || aiService.isEmpty()
-                    ? generateAnswer(prepared.context(), prepared.history(), question, knowledge, evidence, checkpoint)
-                    : new Answer(AssistantStreamReader.read(aiService.get().streamAnswer(contextText(prepared.context(), knowledge),
-                            conversationText(prepared.history()), question), checkpoint, onDelta), evidence);
+            Answer answer;
+            if (onDelta == null || aiService.isEmpty()) {
+                answer = generateAnswer(prepared.context(), history, question, knowledge, evidence, checkpoint);
+            } else {
+                var guard = new AssistantCitationGuard(citations(knowledge), onDelta);
+                String content = AssistantStreamReader.read(aiService.get().streamAnswer(contextText(prepared.context(), knowledge),
+                        conversationText(history), question), checkpoint, guard);
+                checkpoint.run();
+                requireAuthorization(lease, false);
+                guard.finish();
+                answer = new Answer(content, evidence);
+            }
             checkpoint.run();
             requireAuthorization(lease, false);
             return transactions.execute(transaction -> {
@@ -356,13 +370,15 @@ public class AssistantService {
     private Answer generateAnswer(IncidentContext context, List<MessageView> history, String question,
                                   RunbookService.SearchResponse knowledge, List<EvidenceRef> evidence, Runnable checkpoint) {
         if (aiService.isPresent()) {
+            String content = null;
             try {
-                String content = aiService.get().answer(contextText(context, knowledge), conversationText(history), question);
-                if (content != null && !content.isBlank()) {
-                    return new Answer(content.trim(), evidence);
-                }
+                content = aiService.get().answer(contextText(context, knowledge), conversationText(history), question);
             } catch (RuntimeException ignored) {
                 // The deterministic evidence mode remains available when the provider is unavailable.
+            }
+            if (content != null && !content.isBlank()) {
+                AssistantCitationGuard.validate(content, citations(knowledge));
+                return new Answer(content.trim(), evidence);
             }
         }
         checkpoint.run(); // A late failed model must not start fallback database work after shutdown/revocation.
@@ -618,6 +634,36 @@ public class AssistantService {
     private String conversationText(List<MessageView> history) {
         return history.stream().map(message -> message.role() + ": " + message.content())
                 .reduce((left, right) -> left + "\n" + right).orElse("无历史消息");
+    }
+
+    private static Set<String> citations(RunbookService.SearchResponse knowledge) {
+        return knowledge.results().stream().map(RunbookService.SearchResult::citation).collect(Collectors.toSet());
+    }
+
+    /** Private saved conversations remain immutable; only the context sent on a NEW model call is filtered. */
+    private List<MessageView> modelHistory(List<MessageView> history, RunbookService.SearchResponse knowledge,
+                                           SessionAuthorization.Lease lease) {
+        Set<String> visible = "NOT_EXECUTED".equals(knowledge.engine()) ? Set.of() : new HashSet<>(jdbcClient.sql("""
+                        SELECT CONCAT('runbook:',d.stable_key,':v',d.version_no,'#chunk-',c.chunk_index)
+                        FROM runbook_document d JOIN runbook_chunk c ON c.document_id=d.id
+                        JOIN runbook_document_acl a ON a.document_id=d.id
+                        JOIN sys_user u ON u.role_code=a.role_code
+                        WHERE d.status='PUBLISHED' AND u.id=:id AND u.username=:name
+                          AND u.status='ACTIVE' AND u.auth_version=:version
+                        """).param("id", lease.userId()).param("name", lease.username()).param("version", lease.authVersion())
+                .query(String.class).list());
+        return history.stream().map(message -> {
+            if (!"ASSISTANT".equals(message.role())) return message;
+            try {
+                var refs = message.evidenceJson() == null ? new EvidenceRef[0]
+                        : objectMapper.readValue(message.evidenceJson(), EvidenceRef[].class);
+                boolean hidden = refs == null || java.util.Arrays.stream(refs).anyMatch(ref -> ref == null
+                        || "RUNBOOK".equals(ref.type()) && !visible.contains(ref.ref()));
+                if (!hidden) return message;
+            } catch (JsonProcessingException ignored) { /* Corrupt evidence must not become implicit model authority. */ }
+            return new MessageView(message.id(), message.role(), "[历史知识库回答未送入模型：当前不可见、已非发布版本或证据不可读；原对话仍保存]",
+                    null, message.createdAt());
+        }).toList();
     }
 
     private String evidenceSummary(IncidentContext context) {

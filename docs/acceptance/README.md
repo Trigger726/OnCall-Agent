@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+当前：[V1.8 CP02 模型引用围栏与历史上下文权限](V1.8-checkpoint-02-assistant-grounding.md)。102 项相关 Java 已通过；正常/原生流的合法引用、伪引用拒绝、当前权限过滤及历史快照保留按该报告的实际整包证据阅读。旧封版、UI 与 Demo 保持，未称整个长期目标完成。
+
 当前业务增量：[V1.8 CP01：助手问题驱动的 Runbook 检索与稳定引用](V1.8-checkpoint-01-assistant-runbook.md)。90 项相关 Java、旧/新 JAR 实际正常端点及 SSE、幂等回放、刷新与桌面/手机验证通过；独立业务分支交付，V1.7 封版、UI 与 4 个旧 Demo 不变。无新的 MySQL/云模型/完整 CI 证明，不称长期目标 100%。
 
 封版范围核对：[原始 OnCall 与成熟 Incident 能力差异审计](../BASELINE-CAPABILITY-AUDIT.md)。静态来源/已有证据对照，不是新一轮原版模型/检索 A/B 或功能回补。

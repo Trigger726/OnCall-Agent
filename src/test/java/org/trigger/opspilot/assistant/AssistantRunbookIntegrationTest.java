@@ -171,6 +171,86 @@ class AssistantRunbookIntegrationTest {
         assertThat(answer.evidenceJson()).contains("incident:" + incident, "RUNBOOK", "runbook:legacy-runbook-2:v1#chunk-0");
     }
 
+    @Test void invalidNormalModelCitationShouldNotFallBackOrCommitAnswer() {
+        var ai = mock(AssistantAiService.class);
+        when(ai.answer(anyString(), anyString(), anyString())).thenReturn("根因见 runbook:phantom:v1#chunk-0");
+        var identity = identity();
+        assertThatThrownBy(() -> withAi(ai).sendMessage(session, owner, "Redis pending", authorization.capture(owner), () -> {}, identity))
+                .isInstanceOfSatisfying(ApiException.class, error -> assertThat(error.code()).isEqualTo("ASSISTANT_CITATION_INVALID"));
+        assertThat(assistant.getSession(session, owner).messages()).hasSize(1);
+        assertThat(assistant.requestStatus(session, owner, identity.keyHash()).status()).isEqualTo("FAILED");
+        verify(ai, times(1)).answer(anyString(), anyString(), anyString());
+    }
+
+    @Test void splitInvalidNativeCitationShouldNotReachClientOrPersistence() {
+        var ai = mock(AssistantAiService.class);
+        when(ai.streamAnswer(anyString(), anyString(), anyString())).thenReturn(Flux.just("安全前缀\nrun", "book:phantom:v1#chunk-0"));
+        var deltas = new ArrayList<String>(); var identity = identity();
+        assertThatThrownBy(() -> withAi(ai).streamMessage(session, owner, "Redis pending", authorization.capture(owner), () -> {}, identity, deltas::add))
+                .isInstanceOfSatisfying(ApiException.class, error -> assertThat(error.code()).isEqualTo("ASSISTANT_CITATION_INVALID"));
+        assertThat(String.join("", deltas)).isEqualTo("安全前缀\n");
+        assertThat(assistant.getSession(session, owner).messages()).hasSize(1);
+        assertThat(assistant.requestStatus(session, owner, identity.keyHash()).status()).isEqualTo("FAILED");
+        verify(ai, never()).answer(anyString(), anyString(), anyString());
+    }
+
+    @Test void splitValidNativeCitationShouldCommitExactlyTheDeliveredText() {
+        var ai = mock(AssistantAiService.class);
+        String ref = "runbook:legacy-runbook-2:v1#chunk-0";
+        when(ai.streamAnswer(anyString(), anyString(), anyString())).thenReturn(Flux.just("İ 依据 [run", "book:legacy-runbook-2:v1#chunk-", "0]。\n"));
+        var deltas = new ArrayList<String>();
+        var answer = withAi(ai).streamMessage(session, owner, "Redis pending", authorization.capture(owner), () -> {}, null, deltas::add);
+        assertThat(answer.content()).isEqualTo("İ 依据 [" + ref + "]。\n").isEqualTo(String.join("", deltas));
+        assertThat(answer.evidenceJson()).contains(ref);
+    }
+
+    @Test void currentRoleShouldNotSendFormerlyVisiblePrivateAnswerBackToModel() {
+        String word = word();
+        jdbc.sql("UPDATE sys_user SET role_code='ADMIN',auth_version=auth_version+1 WHERE id=:id").param("id", owner).update();
+        document(word + "-private", word, 1, "PUBLISHED", "ADMIN", "PRIVATE_ADMIN_SNIPPET");
+        var original = assistant.sendMessage(session, owner, word);
+        assertThat(original.content()).contains("PRIVATE_ADMIN_SNIPPET");
+        jdbc.sql("UPDATE sys_user SET role_code='ON_CALL',auth_version=auth_version+1 WHERE id=:id").param("id", owner).update();
+        var ai = mock(AssistantAiService.class);
+        when(ai.answer(anyString(), anyString(), anyString())).thenAnswer(call -> {
+            assertThat(call.<String>getArgument(0)).doesNotContain("PRIVATE_ADMIN_SNIPPET");
+            assertThat(call.<String>getArgument(1)).doesNotContain("PRIVATE_ADMIN_SNIPPET").contains("历史知识库回答未送入模型");
+            return "当前证据不足";
+        });
+        withAi(ai).sendMessage(session, owner, "请接着分析");
+        assertThat(assistant.getSession(session, owner).messages()).contains(original);
+        assertThat(assistant.exportMarkdown(session, owner)).contains("PRIVATE_ADMIN_SNIPPET");
+        verify(ai).answer(anyString(), anyString(), anyString());
+    }
+
+    @Test void publicationOrAclChangeShouldFilterModelHistoryWithoutDeletingSnapshot() {
+        for (boolean changeAcl : new boolean[]{true, false}) {
+            String word = word(); long id = document(word + "-visible", word, 1, "PUBLISHED", "ON_CALL", "WITHDRAWN_SNIPPET");
+            var original = assistant.sendMessage(session, owner, word);
+            assertThat(original.content()).contains("WITHDRAWN_SNIPPET");
+            if (changeAcl) jdbc.sql("DELETE FROM runbook_document_acl WHERE document_id=:id").param("id", id).update();
+            else jdbc.sql("UPDATE runbook_document SET status='SUPERSEDED' WHERE id=:id").param("id", id).update();
+            var ai = mock(AssistantAiService.class);
+            when(ai.streamAnswer(anyString(), anyString(), anyString())).thenAnswer(call -> {
+                assertThat(call.<String>getArgument(1)).doesNotContain("WITHDRAWN_SNIPPET").contains("历史知识库回答未送入模型");
+                return Flux.just("当前资料不足");
+            });
+            withAi(ai).streamMessage(session, owner, "继续分析", authorization.capture(owner), () -> {}, null, ignored -> {});
+            assertThat(assistant.getSession(session, owner).messages()).contains(original);
+        }
+    }
+
+    @Test void visiblePublishedAnswerShouldRemainInModelHistory() {
+        var original = assistant.sendMessage(session, owner, "Redis pending");
+        var ai = mock(AssistantAiService.class);
+        when(ai.answer(anyString(), anyString(), anyString())).thenAnswer(call -> {
+            assertThat(call.<String>getArgument(1)).contains("Redis 连接池耗尽处置", "runbook:legacy-runbook-2:v1#chunk-0");
+            return "保持可见历史";
+        });
+        withAi(ai).sendMessage(session, owner, "继续分析");
+        assertThat(assistant.getSession(session, owner).messages()).contains(original);
+    }
+
     private AssistantService withAi(AssistantAiService ai) {
         return new AssistantService(jdbc, json, Optional.of(ai), agentRuns, authorization, transactions, requests, runbooks);
     }
