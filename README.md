@@ -1,5 +1,7 @@
 # OpsPilot
 
+UI 新增可记忆的浅色/深色主题与 Codex 默认系统字体栈，见[主题验收](docs/acceptance/V1.7-ui-themes.md)。登录页和控制台顶栏均可切换；业务封版不变。
+
 已按用户要求[封版 V1.7](docs/releases/V1.7-SEALED.md)：标签 `opspilot-v1.7-sealed-20261011` 固定于 bb012bf。后续只做 [OKX 风格 UI 增量](docs/acceptance/V1.7-ui-okx.md)，保留原有业务、未提交改动与历史 Demo；不再自动追加功能。以下 checkpoint 状态按历史时点阅读。
 
 CP124收尾已闭合：受验源码578d192的主CI21/21、专项12/12全绿，新的MySQL整包9场景＋共享37＋五状态升级官方工件独立重放通过，见[最终验收](docs/acceptance/V1.7-checkpoint-124.md#cp124自身远端闭合)。本次补档仅文档/证据，不改受验代码、不重复触发全CI；旧Demo与未提交改动保留，是否暂停或封版待用户明确。

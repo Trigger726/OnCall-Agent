@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Activity, ArrowRight, KeyRound, UserRound } from 'lucide-vue-next'
 import { auth } from '@/stores/auth'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -33,6 +34,7 @@ async function submit() {
 
 <template>
   <main class="login-page">
+    <ThemeToggle class="login-theme-toggle" />
     <section class="login-brand-panel">
       <div class="login-brand"><Activity :size="22" /><strong>OpsPilot</strong></div>
       <div class="login-caption">

@@ -6,6 +6,7 @@ import {
   BarChart3, ClipboardList, GitBranch, LayoutDashboard, LogOut, Menu, MessageSquareText, RadioTower, ShieldCheck, X,
 } from 'lucide-vue-next'
 import { auth } from '@/stores/auth'
+import ThemeToggle from '@/components/ThemeToggle.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -78,6 +79,7 @@ function signOut() {
         </div>
         <div class="topbar-actions">
           <time>{{ clock }}</time>
+          <ThemeToggle />
           <div class="user-block">
             <span class="user-avatar">{{ auth.state.user?.displayName.slice(0, 1) }}</span>
             <div><strong>{{ auth.state.user?.displayName }}</strong><span>{{ auth.state.user?.roleCode }}</span></div>
