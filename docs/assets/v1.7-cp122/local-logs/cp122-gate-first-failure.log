@@ -1,0 +1,178 @@
+✖ synthetic MySQL gate shape accepts exactly seven whole-JAR scopes not actual MySQL execution (8.8417ms)
+✔ dedicated owner loopback random schema and credentials are required before any startup (5.1566ms)
+✔ skipped wrong-class failing JUnit or Maven build cannot produce a MySQL proof (16.2429ms)
+✔ actual metadata schema ownership and one server identity required at every snapshot (18.5053ms)
+✔ old business checksums no-backfill and final independent counts cannot be dropped (19.0301ms)
+✔ real HTTP same key payload 503 retry revocation and explicit human claim are mandatory (26.8163ms)
+✔ seven complete pool shutdowns actual ports and container cleanup cannot be implied (18.6975ms)
+✔ JDBC credentials remain environment-only and strict read-only root is allowlisted (0.7147ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 208.6707
+
+✖ failing tests:
+
+test at scripts\tests\oncall-open-notification-upgrade-mysql.test.cjs:19:1
+✖ synthetic MySQL gate shape accepts exactly seven whole-JAR scopes not actual MySQL execution (8.8417ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+  
+    {
+  +   actualProduct: 'H2',
+  +   actualVersion: '2.2.220 (2023-07-04)',
+  -   actualProduct: 'MySQL',
+  -   actualVersion: '8.4.11',
+      designatedHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      designatedRows: 0,
+      history: [
+        {
+          success: true,
+  +       type: 'TABLE',
+  +       version: null
+  +     },
+  +     {
+  +       success: true,
+          type: 'SQL',
+          version: '1'
+        },
+        {
+          success: true,
+  ...
+      openRequestHash: '55d6bc65ddb1c5ab8e7d95d70371c907bef8c7388dd2be12f5c2268be19263e6',
+  -   ownerConfirmed: true,
+      publicationHash: '8aabded3a7686ba72d5eec27d5ef61f70469c4f4296fd8855fd2d1925042d9d9',
+      publicationRows: 1,
+      publications: [
+        {
+          eventVersion: 0,
+  ...
+      ],
+  -   schema: 'opspilot_notification_upgrade_012345abcdef',
+  -   serverUuid: '01234567-0123-4567-89ab-0123456789ab',
+      shiftHash: 'df9b8d06afd30d662bdf26fcf3bec2ff18ff63b9a613a438cc4b7a5ebabf45d9',
+      shifts: 3,
+  +   successfulHistoryRows: 41,
+  -   successfulHistoryRows: 40,
+      swapHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      swapRevocationHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      swapRevocationRows: 0,
+      swapRows: 0,
+      v38MigrationHash: '8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820',
+  
+      at verify (D:\Codex\国网\央国企求职\OpsPilot\scripts\verify-oncall-open-notification-http-evidence.cjs:12:107)
+      at Object.verify (D:\Codex\国网\央国企求职\OpsPilot\scripts\verify-oncall-open-notification-upgrade-mysql.cjs:13:13)
+      at run (D:\Codex\国网\央国企求职\OpsPilot\scripts\tests\oncall-open-notification-upgrade-mysql.test.cjs:18:19)
+      at TestContext.<anonymous> (D:\Codex\国网\央国企求职\OpsPilot\scripts\tests\oncall-open-notification-upgrade-mysql.test.cjs:19:114)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.start (node:internal/test_runner/test:1177:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: {
+      actualProduct: 'H2',
+      actualVersion: '2.2.220 (2023-07-04)',
+      migrationCount: 40,
+      successfulHistoryRows: 41,
+      history: [
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object]
+      ],
+      migration38: true,
+      migration39: true,
+      migration40: true,
+      migration41: false,
+      notificationRows: 0,
+      notificationHash: null,
+      notifications: [],
+      publicationRows: 1,
+      publicationHash: '8aabded3a7686ba72d5eec27d5ef61f70469c4f4296fd8855fd2d1925042d9d9',
+      shifts: 3,
+      publications: [ [Object] ],
+      shiftHash: 'df9b8d06afd30d662bdf26fcf3bec2ff18ff63b9a613a438cc4b7a5ebabf45d9',
+      designatedHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      swapHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      swapRevocationHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      designatedRows: 0,
+      swapRows: 0,
+      swapRevocationRows: 0,
+      legacyMigrationHash: 'fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974',
+      onCallAuditHash: '4720764eff07c46a78043b0a4383caf2ed9ed10fe0203f98919c3fb80e96e8c3',
+      v38MigrationHash: '8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820',
+      v39MigrationHash: '7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a',
+      v40MigrationHash: 'c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702',
+      memberHash: '928dd47128c8eadf1532b7f65d625bdb463142adc730c12d68aebe2772138d95',
+      memberOperationHash: '80443bfa51ed8ef1e723782188be472402b594d323d9e6b8de5a0dfe729e1f75',
+      members: [ [Object], [Object], [Object], [Object], [Object], [Object] ],
+      openRequestHash: '55d6bc65ddb1c5ab8e7d95d70371c907bef8c7388dd2be12f5c2268be19263e6',
+      openOperationHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      requests: [ [Object] ]
+    },
+    expected: {
+      actualProduct: 'MySQL',
+      actualVersion: '8.4.11',
+      migrationCount: 40,
+      successfulHistoryRows: 40,
+      history: [
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object]
+      ],
+      migration38: true,
+      migration39: true,
+      migration40: true,
+      migration41: false,
+      notificationRows: 0,
+      notificationHash: null,
+      notifications: [],
+      publicationRows: 1,
+      publicationHash: '8aabded3a7686ba72d5eec27d5ef61f70469c4f4296fd8855fd2d1925042d9d9',
+      shifts: 3,
+      publications: [ [Object] ],
+      shiftHash: 'df9b8d06afd30d662bdf26fcf3bec2ff18ff63b9a613a438cc4b7a5ebabf45d9',
+      designatedHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      swapHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      swapRevocationHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      designatedRows: 0,
+      swapRows: 0,
+      swapRevocationRows: 0,
+      legacyMigrationHash: 'fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974',
+      onCallAuditHash: '4720764eff07c46a78043b0a4383caf2ed9ed10fe0203f98919c3fb80e96e8c3',
+      v38MigrationHash: '8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820',
+      v39MigrationHash: '7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a',
+      v40MigrationHash: 'c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702',
+      memberHash: '928dd47128c8eadf1532b7f65d625bdb463142adc730c12d68aebe2772138d95',
+      memberOperationHash: '80443bfa51ed8ef1e723782188be472402b594d323d9e6b8de5a0dfe729e1f75',
+      members: [ [Object], [Object], [Object], [Object], [Object], [Object] ],
+      openRequestHash: '55d6bc65ddb1c5ab8e7d95d70371c907bef8c7388dd2be12f5c2268be19263e6',
+      openOperationHash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+      requests: [ [Object] ],
+      schema: 'opspilot_notification_upgrade_012345abcdef',
+      serverUuid: '01234567-0123-4567-89ab-0123456789ab',
+      ownerConfirmed: true
+    },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

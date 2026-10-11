@@ -21,10 +21,11 @@ public class OpenHandoffSqlFixture {
             String parent = root.getParent().getFileName().toString();
             boolean memberUpgrade = parent.equals("oncall-plan-membership-upgrade-mysql-it");
             boolean publicationUpgrade = parent.equals("oncall-open-publication-upgrade-mysql-it");
-            if (!memberUpgrade && !publicationUpgrade && !parent.equals("oncall-open-handoff-upgrade-mysql-it")) throw new IllegalArgumentException("Require MySQL runner root");
+            boolean notificationUpgrade = parent.equals("oncall-open-notification-upgrade-mysql-it");
+            if (!memberUpgrade && !publicationUpgrade && !notificationUpgrade && !parent.equals("oncall-open-handoff-upgrade-mysql-it")) throw new IllegalArgumentException("Require MySQL runner root");
             url = System.getenv("OPSPILOT_UPGRADE_JDBC_URL");
             String schema = System.getenv("OPSPILOT_UPGRADE_SCHEMA");
-            if (schema == null || !schema.matches((memberUpgrade ? "opspilot_member_upgrade_" : publicationUpgrade ? "opspilot_publication_upgrade_" : "opspilot_open_upgrade_") + "[a-f0-9]{12}") || url == null
+            if (schema == null || !schema.matches((memberUpgrade ? "opspilot_member_upgrade_" : publicationUpgrade ? "opspilot_publication_upgrade_" : notificationUpgrade ? "opspilot_notification_upgrade_" : "opspilot_open_upgrade_") + "[a-f0-9]{12}") || url == null
                     || !url.matches("jdbc:mysql://(?:localhost|127\\.0\\.0\\.1):[0-9]+/" + schema + "\\?[^\\s]+")) {
                 throw new IllegalArgumentException("Require dedicated loopback Testcontainer schema");
             }

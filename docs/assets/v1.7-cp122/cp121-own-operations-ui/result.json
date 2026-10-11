@@ -1,0 +1,733 @@
+{
+  "status": "PASS",
+  "before": false,
+  "jarSha256": "4e3511be1c10ea233986d708f7c46ab5786935098718f5b13001a5be36d27d6f",
+  "cases": [
+    {
+      "name": "admin-panel-never-auto-reads-or-invents-zero",
+      "automaticReads": 0,
+      "noFakeZero": true,
+      "posts": 0
+    },
+    {
+      "name": "manual-read-real-pending-original-event",
+      "actualPending": {
+        "queue": {
+          "scope": "SHARED_DATABASE_AT_STATEMENT",
+          "enabled": true,
+          "databaseNow": "2026-10-11T07:45:51.294022",
+          "total": 1,
+          "pending": 1,
+          "pendingDue": 1,
+          "claimed": 0,
+          "expiredLeases": 0,
+          "delivered": 0,
+          "failed": 0,
+          "skipped": 0,
+          "oldestPendingCreatedAt": "2026-10-11T07:45:49.027324"
+        },
+        "worker": {
+          "scope": "THIS_PROCESS_SINCE_START",
+          "enabled": true,
+          "activeWorkers": 0,
+          "queuedTicks": 0,
+          "busyRejectedTicks": 0,
+          "failedBatches": 0,
+          "shutdown": false
+        }
+      },
+      "posts": 0
+    },
+    {
+      "name": "real-claimed-http-worker-busy-with-zero-local-queue",
+      "actualBusy": {
+        "queue": {
+          "scope": "SHARED_DATABASE_AT_STATEMENT",
+          "enabled": true,
+          "databaseNow": "2026-10-11T07:46:03.442636",
+          "total": 1,
+          "pending": 0,
+          "pendingDue": 0,
+          "claimed": 1,
+          "expiredLeases": 0,
+          "delivered": 0,
+          "failed": 0,
+          "skipped": 0,
+          "oldestPendingCreatedAt": null
+        },
+        "worker": {
+          "scope": "THIS_PROCESS_SINCE_START",
+          "enabled": true,
+          "activeWorkers": 1,
+          "queuedTicks": 0,
+          "busyRejectedTicks": 5,
+          "failedBatches": 0,
+          "shutdown": false
+        }
+      },
+      "posts": 0
+    },
+    {
+      "name": "real503-future-retry-is-not-technical-success",
+      "actualFutureRetry": {
+        "queue": {
+          "scope": "SHARED_DATABASE_AT_STATEMENT",
+          "enabled": true,
+          "databaseNow": "2026-10-11T07:46:03.899343",
+          "total": 1,
+          "pending": 1,
+          "pendingDue": 0,
+          "claimed": 0,
+          "expiredLeases": 0,
+          "delivered": 0,
+          "failed": 0,
+          "skipped": 0,
+          "oldestPendingCreatedAt": "2026-10-11T07:45:49.027324"
+        },
+        "worker": {
+          "scope": "THIS_PROCESS_SINCE_START",
+          "enabled": true,
+          "activeWorkers": 0,
+          "queuedTicks": 0,
+          "busyRejectedTicks": 9,
+          "failedBatches": 0,
+          "shutdown": false
+        }
+      },
+      "actualReceiver503": true,
+      "posts": 0
+    },
+    {
+      "name": "disabled-restart-retains-database-backlog-and-resets-local-worker",
+      "actualDisabledBacklog": {
+        "queue": {
+          "scope": "SHARED_DATABASE_AT_STATEMENT",
+          "enabled": false,
+          "databaseNow": "2026-10-11T07:46:15.556355",
+          "total": 1,
+          "pending": 1,
+          "pendingDue": 0,
+          "claimed": 0,
+          "expiredLeases": 0,
+          "delivered": 0,
+          "failed": 0,
+          "skipped": 0,
+          "oldestPendingCreatedAt": "2026-10-11T07:45:49.027324"
+        },
+        "worker": {
+          "scope": "THIS_PROCESS_SINCE_START",
+          "enabled": false,
+          "activeWorkers": 0,
+          "queuedTicks": 0,
+          "busyRejectedTicks": 0,
+          "failedBatches": 0,
+          "shutdown": false
+        }
+      },
+      "posts": 0
+    },
+    {
+      "name": "controlled503-clears-global-facts",
+      "controlled503": true,
+      "oldFactsCleared": true,
+      "posts": 0
+    },
+    {
+      "name": "contradictory200-partitions-clear-global-facts",
+      "controlledContradictoryPartition": true,
+      "oldFactsCleared": true,
+      "posts": 0
+    },
+    {
+      "name": "late-real200-native-account-switch-is-fenced",
+      "actualOld200": true,
+      "nativeTrustedStorageEvent": true,
+      "noReadWithWrongStoredActor": true,
+      "posts": 0
+    },
+    {
+      "name": "actual403-auditor-jwt-cannot-trust-admin-storage-hint",
+      "actual403": true,
+      "controlledUntrustedAdminHint": true,
+      "oldFactsCleared": true,
+      "posts": 0
+    },
+    {
+      "name": "non-admin-three-roles-have-no-panel-and-no-global-read",
+      "actualNonAdminUsers": [
+        "auditor",
+        "zhangwei",
+        "lina"
+      ],
+      "globalReads": 0,
+      "posts": 0
+    },
+    {
+      "name": "late-real200-native-same-admin-new-token-is-fenced",
+      "actualOld200": true,
+      "nativeSameActorNewToken": true,
+      "oldFactsCleared": true,
+      "posts": 0
+    },
+    {
+      "name": "late-real200-navigation-unmount-does-not-resurrect-facts",
+      "actualOld200": true,
+      "unmountedAndRemountedUnread": true,
+      "posts": 0
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "after-unread-desktop.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "294e203a3e809792b1fa8d843d9d88d274cd253b7cc5499f58b3566a4ca53a75",
+      "bounds": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "file": "after-unread-mobile.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "8f919bc61a36810718863a4af7d66baa8b2cda792f9506167d9f98d01f4f313c",
+      "bounds": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "file": "actual-pending-desktop.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "7f6ef8d51445cf101fd6692ffbc1358d5b88f249ed403018ecb732b4bc15bfc9",
+      "bounds": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "file": "actual-busy-desktop.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "d89bbafd5d8bcb1d1c1e7d8c5d951705644f8ae954a01cc27f443305a7845b5e",
+      "bounds": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "file": "actual-disabled-backlog-desktop.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "0045328c0c0074ed4a48a85f430ac2522082a3a04d91727055afdf6c68b2618e",
+      "bounds": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    },
+    {
+      "file": "actual-disabled-backlog-mobile.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "c1e340565dc5d1ed69377e8d8d3aadd1e08567a78ce9bd22dae62a74feb7296a",
+      "bounds": {
+        "width": 390,
+        "scroll": 390
+      }
+    },
+    {
+      "file": "read-failure-clears-global-facts.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "06bcd0ae3197acb789e9e1c63ae1a0fe68f9c6b4753b1736bf6e0dc3045237cf",
+      "bounds": {
+        "width": 1440,
+        "scroll": 1440
+      }
+    }
+  ],
+  "pageErrors": [],
+  "console": [
+    {
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "url": "http://127.0.0.1:9931/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 403 ()",
+      "url": "http://127.0.0.1:9931/api/v1/on-call/open-notification-operations"
+    }
+  ],
+  "expectedRejections": [
+    {
+      "path": "/api/v1/on-call/open-notification-operations",
+      "status": 503
+    },
+    {
+      "path": "/api/v1/on-call/open-notification-operations",
+      "status": 403
+    }
+  ],
+  "browserPosts": [],
+  "browserReads": [
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    },
+    {
+      "page": "admin",
+      "path": "/api/v1/on-call/open-notification-operations"
+    }
+  ],
+  "received": [
+    {
+      "handoffId": 1,
+      "recipientId": 1,
+      "authenticated": true,
+      "key": "oncall-open-notification:25c9e483-9e09-417f-b2fe-2f7e4494b777",
+      "payloadSha256": "1cfc152c288284b18d0c1fc21d058a47d1afe7fc5aab5456c0d47baf7fe6d871",
+      "status": 503
+    }
+  ],
+  "startedPids": [
+    3545,
+    3700,
+    3816
+  ],
+  "stoppedPids": [
+    3545,
+    3700,
+    3816
+  ],
+  "shutdowns": [
+    {
+      "pid": 3545,
+      "httpStatus": 200,
+      "graceful": true
+    },
+    {
+      "pid": 3700,
+      "httpStatus": 200,
+      "graceful": true
+    },
+    {
+      "pid": 3816,
+      "httpStatus": 200,
+      "graceful": true
+    }
+  ],
+  "tokensPersistedToEvidence": false,
+  "userDatabaseModified": false,
+  "browserPath": "Browser plugin not available; existing Playwright 1.63.0",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "browser": "153.0.8010.12",
+  "receiverStopped": true,
+  "ownedProcessesStopped": true,
+  "portsFree": true,
+  "completeLogs": [
+    {
+      "file": "jar-1.log",
+      "sha256": "97be1a1671d3ef2aec12045b8c3b075b5af13076a7376a439392c47b1258ef45",
+      "unexpectedErrors": 0
+    },
+    {
+      "file": "jar-2.log",
+      "sha256": "dee77b7cfcd6dda1d0859b35c9aaa34db1cb079f4efc165b04140badd5fc3c44",
+      "unexpectedErrors": 0
+    },
+    {
+      "file": "jar-3.log",
+      "sha256": "e4bfba15249a030eb1b21e1e82c045511fac1027432310c3e8fc5e00baa57f8e",
+      "unexpectedErrors": 0
+    }
+  ],
+  "finalSql": {
+    "actualProduct": "H2",
+    "actualVersion": "2.2.220 (2023-07-04)",
+    "migrationCount": 41,
+    "successfulHistoryRows": 42,
+    "history": [
+      {
+        "version": null,
+        "type": "TABLE",
+        "success": true
+      },
+      {
+        "version": "1",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "2",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "3",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "4",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "5",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "6",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "7",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "8",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "9",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "10",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "11",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "12",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "13",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "14",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "15",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "16",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "17",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "18",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "19",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "20",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "21",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "22",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "23",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "24",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "25",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "26",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "27",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "28",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "29",
+        "type": "JDBC",
+        "success": true
+      },
+      {
+        "version": "30",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "31",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "32",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "33",
+        "type": "JDBC",
+        "success": true
+      },
+      {
+        "version": "34",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "35",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "36",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "37",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "38",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "39",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "40",
+        "type": "SQL",
+        "success": true
+      },
+      {
+        "version": "41",
+        "type": "SQL",
+        "success": true
+      }
+    ],
+    "migration38": true,
+    "migration39": true,
+    "migration40": true,
+    "migration41": true,
+    "notificationRows": 1,
+    "notificationHash": "3ca1b7c9aa1f2be05052d5df7cd6c6066cb40adfc7db3e25135d6c9fe77c05c3",
+    "notifications": [
+      {
+        "id": 1,
+        "handoffId": 1,
+        "eventVersion": 0,
+        "recipientId": 1,
+        "deliveryKey": "25c9e483-9e09-417f-b2fe-2f7e4494b777",
+        "payloadSha256": "1cfc152c288284b18d0c1fc21d058a47d1afe7fc5aab5456c0d47baf7fe6d871",
+        "status": "PENDING",
+        "version": 2,
+        "attempts": 1,
+        "lastHttpStatus": 503,
+        "lastErrorCode": "HTTP_503",
+        "leaseOwnerPresent": false,
+        "leaseUntil": null,
+        "deliveredAt": null
+      }
+    ],
+    "publicationRows": 1,
+    "publicationHash": "b0dceb1e589ef756094d435f5a8edf004b98f2e55444f51116b3745a1c930df5",
+    "shifts": 3,
+    "publications": [
+      {
+        "handoffId": 1,
+        "eventVersion": 0,
+        "snapshotJson": "{\"handoffId\":1,\"scheduleId\":1,\"sourceShiftId\":3,\"sourceVersion\":0,\"requesterId\":2,\"startsAt\":\"2026-10-13T07:45:48\",\"endsAt\":\"2026-10-13T11:45:48\",\"eventVersion\":0,\"capturedAt\":\"2026-10-11T07:45:49.01178\",\"timeBasis\":\"DATABASE_SESSION_LOCAL\",\"recipients\":[{\"userId\":1,\"memberVersion\":0,\"displayName\":\"系统管理员\",\"roleCode\":\"ADMIN\"}]}"
+      }
+    ],
+    "shiftHash": "44ff4c09fb88ab0ec8cde580cf108c2b80e41c9c7be8798d4c15c377012473e3",
+    "designatedHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "swapHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "swapRevocationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "designatedRows": 0,
+    "swapRows": 0,
+    "swapRevocationRows": 0,
+    "legacyMigrationHash": "fbd02b4cf5e8d20cba3e8e3a8eaa80ae55f93699e15ea185a18f8ed759fd4974",
+    "onCallAuditHash": "6baf29322b9e420acb1e53f71b6b9b338dc8884e572f61cf9d8f40c2b3c566c7",
+    "v38MigrationHash": "8d9a32f06ae8ddf2c14bffc2258e7400f77c4d88843196446425e74bbc551820",
+    "v39MigrationHash": "7e33fb5e33335eb5025735481079416d8accbab3497414dad7fa602ebe069a9a",
+    "v40MigrationHash": "c19a2758af53f8a2fda92a33af77214815aab2c7a3aac935e47a02e39d9d3702",
+    "memberHash": "a7b9859e55f5af75690c3fd10abcf1139d1a35ad64d2d13ba3c39e606d0c69e1",
+    "memberOperationHash": "fe586dec1575ff15259869f37d484f4344be098bb4978c7c4f3b36c2dea0ca38",
+    "members": [
+      {
+        "scheduleId": 1,
+        "userId": 1,
+        "active": true,
+        "canRespond": true,
+        "canManage": true,
+        "version": 0,
+        "origin": "MIGRATED_GLOBAL_V38"
+      },
+      {
+        "scheduleId": 1,
+        "userId": 2,
+        "active": true,
+        "canRespond": true,
+        "canManage": false,
+        "version": 0,
+        "origin": "MIGRATED_GLOBAL_V38"
+      },
+      {
+        "scheduleId": 1,
+        "userId": 3,
+        "active": true,
+        "canRespond": false,
+        "canManage": true,
+        "version": 1,
+        "origin": "MIGRATED_GLOBAL_V38"
+      },
+      {
+        "scheduleId": 2,
+        "userId": 1,
+        "active": true,
+        "canRespond": true,
+        "canManage": true,
+        "version": 0,
+        "origin": "MIGRATED_GLOBAL_V38"
+      },
+      {
+        "scheduleId": 2,
+        "userId": 2,
+        "active": true,
+        "canRespond": true,
+        "canManage": false,
+        "version": 0,
+        "origin": "MIGRATED_GLOBAL_V38"
+      },
+      {
+        "scheduleId": 2,
+        "userId": 3,
+        "active": true,
+        "canRespond": true,
+        "canManage": true,
+        "version": 0,
+        "origin": "MIGRATED_GLOBAL_V38"
+      }
+    ],
+    "openRequestHash": "51952622c62732e5cee4032fba6df5e44e84405267c1df20fae421523282d662",
+    "openOperationHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "requests": [
+      {
+        "id": 1,
+        "sourceShiftId": 3,
+        "status": "OPEN",
+        "version": 0,
+        "claimedBy": null,
+        "replacementShiftId": null,
+        "operations": 0,
+        "audits": 1,
+        "overrides": 0
+      }
+    ]
+  }
+}

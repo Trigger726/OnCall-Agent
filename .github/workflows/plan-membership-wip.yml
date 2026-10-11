@@ -14,6 +14,52 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  open-notification-upgrade-mysql:
+    name: Populated V40 to V41 whole notification JAR retries on owned MySQL 8.4
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Inspect whole-JAR MySQL positive and negative gates
+        run: node --test scripts/tests/oncall-open-notification-upgrade-mysql.test.cjs
+      - name: Build own-source current JAR
+        run: bash mvnw -B -DskipTests package
+      - name: Immutable original V40 checkout
+        uses: actions/checkout@v5
+        with:
+          ref: 83a6842f2218427fa4de401ff0f3af40d96f9b97
+          path: target/cp118-v40-source
+      - name: Rebuild clean V40 and record exact source and artifact
+        run: |
+          (cd target/cp118-v40-source && bash mvnw -B -DskipTests package)
+          node scripts/record-open-notification-baseline.cjs
+      - name: Execute seven populated upgrade delivery retry and manual claim scopes on owned MySQL
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p target/oncall-open-notification-upgrade-mysql-it
+          bash mvnw -B -Duser.timezone=UTC -Dopspilot.oncall.notification.upgrade.mysql.enabled=true -Dtest=MySqlOpenNotificationUpgradeHttpIntegrationTest test 2>&1 | tee target/oncall-open-notification-upgrade-mysql-it/maven.log
+      - name: Inspect actual MySQL JUnit JDBC server identity seven JAR shutdowns and container cleanup
+        run: node scripts/verify-oncall-open-notification-upgrade-mysql.cjs
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: open-notification-upgrade-mysql-evidence
+          path: |
+            target/oncall-open-notification-upgrade-mysql-it/**/*.json
+            target/oncall-open-notification-upgrade-mysql-it/**/*.log
+            target/surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOpenNotificationUpgradeHttpIntegrationTest.xml
+            target/cp118-v40-source/old-v40-jar-provenance.json
+          retention-days: 30
+
   open-notification-operations-ui:
     name: Administrator operations real browser and database-local scope fences
     runs-on: ubuntu-latest
