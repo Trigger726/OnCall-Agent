@@ -125,22 +125,27 @@ public class RunbookService {
     }
 
     public SearchResponse search(String rawQuery, String roleCode, int requestedTopK, String rawMode) {
-        return searchInternal(rawQuery, roleCode, requestedTopK, rawMode, null, null);
+        return searchInternal(rawQuery, roleCode, requestedTopK, rawMode, null, null, null);
     }
 
     public SearchResponse searchTracked(String rawQuery, String roleCode, Long actorId, int requestedTopK,
                                         String rawMode, String sourceType) {
-        return searchInternal(rawQuery, roleCode, requestedTopK, rawMode, actorId, sourceType);
+        return searchTracked(rawQuery, roleCode, actorId, requestedTopK, rawMode, sourceType, null);
+    }
+
+    public SearchResponse searchTracked(String rawQuery, String roleCode, Long actorId, int requestedTopK,
+                                        String rawMode, String sourceType, SearchScope scope) {
+        return searchInternal(rawQuery, roleCode, requestedTopK, rawMode, actorId, sourceType, scope);
     }
 
     private SearchResponse searchInternal(String rawQuery, String roleCode, int requestedTopK, String rawMode,
-                                          Long actorId, String sourceType) {
+                                          Long actorId, String sourceType, SearchScope scope) {
         long startedNanos = System.nanoTime();
         String query = requireText(rawQuery, "query", 500);
         String role = normalizeRole(roleCode);
         String mode = normalizeSearchMode(rawMode);
         int topK = Math.max(1, Math.min(10, requestedTopK));
-        List<SearchCandidate> candidates = loadCandidates(role);
+        List<SearchCandidate> candidates = loadCandidates(role, scope);
         Map<Long, SearchCandidate> candidatesById = new HashMap<>();
         candidates.forEach(candidate -> candidatesById.put(candidate.chunkId(), candidate));
         List<Bm25Retriever.Document> documents = candidates.stream()
@@ -164,6 +169,9 @@ public class RunbookService {
         String semanticStatus;
         BigDecimal semanticCoverage;
         List<String> warnings = new ArrayList<>();
+        if (scope != null) warnings.add("Incident 范围检索：事件资源及 CMDB 一跳关联；serviceCode="
+                + clip(String.join(",", scope.serviceCodes()), 400)
+                + "；无 serviceCode 的手册仅按范围内资源类型及 SERVICE 通用类型匹配。未回退全库；跨服务问题请新建未绑定对话。范围匹配不证明根因或内容相关。");
         if (semantic != null && semantic.usable()) {
             List<ReciprocalRankFusion.FusedDocument> fused = ReciprocalRankFusion.fuse(
                     lexicalRanking.stream().map(item -> item.document().chunkId()).toList(),
@@ -469,8 +477,9 @@ public class RunbookService {
                 .param("key", stableKey).query(Integer.class).optional().orElse(0);
     }
 
-    private List<SearchCandidate> loadCandidates(String role) {
-        return jdbcClient.sql("""
+    private List<SearchCandidate> loadCandidates(String role, SearchScope scope) {
+        if (scope != null && (scope.serviceCodes().isEmpty() || scope.resourceTypes().isEmpty())) return List.of();
+        var query = jdbcClient.sql("""
                         SELECT c.id AS chunk_id, c.chunk_index, c.heading, c.content,
                                d.id AS document_id, d.stable_key, d.version_no, d.resource_type,
                                d.service_code, d.title, d.summary, d.source_type, d.published_at
@@ -478,10 +487,13 @@ public class RunbookService {
                         JOIN runbook_document d ON d.id = c.document_id
                         JOIN runbook_document_acl a ON a.document_id = d.id AND a.role_code = :role
                         WHERE d.status = 'PUBLISHED'
-                        ORDER BY d.stable_key, c.chunk_index
-                        """)
-                .param("role", role)
-                .query((rs, rowNum) -> new SearchCandidate(
+                        """ + (scope == null ? "" : """
+                          AND (d.service_code IN (:codes)
+                            OR (d.service_code IS NULL AND d.resource_type IN (:types)))
+                        """) + " ORDER BY d.stable_key, c.chunk_index")
+                .param("role", role);
+        if (scope != null) query.param("codes", scope.serviceCodes()).param("types", scope.resourceTypes());
+        return query.query((rs, rowNum) -> new SearchCandidate(
                         rs.getLong("chunk_id"), rs.getLong("document_id"), rs.getString("stable_key"),
                         rs.getInt("version_no"), rs.getString("resource_type"), rs.getString("service_code"),
                         rs.getString("title"), rs.getString("summary"), rs.getString("source_type"),
@@ -798,6 +810,14 @@ public class RunbookService {
                                  int candidateChunkCount, String semanticStatus,
                                  BigDecimal semanticCoverage, List<String> warnings,
                                  List<SearchResult> results) {
+    }
+
+    /** Programmatic scope, not a user/model query expression. null means explicit global search. */
+    public record SearchScope(List<String> serviceCodes, List<String> resourceTypes) {
+        public SearchScope {
+            serviceCodes = List.copyOf(serviceCodes);
+            resourceTypes = List.copyOf(resourceTypes);
+        }
     }
 
     public record SearchResult(long documentId, String stableKey, int versionNo,

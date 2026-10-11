@@ -18,6 +18,7 @@ import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
@@ -254,6 +255,108 @@ class AssistantRunbookIntegrationTest {
 
     private AssistantService withAi(AssistantAiService ai) {
         return new AssistantService(jdbc, json, Optional.of(ai), agentRuns, authorization, transactions, requests, runbooks, observations);
+    }
+
+    @Test void boundSearchShouldFilterBeforeTopKAndKeepDirectDependencyAndGenericProcedures() throws Exception {
+        String word = word();
+        int before = runbooks.searchTracked(word, "ON_CALL", owner, 3, "AUTO", "ASSISTANT", new RunbookService.SearchScope(
+                List.of("APP-SETTLEMENT", "APP-AUTH", "APP-PORTAL", "MID-REDIS-01", "DB-SETTLEMENT-01", "API-PAYMENT"),
+                List.of("APPLICATION", "MIDDLEWARE", "DATABASE", "API", "SERVICE"))).candidateChunkCount();
+        for (int i = 0; i < 4; i++) scopedDocument(word + "-outside-" + i, word, "SERVICE", "KAFKA-OTHER", (word + " ").repeat(50), "PUBLISHED", "ON_CALL");
+        scopedDocument(word + "-root", word, "APPLICATION", "APP-SETTLEMENT", "ROOT_PROCEDURE", "PUBLISHED", "ON_CALL");
+        scopedDocument(word + "-dependency", word, "MIDDLEWARE", "MID-REDIS-01", "DEPENDENCY_PROCEDURE", "PUBLISHED", "ON_CALL");
+        scopedDocument(word + "-generic", word, "SERVICE", null, "GENERIC_PROCEDURE", "PUBLISHED", "ON_CALL");
+        assertThat(runbooks.search(word, "ON_CALL", 3).results()).anySatisfy(r -> assertThat(r.serviceCode()).isEqualTo("KAFKA-OTHER"));
+        long bound = assistant.createSession(owner, 1L, null).session().id();
+        var answer = assistant.sendMessage(bound, owner, word);
+        var refs = json.readValue(answer.evidenceJson(), AssistantService.EvidenceRef[].class);
+        assertThat(List.of(refs).stream().filter(r -> "RUNBOOK".equals(r.type()))).hasSize(3)
+                .extracting(AssistantService.EvidenceRef::ref).allSatisfy(ref -> assertThat(ref).doesNotContain("outside"));
+        assertThat(answer.content()).contains("ROOT_PROCEDURE", "DEPENDENCY_PROCEDURE", "GENERIC_PROCEDURE", "Incident 范围检索", "未回退全库");
+        assertThat(jdbc.sql("SELECT candidate_chunk_count FROM runbook_retrieval_query WHERE created_by=:id ORDER BY id DESC LIMIT 1")
+                .param("id", owner).query(Integer.class).single()).isEqualTo(before + 3); // Prior tests may have published generic fixtures too.
+    }
+
+    @Test void incomingOneHopShouldBeIncludedButSecondHopAndWrongUnscopedTypeExcluded() {
+        String word = word();
+        scopedDocument(word + "-incoming", word, "APPLICATION", "APP-PORTAL", "INCOMING_PROCEDURE", "PUBLISHED", "ON_CALL");
+        scopedDocument(word + "-network", word, "NETWORK", null, "NETWORK_OUTSIDE", "PUBLISHED", "ON_CALL");
+        String resource = "FAR-" + word.toUpperCase();
+        jdbc.sql("INSERT INTO cmdb_resource(resource_code,resource_type,name,environment,status,attributes_json) VALUES (:code,'SERVICE',:code,'PRODUCTION','RUNNING','{}')")
+                .param("code", resource).update();
+        long far = jdbc.sql("SELECT id FROM cmdb_resource WHERE resource_code=:code").param("code", resource).query(Long.class).single();
+        jdbc.sql("INSERT INTO cmdb_relation(source_resource_id,target_resource_id,relation_type) VALUES (4,:id,'DEPENDS_ON')").param("id", far).update();
+        scopedDocument(word + "-far", word, "SERVICE", resource, "SECOND_HOP_OUTSIDE", "PUBLISHED", "ON_CALL");
+        long bound = assistant.createSession(owner, 1L, null).session().id();
+        var answer = assistant.sendMessage(bound, owner, word);
+        assertThat(answer.content()).contains("INCOMING_PROCEDURE").doesNotContain("NETWORK_OUTSIDE", "SECOND_HOP_OUTSIDE");
+    }
+
+    @Test void boundSearchShouldNotFallBackGlobalWhileUnboundSearchRemainsGlobal() {
+        String word = word(); scopedDocument(word, word, "SERVICE", "FOREIGN-SERVICE", "FOREIGN_PROCEDURE", "PUBLISHED", "ON_CALL");
+        long bound = assistant.createSession(owner, 2L, null).session().id();
+        var local = assistant.sendMessage(bound, owner, word);
+        assertThat(local.content()).contains("未命中", "未回退全库").doesNotContain("FOREIGN_PROCEDURE");
+        assertThat(assistant.sendMessage(session, owner, word).content()).contains("FOREIGN_PROCEDURE").doesNotContain("Incident 范围检索");
+    }
+
+    @Test void scopeShouldNotBypassAclOrPublicationStatusAndInvalidEmptyScopeShouldStayClosed() {
+        String word = word();
+        scopedDocument(word + "-private", word, "SERVICE", "APP-SETTLEMENT", "PRIVATE_PROCEDURE", "PUBLISHED", "ADMIN");
+        scopedDocument(word + "-draft", word, "SERVICE", "APP-SETTLEMENT", "DRAFT_PROCEDURE", "PENDING_REVIEW", "ON_CALL");
+        long bound = assistant.createSession(owner, 1L, null).session().id();
+        assertThat(assistant.sendMessage(bound, owner, word).content()).contains("未命中").doesNotContain("PRIVATE_PROCEDURE", "DRAFT_PROCEDURE");
+        var empty = runbooks.searchTracked("Redis", "ON_CALL", owner, 3, "AUTO", "ASSISTANT", new RunbookService.SearchScope(List.of(), List.of()));
+        assertThat(empty.candidateChunkCount()).isZero(); assertThat(empty.results()).isEmpty();
+        assertThat(empty.warnings()).anySatisfy(w -> assertThat(w).contains("未回退全库"));
+    }
+
+    @Test void boundNormalAndNativeModelsShouldReceiveOnlyCurrentScopedEvidence() {
+        String word = word(), key = word + "-local", ref = "runbook:" + key + ":v1#chunk-0";
+        scopedDocument(key, word, "SERVICE", "APP-SETTLEMENT", "LOCAL_SCOPED_PROCEDURE", "PUBLISHED", "ON_CALL");
+        scopedDocument(word + "-foreign", word, "SERVICE", "OTHER-SERVICE", "FOREIGN_SCOPED_PROCEDURE", "PUBLISHED", "ON_CALL");
+        var ai = mock(AssistantAiService.class); var inputs = new ArrayList<String>();
+        when(ai.answer(anyString(), anyString(), eq(word))).thenAnswer(call -> { inputs.add(call.getArgument(0)); return "本次资料 [" + ref + "]"; });
+        when(ai.streamAnswer(anyString(), anyString(), eq(word))).thenAnswer(call -> { inputs.add(call.getArgument(0)); return Flux.just("本次资料 [run", "book:" + key + ":v1#chunk-0]"); });
+        var service = withAi(ai); long first = assistant.createSession(owner, 1L, null).session().id(), next = assistant.createSession(owner, 1L, null).session().id();
+        var normal = service.sendMessage(first, owner, word); var deltas = new StringBuilder();
+        var nativeAnswer = service.streamMessage(next, owner, word, authorization.capture(owner), () -> {}, null, deltas::append);
+        assertThat(inputs).hasSize(2).allSatisfy(context -> assertThat(context).contains("LOCAL_SCOPED_PROCEDURE", "Incident 范围检索")
+                .doesNotContain("FOREIGN_SCOPED_PROCEDURE"));
+        assertThat(inputs.get(0).replaceAll("\"searchId\":\\d+", "\"searchId\":0")).isEqualTo(inputs.get(1).replaceAll("\"searchId\":\\d+", "\"searchId\":0"));
+        assertThat(nativeAnswer.content()).isEqualTo(normal.content()).isEqualTo(deltas.toString());
+    }
+
+    @Test void visibleButOutsideScopeModelCitationShouldBeRejected() {
+        String word = word(), key = word + "-foreign";
+        scopedDocument(key, word, "SERVICE", "OTHER-SERVICE", "FOREIGN_PROCEDURE", "PUBLISHED", "ON_CALL");
+        var ai = mock(AssistantAiService.class); when(ai.answer(anyString(), anyString(), eq(word))).thenReturn("runbook:" + key + ":v1#chunk-0");
+        long bound = assistant.createSession(owner, 1L, null).session().id(); var identity = identity();
+        assertThatThrownBy(() -> withAi(ai).sendMessage(bound, owner, word, authorization.capture(owner), () -> {}, identity))
+                .isInstanceOfSatisfying(ApiException.class, e -> assertThat(e.code()).isEqualTo("ASSISTANT_CITATION_INVALID"));
+        assertThat(assistant.getSession(bound, owner).messages()).hasSize(1);
+        assertThat(assistant.requestStatus(bound, owner, identity.keyHash()).status()).isEqualTo("FAILED");
+    }
+
+    @Test void completedKeyShouldPreserveOriginalScopedSnapshotWhenCmdbRelationChanges() {
+        String word = word(); scopedDocument(word, word, "SERVICE", "MID-REDIS-01", "ORIGINAL_LINKED_PROCEDURE", "PUBLISHED", "ON_CALL");
+        long bound = assistant.createSession(owner, 1L, null).session().id(); var identity = identity(); var lease = authorization.capture(owner);
+        var original = assistant.sendMessage(bound, owner, word, lease, () -> {}, identity);
+        assertThat(original.content()).contains("ORIGINAL_LINKED_PROCEDURE");
+        jdbc.sql("DELETE FROM cmdb_relation WHERE source_resource_id=1 AND target_resource_id=4").update();
+        try {
+            long before = searches();
+            assertThat(assistant.sendMessage(bound, owner, word, lease, () -> {}, identity)).isEqualTo(original);
+            assertThat(searches()).isEqualTo(before);
+            assertThat(assistant.sendMessage(bound, owner, word).content()).doesNotContain("ORIGINAL_LINKED_PROCEDURE").contains("未命中");
+        } finally { jdbc.sql("INSERT INTO cmdb_relation(source_resource_id,target_resource_id,relation_type) VALUES (1,4,'DEPENDS_ON')").update(); }
+    }
+
+    private long scopedDocument(String key, String word, String type, String code, String content, String status, String role) {
+        long id = document(key, word, 1, status, role, content);
+        jdbc.sql("UPDATE runbook_document SET resource_type=:type,service_code=:code WHERE id=:id")
+                .param("type", type).param("code", code).param("id", id).update();
+        return id;
     }
 
     private long searches() {

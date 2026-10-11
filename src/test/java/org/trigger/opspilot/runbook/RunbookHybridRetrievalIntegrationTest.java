@@ -48,6 +48,7 @@ class RunbookHybridRetrievalIntegrationTest {
 
     @Autowired
     private JdbcClient jdbcClient;
+    @Autowired private RunbookService runbooks;
 
     @MockBean
     private EmbeddingModel embeddingModel;
@@ -154,6 +155,23 @@ class RunbookHybridRetrievalIntegrationTest {
             return new float[]{0, 0, 0, 0, 1, 0};
         }
         return new float[]{0, 0, 0, 0, 0, 1};
+    }
+
+    @Test void hybridShouldApplyScopeBeforeBothRankingsRatherThanDiscardGlobalTopK() throws Exception {
+        when(embeddingModel.embed(anyList())).thenAnswer(call -> call.<List<String>>getArgument(0).stream().map(this::vectorFor).toList());
+        String adminToken = login("admin", "OpsPilot@2026");
+        mockMvc.perform(post("/api/v1/runbooks/semantic-index/rebuild").header("Authorization", bearer(adminToken)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.status.state").value("READY"));
+        var global = runbooks.search("Kafka consumer group offset", "ON_CALL", 3, "HYBRID");
+        assertThat(global.results().get(0).stableKey()).isEqualTo("kafka-consumer-lag");
+        var scoped = runbooks.searchTracked("Kafka consumer group offset", "ON_CALL", 2L, 3, "HYBRID", "ASSISTANT",
+                new RunbookService.SearchScope(List.of("APP-SETTLEMENT", "MID-REDIS-01"), List.of("APPLICATION", "MIDDLEWARE", "SERVICE")));
+        assertThat(scoped.engine()).isEqualTo("HYBRID_RRF_V1"); assertThat(scoped.candidateChunkCount()).isEqualTo(3);
+        assertThat(scoped.results()).hasSize(3).allSatisfy(result -> {
+            assertThat(result.stableKey()).startsWith("legacy-runbook-");
+            assertThat(result.semanticRank()).isBetween(1, 3);
+        });
+        assertThat(scoped.warnings()).anySatisfy(w -> assertThat(w).contains("未回退全库"));
     }
 
     private String login(String username, String password) throws Exception {

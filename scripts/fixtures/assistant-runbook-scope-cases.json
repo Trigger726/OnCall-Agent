@@ -1,0 +1,17 @@
+{
+  "version": "assistant-incident-scope-v1",
+  "basis": "Fixed Incident / CMDB seeds and two independently published controlled Runbooks; labels declared before packaged comparison, not taken from observed ranking.",
+  "notes": "relevantKeys are topical judgments for these ten cases, not production truth. excludedKeys follow explicit serviceCode/resourceType applicability, not relevance scores. Unbound cases must keep identical ordering. No claim of universal retrieval improvement.",
+  "cases": [
+    { "id": "settlement-broad", "incidentId": 1, "question": "推荐当前 Incident 的排查手册", "relevantKeys": ["legacy-runbook-1", "legacy-runbook-2", "cp04-redis-scope"], "excludedKeys": ["kubernetes-crashloop", "kafka-consumer-lag", "mysql-connection-saturation", "cp04-foreign-scope"] },
+    { "id": "settlement-redis", "incidentId": 1, "question": "Redis 连接池 active pending 慢命令", "relevantKeys": ["legacy-runbook-2", "cp04-redis-scope"], "excludedKeys": ["kubernetes-crashloop", "kafka-consumer-lag", "mysql-connection-saturation", "cp04-foreign-scope"] },
+    { "id": "settlement-logs", "incidentId": 1, "question": "当前日志应该参考哪些排查手册", "relevantKeys": ["legacy-runbook-1", "legacy-runbook-2", "cp04-redis-scope"], "excludedKeys": ["kubernetes-crashloop", "kafka-consumer-lag", "mysql-connection-saturation", "cp04-foreign-scope"] },
+    { "id": "auth-token", "incidentId": 2, "question": "登录 token 刷新 旧客户端", "relevantKeys": ["legacy-runbook-3"], "excludedKeys": ["legacy-runbook-2", "cp04-redis-scope", "cp04-foreign-scope", "kubernetes-crashloop", "kafka-consumer-lag", "mysql-connection-saturation"] },
+    { "id": "auth-broad", "incidentId": 2, "question": "推荐当前 Incident 的排查手册", "relevantKeys": ["legacy-runbook-3"], "excludedKeys": ["legacy-runbook-2", "cp04-redis-scope", "cp04-foreign-scope", "kubernetes-crashloop", "kafka-consumer-lag", "mysql-connection-saturation"] },
+    { "id": "global-redis", "incidentId": null, "question": "Redis 连接池 active pending 慢命令", "relevantKeys": ["legacy-runbook-2", "cp04-redis-scope", "cp04-foreign-scope"], "excludedKeys": [] },
+    { "id": "global-kafka", "incidentId": null, "question": "Kafka consumer lag group offset commit", "relevantKeys": ["kafka-consumer-lag"], "excludedKeys": [] },
+    { "id": "global-kubernetes", "incidentId": null, "question": "Kubernetes Pod OOMKilled CrashLoopBackOff", "relevantKeys": ["kubernetes-crashloop"], "excludedKeys": [] },
+    { "id": "bound-cross-service", "incidentId": 1, "question": "Kafka consumer lag group offset commit", "relevantKeys": [], "excludedKeys": ["kafka-consumer-lag", "cp04-foreign-scope", "kubernetes-crashloop", "mysql-connection-saturation"] },
+    { "id": "global-no-match", "incidentId": null, "question": "scopeNoMatchFixture93daef1720", "relevantKeys": [], "excludedKeys": [] }
+  ]
+}

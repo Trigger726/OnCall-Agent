@@ -1,0 +1,1846 @@
+{
+  "status": "PASS",
+  "out": "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-scope-cHnmKx",
+  "aiEnabled": false,
+  "semanticEnabled": false,
+  "userDatabaseModified": false,
+  "browser": "Existing Playwright 1.63.0 + Chrome; Browser plugin not available",
+  "datasetVersion": "assistant-incident-scope-v1",
+  "datasetSha256": "4d73fd937c1d7af0e7be8517988db60f484fb013242826a0cd40766ab79a6ab9",
+  "cases": [
+    {
+      "id": "settlement-broad",
+      "incidentId": 1,
+      "question": "推荐当前 Incident 的排查手册",
+      "relevantKeys": [
+        "legacy-runbook-1",
+        "legacy-runbook-2",
+        "cp04-redis-scope"
+      ],
+      "excludedKeys": [
+        "kubernetes-crashloop",
+        "kafka-consumer-lag",
+        "mysql-connection-saturation",
+        "cp04-foreign-scope"
+      ]
+    },
+    {
+      "id": "settlement-redis",
+      "incidentId": 1,
+      "question": "Redis 连接池 active pending 慢命令",
+      "relevantKeys": [
+        "legacy-runbook-2",
+        "cp04-redis-scope"
+      ],
+      "excludedKeys": [
+        "kubernetes-crashloop",
+        "kafka-consumer-lag",
+        "mysql-connection-saturation",
+        "cp04-foreign-scope"
+      ]
+    },
+    {
+      "id": "settlement-logs",
+      "incidentId": 1,
+      "question": "当前日志应该参考哪些排查手册",
+      "relevantKeys": [
+        "legacy-runbook-1",
+        "legacy-runbook-2",
+        "cp04-redis-scope"
+      ],
+      "excludedKeys": [
+        "kubernetes-crashloop",
+        "kafka-consumer-lag",
+        "mysql-connection-saturation",
+        "cp04-foreign-scope"
+      ]
+    },
+    {
+      "id": "auth-token",
+      "incidentId": 2,
+      "question": "登录 token 刷新 旧客户端",
+      "relevantKeys": [
+        "legacy-runbook-3"
+      ],
+      "excludedKeys": [
+        "legacy-runbook-2",
+        "cp04-redis-scope",
+        "cp04-foreign-scope",
+        "kubernetes-crashloop",
+        "kafka-consumer-lag",
+        "mysql-connection-saturation"
+      ]
+    },
+    {
+      "id": "auth-broad",
+      "incidentId": 2,
+      "question": "推荐当前 Incident 的排查手册",
+      "relevantKeys": [
+        "legacy-runbook-3"
+      ],
+      "excludedKeys": [
+        "legacy-runbook-2",
+        "cp04-redis-scope",
+        "cp04-foreign-scope",
+        "kubernetes-crashloop",
+        "kafka-consumer-lag",
+        "mysql-connection-saturation"
+      ]
+    },
+    {
+      "id": "global-redis",
+      "incidentId": null,
+      "question": "Redis 连接池 active pending 慢命令",
+      "relevantKeys": [
+        "legacy-runbook-2",
+        "cp04-redis-scope",
+        "cp04-foreign-scope"
+      ],
+      "excludedKeys": []
+    },
+    {
+      "id": "global-kafka",
+      "incidentId": null,
+      "question": "Kafka consumer lag group offset commit",
+      "relevantKeys": [
+        "kafka-consumer-lag"
+      ],
+      "excludedKeys": []
+    },
+    {
+      "id": "global-kubernetes",
+      "incidentId": null,
+      "question": "Kubernetes Pod OOMKilled CrashLoopBackOff",
+      "relevantKeys": [
+        "kubernetes-crashloop"
+      ],
+      "excludedKeys": []
+    },
+    {
+      "id": "bound-cross-service",
+      "incidentId": 1,
+      "question": "Kafka consumer lag group offset commit",
+      "relevantKeys": [],
+      "excludedKeys": [
+        "kafka-consumer-lag",
+        "cp04-foreign-scope",
+        "kubernetes-crashloop",
+        "mysql-connection-saturation"
+      ]
+    },
+    {
+      "id": "global-no-match",
+      "incidentId": null,
+      "question": "scopeNoMatchFixture93daef1720",
+      "relevantKeys": [],
+      "excludedKeys": []
+    }
+  ],
+  "runs": [
+    {
+      "name": "before",
+      "jar": "D:\\Codex\\国网\\央国企求职\\OpsPilot\\target\\opspilot-v1.8-assistant-observations.jar",
+      "jarSha256": "c56db7156f1278b519876759ead4a564d07cb1fb8ddcfc45de2e8d847581f856",
+      "base": "http://127.0.0.1:9913",
+      "status": "PASS",
+      "screenshots": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-scope-cHnmKx\\before\\initial-light-1440.png",
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-scope-cHnmKx\\before\\scope-light-1440.png",
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-scope-cHnmKx\\before\\initial-dark-390.png",
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-scope-cHnmKx\\before\\scope-dark-390.png"
+      ],
+      "errors": [],
+      "assets": [
+        {
+          "file": "index.html",
+          "sha256": "84449974fdaabe2fec2e0b075bece5817d4218d3fd4099901d46a93d1da6068d"
+        },
+        {
+          "file": "favicon.svg",
+          "sha256": "40f017db2d6e9da7fbbc2235138455c4a39fb721a60f1f69504f98fabafb3471"
+        },
+        {
+          "file": "assets/theme.js",
+          "sha256": "f3066ab98bdef18e605d4c1a7a4a8257dd161a87d619b1ebb4c1fc2d69f505a3"
+        },
+        {
+          "file": "assets/index-C5QJvBlg.js",
+          "sha256": "9a8979483799c6a114b9de4547483ddf8b095430f5ebf6b8c81d0d7997acf670"
+        },
+        {
+          "file": "assets/index-CKb6ZeZO.css",
+          "sha256": "b12e842a50792cd5fd658372952b4d33894c47b420a0ab50e2250ac97264ff52"
+        }
+      ],
+      "cases": [
+        {
+          "id": "settlement-broad",
+          "incidentId": 1,
+          "question": "推荐当前 Incident 的排查手册",
+          "relevantKeys": [
+            "legacy-runbook-1",
+            "legacy-runbook-2",
+            "cp04-redis-scope"
+          ],
+          "excludedKeys": [
+            "kubernetes-crashloop",
+            "kafka-consumer-lag",
+            "mysql-connection-saturation",
+            "cp04-foreign-scope"
+          ],
+          "sessionId": 1,
+          "messageId": 2,
+          "returned": [
+            "cp04-redis-scope",
+            "cp04-foreign-scope",
+            "legacy-runbook-1"
+          ],
+          "answer": "### Incident 概况\n- **INC-20260819-0001** 统一结算接口持续超时\n- 状态：P1 / INVESTIGATING\n- 影响服务：统一结算服务\n- 关联告警：2 条\n\n### 当前证据\n- [alert:1] 结算接口 P95 延迟超过 5 秒\n- [alert:2] Redis 连接池等待线程过高\n- [change:1] Redis 连接池上限由 200 调整为 120\n- [change:2] 认证服务发布 v2.8.1\n- [investigation:1] 最近调查报告\n\n你可以继续追问根因、近期变更、处置进展或下一步验证动作。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n\n- **结算 Redis 排查手册** [runbook:cp04-redis-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **其他服务 Redis 排查手册** [runbook:cp04-foreign-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **应用接口超时排查手册** [runbook:legacy-runbook-1:v1#chunk-0]\n原文片段：\n1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。"
+        },
+        {
+          "id": "settlement-redis",
+          "incidentId": 1,
+          "question": "Redis 连接池 active pending 慢命令",
+          "relevantKeys": [
+            "legacy-runbook-2",
+            "cp04-redis-scope"
+          ],
+          "excludedKeys": [
+            "kubernetes-crashloop",
+            "kafka-consumer-lag",
+            "mysql-connection-saturation",
+            "cp04-foreign-scope"
+          ],
+          "sessionId": 2,
+          "messageId": 4,
+          "returned": [
+            "cp04-redis-scope",
+            "cp04-foreign-scope",
+            "legacy-runbook-2"
+          ],
+          "answer": "### Incident 概况\n- **INC-20260819-0001** 统一结算接口持续超时\n- 状态：P1 / INVESTIGATING\n- 影响服务：统一结算服务\n- 关联告警：2 条\n\n### 当前证据\n- [alert:1] 结算接口 P95 延迟超过 5 秒\n- [alert:2] Redis 连接池等待线程过高\n- [change:1] Redis 连接池上限由 200 调整为 120\n- [change:2] 认证服务发布 v2.8.1\n- [investigation:1] 最近调查报告\n\n你可以继续追问根因、近期变更、处置进展或下一步验证动作。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n\n- **结算 Redis 排查手册** [runbook:cp04-redis-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **其他服务 Redis 排查手册** [runbook:cp04-foreign-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **Redis 连接池耗尽处置** [runbook:legacy-runbook-2:v1#chunk-0]\n原文片段：\n检查 active、idle、pending；核对连接池上限变更；确认慢命令；必要时回滚配置并分批重启客户端实例。"
+        },
+        {
+          "id": "settlement-logs",
+          "incidentId": 1,
+          "question": "当前日志应该参考哪些排查手册",
+          "relevantKeys": [
+            "legacy-runbook-1",
+            "legacy-runbook-2",
+            "cp04-redis-scope"
+          ],
+          "excludedKeys": [
+            "kubernetes-crashloop",
+            "kafka-consumer-lag",
+            "mysql-connection-saturation",
+            "cp04-foreign-scope"
+          ],
+          "sessionId": 3,
+          "messageId": 6,
+          "returned": [
+            "cp04-redis-scope",
+            "cp04-foreign-scope",
+            "legacy-runbook-1"
+          ],
+          "answer": "### Incident 概况\n- **INC-20260819-0001** 统一结算接口持续超时\n- 状态：P1 / INVESTIGATING\n- 影响服务：统一结算服务\n- 关联告警：2 条\n\n### 当前证据\n- [alert:1] 结算接口 P95 延迟超过 5 秒\n- [alert:2] Redis 连接池等待线程过高\n- [change:1] Redis 连接池上限由 200 调整为 120\n- [change:2] 认证服务发布 v2.8.1\n- [investigation:1] 最近调查报告\n\n你可以继续追问根因、近期变更、处置进展或下一步验证动作。\n\n### 只读指标 / 日志取证\n\nLOG · EMPTY；来源：local-logs；资源：APP-SETTLEMENT\n时间窗：最新近 30 分钟 [2026-10-11T23:32:55.494064500 ～ 2026-10-12T00:02:55.494064500]\n该窗口未返回样本，不代表系统健康或没有故障。\n提示：最多 20 条脱敏样本，非日志总体计数；Provider 脱敏字段=0\n仅为只读、有限样本；未执行修复，也未确认根因。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n\n- **结算 Redis 排查手册** [runbook:cp04-redis-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **其他服务 Redis 排查手册** [runbook:cp04-foreign-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **应用接口超时排查手册** [runbook:legacy-runbook-1:v1#chunk-0]\n原文片段：\n1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。"
+        },
+        {
+          "id": "auth-token",
+          "incidentId": 2,
+          "question": "登录 token 刷新 旧客户端",
+          "relevantKeys": [
+            "legacy-runbook-3"
+          ],
+          "excludedKeys": [
+            "legacy-runbook-2",
+            "cp04-redis-scope",
+            "cp04-foreign-scope",
+            "kubernetes-crashloop",
+            "kafka-consumer-lag",
+            "mysql-connection-saturation"
+          ],
+          "sessionId": 4,
+          "messageId": 8,
+          "returned": [
+            "legacy-runbook-3",
+            "legacy-runbook-2"
+          ],
+          "answer": "### Incident 概况\n- **INC-20260818-0002** 统一认证登录错误率升高\n- 状态：P2 / RESOLVED\n- 影响服务：统一身份认证\n- 关联告警：1 条\n\n### 当前证据\n- [alert:3] 认证 token 刷新错误率超过 3%\n- [change:2] 认证服务发布 v2.8.1\n\n你可以继续追问根因、近期变更、处置进展或下一步验证动作。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n\n- **认证错误率升高排查** [runbook:legacy-runbook-3:v1#chunk-0]\n原文片段：\n按客户端版本、错误码和发布批次聚合；核对 token 格式兼容；灰度开启兼容策略并观察错误率。\n\n- **Redis 连接池耗尽处置** [runbook:legacy-runbook-2:v1#chunk-0]\n原文片段：\n检查 active、idle、pending；核对连接池上限变更；确认慢命令；必要时回滚配置并分批重启客户端实例。"
+        },
+        {
+          "id": "auth-broad",
+          "incidentId": 2,
+          "question": "推荐当前 Incident 的排查手册",
+          "relevantKeys": [
+            "legacy-runbook-3"
+          ],
+          "excludedKeys": [
+            "legacy-runbook-2",
+            "cp04-redis-scope",
+            "cp04-foreign-scope",
+            "kubernetes-crashloop",
+            "kafka-consumer-lag",
+            "mysql-connection-saturation"
+          ],
+          "sessionId": 5,
+          "messageId": 10,
+          "returned": [
+            "cp04-redis-scope",
+            "cp04-foreign-scope",
+            "legacy-runbook-1"
+          ],
+          "answer": "### Incident 概况\n- **INC-20260818-0002** 统一认证登录错误率升高\n- 状态：P2 / RESOLVED\n- 影响服务：统一身份认证\n- 关联告警：1 条\n\n### 当前证据\n- [alert:3] 认证 token 刷新错误率超过 3%\n- [change:2] 认证服务发布 v2.8.1\n\n你可以继续追问根因、近期变更、处置进展或下一步验证动作。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n\n- **结算 Redis 排查手册** [runbook:cp04-redis-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **其他服务 Redis 排查手册** [runbook:cp04-foreign-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **应用接口超时排查手册** [runbook:legacy-runbook-1:v1#chunk-0]\n原文片段：\n1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。"
+        },
+        {
+          "id": "global-redis",
+          "incidentId": null,
+          "question": "Redis 连接池 active pending 慢命令",
+          "relevantKeys": [
+            "legacy-runbook-2",
+            "cp04-redis-scope",
+            "cp04-foreign-scope"
+          ],
+          "excludedKeys": [],
+          "sessionId": 6,
+          "messageId": 12,
+          "returned": [
+            "cp04-redis-scope",
+            "cp04-foreign-scope",
+            "legacy-runbook-2"
+          ],
+          "answer": "以下是按当前问题检索到的已发布 Runbook 原文片段；这是资料检索，不是 AI 根因结论。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n\n- **结算 Redis 排查手册** [runbook:cp04-redis-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **其他服务 Redis 排查手册** [runbook:cp04-foreign-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **Redis 连接池耗尽处置** [runbook:legacy-runbook-2:v1#chunk-0]\n原文片段：\n检查 active、idle、pending；核对连接池上限变更；确认慢命令；必要时回滚配置并分批重启客户端实例。"
+        },
+        {
+          "id": "global-kafka",
+          "incidentId": null,
+          "question": "Kafka consumer lag group offset commit",
+          "relevantKeys": [
+            "kafka-consumer-lag"
+          ],
+          "excludedKeys": [],
+          "sessionId": 7,
+          "messageId": 14,
+          "returned": [
+            "kafka-consumer-lag"
+          ],
+          "answer": "以下是按当前问题检索到的已发布 Runbook 原文片段；这是资料检索，不是 AI 根因结论。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n\n- **Kafka Consumer Lag 处置** [runbook:kafka-consumer-lag:v1#chunk-0]\n原文片段：\n# Kafka Consumer Lag 处置 Kafka consumer lag、topic backlog、partition 消费落后时，检查 consumer group、rebalance、offset commit、处理耗时与分区倾斜；扩容前确认幂等，恢复后观察 lag 持续下降。"
+        },
+        {
+          "id": "global-kubernetes",
+          "incidentId": null,
+          "question": "Kubernetes Pod OOMKilled CrashLoopBackOff",
+          "relevantKeys": [
+            "kubernetes-crashloop"
+          ],
+          "excludedKeys": [],
+          "sessionId": 8,
+          "messageId": 16,
+          "returned": [
+            "kubernetes-crashloop"
+          ],
+          "answer": "以下是按当前问题检索到的已发布 Runbook 原文片段；这是资料检索，不是 AI 根因结论。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n\n- **Kubernetes CrashLoopBackOff 处置** [runbook:kubernetes-crashloop:v1#chunk-0]\n原文片段：\n# Kubernetes CrashLoopBackOff 处置 Pod 反复重启、CrashLoopBackOff、OOMKilled、liveness probe 失败时，检查 previous logs、退出码、资源限制、探针和最近镜像变更；回滚后观察重启次数。"
+        },
+        {
+          "id": "bound-cross-service",
+          "incidentId": 1,
+          "question": "Kafka consumer lag group offset commit",
+          "relevantKeys": [],
+          "excludedKeys": [
+            "kafka-consumer-lag",
+            "cp04-foreign-scope",
+            "kubernetes-crashloop",
+            "mysql-connection-saturation"
+          ],
+          "sessionId": 9,
+          "messageId": 18,
+          "returned": [
+            "kafka-consumer-lag"
+          ],
+          "answer": "### Incident 概况\n- **INC-20260819-0001** 统一结算接口持续超时\n- 状态：P1 / INVESTIGATING\n- 影响服务：统一结算服务\n- 关联告警：2 条\n\n### 当前证据\n- [alert:1] 结算接口 P95 延迟超过 5 秒\n- [alert:2] Redis 连接池等待线程过高\n- [change:1] Redis 连接池上限由 200 调整为 120\n- [change:2] 认证服务发布 v2.8.1\n- [investigation:1] 最近调查报告\n\n你可以继续追问根因、近期变更、处置进展或下一步验证动作。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n\n- **Kafka Consumer Lag 处置** [runbook:kafka-consumer-lag:v1#chunk-0]\n原文片段：\n# Kafka Consumer Lag 处置 Kafka consumer lag、topic backlog、partition 消费落后时，检查 consumer group、rebalance、offset commit、处理耗时与分区倾斜；扩容前确认幂等，恢复后观察 lag 持续下降。"
+        },
+        {
+          "id": "global-no-match",
+          "incidentId": null,
+          "question": "scopeNoMatchFixture93daef1720",
+          "relevantKeys": [],
+          "excludedKeys": [],
+          "sessionId": 10,
+          "messageId": 20,
+          "returned": [],
+          "answer": "我是 OpsPilot OnCall 助手，可以围绕告警、Incident、CMDB、变更和 Runbook 持续协作。\n\n### 当前活跃 Incident\n- **INC-20260819-0001** 统一结算接口持续超时（P1 / INVESTIGATING）\n\n将会话绑定到某个 Incident 后，可以继续问：‘总结当前证据’、‘最可能的根因是什么’或‘下一步怎么验证’。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n当前问题未命中对你可见的已发布 Runbook；不会编造文档或引用。"
+        }
+      ],
+      "publications": [
+        {
+          "stableKey": "cp04-redis-scope",
+          "serviceCode": "MID-REDIS-01",
+          "version": 1,
+          "writer": "admin",
+          "reviewer": "lina",
+          "status": "PUBLISHED"
+        },
+        {
+          "stableKey": "cp04-foreign-scope",
+          "serviceCode": "REDIS-FOREIGN",
+          "version": 1,
+          "writer": "admin",
+          "reviewer": "lina",
+          "status": "PUBLISHED"
+        }
+      ],
+      "layout": [
+        {
+          "stage": "eleven-sessions-initial",
+          "composerTop": 999,
+          "composerBottom": 1053,
+          "height": 1000,
+          "visible": false,
+          "sessionListHeight": 826,
+          "sessionListScrollHeight": 826,
+          "font": "-apple-system-body, ui-sans-serif, -apple-system, system-ui, \"Segoe UI\", Helvetica, \"Apple Color Emoji\", Arial, sans-serif, \"Segoe UI Emoji\", \"Segoe UI Symbol\""
+        },
+        {
+          "stage": "light-1440",
+          "composerTop": 999,
+          "composerBottom": 1053,
+          "height": 1000,
+          "visible": false,
+          "sessionListHeight": 826,
+          "sessionListScrollHeight": 826,
+          "font": "-apple-system-body, ui-sans-serif, -apple-system, system-ui, \"Segoe UI\", Helvetica, \"Apple Color Emoji\", Arial, sans-serif, \"Segoe UI Emoji\", \"Segoe UI Symbol\""
+        },
+        {
+          "stage": "scrolled-light-1440",
+          "composerTop": 999,
+          "composerBottom": 1053,
+          "height": 1000,
+          "visible": false,
+          "sessionListHeight": 826,
+          "sessionListScrollHeight": 826,
+          "font": "-apple-system-body, ui-sans-serif, -apple-system, system-ui, \"Segoe UI\", Helvetica, \"Apple Color Emoji\", Arial, sans-serif, \"Segoe UI Emoji\", \"Segoe UI Symbol\""
+        },
+        {
+          "stage": "dark-390",
+          "composerTop": 740,
+          "composerBottom": 794,
+          "height": 844,
+          "visible": true,
+          "sessionListHeight": 610,
+          "sessionListScrollHeight": 826,
+          "font": "-apple-system-body, ui-sans-serif, -apple-system, system-ui, \"Segoe UI\", Helvetica, \"Apple Color Emoji\", Arial, sans-serif, \"Segoe UI Emoji\", \"Segoe UI Symbol\""
+        },
+        {
+          "stage": "scrolled-dark-390",
+          "composerTop": 740,
+          "composerBottom": 794,
+          "height": 844,
+          "visible": true,
+          "sessionListHeight": 610,
+          "sessionListScrollHeight": 826,
+          "font": "-apple-system-body, ui-sans-serif, -apple-system, system-ui, \"Segoe UI\", Helvetica, \"Apple Color Emoji\", Arial, sans-serif, \"Segoe UI Emoji\", \"Segoe UI Symbol\""
+        }
+      ],
+      "corpus": [
+        {
+          "stableKey": "cp04-foreign-scope",
+          "versionNo": 1,
+          "resourceType": "MIDDLEWARE",
+          "serviceCode": "REDIS-FOREIGN",
+          "title": "其他服务 Redis 排查手册",
+          "contentHash": "5e5b4ba7aadf4b6bd189ce1f78f9d907465f3166ce6d65fe88f6ac5a9c09f59b"
+        },
+        {
+          "stableKey": "cp04-redis-scope",
+          "versionNo": 1,
+          "resourceType": "MIDDLEWARE",
+          "serviceCode": "MID-REDIS-01",
+          "title": "结算 Redis 排查手册",
+          "contentHash": "5e5b4ba7aadf4b6bd189ce1f78f9d907465f3166ce6d65fe88f6ac5a9c09f59b"
+        },
+        {
+          "stableKey": "kafka-consumer-lag",
+          "versionNo": 1,
+          "resourceType": "MIDDLEWARE",
+          "serviceCode": "KAFKA-ORDER",
+          "title": "Kafka Consumer Lag 处置",
+          "contentHash": "d10eda4033f969a72ae8043649602956a635127c23532b23ea44d8d407654257"
+        },
+        {
+          "stableKey": "kubernetes-crashloop",
+          "versionNo": 1,
+          "resourceType": "APPLICATION",
+          "serviceCode": "K8S-PLATFORM",
+          "title": "Kubernetes CrashLoopBackOff 处置",
+          "contentHash": "bbb29e9664ace82f2b0829a841b2d75d3eb3fbe36411d538a4e8c22581d9269f"
+        },
+        {
+          "stableKey": "legacy-runbook-1",
+          "versionNo": 1,
+          "resourceType": "APPLICATION",
+          "serviceCode": null,
+          "title": "应用接口超时排查手册",
+          "contentHash": "18c01d48a2c1649a88e19bb2816a106cb7f4ed158f8c0eaa3749bbecc596fc7c"
+        },
+        {
+          "stableKey": "legacy-runbook-2",
+          "versionNo": 1,
+          "resourceType": "MIDDLEWARE",
+          "serviceCode": null,
+          "title": "Redis 连接池耗尽处置",
+          "contentHash": "56267f119845f2489a6a0e2974f88e8f0e51ff479dfbf518b9a34e5cc19811a7"
+        },
+        {
+          "stableKey": "legacy-runbook-3",
+          "versionNo": 1,
+          "resourceType": "APPLICATION",
+          "serviceCode": null,
+          "title": "认证错误率升高排查",
+          "contentHash": "6fbb3bb52e3e1ed2951b8978f3faa6c0a793c9949d802b594f51ad53da17826e"
+        },
+        {
+          "stableKey": "mysql-connection-saturation",
+          "versionNo": 1,
+          "resourceType": "DATABASE",
+          "serviceCode": "MYSQL-CORE",
+          "title": "MySQL 连接饱和处置",
+          "contentHash": "b1bc1c2277021b3a422e078ce7c2829faf56aa9d5313ff82aa5be769d71ab8d8"
+        }
+      ],
+      "metrics": {
+        "caseCount": 10,
+        "boundCases": 6,
+        "judgedCases": 8,
+        "scopeViolations": 7,
+        "boundReturned": 15,
+        "scopeViolationRate": 0.4666666666666667,
+        "hitAt3": 0.875,
+        "mrr": 0.875,
+        "precisionAt3": 0.5
+      },
+      "streamNormalEquivalent": true,
+      "idempotentReplay": true,
+      "refreshPersisted": true,
+      "sessionListScrollable": false,
+      "publicSearchStillGlobal": true,
+      "shutdown": true,
+      "childExit": 0,
+      "portsFree": true,
+      "sql": [
+        {
+          "id": 1,
+          "query": "推荐当前 Incident 的排查手册",
+          "candidateChunkCount": 8,
+          "results": [
+            {
+              "documentId": 7,
+              "stableKey": "cp04-redis-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "MID-REDIS-01",
+              "title": "结算 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 11.3437,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-redis-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:54.80117"
+            },
+            {
+              "documentId": 8,
+              "stableKey": "cp04-foreign-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "REDIS-FOREIGN",
+              "title": "其他服务 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 11.1471,
+              "lexicalRank": 2,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-foreign-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:54.850522"
+            },
+            {
+              "documentId": 1,
+              "stableKey": "legacy-runbook-1",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "应用接口超时排查手册",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "应用接口超时排查手册",
+              "excerpt": "1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。",
+              "score": 6.8785,
+              "lexicalRank": 3,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-1:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:48.084372"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "query": "Redis 连接池 active pending 慢命令",
+          "candidateChunkCount": 8,
+          "results": [
+            {
+              "documentId": 7,
+              "stableKey": "cp04-redis-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "MID-REDIS-01",
+              "title": "结算 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 13.4195,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-redis-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:54.80117"
+            },
+            {
+              "documentId": 8,
+              "stableKey": "cp04-foreign-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "REDIS-FOREIGN",
+              "title": "其他服务 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 13.2146,
+              "lexicalRank": 2,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-foreign-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:54.850522"
+            },
+            {
+              "documentId": 2,
+              "stableKey": "legacy-runbook-2",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": null,
+              "title": "Redis 连接池耗尽处置",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池耗尽处置",
+              "excerpt": "检查 active、idle、pending；核对连接池上限变更；确认慢命令；必要时回滚配置并分批重启客户端实例。",
+              "score": 13.1713,
+              "lexicalRank": 3,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-2:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:48.084372"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "query": "当前日志应该参考哪些排查手册",
+          "candidateChunkCount": 8,
+          "results": [
+            {
+              "documentId": 7,
+              "stableKey": "cp04-redis-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "MID-REDIS-01",
+              "title": "结算 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 14.0898,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-redis-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:54.80117"
+            },
+            {
+              "documentId": 8,
+              "stableKey": "cp04-foreign-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "REDIS-FOREIGN",
+              "title": "其他服务 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 13.8338,
+              "lexicalRank": 2,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-foreign-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:54.850522"
+            },
+            {
+              "documentId": 1,
+              "stableKey": "legacy-runbook-1",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "应用接口超时排查手册",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "应用接口超时排查手册",
+              "excerpt": "1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。",
+              "score": 9.811,
+              "lexicalRank": 3,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-1:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:48.084372"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "query": "登录 token 刷新 旧客户端",
+          "candidateChunkCount": 8,
+          "results": [
+            {
+              "documentId": 3,
+              "stableKey": "legacy-runbook-3",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "认证错误率升高排查",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "认证错误率升高排查",
+              "excerpt": "按客户端版本、错误码和发布批次聚合；核对 token 格式兼容；灰度开启兼容策略并观察错误率。",
+              "score": 7.6706,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-3:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:48.084372"
+            },
+            {
+              "documentId": 2,
+              "stableKey": "legacy-runbook-2",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": null,
+              "title": "Redis 连接池耗尽处置",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池耗尽处置",
+              "excerpt": "检查 active、idle、pending；核对连接池上限变更；确认慢命令；必要时回滚配置并分批重启客户端实例。",
+              "score": 6.2888,
+              "lexicalRank": 2,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-2:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:48.084372"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "query": "推荐当前 Incident 的排查手册",
+          "candidateChunkCount": 8,
+          "results": [
+            {
+              "documentId": 7,
+              "stableKey": "cp04-redis-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "MID-REDIS-01",
+              "title": "结算 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 11.3437,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-redis-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:54.80117"
+            },
+            {
+              "documentId": 8,
+              "stableKey": "cp04-foreign-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "REDIS-FOREIGN",
+              "title": "其他服务 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 11.1471,
+              "lexicalRank": 2,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-foreign-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:54.850522"
+            },
+            {
+              "documentId": 1,
+              "stableKey": "legacy-runbook-1",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "应用接口超时排查手册",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "应用接口超时排查手册",
+              "excerpt": "1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。",
+              "score": 6.8785,
+              "lexicalRank": 3,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-1:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:48.084372"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "query": "Redis 连接池 active pending 慢命令",
+          "candidateChunkCount": 8,
+          "results": [
+            {
+              "documentId": 7,
+              "stableKey": "cp04-redis-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "MID-REDIS-01",
+              "title": "结算 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 13.4195,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-redis-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:54.80117"
+            },
+            {
+              "documentId": 8,
+              "stableKey": "cp04-foreign-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "REDIS-FOREIGN",
+              "title": "其他服务 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 13.2146,
+              "lexicalRank": 2,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-foreign-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:54.850522"
+            },
+            {
+              "documentId": 2,
+              "stableKey": "legacy-runbook-2",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": null,
+              "title": "Redis 连接池耗尽处置",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池耗尽处置",
+              "excerpt": "检查 active、idle、pending；核对连接池上限变更；确认慢命令；必要时回滚配置并分批重启客户端实例。",
+              "score": 13.1713,
+              "lexicalRank": 3,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-2:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:48.084372"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "query": "Kafka consumer lag group offset commit",
+          "candidateChunkCount": 8,
+          "results": [
+            {
+              "documentId": 4,
+              "stableKey": "kafka-consumer-lag",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "KAFKA-ORDER",
+              "title": "Kafka Consumer Lag 处置",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Kafka Consumer Lag 处置",
+              "excerpt": "# Kafka Consumer Lag 处置 Kafka consumer lag、topic backlog、partition 消费落后时，检查 consumer group、rebalance、offset commit、处理耗时与分区倾斜；扩容前确认幂等，恢复后观察 lag 持续下降。",
+              "score": 15.7079,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:kafka-consumer-lag:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:48.344326"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "query": "Kubernetes Pod OOMKilled CrashLoopBackOff",
+          "candidateChunkCount": 8,
+          "results": [
+            {
+              "documentId": 6,
+              "stableKey": "kubernetes-crashloop",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": "K8S-PLATFORM",
+              "title": "Kubernetes CrashLoopBackOff 处置",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Kubernetes CrashLoopBackOff 处置",
+              "excerpt": "# Kubernetes CrashLoopBackOff 处置 Pod 反复重启、CrashLoopBackOff、OOMKilled、liveness probe 失败时，检查 previous logs、退出码、资源限制、探针和最近镜像变更；回滚后观察重启次数。",
+              "score": 10.3588,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:kubernetes-crashloop:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:48.344326"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "query": "Kafka consumer lag group offset commit",
+          "candidateChunkCount": 8,
+          "results": [
+            {
+              "documentId": 4,
+              "stableKey": "kafka-consumer-lag",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "KAFKA-ORDER",
+              "title": "Kafka Consumer Lag 处置",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Kafka Consumer Lag 处置",
+              "excerpt": "# Kafka Consumer Lag 处置 Kafka consumer lag、topic backlog、partition 消费落后时，检查 consumer group、rebalance、offset commit、处理耗时与分区倾斜；扩容前确认幂等，恢复后观察 lag 持续下降。",
+              "score": 15.7079,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:kafka-consumer-lag:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:48.344326"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "query": "scopeNoMatchFixture93daef1720",
+          "candidateChunkCount": 8,
+          "results": []
+        },
+        {
+          "id": 11,
+          "query": "推荐当前 Incident 的排查手册",
+          "candidateChunkCount": 8,
+          "results": [
+            {
+              "documentId": 7,
+              "stableKey": "cp04-redis-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "MID-REDIS-01",
+              "title": "结算 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 11.3437,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-redis-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:54.80117"
+            },
+            {
+              "documentId": 8,
+              "stableKey": "cp04-foreign-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "REDIS-FOREIGN",
+              "title": "其他服务 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 11.1471,
+              "lexicalRank": 2,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-foreign-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:54.850522"
+            },
+            {
+              "documentId": 1,
+              "stableKey": "legacy-runbook-1",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "应用接口超时排查手册",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "应用接口超时排查手册",
+              "excerpt": "1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。",
+              "score": 6.8785,
+              "lexicalRank": 3,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-1:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:02:48.084372"
+            }
+          ]
+        }
+      ],
+      "readOnlySqlVerified": true
+    },
+    {
+      "name": "after",
+      "jar": "D:\\Codex\\国网\\央国企求职\\OpsPilot\\target\\opspilot-v1.8-assistant-scope-ui.jar",
+      "jarSha256": "5d5a006ec6af3e0413cb5a84d1d58c26599df3b77ffd411ec747bea6d1c93f54",
+      "base": "http://127.0.0.1:9913",
+      "status": "PASS",
+      "screenshots": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-scope-cHnmKx\\after\\initial-light-1440.png",
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-scope-cHnmKx\\after\\scope-light-1440.png",
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-scope-cHnmKx\\after\\initial-dark-390.png",
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-scope-cHnmKx\\after\\scope-dark-390.png"
+      ],
+      "errors": [],
+      "assets": [
+        {
+          "file": "index.html",
+          "sha256": "0d81f4d41db7a76dac1a826f51ba944d501e2be7173568b7f209008689855491"
+        },
+        {
+          "file": "favicon.svg",
+          "sha256": "40f017db2d6e9da7fbbc2235138455c4a39fb721a60f1f69504f98fabafb3471"
+        },
+        {
+          "file": "assets/theme.js",
+          "sha256": "f3066ab98bdef18e605d4c1a7a4a8257dd161a87d619b1ebb4c1fc2d69f505a3"
+        },
+        {
+          "file": "assets/index-DkoUvj8O.js",
+          "sha256": "9a8979483799c6a114b9de4547483ddf8b095430f5ebf6b8c81d0d7997acf670"
+        },
+        {
+          "file": "assets/index-DyvUFVBn.css",
+          "sha256": "98234046611e2b42449468a4ccdd4920fecdb22d3d573a2aaef901de4be2610a"
+        }
+      ],
+      "cases": [
+        {
+          "id": "settlement-broad",
+          "incidentId": 1,
+          "question": "推荐当前 Incident 的排查手册",
+          "relevantKeys": [
+            "legacy-runbook-1",
+            "legacy-runbook-2",
+            "cp04-redis-scope"
+          ],
+          "excludedKeys": [
+            "kubernetes-crashloop",
+            "kafka-consumer-lag",
+            "mysql-connection-saturation",
+            "cp04-foreign-scope"
+          ],
+          "sessionId": 1,
+          "messageId": 2,
+          "returned": [
+            "cp04-redis-scope",
+            "legacy-runbook-1",
+            "legacy-runbook-3"
+          ],
+          "answer": "### Incident 概况\n- **INC-20260819-0001** 统一结算接口持续超时\n- 状态：P1 / INVESTIGATING\n- 影响服务：统一结算服务\n- 关联告警：2 条\n\n### 当前证据\n- [alert:1] 结算接口 P95 延迟超过 5 秒\n- [alert:2] Redis 连接池等待线程过高\n- [change:1] Redis 连接池上限由 200 调整为 120\n- [change:2] 认证服务发布 v2.8.1\n- [investigation:1] 最近调查报告\n\n你可以继续追问根因、近期变更、处置进展或下一步验证动作。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n提示：Incident 范围检索：事件资源及 CMDB 一跳关联；serviceCode=API-PAYMENT,APP-AUTH,APP-PORTAL,APP-SETTLEMENT,DB-SETTLEMENT-01,MID-REDIS-01；无 serviceCode 的手册仅按范围内资源类型及 SERVICE 通用类型匹配。未回退全库；跨服务问题请新建未绑定对话。范围匹配不证明根因或内容相关。\n提示：语义检索未启用，AUTO 模式使用 BM25\n\n- **结算 Redis 排查手册** [runbook:cp04-redis-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **应用接口超时排查手册** [runbook:legacy-runbook-1:v1#chunk-0]\n原文片段：\n1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。\n\n- **认证错误率升高排查** [runbook:legacy-runbook-3:v1#chunk-0]\n原文片段：\n按客户端版本、错误码和发布批次聚合；核对 token 格式兼容；灰度开启兼容策略并观察错误率。"
+        },
+        {
+          "id": "settlement-redis",
+          "incidentId": 1,
+          "question": "Redis 连接池 active pending 慢命令",
+          "relevantKeys": [
+            "legacy-runbook-2",
+            "cp04-redis-scope"
+          ],
+          "excludedKeys": [
+            "kubernetes-crashloop",
+            "kafka-consumer-lag",
+            "mysql-connection-saturation",
+            "cp04-foreign-scope"
+          ],
+          "sessionId": 2,
+          "messageId": 4,
+          "returned": [
+            "cp04-redis-scope",
+            "legacy-runbook-2",
+            "legacy-runbook-1"
+          ],
+          "answer": "### Incident 概况\n- **INC-20260819-0001** 统一结算接口持续超时\n- 状态：P1 / INVESTIGATING\n- 影响服务：统一结算服务\n- 关联告警：2 条\n\n### 当前证据\n- [alert:1] 结算接口 P95 延迟超过 5 秒\n- [alert:2] Redis 连接池等待线程过高\n- [change:1] Redis 连接池上限由 200 调整为 120\n- [change:2] 认证服务发布 v2.8.1\n- [investigation:1] 最近调查报告\n\n你可以继续追问根因、近期变更、处置进展或下一步验证动作。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n提示：Incident 范围检索：事件资源及 CMDB 一跳关联；serviceCode=API-PAYMENT,APP-AUTH,APP-PORTAL,APP-SETTLEMENT,DB-SETTLEMENT-01,MID-REDIS-01；无 serviceCode 的手册仅按范围内资源类型及 SERVICE 通用类型匹配。未回退全库；跨服务问题请新建未绑定对话。范围匹配不证明根因或内容相关。\n提示：语义检索未启用，AUTO 模式使用 BM25\n\n- **结算 Redis 排查手册** [runbook:cp04-redis-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **Redis 连接池耗尽处置** [runbook:legacy-runbook-2:v1#chunk-0]\n原文片段：\n检查 active、idle、pending；核对连接池上限变更；确认慢命令；必要时回滚配置并分批重启客户端实例。\n\n- **应用接口超时排查手册** [runbook:legacy-runbook-1:v1#chunk-0]\n原文片段：\n1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。"
+        },
+        {
+          "id": "settlement-logs",
+          "incidentId": 1,
+          "question": "当前日志应该参考哪些排查手册",
+          "relevantKeys": [
+            "legacy-runbook-1",
+            "legacy-runbook-2",
+            "cp04-redis-scope"
+          ],
+          "excludedKeys": [
+            "kubernetes-crashloop",
+            "kafka-consumer-lag",
+            "mysql-connection-saturation",
+            "cp04-foreign-scope"
+          ],
+          "sessionId": 3,
+          "messageId": 6,
+          "returned": [
+            "cp04-redis-scope",
+            "legacy-runbook-1",
+            "legacy-runbook-3"
+          ],
+          "answer": "### Incident 概况\n- **INC-20260819-0001** 统一结算接口持续超时\n- 状态：P1 / INVESTIGATING\n- 影响服务：统一结算服务\n- 关联告警：2 条\n\n### 当前证据\n- [alert:1] 结算接口 P95 延迟超过 5 秒\n- [alert:2] Redis 连接池等待线程过高\n- [change:1] Redis 连接池上限由 200 调整为 120\n- [change:2] 认证服务发布 v2.8.1\n- [investigation:1] 最近调查报告\n\n你可以继续追问根因、近期变更、处置进展或下一步验证动作。\n\n### 只读指标 / 日志取证\n\nLOG · EMPTY；来源：local-logs；资源：APP-SETTLEMENT\n时间窗：最新近 30 分钟 [2026-10-11T23:33:17.362853500 ～ 2026-10-12T00:03:17.362853500]\n该窗口未返回样本，不代表系统健康或没有故障。\n提示：最多 20 条脱敏样本，非日志总体计数；Provider 脱敏字段=0\n仅为只读、有限样本；未执行修复，也未确认根因。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n提示：Incident 范围检索：事件资源及 CMDB 一跳关联；serviceCode=API-PAYMENT,APP-AUTH,APP-PORTAL,APP-SETTLEMENT,DB-SETTLEMENT-01,MID-REDIS-01；无 serviceCode 的手册仅按范围内资源类型及 SERVICE 通用类型匹配。未回退全库；跨服务问题请新建未绑定对话。范围匹配不证明根因或内容相关。\n提示：语义检索未启用，AUTO 模式使用 BM25\n\n- **结算 Redis 排查手册** [runbook:cp04-redis-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **应用接口超时排查手册** [runbook:legacy-runbook-1:v1#chunk-0]\n原文片段：\n1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。\n\n- **认证错误率升高排查** [runbook:legacy-runbook-3:v1#chunk-0]\n原文片段：\n按客户端版本、错误码和发布批次聚合；核对 token 格式兼容；灰度开启兼容策略并观察错误率。"
+        },
+        {
+          "id": "auth-token",
+          "incidentId": 2,
+          "question": "登录 token 刷新 旧客户端",
+          "relevantKeys": [
+            "legacy-runbook-3"
+          ],
+          "excludedKeys": [
+            "legacy-runbook-2",
+            "cp04-redis-scope",
+            "cp04-foreign-scope",
+            "kubernetes-crashloop",
+            "kafka-consumer-lag",
+            "mysql-connection-saturation"
+          ],
+          "sessionId": 4,
+          "messageId": 8,
+          "returned": [
+            "legacy-runbook-3"
+          ],
+          "answer": "### Incident 概况\n- **INC-20260818-0002** 统一认证登录错误率升高\n- 状态：P2 / RESOLVED\n- 影响服务：统一身份认证\n- 关联告警：1 条\n\n### 当前证据\n- [alert:3] 认证 token 刷新错误率超过 3%\n- [change:2] 认证服务发布 v2.8.1\n\n你可以继续追问根因、近期变更、处置进展或下一步验证动作。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n提示：Incident 范围检索：事件资源及 CMDB 一跳关联；serviceCode=APP-AUTH,APP-SETTLEMENT；无 serviceCode 的手册仅按范围内资源类型及 SERVICE 通用类型匹配。未回退全库；跨服务问题请新建未绑定对话。范围匹配不证明根因或内容相关。\n提示：语义检索未启用，AUTO 模式使用 BM25\n\n- **认证错误率升高排查** [runbook:legacy-runbook-3:v1#chunk-0]\n原文片段：\n按客户端版本、错误码和发布批次聚合；核对 token 格式兼容；灰度开启兼容策略并观察错误率。"
+        },
+        {
+          "id": "auth-broad",
+          "incidentId": 2,
+          "question": "推荐当前 Incident 的排查手册",
+          "relevantKeys": [
+            "legacy-runbook-3"
+          ],
+          "excludedKeys": [
+            "legacy-runbook-2",
+            "cp04-redis-scope",
+            "cp04-foreign-scope",
+            "kubernetes-crashloop",
+            "kafka-consumer-lag",
+            "mysql-connection-saturation"
+          ],
+          "sessionId": 5,
+          "messageId": 10,
+          "returned": [
+            "legacy-runbook-1",
+            "legacy-runbook-3"
+          ],
+          "answer": "### Incident 概况\n- **INC-20260818-0002** 统一认证登录错误率升高\n- 状态：P2 / RESOLVED\n- 影响服务：统一身份认证\n- 关联告警：1 条\n\n### 当前证据\n- [alert:3] 认证 token 刷新错误率超过 3%\n- [change:2] 认证服务发布 v2.8.1\n\n你可以继续追问根因、近期变更、处置进展或下一步验证动作。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n提示：Incident 范围检索：事件资源及 CMDB 一跳关联；serviceCode=APP-AUTH,APP-SETTLEMENT；无 serviceCode 的手册仅按范围内资源类型及 SERVICE 通用类型匹配。未回退全库；跨服务问题请新建未绑定对话。范围匹配不证明根因或内容相关。\n提示：语义检索未启用，AUTO 模式使用 BM25\n\n- **应用接口超时排查手册** [runbook:legacy-runbook-1:v1#chunk-0]\n原文片段：\n1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。\n\n- **认证错误率升高排查** [runbook:legacy-runbook-3:v1#chunk-0]\n原文片段：\n按客户端版本、错误码和发布批次聚合；核对 token 格式兼容；灰度开启兼容策略并观察错误率。"
+        },
+        {
+          "id": "global-redis",
+          "incidentId": null,
+          "question": "Redis 连接池 active pending 慢命令",
+          "relevantKeys": [
+            "legacy-runbook-2",
+            "cp04-redis-scope",
+            "cp04-foreign-scope"
+          ],
+          "excludedKeys": [],
+          "sessionId": 6,
+          "messageId": 12,
+          "returned": [
+            "cp04-redis-scope",
+            "cp04-foreign-scope",
+            "legacy-runbook-2"
+          ],
+          "answer": "以下是按当前问题检索到的已发布 Runbook 原文片段；这是资料检索，不是 AI 根因结论。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n提示：语义检索未启用，AUTO 模式使用 BM25\n\n- **结算 Redis 排查手册** [runbook:cp04-redis-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **其他服务 Redis 排查手册** [runbook:cp04-foreign-scope:v1#chunk-0]\n原文片段：\n核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。\n\n- **Redis 连接池耗尽处置** [runbook:legacy-runbook-2:v1#chunk-0]\n原文片段：\n检查 active、idle、pending；核对连接池上限变更；确认慢命令；必要时回滚配置并分批重启客户端实例。"
+        },
+        {
+          "id": "global-kafka",
+          "incidentId": null,
+          "question": "Kafka consumer lag group offset commit",
+          "relevantKeys": [
+            "kafka-consumer-lag"
+          ],
+          "excludedKeys": [],
+          "sessionId": 7,
+          "messageId": 14,
+          "returned": [
+            "kafka-consumer-lag"
+          ],
+          "answer": "以下是按当前问题检索到的已发布 Runbook 原文片段；这是资料检索，不是 AI 根因结论。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n提示：语义检索未启用，AUTO 模式使用 BM25\n\n- **Kafka Consumer Lag 处置** [runbook:kafka-consumer-lag:v1#chunk-0]\n原文片段：\n# Kafka Consumer Lag 处置 Kafka consumer lag、topic backlog、partition 消费落后时，检查 consumer group、rebalance、offset commit、处理耗时与分区倾斜；扩容前确认幂等，恢复后观察 lag 持续下降。"
+        },
+        {
+          "id": "global-kubernetes",
+          "incidentId": null,
+          "question": "Kubernetes Pod OOMKilled CrashLoopBackOff",
+          "relevantKeys": [
+            "kubernetes-crashloop"
+          ],
+          "excludedKeys": [],
+          "sessionId": 8,
+          "messageId": 16,
+          "returned": [
+            "kubernetes-crashloop"
+          ],
+          "answer": "以下是按当前问题检索到的已发布 Runbook 原文片段；这是资料检索，不是 AI 根因结论。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n提示：语义检索未启用，AUTO 模式使用 BM25\n\n- **Kubernetes CrashLoopBackOff 处置** [runbook:kubernetes-crashloop:v1#chunk-0]\n原文片段：\n# Kubernetes CrashLoopBackOff 处置 Pod 反复重启、CrashLoopBackOff、OOMKilled、liveness probe 失败时，检查 previous logs、退出码、资源限制、探针和最近镜像变更；回滚后观察重启次数。"
+        },
+        {
+          "id": "bound-cross-service",
+          "incidentId": 1,
+          "question": "Kafka consumer lag group offset commit",
+          "relevantKeys": [],
+          "excludedKeys": [
+            "kafka-consumer-lag",
+            "cp04-foreign-scope",
+            "kubernetes-crashloop",
+            "mysql-connection-saturation"
+          ],
+          "sessionId": 9,
+          "messageId": 18,
+          "returned": [],
+          "answer": "### Incident 概况\n- **INC-20260819-0001** 统一结算接口持续超时\n- 状态：P1 / INVESTIGATING\n- 影响服务：统一结算服务\n- 关联告警：2 条\n\n### 当前证据\n- [alert:1] 结算接口 P95 延迟超过 5 秒\n- [alert:2] Redis 连接池等待线程过高\n- [change:1] Redis 连接池上限由 200 调整为 120\n- [change:2] 认证服务发布 v2.8.1\n- [investigation:1] 最近调查报告\n\n你可以继续追问根因、近期变更、处置进展或下一步验证动作。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n提示：Incident 范围检索：事件资源及 CMDB 一跳关联；serviceCode=API-PAYMENT,APP-AUTH,APP-PORTAL,APP-SETTLEMENT,DB-SETTLEMENT-01,MID-REDIS-01；无 serviceCode 的手册仅按范围内资源类型及 SERVICE 通用类型匹配。未回退全库；跨服务问题请新建未绑定对话。范围匹配不证明根因或内容相关。\n提示：语义检索未启用，AUTO 模式使用 BM25\n当前问题未命中对你可见的已发布 Runbook；不会编造文档或引用。"
+        },
+        {
+          "id": "global-no-match",
+          "incidentId": null,
+          "question": "scopeNoMatchFixture93daef1720",
+          "relevantKeys": [],
+          "excludedKeys": [],
+          "sessionId": 10,
+          "messageId": 20,
+          "returned": [],
+          "answer": "我是 OpsPilot OnCall 助手，可以围绕告警、Incident、CMDB、变更和 Runbook 持续协作。\n\n### 当前活跃 Incident\n- **INC-20260819-0001** 统一结算接口持续超时（P1 / INVESTIGATING）\n\n将会话绑定到某个 Incident 后，可以继续问：‘总结当前证据’、‘最可能的根因是什么’或‘下一步怎么验证’。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n提示：语义检索未启用，AUTO 模式使用 BM25\n当前问题未命中对你可见的已发布 Runbook；不会编造文档或引用。"
+        }
+      ],
+      "publications": [
+        {
+          "stableKey": "cp04-redis-scope",
+          "serviceCode": "MID-REDIS-01",
+          "version": 1,
+          "writer": "admin",
+          "reviewer": "lina",
+          "status": "PUBLISHED"
+        },
+        {
+          "stableKey": "cp04-foreign-scope",
+          "serviceCode": "REDIS-FOREIGN",
+          "version": 1,
+          "writer": "admin",
+          "reviewer": "lina",
+          "status": "PUBLISHED"
+        }
+      ],
+      "layout": [
+        {
+          "stage": "eleven-sessions-initial",
+          "composerTop": 883,
+          "composerBottom": 937,
+          "height": 1000,
+          "visible": true,
+          "sessionListHeight": 710,
+          "sessionListScrollHeight": 826,
+          "font": "-apple-system-body, ui-sans-serif, -apple-system, system-ui, \"Segoe UI\", Helvetica, \"Apple Color Emoji\", Arial, sans-serif, \"Segoe UI Emoji\", \"Segoe UI Symbol\""
+        },
+        {
+          "stage": "light-1440",
+          "composerTop": 883,
+          "composerBottom": 937,
+          "height": 1000,
+          "visible": true,
+          "sessionListHeight": 710,
+          "sessionListScrollHeight": 826,
+          "font": "-apple-system-body, ui-sans-serif, -apple-system, system-ui, \"Segoe UI\", Helvetica, \"Apple Color Emoji\", Arial, sans-serif, \"Segoe UI Emoji\", \"Segoe UI Symbol\""
+        },
+        {
+          "stage": "scrolled-light-1440",
+          "composerTop": 883,
+          "composerBottom": 937,
+          "height": 1000,
+          "visible": true,
+          "sessionListHeight": 710,
+          "sessionListScrollHeight": 826,
+          "font": "-apple-system-body, ui-sans-serif, -apple-system, system-ui, \"Segoe UI\", Helvetica, \"Apple Color Emoji\", Arial, sans-serif, \"Segoe UI Emoji\", \"Segoe UI Symbol\""
+        },
+        {
+          "stage": "dark-390",
+          "composerTop": 740,
+          "composerBottom": 794,
+          "height": 844,
+          "visible": true,
+          "sessionListHeight": 610,
+          "sessionListScrollHeight": 826,
+          "font": "-apple-system-body, ui-sans-serif, -apple-system, system-ui, \"Segoe UI\", Helvetica, \"Apple Color Emoji\", Arial, sans-serif, \"Segoe UI Emoji\", \"Segoe UI Symbol\""
+        },
+        {
+          "stage": "scrolled-dark-390",
+          "composerTop": 740,
+          "composerBottom": 794,
+          "height": 844,
+          "visible": true,
+          "sessionListHeight": 610,
+          "sessionListScrollHeight": 826,
+          "font": "-apple-system-body, ui-sans-serif, -apple-system, system-ui, \"Segoe UI\", Helvetica, \"Apple Color Emoji\", Arial, sans-serif, \"Segoe UI Emoji\", \"Segoe UI Symbol\""
+        }
+      ],
+      "corpus": [
+        {
+          "stableKey": "cp04-foreign-scope",
+          "versionNo": 1,
+          "resourceType": "MIDDLEWARE",
+          "serviceCode": "REDIS-FOREIGN",
+          "title": "其他服务 Redis 排查手册",
+          "contentHash": "5e5b4ba7aadf4b6bd189ce1f78f9d907465f3166ce6d65fe88f6ac5a9c09f59b"
+        },
+        {
+          "stableKey": "cp04-redis-scope",
+          "versionNo": 1,
+          "resourceType": "MIDDLEWARE",
+          "serviceCode": "MID-REDIS-01",
+          "title": "结算 Redis 排查手册",
+          "contentHash": "5e5b4ba7aadf4b6bd189ce1f78f9d907465f3166ce6d65fe88f6ac5a9c09f59b"
+        },
+        {
+          "stableKey": "kafka-consumer-lag",
+          "versionNo": 1,
+          "resourceType": "MIDDLEWARE",
+          "serviceCode": "KAFKA-ORDER",
+          "title": "Kafka Consumer Lag 处置",
+          "contentHash": "d10eda4033f969a72ae8043649602956a635127c23532b23ea44d8d407654257"
+        },
+        {
+          "stableKey": "kubernetes-crashloop",
+          "versionNo": 1,
+          "resourceType": "APPLICATION",
+          "serviceCode": "K8S-PLATFORM",
+          "title": "Kubernetes CrashLoopBackOff 处置",
+          "contentHash": "bbb29e9664ace82f2b0829a841b2d75d3eb3fbe36411d538a4e8c22581d9269f"
+        },
+        {
+          "stableKey": "legacy-runbook-1",
+          "versionNo": 1,
+          "resourceType": "APPLICATION",
+          "serviceCode": null,
+          "title": "应用接口超时排查手册",
+          "contentHash": "18c01d48a2c1649a88e19bb2816a106cb7f4ed158f8c0eaa3749bbecc596fc7c"
+        },
+        {
+          "stableKey": "legacy-runbook-2",
+          "versionNo": 1,
+          "resourceType": "MIDDLEWARE",
+          "serviceCode": null,
+          "title": "Redis 连接池耗尽处置",
+          "contentHash": "56267f119845f2489a6a0e2974f88e8f0e51ff479dfbf518b9a34e5cc19811a7"
+        },
+        {
+          "stableKey": "legacy-runbook-3",
+          "versionNo": 1,
+          "resourceType": "APPLICATION",
+          "serviceCode": null,
+          "title": "认证错误率升高排查",
+          "contentHash": "6fbb3bb52e3e1ed2951b8978f3faa6c0a793c9949d802b594f51ad53da17826e"
+        },
+        {
+          "stableKey": "mysql-connection-saturation",
+          "versionNo": 1,
+          "resourceType": "DATABASE",
+          "serviceCode": "MYSQL-CORE",
+          "title": "MySQL 连接饱和处置",
+          "contentHash": "b1bc1c2277021b3a422e078ce7c2829faf56aa9d5313ff82aa5be769d71ab8d8"
+        }
+      ],
+      "metrics": {
+        "caseCount": 10,
+        "boundCases": 6,
+        "judgedCases": 8,
+        "scopeViolations": 0,
+        "boundReturned": 12,
+        "scopeViolationRate": 0,
+        "hitAt3": 1,
+        "mrr": 0.9375,
+        "precisionAt3": 0.5416666666666666
+      },
+      "streamNormalEquivalent": true,
+      "idempotentReplay": true,
+      "refreshPersisted": true,
+      "sessionListScrollable": true,
+      "publicSearchStillGlobal": true,
+      "shutdown": true,
+      "childExit": 0,
+      "portsFree": true,
+      "sql": [
+        {
+          "id": 1,
+          "query": "推荐当前 Incident 的排查手册",
+          "candidateChunkCount": 4,
+          "results": [
+            {
+              "documentId": 7,
+              "stableKey": "cp04-redis-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "MID-REDIS-01",
+              "title": "结算 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 10.8268,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-redis-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:16.702985"
+            },
+            {
+              "documentId": 1,
+              "stableKey": "legacy-runbook-1",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "应用接口超时排查手册",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "应用接口超时排查手册",
+              "excerpt": "1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。",
+              "score": 5.9556,
+              "lexicalRank": 2,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-1:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.649404"
+            },
+            {
+              "documentId": 3,
+              "stableKey": "legacy-runbook-3",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "认证错误率升高排查",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "认证错误率升高排查",
+              "excerpt": "按客户端版本、错误码和发布批次聚合；核对 token 格式兼容；灰度开启兼容策略并观察错误率。",
+              "score": 1.3619,
+              "lexicalRank": 3,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-3:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.649404"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "query": "Redis 连接池 active pending 慢命令",
+          "candidateChunkCount": 4,
+          "results": [
+            {
+              "documentId": 7,
+              "stableKey": "cp04-redis-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "MID-REDIS-01",
+              "title": "结算 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 11.8099,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-redis-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:16.702985"
+            },
+            {
+              "documentId": 2,
+              "stableKey": "legacy-runbook-2",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": null,
+              "title": "Redis 连接池耗尽处置",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池耗尽处置",
+              "excerpt": "检查 active、idle、pending；核对连接池上限变更；确认慢命令；必要时回滚配置并分批重启客户端实例。",
+              "score": 11.6793,
+              "lexicalRank": 2,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-2:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.649404"
+            },
+            {
+              "documentId": 1,
+              "stableKey": "legacy-runbook-1",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "应用接口超时排查手册",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "应用接口超时排查手册",
+              "excerpt": "1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。",
+              "score": 0.5906,
+              "lexicalRank": 3,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-1:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.649404"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "query": "当前日志应该参考哪些排查手册",
+          "candidateChunkCount": 4,
+          "results": [
+            {
+              "documentId": 7,
+              "stableKey": "cp04-redis-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "MID-REDIS-01",
+              "title": "结算 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 13.4637,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-redis-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:16.702985"
+            },
+            {
+              "documentId": 1,
+              "stableKey": "legacy-runbook-1",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "应用接口超时排查手册",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "应用接口超时排查手册",
+              "excerpt": "1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。",
+              "score": 7.9492,
+              "lexicalRank": 2,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-1:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.649404"
+            },
+            {
+              "documentId": 3,
+              "stableKey": "legacy-runbook-3",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "认证错误率升高排查",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "认证错误率升高排查",
+              "excerpt": "按客户端版本、错误码和发布批次聚合；核对 token 格式兼容；灰度开启兼容策略并观察错误率。",
+              "score": 1.3619,
+              "lexicalRank": 3,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-3:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.649404"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "query": "登录 token 刷新 旧客户端",
+          "candidateChunkCount": 2,
+          "results": [
+            {
+              "documentId": 3,
+              "stableKey": "legacy-runbook-3",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "认证错误率升高排查",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "认证错误率升高排查",
+              "excerpt": "按客户端版本、错误码和发布批次聚合；核对 token 格式兼容；灰度开启兼容策略并观察错误率。",
+              "score": 4.1797,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-3:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.649404"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "query": "推荐当前 Incident 的排查手册",
+          "candidateChunkCount": 2,
+          "results": [
+            {
+              "documentId": 1,
+              "stableKey": "legacy-runbook-1",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "应用接口超时排查手册",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "应用接口超时排查手册",
+              "excerpt": "1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。",
+              "score": 5.6209,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-1:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.649404"
+            },
+            {
+              "documentId": 3,
+              "stableKey": "legacy-runbook-3",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "认证错误率升高排查",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "认证错误率升高排查",
+              "excerpt": "按客户端版本、错误码和发布批次聚合；核对 token 格式兼容；灰度开启兼容策略并观察错误率。",
+              "score": 0.9276,
+              "lexicalRank": 2,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-3:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.649404"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "query": "Redis 连接池 active pending 慢命令",
+          "candidateChunkCount": 8,
+          "results": [
+            {
+              "documentId": 7,
+              "stableKey": "cp04-redis-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "MID-REDIS-01",
+              "title": "结算 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 13.4195,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-redis-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:16.702985"
+            },
+            {
+              "documentId": 8,
+              "stableKey": "cp04-foreign-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "REDIS-FOREIGN",
+              "title": "其他服务 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 13.2146,
+              "lexicalRank": 2,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-foreign-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:16.74987"
+            },
+            {
+              "documentId": 2,
+              "stableKey": "legacy-runbook-2",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": null,
+              "title": "Redis 连接池耗尽处置",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池耗尽处置",
+              "excerpt": "检查 active、idle、pending；核对连接池上限变更；确认慢命令；必要时回滚配置并分批重启客户端实例。",
+              "score": 13.1713,
+              "lexicalRank": 3,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-2:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.649404"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "query": "Kafka consumer lag group offset commit",
+          "candidateChunkCount": 8,
+          "results": [
+            {
+              "documentId": 4,
+              "stableKey": "kafka-consumer-lag",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "KAFKA-ORDER",
+              "title": "Kafka Consumer Lag 处置",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Kafka Consumer Lag 处置",
+              "excerpt": "# Kafka Consumer Lag 处置 Kafka consumer lag、topic backlog、partition 消费落后时，检查 consumer group、rebalance、offset commit、处理耗时与分区倾斜；扩容前确认幂等，恢复后观察 lag 持续下降。",
+              "score": 15.7079,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:kafka-consumer-lag:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.919612"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "query": "Kubernetes Pod OOMKilled CrashLoopBackOff",
+          "candidateChunkCount": 8,
+          "results": [
+            {
+              "documentId": 6,
+              "stableKey": "kubernetes-crashloop",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": "K8S-PLATFORM",
+              "title": "Kubernetes CrashLoopBackOff 处置",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Kubernetes CrashLoopBackOff 处置",
+              "excerpt": "# Kubernetes CrashLoopBackOff 处置 Pod 反复重启、CrashLoopBackOff、OOMKilled、liveness probe 失败时，检查 previous logs、退出码、资源限制、探针和最近镜像变更；回滚后观察重启次数。",
+              "score": 10.3588,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:kubernetes-crashloop:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.919612"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "query": "Kafka consumer lag group offset commit",
+          "candidateChunkCount": 4,
+          "results": []
+        },
+        {
+          "id": 10,
+          "query": "scopeNoMatchFixture93daef1720",
+          "candidateChunkCount": 8,
+          "results": []
+        },
+        {
+          "id": 11,
+          "query": "推荐当前 Incident 的排查手册",
+          "candidateChunkCount": 4,
+          "results": [
+            {
+              "documentId": 7,
+              "stableKey": "cp04-redis-scope",
+              "versionNo": 1,
+              "resourceType": "MIDDLEWARE",
+              "serviceCode": "MID-REDIS-01",
+              "title": "结算 Redis 排查手册",
+              "sourceType": "MARKDOWN",
+              "chunkIndex": 0,
+              "heading": "Redis 连接池排查",
+              "excerpt": "核对 Redis active pending 慢命令、连接池上限、等待队列和超时日志。先按当前 Incident 排查，再验证恢复，不直接确认根因。",
+              "score": 10.8268,
+              "lexicalRank": 1,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:cp04-redis-scope:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:16.702985"
+            },
+            {
+              "documentId": 1,
+              "stableKey": "legacy-runbook-1",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "应用接口超时排查手册",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "应用接口超时排查手册",
+              "excerpt": "1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。",
+              "score": 5.9556,
+              "lexicalRank": 2,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-1:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.649404"
+            },
+            {
+              "documentId": 3,
+              "stableKey": "legacy-runbook-3",
+              "versionNo": 1,
+              "resourceType": "APPLICATION",
+              "serviceCode": null,
+              "title": "认证错误率升高排查",
+              "sourceType": "LEGACY",
+              "chunkIndex": 0,
+              "heading": "认证错误率升高排查",
+              "excerpt": "按客户端版本、错误码和发布批次聚合；核对 token 格式兼容；灰度开启兼容策略并观察错误率。",
+              "score": 1.3619,
+              "lexicalRank": 3,
+              "semanticRank": null,
+              "semanticScore": null,
+              "citation": "runbook:legacy-runbook-3:v1#chunk-0",
+              "publishedAt": "2026-10-12T00:03:09.649404"
+            }
+          ]
+        }
+      ],
+      "readOnlySqlVerified": true
+    }
+  ]
+}

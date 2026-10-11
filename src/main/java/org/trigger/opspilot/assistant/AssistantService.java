@@ -164,7 +164,7 @@ public class AssistantService {
             checkpoint.run();
             requireAuthorization(lease, false);
             // Never hold the account/session row locks over an external model call.
-            var knowledge = retrieveRunbooks(question, lease, checkpoint);
+            var knowledge = retrieveRunbooks(prepared.context(), question, lease, checkpoint);
             var observation = observations.collect(prepared.session().incidentId(), question, lease, checkpoint);
             var history = aiService.isPresent() ? modelHistory(prepared.history(), knowledge, lease) : prepared.history();
             checkpoint.run();
@@ -353,7 +353,7 @@ public class AssistantService {
         return markdown.toString();
     }
 
-    private RunbookService.SearchResponse retrieveRunbooks(String question, SessionAuthorization.Lease lease, Runnable checkpoint) {
+    private RunbookService.SearchResponse retrieveRunbooks(IncidentContext context, String question, SessionAuthorization.Lease lease, Runnable checkpoint) {
         checkpoint.run();
         requireAuthorization(lease, false);
         // Resolve the live role, never assume ON_CALL for an unavailable/revoked account.
@@ -367,7 +367,8 @@ public class AssistantService {
         if (end < question.length() && Character.isHighSurrogate(question.charAt(end - 1))) end--;
         RunbookService.SearchResponse result;
         try {
-            result = runbooks.searchTracked(question.substring(0, end), role, lease.userId(), 3, "AUTO", "ASSISTANT");
+            var scope = context == null ? null : runbookScope(context.id());
+            result = runbooks.searchTracked(question.substring(0, end), role, lease.userId(), 3, "AUTO", "ASSISTANT", scope);
         } catch (ApiException exception) {
             if (!"RUNBOOK_ROLE_UNSUPPORTED".equals(exception.code())) throw exception;
             // Assistant access is broader than Runbook access (e.g. AUDITOR); never elevate its role.
@@ -377,6 +378,23 @@ public class AssistantService {
         checkpoint.run();
         requireAuthorization(lease, false);
         return result;
+    }
+
+    private RunbookService.SearchScope runbookScope(long incidentId) {
+        var resources = jdbcClient.sql("""
+                        SELECT DISTINCT r.resource_code, r.resource_type
+                        FROM cmdb_resource r JOIN incident i ON i.id=:id
+                        WHERE r.id=i.service_resource_id OR EXISTS (
+                            SELECT 1 FROM cmdb_relation relation
+                            WHERE (relation.source_resource_id=i.service_resource_id AND relation.target_resource_id=r.id)
+                               OR (relation.target_resource_id=i.service_resource_id AND relation.source_resource_id=r.id))
+                        ORDER BY r.resource_code
+                        """).param("id", incidentId)
+                .query((rs, row) -> new RunbookResource(rs.getString("resource_code"), rs.getString("resource_type"))).list();
+        var types = new HashSet<String>();
+        resources.forEach(resource -> types.add(resource.type()));
+        types.add("SERVICE"); // Explicitly unscoped generic service procedures remain eligible.
+        return new RunbookService.SearchScope(resources.stream().map(RunbookResource::code).toList(), types.stream().sorted().toList());
     }
 
     private Answer generateAnswer(IncidentContext context, List<MessageView> history, String question,
@@ -404,6 +422,7 @@ public class AssistantService {
     private String knowledgeSummary(RunbookService.SearchResponse knowledge, String question) {
         StringBuilder text = new StringBuilder("\n\n### Runbook 检索依据\n");
         text.append("检索引擎：").append(knowledge.engine()).append("；资料仅供验证，不代表已执行操作或已确认根因。\n");
+        knowledge.warnings().forEach(warning -> text.append("提示：").append(warning).append("\n"));
         if (question.length() > 500) text.append("问题超过检索预算，仅使用前 500 字以内检索；完整问题仍保留。\n");
         if ("NOT_EXECUTED".equals(knowledge.engine())) text.append("当前角色无 Runbook 访问权限，未执行检索；不会编造文档或引用。\n");
         else if (knowledge.results().isEmpty()) text.append("当前问题未命中对你可见的已发布 Runbook；不会编造文档或引用。\n");
@@ -761,6 +780,8 @@ public class AssistantService {
 
     private record Investigation(Long id, String hypothesis, String suggestions) {
     }
+
+    private record RunbookResource(String code, String type) { }
 
     private record Answer(String content, List<EvidenceRef> evidence) {
     }

@@ -1,6 +1,8 @@
 # OpsPilot 验收记录
 
-当前：[V1.8 CP03 助手真实指标/日志取证](V1.8-checkpoint-03-assistant-observations.md)。121 项相关 Java、真实 Prometheus/Loki HTTP、旧/新 JAR 的页面/SSE/保存/幂等、无权限/无绑定/空数据/降级通过；首轮 Java 失败保留。旧封版、UI 与六个历史 Demo 保持，未称整个长期目标完成。
+当前：[V1.8 CP04 Incident 范围检索与多会话布局修复](V1.8-checkpoint-04-assistant-scope.md)。131 项相关 Java、231 项前端、冻结 10 题同语料旧/新 JAR 与真实页面/SSE/保存/幂等/退出后只读 SQL 通过；范围外引用 7→0，四题未绑定排名不变，11 条会话下输入框可见且列表独立滚动。八个既有 Demo 保留，无新 MySQL/云模型/完整 CI 证明，不称长期目标完成。
+
+上一增量：[V1.8 CP03 助手真实指标/日志取证](V1.8-checkpoint-03-assistant-observations.md)。121 项相关 Java、真实 Prometheus/Loki HTTP、旧/新 JAR 的页面/SSE/保存/幂等、无权限/无绑定/空数据/降级通过；首轮 Java 失败保留。按该报告当时的范围阅读。
 
 上一增量：[V1.8 CP02 模型引用围栏与历史上下文权限](V1.8-checkpoint-02-assistant-grounding.md)。102 项相关 Java 已通过；正常/原生流的合法引用、伪引用拒绝、当前权限过滤及历史快照保留按该报告的实际整包证据阅读。
 
