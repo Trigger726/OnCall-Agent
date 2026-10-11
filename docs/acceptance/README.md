@@ -1,8 +1,10 @@
 # OpsPilot 验收记录
 
+当前业务增量：[V1.8 CP01：助手问题驱动的 Runbook 检索与稳定引用](V1.8-checkpoint-01-assistant-runbook.md)。90 项相关 Java、旧/新 JAR 实际正常端点及 SSE、幂等回放、刷新与桌面/手机验证通过；独立业务分支交付，V1.7 封版、UI 与 4 个旧 Demo 不变。无新的 MySQL/云模型/完整 CI 证明，不称长期目标 100%。
+
 封版范围核对：[原始 OnCall 与成熟 Incident 能力差异审计](../BASELINE-CAPABILITY-AUDIT.md)。静态来源/已有证据对照，不是新一轮原版模型/检索 A/B 或功能回补。
 
-当前版本和启动入口见[封版交付指南](../releases/V1.7-DELIVERY.md)。以下报告按各自证据范围阅读，旧的“待验/待封版”不重新开启业务工作。
+V1.7 稳定版本和启动入口见[封版交付指南](../releases/V1.7-DELIVERY.md)。以下报告按各自证据范围阅读，旧的“待验/待封版”不构成新的开发授权。
 
 UI 工程收尾：[双主题可重复验收脚本与实际结果](V1.7-ui-repeatable-qa.md)。只补测试/说明，不变更精修视觉、封版业务或 CI。
 
@@ -10,7 +12,7 @@ UI 工程收尾：[双主题可重复验收脚本与实际结果](V1.7-ui-repeat
 
 最新 UI 增量：[浅色/深色切换、偏好记忆与 Codex 默认字体](V1.7-ui-themes.md)，保留已封版业务及原 OKX 深色 Demo。
 
-2026-10-11 已执行用户“先封版，然后优化 UI”：见[封版记录](../releases/V1.7-SEALED.md)及[OKX 风格 UI 与新旧 Demo](V1.7-ui-okx.md)。业务冻结，以下“待选择/继续迭代”仅保留历史含义。
+2026-10-11 已执行用户“先封版，然后优化 UI”：见[封版记录](../releases/V1.7-SEALED.md)及[OKX 风格 UI 与新旧 Demo](V1.7-ui-okx.md)。V1.7 版本固定，以下“待选择/继续迭代”仅保留历史含义；最新重新授权增量见页首。
 
 <details>
 <summary>历史 checkpoint、阶段表与状态说明（点击展开）</summary>

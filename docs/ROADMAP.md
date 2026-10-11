@@ -1,12 +1,12 @@
 # OpsPilot 高价值迭代路线
 
-当前以[封版交付指南](releases/V1.7-DELIVERY.md)为准：业务冻结、UI 已交付、复验入口可用。下面保留全部历史路线与未承诺设想，展开不代表重新授权开发。
+当前限定任务：[V1.8 CP01 助手按问题检索 Runbook](acceptance/V1.8-checkpoint-01-assistant-runbook.md)，由用户最新“继续吧”恢复业务迭代。优先复用已有检索、权限和持久化，保留 [V1.7 封版交付](releases/V1.7-DELIVERY.md)及 UI，不自动扩展原版全部工具/历史路线。
 
 用户指定的 [Claude frontend-design skill 精修](acceptance/V1.7-ui-claude-design.md)仅调整既有 UI 层级与尺度；不重新开启业务迭代。
 
 2026-10-11 用户追加的[浅色主题与 Codex 字体增量](acceptance/V1.7-ui-themes.md)限定于视觉层，不重新开启业务迭代。
 
-2026-10-11 用户已明确“先封版，然后优化 UI”。当前业务范围[冻结于 V1.7](releases/V1.7-SEALED.md)，只交付 [OKX 风格视觉增量](acceptance/V1.7-ui-okx.md)；不再自动扩项。下方“继续/待选择”均为历史计划，不是新的自动执行任务。
+2026-10-11 用户已明确“先封版，然后优化 UI”。[V1.7 封版](releases/V1.7-SEALED.md)与 [OKX 风格视觉增量](acceptance/V1.7-ui-okx.md)保持固定，后续重新授权增量独立交付。下方“继续/待选择”均为历史计划，不是新的自动执行任务。
 
 <details>
 <summary>封版前的开发记录及长期路线（点击展开）</summary>

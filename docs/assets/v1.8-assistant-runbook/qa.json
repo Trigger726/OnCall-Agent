@@ -1,0 +1,98 @@
+{
+  "status": "PASS",
+  "out": "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-assistant-rag-3m5GEa",
+  "browserPath": "Browser plugin not available; existing Playwright 1.63.0 + Chrome",
+  "question": "Redis 连接池 active pending 慢命令",
+  "aiEnabled": false,
+  "userDatabaseModified": false,
+  "runs": [
+    {
+      "name": "before",
+      "jar": "D:\\Codex\\国网\\央国企求职\\OpsPilot\\target\\opspilot-v1.7-ui-claude.jar",
+      "jarSha256": "d556e257428f06fc9c982a6c32fb2ae738d665d80309bb23600ea4b491009859",
+      "base": "http://127.0.0.1:9913",
+      "status": "PASS",
+      "screenshots": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-assistant-rag-3m5GEa\\before\\assistant-light-1440.png",
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-assistant-rag-3m5GEa\\before\\assistant-dark-390.png"
+      ],
+      "errors": [],
+      "assets": [
+        {
+          "file": "index.html",
+          "sha256": "84449974fdaabe2fec2e0b075bece5817d4218d3fd4099901d46a93d1da6068d"
+        },
+        {
+          "file": "favicon.svg",
+          "sha256": "40f017db2d6e9da7fbbc2235138455c4a39fb721a60f1f69504f98fabafb3471"
+        },
+        {
+          "file": "assets/theme.js",
+          "sha256": "f3066ab98bdef18e605d4c1a7a4a8257dd161a87d619b1ebb4c1fc2d69f505a3"
+        },
+        {
+          "file": "assets/index-C5QJvBlg.js",
+          "sha256": "9a8979483799c6a114b9de4547483ddf8b095430f5ebf6b8c81d0d7997acf670"
+        },
+        {
+          "file": "assets/index-CKb6ZeZO.css",
+          "sha256": "b12e842a50792cd5fd658372952b4d33894c47b420a0ab50e2250ac97264ff52"
+        }
+      ],
+      "shutdown": true,
+      "runbookCitations": [],
+      "answer": "我是 OpsPilot OnCall 助手，可以围绕告警、Incident、CMDB、变更和 Runbook 持续协作。\n\n### 当前活跃 Incident\n- **INC-20260819-0001** 统一结算接口持续超时（P1 / INVESTIGATING）\n\n将会话绑定到某个 Incident 后，可以继续问：‘总结当前证据’、‘最可能的根因是什么’或‘下一步怎么验证’。",
+      "idempotentReplay": true,
+      "normalAndSseEquivalent": true,
+      "reloadPersistence": true,
+      "childExit": 0,
+      "portsFree": true
+    },
+    {
+      "name": "after",
+      "jar": "D:\\Codex\\国网\\央国企求职\\OpsPilot\\target\\opspilot-v1.8-assistant-runbook.jar",
+      "jarSha256": "81a01f9f5b855b79ad3a5e860941d12bc278c45859a4bbb36030df2564846c4d",
+      "base": "http://127.0.0.1:9913",
+      "status": "PASS",
+      "screenshots": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-assistant-rag-3m5GEa\\after\\assistant-light-1440.png",
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-assistant-rag-3m5GEa\\after\\assistant-dark-390.png"
+      ],
+      "errors": [],
+      "assets": [
+        {
+          "file": "index.html",
+          "sha256": "84449974fdaabe2fec2e0b075bece5817d4218d3fd4099901d46a93d1da6068d"
+        },
+        {
+          "file": "favicon.svg",
+          "sha256": "40f017db2d6e9da7fbbc2235138455c4a39fb721a60f1f69504f98fabafb3471"
+        },
+        {
+          "file": "assets/theme.js",
+          "sha256": "f3066ab98bdef18e605d4c1a7a4a8257dd161a87d619b1ebb4c1fc2d69f505a3"
+        },
+        {
+          "file": "assets/index-C5QJvBlg.js",
+          "sha256": "9a8979483799c6a114b9de4547483ddf8b095430f5ebf6b8c81d0d7997acf670"
+        },
+        {
+          "file": "assets/index-CKb6ZeZO.css",
+          "sha256": "b12e842a50792cd5fd658372952b4d33894c47b420a0ab50e2250ac97264ff52"
+        }
+      ],
+      "shutdown": true,
+      "runbookCitations": [
+        "runbook:legacy-runbook-2:v1#chunk-0",
+        "runbook:mysql-connection-saturation:v1#chunk-0",
+        "runbook:legacy-runbook-1:v1#chunk-0"
+      ],
+      "answer": "以下是按当前问题检索到的已发布 Runbook 原文片段；这是资料检索，不是 AI 根因结论。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n\n- **Redis 连接池耗尽处置** [runbook:legacy-runbook-2:v1#chunk-0]\n原文片段：\n检查 active、idle、pending；核对连接池上限变更；确认慢命令；必要时回滚配置并分批重启客户端实例。\n\n- **MySQL 连接饱和处置** [runbook:mysql-connection-saturation:v1#chunk-0]\n原文片段：\n# MySQL 连接饱和处置 MySQL active connections、connection pool pending、too many connections 或 wait timeout 时，检查连接泄漏、慢 SQL、事务持有和 max_connections；优先限流或回滚异常版本。\n\n- **应用接口超时排查手册** [runbook:legacy-runbook-1:v1#chunk-0]\n原文片段：\n1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。",
+      "idempotentReplay": true,
+      "normalAndSseEquivalent": true,
+      "reloadPersistence": true,
+      "childExit": 0,
+      "portsFree": true
+    }
+  ]
+}

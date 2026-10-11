@@ -1,6 +1,8 @@
 # OpsPilot
 
-当前交付：[封版版本、UI 分支与 Demo 启动指南](docs/releases/V1.7-DELIVERY.md)。最新 UI 在 `ui/opspilot-okx-20261011`，业务封版标签不变；下方旧 checkpoint 已折叠，不能当作当前待办。
+当前业务增量：[V1.8 CP01 助手按问题检索 Runbook](docs/acceptance/V1.8-checkpoint-01-assistant-runbook.md)。用户明确“继续吧”后恢复这一项开发；V1.7 封版标签、OKX 双主题 UI 和历史 Demo 保持不变，不等于重新承诺全部历史路线。
+
+V1.7 稳定交付：[封版版本、UI 分支与 Demo 启动指南](docs/releases/V1.7-DELIVERY.md)。UI 在 `ui/opspilot-okx-20261011`；下方旧 checkpoint 已折叠，不能当作当前待办。
 
 双主题 UI 验收已提供[可重复运行入口](docs/acceptance/V1.7-ui-repeatable-qa.md)：独立临时 H2、44 个页面检查、10 条交互，消费既有 JAR，不覆盖 Demo、不改封版业务。
 
@@ -8,7 +10,7 @@
 
 UI 新增可记忆的浅色/深色主题与 Codex 默认系统字体栈，见[主题验收](docs/acceptance/V1.7-ui-themes.md)。登录页和控制台顶栏均可切换；业务封版不变。
 
-已按用户要求[封版 V1.7](docs/releases/V1.7-SEALED.md)：标签 `opspilot-v1.7-sealed-20261011` 固定于 bb012bf。后续只做 [OKX 风格 UI 增量](docs/acceptance/V1.7-ui-okx.md)，保留原有业务、未提交改动与历史 Demo；不再自动追加功能。以下 checkpoint 状态按历史时点阅读。
+已按用户要求[封版 V1.7](docs/releases/V1.7-SEALED.md)：标签 `opspilot-v1.7-sealed-20261011` 固定于 bb012bf。其后的 [OKX 风格 UI 增量](docs/acceptance/V1.7-ui-okx.md)及重新授权的 V1.8 业务增量均独立交付，保留原有业务、未提交改动与历史 Demo，不移动旧标签。以下 checkpoint 状态按历史时点阅读。
 
 <details>
 <summary>历史开发状态（封版前记录，点击展开）</summary>
