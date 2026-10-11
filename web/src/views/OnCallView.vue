@@ -10,6 +10,7 @@ import OnCallHandoffPanel from '@/components/OnCallHandoffPanel.vue'
 import OnCallSwapPanel from '@/components/OnCallSwapPanel.vue'
 import OnCallOpenHandoffPanel from '@/components/OnCallOpenHandoffPanel.vue'
 import OnCallPlanMemberPanel from '@/components/OnCallPlanMemberPanel.vue'
+import OnCallOpenNotificationOperationsPanel from '@/components/OnCallOpenNotificationOperationsPanel.vue'
 
 interface Shift { scheduleId: number; scheduleName: string; resourceName: string; userName: string | null; department: string | null; startsAt: string | null; endsAt: string | null; override: boolean }
 interface Policy { policyId: number; policyName: string; severity: string | null; resourceName: string; step: number; delayMinutes: number; targetType: string; targetRef: string }
@@ -77,6 +78,7 @@ onMounted(load)
     </section>
     <OnCallPlanMemberPanel @changed="memberChanged" />
     <OnCallOpenHandoffPanel ref="openPanel" @changed="openChanged" />
+    <OnCallOpenNotificationOperationsPanel v-if="auth.state.user?.roleCode==='ADMIN'" />
     <OnCallHandoffPanel ref="handoffPanel" @changed="handoffChanged" />
     <OnCallSwapPanel ref="swapPanel" @changed="swapChanged" />
     <OnCallRotationPanel ref="rotationPanel" @changed="rotationChanged" />

@@ -22,3 +22,9 @@
 executor统计及拒绝含义依据[JDK17 ThreadPoolExecutor文档](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ThreadPoolExecutor.html)：统计是本地观察，直接交接队列不能无限堆积，关闭和资源饱和是不同拒绝原因。没有扩大线程池、换收件人或让调用线程发送外部HTTP。
 
 验收与原始证据见[CP120](acceptance/V1.7-checkpoint-120.md)。原始OnCall归档仍为 `archive/oncall-original-2026-08-19`（`0cd654ea49957d05c0e5c683c0e945a5a87c5bab`）；这次补的是OpsPilot真实持久通知队列的运维观察，不冒称原始Agent或厂商完整值班/渠道功能已由本轮实现。
+
+## CP121人工管理员面板
+
+“值班与升级”中仅ADMIN显示“开放通知运行观察”。初始未读不是零，人工点击才GET；错误/非法分区/身份变化/原生跨标签会话变化和卸载均清除旧事实，晚响应受捕获账号/token/epoch围栏约束，不自动重投、轮询或认领。配置关闭仍能看到历史积压，数据库与本实例卡片各自标注范围；shutdown只表示executor已请求关闭，不等于已经终止。
+
+[CP121](acceptance/V1.7-checkpoint-121.md)用真实API发布→阻塞认证HTTP→503后未来重试→关闭配置重启证明上述状态，保留新旧桌面/手机截图。自己的Linux UI待验；父CP120主21/专项10已终态成功且新MySQL7官方工件独立核验，但不是本轮MySQL UI或全渠道验收。
