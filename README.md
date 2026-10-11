@@ -1,5 +1,7 @@
 # OpsPilot
 
+CP124收尾已闭合：受验源码578d192的主CI21/21、专项12/12全绿，新的MySQL整包9场景＋共享37＋五状态升级官方工件独立重放通过，见[最终验收](docs/acceptance/V1.7-checkpoint-124.md#cp124自身远端闭合)。本次补档仅文档/证据，不改受验代码、不重复触发全CI；旧Demo与未提交改动保留，是否暂停或封版待用户明确。
+
 当前CP124：[已有人工重投的TCP/重启验收收尾](docs/acceptance/V1.7-checkpoint-124.md)。不新增生产功能：9整包场景/6有序JVM/4真实HTTP、Node283与test-compile通过；CP123自身21＋12全绿及MySQL37/五状态迁移官方包已独立核验。同9步新MySQL放入已有通知作业，待本轮CI，不新增第13作业。旧Demo/dirty保留；用户要求控制token，后续不自动扩项，暂停或封版方向待明确。
 
 当前CP123：[FAILED通知的显式人工重投](docs/acceptance/V1.7-checkpoint-123.md)。V42保存原actor/key回执，原载荷/收件人/投递键不换、累计次数不清零；当前权限和原候选重查，POST仅排队不发送/认领。H2共享37/五状态迁移、606实际Java/282条件跳过、Node275/前端223、原JAR7和页面11通过。CP122自身21＋12及新MySQL官方工件独立闭合；CP123自身MySQL/CI待验，页面无新写按钮，旧Demo/dirty/失败保留，目标active。

@@ -1,0 +1,64 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< org.trigger:opspilot >------------------------
+[INFO] Building OpsPilot 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 49 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+[INFO] Copying 1 resource from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.trigger.opspilot.oncall.MySqlOpenNotificationRedriveHttpIntegrationTest
+09:08:47.332 [main] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
+09:08:47.336 [main] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+09:08:47.341 [main] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 1.21.4
+09:08:47.471 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+09:08:47.646 [main] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
+09:08:47.647 [main] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
+09:08:47.659 [main] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
+  Server Version: 28.0.4
+  API Version: 1.48
+  Operating System: Ubuntu 24.04.5 LTS
+  Total Memory: 15989 MB
+09:08:47.677 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Creating container for image: testcontainers/ryuk:0.12.0
+09:08:47.790 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 is starting: a86894da88e699ce24f83d44676c55924f8f0d4b9ed48d0bc6b8abc428a4eb70
+09:08:47.984 [main] INFO tc.testcontainers/ryuk:0.12.0 -- Container testcontainers/ryuk:0.12.0 started in PT0.306696761S
+09:08:47.988 [main] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+09:08:47.989 [main] INFO org.testcontainers.DockerClientFactory -- Checking the system...
+09:08:47.989 [main] INFO org.testcontainers.DockerClientFactory -- ✔︎ Docker server version should be at least 1.6.0
+09:08:47.991 [main] INFO tc.mysql:8.4 -- Creating container for image: mysql:8.4
+09:08:48.030 [main] INFO tc.mysql:8.4 -- Container mysql:8.4 is starting: f04b3521956ac1154a944e1f99dcfc206767ae7f0e5c1fbde90023f94906f78b
+09:08:48.135 [main] INFO tc.mysql:8.4 -- Waiting for database connection to become available at jdbc:mysql://localhost:32773/opspilot_notification_redrive_7b94fc759cb8?allowPublicKeyRetrieval=true&forceConnectionTimeZoneToSession=true&connectionTimeZone=UTC&useSSL=false using query 'SELECT 1'
+09:08:57.367 [main] INFO tc.mysql:8.4 -- Container mysql:8.4 started in PT9.37599616S
+09:08:57.367 [main] INFO tc.mysql:8.4 -- Container is started (JDBC URL: jdbc:mysql://localhost:32773/opspilot_notification_redrive_7b94fc759cb8?allowPublicKeyRetrieval=true&forceConnectionTimeZoneToSession=true&connectionTimeZone=UTC&useSSL=false)
+OPEN_NOTIFICATION_REDRIVE_DATABASE {"version":"8.4.11","product":"MySQL","serverUuid":"5e94bb01-c553-11f1-9bfb-3238889d45a6","schema":"opspilot_notification_redrive_7b94fc759cb8"}
+OPEN_NOTIFICATION_REDRIVE_AUDIT target/oncall-open-notification-redrive-mysql-it/audit-bfb9d9ec-937a-4ff4-92ba-dfd7a5950516/audit.json
+OPEN_NOTIFICATION_REDRIVE_CONTAINER_STOPPED {"stopped":true}
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 95.61 s -- in org.trigger.opspilot.oncall.MySqlOpenNotificationRedriveHttpIntegrationTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:37 min
+[INFO] Finished at: 2026-10-11T09:10:22Z
+[INFO] ------------------------------------------------------------------------
