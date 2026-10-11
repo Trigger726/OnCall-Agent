@@ -1,5 +1,7 @@
 # OpsPilot
 
+当前交付：[封版版本、UI 分支与 Demo 启动指南](docs/releases/V1.7-DELIVERY.md)。最新 UI 在 `ui/opspilot-okx-20261011`，业务封版标签不变；下方旧 checkpoint 已折叠，不能当作当前待办。
+
 双主题 UI 验收已提供[可重复运行入口](docs/acceptance/V1.7-ui-repeatable-qa.md)：独立临时 H2、44 个页面检查、10 条交互，消费既有 JAR，不覆盖 Demo、不改封版业务。
 
 最新视觉精修使用 [Anthropic 官方 frontend-design skill](docs/acceptance/V1.7-ui-claude-design.md)：连续指标栏、可读的业务文字、统一表格/控件尺度；保留 OKX 风格、双主题与 Codex 字体，不变更封版业务。
@@ -7,6 +9,9 @@
 UI 新增可记忆的浅色/深色主题与 Codex 默认系统字体栈，见[主题验收](docs/acceptance/V1.7-ui-themes.md)。登录页和控制台顶栏均可切换；业务封版不变。
 
 已按用户要求[封版 V1.7](docs/releases/V1.7-SEALED.md)：标签 `opspilot-v1.7-sealed-20261011` 固定于 bb012bf。后续只做 [OKX 风格 UI 增量](docs/acceptance/V1.7-ui-okx.md)，保留原有业务、未提交改动与历史 Demo；不再自动追加功能。以下 checkpoint 状态按历史时点阅读。
+
+<details>
+<summary>历史开发状态（封版前记录，点击展开）</summary>
 
 CP124收尾已闭合：受验源码578d192的主CI21/21、专项12/12全绿，新的MySQL整包9场景＋共享37＋五状态升级官方工件独立重放通过，见[最终验收](docs/acceptance/V1.7-checkpoint-124.md#cp124自身远端闭合)。本次补档仅文档/证据，不改受验代码、不重复触发全CI；旧Demo与未提交改动保留，是否暂停或封版待用户明确。
 
@@ -64,11 +69,16 @@ CP124收尾已闭合：受验源码578d192的主CI21/21、专项12/12全绿，�
 
 最新 CP93：[持久化时间边界夹具/门禁修复](docs/acceptance/V1.7-checkpoint-93.md)已由自身033f491/[Run37199872957](https://github.com/Trigger726/OnCall-Agent/actions/runs/37199872957)十八CI success闭合，见[五ZIP自身proof](docs/assets/v1.7-cp93/remote-proof.json)。真实MySQL19零跳过及两次.900→实际下一整秒/DB释放超过存储截止，独立强化门禁重放与CI保存结果相等；原17/27/1/99、双时区各480执行/171跳过/83新鲜XML、前端132/audit0及Linux原12/14/8/6与HTTP三流程也核对。脚本115为本地结果。生产代码/DDL/页面未改，没有新视觉Demo；CP92自己的[首次失败](docs/assets/v1.7-cp92/first-remote-proof.json)保留，不改写绿灯。专用撤销页面、冻结原键/三个版本、真实浏览器丢响应/409/身份围栏和桌面手机新旧对照继续必需，完整路线/目标active。
 
+</details>
+
 企业级智能运维与故障闭环平台，面向能源企业信息系统的告警治理、Incident 协同、值班升级和证据驱动调查。
 
 OpsPilot 不是“输入一条告警让大模型猜根因”的聊天演示。它先把资源、告警、事故、人员、变更和审计放进同一个业务闭环，再将 AI 限制在可引用、可追踪的证据上下文中。
 
 ## 核心能力
+
+<details>
+<summary>早期能力验收进展（历史时点，点击展开）</summary>
 
 最新 CP90：[保留事实页面验收](docs/acceptance/V1.7-checkpoint-90.md)/[本地机器证据](docs/assets/v1.7-cp90/local-proof.json)。数据库快照/冻结期限/清理记录可见；首次新重试前重新GET，到期或读取失败0POST，原已提交意图在载荷擦除后仍只手动求原回执。前端132、脚本92、真实生产JAR通知12流程/桌面与390px通过，六张新旧图保留；自己的源码CI待验。CP89源码adc89b3的[十八作业CI](https://github.com/Trigger726/OnCall-Agent/actions/runs/37174799138)已全部成功，五选定ZIP与真实MySQL通知27/原换班17、一般99独立重放通过，见[89远端证据](docs/assets/v1.7-cp89/remote-proof.json)。旧V35有数据的真实MySQL升级仍未验，整体路线继续。
 
@@ -156,10 +166,12 @@ checkpoint 49 定向接班后端已验：本人申请、指定接班人接受/�
 
 checkpoint 48 新增日历覆盖预览：已持久化班次按实际路由优先级分段，逐日查看有效覆盖/缺班、被遮盖与无资格班次，取消后自动重算；不是未生成轮转的预测，也不是历史账号资格快照。代码 `4573a82` 的 [Run 36291809846](https://github.com/Trigger726/OnCall-Agent/actions/runs/36291809846) 十二项全绿，前端29项、真实MySQL35项零跳过、双时区各189项发现/147项执行/42项条件跳过、Linux桌面/390px与完整停机日志通过，详见 [验收报告](docs/acceptance/V1.7-checkpoint-48.md)。
 
+</details>
+
 - 告警治理：外部事件 ID 幂等、SHA-256 指纹压缩、30 分钟窗口聚合、原始告警与 Incident 分层；原生接收 Alertmanager v4 批量 webhook，同状态重试零写入、firing/resolved 共用生命周期，批内永久坏项进入脱敏台账并支持角色受控重放。
 - Incident 工作台：`OPEN -> ACKNOWLEDGED -> INVESTIGATING -> MITIGATED -> RESOLVED -> CLOSED` 状态机、乐观锁、分派、备注和时间线。
 - CMDB：应用、API、数据库和中间件台账，依赖/调用关系拓扑，事故与近期变更关联。
-- 值班升级：管理角色可创建普通/临时覆盖班次，计划行锁防同层重叠，带版本/原因软取消并保留历史与审计；当前值班和新事故路由排除取消班次。有序成员轮转 API/页面默认每分钟续排未来 14 天开始的班次，冲突/不可用成员留台账，已取消生成班不复活，暂停/恢复受版本与原因约束。P1 未确认 Incident 按 0/10/20 分钟分级路由，首步在告警创建事务内执行，后续分钟扫描，确认后停止。缺班记录 `NO_TARGET`；`ROUTED` 仅是站内事实，非外部送达；跨时区/DST、换班和日历同步仍待建设。
+- 值班升级：管理角色可创建普通/临时覆盖班次，计划行锁防同层重叠，带版本/原因软取消并保留历史与审计；当前值班和新事故路由排除取消班次。有序成员轮转 API/页面默认每分钟续排未来 14 天开始的班次，冲突/不可用成员留台账，已取消生成班不复活，暂停/恢复受版本与原因约束。P1 未确认 Incident 按 0/10/20 分钟分级路由，首步在告警创建事务内执行，后续分钟扫描，确认后停止。缺班记录 `NO_TARGET`；`ROUTED` 仅是站内事实，非外部送达。定向接班、双向换班、开放认领和持久化通知已分阶段实现，技术投递不等于人的接受；跨时区/DST、日历同步等仍非封版验收承诺，详见[交付边界](docs/releases/V1.7-DELIVERY.md#本次文档核验与诚实边界)。
 - 可解释 Agent 调查：以 `PLAN -> EXECUTE -> REPLAN -> FINISH` 编排告警、CMDB、指标、变更、日志和 Runbook 六个只读工具；每步持久化输入、查询范围、数据源、证据、失败原因和耗时。
 - 可恢复调查事件流：运行事件先落库再通过 SSE 实时发送，事件 ID 同时作为断线回放游标；普通断网/本地退出不取消后台调查。全部会话撤销、到期或资格丧失由持续授权检查关闭原流并安全取消任务，不承诺撤回已发送字节或立即停止外部请求。
 - Agent 运行控制：同一 Incident 使用幂等键抑制重复 run；任务先进入有界队列，可显式取消并受持久化截止时间预算约束；取消、超时和队列拒绝都形成可回放的持久化终态，执行 JVM 崩溃后由存活实例幂等结算逾期孤儿 run。
@@ -238,25 +250,21 @@ Prometheus / APM / manual event
 
 ## 快速启动
 
-前置条件：JDK 17+、Node.js 20+。
+前置条件：源码运行需要 JDK 17+；只有开发前端或执行 UI 自动验收时需要 Node.js 20+。
+
+最新 UI 分支已提交生成后的静态资源，查看 Demo 无需先运行 npm 构建，也无需 Node.js。源码编译目标为 Java 17，本机当前 UI JAR 使用 JDK 21 验收；新环境仍需 Maven Wrapper 能下载依赖。先确认业务 9900/管理 9920 端口空闲，不停止已有服务。
 
 ```bash
-cd web
-npm ci
-npm run build
-cd ..
 ./mvnw spring-boot:run
 ```
 
 Windows PowerShell 使用：
 
 ```powershell
-cd web
-npm ci
-npm run build
-cd ..
 .\mvnw.cmd spring-boot:run
 ```
+
+以上命令消费当前 checkout 的发布资源，不切分支、不覆盖 JAR。已有 dirty 工作区不要为查看另一个版本 reset/覆盖文件；使用已有 Demo JAR 或另建干净目录，见[交付指南](docs/releases/V1.7-DELIVERY.md)。只有主动修改前端时才重新构建；Vite 默认会清空 `src/main/resources/static`，保留历史资源可先执行 `npm ci --prefix web`，再执行 `npm run build --prefix web -- --outDir ../target/ui-preview-build`，这只做独立构建检查，不会自动替换发布资源。
 
 打开 [http://localhost:9900](http://localhost:9900)。默认使用本地 H2 文件数据库，首次启动由 Flyway 自动建表和写入演示数据，不需要安装 MySQL 或配置 AI Key。
 
@@ -596,6 +604,6 @@ docs/             架构、演示、面试材料和阶段验收报告
 
 ## 项目来源
 
-OpsPilot 是在原 OnCall AI Agent 原型上进行的独立重构。重构保留并升级了原版多轮对话能力，同时补齐 Incident、CMDB、状态机、值班和审计闭环。原始版本保存在 Git 分支 `archive/oncall-original-2026-08-19`，新实现位于 `feat/opspilot-v1`，两者可以独立查看和演示。
+OpsPilot 是在原 OnCall AI Agent 原型上进行的独立重构。重构保留并升级了原版多轮对话能力，同时补齐 Incident、CMDB、状态机、值班和审计闭环。原始版本保存在 Git 分支 `archive/oncall-original-2026-08-19`，历史开发线为 `feat/opspilot-v1`；当前已验收的 UI 交付线为 `ui/opspilot-okx-20261011`，业务封版由标签 `opspilot-v1.7-sealed-20261011` 固定。版本可以独立查看和演示，不要在 dirty 工作区覆盖切换。
 
 License: MIT

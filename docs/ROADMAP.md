@@ -1,10 +1,15 @@
 # OpsPilot 高价值迭代路线
 
+当前以[封版交付指南](releases/V1.7-DELIVERY.md)为准：业务冻结、UI 已交付、复验入口可用。下面保留全部历史路线与未承诺设想，展开不代表重新授权开发。
+
 用户指定的 [Claude frontend-design skill 精修](acceptance/V1.7-ui-claude-design.md)仅调整既有 UI 层级与尺度；不重新开启业务迭代。
 
 2026-10-11 用户追加的[浅色主题与 Codex 字体增量](acceptance/V1.7-ui-themes.md)限定于视觉层，不重新开启业务迭代。
 
 2026-10-11 用户已明确“先封版，然后优化 UI”。当前业务范围[冻结于 V1.7](releases/V1.7-SEALED.md)，只交付 [OKX 风格视觉增量](acceptance/V1.7-ui-okx.md)；不再自动扩项。下方“继续/待选择”均为历史计划，不是新的自动执行任务。
+
+<details>
+<summary>封版前的开发记录及长期路线（点击展开）</summary>
 
 CP124收尾已闭合：[最终验收](acceptance/V1.7-checkpoint-124.md#cp124自身远端闭合)。受验578d192主21＋专项12 success，新MySQL整包9/共享37/五状态官方工件独立核验；纯文档补档不改受验代码、不再次触发全CI。不继续自动扩项，是否封版/暂停待用户明确；全长期目标尚未证明100%，下方保留历史路线。
 
@@ -283,3 +288,5 @@ CP89后台/API本地阶段已推进：[89报告](acceptance/V1.7-checkpoint-89.m
 - 检查点55限定通过：真实检索逐日趋势与完整独立复核子集Hit@K，显式保留返回率、复核覆盖、未知与零分母；V29恢复旧ACTIVE计数但不把已清理快照当空结果。`49c0161` 的 [Run36338448177](https://github.com/Trigger726/OnCall-Agent/actions/runs/36338448177) 十二作业success，真实MySQL63执行零跳过/五池干净关闭、双时区各250发现/180执行/70条件跳过、50项前端、八脚本与新旧/远端桌面手机已验，工件摘要与MySQL CLI重放通过；长期真实样本、生产规模与历史评审快照仍待验证，见 [验收报告](acceptance/V1.7-checkpoint-55.md)。
 
 简历价值：可讲分布式事件一致性、端到端可观测性和事故复盘闭环。
+
+</details>
