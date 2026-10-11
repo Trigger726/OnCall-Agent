@@ -35,18 +35,14 @@ async function submit() {
   <main class="login-page">
     <section class="login-brand-panel">
       <div class="login-brand"><Activity :size="22" /><strong>OpsPilot</strong></div>
-      <div class="signal-visual" aria-hidden="true">
-        <span v-for="height in [24, 42, 31, 58, 38, 70, 47, 64, 35, 51]" :key="height" :style="{ height: `${height}%` }" />
-      </div>
       <div class="login-caption">
-        <span>INCIDENT COMMAND</span>
         <h1>让每一次故障处置<br />都有证据、有责任人、有闭环。</h1>
-        <p>华东生产域 · 6 项核心资源在线</p>
+        <p>告警关联、值班协作与处置审计</p>
       </div>
     </section>
     <section class="login-form-panel">
       <form class="login-form" @submit.prevent="submit">
-        <div class="login-form-title"><span>OPERATION CONSOLE</span><h2>登录运维控制台</h2></div>
+        <div class="login-form-title"><h2>登录运维控制台</h2></div>
         <label><span>账号</span><div class="input-with-icon"><UserRound :size="17" /><input v-model="username" autocomplete="username" /></div></label>
         <label><span>密码</span><div class="input-with-icon"><KeyRound :size="17" /><input v-model="password" type="password" autocomplete="current-password" /></div></label>
         <p v-if="notice" class="form-notice">{{ notice }}</p>
@@ -54,7 +50,7 @@ async function submit() {
         <button class="primary-button login-submit" type="submit" :disabled="loading">
           <span>{{ loading ? '正在验证' : '进入控制台' }}</span><ArrowRight :size="17" />
         </button>
-        <div class="login-meta"><span class="health-dot" />统一身份认证运行正常</div>
+        <div class="login-meta">演示账号仅用于本地试用</div>
       </form>
     </section>
   </main>

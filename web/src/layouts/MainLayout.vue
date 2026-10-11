@@ -3,7 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   Activity, AlarmClock, BellRing, BookOpenCheck, Boxes, ChevronLeft, ChevronRight,
-  BarChart3, ClipboardList, GitBranch, LayoutDashboard, LogOut, Menu, MessageSquareText, RadioTower, Search, ShieldCheck, X,
+  BarChart3, ClipboardList, GitBranch, LayoutDashboard, LogOut, Menu, MessageSquareText, RadioTower, ShieldCheck, X,
 } from 'lucide-vue-next'
 import { auth } from '@/stores/auth'
 
@@ -60,7 +60,6 @@ function signOut() {
         </RouterLink>
       </nav>
       <div class="sidebar-foot">
-        <div class="secure-state"><ShieldCheck :size="16" /><span>生产域 · 受控</span></div>
         <button class="collapse-button" :title="collapsed ? '展开侧栏' : '收起侧栏'" @click="collapsed = !collapsed">
           <ChevronRight v-if="collapsed" :size="17" />
           <ChevronLeft v-else :size="17" />
@@ -76,11 +75,8 @@ function signOut() {
         <button class="icon-button mobile-menu" title="打开导航" @click="mobileOpen = true"><Menu :size="20" /></button>
         <div class="page-heading">
           <h1>{{ pageTitle }}</h1>
-          <span class="environment-label">PRODUCTION</span>
         </div>
         <div class="topbar-actions">
-          <button class="search-trigger" title="全局搜索"><Search :size="16" /><span>搜索资源、告警或编号</span><kbd>Ctrl K</kbd></button>
-          <div class="platform-health"><span class="health-dot" />服务正常</div>
           <time>{{ clock }}</time>
           <div class="user-block">
             <span class="user-avatar">{{ auth.state.user?.displayName.slice(0, 1) }}</span>

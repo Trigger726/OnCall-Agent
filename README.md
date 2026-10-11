@@ -1,5 +1,7 @@
 # OpsPilot
 
+已按用户要求[封版 V1.7](docs/releases/V1.7-SEALED.md)：标签 `opspilot-v1.7-sealed-20261011` 固定于 bb012bf。后续只做 [OKX 风格 UI 增量](docs/acceptance/V1.7-ui-okx.md)，保留原有业务、未提交改动与历史 Demo；不再自动追加功能。以下 checkpoint 状态按历史时点阅读。
+
 CP124收尾已闭合：受验源码578d192的主CI21/21、专项12/12全绿，新的MySQL整包9场景＋共享37＋五状态升级官方工件独立重放通过，见[最终验收](docs/acceptance/V1.7-checkpoint-124.md#cp124自身远端闭合)。本次补档仅文档/证据，不改受验代码、不重复触发全CI；旧Demo与未提交改动保留，是否暂停或封版待用户明确。
 
 当前CP124：[已有人工重投的TCP/重启验收收尾](docs/acceptance/V1.7-checkpoint-124.md)。不新增生产功能：9整包场景/6有序JVM/4真实HTTP、Node283与test-compile通过；CP123自身21＋12全绿及MySQL37/五状态迁移官方包已独立核验。同9步新MySQL放入已有通知作业，待本轮CI，不新增第13作业。旧Demo/dirty保留；用户要求控制token，后续不自动扩项，暂停或封版方向待明确。

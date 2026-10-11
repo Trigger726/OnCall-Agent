@@ -1,0 +1,129 @@
+[
+  [
+    "/dashboard",
+    {
+      "success": true,
+      "data": {
+        "firingAlerts": 2,
+        "activeIncidents": 1,
+        "p1Incidents": 1,
+        "degradedResources": 2,
+        "alertCompressionPercent": 93,
+        "mttaMinutes": 3,
+        "severityDistribution": [
+          {
+            "severity": "P1",
+            "count": 1
+          }
+        ],
+        "incidentTrend": [
+          {
+            "day": "2026-08-19",
+            "count": 1
+          },
+          {
+            "day": "2026-08-18",
+            "count": 1
+          }
+        ],
+        "riskResources": [
+          {
+            "id": 1,
+            "name": "统一结算服务",
+            "type": "APPLICATION",
+            "status": "DEGRADED",
+            "activeIncidents": 1
+          },
+          {
+            "id": 4,
+            "name": "结算 Redis 集群",
+            "type": "MIDDLEWARE",
+            "status": "DEGRADED",
+            "activeIncidents": 0
+          }
+        ]
+      },
+      "error": null,
+      "timestamp": "2026-10-11T10:01:09.325378900Z"
+    }
+  ],
+  [
+    "/incidents?size=6",
+    {
+      "success": true,
+      "data": {
+        "items": [
+          {
+            "id": 1,
+            "incidentCode": "INC-20260819-0001",
+            "title": "统一结算接口持续超时",
+            "severity": "P1",
+            "status": "INVESTIGATING",
+            "version": 2,
+            "resourceId": 1,
+            "resourceName": "统一结算服务",
+            "commander": "李娜",
+            "assignee": "张伟",
+            "alertCount": 2,
+            "createdAt": "2026-08-19T09:02:00",
+            "updatedAt": "2026-08-19T09:16:00"
+          },
+          {
+            "id": 2,
+            "incidentCode": "INC-20260818-0002",
+            "title": "统一认证登录错误率升高",
+            "severity": "P2",
+            "status": "RESOLVED",
+            "version": 4,
+            "resourceId": 3,
+            "resourceName": "统一身份认证",
+            "commander": "李娜",
+            "assignee": "李娜",
+            "alertCount": 1,
+            "createdAt": "2026-08-18T21:31:00",
+            "updatedAt": "2026-08-18T22:12:00"
+          }
+        ],
+        "total": 2,
+        "page": 1,
+        "size": 6
+      },
+      "error": null,
+      "timestamp": "2026-10-11T10:01:09.325378900Z"
+    }
+  ],
+  [
+    "/on-call/current",
+    {
+      "success": true,
+      "data": [
+        {
+          "scheduleId": 1,
+          "scheduleName": "结算系统 7x24 值班",
+          "resourceId": 1,
+          "resourceName": "统一结算服务",
+          "userId": null,
+          "userName": null,
+          "department": null,
+          "startsAt": null,
+          "endsAt": null,
+          "override": false
+        },
+        {
+          "scheduleId": 2,
+          "scheduleName": "基础平台值班",
+          "resourceId": 3,
+          "resourceName": "统一身份认证",
+          "userId": null,
+          "userName": null,
+          "department": null,
+          "startsAt": null,
+          "endsAt": null,
+          "override": false
+        }
+      ],
+      "error": null,
+      "timestamp": "2026-10-11T10:01:09.324376Z"
+    }
+  ]
+]
