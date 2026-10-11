@@ -6,7 +6,7 @@ function fixture(mysql=false){const folder=path.resolve(__dirname,'../../docs/as
   if(mysql)for(const [before,after] of [[suite.replace('MySqlOnCall','OnCall'),suite],['"product":"H2"','"product":"MySQL"'],
     ['"version":"2.2.220 (2023-07-04)"','"version":"8.4.11"'],['"schema":"opspilot-open-notification-test"','"schema":"opspilot_open_notification_test"']]){log=log.replaceAll(before,after);xml=xml.replaceAll(before,after);}
   return {log,xml,mysql};}
-const run=f=>verify(f.log,f.xml,f.mysql);
+const run=f=>verify(f.log,f.xml,f.mysql,true); // Explicit historical replay; production CLI requires all 37 V42 cases.
 test('saved actual H2 transport data independently replays 22 cases and fourteen authenticated requests',()=>{assert.equal(run(fixture()).observedAuthenticatedHttpRequests,14);});
 test('synthetic MySQL gate shape is not actual MySQL; H2 can never substitute',()=>{assert.equal(run(fixture(true)).database,'MySQL');const f=fixture();assert.throws(()=>verify(f.log,f.xml,true));});
 test('omitted skipped renamed failed or truncated real JUnit is rejected',()=>{for(const change of [f=>f.xml=f.xml.replace('tests="22"','tests="21"'),f=>f.xml=f.xml.replace('skipped="0"','skipped="1"'),f=>f.xml=f.xml.replace('shouldSkipInactivePlan','renamed'),f=>f.xml=f.xml.replace('</testsuite>',''),f=>f.log+='\n ERROR failure']){const f=fixture(true);change(f);assert.throws(()=>run(f));}});

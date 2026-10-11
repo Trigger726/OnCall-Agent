@@ -70,6 +70,7 @@ public class OpenHandoffSqlFixture {
             boolean memberMigrated = count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version='39' AND success=TRUE") == 1;
             boolean publicationMigrated = count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version='40' AND success=TRUE") == 1;
             boolean notificationMigrated = count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version='41' AND success=TRUE") == 1;
+            boolean redriveMigrated = count(connection, "SELECT COUNT(*) FROM flyway_schema_history WHERE version='42' AND success=TRUE") == 1;
             var history = new ArrayList<String>();
             try (var statement = connection.createStatement(); var rows = statement.executeQuery("SELECT version,type,success FROM flyway_schema_history ORDER BY installed_rank")) {
                 while (rows.next()) history.add("{\"version\":" + quote(rows.getString("version"))
@@ -120,6 +121,7 @@ public class OpenHandoffSqlFixture {
                     + ",\"history\":[" + String.join(",", history) + "]"
                     + ",\"migration38\":" + migrated + ",\"migration39\":" + memberMigrated + ",\"migration40\":" + publicationMigrated
                     + ",\"migration41\":" + notificationMigrated
+                    + ",\"migration42\":" + redriveMigrated
                     + ",\"notificationRows\":" + (notificationMigrated ? count(connection,"SELECT COUNT(*) FROM oncall_open_handoff_notification") : 0)
                     + ",\"notificationHash\":" + quote(notificationMigrated ? fingerprint(connection,"SELECT * FROM oncall_open_handoff_notification ORDER BY id") : null)
                     + ",\"notifications\":[" + String.join(",", notifications) + "]"

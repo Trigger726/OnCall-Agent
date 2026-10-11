@@ -2,8 +2,8 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 const {caseNames,preservedKeys,oldSource}=require('./verify-oncall-open-publication-upgrade-http-ci.cjs');
 const {assertMigrations}=require('./verify-oncall-open-handoff-http-ci.cjs');
 const {unexpectedLogLines}=require('./verify-oncall-browser-ci.cjs');
-function verify(result,read,mysql=true,maximum=41) {
-  assert.ok([40,41].includes(maximum),'Only explicit historical/current publication boundary');
+function verify(result,read,mysql=true,maximum=42) {
+  assert.ok([40,41,42].includes(maximum),'Only explicit historical/current publication boundary');
   assert.equal(result.status,'PASS');assert.equal(result.oldSource,oldSource);
   for(const key of ['oldJarSha256','jarSha256'])assert.match(result[key],/^[a-f0-9]{64}$/);assert.notEqual(result.jarSha256,result.oldJarSha256);
   assert.equal(result.databaseMode,mysql?'MYSQL_TESTCONTAINER':'H2_OWNED_FILE');assert.equal(result.tokensPersistedToEvidence,false);
@@ -31,7 +31,7 @@ function verify(result,read,mysql=true,maximum=41) {
   assert.equal(ended.currentRequestStatus,'WITHDRAWN');assert.equal(ended.currentRequestVersion,1);assert.deepEqual(ended.eligibleOriginalRecipientIds,[]);assert.deepEqual(ended.publication,second.publication);
   assert.equal(committed.publicationRows,2);assert.equal(committed.publications.length,2);assert.equal(committed.requests.length,4);
   for(const view of [first,later,second,revoked,publisherRevoked,ended,...result.cases[5].restarted]) {
-    assert.equal(view.publicationSnapshotAvailable,true);assert.equal(view.deliveryImplemented,maximum===41);assert.equal(view.publication.eventVersion,0);
+    assert.equal(view.publicationSnapshotAvailable,true);assert.equal(view.deliveryImplemented,maximum>=41);assert.equal(view.publication.eventVersion,0);
     assert.equal(view.publication.timeBasis,'DATABASE_SESSION_LOCAL');assert.ok(view.publication.recipients.every(r=>r.userId!==view.publication.requesterId));
     const stored=committed.publications.find(p=>p.handoffId===view.publication.handoffId);assert.ok(stored);assert.equal(stored.eventVersion,0);
     assert.deepEqual(JSON.parse(stored.snapshotJson),view.publication);

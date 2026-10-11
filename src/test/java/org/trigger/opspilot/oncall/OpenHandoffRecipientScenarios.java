@@ -51,9 +51,9 @@ abstract class OpenHandoffRecipientScenarios {
             }
             assertThat(count("flyway_schema_history","version='40' AND success=TRUE")).isEqualTo(1);
             assertThat(count("flyway_schema_history","version='41' AND success=TRUE")).isEqualTo(1);
-            assertThat(count("flyway_schema_history","version IS NOT NULL AND success=TRUE")).isEqualTo(41);
+            assertThat(count("flyway_schema_history","version IS NOT NULL AND success=TRUE")).isEqualTo(42);
             System.out.println("OPEN_RECIPIENT_DATABASE "+json.writeValueAsString(Map.of("case",test.getTestMethod().orElseThrow().getName(),
-                    "product",metadata.getDatabaseProductName(),"version",metadata.getDatabaseProductVersion(),"schema",connection.getCatalog(),"migration40",true,"migration41",true)));
+                    "product",metadata.getDatabaseProductName(),"version",metadata.getDatabaseProductVersion(),"schema",connection.getCatalog(),"migration40",true,"migration41",true,"migration42",true)));
         }
     }
     @AfterEach void resetSpies() { reset(audit);reset(AopTestUtils.<OnCallOpenHandoffRecipients>getUltimateTargetObject(recipients)); }

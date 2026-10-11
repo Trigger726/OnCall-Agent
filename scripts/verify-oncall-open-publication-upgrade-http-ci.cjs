@@ -113,7 +113,7 @@ async function verify(mysql=configuration(process.env)) {
     assert.equal(missing.publicationSnapshotAvailable,false);assert.equal(missing.publication,null);assert.deepEqual(missing.eligibleOriginalRecipientIds,[]);
     assert.equal(missing.deliveryImplemented,true);assert.deepEqual(await api('/on-call/open-handoffs',owner,legacy.draft),legacy.request);
     assert.deepEqual(receipt(await api(route(closed.request.id)+'/withdrawals',owner,withdraw)),oldClosed);
-    await stop();const upgraded=sql();assertMigrations(upgraded,41);for(const key of preservedKeys)assert.equal(upgraded[key],before[key],key);
+    await stop();const upgraded=sql();assertMigrations(upgraded,42);for(const key of preservedKeys)assert.equal(upgraded[key],before[key],key);
     assert.deepEqual(upgraded.requests,before.requests);assert.deepEqual(upgraded.members,before.members);assert.equal(upgraded.publicationRows,0);
     result.cases.push({name:caseNames[1],legacyPublication:missing,upgraded});
     await start(jar);await accounts();const first=await create(2),firstView=await api(publication(first.request.id),auditor);
@@ -142,7 +142,7 @@ async function verify(mysql=configuration(process.env)) {
     await start(jar);await accounts();const restarted=[];
     for(const entry of [first,second]){await api('/on-call/open-handoffs',owner,entry.draft);restarted.push(await api(publication(entry.request.id),auditor));}
     assert.deepEqual(restarted.map(v=>v.publication),[firstView.publication,secondView.publication]);assert.deepEqual(restarted.map(v=>v.eligibleOriginalRecipientIds),[[],[]]);
-    await stop();const final=sql();assert.deepEqual(final,committed);assert.equal(final.v39MigrationHash,before.v39MigrationHash);assertMigrations(final,41);
+    await stop();const final=sql();assert.deepEqual(final,committed);assert.equal(final.v39MigrationHash,before.v39MigrationHash);assertMigrations(final,42);
     result.cases.push({name:caseNames[5],restarted,final});assert.deepEqual(result.cases.map(c=>c.name),caseNames);result.status='PASS';
   } catch(error){result.status='FAIL';result.failure=redact(error.stack);throw error;}
   finally {

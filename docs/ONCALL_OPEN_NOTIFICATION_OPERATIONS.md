@@ -1,5 +1,7 @@
 # 开放通知：队列与本进程运行观察
 
+CP123新增的是单条FAILED的独立管理写API，并非修改下面全局观察接口：[人工重投契约及验收](acceptance/V1.7-checkpoint-123.md)。POST带通知版本/操作键/理由，只排队原事件；原键回放返回原receipt与独立currentDelivery，权限每次重查，累计次数不清零。页面暂不提供写入口。CP122自己的MySQL整包七步已独立闭合，CP123新42真实MySQL等待自身CI。
+
 管理员只读接口：`GET /api/v1/on-call/open-notification-operations`。不发送通知、不认领、不重投、不改变版本或投递键。HTTP角色与当前数据库ACTIVE/ADMIN双重核对；运维经理、普通值班员、审计员均不能读取这份全局统计，既有单请求技术回执接口不变。
 
 | 范围 | 字段与含义 |

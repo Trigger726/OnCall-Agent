@@ -1,7 +1,7 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {verify}=require('../verify-oncall-open-notification-http-evidence.cjs');
 function fixture(){const dir=path.resolve(__dirname,'../../docs/assets/v1.7-cp118/final-notification-jar');return{r:JSON.parse(fs.readFileSync(dir+'/result.json','utf8')),read:name=>fs.readFileSync(dir+'/'+name,'utf8')};}
-const run=f=>verify(f.r,f.read),rejects=changes=>{for(const change of changes){const f=fixture();change(f);assert.throws(()=>run(f));}};
+const run=f=>verify(f.r,f.read,false,41),rejects=changes=>{for(const change of changes){const f=fixture();change(f);assert.throws(()=>run(f));}};
 test('actual owned H2 populated V40 upgrade real JAR retries and manual claim replay seven scopes',()=>{const p=run(fixture());assert.equal(p.cases,7);assert.equal(p.observedAuthenticatedHttpRequests,2);assert.equal(p.actualMysqlWholeJarVerified,false);});
 test('missing renamed cases SQL or actual MySQL substitution cannot pass H2 proof',()=>rejects([f=>f.r.cases.pop(),f=>f.r.cases[0].name='invented',f=>f.r.databaseMode='MYSQL_TESTCONTAINER',f=>f.r.sqlFixtures.pop()]));
 test('missing original business or checksum preservation rejects a green result',()=>rejects([f=>f.r.oldJarSha256='0'.repeat(64),f=>f.r.sqlFixtures[1].publicationHash='changed',f=>f.r.sqlFixtures[6].v40MigrationHash='changed',f=>f.r.sqlFixtures[2].notificationRows=1]));

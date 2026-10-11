@@ -1,5 +1,7 @@
 # OpsPilot
 
+当前CP123：[FAILED通知的显式人工重投](docs/acceptance/V1.7-checkpoint-123.md)。V42保存原actor/key回执，原载荷/收件人/投递键不换、累计次数不清零；当前权限和原候选重查，POST仅排队不发送/认领。H2共享37/五状态迁移、606实际Java/282条件跳过、Node275/前端223、原JAR7和页面11通过。CP122自身21＋12及新MySQL官方工件独立闭合；CP123自身MySQL/CI待验，页面无新写按钮，旧Demo/dirty/失败保留，目标active。
+
 当前CP122：[完整通知JAR的独立MySQL升级门禁](docs/acceptance/V1.7-checkpoint-122.md)。原七步H2真实升级/503与200跨重启/撤权跳过/人工认领通过；本轮Java856发现/590执行/266条件跳过、Node270通过。新增第十二自有MySQL作业，真实新MySQL仍待，合成门禁不是实际运行。CP121自身主21＋专项11 success、新Linux12官方UI工件已独立重放；生产Java/前端/V1–V41与旧Demo不改，整个目标active、不称100%。以下按历史时点阅读。
 
 当前CP121：[管理员人工队列页面与新旧Demo](docs/acceptance/V1.7-checkpoint-121.md)。未读不造零、SQL积压与本实例忙拒绝分开展示，禁用重启保留历史积压；新12实页/前端222/Node262与构建通过。CP120自身主21＋专项10 success、新MySQL7官方ZIP已独立重放；本轮自身Linux和完整新CI仍待。旧Demo/原业务/首次失败保留，角色显示不取代当前数据库ADMIN权限，完整目标active、不称100%。以下按历史时点阅读。

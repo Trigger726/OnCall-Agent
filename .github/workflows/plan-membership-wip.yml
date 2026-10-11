@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   open-notification-upgrade-mysql:
-    name: Populated V40 to V41 whole notification JAR retries on owned MySQL 8.4
+    name: Populated V40 to V42 whole notification JAR retries on owned MySQL 8.4
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -186,7 +186,7 @@ jobs:
           retention-days: 30
 
   open-notification-jar:
-    name: Populated V40 to V41 notification JAR HTTP and durable restart
+    name: Populated V40 to V42 notification JAR HTTP and durable restart
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -263,7 +263,7 @@ jobs:
           retention-days: 30
 
   publication-upgrade-mysql:
-    name: Nonempty V39 to current V41 publication HTTP and restart on owned MySQL 8.4
+    name: Nonempty V39 to current V42 publication HTTP and restart on owned MySQL 8.4
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -398,7 +398,7 @@ jobs:
           retention-days: 30
 
   membership-upgrade-mysql:
-    name: Populated V38 to current V41 JAR upgrade on owned MySQL 8.4
+    name: Populated V38 to current V42 JAR upgrade on owned MySQL 8.4
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -426,7 +426,7 @@ jobs:
         run: |
           (cd target/cp110-v38-source && bash mvnw -B -DskipTests package)
           node scripts/record-plan-membership-upgrade-baseline.cjs
-      - name: Execute nonempty original V38 to fresh V41 on owned MySQL
+      - name: Execute nonempty original V38 to fresh V42 on owned MySQL
         shell: bash
         run: |
           set -o pipefail
@@ -500,6 +500,12 @@ jobs:
           set -o pipefail
           mkdir -p target/oncall-open-notification-mysql-it
           bash mvnw -B -Duser.timezone=UTC -Dopspilot.mysql.it.enabled=true -Dtest=MySqlOnCallOpenNotificationIntegrationTest test 2>&1 | tee target/oncall-open-notification-mysql-it/maven.log
+      - name: Preserve populated V41 five notification states through V42 on a second owned MySQL
+        shell: bash
+        run: |
+          set -o pipefail
+          bash mvnw -B -Duser.timezone=UTC -Dopspilot.mysql.it.enabled=true -Dtest=MySqlOpenNotificationRedriveMigrationTest test 2>&1 | tee target/oncall-open-notification-mysql-it/migration.log
+          node scripts/verify-oncall-open-notification-redrive-migration.cjs
       - name: Verify exact cases observed HTTP receipts fencing and pool shutdown
         run: node scripts/verify-oncall-open-notifications.cjs
       - uses: actions/upload-artifact@v5
@@ -509,4 +515,5 @@ jobs:
           path: |
             target/oncall-open-notification-mysql-it/
             target/surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOnCallOpenNotificationIntegrationTest.xml
+            target/surefire-reports/TEST-org.trigger.opspilot.oncall.MySqlOpenNotificationRedriveMigrationTest.xml
           retention-days: 30

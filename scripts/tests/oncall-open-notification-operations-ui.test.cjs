@@ -2,7 +2,7 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const {verify}=require('../verify-oncall-open-notification-operations-ui-evidence.cjs');
 // Replay actual archived evidence: not another browser run or a MySQL UI proof.
 function fixture(){const dir=path.resolve(__dirname,'../../docs/assets/v1.7-cp121/final-operations-ui');return{r:JSON.parse(fs.readFileSync(dir+'/result.json','utf8')),read:name=>fs.readFileSync(dir+'/'+name)};}
-const run=f=>verify(f.r,f.read),rejects=changes=>{for(const change of changes){const f=fixture();change(f);assert.throws(()=>run(f));}};
+const run=f=>verify(f.r,f.read,41),rejects=changes=>{for(const change of changes){const f=fixture();change(f);assert.throws(()=>run(f));}};
 test('actual operations UI raw evidence independently proves twelve bounded cases',()=>{const p=run(fixture());assert.equal(p.cases,12);assert.equal(p.actualAuthenticatedReceiver503,1);assert.equal(p.browserBusinessPosts,0);assert.equal(p.ownMysqlUiVerified,false);});
 test('old page incomplete cases or runtime errors cannot substitute current UI',()=>rejects([f=>f.r.before=true,f=>f.r.status='FAIL',f=>f.r.cases.pop(),f=>f.r.cases[0].name='invented',f=>f.r.pageErrors.push('runtime')]));
 test('read-only panel must not auto-read mutate or accept human claim',()=>rejects([f=>f.r.browserPosts.push('/api/v1/on-call/open-handoffs/1/claim'),f=>f.r.cases[0].automaticReads=1,f=>f.r.cases[1].posts=1,f=>f.r.finalSql.requests[0].claimedBy=1,f=>f.r.cases[0].noFakeZero=false]));

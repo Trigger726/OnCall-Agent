@@ -1,7 +1,7 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const {verify}=require('../verify-oncall-open-notification-operations.cjs'),dir=path.resolve(__dirname,'../../docs/assets/v1.7-cp120/selected');
 const fixture=()=>({log:fs.readFileSync(dir+'/cp120-selected-final.log','utf8'),xml:fs.readFileSync(dir+'/TEST-OnCallOpenNotificationOperationsIntegrationTest.xml','utf8')});
-const run=f=>verify(f.log,f.xml,false),reject=(search,replacement)=>{const f=fixture();assert.ok(f.xml.includes(search));f.xml=f.xml.replace(search,replacement);assert.throws(()=>run(f));};
+const run=f=>verify(f.log,f.xml,false,41),reject=(search,replacement)=>{const f=fixture();assert.ok(f.xml.includes(search));f.xml=f.xml.replace(search,replacement);assert.throws(()=>run(f));};
 test('actual owned H2 operational evidence seven cases independently replays',()=>{const p=run(fixture());assert.equal(p.executed,7);assert.equal(p.authenticatedReceiverHttp,3);assert.equal(p.busyRejectedDelta,100);assert.equal(p.frontendQueuePageVerified,false);});
 test('own MySQL opt-in cannot be replaced by H2 or skipped JUnit',()=>{const f=fixture();assert.throws(()=>verify(f.log,f.xml,true));reject('failures="0"','failures="1"');reject('errors="0"','errors="1"');});
 test('actual denied roles and immutable events are required',()=>{reject('"deniedRoles":4','"deniedRoles":0');reject('"originalEventsUnchanged":true','"originalEventsUnchanged":false');});

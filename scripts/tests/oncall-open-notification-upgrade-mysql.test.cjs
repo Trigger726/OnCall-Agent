@@ -5,13 +5,13 @@ function fixture(){
   // Explicitly synthetic MySQL gate shape derived from actual H2: never a MySQL execution claim.
   const folder=path.resolve(__dirname,'../../docs/assets/v1.7-cp118/final-notification-jar'),r=JSON.parse(fs.readFileSync(folder+'/result.json','utf8')),files={};
   const identity={product:'MySQL',version:'8.4.11',schema:'opspilot_notification_upgrade_012345abcdef',serverUuid:'01234567-0123-4567-89ab-0123456789ab'};
-  r.databaseMode='MYSQL_TESTCONTAINER';r.mysqlSchema=identity.schema;
+  require('./v42-gate-fixture.cjs').toV42(r);r.databaseMode='MYSQL_TESTCONTAINER';r.mysqlSchema=identity.schema;
   for(const s of r.sqlFixtures){Object.assign(s,{actualProduct:'MySQL',actualVersion:identity.version,schema:identity.schema,serverUuid:identity.serverUuid,ownerConfirmed:true});s.history=s.history.filter(h=>h.version!==null);s.successfulHistoryRows=s.migrationCount;}
   const [old,upgraded,disabled,queued,retry,delivered,final]=r.sqlFixtures;r.cases[0].before=old;r.cases[1].upgraded=upgraded;r.cases[1].disabledSql=disabled;r.cases[2].queuedSql=queued;r.cases[3].retrySql=retry;r.cases[4].deliveredSql=delivered;r.cases[6].final=final;
-  for(let i=1;i<=7;i++){const text=fs.readFileSync(folder+'/jar-'+i+'.log','utf8').replace(/Database: jdbc:h2:file:[^\r\n]+\(H2 2\.2\)/g,'Database: jdbc:mysql://localhost:33101/'+identity.schema+' (MySQL 8.4)').replaceAll('schema "public"','schema `'+identity.schema+'`');files['jar-'+i+'.log']=text;r.completeJarLogs[i-1].sha256=sha(text);}
+  for(let i=1;i<=7;i++){const text=fs.readFileSync(folder+'/jar-'+i+'.log','utf8').replace(/Database: jdbc:h2:file:[^\r\n]+\(H2 2\.2\)/g,'Database: jdbc:mysql://localhost:33101/'+identity.schema+' (MySQL 8.4)').replaceAll('version v41','version v42').replaceAll(': 41',': 42').replaceAll('schema "public"','schema `'+identity.schema+'`');files['jar-'+i+'.log']=text;r.completeJarLogs[i-1].sha256=sha(text);}
   const p={source:oldSource,jarSha256:r.oldJarSha256,cleanTrackedCheckout:true,versionedMigrationFiles:40};
   const read=name=>name==='old-v40-jar-provenance.json'?JSON.stringify(p):/^sql-\d+\.log$/.test(name)?JSON.stringify(r.sqlFixtures[Number(name.match(/\d+/)[0])]):files[name];
-  const audit={status:'PASS',database:identity,ownedContainerStopped:true,twoScopedPortsVerifiedFree:true,recordedJvmPidsVerifiedAbsent:true,finalJdbcCounts:{versionedMigrations:41,requests:4,humanClaims:1,operations:1,publications:4,memberOperations:5,notifications:2,delivered:1,skipped:1,attempts:3}};
+  const audit={status:'PASS',database:identity,ownedContainerStopped:true,twoScopedPortsVerifiedFree:true,recordedJvmPidsVerifiedAbsent:true,finalJdbcCounts:{versionedMigrations:42,requests:4,humanClaims:1,operations:1,publications:4,memberOperations:5,notifications:2,delivered:1,skipped:1,attempts:3}};
   const markers='OPEN_NOTIFICATION_UPGRADE_DATABASE '+JSON.stringify(identity)+'\nOPEN_NOTIFICATION_UPGRADE_CONTAINER_STOPPED {"stopped":true}\n';
   const xml='<testsuite name="'+gate.suite+'" tests="1" failures="0" errors="0" skipped="0"><testcase name="'+gate.testName+'" classname="'+gate.suite+'"><system-out><![CDATA['+markers+']]></system-out></testcase></testsuite>';
   return{r,files,read,audit,p,xml,log:markers+'[INFO] BUILD SUCCESS\n'};

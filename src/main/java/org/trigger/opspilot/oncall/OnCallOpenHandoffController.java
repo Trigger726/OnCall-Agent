@@ -20,7 +20,8 @@ public class OnCallOpenHandoffController {
     private final OnCallOpenHandoffService service;
     private final OnCallOpenHandoffRecipients recipients;
     private final OnCallOpenNotifications notifications;
-    public OnCallOpenHandoffController(OnCallOpenHandoffService service, OnCallOpenHandoffRecipients recipients,OnCallOpenNotifications notifications) { this.service = service; this.recipients = recipients; this.notifications=notifications; }
+    private final OnCallOpenNotificationRedrive redrive;
+    public OnCallOpenHandoffController(OnCallOpenHandoffService service, OnCallOpenHandoffRecipients recipients,OnCallOpenNotifications notifications,OnCallOpenNotificationRedrive redrive) { this.service = service; this.recipients = recipients; this.notifications=notifications;this.redrive=redrive; }
 
     @GetMapping
     public ApiResponse<OnCallOpenHandoffService.ListView> list(@RequestParam(required=false) Long scheduleId,
@@ -36,6 +37,13 @@ public class OnCallOpenHandoffController {
     public ApiResponse<OnCallOpenHandoffRecipients.View> publication(@PathVariable long id) { return ApiResponse.ok(recipients.get(id)); }
     @GetMapping("/{id}/notifications")
     public ApiResponse<OnCallOpenNotifications.ListView> notifications(@PathVariable long id) { return ApiResponse.ok(notifications.list(id)); }
+
+    @PostMapping("/{id}/notifications/{notificationId}/redrives")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
+    public ApiResponse<OnCallOpenNotificationRedrive.Result> redrive(@PathVariable long id,@PathVariable long notificationId,
+            @Valid @RequestBody Operation body,@AuthenticationPrincipal UserPrincipal user,HttpServletRequest request) {
+        return ApiResponse.ok(redrive.retry(id,notificationId,new OnCallOpenNotificationRedrive.Command(body.version(),body.operationKey(),body.reason()),user.id(),request.getRemoteAddr()));
+    }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER','ON_CALL')")

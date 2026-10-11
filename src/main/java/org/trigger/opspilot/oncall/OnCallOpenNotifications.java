@@ -84,24 +84,27 @@ public class OnCallOpenNotifications {
                     UPDATE oncall_open_handoff_notification SET
                       last_error_code=CASE WHEN status='CLAIMED' THEN 'LEASE_EXPIRED' ELSE 'ATTEMPTS_EXHAUSTED' END,
                       status='FAILED',version=version+1,lease_token=NULL,lease_until=NULL
-                    WHERE id=:id AND attempts>=:max AND ((status='CLAIMED' AND lease_until<=:now) OR (status='PENDING' AND next_attempt_at<=:now))
+                    WHERE id=:id AND attempts-cycle_start_attempts>=:max AND ((status='CLAIMED' AND lease_until<=:now) OR (status='PENDING' AND next_attempt_at<=:now))
                     """).param("id",id).param("now",at).param("max",properties.maxAttempts()).update();
             if(exhausted==1){count++;continue;}
             int claimed=jdbc.sql("""
                     UPDATE oncall_open_handoff_notification SET status='CLAIMED',version=version+1,attempts=attempts+1,lease_token=:token,lease_until=:until
-                    WHERE id=:id AND attempts<:max AND ((status='PENDING' AND next_attempt_at<=:now) OR (status='CLAIMED' AND lease_until<=:now))
+                    WHERE id=:id AND attempts-cycle_start_attempts<:max AND ((status='PENDING' AND next_attempt_at<=:now) OR (status='CLAIMED' AND lease_until<=:now))
                     """).param("id",id).param("max",properties.maxAttempts()).param("now",at).param("token",token).param("until",at.plus(properties.lease())).update();
             if(claimed!=1)continue;
-            count++;deliver(view(id),token);
+            var attempt=jdbc.sql("SELECT * FROM oncall_open_handoff_notification WHERE id=:id").param("id",id)
+                    .query((rs,n)->new Attempt(mapper.mapRow(rs,n),rs.getInt("cycle_start_attempts"))).single();
+            count++;deliver(attempt,token);
         }
         return count;
     }
 
-    private void deliver(View row,String token) {
+    private void deliver(Attempt attempt,String token) {
+        var row=attempt.row();int cycleAttempts=row.attempts()-attempt.cycleStart();
         // Observation immediately before building the real HTTP request; no SQL transaction is held over the network.
         // Revocation after this observation cannot be made atomic with a third-party HTTP receiver.
         if(!recipients.get(row.handoffId()).eligibleOriginalRecipientIds().contains(row.recipientId())){
-            settle(row,token,"SKIPPED",null,"NO_LONGER_ELIGIBLE");return;
+            settle(row,token,"SKIPPED",null,"NO_LONGER_ELIGIBLE",cycleAttempts);return;
         }
         var sendUntil=now().plus(properties.connectTimeout()).plus(properties.readTimeout());
         var payload=jdbc.sql("SELECT payload_json FROM oncall_open_handoff_notification WHERE id=:id AND status='CLAIMED' AND lease_token=:token AND lease_until>:until")
@@ -116,15 +119,15 @@ public class OnCallOpenNotifications {
             try(var body=response.body()){status=response.statusCode();} // No unbounded response body or sensitive provider text retained.
         }catch(InterruptedException e){Thread.currentThread().interrupt();code="TRANSPORT_INTERRUPTED";}
         catch(Exception e){code="TRANSPORT_ERROR";}
-        if(status!=null&&status>=200&&status<300){settle(row,token,"DELIVERED",status,null);return;}
+        if(status!=null&&status>=200&&status<300){settle(row,token,"DELIVERED",status,null,cycleAttempts);return;}
         if(code==null)code="HTTP_"+status;
         boolean permanent=status!=null&&status>=300&&status<500&&status!=429;
-        settle(row,token,permanent||row.attempts()>=properties.maxAttempts()?"FAILED":"PENDING",status,code);
+        settle(row,token,permanent||cycleAttempts>=properties.maxAttempts()?"FAILED":"PENDING",status,code,cycleAttempts);
     }
 
-    private void settle(View row,String token,String state,Integer http,String code) {
+    private void settle(View row,String token,String state,Integer http,String code,int cycleAttempts) {
         var at=now();var delay=properties.retryBaseDelay();
-        for(int i=1;i<row.attempts()&&delay.compareTo(properties.retryMaxDelay())<0;i++)delay=delay.multipliedBy(2);
+        for(int i=1;i<cycleAttempts&&delay.compareTo(properties.retryMaxDelay())<0;i++)delay=delay.multipliedBy(2);
         if(delay.compareTo(properties.retryMaxDelay())>0)delay=properties.retryMaxDelay();
         jdbc.sql("""
                 UPDATE oncall_open_handoff_notification SET status=:state,version=version+1,last_http_status=:http,last_error_code=:code,
@@ -133,7 +136,8 @@ public class OnCallOpenNotifications {
                 """).param("id",row.id()).param("token",token).param("state",state).param("http",http).param("code",code)
                 .param("now",at).param("next",at.plus(delay)).update(); // A stale lease can never overwrite a newer worker's receipt.
     }
-    private View view(long id){return jdbc.sql("SELECT * FROM oncall_open_handoff_notification WHERE id=:id").param("id",id).query(mapper).single();}
+    private View view(long id){return view(id,false);}
+    View view(long id,boolean lock){return jdbc.sql("SELECT * FROM oncall_open_handoff_notification WHERE id=:id"+(lock?" FOR UPDATE":"")).param("id",id).query(mapper).single();}
     private LocalDateTime now(){return jdbc.sql("SELECT CURRENT_TIMESTAMP(6)").query((rs,n)->rs.getObject(1,LocalDateTime.class)).single();}
     private static final RowMapper<View> mapper=(rs,n)->new View(rs.getLong("id"),rs.getLong("handoff_id"),rs.getInt("event_version"),rs.getLong("recipient_id"),
             rs.getString("delivery_key"),rs.getString("status"),rs.getInt("version"),rs.getInt("attempts"),rs.getObject("next_attempt_at",LocalDateTime.class),
@@ -144,4 +148,5 @@ public class OnCallOpenNotifications {
     public record View(long id,long handoffId,int eventVersion,long recipientId,String deliveryKey,String status,int version,int attempts,
                        LocalDateTime nextAttemptAt,LocalDateTime leaseUntil,Integer lastHttpStatus,String lastErrorCode,LocalDateTime deliveredAt) {}
     public record ListView(boolean adapterImplemented,boolean enabled,LocalDateTime databaseNow,List<View> deliveries) {}
+    private record Attempt(View row,int cycleStart) {}
 }

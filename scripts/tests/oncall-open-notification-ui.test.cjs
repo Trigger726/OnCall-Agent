@@ -2,7 +2,7 @@ const test=require('node:test'),assert=require('node:assert/strict'),fs=require(
 const {verify}=require('../verify-oncall-open-notification-ui-evidence.cjs');
 // Replay actual archived local evidence; these gate tests are not another browser execution.
 function fixture(){const dir=path.resolve(__dirname,'../../docs/assets/v1.7-cp119/final-notification-ui');return{r:JSON.parse(fs.readFileSync(dir+'/result.json','utf8')),read:name=>fs.readFileSync(dir+'/'+name)};}
-const run=f=>verify(f.r,f.read),rejects=changes=>{for(const change of changes){const f=fixture();change(f);assert.throws(()=>run(f));}};
+const run=f=>verify(f.r,f.read,41),rejects=changes=>{for(const change of changes){const f=fixture();change(f);assert.throws(()=>run(f));}};
 test('actual notification UI raw evidence independently proves eleven scoped cases',()=>{const p=run(fixture());assert.equal(p.cases,11);assert.equal(p.browserBusinessPosts,0);assert.equal(p.actualConfiguredReceiverHttp,4);assert.equal(p.noAutomaticHumanClaim,true);});
 test('archived baseline missing case and page errors cannot substitute current UI',()=>rejects([f=>f.r.before=true,f=>f.r.cases.pop(),f=>f.r.cases[0].name='invented',f=>f.r.pageErrors.push('runtime'),f=>f.r.status='FAIL']));
 test('UI posts or automatic human acceptance reject technical delivery evidence',()=>rejects([f=>f.r.browserPosts.push('/api/v1/on-call/open-handoffs/1/claim'),f=>f.r.cases[3].posts=1,f=>f.r.sqlFixtures[0].requests[0].claimedBy=1,f=>f.r.cases[5].requestStillOpen=false]));

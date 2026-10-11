@@ -16,8 +16,9 @@ test('missing implementation enabled time array or contradictory delivery metada
   for(const change of [f=>delete f.enabled,f=>f.adapterImplemented='true',f=>f.databaseNow='2026-02-30T10:00:00',f=>f.deliveries=null,f=>f.deliveries[0].leaseUntil='2026-10-11T10:00:30',f=>f.deliveries[0].deliveredAt='2026-10-11T10:00:00',f=>f.deliveries[0].eventVersion=1]){const f=facts();change(f);assert.throws(()=>parse(f))}
 })
 test('cross-request duplicate recipient key or invalid versions cannot render as current facts',()=>{
-  for(const change of [f=>f.deliveries[0].handoffId=5,f=>f.deliveries.push({...row(),id:2}),f=>f.deliveries[0].version=-1,f=>f.deliveries[0].attempts=11,f=>f.deliveries[0].deliveryKey='bad',f=>f.deliveries[0].status='unknown',f=>f.deliveries[0].lastErrorCode='secret provider text']){const f=facts();change(f);assert.throws(()=>parse(f))}
+  for(const change of [f=>f.deliveries[0].handoffId=5,f=>f.deliveries.push({...row(),id:2}),f=>f.deliveries[0].version=-1,f=>f.deliveries[0].attempts=2147483648,f=>f.deliveries[0].deliveryKey='bad',f=>f.deliveries[0].status='unknown',f=>f.deliveries[0].lastErrorCode='secret provider text']){const f=facts();change(f);assert.throws(()=>parse(f))}
 })
+test('lifetime attempts above ten survive explicit redrive without claiming delivery',()=>{const f=facts();f.deliveries[0].attempts=11;assert.equal(parse(f).deliveries[0].attempts,11);assert.match(notifications.openDeliveryMeaning({...row(),status:'FAILED'}),/累计尝试不会清零/)})
 test('delivered requires actual 2xx attempt timestamp with no lease or error',()=>{
   const delivered=()=>{const f=facts();Object.assign(f.deliveries[0],{status:'DELIVERED',attempts:1,lastHttpStatus:200,deliveredAt:'2026-10-11T10:00:01'});return f}
   assert.equal(parse(delivered()).deliveries[0].lastHttpStatus,200)

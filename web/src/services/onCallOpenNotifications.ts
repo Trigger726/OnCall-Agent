@@ -20,7 +20,7 @@ export function parseOpenNotificationFacts(value:unknown,handoffId:number):OpenN
   if(typeof facts.adapterImplemented!=='boolean'||typeof facts.enabled!=='boolean'||!facts.adapterImplemented&&facts.enabled||!clock(facts.databaseNow)||!Array.isArray(facts.deliveries)||facts.deliveries.length>500)throw invalid()
   const ids=new Set<number>(),recipients=new Set<number>(),keys=new Set<string>()
   const deliveries=facts.deliveries.map(row=>{
-    if(!row||![row.id,row.recipientId].every(id)||row.handoffId!==handoffId||row.eventVersion!==0||!uuid.test(row.deliveryKey??'')||!integer(row.version)||!integer(row.attempts)||row.attempts>10
+    if(!row||![row.id,row.recipientId].every(id)||row.handoffId!==handoffId||row.eventVersion!==0||!uuid.test(row.deliveryKey??'')||!integer(row.version)||!integer(row.attempts)
       ||!['PENDING','CLAIMED','DELIVERED','FAILED','SKIPPED'].includes(row.status)||!clock(row.nextAttemptAt)||!nullableClock(row.leaseUntil)||!nullableClock(row.deliveredAt)
       ||!(row.lastHttpStatus===null||Number.isInteger(row.lastHttpStatus)&&row.lastHttpStatus>=100&&row.lastHttpStatus<=999)
       ||!(row.lastErrorCode===null||typeof row.lastErrorCode==='string'&&/^[A-Z][A-Z0-9_]{0,63}$/.test(row.lastErrorCode))
@@ -39,4 +39,4 @@ export async function readOpenNotifications(handoffId:number,session:CapturedSes
 }
 export const openNotificationClock=notificationClock
 export function openDeliveryLabel(row:OpenDelivery){return ({PENDING:row.attempts===0?'排队 · 尚未尝试':'等待自动重试',CLAIMED:'已领取发送租约',DELIVERED:'渠道技术成功 · 非接班',FAILED:'失败 · 自动重试已停止',SKIPPED:'发送条件不满足 · 已跳过'})[row.status]}
-export function openDeliveryMeaning(row:OpenDelivery){return ({PENDING:'仅为数据库排队状态，未证明渠道收到。再次尝试时间不是送达承诺。',CLAIMED:'租约已领取，技术结果尚未确认；页面不按浏览器时钟判断租约是否过期。',DELIVERED:'HTTP 2xx 仅是网关技术回执，不证明本人已读或自愿接班。',FAILED:'已停止自动重试；当前没有手工重投入口，不换新键再次发送。',SKIPPED:'原候选当前不满足发送条件；不改投后来授权的新人。'})[row.status]}
+export function openDeliveryMeaning(row:OpenDelivery){return ({PENDING:'仅为数据库排队状态，未证明渠道收到。再次尝试时间不是送达承诺。',CLAIMED:'租约已领取，技术结果尚未确认；页面不按浏览器时钟判断租约是否过期。',DELIVERED:'HTTP 2xx 仅是网关技术回执，不证明本人已读或自愿接班。',FAILED:'已停止本轮自动重试；管理员可通过显式重投 API 重新排队原事件。页面暂不提供重投操作，累计尝试不会清零。',SKIPPED:'原候选当前不满足发送条件；不改投后来授权的新人。'})[row.status]}

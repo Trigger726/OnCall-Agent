@@ -80,7 +80,7 @@ class MySqlOpenNotificationUpgradeHttpIntegrationTest {
                         Map.entry("attempts","SELECT SUM(attempts) FROM oncall_open_handoff_notification")).entrySet()) {
                     try(var rows=statement.executeQuery(entry.getValue())){assertThat(rows.next()).isTrue();counts.put(entry.getKey(),rows.getLong(1));}
                 }
-                assertThat(counts).containsExactlyInAnyOrderEntriesOf(Map.of("versionedMigrations",41L,"requests",4L,"humanClaims",1L,"operations",1L,"publications",4L,"memberOperations",5L,"notifications",2L,"delivered",1L,"skipped",1L,"attempts",3L));
+                assertThat(counts).containsExactlyInAnyOrderEntriesOf(Map.of("versionedMigrations",42L,"requests",4L,"humanClaims",1L,"operations",1L,"publications",4L,"memberOperations",5L,"notifications",2L,"delivered",1L,"skipped",1L,"attempts",3L));
                 audit.put("finalJdbcCounts",counts);
             }
             audit.put("recordedJvmPidsVerifiedAbsent",true);audit.put("twoScopedPortsVerifiedFree",true);

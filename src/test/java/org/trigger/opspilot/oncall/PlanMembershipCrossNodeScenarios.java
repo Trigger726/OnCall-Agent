@@ -68,8 +68,8 @@ abstract class PlanMembershipCrossNodeScenarios {
             now=LocalDateTime.parse(api(0,"/on-call/roster",admin,null,200,null).path("databaseNow").asText());
             assertThat(count("SELECT COUNT(*) FROM flyway_schema_history WHERE version='40' AND success=TRUE")).isEqualTo(1);
             assertThat(count("SELECT COUNT(*) FROM flyway_schema_history WHERE version='41' AND success=TRUE")).isEqualTo(1);
-            assertThat(count("SELECT COUNT(*) FROM flyway_schema_history WHERE version IS NOT NULL AND success=TRUE")).isEqualTo(41);
-            receipt.put("versionedMigrations",41);
+            assertThat(count("SELECT COUNT(*) FROM flyway_schema_history WHERE version IS NOT NULL AND success=TRUE")).isEqualTo(42);
+            receipt.put("versionedMigrations",42);
             var member=memberCommand(0,true,true,false);long before=count("SELECT COUNT(*) FROM audit_log WHERE action='ONCALL_MEMBER_CHANGED'");
             var pair=concurrent("/on-call/schedules/1/members",admin,member);
             assertThat(pair.get(0).path("receipt").isObject()).isTrue();assertThat(pair.get(0).path("receipt")).isEqualTo(pair.get(1).path("receipt"));
