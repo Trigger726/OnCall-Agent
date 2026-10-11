@@ -1,5 +1,7 @@
 # OpsPilot
 
+双主题 UI 验收已提供[可重复运行入口](docs/acceptance/V1.7-ui-repeatable-qa.md)：独立临时 H2、44 个页面检查、10 条交互，消费既有 JAR，不覆盖 Demo、不改封版业务。
+
 最新视觉精修使用 [Anthropic 官方 frontend-design skill](docs/acceptance/V1.7-ui-claude-design.md)：连续指标栏、可读的业务文字、统一表格/控件尺度；保留 OKX 风格、双主题与 Codex 字体，不变更封版业务。
 
 UI 新增可记忆的浅色/深色主题与 Codex 默认系统字体栈，见[主题验收](docs/acceptance/V1.7-ui-themes.md)。登录页和控制台顶栏均可切换；业务封版不变。

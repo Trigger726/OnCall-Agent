@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+UI 工程收尾：[双主题可重复验收脚本与实际结果](V1.7-ui-repeatable-qa.md)。只补测试/说明，不变更精修视觉、封版业务或 CI。
+
 最新：[使用 Anthropic 官方 frontend-design skill 的 UI 精修](V1.7-ui-claude-design.md)，保留浅/深主题、Codex 默认字体、原业务及历史 Demo。
 
 最新 UI 增量：[浅色/深色切换、偏好记忆与 Codex 默认字体](V1.7-ui-themes.md)，保留已封版业务及原 OKX 深色 Demo。
