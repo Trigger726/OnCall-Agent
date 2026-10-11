@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+封版范围核对：[原始 OnCall 与成熟 Incident 能力差异审计](../BASELINE-CAPABILITY-AUDIT.md)。静态来源/已有证据对照，不是新一轮原版模型/检索 A/B 或功能回补。
+
 当前版本和启动入口见[封版交付指南](../releases/V1.7-DELIVERY.md)。以下报告按各自证据范围阅读，旧的“待验/待封版”不重新开启业务工作。
 
 UI 工程收尾：[双主题可重复验收脚本与实际结果](V1.7-ui-repeatable-qa.md)。只补测试/说明，不变更精修视觉、封版业务或 CI。
