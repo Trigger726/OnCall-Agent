@@ -61,4 +61,20 @@ class AssistantCitationGuardTest {
         assertThatThrownBy(() -> AssistantCitationGuard.validate(REF + "\nrunbook:phantom:v1#chunk-0", ALLOWED)).isInstanceOf(ApiException.class);
         AssistantCitationGuard.validate("[" + REF + "].", ALLOWED);
     }
+
+    @Test void metricAndLogPrefixesShouldPreserveEverySplitWithoutAcceptingWrongSourceOrSuffix() {
+        var refs = Set.of("metric:prometheus-metrics:0", "log:loki-logs:0:0:123456");
+        String content = "İ [metric:prometheus-metrics:0]，[log:loki-logs:0:0:123456]🙂";
+        for (int split = 0; split <= content.length(); split++) {
+            var output = new StringBuilder(); var guard = new AssistantCitationGuard(refs, output::append);
+            guard.accept(content.substring(0, split)); guard.accept(content.substring(split)); guard.finish();
+            assertThat(output.toString()).isEqualTo(content);
+        }
+        for (String bad : new String[]{"metric:local-metrics:0", "metric:prometheus-metrics:0evil", "log:loki-logs:0:0:123457", "LOG:loki-logs:0:0:123456", "metric:", "log:"}) for (int split = 0; split <= bad.length(); split++) {
+            var output = new StringBuilder(); var guard = new AssistantCitationGuard(refs, output::append); int point = split;
+            assertThatThrownBy(() -> { guard.accept("事实：" + bad.substring(0, point)); guard.accept(bad.substring(point)); guard.finish(); }).isInstanceOf(ApiException.class);
+            assertThat(output.toString()).isEqualTo("事实：");
+        }
+    }
+
 }

@@ -42,6 +42,7 @@ class AssistantRunbookIntegrationTest {
     @Autowired AgentRunQueryService agentRuns;
     @Autowired TransactionTemplate transactions;
     @Autowired AssistantRequestStore requests;
+    @Autowired AssistantObservationService observations;
     long owner, session;
 
     @BeforeEach void session() {
@@ -252,7 +253,7 @@ class AssistantRunbookIntegrationTest {
     }
 
     private AssistantService withAi(AssistantAiService ai) {
-        return new AssistantService(jdbc, json, Optional.of(ai), agentRuns, authorization, transactions, requests, runbooks);
+        return new AssistantService(jdbc, json, Optional.of(ai), agentRuns, authorization, transactions, requests, runbooks, observations);
     }
 
     private long searches() {

@@ -20,8 +20,13 @@ public class LogsProviderRouter {
     }
 
     public LogsProvider.LogsResult query(LogsProvider.LogsQuery query) {
+        return query(query, () -> {});
+    }
+
+    public LogsProvider.LogsResult query(LogsProvider.LogsQuery query, Runnable checkpoint) {
         List<String> warnings = new ArrayList<>();
         for (LogsProvider provider : providers) {
+            checkpoint.run(); // Outside the provider catch: cancellation must stop failover too.
             if (!provider.available()) continue;
             try {
                 LogsProvider.LogsResult result = tracing.traceProviderQuery(

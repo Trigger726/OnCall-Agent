@@ -1,0 +1,224 @@
+{
+  "status": "PASS",
+  "out": "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-observations-aB6vaf",
+  "question": "查看当前 Incident 的最新指标和日志",
+  "aiEnabled": false,
+  "realCloud": false,
+  "userDatabaseModified": false,
+  "browser": "Existing Playwright 1.63.0 + Chrome; Browser plugin unavailable",
+  "providerCalls": [
+    {
+      "run": "after",
+      "mode": "samples",
+      "path": "/api/v1/query",
+      "params": {
+        "query": "up{job=\"APP-SETTLEMENT\"}",
+        "time": "1791732742"
+      }
+    },
+    {
+      "run": "after",
+      "mode": "samples",
+      "path": "/loki/api/v1/query_range",
+      "params": {
+        "query": "{resource_code=\"APP-SETTLEMENT\"}",
+        "start": "1791730942768414900",
+        "end": "1791732742768414900",
+        "limit": "20",
+        "direction": "backward"
+      }
+    },
+    {
+      "run": "after",
+      "mode": "samples",
+      "path": "/api/v1/query",
+      "params": {
+        "query": "up{job=\"APP-SETTLEMENT\"}",
+        "time": "1791732743"
+      }
+    },
+    {
+      "run": "after",
+      "mode": "samples",
+      "path": "/loki/api/v1/query_range",
+      "params": {
+        "query": "{resource_code=\"APP-SETTLEMENT\"}",
+        "start": "1791730943187241800",
+        "end": "1791732743187241800",
+        "limit": "20",
+        "direction": "backward"
+      }
+    },
+    {
+      "run": "after",
+      "mode": "empty",
+      "path": "/api/v1/query",
+      "params": {
+        "query": "up{job=\"APP-SETTLEMENT\"}",
+        "time": "1791732744"
+      }
+    },
+    {
+      "run": "after",
+      "mode": "empty",
+      "path": "/loki/api/v1/query_range",
+      "params": {
+        "query": "{resource_code=\"APP-SETTLEMENT\"}",
+        "start": "1791730944182017200",
+        "end": "1791732744182017200",
+        "limit": "20",
+        "direction": "backward"
+      }
+    },
+    {
+      "run": "after",
+      "mode": "failed",
+      "path": "/api/v1/query",
+      "params": {
+        "query": "up{job=\"APP-SETTLEMENT\"}",
+        "time": "1787103960"
+      }
+    },
+    {
+      "run": "after",
+      "mode": "failed",
+      "path": "/loki/api/v1/query_range",
+      "params": {
+        "query": "{resource_code=\"APP-SETTLEMENT\"}",
+        "start": "1787099520000000000",
+        "end": "1787103960000000000",
+        "limit": "20",
+        "direction": "backward"
+      }
+    }
+  ],
+  "providerErrors": [],
+  "runs": [
+    {
+      "name": "before",
+      "jar": "D:\\Codex\\国网\\央国企求职\\OpsPilot\\target\\opspilot-v1.8-assistant-grounding.jar",
+      "jarSha256": "69e59fa5ded26dd67c07290d5891c6d25869e81410516cd4943c66f250202efd",
+      "base": "http://127.0.0.1:9913",
+      "status": "PASS",
+      "screenshots": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-observations-aB6vaf\\before\\latest-light-1440.png",
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-observations-aB6vaf\\before\\latest-dark-390.png"
+      ],
+      "errors": [],
+      "assets": [
+        {
+          "file": "index.html",
+          "sha256": "84449974fdaabe2fec2e0b075bece5817d4218d3fd4099901d46a93d1da6068d"
+        },
+        {
+          "file": "favicon.svg",
+          "sha256": "40f017db2d6e9da7fbbc2235138455c4a39fb721a60f1f69504f98fabafb3471"
+        },
+        {
+          "file": "assets/theme.js",
+          "sha256": "f3066ab98bdef18e605d4c1a7a4a8257dd161a87d619b1ebb4c1fc2d69f505a3"
+        },
+        {
+          "file": "assets/index-C5QJvBlg.js",
+          "sha256": "9a8979483799c6a114b9de4547483ddf8b095430f5ebf6b8c81d0d7997acf670"
+        },
+        {
+          "file": "assets/index-CKb6ZeZO.css",
+          "sha256": "b12e842a50792cd5fd658372952b4d33894c47b420a0ab50e2250ac97264ff52"
+        }
+      ],
+      "latestCalls": 0,
+      "answer": "### 关联告警\n- **alert:1** 结算接口 P95 延迟超过 5 秒\n- **alert:2** Redis 连接池等待线程过高\n\n告警只代表观测现象，需要和变更、依赖及恢复验证结合。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n\n- **Kubernetes CrashLoopBackOff 处置** [runbook:kubernetes-crashloop:v1#chunk-0]\n原文片段：\n# Kubernetes CrashLoopBackOff 处置 Pod 反复重启、CrashLoopBackOff、OOMKilled、liveness probe 失败时，检查 previous logs、退出码、资源限制、探针和最近镜像变更；回滚后观察重启次数。\n\n- **Kafka Consumer Lag 处置** [runbook:kafka-consumer-lag:v1#chunk-0]\n原文片段：\n# Kafka Consumer Lag 处置 Kafka consumer lag、topic backlog、partition 消费落后时，检查 consumer group、rebalance、offset commit、处理耗时与分区倾斜；扩容前确认幂等，恢复后观察 lag 持续下降。\n\n- **MySQL 连接饱和处置** [runbook:mysql-connection-saturation:v1#chunk-0]\n原文片段：\n# MySQL 连接饱和处置 MySQL active connections、connection pool pending、too many connections 或 wait timeout 时，检查连接泄漏、慢 SQL、事务持有和 max_connections；优先限流或回滚异常版本。",
+      "operationalEvidence": [],
+      "streamEqualsSaved": true,
+      "replayWithoutProviderCall": true,
+      "normalGrounded": true,
+      "refreshPersisted": true,
+      "providerCalls": 0,
+      "shutdown": true,
+      "childExit": 0,
+      "portsFree": true
+    },
+    {
+      "name": "after",
+      "jar": "D:\\Codex\\国网\\央国企求职\\OpsPilot\\target\\opspilot-v1.8-assistant-observations.jar",
+      "jarSha256": "c56db7156f1278b519876759ead4a564d07cb1fb8ddcfc45de2e8d847581f856",
+      "base": "http://127.0.0.1:9913",
+      "status": "PASS",
+      "screenshots": [
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-observations-aB6vaf\\after\\latest-light-1440.png",
+        "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-observations-aB6vaf\\after\\latest-dark-390.png"
+      ],
+      "errors": [],
+      "assets": [
+        {
+          "file": "index.html",
+          "sha256": "84449974fdaabe2fec2e0b075bece5817d4218d3fd4099901d46a93d1da6068d"
+        },
+        {
+          "file": "favicon.svg",
+          "sha256": "40f017db2d6e9da7fbbc2235138455c4a39fb721a60f1f69504f98fabafb3471"
+        },
+        {
+          "file": "assets/theme.js",
+          "sha256": "f3066ab98bdef18e605d4c1a7a4a8257dd161a87d619b1ebb4c1fc2d69f505a3"
+        },
+        {
+          "file": "assets/index-C5QJvBlg.js",
+          "sha256": "9a8979483799c6a114b9de4547483ddf8b095430f5ebf6b8c81d0d7997acf670"
+        },
+        {
+          "file": "assets/index-CKb6ZeZO.css",
+          "sha256": "b12e842a50792cd5fd658372952b4d33894c47b420a0ab50e2250ac97264ff52"
+        }
+      ],
+      "latestCalls": 2,
+      "answer": "### 关联告警\n- **alert:1** 结算接口 P95 延迟超过 5 秒\n- **alert:2** Redis 连接池等待线程过高\n\n告警只代表观测现象，需要和变更、依赖及恢复验证结合。\n\n### 只读指标 / 日志取证\n\nMETRIC · OK；来源：prometheus-metrics；资源：APP-SETTLEMENT\n时间窗：最新近 30 分钟 [2026-10-11T23:02:22.768414900 ～ 2026-10-11T23:32:22.768414900]\n- [metric:prometheus-metrics:0] 2026-10-11T23:32:21 · APP-SETTLEMENT · cp03_cpu_usage=83.25 raw; labels={api_key=***, job=APP-SETTLEMENT}\n提示：Prometheus 使用窗口末端 instant query，非全窗口时序/趋势统计\n\nLOG · OK；来源：loki-logs；资源：APP-SETTLEMENT\n时间窗：最新近 30 分钟 [2026-10-11T23:02:22.768414900 ～ 2026-10-11T23:32:22.768414900]\n- [log:loki-logs:0:0:1791732741768414900] 2026-10-11T23:32:21.768414900 · APP-SETTLEMENT · [ERROR] settlement; trace=cp03-trace; CP03 controlled timeout token=***; metadata={traceId=cp03-trace, resource_code=APP-SETTLEMENT, job=settlement, level=ERROR, password=***, token=***\n提示：最多 20 条脱敏样本，非日志总体计数；Provider 脱敏字段=3\n仅为只读、有限样本；未执行修复，也未确认根因。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n\n- **Kubernetes CrashLoopBackOff 处置** [runbook:kubernetes-crashloop:v1#chunk-0]\n原文片段：\n# Kubernetes CrashLoopBackOff 处置 Pod 反复重启、CrashLoopBackOff、OOMKilled、liveness probe 失败时，检查 previous logs、退出码、资源限制、探针和最近镜像变更；回滚后观察重启次数。\n\n- **Kafka Consumer Lag 处置** [runbook:kafka-consumer-lag:v1#chunk-0]\n原文片段：\n# Kafka Consumer Lag 处置 Kafka consumer lag、topic backlog、partition 消费落后时，检查 consumer group、rebalance、offset commit、处理耗时与分区倾斜；扩容前确认幂等，恢复后观察 lag 持续下降。\n\n- **MySQL 连接饱和处置** [runbook:mysql-connection-saturation:v1#chunk-0]\n原文片段：\n# MySQL 连接饱和处置 MySQL active connections、connection pool pending、too many connections 或 wait timeout 时，检查连接泄漏、慢 SQL、事务持有和 max_connections；优先限流或回滚异常版本。",
+      "operationalEvidence": [
+        {
+          "ref": "metric:prometheus-metrics:0",
+          "type": "METRIC",
+          "label": "cp03_cpu_usage",
+          "snapshot": {
+            "provider": "prometheus-metrics",
+            "window": "RECENT_30_MINUTES",
+            "windowStart": "2026-10-11T23:02:22.7684149",
+            "windowEnd": "2026-10-11T23:32:22.7684149",
+            "observedAt": "2026-10-11T23:32:21",
+            "resourceCode": "APP-SETTLEMENT",
+            "text": "cp03_cpu_usage=83.25 raw; labels={api_key=***, job=APP-SETTLEMENT}"
+          }
+        },
+        {
+          "ref": "log:loki-logs:0:0:1791732741768414900",
+          "type": "LOG",
+          "label": "ERROR · settlement",
+          "snapshot": {
+            "provider": "loki-logs",
+            "window": "RECENT_30_MINUTES",
+            "windowStart": "2026-10-11T23:02:22.7684149",
+            "windowEnd": "2026-10-11T23:32:22.7684149",
+            "observedAt": "2026-10-11T23:32:21.7684149",
+            "resourceCode": "APP-SETTLEMENT",
+            "text": "[ERROR] settlement; trace=cp03-trace; CP03 controlled timeout token=***; metadata={traceId=cp03-trace, resource_code=APP-SETTLEMENT, job=settlement, level=ERROR, password=***, token=***"
+          }
+        }
+      ],
+      "streamEqualsSaved": true,
+      "replayWithoutProviderCall": true,
+      "normalGrounded": true,
+      "refreshPersisted": true,
+      "unboundNoProvider": true,
+      "unsupportedNoProvider": true,
+      "auditorNoProvider": true,
+      "emptyNotHealth": true,
+      "providerFailoverDisclosed": true,
+      "fallbackAnswer": "### 关联告警\n- **alert:1** 结算接口 P95 延迟超过 5 秒\n- **alert:2** Redis 连接池等待线程过高\n\n告警只代表观测现象，需要和变更、依赖及恢复验证结合。\n\n### 只读指标 / 日志取证\n\nMETRIC · OK；来源：local-metrics；资源：APP-SETTLEMENT\n时间窗：Incident 故障窗口（不是实时） [2026-08-19T08:32 ～ 2026-08-19T09:46]\n- [metric:local-metrics:4] 2026-08-19T09:18 · MID-REDIS-01 · redis_pool_pending=84 threads; labels={cluster=settlement-redis}\n- [metric:local-metrics:3] 2026-08-19T09:18 · MID-REDIS-01 · redis_pool_active=120 connections; labels={cluster=settlement-redis, max=120}\n- [metric:local-metrics:2] 2026-08-19T09:18 · APP-SETTLEMENT · http_server_error_rate=0.073 ratio; labels={status=5xx, route=/api/settlements}\n- [metric:local-metrics:1] 2026-08-19T09:18 · APP-SETTLEMENT · http_request_duration_p95=6.8 s; labels={cluster=prod-east, route=/api/settlements}\n- [metric:local-metrics:5] 2026-08-19T09:17 · MID-REDIS-01 · redis_command_duration_p95=3.24 s; labels={command=GET, cluster=settlement-redis}\n提示：prometheus-metrics unavailable (ServiceUnavailable)\n\nLOG · OK；来源：local-logs；资源：APP-SETTLEMENT\n时间窗：Incident 故障窗口（不是实时） [2026-08-19T08:32 ～ 2026-08-19T09:46]\n- [log:local-logs:1] 2026-08-19T09:17:42 · APP-SETTLEMENT · [ERROR] SettlementController; trace=settle-8af03; 结算请求失败，下游 Redis 命令超时；token=***; metadata={status=500, route=/api/settlements}\n- [log:local-logs:2] 2026-08-19T09:17:41 · APP-SETTLEMENT · [WARN] RedisCheckoutRepository; trace=settle-8af03; 等待 Redis 连接超过 3000ms，pending=84; metadata={timeoutMs=3000, pending=84}\n- [log:local-logs:3] 2026-08-19T09:17:40 · MID-REDIS-01 · [WARN] LettucePoolMonitor; trace=settle-8af03; 连接池已达到上限，active=120 max=120 pending=84; metadata={active=120, pending=84, max=120}\n- [log:local-logs:4] 2026-08-19T09:16:55 · MID-REDIS-01 · [INFO] RedisClusterClient; trace=null; 节点 redis-settlement-02 健康检查成功，clientIp=10.20.8.*; metadata={node=redis-settlement-02}\n提示：loki-logs unavailable (ServiceUnavailable)\n提示：最多 20 条脱敏样本，非日志总体计数；Provider 脱敏字段=2\n仅为只读、有限样本；未执行修复，也未确认根因。\n\n### Runbook 检索依据\n检索引擎：BM25_LOCAL_V1；资料仅供验证，不代表已执行操作或已确认根因。\n\n- **应用接口超时排查手册** [runbook:legacy-runbook-1:v1#chunk-0]\n原文片段：\n1. 确认入口流量与 P95/P99；2. 检查下游依赖；3. 对照 2 小时内变更；4. 先限流或回滚再继续定位。\n\n- **认证错误率升高排查** [runbook:legacy-runbook-3:v1#chunk-0]\n原文片段：\n按客户端版本、错误码和发布批次聚合；核对 token 格式兼容；灰度开启兼容策略并观察错误率。\n\n- **Kubernetes CrashLoopBackOff 处置** [runbook:kubernetes-crashloop:v1#chunk-0]\n原文片段：\n# Kubernetes CrashLoopBackOff 处置 Pod 反复重启、CrashLoopBackOff、OOMKilled、liveness probe 失败时，检查 previous logs、退出码、资源限制、探针和最近镜像变更；回滚后观察重启次数。",
+      "providerCalls": 8,
+      "shutdown": true,
+      "childExit": 0,
+      "portsFree": true
+    }
+  ],
+  "providerPortFree": true
+}

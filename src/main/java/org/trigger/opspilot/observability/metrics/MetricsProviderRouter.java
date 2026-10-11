@@ -20,8 +20,13 @@ public class MetricsProviderRouter {
     }
 
     public MetricsProvider.MetricsResult query(MetricsProvider.MetricsQuery query) {
+        return query(query, () -> {});
+    }
+
+    public MetricsProvider.MetricsResult query(MetricsProvider.MetricsQuery query, Runnable checkpoint) {
         List<String> warnings = new ArrayList<>();
         for (MetricsProvider provider : providers) {
+            checkpoint.run(); // Outside the provider catch: cancellation must stop failover too.
             if (!provider.available()) continue;
             try {
                 MetricsProvider.MetricsResult result = tracing.traceProviderQuery(

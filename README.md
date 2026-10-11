@@ -1,6 +1,6 @@
 # OpsPilot
 
-当前业务增量：[V1.8 CP02 模型引用围栏与历史上下文权限](docs/acceptance/V1.8-checkpoint-02-assistant-grounding.md)，接续 [CP01 问题驱动 Runbook 检索](docs/acceptance/V1.8-checkpoint-01-assistant-runbook.md)。用户明确“继续吧”后恢复这条业务链路；V1.7 封版标签、OKX 双主题 UI 和历史 Demo 保持不变，不等于重新承诺全部历史路线。
+当前业务增量：[V1.8 CP03 助手真实指标/日志取证](docs/acceptance/V1.8-checkpoint-03-assistant-observations.md)，接续 [CP02 引用/历史权限](docs/acceptance/V1.8-checkpoint-02-assistant-grounding.md)与 [CP01 Runbook 问答](docs/acceptance/V1.8-checkpoint-01-assistant-runbook.md)。121 项相关测试、真实 Provider HTTP 和旧/新 Demo 页面对照通过；V1.7 标签、OKX 双主题 UI 与六个历史 Demo 保持，不称全目标 100%。
 
 V1.7 稳定交付：[封版版本、UI 分支与 Demo 启动指南](docs/releases/V1.7-DELIVERY.md)。UI 在 `ui/opspilot-okx-20261011`；下方旧 checkpoint 已折叠，不能当作当前待办。
 

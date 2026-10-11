@@ -8,10 +8,10 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
-/** Preserve native text while withholding an incomplete/unknown Runbook reference. */
+/** Preserve native text while withholding an incomplete/unknown retrieved reference. */
 final class AssistantCitationGuard implements Consumer<String> {
-    private static final String PREFIX = "runbook:";
-    private static final Pattern PREFIX_PATTERN = Pattern.compile(PREFIX, Pattern.CASE_INSENSITIVE);
+    private static final Set<String> PREFIXES = Set.of("runbook:", "metric:", "log:");
+    private static final Pattern PREFIX_PATTERN = Pattern.compile("runbook:|metric:|log:", Pattern.CASE_INSENSITIVE);
     private final Set<String> allowed;
     private final Consumer<String> output;
     private final StringBuilder pending = new StringBuilder();
@@ -42,15 +42,16 @@ final class AssistantCitationGuard implements Consumer<String> {
             if (start < 0) {
                 int keep = 0;
                 if (!complete) {
-                    for (int size = 1; size < PREFIX.length() && size <= lower.length(); size++) {
-                        if (lower.endsWith(PREFIX.substring(0, size))) keep = size;
+                    for (String prefix : PREFIXES) for (int size = 1; size < prefix.length() && size <= lower.length(); size++) {
+                        if (lower.endsWith(prefix.substring(0, size))) keep = Math.max(keep, size);
                     }
                 }
                 emit(pending.length() - keep);
                 return;
             }
+            int prefixLength = match.end() - match.start();
             if (start > 0) emit(start);
-            int end = PREFIX.length();
+            int end = prefixLength;
             while (end < pending.length() && referenceCharacter(pending.charAt(end))) end++;
             String reference = pending.substring(0, end);
             if (end == pending.length() && !complete && allowed.stream().anyMatch(item -> item.startsWith(reference))) return;
