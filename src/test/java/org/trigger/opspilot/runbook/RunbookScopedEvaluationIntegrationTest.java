@@ -17,8 +17,10 @@ import org.trigger.opspilot.common.ApiException;
         "spring.datasource.username=sa", "spring.datasource.password=", "spring.datasource.driver-class-name=org.h2.Driver",
         "spring.ai.dashscope.api-key=disabled", "opspilot.ai.enabled=false", "opspilot.runbook.semantic.enabled=false"
 })
+class RunbookScopedEvaluationIntegrationTest extends ScopedEvaluationScenarios {}
+
 @Transactional
-class RunbookScopedEvaluationIntegrationTest {
+abstract class ScopedEvaluationScenarios {
     @Autowired RunbookService runbooks;
     @Autowired RunbookRetrievalFeedbackService feedback;
     @Autowired JdbcClient jdbc;
