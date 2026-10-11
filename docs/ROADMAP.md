@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+用户指定的 [Claude frontend-design skill 精修](acceptance/V1.7-ui-claude-design.md)仅调整既有 UI 层级与尺度；不重新开启业务迭代。
+
 2026-10-11 用户追加的[浅色主题与 Codex 字体增量](acceptance/V1.7-ui-themes.md)限定于视觉层，不重新开启业务迭代。
 
 2026-10-11 用户已明确“先封版，然后优化 UI”。当前业务范围[冻结于 V1.7](releases/V1.7-SEALED.md)，只交付 [OKX 风格视觉增量](acceptance/V1.7-ui-okx.md)；不再自动扩项。下方“继续/待选择”均为历史计划，不是新的自动执行任务。

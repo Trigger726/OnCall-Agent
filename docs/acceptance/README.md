@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+最新：[使用 Anthropic 官方 frontend-design skill 的 UI 精修](V1.7-ui-claude-design.md)，保留浅/深主题、Codex 默认字体、原业务及历史 Demo。
+
 最新 UI 增量：[浅色/深色切换、偏好记忆与 Codex 默认字体](V1.7-ui-themes.md)，保留已封版业务及原 OKX 深色 Demo。
 
 2026-10-11 已执行用户“先封版，然后优化 UI”：见[封版记录](../releases/V1.7-SEALED.md)及[OKX 风格 UI 与新旧 Demo](V1.7-ui-okx.md)。业务冻结，以下“待选择/继续迭代”仅保留历史含义。

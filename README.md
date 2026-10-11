@@ -1,5 +1,7 @@
 # OpsPilot
 
+最新视觉精修使用 [Anthropic 官方 frontend-design skill](docs/acceptance/V1.7-ui-claude-design.md)：连续指标栏、可读的业务文字、统一表格/控件尺度；保留 OKX 风格、双主题与 Codex 字体，不变更封版业务。
+
 UI 新增可记忆的浅色/深色主题与 Codex 默认系统字体栈，见[主题验收](docs/acceptance/V1.7-ui-themes.md)。登录页和控制台顶栏均可切换；业务封版不变。
 
 已按用户要求[封版 V1.7](docs/releases/V1.7-SEALED.md)：标签 `opspilot-v1.7-sealed-20261011` 固定于 bb012bf。后续只做 [OKX 风格 UI 增量](docs/acceptance/V1.7-ui-okx.md)，保留原有业务、未提交改动与历史 Demo；不再自动追加功能。以下 checkpoint 状态按历史时点阅读。
