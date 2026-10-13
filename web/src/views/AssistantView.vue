@@ -6,6 +6,7 @@ import {
   Menu, MessageSquarePlus, PanelLeft, Play, Plus, Send, Sparkles, Trash2, Workflow, X,
 } from 'lucide-vue-next'
 import ChatMessage from '@/components/ChatMessage.vue'
+import WorkbenchBackdrop from '@/components/WorkbenchBackdrop.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
 import { api, formatTime, RequestError, type PageResponse } from '@/services/api'
 import { clearAgentInvestigationIdempotency, streamAgentInvestigation, subscribeAgentInvestigation } from '@/services/agentStream'
@@ -499,6 +500,7 @@ onBeforeUnmount(() => {
       <div v-if="mobileContextOpen" class="assistant-context-scrim" @click="mobileContextOpen = false" />
 
       <section class="assistant-conversation">
+        <WorkbenchBackdrop surface="conversation" />
         <header class="assistant-chat-head">
           <button class="icon-button assistant-mobile-sessions" title="打开会话列表" aria-label="打开会话列表" :aria-expanded="mobileSessionsOpen" @click="mobileContextOpen = false; mobileSessionsOpen = true"><PanelLeft :size="18" /></button>
           <div><strong>{{ active?.session.title ?? 'OnCall 助手' }}</strong><span v-if="active?.context">{{ active.context.incidentCode }} · {{ active.context.resourceName }}</span><span v-else>通用运维协作</span></div>
@@ -595,3 +597,14 @@ onBeforeUnmount(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.assistant-conversation { position: relative; isolation: isolate; }
+.assistant-conversation > :not(.workbench-backdrop) { position: relative; z-index: 1; }
+.assistant-chat-head, .assistant-composer-wrap { background: color-mix(in srgb, var(--surface) 95%, transparent); }
+.assistant-chat-actions { margin-left: 118px; }
+.assistant-message.assistant .assistant-message-body { padding: 14px 18px; border: 1px solid var(--line); border-radius: 8px; background: color-mix(in srgb, var(--surface) 95%, transparent); }
+.assistant-message.user .assistant-message-body { background: color-mix(in srgb, var(--surface-muted) 96%, transparent); }
+.assistant-suggestions button { background: color-mix(in srgb, var(--surface) 96%, transparent); }
+@media (max-width: 640px) { .assistant-chat-actions { margin-left: 44px; } .assistant-message.assistant .assistant-message-body { padding: 12px; } }
+</style>

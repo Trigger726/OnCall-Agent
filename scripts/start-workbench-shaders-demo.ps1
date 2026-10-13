@@ -1,7 +1,7 @@
 param([int]$Port=9900,[string]$JavaHome=$env:JAVA_HOME)
 $ErrorActionPreference='Stop'
 $demoRepoRoot=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
-$demoJarPath=Join-Path $demoRepoRoot 'target/opspilot-v1.8-workbench-misans.jar'
+$demoJarPath=Join-Path $demoRepoRoot 'target/opspilot-v1.8-ambient-motion-final.jar'
 if(-not (Test-Path -LiteralPath $demoJarPath)){throw 'Missing workbench UI demo JAR; see the UI acceptance report.'}
 if(-not $JavaHome){throw 'Set JAVA_HOME to JDK 21 before starting the demo.'}
 $demoJavaPath=Join-Path $JavaHome 'bin/java.exe'

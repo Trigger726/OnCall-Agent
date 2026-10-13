@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+最新用户指定视觉增量：[扩大流光覆盖与鼠标互动](acceptance/V1.8-ui-ambient-motion.md)。只扩展既有 UI，覆盖运行总览、登录/欢迎区域及 OnCall 助手空会话/实际对话；保留 MiSans，优化两主题配色、暂停和手机触控。不推进待验 CP07 或其他业务功能。
+
 最新用户指定字体：[小米 MiSans](acceptance/V1.8-ui-misans.md)。覆盖此前的 Codex 字体选择，保留 OKX 风格、双主题和 Shader 动效；仅替换 UI 字体并验证实际渲染，不扩大业务范围。
 
 用户指定 UI 已交付：[工作台 Shader 动效和 Codex 字体](acceptance/V1.8-ui-workbench-shaders.md)。仅前端，原生 Vue 效果、暂停/记忆/降级、双主题、字体实际验证；新 Demo 与已交付业务 JAR 的 771 个非静态条目相同，待验 CP07 检索改动保留但不混入 UI 分支。

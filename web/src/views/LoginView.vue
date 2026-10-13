@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Activity, ArrowRight, KeyRound, UserRound } from 'lucide-vue-next'
 import { auth } from '@/stores/auth'
 import ThemeToggle from '@/components/ThemeToggle.vue'
+import WorkbenchBackdrop from '@/components/WorkbenchBackdrop.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -34,6 +35,7 @@ async function submit() {
 
 <template>
   <main class="login-page">
+    <WorkbenchBackdrop surface="login" />
     <ThemeToggle class="login-theme-toggle" />
     <section class="login-brand-panel">
       <div class="login-brand"><Activity :size="22" /><strong>OpsPilot</strong></div>
@@ -57,3 +59,11 @@ async function submit() {
     </section>
   </main>
 </template>
+
+<style scoped>
+.login-page { isolation: isolate; }
+.login-brand-panel, .login-form-panel { position: relative; z-index: 1; background: transparent; }
+.login-form { background: color-mix(in srgb, var(--surface) 94%, transparent); border: 1px solid var(--line); border-radius: 12px; padding: 32px; }
+.login-theme-toggle { z-index: 3; }
+@media (max-width: 640px) { .login-form { padding: 24px 20px; } }
+</style>

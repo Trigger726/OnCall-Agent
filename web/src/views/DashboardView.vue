@@ -68,8 +68,8 @@ onMounted(load)
 
 <template>
   <div class="page-content dashboard-page">
+    <WorkbenchBackdrop />
     <section class="workbench-hero" aria-labelledby="workbench-title">
-      <WorkbenchBackdrop />
       <div class="workbench-intro">
         <h1 id="workbench-title">生产运行态势</h1>
         <p>告警、事故与资源健康的统一视图</p>
@@ -142,10 +142,13 @@ onMounted(load)
 </template>
 
 <style scoped>
-.workbench-hero { position: relative; isolation: isolate; min-height: 176px; margin-bottom: 22px; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.dashboard-page { position: relative; isolation: isolate; }
+.dashboard-page > :not(.workbench-backdrop) { position: relative; z-index: 1; }
+.dashboard-page :is(.content-panel, .metric-strip) { background: color-mix(in srgb, var(--surface) 91%, transparent); }
+.workbench-hero { position: relative; min-height: 260px; margin-bottom: 22px; border: 0; background: transparent; }
 .workbench-intro { position: relative; z-index: 1; padding: 26px 30px; width: fit-content; max-width: calc(100% - 130px); }
 .workbench-intro h1 { margin: 0; font-size: 28px; font-weight: 600; line-height: 1.25; letter-spacing: -.6px; }
 .workbench-intro p { margin: 9px 0 18px; color: var(--text-muted); font-size: 14px; line-height: 1.5; }
 .workbench-intro button { font-size: 12px; }
-@media (max-width: 640px) { .workbench-hero { min-height: 190px; margin-bottom: 16px; } .workbench-intro { padding: 22px 20px; max-width: 100%; } .workbench-intro h1 { font-size: 25px; } .workbench-intro p { font-size: 13px; } }
+@media (max-width: 640px) { .workbench-hero { min-height: 250px; margin-bottom: 16px; } .workbench-intro { padding: 68px 4px 22px; max-width: 100%; } .workbench-intro h1 { font-size: 25px; } .workbench-intro p { font-size: 13px; } }
 </style>

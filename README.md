@@ -1,5 +1,7 @@
 # OpsPilot
 
+最新动效：[页面级交互流光](docs/acceptance/V1.8-ui-ambient-motion.md)。覆盖总览、登录欢迎区、助手欢迎态和实际对话；鼠标驱动光带形变及波纹，青玉/雾青双主题，暂停冻结画面并释放渲染器。244 项前端测试、16 张新版桌面/手机截图和四状态真实鼠标交互通过；MiSans、业务、演示数据和历史版本保留。
+
 最新字体：[小米 MiSans 本地字体交付](docs/acceptance/V1.8-ui-misans.md)。按用户最新选择替换 Codex 系统字体栈；中英文实际使用 MiSans，代码区保留等宽字体。240 项前端测试及分析页/工作台的桌面、手机、双主题与动效检查通过，旧 Demo 和待验业务改动保留。
 
 最新 UI：[工作台 Shader 动效与 Codex 默认字体修正](docs/acceptance/V1.8-ui-workbench-shaders.md)。原生 `shaders@4.0.4`、30 fps/暂停记忆/静态降级、双主题与 Segoe UI 中文回退；237 项前端及旧/新 JAR 的桌面/手机、真实 GPU 动画和字体验证通过。独立分支 `ui/opspilot-shaders-20261014`，最终 Demo 仅替换静态资源，不混入待验 CP07 后端，旧 Demo 保留。
