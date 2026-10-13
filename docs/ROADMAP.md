@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+最新用户指定字体：[小米 MiSans](acceptance/V1.8-ui-misans.md)。覆盖此前的 Codex 字体选择，保留 OKX 风格、双主题和 Shader 动效；仅替换 UI 字体并验证实际渲染，不扩大业务范围。
+
 用户指定 UI 已交付：[工作台 Shader 动效和 Codex 字体](acceptance/V1.8-ui-workbench-shaders.md)。仅前端，原生 Vue 效果、暂停/记忆/降级、双主题、字体实际验证；新 Demo 与已交付业务 JAR 的 771 个非静态条目相同，待验 CP07 检索改动保留但不混入 UI 分支。
 
 当前：[V1.8 CP06 真实 MySQL 范围评测与 V43 升级](acceptance/V1.8-checkpoint-06-native-mysql.md)。补齐 CP05 的真实 MySQL 8.0.41 数据库契约与非空迁移证据，H2/MySQL 共享 16 项通过；不新增业务，不改排序或历史 Demo。完整 CI、MySQL 8.4 和 MySQL 整包 HTTP/SSE 仍无本轮证据。

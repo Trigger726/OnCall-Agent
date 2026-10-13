@@ -1,3 +1,4 @@
+@import url('/assets/fonts/misans.css');
 /* OpsPilot terminal visual system. OKX-inspired, not an OKX replica. */
 :root {
   color-scheme: dark;
@@ -35,8 +36,8 @@
   --warning-line: #574125;
   --success-line: #2c4c3b;
   --blue-line: #2c4058;
-  /* Codex 26.1007 default UI stack; explicit CJK fallback prevents serif glyph fallback on Windows. */
-  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+  /* Xiaomi MiSans is bundled locally; system CJK faces remain an offline failure fallback. */
+  --font-ui: "MiSans VF", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
   --font-code: ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   font-family: var(--font-ui);
   font-size: 14px;
@@ -104,6 +105,10 @@ input::placeholder, textarea::placeholder { color: var(--text-muted); }
 .primary-nav a.router-link-exact-active { color: var(--highlight); background: var(--active); box-shadow: inset 2px 0 var(--highlight); }
 .primary-nav a.router-link-exact-active svg { color: inherit; }
 .sidebar-foot { border-top: 1px solid var(--line); }
+.font-credit { display: block; padding: 4px 16px 8px; color: var(--text-muted); font-size: 11px; }
+.font-credit:hover { color: var(--text); }
+.sidebar-collapsed .font-credit { font-size: 0; padding: 4px 8px 8px; }
+.sidebar-collapsed .font-credit::after { content: "Mi"; font-size: 11px; }
 .main-frame { margin-left: 216px; min-width: 0; }
 .sidebar-collapsed .sidebar { width: 64px; }
 .sidebar-collapsed .brand-row { padding: 0 16px; }

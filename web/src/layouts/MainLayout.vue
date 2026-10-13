@@ -66,6 +66,7 @@ function signOut() {
           <ChevronLeft v-else :size="17" />
           <span>收起侧栏</span>
         </button>
+        <a class="font-credit" href="/assets/fonts/MiSans-LICENSE.pdf" target="_blank" rel="noopener" title="本软件使用小米 MiSans 字体，查看授权协议">MiSans 字体 · 小米</a>
       </div>
     </aside>
 
