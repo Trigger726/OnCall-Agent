@@ -602,9 +602,8 @@ onBeforeUnmount(() => {
 .assistant-conversation { position: relative; isolation: isolate; }
 .assistant-conversation > :not(.workbench-backdrop) { position: relative; z-index: 1; }
 .assistant-chat-head, .assistant-composer-wrap { background: color-mix(in srgb, var(--surface) 95%, transparent); }
-.assistant-chat-actions { margin-left: 118px; }
 .assistant-message.assistant .assistant-message-body { padding: 14px 18px; border: 1px solid var(--line); border-radius: 8px; background: color-mix(in srgb, var(--surface) 95%, transparent); }
 .assistant-message.user .assistant-message-body { background: color-mix(in srgb, var(--surface-muted) 96%, transparent); }
 .assistant-suggestions button { background: color-mix(in srgb, var(--surface) 96%, transparent); }
-@media (max-width: 640px) { .assistant-chat-actions { margin-left: 44px; } .assistant-message.assistant .assistant-message-body { padding: 12px; } }
+@media (max-width: 640px) { .assistant-message.assistant .assistant-message-body { padding: 12px; } }
 </style>

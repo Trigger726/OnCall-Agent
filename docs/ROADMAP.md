@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+最新用户指定 UI 收口：[删除动效按钮，默认播放](acceptance/V1.8-ui-ambient-autoplay.md)。仅移除控制与旧暂停偏好的读取，回收助手工具栏占位；保留系统减少动态/无 GPU 降级、配色、MiSans 和业务，不新增功能。
+
 最新用户指定视觉增量：[扩大流光覆盖与鼠标互动](acceptance/V1.8-ui-ambient-motion.md)。只扩展既有 UI，覆盖运行总览、登录/欢迎区域及 OnCall 助手空会话/实际对话；保留 MiSans，优化两主题配色、暂停和手机触控。不推进待验 CP07 或其他业务功能。
 
 最新用户指定字体：[小米 MiSans](acceptance/V1.8-ui-misans.md)。覆盖此前的 Codex 字体选择，保留 OKX 风格、双主题和 Shader 动效；仅替换 UI 字体并验证实际渲染，不扩大业务范围。
