@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+用户指定 UI 已交付：[工作台 Shader 动效和 Codex 字体](acceptance/V1.8-ui-workbench-shaders.md)。仅前端，原生 Vue 效果、暂停/记忆/降级、双主题、字体实际验证；新 Demo 与已交付业务 JAR 的 771 个非静态条目相同，待验 CP07 检索改动保留但不混入 UI 分支。
+
 当前：[V1.8 CP06 真实 MySQL 范围评测与 V43 升级](acceptance/V1.8-checkpoint-06-native-mysql.md)。补齐 CP05 的真实 MySQL 8.0.41 数据库契约与非空迁移证据，H2/MySQL 共享 16 项通过；不新增业务，不改排序或历史 Demo。完整 CI、MySQL 8.4 和 MySQL 整包 HTTP/SSE 仍无本轮证据。
 
 当前已验增量：[V1.8 CP05 保留范围的人工反馈与评测](acceptance/V1.8-checkpoint-05-scoped-evaluation.md)，接续 [CP04 Incident 范围检索](acceptance/V1.8-checkpoint-04-assistant-scope.md)。144 项相关 Java、231 项前端、真实非空 V42→V43/原键恢复/四次 JAR 生命周期/独立复核与桌面手机通过。先修正“同题不同范围合并、再全库计分”的实际评测缺陷，未调整 BM25/RRF 或宣称排序提高；原范围未知标签保留但显式排除。保留 [V1.7 封版交付](releases/V1.7-DELIVERY.md)、双主题/字体及十个既有 Demo，长期目标继续。下一候选仍是更广、按实际信息需求分层的冻结题集，不以 13 个全库种子＋2 个 scoped 样本代替生产质量证明。

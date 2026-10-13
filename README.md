@@ -1,5 +1,7 @@
 # OpsPilot
 
+最新 UI：[工作台 Shader 动效与 Codex 默认字体修正](docs/acceptance/V1.8-ui-workbench-shaders.md)。原生 `shaders@4.0.4`、30 fps/暂停记忆/静态降级、双主题与 Segoe UI 中文回退；237 项前端及旧/新 JAR 的桌面/手机、真实 GPU 动画和字体验证通过。独立分支 `ui/opspilot-shaders-20261014`，最终 Demo 仅替换静态资源，不混入待验 CP07 后端，旧 Demo 保留。
+
 最新工程验收：[V1.8 CP06 真实 MySQL 范围评测与 V43 升级](docs/acceptance/V1.8-checkpoint-06-native-mysql.md)。MySQL 8.0.41 与 H2 共享 16 项契约通过，非空 V42→V43 保留旧载荷、标签与校验和；仅补测试/证据，不改生产业务、UI 或十一份命名 Demo。默认不启用 MySQL 专项；不是新的完整 CI、MySQL 8.4 或整包 HTTP/SSE 证明。
 
 当前增量：[V1.8 CP05 保留范围的人工反馈与评测](docs/acceptance/V1.8-checkpoint-05-scoped-evaluation.md)，接续 [CP04 Incident 范围检索](docs/acceptance/V1.8-checkpoint-04-assistant-scope.md)。144 项相关 Java、231 项前端及旧/新 JAR 非空 V42→V43、四次真实生命周期/SSE/原键恢复/独立复核通过：同题不同 Incident 不混并，未知历史范围不伪装成全库标签，审核页面披露原范围并修复暗色正文可读性。V1.7 标签、OKX 双主题/字体及十个既有 Demo 保留；未改排序算法，不称全目标 100%。

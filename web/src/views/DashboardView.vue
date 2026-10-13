@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { AlertTriangle, ArrowRight, BellRing, Boxes, Clock3, RadioTower, RefreshCw, Users } from 'lucide-vue-next'
 import StatusBadge from '@/components/StatusBadge.vue'
+import WorkbenchBackdrop from '@/components/WorkbenchBackdrop.vue'
 import { api, formatTime, type PageResponse } from '@/services/api'
 
 interface Dashboard {
@@ -67,10 +68,14 @@ onMounted(load)
 
 <template>
   <div class="page-content dashboard-page">
-    <div class="page-toolbar">
-      <div><strong>生产运行态势</strong><span>告警、事故与资源健康的统一视图</span></div>
-      <button class="secondary-button" :disabled="loading" @click="load"><RefreshCw :size="15" :class="{ spin: loading }" />刷新</button>
-    </div>
+    <section class="workbench-hero" aria-labelledby="workbench-title">
+      <WorkbenchBackdrop />
+      <div class="workbench-intro">
+        <h1 id="workbench-title">生产运行态势</h1>
+        <p>告警、事故与资源健康的统一视图</p>
+        <button class="secondary-button" :disabled="loading" @click="load"><RefreshCw :size="15" :class="{ spin: loading }" />刷新数据</button>
+      </div>
+    </section>
     <div v-if="error" class="inline-error"><AlertTriangle :size="16" />{{ error }}</div>
 
     <section class="metric-strip" aria-label="核心指标">
@@ -135,3 +140,12 @@ onMounted(load)
     </section>
   </div>
 </template>
+
+<style scoped>
+.workbench-hero { position: relative; isolation: isolate; min-height: 176px; margin-bottom: 22px; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.workbench-intro { position: relative; z-index: 1; padding: 26px 30px; width: fit-content; max-width: calc(100% - 130px); }
+.workbench-intro h1 { margin: 0; font-size: 28px; font-weight: 600; line-height: 1.25; letter-spacing: -.6px; }
+.workbench-intro p { margin: 9px 0 18px; color: var(--text-muted); font-size: 14px; line-height: 1.5; }
+.workbench-intro button { font-size: 12px; }
+@media (max-width: 640px) { .workbench-hero { min-height: 190px; margin-bottom: 16px; } .workbench-intro { padding: 22px 20px; max-width: 100%; } .workbench-intro h1 { font-size: 25px; } .workbench-intro p { font-size: 13px; } }
+</style>

@@ -1,5 +1,7 @@
 # OpsPilot 验收记录
 
+最新 UI：[工作台 Shader 动效与 Codex 默认字体修正](V1.8-ui-workbench-shaders.md)。237 项前端、真实 GPU 像素变化/暂停稳定/记忆/恢复/无 GPU/减少动态/刷新与 1440/390 双主题通过；Latin 实测改用 Segoe UI，中文微软雅黑 UI；771 个业务二进制条目未改。旧 Demo 和待验 CP07 均保留，独立 UI 分支交付。
+
 当前：[V1.8 CP06 真实 MySQL 范围评测与 V43 升级](V1.8-checkpoint-06-native-mysql.md)。MySQL 8.0.41 与 H2 共享 16 项通过，非空升级不重写旧查询/标签/校验和，临时实例正常停止；只补测试/文档/证据，首轮脚本失败保留，十一份命名 Demo 和封版标签不变。不是新的完整 CI、MySQL 8.4 或整包 HTTP/SSE 验收。
 
 当前：[V1.8 CP05 保留范围的人工反馈与评测](V1.8-checkpoint-05-scoped-evaluation.md)。144 项相关 Java、231 项前端、旧/新 JAR 真实非空 V42→V43/四次生命周期/SSE/原键恢复/独立复核、只读 SQL 与桌面手机通过；同题不同范围分组，未知历史标签明确排除，审核页披露范围且暗色正文可读。首轮测试/实页失败保留，十个既有 Demo 不覆盖；没有新 MySQL/云模型/完整 CI 或普遍排序提升证明。
