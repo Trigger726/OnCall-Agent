@@ -34,13 +34,20 @@ public class AssistantController {
     private final SessionAuthorization authorization;
     private final AssistantExecutionManager execution;
     private final AssistantStreamTransport transports;
+    private final AssistantIdentity identity;
 
     public AssistantController(AssistantService service, SessionAuthorization authorization, AssistantExecutionManager execution,
-                               AssistantStreamTransport transports) {
+                               AssistantStreamTransport transports, AssistantIdentity identity) {
         this.service = service;
         this.authorization = authorization;
         this.execution = execution;
         this.transports = transports;
+        this.identity = identity;
+    }
+
+    @GetMapping("/runtime")
+    public ApiResponse<AssistantIdentity.RuntimeView> runtime() {
+        return ApiResponse.ok(identity.runtime());
     }
 
     @GetMapping("/sessions")

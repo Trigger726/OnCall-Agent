@@ -1,0 +1,72 @@
+{
+  "status": "FAIL",
+  "out": "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-identity-SehkmO",
+  "browser": "Browser plugin not available; existing Playwright/Chrome; IAB also used for original reproduction",
+  "realCloudModel": false,
+  "userDatabaseModified": false,
+  "runs": [
+    {
+      "name": "before",
+      "modelEnabled": false,
+      "identityCases": [
+        {
+          "content": "你是谁",
+          "reproduced": true
+        },
+        {
+          "content": "你是什么模型",
+          "reproduced": true
+        }
+      ],
+      "shutdown": true,
+      "exitCode": 0,
+      "portsFree": true
+    },
+    {
+      "name": "rules",
+      "modelEnabled": false,
+      "identityCases": [
+        {
+          "incidentId": null,
+          "transport": "messages",
+          "content": "你是谁",
+          "emptyEvidence": true,
+          "replayed": true,
+          "conflictingKeyRejected": true
+        },
+        {
+          "incidentId": null,
+          "transport": "messages",
+          "content": "你是什么模型",
+          "emptyEvidence": true,
+          "replayed": true,
+          "conflictingKeyRejected": true
+        }
+      ],
+      "runtime": {
+        "mode": "RULES",
+        "provider": null,
+        "model": null,
+        "label": "规则与证据模式"
+      },
+      "shutdown": true,
+      "exitCode": 0,
+      "portsFree": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "before-dark1440.png",
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440,
+      "theme": "dark",
+      "url": "http://127.0.0.1:9913/assistant?session=1"
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "externalOrigins": [],
+  "providerCalls": [],
+  "failure": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(!events.some(event=>['error','cancelled','delta','token'].includes(event.type)))\n\n    at run (D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-assistant-identity-packaged.cjs:86:67)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-assistant-identity-packaged.cjs:155:5"
+}

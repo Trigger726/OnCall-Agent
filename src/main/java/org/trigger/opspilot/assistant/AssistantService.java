@@ -37,12 +37,13 @@ public class AssistantService {
     private final AssistantRequestStore requests;
     private final RunbookService runbooks;
     private final AssistantObservationService observations;
+    private final AssistantIdentity identityResponses;
 
     public AssistantService(JdbcClient jdbcClient, ObjectMapper objectMapper,
                             Optional<AssistantAiService> aiService,
                             AgentRunQueryService agentRunQueryService,
                             SessionAuthorization authorization, TransactionTemplate transactions, AssistantRequestStore requests,
-                            RunbookService runbooks, AssistantObservationService observations) {
+                            RunbookService runbooks, AssistantObservationService observations, AssistantIdentity identityResponses) {
         this.jdbcClient = jdbcClient;
         this.objectMapper = objectMapper;
         this.aiService = aiService;
@@ -52,6 +53,7 @@ public class AssistantService {
         this.requests = requests;
         this.runbooks = runbooks;
         this.observations = observations;
+        this.identityResponses = identityResponses;
     }
 
     public List<SessionSummary> listSessions(long ownerId) {
@@ -164,13 +166,19 @@ public class AssistantService {
             checkpoint.run();
             requireAuthorization(lease, false);
             // Never hold the account/session row locks over an external model call.
-            var knowledge = retrieveRunbooks(prepared.context(), question, lease, checkpoint);
-            var observation = observations.collect(prepared.session().incidentId(), question, lease, checkpoint);
-            var history = aiService.isPresent() ? modelHistory(prepared.history(), knowledge, lease) : prepared.history();
+            var directReply = identityResponses.answer(question);
+            var knowledge = directReply.isPresent()
+                    ? new RunbookService.SearchResponse(null, question, "AUTO", "NOT_EXECUTED", 3, 0,
+                        "NOT_REQUESTED", java.math.BigDecimal.ZERO, List.of(), List.of())
+                    : retrieveRunbooks(prepared.context(), question, lease, checkpoint);
+            var observation = directReply.isPresent()
+                    ? new AssistantObservationService.Snapshot("NOT_REQUESTED", false, List.of())
+                    : observations.collect(prepared.session().incidentId(), question, lease, checkpoint);
+            var history = aiService.isPresent() && directReply.isEmpty() ? modelHistory(prepared.history(), knowledge, lease) : prepared.history();
             checkpoint.run();
             requireAuthorization(lease, false);
             var evidence = new ArrayList<EvidenceRef>();
-            if (prepared.context() != null) evidence.addAll(collectEvidence(prepared.context()));
+            if (prepared.context() != null && directReply.isEmpty()) evidence.addAll(collectEvidence(prepared.context()));
             knowledge.results().forEach(item -> evidence.add(new EvidenceRef(item.citation(), "RUNBOOK",
                     item.title() + " · v" + item.versionNo() + " · " + item.heading())));
             evidence.addAll(observation.evidence());
@@ -181,7 +189,9 @@ public class AssistantService {
             };
             answerCheckpoint.run();
             Answer answer;
-            if (onDelta == null || aiService.isEmpty()) {
+            if (directReply.isPresent()) {
+                answer = new Answer(directReply.get(), List.of());
+            } else if (onDelta == null || aiService.isEmpty()) {
                 answer = generateAnswer(prepared.context(), history, question, knowledge, observation, evidence, answerCheckpoint);
             } else {
                 var guard = new AssistantCitationGuard(citations(knowledge, observation), onDelta);

@@ -1,0 +1,662 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< org.trigger:opspilot >------------------------
+[INFO] Building OpsPilot 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 108 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 139 source files with javac [debug release 17] to target\test-classes
+[INFO] 由于在类路径中发现了一个或多个处理程序，因此启用了
+  批注处理。未来发行版的 javac 可能会禁用批注处理，
+  除非至少按名称指定了一个处理程序 (-processor)，
+  或指定了搜索路径 (--processor-path, --processor-module-path)，
+  或显式启用了批注处理 (-proc:only, -proc:full)。
+  可使用 -Xlint:-options 隐藏此消息。
+  可使用 -proc:none 禁用批注处理。
+[INFO] /D:/Codex/国网/央国企求职/OpsPilot/src/test/java/org/trigger/opspilot/distributed/DistributedAgentEventsIntegrationTest.java: 某些输入文件使用了未经检查或不安全的操作。
+[INFO] /D:/Codex/国网/央国企求职/OpsPilot/src/test/java/org/trigger/opspilot/distributed/DistributedAgentEventsIntegrationTest.java: 有关详细信息, 请使用 -Xlint:unchecked 重新编译。
+[INFO] 
+[INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.trigger.opspilot.assistant.AssistantAiStreamingTest
+WARNING: A Java agent has been loaded dynamically (C:\Users\lenovo\.m2\repository\net\bytebuddy\byte-buddy-agent\1.14.10\byte-buddy-agent-1.14.10.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+22:18:00.551 [boundedElastic-1] ERROR org.springframework.ai.chat.model.MessageAggregator -- Aggregation Error
+java.lang.IllegalStateException: controlled transport failure
+	at org.trigger.opspilot.assistant.AssistantAiStreamingTest.shouldPropagateLateProviderFailureWithoutRetryOrFallbackEvenAfterStop(AssistantAiStreamingTest.java:114)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:218)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:214)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:139)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:184)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:148)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:122)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+22:18:00.570 [boundedElastic-1] ERROR org.springframework.ai.chat.model.MessageAggregator -- Aggregation Error
+java.lang.IllegalStateException: controlled transport failure
+	at org.trigger.opspilot.assistant.AssistantAiStreamingTest.shouldPropagateLateProviderFailureWithoutRetryOrFallbackEvenAfterStop(AssistantAiStreamingTest.java:114)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:218)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:214)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:139)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.apache.maven.surefire.junitplatform.LazyLauncher.execute(LazyLauncher.java:56)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.execute(JUnitPlatformProvider.java:184)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invokeAllTests(JUnitPlatformProvider.java:148)
+	at org.apache.maven.surefire.junitplatform.JUnitPlatformProvider.invoke(JUnitPlatformProvider.java:122)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:385)
+	at org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:162)
+	at org.apache.maven.surefire.booter.ForkedBooter.run(ForkedBooter.java:507)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:495)
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.782 s -- in org.trigger.opspilot.assistant.AssistantAiStreamingTest
+[INFO] Running org.trigger.opspilot.assistant.AssistantIdentityIntegrationTest
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+22:18:01.380 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.trigger.opspilot.assistant.AssistantIdentityIntegrationTest]: AssistantIdentityIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+22:18:02.092 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.assistant.AssistantIdentityIntegrationTest
+22:18:02.424 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-14T22:18:02.941+08:00  INFO 56788 --- [opspilot] [           main] o.t.o.a.AssistantIdentityIntegrationTest : Starting AssistantIdentityIntegrationTest using Java 21.0.2 with PID 56788 (started by lenovo in D:\Codex\国网\央国企求职\OpsPilot)
+2026-10-14T22:18:02.943+08:00  INFO 56788 --- [opspilot] [           main] o.t.o.a.AssistantIdentityIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-14T22:18:06.444+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-14T22:18:06.450+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-14T22:18:06.553+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 71 ms. Found 0 Redis repository interfaces.
+2026-10-14T22:18:07.547+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-14T22:18:08.012+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:assistant-identity user=SA
+2026-10-14T22:18:08.014+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-14T22:18:08.135+08:00  INFO 56788 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
+2026-10-14T22:18:08.136+08:00  INFO 56788 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2026-10-14T22:18:08.136+08:00  INFO 56788 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : 
+2026-10-14T22:18:08.218+08:00  INFO 56788 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:assistant-identity (H2 2.2)
+2026-10-14T22:18:08.384+08:00  INFO 56788 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-14T22:18:08.388+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.151s)
+2026-10-14T22:18:08.394+08:00  INFO 56788 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-14T22:18:08.425+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-14T22:18:08.445+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-14T22:18:08.530+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-14T22:18:08.544+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-14T22:18:08.557+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-14T22:18:08.570+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-14T22:18:08.582+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-14T22:18:08.641+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-14T22:18:08.685+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-14T22:18:08.707+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-14T22:18:08.728+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-14T22:18:08.741+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-14T22:18:08.751+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-14T22:18:08.768+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-14T22:18:08.782+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-14T22:18:08.794+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-14T22:18:08.805+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-14T22:18:08.810+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-14T22:18:08.820+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-14T22:18:08.827+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-14T22:18:08.840+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-14T22:18:08.852+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-14T22:18:08.874+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-14T22:18:08.881+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-14T22:18:08.894+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-14T22:18:08.901+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-14T22:18:08.912+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-14T22:18:08.926+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-14T22:18:08.934+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-14T22:18:08.937+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-14T22:18:08.956+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-14T22:18:08.988+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-14T22:18:08.999+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-14T22:18:09.006+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-14T22:18:09.012+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-14T22:18:09.022+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-14T22:18:09.030+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-14T22:18:09.054+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-14T22:18:09.061+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-14T22:18:09.073+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "39 - oncall plan memberships"
+2026-10-14T22:18:09.085+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "40 - open handoff publication snapshots"
+2026-10-14T22:18:09.088+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "41 - open handoff notification outbox"
+2026-10-14T22:18:09.096+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "42 - open notification redrive receipts"
+2026-10-14T22:18:09.108+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "43 - runbook retrieval scope snapshots"
+2026-10-14T22:18:09.142+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 43 migrations to schema "public", now at version v43 (execution time 00:00.450s)
+2026-10-14T22:18:12.226+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-14T22:18:12.721+08:00  INFO 56788 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@428e875f, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1da9f44c, org.springframework.security.web.context.SecurityContextHolderFilter@5c3cc103, org.springframework.security.web.header.HeaderWriterFilter@182ce25e, org.springframework.web.filter.CorsFilter@16a83016, org.springframework.security.web.authentication.logout.LogoutFilter@5a640f98, org.trigger.opspilot.security.JwtAuthenticationFilter@225d93aa, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@41f57420, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@62e8ef9f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@592efd6, org.springframework.security.web.session.SessionManagementFilter@7fdf32a4, org.springframework.security.web.access.ExceptionTranslationFilter@4ed7fb78, org.springframework.security.web.access.intercept.AuthorizationFilter@4ba29b51]
+2026-10-14T22:18:14.329+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:assistant-identity'
+2026-10-14T22:18:14.737+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 0 (http)
+2026-10-14T22:18:14.751+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-14T22:18:14.751+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-10-14T22:18:14.918+08:00  INFO 56788 --- [opspilot] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-10-14T22:18:14.919+08:00  INFO 56788 --- [opspilot] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 464 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-14T22:18:14.968+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2026-10-14T22:18:15.052+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 62133 (http) with context path ''
+2026-10-14T22:18:15.076+08:00  INFO 56788 --- [opspilot] [           main] o.t.o.a.AssistantIdentityIntegrationTest : Started AssistantIdentityIntegrationTest in 12.671 seconds (process running for 18.243)
+2026-10-14T22:18:15.775+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-14T22:18:15.935+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-14T22:18:15.942+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 15.09 s -- in org.trigger.opspilot.assistant.AssistantIdentityIntegrationTest
+[INFO] Running org.trigger.opspilot.assistant.AssistantIdentityTest
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.033 s -- in org.trigger.opspilot.assistant.AssistantIdentityTest
+[INFO] Running org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest
+2026-10-14T22:18:16.019+08:00  INFO 56788 --- [opspilot] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest
+2026-10-14T22:18:16.067+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-14T22:18:16.152+08:00  INFO 56788 --- [opspilot] [           main] a.AssistantNativeEndpointIntegrationTest : Starting AssistantNativeEndpointIntegrationTest using Java 21.0.2 with PID 56788 (started by lenovo in D:\Codex\国网\央国企求职\OpsPilot)
+2026-10-14T22:18:16.152+08:00  INFO 56788 --- [opspilot] [           main] a.AssistantNativeEndpointIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-14T22:18:17.540+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-14T22:18:17.541+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-14T22:18:17.579+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 38 ms. Found 0 Redis repository interfaces.
+2026-10-14T22:18:17.896+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 0 (http)
+2026-10-14T22:18:17.898+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-14T22:18:17.899+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-10-14T22:18:18.035+08:00  INFO 56788 --- [opspilot] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-10-14T22:18:18.035+08:00  INFO 56788 --- [opspilot] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1875 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-14T22:18:18.187+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-10-14T22:18:18.192+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection conn10: url=jdbc:h2:mem:opspilot-native-endpoint user=SA
+2026-10-14T22:18:18.194+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-10-14T22:18:18.194+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:opspilot-native-endpoint'
+2026-10-14T22:18:18.245+08:00  INFO 56788 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:opspilot-native-endpoint (H2 2.2)
+2026-10-14T22:18:18.290+08:00  INFO 56788 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-14T22:18:18.292+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.042s)
+2026-10-14T22:18:18.293+08:00  INFO 56788 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-14T22:18:18.300+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-14T22:18:18.315+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-14T22:18:18.346+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-14T22:18:18.354+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-14T22:18:18.363+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-14T22:18:18.370+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-14T22:18:18.380+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-14T22:18:18.400+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-14T22:18:18.414+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-14T22:18:18.425+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-14T22:18:18.436+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-14T22:18:18.446+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-14T22:18:18.452+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-14T22:18:18.462+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-14T22:18:18.471+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-14T22:18:18.479+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-14T22:18:18.488+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-14T22:18:18.493+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-14T22:18:18.500+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-14T22:18:18.505+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-14T22:18:18.514+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-14T22:18:18.520+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-14T22:18:18.543+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-14T22:18:18.548+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-14T22:18:18.556+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-14T22:18:18.563+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-14T22:18:18.572+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-14T22:18:18.581+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-14T22:18:18.586+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-14T22:18:18.588+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-14T22:18:18.596+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-14T22:18:18.616+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-14T22:18:18.626+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-14T22:18:18.629+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-14T22:18:18.635+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-14T22:18:18.645+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-14T22:18:18.650+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-14T22:18:18.658+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-14T22:18:18.662+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-14T22:18:18.669+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "39 - oncall plan memberships"
+2026-10-14T22:18:18.675+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "40 - open handoff publication snapshots"
+2026-10-14T22:18:18.679+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "41 - open handoff notification outbox"
+2026-10-14T22:18:18.685+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "42 - open notification redrive receipts"
+2026-10-14T22:18:18.692+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "43 - runbook retrieval scope snapshots"
+2026-10-14T22:18:18.702+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 43 migrations to schema "public", now at version v43 (execution time 00:00.193s)
+2026-10-14T22:18:19.239+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-14T22:18:19.386+08:00  INFO 56788 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4610594a, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1e52e3e8, org.springframework.security.web.context.SecurityContextHolderFilter@406a54a2, org.springframework.security.web.header.HeaderWriterFilter@35af404f, org.springframework.web.filter.CorsFilter@641ce448, org.springframework.security.web.authentication.logout.LogoutFilter@3bdc78d8, org.trigger.opspilot.security.JwtAuthenticationFilter@48306cc8, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@49a777ee, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6c5ebad, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3f520f7b, org.springframework.security.web.session.SessionManagementFilter@571f1e9d, org.springframework.security.web.access.ExceptionTranslationFilter@45399fae, org.springframework.security.web.access.intercept.AuthorizationFilter@60877252]
+2026-10-14T22:18:19.765+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3730 (http) with context path ''
+2026-10-14T22:18:19.835+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 0 (http)
+2026-10-14T22:18:19.837+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-14T22:18:19.838+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-10-14T22:18:19.958+08:00  INFO 56788 --- [opspilot] [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-10-14T22:18:19.959+08:00  INFO 56788 --- [opspilot] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 188 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-14T22:18:19.974+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2026-10-14T22:18:20.024+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 3731 (http) with context path ''
+2026-10-14T22:18:20.049+08:00  INFO 56788 --- [opspilot] [           main] a.AssistantNativeEndpointIntegrationTest : Started AssistantNativeEndpointIntegrationTest in 3.982 seconds (process running for 23.216)
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"browserDisconnectShouldContinueOriginalDurableRequestWithoutAnotherPost"}
+2026-10-14T22:18:20.610+08:00  INFO 56788 --- [opspilot] [o-auto-2-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-14T22:18:20.611+08:00  INFO 56788 --- [opspilot] [o-auto-2-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-14T22:18:20.612+08:00  INFO 56788 --- [opspilot] [o-auto-2-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-10-14T22:18:20.739+08:00  WARN 56788 --- [opspilot] [o-auto-2-exec-1] o.s.w.s.h.HandlerMappingIntrospector     : Cache miss for REQUEST dispatch to '/api/v1/auth/login' (previous null). Performing MatchableHandlerMapping lookup. This is logged once only at WARN level, and every time at TRACE.
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldTimeoutAnIdleProviderAfterPreviewWithoutCommittingPartialAnswer"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldStopRevokedNativePreviewWithoutLateAnswerOrErrorPayload"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldNotResurrectClearedNativePreviewWhenModelCompletesLate"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldFailOnNativeEofRatherThanAppendRuleFallback"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldFailOnNativeEofRatherThanAppendRuleFallback"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldFailOnNativeEofRatherThanAppendRuleFallback"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldFailOnNativeEofRatherThanAppendRuleFallback"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldFailOnNativeEofRatherThanAppendRuleFallback"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldFailOnNativeEofRatherThanAppendRuleFallback"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldFailOnNativeEofRatherThanAppendRuleFallback"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldFailOnNativeEofRatherThanAppendRuleFallback"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldFailOnNativeEofRatherThanAppendRuleFallback"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldFailOnNativeEofRatherThanAppendRuleFallback"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldRejectNativeQueueSaturationBeforeAdmissionAndReuseCancelledSlot"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"nativeDoneMustNotEscapeAFailedFinalAuditTransaction"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldDeliverRealNativeTokenBeforeCompletionAndCommitExactAnswer"}
+CP80_NATIVE_DATABASE {"product":"H2","version":"2.2.220 (2023-07-04)","case":"shouldCancelAfterPreviewAndReuseWorkerBeforeOldProviderIsReleased"}
+2026-10-14T22:18:36.003+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-14T22:18:36.039+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2026-10-14T22:18:36.041+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+[INFO] Tests run: 18, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 20.06 s -- in org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest
+[INFO] Running org.trigger.opspilot.assistant.AssistantObservationIntegrationTest
+2026-10-14T22:18:36.049+08:00  INFO 56788 --- [opspilot] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.trigger.opspilot.assistant.AssistantObservationIntegrationTest]: AssistantObservationIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-14T22:18:36.055+08:00  INFO 56788 --- [opspilot] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.assistant.AssistantObservationIntegrationTest
+2026-10-14T22:18:36.063+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-14T22:18:36.139+08:00  INFO 56788 --- [opspilot] [           main] .o.a.AssistantObservationIntegrationTest : Starting AssistantObservationIntegrationTest using Java 21.0.2 with PID 56788 (started by lenovo in D:\Codex\国网\央国企求职\OpsPilot)
+2026-10-14T22:18:36.140+08:00  INFO 56788 --- [opspilot] [           main] .o.a.AssistantObservationIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-14T22:18:37.116+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-14T22:18:37.116+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-14T22:18:37.145+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 29 ms. Found 0 Redis repository interfaces.
+2026-10-14T22:18:37.245+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2026-10-14T22:18:37.250+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection conn20: url=jdbc:h2:mem:assistant-observations user=SA
+2026-10-14T22:18:37.250+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2026-10-14T22:18:37.275+08:00  INFO 56788 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:assistant-observations (H2 2.2)
+2026-10-14T22:18:37.318+08:00  INFO 56788 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-14T22:18:37.318+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.041s)
+2026-10-14T22:18:37.319+08:00  INFO 56788 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-14T22:18:37.328+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-14T22:18:37.338+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-14T22:18:37.356+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-14T22:18:37.360+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-14T22:18:37.367+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-14T22:18:37.374+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-14T22:18:37.379+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-14T22:18:37.397+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-14T22:18:37.404+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-14T22:18:37.411+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-14T22:18:37.419+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-14T22:18:37.427+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-14T22:18:37.431+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-14T22:18:37.439+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-14T22:18:37.446+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-14T22:18:37.451+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-14T22:18:37.458+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-14T22:18:37.462+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-14T22:18:37.468+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-14T22:18:37.470+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-14T22:18:37.475+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-14T22:18:37.480+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-14T22:18:37.491+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-14T22:18:37.495+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-14T22:18:37.501+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-14T22:18:37.506+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-14T22:18:37.513+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-14T22:18:37.519+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-14T22:18:37.524+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-14T22:18:37.526+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-14T22:18:37.531+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-14T22:18:37.548+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-14T22:18:37.556+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-14T22:18:37.559+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-14T22:18:37.570+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-14T22:18:37.578+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-14T22:18:37.582+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-14T22:18:37.629+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-14T22:18:37.633+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-14T22:18:37.638+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "39 - oncall plan memberships"
+2026-10-14T22:18:37.643+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "40 - open handoff publication snapshots"
+2026-10-14T22:18:37.646+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "41 - open handoff notification outbox"
+2026-10-14T22:18:37.651+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "42 - open notification redrive receipts"
+2026-10-14T22:18:37.658+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "43 - runbook retrieval scope snapshots"
+2026-10-14T22:18:37.664+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 43 migrations to schema "public", now at version v43 (execution time 00:00.166s)
+2026-10-14T22:18:37.965+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-14T22:18:38.055+08:00  INFO 56788 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6ffb07a4, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@925fa0a, org.springframework.security.web.context.SecurityContextHolderFilter@32bce883, org.springframework.security.web.header.HeaderWriterFilter@1903e8e5, org.springframework.web.filter.CorsFilter@786d9f87, org.springframework.security.web.authentication.logout.LogoutFilter@26381009, org.trigger.opspilot.security.JwtAuthenticationFilter@4f56cd4f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4c718b69, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4a3306c2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6360a442, org.springframework.security.web.session.SessionManagementFilter@672bc69a, org.springframework.security.web.access.ExceptionTranslationFilter@5ac49efb, org.springframework.security.web.access.intercept.AuthorizationFilter@3405f26a]
+2026-10-14T22:18:38.235+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:assistant-observations'
+2026-10-14T22:18:38.298+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 0 (http)
+2026-10-14T22:18:38.298+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-14T22:18:38.298+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-10-14T22:18:38.416+08:00  INFO 56788 --- [opspilot] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-10-14T22:18:38.416+08:00  INFO 56788 --- [opspilot] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 159 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-14T22:18:38.426+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2026-10-14T22:18:38.464+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 27916 (http) with context path ''
+2026-10-14T22:18:38.478+08:00  INFO 56788 --- [opspilot] [           main] .o.a.AssistantObservationIntegrationTest : Started AssistantObservationIntegrationTest in 2.416 seconds (process running for 41.646)
+2026-10-14T22:18:39.215+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-14T22:18:39.251+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2026-10-14T22:18:39.252+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+[INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.205 s -- in org.trigger.opspilot.assistant.AssistantObservationIntegrationTest
+[INFO] Running org.trigger.opspilot.assistant.AssistantRunbookIntegrationTest
+2026-10-14T22:18:39.257+08:00  INFO 56788 --- [opspilot] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.trigger.opspilot.assistant.AssistantRunbookIntegrationTest]: AssistantRunbookIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-14T22:18:39.261+08:00  INFO 56788 --- [opspilot] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.assistant.AssistantRunbookIntegrationTest
+2026-10-14T22:18:39.265+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-14T22:18:39.306+08:00  INFO 56788 --- [opspilot] [           main] o.t.o.a.AssistantRunbookIntegrationTest  : Starting AssistantRunbookIntegrationTest using Java 21.0.2 with PID 56788 (started by lenovo in D:\Codex\国网\央国企求职\OpsPilot)
+2026-10-14T22:18:39.306+08:00  INFO 56788 --- [opspilot] [           main] o.t.o.a.AssistantRunbookIntegrationTest  : No active profile set, falling back to 1 default profile: "default"
+2026-10-14T22:18:40.154+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-14T22:18:40.155+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-14T22:18:40.185+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 30 ms. Found 0 Redis repository interfaces.
+2026-10-14T22:18:40.256+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
+2026-10-14T22:18:40.260+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-4 - Added connection conn30: url=jdbc:h2:mem:opspilot-assistant-runbook user=SA
+2026-10-14T22:18:40.260+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Start completed.
+2026-10-14T22:18:40.279+08:00  INFO 56788 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:opspilot-assistant-runbook (H2 2.2)
+2026-10-14T22:18:40.318+08:00  INFO 56788 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-14T22:18:40.319+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.038s)
+2026-10-14T22:18:40.320+08:00  INFO 56788 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-14T22:18:40.324+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-14T22:18:40.329+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-14T22:18:40.342+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-14T22:18:40.347+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-14T22:18:40.354+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-14T22:18:40.362+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-14T22:18:40.366+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-14T22:18:40.379+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-14T22:18:40.385+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-14T22:18:40.391+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-14T22:18:40.396+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-14T22:18:40.404+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-14T22:18:40.408+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-14T22:18:40.414+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-14T22:18:40.419+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-14T22:18:40.424+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-14T22:18:40.428+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-14T22:18:40.431+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-14T22:18:40.435+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-14T22:18:40.438+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-14T22:18:40.442+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-14T22:18:40.445+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-14T22:18:40.455+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-14T22:18:40.459+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-14T22:18:40.464+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-14T22:18:40.469+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-14T22:18:40.474+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-14T22:18:40.479+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-14T22:18:40.483+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-14T22:18:40.485+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-14T22:18:40.490+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-14T22:18:40.503+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-14T22:18:40.532+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-14T22:18:40.534+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-14T22:18:40.537+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-14T22:18:40.541+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-14T22:18:40.546+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-14T22:18:40.552+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-14T22:18:40.556+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-14T22:18:40.561+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "39 - oncall plan memberships"
+2026-10-14T22:18:40.565+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "40 - open handoff publication snapshots"
+2026-10-14T22:18:40.568+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "41 - open handoff notification outbox"
+2026-10-14T22:18:40.572+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "42 - open notification redrive receipts"
+2026-10-14T22:18:40.580+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "43 - runbook retrieval scope snapshots"
+2026-10-14T22:18:40.587+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 43 migrations to schema "public", now at version v43 (execution time 00:00.122s)
+2026-10-14T22:18:40.876+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-14T22:18:40.959+08:00  INFO 56788 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@23b78173, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@27eae2f2, org.springframework.security.web.context.SecurityContextHolderFilter@ed870c0, org.springframework.security.web.header.HeaderWriterFilter@60bffecb, org.springframework.web.filter.CorsFilter@67c0ba8a, org.springframework.security.web.authentication.logout.LogoutFilter@5b6bf649, org.trigger.opspilot.security.JwtAuthenticationFilter@6287533d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@203855c2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3feeaea8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@66e9e248, org.springframework.security.web.session.SessionManagementFilter@5c9eb43f, org.springframework.security.web.access.ExceptionTranslationFilter@71dbf2b3, org.springframework.security.web.access.intercept.AuthorizationFilter@734e5cd6]
+2026-10-14T22:18:41.206+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:opspilot-assistant-runbook'
+2026-10-14T22:18:41.277+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 0 (http)
+2026-10-14T22:18:41.278+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-14T22:18:41.278+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-10-14T22:18:41.383+08:00  INFO 56788 --- [opspilot] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-10-14T22:18:41.383+08:00  INFO 56788 --- [opspilot] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 153 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-14T22:18:41.394+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2026-10-14T22:18:41.435+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 27918 (http) with context path ''
+2026-10-14T22:18:41.442+08:00  INFO 56788 --- [opspilot] [           main] o.t.o.a.AssistantRunbookIntegrationTest  : Started AssistantRunbookIntegrationTest in 2.177 seconds (process running for 44.609)
+2026-10-14T22:18:42.434+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-14T22:18:42.455+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
+2026-10-14T22:18:42.456+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
+[INFO] Tests run: 23, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.201 s -- in org.trigger.opspilot.assistant.AssistantRunbookIntegrationTest
+[INFO] Running org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest
+2026-10-14T22:18:42.459+08:00  INFO 56788 --- [opspilot] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest]: AssistantTransactionIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-14T22:18:42.465+08:00  INFO 56788 --- [opspilot] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest
+2026-10-14T22:18:42.468+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-14T22:18:42.503+08:00  INFO 56788 --- [opspilot] [           main] .o.a.AssistantTransactionIntegrationTest : Starting AssistantTransactionIntegrationTest using Java 21.0.2 with PID 56788 (started by lenovo in D:\Codex\国网\央国企求职\OpsPilot)
+2026-10-14T22:18:42.503+08:00  INFO 56788 --- [opspilot] [           main] .o.a.AssistantTransactionIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-14T22:18:43.235+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-14T22:18:43.235+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-14T22:18:43.260+08:00  INFO 56788 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 0 Redis repository interfaces.
+2026-10-14T22:18:43.323+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2026-10-14T22:18:43.329+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection conn40: url=jdbc:h2:mem:opspilot-assistant-transactions user=SA
+2026-10-14T22:18:43.330+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2026-10-14T22:18:43.361+08:00  INFO 56788 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:opspilot-assistant-transactions (H2 2.2)
+2026-10-14T22:18:43.395+08:00  INFO 56788 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-14T22:18:43.396+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.033s)
+2026-10-14T22:18:43.396+08:00  INFO 56788 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-14T22:18:43.402+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-14T22:18:43.405+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-14T22:18:43.415+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-14T22:18:43.419+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-14T22:18:43.424+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-14T22:18:43.431+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-14T22:18:43.437+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-14T22:18:43.447+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-14T22:18:43.452+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-14T22:18:43.458+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-14T22:18:43.466+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-14T22:18:43.471+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-14T22:18:43.475+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-14T22:18:43.481+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-14T22:18:43.486+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-14T22:18:43.490+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-14T22:18:43.493+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-14T22:18:43.496+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-14T22:18:43.501+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-14T22:18:43.503+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-14T22:18:43.508+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-14T22:18:43.512+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-14T22:18:43.522+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-14T22:18:43.525+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-14T22:18:43.531+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-14T22:18:43.534+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-14T22:18:43.539+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-14T22:18:43.543+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-14T22:18:43.547+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-14T22:18:43.547+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-14T22:18:43.551+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-14T22:18:43.563+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-14T22:18:43.569+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-14T22:18:43.570+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-14T22:18:43.573+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-14T22:18:43.576+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-14T22:18:43.579+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-14T22:18:43.582+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-14T22:18:43.585+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-14T22:18:43.590+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "39 - oncall plan memberships"
+2026-10-14T22:18:43.594+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "40 - open handoff publication snapshots"
+2026-10-14T22:18:43.597+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "41 - open handoff notification outbox"
+2026-10-14T22:18:43.600+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "42 - open notification redrive receipts"
+2026-10-14T22:18:43.606+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "43 - runbook retrieval scope snapshots"
+2026-10-14T22:18:43.610+08:00  INFO 56788 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 43 migrations to schema "public", now at version v43 (execution time 00:00.084s)
+2026-10-14T22:18:43.853+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-14T22:18:43.924+08:00  INFO 56788 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@79b2d75b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7fe251f5, org.springframework.security.web.context.SecurityContextHolderFilter@4f8e00a0, org.springframework.security.web.header.HeaderWriterFilter@60ae1183, org.springframework.web.filter.CorsFilter@31a62fff, org.springframework.security.web.authentication.logout.LogoutFilter@65ec7757, org.trigger.opspilot.security.JwtAuthenticationFilter@d575d98, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@490acdea, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@59b8ff41, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@412d9c3, org.springframework.security.web.session.SessionManagementFilter@1662b02a, org.springframework.security.web.access.ExceptionTranslationFilter@f712e7d, org.springframework.security.web.access.intercept.AuthorizationFilter@64ca2969]
+2026-10-14T22:18:44.083+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:opspilot-assistant-transactions'
+2026-10-14T22:18:44.143+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 0 (http)
+2026-10-14T22:18:44.143+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-10-14T22:18:44.144+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-10-14T22:18:44.255+08:00  INFO 56788 --- [opspilot] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-10-14T22:18:44.256+08:00  INFO 56788 --- [opspilot] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 153 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-14T22:18:44.270+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2026-10-14T22:18:44.302+08:00  INFO 56788 --- [opspilot] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 57706 (http) with context path ''
+2026-10-14T22:18:44.307+08:00  INFO 56788 --- [opspilot] [           main] .o.a.AssistantTransactionIntegrationTest : Started AssistantTransactionIntegrationTest in 1.839 seconds (process running for 47.475)
+2026-10-14T22:18:49.770+08:00  INFO 56788 --- [opspilot] [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2026-10-14T22:18:49.814+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown initiated...
+2026-10-14T22:18:49.815+08:00  INFO 56788 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown completed.
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.358 s -- in org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 91, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:13 min
+[INFO] Finished at: 2026-10-14T22:18:50+08:00
+[INFO] ------------------------------------------------------------------------

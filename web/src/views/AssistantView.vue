@@ -33,6 +33,7 @@ interface IncidentContext {
 interface SessionDetail { session: SessionSummary; messages: Message[]; context: IncidentContext | null }
 interface IncidentSummary { id: number; incidentCode: string; title: string; severity: string; status: string; resourceName: string }
 interface EvidenceRef { ref: string; type: string; label: string }
+interface AssistantRuntime { mode: 'RULES' | 'MODEL'; provider: string | null; model: string | null; label: string }
 
 const route = useRoute()
 const router = useRouter()
@@ -40,6 +41,10 @@ const sessions = ref<SessionSummary[]>([])
 const incidents = ref<IncidentSummary[]>([])
 const active = ref<SessionDetail | null>(null)
 const loading = ref(true)
+const runtime = ref<AssistantRuntime | null>(null)
+const runtimeLabel = computed(() => runtime.value?.mode === 'MODEL'
+  ? `${runtime.value.provider ?? '模型'}${runtime.value.model ? ` · ${runtime.value.model}` : ''}（已配置）`
+  : runtime.value?.label ?? '运行模式待确认')
 const sending = ref(false)
 const pendingRequest = ref<Readonly<AssistantIntent> | null>(null)
 const requestState = ref<AssistantRequestView | null>(null)
@@ -82,13 +87,15 @@ async function load() {
   loading.value = true
   error.value = ''
   try {
-    const [sessionRows, incidentPage] = await Promise.all([
+    const [sessionRows, incidentPage, runtimeInfo] = await Promise.all([
       api<SessionSummary[]>('/assistant/sessions'),
       api<PageResponse<IncidentSummary>>('/incidents?size=100'),
+      api<AssistantRuntime>('/assistant/runtime').catch(() => null),
     ])
     if (disposed || sessionChanged.value) return
     sessions.value = sessionRows
     incidents.value = incidentPage.items
+    runtime.value = runtimeInfo
     const incidentId = Number(route.query.incident)
     if (Number.isFinite(incidentId) && incidentId > 0) {
       const existing = sessionRows.find(item => item.incidentId === incidentId)
@@ -454,6 +461,12 @@ async function scrollToBottom() {
   messageViewport.value?.scrollTo({ top: messageViewport.value.scrollHeight, behavior: 'smooth' })
 }
 
+function onComposerKeydown(event: KeyboardEvent) {
+  if (event.key !== 'Enter' || event.shiftKey || event.ctrlKey || event.altKey || event.metaKey || event.isComposing) return
+  event.preventDefault()
+  void sendMessage()
+}
+
 function onSessionChange() {
   if (localStorage.getItem('opspilot_token') === pageToken) return
   sessionChanged.value = true
@@ -494,7 +507,7 @@ onBeforeUnmount(() => {
             <ChevronRight :size="15" />
           </button>
         </div>
-        <footer><span class="assistant-mode-dot" /><div><strong>{{ active?.context ? 'INCIDENT CONTEXT' : 'GENERAL CONTEXT' }}</strong><span>证据约束模式</span></div></footer>
+        <footer><span class="assistant-mode-dot" /><div><strong>{{ active?.context ? 'Incident 协作' : '通用对话' }}</strong><span>{{ runtimeLabel }}</span></div></footer>
       </aside>
       <div v-if="mobileSessionsOpen" class="assistant-mobile-scrim" @click="mobileSessionsOpen = false" />
       <div v-if="mobileContextOpen" class="assistant-context-scrim" @click="mobileContextOpen = false" />
@@ -518,7 +531,7 @@ onBeforeUnmount(() => {
             <span class="assistant-orb"><Bot :size="24" /></span>
             <h2>{{ active.context ? '从当前证据开始分析' : '今天需要处理什么？' }}</h2>
             <p v-if="active.context">已载入 {{ active.context.incidentCode }} 的告警、资源、变更与调查记录。</p>
-            <p v-else>选择一个 Incident 建立上下文，或直接进行通用运维问答。</p>
+            <p v-else>选择 Incident 查看证据，也可以询问助手身份与能力。</p>
             <div class="assistant-suggestions"><button v-for="item in suggestions" :key="item" :disabled="requestLocked" @click="sendMessage(item)">{{ item }}<ChevronRight :size="15" /></button></div>
           </div>
 
@@ -558,10 +571,10 @@ onBeforeUnmount(() => {
           </section>
           <div v-if="error" class="assistant-inline-error">{{ error }}</div>
           <form class="assistant-composer" @submit.prevent="sendMessage()">
-            <textarea v-model="draft" rows="1" :disabled="requestLocked" placeholder="询问当前证据、根因假设或下一步动作" @keydown.enter.exact.prevent="sendMessage()" />
+            <textarea v-model="draft" rows="2" maxlength="10000" aria-label="消息内容" :disabled="requestLocked" placeholder="输入问题，Enter 发送，Shift + Enter 换行" @keydown="onComposerKeydown" />
             <button class="assistant-send" title="发送消息" :disabled="requestLocked || !draft.trim()"><Send :size="18" /></button>
           </form>
-          <div class="assistant-composer-meta"><span><Sparkles :size="13" />证据约束</span><span>回答不会自动执行生产操作</span></div>
+          <div class="assistant-composer-meta"><span><Sparkles :size="13" />{{ runtimeLabel }}</span><span>回答不会自动执行生产操作</span></div>
         </div>
       </section>
 
@@ -599,11 +612,67 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+.assistant-page { height: calc(100dvh - 64px); min-height: 0; padding: 0; }
+.assistant-shell { grid-template-columns: 232px minmax(0, 1fr) 280px; }
+.assistant-session-list strong { font-size: 13px; font-weight: 600; }
+.assistant-session-list span, .assistant-session-list small { font-size: 11px; }
+.assistant-session-rail > footer strong, .assistant-session-rail > footer span { font-size: 11px; }
+.assistant-session-rail > footer > div { min-width: 0; overflow-wrap: anywhere; }
 .assistant-conversation { position: relative; isolation: isolate; }
 .assistant-conversation > :not(.workbench-backdrop) { position: relative; z-index: 1; }
 .assistant-chat-head, .assistant-composer-wrap { background: color-mix(in srgb, var(--surface) 95%, transparent); }
-.assistant-message.assistant .assistant-message-body { padding: 14px 18px; border: 1px solid var(--line); border-radius: 8px; background: color-mix(in srgb, var(--surface) 95%, transparent); }
-.assistant-message.user .assistant-message-body { background: color-mix(in srgb, var(--surface-muted) 96%, transparent); }
-.assistant-suggestions button { background: color-mix(in srgb, var(--surface) 96%, transparent); }
-@media (max-width: 640px) { .assistant-message.assistant .assistant-message-body { padding: 12px; } }
+.assistant-chat-head strong { font-size: 14px; font-weight: 600; }
+.assistant-chat-head span { font-size: 11px; }
+.assistant-chat-actions { flex-shrink: 0; }
+.assistant-welcome { padding: 40px 28px; max-width: 660px; }
+.assistant-welcome h2 { font-size: clamp(23px, 2.1vw, 30px); font-weight: 600; letter-spacing: -.5px; }
+.assistant-welcome p { font-size: 13px; line-height: 1.8; }
+.assistant-suggestions button { font-size: 13px; background: color-mix(in srgb, var(--surface) 96%, transparent); }
+.assistant-message-list { width: min(780px, 100%); padding: 28px 28px 40px; }
+.assistant-message { grid-template-columns: 28px minmax(0, 1fr); gap: 10px; margin-bottom: 24px; }
+.assistant-message.user { grid-template-columns: minmax(0, 1fr); }
+.assistant-message-avatar { width: 28px; height: 28px; border-radius: 50%; }
+.assistant-message.assistant .assistant-message-body { padding: 16px 20px; border: 0; border-radius: 12px; background: color-mix(in srgb, var(--surface) 97%, transparent); }
+.assistant-message.user .assistant-message-body { border-radius: 16px 16px 4px 16px; background: color-mix(in srgb, var(--surface-muted) 97%, transparent); }
+.assistant-message-body > header { height: 28px; align-items: baseline; }
+.assistant-message-body > header strong { font-size: 12px; font-weight: 600; }
+.assistant-message-body > header time { font-size: 10px; }
+.assistant-message-body :deep(.chat-markdown) { font-size: 14px; line-height: 1.85; overflow-wrap: anywhere; }
+.assistant-message-body :deep(.chat-markdown h3) { font-size: 15px; }
+.assistant-evidence > span, .assistant-evidence em { font-size: 11px; overflow-wrap: anywhere; }
+.assistant-composer-wrap { padding: 12px 28px 16px; }
+.assistant-composer { max-width: 724px; min-height: 84px; padding: 12px 12px 12px 18px; border-radius: 16px; }
+.assistant-composer textarea { min-height: 54px; padding: 4px 0; font-size: 14px; line-height: 1.7; }
+.assistant-send { width: 36px; height: 36px; border-radius: 50%; }
+.assistant-composer-meta { max-width: 724px; font-size: 10px; flex-wrap: wrap; gap: 4px 12px; }
+.assistant-context-rail > header > span { font-size: 11px; }
+.assistant-context-title strong { font-size: 16px; line-height: 1.6; }
+.assistant-context-title > span, .assistant-context-rail dt { font-size: 11px; }
+.assistant-context-rail dd { font-size: 13px; }
+.assistant-context-rail h3, .assistant-context-empty strong { font-size: 13px; }
+.assistant-context-empty p, .assistant-context-items strong, .assistant-context-prompts button { font-size: 12px; line-height: 1.7; }
+.assistant-context-items span, .assistant-context-items small { font-size: 10px; }
+.assistant-incident-picker strong { font-size: 12px; line-height: 1.6; }
+.assistant-incident-picker span { font-size: 11px; }
+@media (max-width: 1180px) { .assistant-shell { grid-template-columns: 216px minmax(0, 1fr); } }
+@media (max-width: 900px) {
+  .assistant-shell { display: block; position: relative; }
+  .assistant-conversation { height: 100%; }
+  .assistant-session-rail { width: min(292px, 82vw); position: fixed; inset: 64px auto 0 0; z-index: 52; transform: translateX(-100%); transition: transform 180ms ease; box-shadow: var(--shadow-float); }
+  .assistant-session-rail.mobile-open { transform: translateX(0); }
+  .assistant-session-rail > header .icon-button, .assistant-mobile-sessions { display: inline-grid; }
+  .assistant-mobile-scrim { display: block; position: fixed; inset: 64px 0 0; z-index: 51; background: #0006; }
+}
+@media (max-width: 640px) {
+  .assistant-chat-head { padding-inline: 10px; }
+  .assistant-message-list { padding: 20px 12px 28px; }
+  .assistant-message { grid-template-columns: minmax(0, 1fr); }
+  .assistant-message-avatar { display: none; }
+  .assistant-message.assistant .assistant-message-body { padding: 14px; }
+  .assistant-welcome { padding: 24px 18px; }
+  .assistant-composer-wrap { padding: 8px 12px 12px; }
+  .assistant-composer { padding: 10px 10px 10px 14px; }
+  .assistant-composer-meta { justify-content: center; white-space: normal; }
+}
+@media (prefers-reduced-motion: reduce) { .assistant-session-rail { transition: none; } }
 </style>

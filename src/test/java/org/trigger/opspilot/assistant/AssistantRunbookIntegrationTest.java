@@ -254,7 +254,8 @@ class AssistantRunbookIntegrationTest {
     }
 
     private AssistantService withAi(AssistantAiService ai) {
-        return new AssistantService(jdbc, json, Optional.of(ai), agentRuns, authorization, transactions, requests, runbooks, observations);
+        return new AssistantService(jdbc, json, Optional.of(ai), agentRuns, authorization, transactions, requests, runbooks, observations,
+                new AssistantIdentity(Optional.of(ai), Optional.empty()));
     }
 
     @Test void boundSearchShouldFilterBeforeTopKAndKeepDirectDependencyAndGenericProcedures() throws Exception {

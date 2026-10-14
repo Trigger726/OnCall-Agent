@@ -267,7 +267,8 @@ class AssistantObservationIntegrationTest {
         return new AssistantObservationService(incidents, contexts, router, new LogsProviderRouter(List.of(logs), tracing), new LogRedactor(), authorization);
     }
     private AssistantService withAi(AssistantAiService ai, AssistantObservationService observation) {
-        return new AssistantService(jdbc, json, Optional.ofNullable(ai), agentRuns, authorization, transactions, requests, runbooks, observation);
+        return new AssistantService(jdbc, json, Optional.ofNullable(ai), agentRuns, authorization, transactions, requests, runbooks, observation,
+                new AssistantIdentity(Optional.ofNullable(ai), Optional.empty()));
     }
     private AssistantRequestStore.Identity identity() {
         return new AssistantRequestStore.Identity(AssistantRequestStore.keyHash(UUID.randomUUID().toString()), UUID.randomUUID().toString(), System.currentTimeMillis() + 30000);

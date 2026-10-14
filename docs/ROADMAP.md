@@ -1,5 +1,7 @@
 # OpsPilot 高价值迭代路线
 
+最新用户指定助手增量：[身份直答与 Claude design 可读性细修](acceptance/V1.8-ui-assistant-identity.md)。沿用现有视觉、MiSans 与默认互动流光，显示真实运行模式；修复身份问题误入证据路径，保留事务/幂等/撤权围栏，不扩展为完整通用聊天或推进 CP07。
+
 最新用户指定 UI 收口：[删除动效按钮，默认播放](acceptance/V1.8-ui-ambient-autoplay.md)。仅移除控制与旧暂停偏好的读取，回收助手工具栏占位；保留系统减少动态/无 GPU 降级、配色、MiSans 和业务，不新增功能。
 
 最新用户指定视觉增量：[扩大流光覆盖与鼠标互动](acceptance/V1.8-ui-ambient-motion.md)。只扩展既有 UI，覆盖运行总览、登录/欢迎区域及 OnCall 助手空会话/实际对话；保留 MiSans，优化两主题配色、暂停和手机触控。不推进待验 CP07 或其他业务功能。
