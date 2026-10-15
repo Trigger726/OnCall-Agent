@@ -110,6 +110,16 @@ abstract class CitationScenarios {
         mvc.perform(get(url("citation-session", 1, 0)).header("Authorization", token)).andExpect(status().isUnauthorized());
     }
 
+    @Test void keepsFencedCodeCommentsInTheReferencedSourceChunk() throws Exception {
+        String body = "READERPROBE\n```sh\n# 注释不是章节\n  echo safe\n```\n完成";
+        long id = submit("citation-code", "# 真正章节\n" + body, List.of("ADMIN", "ON_CALL"));approve(id);
+        assertThat(jdbc.sql("SELECT COUNT(*) FROM runbook_chunk WHERE document_id=:id").param("id", id)
+                .query(Integer.class).single()).isEqualTo(1);
+        mvc.perform(get(url("citation-code", 1, 0)).header("Authorization", bearer("zhangwei")))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.data.content").value(body))
+                .andExpect(jsonPath("$.data.heading").value("真正章节"));
+    }
+
     private long submit(String key, String markdown, List<String> roles) throws Exception {
         JsonNode result = json.readTree(mvc.perform(post("/api/v1/runbooks/imports/markdown")
                 .header("Authorization", bearer("admin")).contentType(MediaType.APPLICATION_JSON)

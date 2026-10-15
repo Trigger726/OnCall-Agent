@@ -60,13 +60,13 @@ jobs:
           node-version: 22
       - name: Verify evidence gates
         run: node --test scripts/tests/citation-source-ci.test.cjs
-      - name: Run the same six scenarios on both real database products
+      - name: Run the same seven scenarios on both real database products
         run: |
           chmod +x mvnw
           mkdir -p target/citation-contract-it
           node -e "require('fs').writeFileSync('target/citation-contract-it/started', String(Date.now()))"
           set -o pipefail
-          ./mvnw -B -Dtest=RunbookCitationIntegrationTest,MySqlRunbookCitationIntegrationTest -Dopspilot.scoped.eval.mysql.enabled=true test 2>&1 | tee target/citation-contract-it/maven.log
+          ./mvnw -B -Dtest=RunbookTextProcessorTest,RunbookCitationIntegrationTest,MySqlRunbookCitationIntegrationTest -Dopspilot.scoped.eval.mysql.enabled=true test 2>&1 | tee target/citation-contract-it/maven.log
       - name: Reject skipped, stale, mismatched or wrong-product results
         run: node scripts/verify-citation-contract-results.cjs target/surefire-reports target/citation-contract-it/started target/citation-contract-it/result.json
       - uses: actions/upload-artifact@v5
@@ -76,6 +76,7 @@ jobs:
           path: |
             target/citation-contract-it/
             target/surefire-reports/TEST-org.trigger.opspilot.runbook.*RunbookCitationIntegrationTest.xml
+            target/surefire-reports/TEST-org.trigger.opspilot.runbook.RunbookTextProcessorTest.xml
           retention-days: 30
 
   citation-browser:
@@ -107,12 +108,16 @@ jobs:
         run: |
           npm ci --prefix scripts/browser
           node scripts/browser/node_modules/playwright/cli.js install --with-deps chromium
-          node --test scripts/tests/citation-source-ci.test.cjs
+          node --test scripts/tests/citation-source-ci.test.cjs scripts/tests/answer-reader-ui-ci.test.cjs
       - name: Verify all five source UI flows against the fresh default package
         run: node scripts/verify-runbook-citation-ui.cjs
+      - name: Verify answer code, inline references, copy and native preview boundaries
+        run: node scripts/verify-answer-reader-ui.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: citation-browser-evidence
-          path: target/runbook-citation-ui-it/
+          path: |
+            target/runbook-citation-ui-it/
+            target/answer-reader-ui-it/
           retention-days: 30

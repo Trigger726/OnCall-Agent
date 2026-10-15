@@ -1,12 +1,12 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path');
 const {verifyResults,names}=require('../verify-citation-contract-results.cjs');
 function fixture(){const folder=fs.mkdtempSync(path.join(os.tmpdir(),'citation-gate-'));const start=Date.now()-2000;
-  for(const name of ['RunbookCitationIntegrationTest','MySqlRunbookCitationIntegrationTest']){const product=name.startsWith('MySql')?'MySQL':'H2';fs.writeFileSync(path.join(folder,'TEST-org.trigger.opspilot.runbook.'+name+'.xml'),`<testsuite name="org.trigger.opspilot.runbook.${name}" tests="6" failures="0" errors="0" skipped="0">${names.map(name=>`<testcase name="${name}"/>`).join('')}<system-out>CITATION_DATABASE ${name}|${product}|controlled</system-out></testsuite>`);}
+  for(const name of ['RunbookCitationIntegrationTest','MySqlRunbookCitationIntegrationTest']){const product=name.startsWith('MySql')?'MySQL':'H2';fs.writeFileSync(path.join(folder,'TEST-org.trigger.opspilot.runbook.'+name+'.xml'),`<testsuite name="org.trigger.opspilot.runbook.${name}" tests="7" failures="0" errors="0" skipped="0">${names.map(name=>`<testcase name="${name}"/>`).join('')}<system-out>CITATION_DATABASE ${name}|${product}|controlled</system-out></testsuite>`);}
   return {folder,start,file:path.join(folder,'TEST-org.trigger.opspilot.runbook.MySqlRunbookCitationIntegrationTest.xml')};}
-test('accepts only both fresh, identical six-case products',()=>{const f=fixture();assert.equal(verifyResults(f.folder,f.start).tests,12);});
+test('accepts only both fresh, identical seven-case products',()=>{const f=fixture();assert.equal(verifyResults(f.folder,f.start).tests,14);});
 test('rejects stale XML, skipped cases and wrong database product',()=>{
   const stale=fixture();assert.throws(()=>verifyResults(stale.folder,Date.now()+10000),/Stale XML/);
-  for(const[before,after]of [['skipped="0"','skipped="1"'],['|MySQL|','|H2|'],['tests="6"','tests="0"']]){const f=fixture();fs.writeFileSync(f.file,fs.readFileSync(f.file,'utf8').replace(before,after));assert.throws(()=>verifyResults(f.folder,f.start));}
+  for(const[before,after]of [['skipped="0"','skipped="1"'],['|MySQL|','|H2|'],['tests="7"','tests="0"']]){const f=fixture();fs.writeFileSync(f.file,fs.readFileSync(f.file,'utf8').replace(before,after));assert.throws(()=>verifyResults(f.folder,f.start));}
 });
 test('rejects divergent or duplicate scenarios instead of trusting aggregate counts',()=>{const f=fixture();fs.writeFileSync(f.file,fs.readFileSync(f.file,'utf8').replace(names[0],names[1]));assert.throws(()=>verifyResults(f.folder,f.start));});
 test('Linux UI gates retain all flows and force the freshly packaged default JAR in CI',()=>{

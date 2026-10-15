@@ -1,0 +1,62 @@
+{
+  "status": "FAIL",
+  "out": "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-answer-reader-OQfBjF",
+  "mode": "LOCAL_COMPARISON",
+  "sourceCommit": null,
+  "browser": "Browser plugin not available; existing Playwright/Chromium",
+  "realCloudModel": false,
+  "userDatabaseModified": false,
+  "osClipboardModified": false,
+  "runs": [
+    {
+      "label": "before",
+      "jar": "target/opspilot-v1.8-citation-source-final.jar",
+      "jarSha256": "7cef50f1003f68f4fc12c593df428c33feb40ad5d3478d9f2d02e456a283d539",
+      "fixtureSha256": "8457cdcc5ea23e9f3a2c2702261c96fb7584add01f6e78d15812e60268f74d51",
+      "cases": [
+        {
+          "name": "raw-fences-long-citations-and-cross-section-renumbering",
+          "reproduced": true
+        }
+      ],
+      "answerSha256": "f6c274d4283d3d43c819bfb4dfe3596d9952ee11f8e60e4315f926d39e764f9e",
+      "originalNumbers": [
+        "1",
+        "2",
+        "1"
+      ],
+      "renderedNumbers": [
+        "1",
+        "2",
+        "3"
+      ],
+      "shutdown": true,
+      "exitCode": 0,
+      "portsFree": true
+    },
+    {
+      "label": "after",
+      "jar": "target/opspilot-v1.8-answer-reader-20261015.jar",
+      "jarSha256": "09b2ecff5e7795809bdcb35a159cd3fa63d932bfda0b728cf2e04b3cb6ddf9c1",
+      "fixtureSha256": "8457cdcc5ea23e9f3a2c2702261c96fb7584add01f6e78d15812e60268f74d51",
+      "cases": [],
+      "answerSha256": "f6c274d4283d3d43c819bfb4dfe3596d9952ee11f8e60e4315f926d39e764f9e",
+      "shutdown": true,
+      "exitCode": 0,
+      "portsFree": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "before-answer-light1440.png",
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440,
+      "theme": "light"
+    }
+  ],
+  "providerCalls": [],
+  "errors": [],
+  "warnings": [],
+  "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n  '  redis-cli INFO stats\\n' +\n    '  printf \"%s\\\\n\" \"read-only-sample-read-only-sample-read-only-sample-read-only-sample-read-only-sample-read-only-sample-read-only-sample-read-only-sample-read-only-sample-read-only-sample-read-only-sample-read-only-sample-\"\\n' +\n+   '\\n' +\n+   '- **Redis 连接池耗尽处置** [runbook:legacy-runbook-2:v1#chunk-0]\\n' +\n+   '原文片段：\\n' +\n+   '检查 active、idle、pending；核对连接池上限变更；确认慢命令；必要时回滚配置并分批重启客户端实例。\\n' +\n+   '\\n' +\n+   '- **认证错误率升高排查** [runbook:legacy-runbook-3:v1#chunk-0]\\n' +\n+   '原文片段：\\n' +\n+   '按客户端版本、错误码和发布批次聚合；核对 token 格式兼容；灰度开启兼容策略并观察错误率。'\n-   '# 参考 [runbook:answer-reader:v1#chunk-0]\\n'\n\n    at run (D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-answer-reader-ui.cjs:48:12)\n    at async D:\\Codex\\国网\\央国企求职\\OpsPilot\\scripts\\verify-answer-reader-ui.cjs:69:321"
+}

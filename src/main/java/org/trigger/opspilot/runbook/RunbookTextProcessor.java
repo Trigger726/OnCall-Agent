@@ -8,6 +8,8 @@ import java.util.Locale;
 final class RunbookTextProcessor {
     private static final int MAX_CHUNK_CHARS = 1_200;
     private static final int CHUNK_OVERLAP_CHARS = 120;
+    private static final java.util.regex.Pattern FENCE = java.util.regex.Pattern.compile("^ {0,3}(`{3,}|~{3,})(.*)$");
+    private static final java.util.regex.Pattern FENCE_END = java.util.regex.Pattern.compile("^ {0,3}(`+|~+)[ \\t]*$");
 
     private RunbookTextProcessor() {
     }
@@ -17,9 +19,22 @@ final class RunbookTextProcessor {
         List<ChunkDraft> chunks = new ArrayList<>();
         String heading = "正文";
         StringBuilder section = new StringBuilder();
+        String fenceMarker = null;
         for (String line : normalized.split("\n", -1)) {
             String trimmed = line.trim();
-            if (trimmed.matches("^#{1,6}\\s+.+")) {
+            boolean fenced = fenceMarker != null;
+            if (fenced) {
+                var closing = FENCE_END.matcher(line);
+                if (closing.matches() && closing.group(1).charAt(0) == fenceMarker.charAt(0)
+                        && closing.group(1).length() >= fenceMarker.length()) fenceMarker = null;
+            } else {
+                var opening = FENCE.matcher(line);
+                if (opening.matches() && !(opening.group(1).charAt(0) == '`' && opening.group(2).contains("`"))) {
+                    fenceMarker = opening.group(1);
+                    fenced = true;
+                }
+            }
+            if (!fenced && trimmed.matches("^#{1,6}\\s+.+")) {
                 appendSection(chunks, heading, section.toString());
                 heading = trimmed.replaceFirst("^#{1,6}\\s+", "").trim();
                 section.setLength(0);

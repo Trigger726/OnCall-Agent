@@ -480,7 +480,11 @@ async function copyMessage(message: Message) {
 
 function evidence(message: Message): EvidenceRef[] {
   if (!message.evidenceJson) return []
-  try { return JSON.parse(message.evidenceJson) as EvidenceRef[] }
+  try {
+    const rows: unknown = JSON.parse(message.evidenceJson)
+    return Array.isArray(rows) ? rows.filter(item => item && typeof item.ref === 'string'
+      && typeof item.label === 'string' && typeof item.type === 'string') : []
+  }
   catch { return [] }
 }
 
@@ -569,11 +573,11 @@ onBeforeUnmount(() => {
               <div class="assistant-message-body">
                 <header><strong>{{ message.role === 'USER' ? '你' : 'OnCall 助手' }}</strong><time>{{ formatTime(message.createdAt, true) }}</time></header>
                 <small v-if="message.provisional" class="assistant-preview-label" role="status">模型实时生成 · 片段尚未保存</small>
-                <ChatMessage v-if="message.content" :content="message.content" />
+                <ChatMessage v-if="message.content" :content="message.content" :citations="message.role === 'ASSISTANT' && !message.provisional ? evidence(message) : []" :provisional="message.provisional" @citation="selectedCitation = $event" />
                 <div v-else class="assistant-generating"><i /><i /><i /></div>
                 <details v-if="evidence(message).length" class="assistant-evidence">
                   <summary><FileText :size="14" /><span>{{ evidence(message).length }} 条证据</span><ChevronRight :size="14" /></summary>
-                  <ul><li v-for="item in evidence(message)" :key="item.ref"><button v-if="parseRunbookCitation(item.ref) && !message.provisional" type="button" class="assistant-source-link" @click="selectedCitation = item.ref"><strong>{{ item.label }}</strong><span>查看原文</span></button><strong v-else>{{ item.label }}</strong><code>{{ item.ref }}</code></li></ul>
+                  <ul><li v-for="(item, index) in evidence(message)" :key="item.ref"><button v-if="parseRunbookCitation(item.ref) && !message.provisional" type="button" class="assistant-source-link" @click="selectedCitation = item.ref"><strong>[{{ index + 1 }}] {{ item.label }}</strong><span>查看原文</span></button><strong v-else>{{ item.label }}</strong><code>{{ item.ref }}</code></li></ul>
                 </details>
                 <button v-if="message.content && !message.provisional" class="assistant-copy" :title="copiedId === message.id ? '已复制' : '复制回答'" @click="copyMessage(message)"><Check v-if="copiedId === message.id" :size="14" /><Copy v-else :size="14" /></button>
               </div>
