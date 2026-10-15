@@ -125,6 +125,15 @@ public class RunbookController {
         return ApiResponse.ok(service.versions(stableKey, user.roleCode()));
     }
 
+    @GetMapping("/{stableKey}/versions/{versionNo}/chunks/{chunkIndex}")
+    public ApiResponse<RunbookService.CitationView> citation(
+            @AuthenticationPrincipal UserPrincipal user,
+            @PathVariable String stableKey,
+            @PathVariable @Min(1) int versionNo,
+            @PathVariable @Min(0) int chunkIndex) {
+        return ApiResponse.ok(service.citation(stableKey, versionNo, chunkIndex, user.roleCode()));
+    }
+
     @PostMapping("/imports/markdown")
     @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
     public ApiResponse<RunbookService.ImportResult> importMarkdown(

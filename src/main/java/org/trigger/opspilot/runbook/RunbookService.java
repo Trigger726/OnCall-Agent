@@ -120,6 +120,31 @@ public class RunbookService {
         return versions;
     }
 
+    public CitationView citation(String stableKey, int versionNo, int chunkIndex, String roleCode) {
+        String key = normalizeStableKey(stableKey);
+        String role = normalizeRole(roleCode);
+        return jdbcClient.sql("""
+                        SELECT d.stable_key, d.version_no, d.status, d.title, d.source_type, d.source_name,
+                               d.published_at, c.chunk_index, c.heading, c.content
+                        FROM runbook_document d
+                        JOIN runbook_chunk c ON c.document_id = d.id
+                        WHERE d.stable_key = :key AND d.version_no = :version AND c.chunk_index = :chunk
+                          AND d.status IN ('PUBLISHED', 'SUPERSEDED')
+                          AND EXISTS (SELECT 1 FROM runbook_document_acl a
+                                      WHERE a.document_id = d.id AND a.role_code = :role)
+                        """)
+                .param("key", key).param("version", versionNo).param("chunk", chunkIndex).param("role", role)
+                .query((rs, rowNum) -> new CitationView(
+                        "runbook:" + rs.getString("stable_key") + ":v" + rs.getInt("version_no")
+                                + "#chunk-" + rs.getInt("chunk_index"),
+                        rs.getString("stable_key"), rs.getInt("version_no"), rs.getString("status"),
+                        rs.getString("title"), rs.getString("source_type"), rs.getString("source_name"),
+                        rs.getObject("published_at", LocalDateTime.class), rs.getInt("chunk_index"),
+                        rs.getString("heading"), rs.getString("content")))
+                .optional().orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND,
+                        "RUNBOOK_CITATION_NOT_FOUND", "引用原文不存在或当前无权查看"));
+    }
+
     public SearchResponse search(String rawQuery, String roleCode, int requestedTopK) {
         return search(rawQuery, roleCode, requestedTopK, "AUTO");
     }
@@ -807,6 +832,11 @@ public class RunbookService {
 
     public record FileImportCommand(String stableKey, String resourceType, String serviceCode,
                                     String title, String summary, List<String> allowedRoles) {
+    }
+
+    public record CitationView(String citation, String stableKey, int versionNo, String status,
+                               String title, String sourceType, String sourceName, LocalDateTime publishedAt,
+                               int chunkIndex, String heading, String content) {
     }
 
     public record ImportResult(DocumentView document, boolean reused) {

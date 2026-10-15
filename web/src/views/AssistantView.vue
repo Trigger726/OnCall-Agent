@@ -6,11 +6,13 @@ import {
   Menu, MessageSquarePlus, PanelLeft, Play, Plus, Send, Sparkles, Trash2, Workflow, X,
 } from 'lucide-vue-next'
 import ChatMessage from '@/components/ChatMessage.vue'
+import RunbookCitationDialog from '@/components/RunbookCitationDialog.vue'
 import WorkbenchBackdrop from '@/components/WorkbenchBackdrop.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
 import { api, formatTime, RequestError, type PageResponse } from '@/services/api'
 import { clearAgentInvestigationIdempotency, streamAgentInvestigation, subscribeAgentInvestigation } from '@/services/agentStream'
 import { captureStreamSession } from '@/services/streamSession'
+import { parseRunbookCitation } from '@/services/runbookCitations'
 import {
   assistantStatusLabel, assistantTerminal, cancelAssistantRequest, clearAssistantIntent, freezeAssistantIntent,
   readAssistantIntent, readAssistantRequest, readAssistantSession, removeUnreadableAssistantIntent, streamAssistantRequest,
@@ -40,6 +42,7 @@ const router = useRouter()
 const sessions = ref<SessionSummary[]>([])
 const incidents = ref<IncidentSummary[]>([])
 const active = ref<SessionDetail | null>(null)
+const selectedCitation = ref<string | null>(null)
 const loading = ref(true)
 const runtime = ref<AssistantRuntime | null>(null)
 const runtimeLabel = computed(() => runtime.value?.mode === 'MODEL'
@@ -256,6 +259,7 @@ function stopAgentSubscription() {
 
 function rememberSessionAndResume() {
   if (!active.value) return
+  selectedCitation.value = null
   pendingRequest.value = null
   requestState.value = null
   requestNotFound.value = false
@@ -494,6 +498,7 @@ function onComposerKeydown(event: KeyboardEvent) {
 function onSessionChange() {
   if (localStorage.getItem('opspilot_token') === pageToken) return
   sessionChanged.value = true
+  selectedCitation.value = null
   selectionVersion++
   abortController?.abort()
   requestController?.abort()
@@ -568,7 +573,7 @@ onBeforeUnmount(() => {
                 <div v-else class="assistant-generating"><i /><i /><i /></div>
                 <details v-if="evidence(message).length" class="assistant-evidence">
                   <summary><FileText :size="14" /><span>{{ evidence(message).length }} 条证据</span><ChevronRight :size="14" /></summary>
-                  <ul><li v-for="item in evidence(message)" :key="item.ref"><strong>{{ item.label }}</strong><code>{{ item.ref }}</code></li></ul>
+                  <ul><li v-for="item in evidence(message)" :key="item.ref"><button v-if="parseRunbookCitation(item.ref) && !message.provisional" type="button" class="assistant-source-link" @click="selectedCitation = item.ref"><strong>{{ item.label }}</strong><span>查看原文</span></button><strong v-else>{{ item.label }}</strong><code>{{ item.ref }}</code></li></ul>
                 </details>
                 <button v-if="message.content && !message.provisional" class="assistant-copy" :title="copiedId === message.id ? '已复制' : '复制回答'" @click="copyMessage(message)"><Check v-if="copiedId === message.id" :size="14" /><Copy v-else :size="14" /></button>
               </div>
@@ -631,6 +636,7 @@ onBeforeUnmount(() => {
         </template>
       </aside>
     </div>
+    <RunbookCitationDialog v-if="selectedCitation" :key="selectedCitation" :citation="selectedCitation" @close="selectedCitation = null" />
   </div>
 </template>
 
@@ -669,6 +675,9 @@ onBeforeUnmount(() => {
 .assistant-evidence li { display: grid; gap: 3px; overflow-wrap: anywhere; }
 .assistant-evidence li strong { font-size: 12px; font-weight: 500; }
 .assistant-evidence li code { color: var(--text-muted); font-size: 11px; white-space: normal; }
+.assistant-source-link { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 36px; padding: 2px 0; border: 0; color: var(--text); background: transparent; text-align: left; cursor: pointer; }
+.assistant-source-link span { flex-shrink: 0; color: var(--blue); font-size: 12px; }
+.assistant-source-link:hover strong { text-decoration: underline; text-underline-offset: 3px; }
 .assistant-composer-wrap { padding: 12px 28px 16px; }
 .assistant-composer { max-width: 724px; min-height: 84px; padding: 12px 12px 12px 18px; border-radius: 16px; }
 .assistant-composer textarea { min-height: 54px; padding: 4px 0; font-size: 14px; line-height: 1.7; }

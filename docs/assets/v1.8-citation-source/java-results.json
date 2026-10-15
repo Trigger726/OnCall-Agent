@@ -1,0 +1,372 @@
+{
+  "tests": 163,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "isolatedSourceParent": "db4513711a16d13fa922db36307f78814e6187c3",
+  "suites": [
+    {
+      "name": "org.trigger.opspilot.assistant.AssistantAiStreamingTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "6c2d18d6055b174e3ceac9dda7b27f1ac08cbadade7693fea9c367865fd2d282",
+      "cases": [
+        "shouldMarkRetrievedDocumentsAndHistoryAsDataOnBothModelPaths",
+        "shouldBoundResponseCountIncludingEmptyFramesAndCancelSource",
+        "shouldCancelIdleUpstreamWithoutClaimingNormalCompletion",
+        "shouldPreserveExactIncrementalWhitespaceAndUnicodeWithEmptyStopFrame",
+        "shouldAcceptExactCharacterBoundaryAndRejectOverflowBeforeDelivery",
+        "shouldKeepValidationStateIsolatedForEachColdSubscription",
+        "shouldPropagateLateProviderFailureWithoutRetryOrFallbackEvenAfterStop",
+        "shouldRejectEmptyOrWhitespaceOnlyAnswerEvenWithStop",
+        "shouldAcceptExactResponseCountBoundary",
+        "shouldRejectUnknownFilteredOrToolTerminalWithoutEmittingItsContent",
+        "shouldRejectActualToolCallPayloadAndDisableSdkToolExecutionInPrompt",
+        "shouldRejectEmptyStreamAndNonterminalEof",
+        "shouldNotMergeMultipleAlternativeGenerations",
+        "shouldRejectMoreContentOrDuplicateTerminalAfterStop"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.assistant.AssistantCitationGuardTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "babcafe3fc817d9ada735f51d4819ffaf4ab09fa20de7c26e2adbd0e3f0fb901",
+      "cases": [
+        "unknownDocumentVersionChunkMalformedCaseOrSuffixShouldNeverBeEmitted",
+        "shouldHoldReferenceUntilBoundaryOrNormalCompletion",
+        "allChunkBoundariesShouldPreserveExactValidTextIncludingUnicodeAndMarkdown",
+        "shouldAllowNoReferencesAndFlushPartialOrdinaryWordAtEof",
+        "completePrefixWithoutAvailableEvidenceShouldFailWithoutLeakingReference",
+        "validationShouldRejectInvalidReferenceAfterAnAlreadyValidOne",
+        "metricAndLogPrefixesShouldPreserveEverySplitWithoutAcceptingWrongSourceOrSuffix"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.assistant.AssistantIdentityIntegrationTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "8842e35bbbab9d8c9e6a3e9cf5a8f9ccf2f6ed3ce3836a45b650ded754548b86",
+      "cases": [
+        "bothUnboundAndIncidentBoundIdentityMustPersistWithoutIrrelevantEvidence",
+        "revokedActorMustNotCommitIdentityAnswer",
+        "operationalQuestionAfterIdentityStillRetrievesPublishedRunbooks",
+        "nativeStreamWithModelConfiguredMustStillUseDirectIdentityPath",
+        "sameKeyMustReplayExactlyOnePersistedAnswer"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.assistant.AssistantIdentityTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "9f7a6aadf501847e41a3062431e3a3aaad572d4fb24d494018c57fa063bdf518",
+      "cases": [
+        "disabledModeMustNotClaimAConfiguredModelWasUsed",
+        "identityQuestionsAndCombinedQuestionsShouldAnswerDirectly",
+        "unknownOrUnsafeModelMetadataMustNotBeGuessedOrExposed",
+        "enabledModeShouldReportActualDefaultOptionsWithoutCallingTheModel",
+        "operationalAndMixedQuestionsMustNotBypassEvidencePath"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.assistant.AssistantNativeEndpointIntegrationTest",
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "f58bf6df5bc4c2d0c3c84baf9b4ceb5dabdd59d4b6ed897b4d4cf51c30940e5b",
+      "cases": [
+        "browserDisconnectShouldContinueOriginalDurableRequestWithoutAnotherPost",
+        "shouldTimeoutAnIdleProviderAfterPreviewWithoutCommittingPartialAnswer",
+        "shouldStopRevokedNativePreviewWithoutLateAnswerOrErrorPayload",
+        "shouldNotResurrectClearedNativePreviewWhenModelCompletesLate",
+        "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+        "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+        "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+        "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+        "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+        "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+        "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+        "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+        "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+        "shouldFailOnNativeEofRatherThanAppendRuleFallback",
+        "shouldRejectNativeQueueSaturationBeforeAdmissionAndReuseCancelledSlot",
+        "nativeDoneMustNotEscapeAFailedFinalAuditTransaction",
+        "shouldDeliverRealNativeTokenBeforeCompletionAndCommitExactAnswer",
+        "shouldCancelAfterPreviewAndReuseWorkerBeforeOldProviderIsReleased"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.assistant.AssistantObservationIntegrationTest",
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "f016143a18b1f3ae885405d68a3efebe868b7e3cfa6544b7d5978f3605f83e02",
+      "cases": [
+        "absentIncidentGenericQuestionAuditorAndUnsupportedRangesShouldNotQueryProviders",
+        "sampleBudgetShouldBeTwentyWithExplicitWarning",
+        "inventedMetricOrLogReferenceShouldFailBothPathsAndNotCommitAnswer",
+        "latestShouldBeExactlyRollingThirtyMinutesNotIncidentSeedData",
+        "actualLocalProvidersShouldReturnSeededFaultWindowAndDurableSanitizedSnapshots",
+        "normalAndNativeModelsShouldReceiveSameActualEvidenceAndGuardCrossFrameReferences",
+        "roleDowngradeInsideModelShouldFencePersistence",
+        "cancellationDuringFailedProviderShouldStopFallbackLogsAndModel",
+        "historicalObservationsShouldBeFilteredFromNewModelAfterRoleDowngradeButRemainReplayable",
+        "roleDowngradeDuringMetricCallShouldStopLogsAndAnswer",
+        "providerFailoverShouldDiscloseActualSourceAndWarning",
+        "staleAndFutureSamplesShouldNotBePresentedAsCurrentOrSystemHealth",
+        "keyedReplayShouldReturnOriginalSnapshotWithoutAnotherProviderCall",
+        "defaultWindowShouldReuseIncidentResourceAndIgnoreQuestionResourceOrQueryExpression",
+        "failureAndEmptyShouldRemainDistinctWithoutErrorBodyLeak"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.assistant.AssistantRunbookIntegrationTest",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "e7992211b1b7eaa38918817dc42a5455ff3b7790f8d15919112a4bd5791ef7ed",
+      "cases": [
+        "visiblePublishedAnswerShouldRemainInModelHistory",
+        "invalidNormalModelCitationShouldNotFallBackOrCommitAnswer",
+        "splitValidNativeCitationShouldCommitExactlyTheDeliveredText",
+        "boundSearchShouldFilterBeforeTopKAndKeepDirectDependencyAndGenericProcedures",
+        "visibleButOutsideScopeModelCitationShouldBeRejected",
+        "noMatchShouldNotInventEvidence",
+        "longQuestionShouldKeepOriginalAndExposeUnicodeSafeRetrievalBudget",
+        "onlyPublishedRoleVisibleChunksShouldEnterAnswers",
+        "completedKeyShouldPreserveOriginalScopedSnapshotWhenCmdbRelationChanges",
+        "revocationDuringModelCallShouldFenceRetrievedEvidenceAndCompletion",
+        "splitInvalidNativeCitationShouldNotReachClientOrPersistence",
+        "incomingOneHopShouldBeIncludedButSecondHopAndWrongUnscopedTypeExcluded",
+        "scopeShouldNotBypassAclOrPublicationStatusAndInvalidEmptyScopeShouldStayClosed",
+        "currentRoleShouldNotSendFormerlyVisiblePrivateAnswerBackToModel",
+        "completedReplayShouldKeepOriginalVersionWithoutAnotherSearch",
+        "retrievalShouldResolveLiveRoleRatherThanAssumeOnCall",
+        "boundNormalAndNativeModelsShouldReceiveOnlyCurrentScopedEvidence",
+        "boundSearchShouldNotFallBackGlobalWhileUnboundSearchRemainsGlobal",
+        "boundIncidentShouldKeepOperationalEvidenceAlongsideRunbookCitations",
+        "publicationOrAclChangeShouldFilterModelHistoryWithoutDeletingSnapshot",
+        "questionSearchShouldWorkWithoutIncidentOrModelAndPersistStableCitations",
+        "stopAfterRetrievalShouldNotCallModelOrCommitAnswer",
+        "normalAndNativeModelPathsShouldReceiveSameGroundingAndPersistExactDeltaText"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.assistant.AssistantSessionRevocationIntegrationTest",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "63432c6077915adebc0925fd0e5841b6023bc76360a4c9c38b61f4018aeeddf0",
+      "cases": [
+        "shouldRejectSynchronousRequestWhenStreamCapacityIsFullWithoutWrites",
+        "shouldReplayCompletedKeyAcrossSyncAndStreamWithoutWrites",
+        "shouldNotResurrectDeletedSessionWhenLateProviderReturns",
+        "shouldPersistQueuedKeyAndCancelItWithoutQuestionWrites",
+        "shouldKeepClearedKeyTombstoneWithoutResurrectingMessages",
+        "shouldRejectInvalidKeysAndOtherOwnersStatusWithoutWrites",
+        "shouldRejectDuplicateInFlightKeyWithoutCallingProvider",
+        "shouldPreserveCompletedAnswerWhenCancellationArrivesLate",
+        "shouldCloseExpiredStreamBeforeProviderReleaseWithoutPersistingItsAnswer",
+        "shouldExposeKeyedTimeoutBeforeProviderReleaseAndNeverRetryItAutomatically",
+        "shouldNotSendCommittedAnswerAfterLogoutCompletesBeforeControllerReturns",
+        "shouldIncludeSynchronousWorkInStreamCapacityAndAllowReplacement",
+        "shouldReplayCompletedKeyWithoutTakingSaturatedCapacity",
+        "shouldDiscardLateStreamAnswerAfterCommittedLogoutAndAllowFreshLogin",
+        "shouldReturnSafeTimeoutBeforeProviderReleaseAndDiscardItsLateAnswer",
+        "shouldCancelRunningKeyBeforeProviderReleaseWithoutLateAnswer",
+        "shouldTimeoutRunningAndQueuedSynchronousRequestsBeforeProviderRelease",
+        "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+        "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+        "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+        "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+        "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+        "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+        "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+        "shouldRejectSaturatedHttpRequestWithoutWritesAndReleaseRevokedQueuedSlot",
+        "shouldRejectReusedKeyWithDifferentQuestionWithoutWrites",
+        "shouldPersistQueuedTimeoutWithoutAcceptingQuestionOrRetryingKey",
+        "shouldSendCancelledEventWithoutDoneForRunningStream",
+        "shouldNotResurrectClearedMessagesWhenLateProviderReturns",
+        "shouldRejectLateSynchronousAnswerAfterCommittedLogoutAndAllowFreshLogin",
+        "shouldNotSendCommittedAnswerAfterLeaseExpiresBeforeControllerReturns",
+        "shouldExposeRevokedKeyToFreshOwnerWithoutRevivingItsOriginalWork"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.assistant.AssistantTransactionIntegrationTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "6274b15be63722047c130e878d0692e7f460cef782afb945bb8f3340e5990077",
+      "cases": [
+        "shouldRollbackKeyedAssistantCompletionStateWithAnswerAndAudit",
+        "shouldRollbackAssistantCancellationWhenAuditInsertFails",
+        "shouldRecheckAssistantLeaseExpiryAfterFinalLockWait",
+        "shouldRollbackAssistantCompletionWhenLeaseExpiresDuringPersistence",
+        "shouldFenceAssistantCompletionAfterCancellationCommit",
+        "shouldRollbackAssistantAnswerWhenCompletionAuditInsertFails",
+        "shouldFenceConcurrentAssistantKeyAndPreserveOriginalAttempt",
+        "shouldFenceAssistantFinalCommitAgainstConcurrentRevocation",
+        "shouldReplayCompletedAssistantKeyWithCaseSensitiveSessionScope",
+        "shouldPreserveAssistantCompletionWhenCancellationWaitsForCommit",
+        "shouldRollbackAssistantCompletionWhenFinalStopCheckFails"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.runbook.Bm25RetrieverTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "2832f13f2aaed3843d2d41f67a710f6d3afba32829fb37bf85dc2076ba779b9e",
+      "cases": [
+        "shouldSplitLongMarkdownIntoBoundedOverlappingChunks",
+        "shouldTokenizeChineseBigramsAndRankTheRelevantChunk"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.runbook.ReciprocalRankFusionTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "297f0b4ff0464410c4f60bf227fb6731f1a120f5cb419d9fdeea92782611b778",
+      "cases": [
+        "shouldBreakEqualFusionScoresByStableChunkId",
+        "shouldFuseRanksWithoutMixingRawScoreScales"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.runbook.RunbookCitationIntegrationTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "de0a3465a8552fa07f2fac76230136f91d4ead253656c881a4b79ddae2a99364",
+      "cases": [
+        "readsExactPersistedChunkWithoutTruncationOrHtmlExecution",
+        "requiresAuthenticationSupportedRoleAndValidCoordinates",
+        "checksEachVersionsCurrentAclAndDoesNotRevealMissingVersusDenied",
+        "oldCitationsRemainOnOriginalVersionAfterPublishingReplacement",
+        "draftRejectedAndUnknownChunksAreNotPublishedSources"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.runbook.RunbookDocumentDiversityIntegrationTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "f99fef58a007f562ced388a755a90b10abed70f14c9a8042f39e10e62566c6e7",
+      "cases": [
+        "shouldKeepScopePublicationAndAclFencesBeforeDocumentSelection",
+        "shouldEvaluateTheSameDistinctDocumentBudgetAsLiveSearch",
+        "shouldDiversifyRealSemanticRankingAndFusionWithoutInventingCitations",
+        "shouldFillTopThreeWithDistinctBooksBeforeTheCandidateWindow"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.runbook.RunbookHybridRetrievalIntegrationTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "cfaee5b971c51e6c8df87ed2740e20df459e7042945070f6b3ee8320356bc298",
+      "cases": [
+        "hybridShouldApplyScopeBeforeBothRankingsRatherThanDiscardGlobalTopK",
+        "shouldBuildIdempotentIndexFuseRankingsEvaluateAndPreserveOldIndexOnFailure"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.runbook.RunbookJudgmentAgreementTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "2748eb0373a17dfb60688d7370a300e33a97bbc2175c0b877f716e86b518b8f0",
+      "cases": [
+        "shouldReportEmptyAgreementDataset",
+        "shouldCalculateLinearWeightedKappaForOrdinalGrades",
+        "shouldReturnUndefinedKappaWithoutLabelVariation"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.runbook.RunbookKnowledgeIntegrationTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "6c9317071f8306130dd0c2c909073464b5b5c70c87419f43a97f02a5f887c59b",
+      "cases": [
+        "shouldExtractAndIndexPdfText",
+        "shouldKeepEvaluationHistoryVersionedAndBounded",
+        "shouldSearchMigratedRunbooksAndPersistDeterministicEvaluation",
+        "shouldCreateImmutableMarkdownVersionsAndEnforceDocumentAcl",
+        "shouldRejectUnsupportedRunbookFileType"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.runbook.RunbookRelevanceFeedbackIntegrationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "ca05b7af18dcb6c72e7e405b99c69892f58b463e7c2a4e4ede2df8fd20a44492",
+      "cases": [
+        "shouldCaptureSearchEnforceIndependentReviewAndPromoteOnlyPositiveJudgments"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.runbook.RunbookRetrievalLifecycleIntegrationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "44ebcefcae833b8fed732bc01fdc7c0ce8d9d2c2c0f1c9198a94acfaf977eec3",
+      "cases": [
+        "shouldRedactPurgeAuditAndPreservePromotedQrel"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.runbook.RunbookRetrievalScopeMigrationTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "b91f6cb47c17613c5e1696ae850a65e5029c5b132527ab9c0d2d08472cb665e3",
+      "cases": [
+        "shouldMarkAmbiguousAssistantHistoryWithoutRewritingOldPayloadsOrEnabledFlags"
+      ]
+    },
+    {
+      "name": "org.trigger.opspilot.runbook.RunbookScopedEvaluationIntegrationTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "5d36aa9aa707568dac829d10576d8ba4437bf067fab9256a30183027f9fcc432",
+      "cases": [
+        "shouldNotMergeIdenticalQuestionsFromDifferentRetrievalScopes",
+        "shouldMergeCanonicalEquivalentScopesButSeparateIncidentIdentities",
+        "shouldNotPersistSensitiveScopeAsAnEvaluableFilter",
+        "shouldPurgeScopePayloadButPreserveIndependentlyApprovedEvaluationSnapshot",
+        "shouldReviewUnknownScopeWithoutPromotingAndExplicitlyExcludeHistoricalLabels",
+        "shouldRejectMalformedScopeBeforeReviewOrEvaluationWrites",
+        "shouldReplayOriginalScopeAndReportOutOfScopeLabelWithoutGlobalFallback"
+      ]
+    }
+  ]
+}
