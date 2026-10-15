@@ -1,0 +1,80 @@
+{
+  "version": "runbook-document-diversity-v1",
+  "basis": "Engineering-authored topical judgments over six unchanged seeded books plus these immutable controlled books. Declared before packaged results are inspected. The algorithm change is based on four earlier duplicate-chunk regression cases, not tuned to these labels.",
+  "limitations": "Synthetic diagnostic corpus, not user logs, an independent human study, neural reranker quality, or a blind holdout. Negative cases check explicit scope/ACL/publication fences and no lexical match, not universal natural-language abstention.",
+  "documents": [
+    {
+      "stableKey": "diversity-redis-deep", "resourceType": "MIDDLEWARE", "serviceCode": "MID-REDIS-01", "title": "Redis 连接池 active pending 排查", "summary": "连接等待、慢命令和恢复验证", "roles": ["ADMIN", "ON_CALL"], "publish": true,
+      "sections": [
+        ["Redis 连接池 active pending 观测", "检查连接池 active pending 等待时间和借连接失败，区分客户端排队与 Redis 服务端慢命令。"],
+        ["Redis 连接池 active pending 配置", "比较 max-active、连接池上限、命令超时和最近变更；不要直接扩大连接数。"],
+        ["Redis 慢命令定位", "读取 slowlog 慢命令，比较命令耗时、连接池等待及缓存客户端 active pending。"],
+        ["Redis 连接池 active pending 降级", "限流或回滚异常客户端版本，确认缓存请求的超时预算。"],
+        ["Redis 连接池 active pending 恢复", "观察 pending 回落、active 连接稳定和慢命令消失，记录恢复时间。"],
+        ["Redis 连接池 active pending 复盘", "保存连接池趋势、slowlog 和变更窗口，避免把连接排队直接断言为根因。"]
+      ]
+    },
+    {
+      "stableKey": "diversity-auth-deep", "resourceType": "APPLICATION", "serviceCode": "APP-AUTH", "title": "登录 token 刷新兼容与发布回归", "summary": "认证错误码、旧客户端与发布批次", "roles": ["ADMIN", "ON_CALL"], "publish": true,
+      "sections": [
+        ["登录 token 刷新错误码", "对照登录失败错误码、token 刷新时间、凭证格式与发布批次。"],
+        ["登录 token 旧客户端兼容", "比较旧客户端和新客户端 token 格式，验证刷新协议兼容，禁止记录原始凭证。"],
+        ["登录 token 发布回滚", "按发布批次对比认证失败，独立审批回滚并验证登录恢复。"],
+        ["登录 token 刷新恢复确认", "验证旧客户端刷新成功和错误码回落，保留脱敏证据。"]
+      ]
+    },
+    {
+      "stableKey": "diversity-incident-triage", "resourceType": "SERVICE", "serviceCode": null, "title": "Incident 通用排查与证据确认", "summary": "事件排查清单，不证明任何特定依赖故障", "roles": ["ADMIN", "ON_CALL"], "publish": true,
+      "sections": [
+        ["Incident 通用排查", "确认当前事件、服务范围、用户影响与发生时间；再选择对应服务的手册。"],
+        ["Incident 证据确认", "交叉核对指标、日志与最近变更，标注未验证假设和缺失数据。"],
+        ["Incident 恢复确认", "核对用户影响和恢复指标，记录确认、缓解与恢复分别发生的时间。"]
+      ]
+    },
+    {
+      "stableKey": "diversity-foreign-redis", "resourceType": "MIDDLEWARE", "serviceCode": "MID-OTHER", "title": "Redis 连接池 active pending 异地服务手册", "summary": "另一服务的缓存客户端排查", "roles": ["ADMIN", "ON_CALL"], "publish": true,
+      "sections": [
+        ["Redis 连接池 active pending 检查", "检查缓存客户端连接等待、max-active 和 Redis 慢命令。"],
+        ["Redis 连接池 active pending 缓解", "限流异常流量或回滚客户端，观察 pending 恢复。"],
+        ["Redis 慢命令验证", "读取 slowlog，核对命令耗时与连接池等待。"],
+        ["Redis 连接池 active pending 复盘", "记录事件服务、连接池趋势和验证结果。"]
+      ]
+    },
+    {"stableKey":"diversity-private","resourceType":"APPLICATION","serviceCode":"APP-AUTH","title":"privateScopeProbe739x","summary":null,"roles":["ADMIN"],"publish":true,"sections":[["privateScopeProbe739x","管理员私有资料 privateScopeProbe739x，不对 ON_CALL 开放。"]]},
+    {"stableKey":"diversity-draft","resourceType":"APPLICATION","serviceCode":"APP-AUTH","title":"draftScopeProbe482y","summary":null,"roles":["ADMIN","ON_CALL"],"publish":false,"sections":[["draftScopeProbe482y","未发布候选 draftScopeProbe482y，不参与检索。"]]}
+  ],
+  "cases": [
+    {"id":"keyword-redis-multi","group":"exact-keyword","incidentId":null,"question":"Redis 连接池 active pending","relevantKeys":["legacy-runbook-2","diversity-redis-deep","diversity-foreign-redis"]},
+    {"id":"keyword-redis-slowlog","group":"exact-keyword","incidentId":null,"question":"Redis slowlog 慢命令 连接等待","relevantKeys":["legacy-runbook-2","diversity-redis-deep","diversity-foreign-redis"]},
+    {"id":"keyword-auth-token","group":"exact-keyword","incidentId":null,"question":"登录 token 刷新 旧客户端","relevantKeys":["legacy-runbook-3","diversity-auth-deep"]},
+    {"id":"keyword-auth-release","group":"exact-keyword","incidentId":null,"question":"认证 错误码 token 发布批次","relevantKeys":["legacy-runbook-3","diversity-auth-deep"]},
+    {"id":"keyword-kafka","group":"exact-keyword","incidentId":null,"question":"Kafka consumer lag group offset commit","relevantKeys":["kafka-consumer-lag"]},
+    {"id":"keyword-mysql","group":"exact-keyword","incidentId":null,"question":"MySQL too many connections max_connections","relevantKeys":["mysql-connection-saturation"]},
+    {"id":"keyword-kubernetes","group":"exact-keyword","incidentId":null,"question":"Kubernetes OOMKilled CrashLoopBackOff","relevantKeys":["kubernetes-crashloop"]},
+    {"id":"keyword-incident","group":"exact-keyword","incidentId":null,"question":"Incident 通用排查 证据确认","relevantKeys":["diversity-incident-triage"]},
+    {"id":"task-redis-queue","group":"symptom-task","incidentId":null,"question":"缓存客户端连接排队 pending，怎样区分慢命令与连接池等待","relevantKeys":["legacy-runbook-2","diversity-redis-deep","diversity-foreign-redis"]},
+    {"id":"task-redis-recovery","group":"symptom-task","incidentId":null,"question":"Redis 回滚客户端后，如何验证 pending 回落和连接稳定","relevantKeys":["legacy-runbook-2","diversity-redis-deep","diversity-foreign-redis"]},
+    {"id":"task-auth-compat","group":"symptom-task","incidentId":null,"question":"旧客户端刷新凭证失败，需要比较哪些 token 格式和发布批次","relevantKeys":["legacy-runbook-3","diversity-auth-deep"]},
+    {"id":"task-auth-redaction","group":"symptom-task","incidentId":null,"question":"登录 token 刷新失败的错误码如何对比，避免记录原始凭证","relevantKeys":["diversity-auth-deep","legacy-runbook-3"]},
+    {"id":"task-kafka-rebalance","group":"symptom-task","incidentId":null,"question":"消息积压 partition rebalance 抖动，扩容前如何检查 offset commit","relevantKeys":["kafka-consumer-lag"]},
+    {"id":"task-mysql-leak","group":"symptom-task","incidentId":null,"question":"数据库 active connections 打满疑似连接泄漏，要检查慢 SQL 和事务持有","relevantKeys":["mysql-connection-saturation"]},
+    {"id":"task-kubernetes-logs","group":"symptom-task","incidentId":null,"question":"Pod 反复重启，previous logs 退出码和 liveness probe 怎么排查","relevantKeys":["kubernetes-crashloop"]},
+    {"id":"task-api-latency","group":"symptom-task","incidentId":null,"question":"服务接口 P95 P99 升高，应该核对哪些下游依赖和最近两小时变更","relevantKeys":["legacy-runbook-1"]},
+    {"id":"scope-settlement-redis","group":"incident-scope","incidentId":1,"question":"Redis 连接池 active pending","relevantKeys":["legacy-runbook-2","diversity-redis-deep"]},
+    {"id":"scope-settlement-slowlog","group":"incident-scope","incidentId":1,"question":"缓存客户端 slowlog 慢命令和连接等待","relevantKeys":["legacy-runbook-2","diversity-redis-deep"]},
+    {"id":"scope-settlement-max-active","group":"incident-scope","incidentId":1,"question":"Redis max-active 连接池上限与客户端命令超时","relevantKeys":["legacy-runbook-2","diversity-redis-deep"]},
+    {"id":"scope-settlement-api","group":"incident-scope","incidentId":1,"question":"接口 P99 下游依赖 最近两小时变更","relevantKeys":["legacy-runbook-1"]},
+    {"id":"scope-auth-token","group":"incident-scope","incidentId":2,"question":"登录 token 刷新 旧客户端","relevantKeys":["legacy-runbook-3","diversity-auth-deep"]},
+    {"id":"scope-auth-release","group":"incident-scope","incidentId":2,"question":"登录凭证格式兼容 错误码 发布批次","relevantKeys":["legacy-runbook-3","diversity-auth-deep"]},
+    {"id":"scope-auth-broad","group":"incident-scope","incidentId":2,"question":"推荐当前 Incident 的排查手册","relevantKeys":["legacy-runbook-3","diversity-auth-deep","diversity-incident-triage"]},
+    {"id":"scope-auth-triage","group":"incident-scope","incidentId":2,"question":"Incident 证据确认 未验证假设 缺失数据","relevantKeys":["diversity-incident-triage"]},
+    {"id":"negative-global-no-match","group":"negative-fences","incidentId":null,"question":"noLexicalDiversityProbe9172x","relevantKeys":[]},
+    {"id":"negative-settlement-kafka","group":"negative-fences","incidentId":1,"question":"Kafka consumer group offset commit partition rebalance","relevantKeys":[]},
+    {"id":"negative-auth-kafka","group":"negative-fences","incidentId":2,"question":"Kafka consumer group offset commit partition rebalance","relevantKeys":[]},
+    {"id":"negative-auth-kubernetes","group":"negative-fences","incidentId":2,"question":"Kubernetes OOMKilled CrashLoopBackOff liveness probe","relevantKeys":[]},
+    {"id":"negative-private-global","group":"negative-fences","incidentId":null,"question":"privateScopeProbe739x","relevantKeys":[]},
+    {"id":"negative-private-auth","group":"negative-fences","incidentId":2,"question":"privateScopeProbe739x","relevantKeys":[]},
+    {"id":"negative-draft-global","group":"negative-fences","incidentId":null,"question":"draftScopeProbe482y","relevantKeys":[]},
+    {"id":"negative-draft-auth","group":"negative-fences","incidentId":2,"question":"draftScopeProbe482y","relevantKeys":[]}
+  ]
+}

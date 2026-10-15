@@ -1,5 +1,7 @@
 # OpsPilot
 
+最新检索验收：[CP07 手册级候选预算与新旧 Demo 对比](docs/acceptance/V1.8-checkpoint-07-document-diversity.md)。固定 32 题同语料中 Recall@3 73.61%→97.22%，重复位置 27→0；158 项相关 Java、290 项脚本、H2/MySQL 24 项共享契约及桌面/手机 SSE/保存/回放通过。独立新版 Demo 位于 9916，原 9900、全部 21 份旧 JAR、密钥配置与 UI 保留；工程样本结果不冒充生产质量或长期目标完成。
+
 最新助手修复：[Claude design 细修与身份回答验收](docs/acceptance/V1.8-ui-assistant-identity.md)。明确显示真实规则/模型配置；“你是谁 / 你是什么模型”不再夹带 Incident/手册。247 项前端、91 项相关后端、16 组整包 HTTP/SSE 与双主题/平板/手机实页通过，当前预览未启用付费模型。原对话、旧 Demo、未提交工作与 CP07 保留。
 
 最新 UI：[流光默认播放、移除控制按钮](docs/acceptance/V1.8-ui-ambient-autoplay.md)。登录、总览、助手均无动效按钮，忽略旧暂停偏好；保留系统减少动态、无 GPU 降级和鼠标互动。244 项前端测试及实际页面检查通过，不改业务。

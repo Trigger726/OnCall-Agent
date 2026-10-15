@@ -1,0 +1,421 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< org.trigger:opspilot >------------------------
+[INFO] Building OpsPilot 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 108 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+[INFO] Copying 1 resource from src\test\resources to target\test-classes
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.trigger.opspilot.runbook.MySqlRunbookDocumentDiversityIntegrationTest
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+18:03:32.563 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.trigger.opspilot.runbook.MySqlRunbookDocumentDiversityIntegrationTest]: MySqlRunbookDocumentDiversityIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+18:03:32.820 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.runbook.MySqlRunbookDocumentDiversityIntegrationTest
+18:03:33.029 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-15T18:03:33.442+08:00  INFO 37992 --- [opspilot] [           main] lRunbookDocumentDiversityIntegrationTest : Starting MySqlRunbookDocumentDiversityIntegrationTest using Java 21.0.2 with PID 37992 (started by lenovo in D:\Codex\国网\央国企求职\OpsPilot)
+2026-10-15T18:03:33.443+08:00  INFO 37992 --- [opspilot] [           main] lRunbookDocumentDiversityIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-15T18:03:35.674+08:00  INFO 37992 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-15T18:03:35.679+08:00  INFO 37992 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-15T18:03:35.747+08:00  INFO 37992 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 43 ms. Found 0 Redis repository interfaces.
+WARNING: A Java agent has been loaded dynamically (D:\Codex\国网\tmp\m2-repository\net\bytebuddy\byte-buddy-agent\1.14.10\byte-buddy-agent-1.14.10.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-10-15T18:03:37.898+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-15T18:03:38.318+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3673e211
+2026-10-15T18:03:38.321+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-15T18:03:38.582+08:00  INFO 37992 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
+2026-10-15T18:03:38.582+08:00  INFO 37992 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2026-10-15T18:03:38.582+08:00  INFO 37992 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : 
+2026-10-15T18:03:38.641+08:00  INFO 37992 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://127.0.0.1:55752/opspilot_scope_evaluation (MySQL 8.0)
+2026-10-15T18:03:38.746+08:00  INFO 37992 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table `opspilot_scope_evaluation`.`flyway_schema_history` does not exist yet
+2026-10-15T18:03:38.755+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.078s)
+2026-10-15T18:03:38.780+08:00  INFO 37992 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table `opspilot_scope_evaluation`.`flyway_schema_history` ...
+2026-10-15T18:03:38.880+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `opspilot_scope_evaluation`: << Empty Schema >>
+2026-10-15T18:03:38.901+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "1 - init opspilot"
+2026-10-15T18:03:39.637+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "2 - assistant conversations"
+2026-10-15T18:03:39.821+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "3 - agent investigation runs"
+2026-10-15T18:03:40.081+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "4 - observability evidence"
+2026-10-15T18:03:40.264+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "5 - agent events and remediation proposals"
+2026-10-15T18:03:40.437+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "6 - agent run controls"
+2026-10-15T18:03:41.188+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "7 - runbook knowledge base"
+2026-10-15T18:03:41.447+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "8 - hybrid runbook retrieval"
+2026-10-15T18:03:41.636+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "9 - runbook relevance feedback"
+2026-10-15T18:03:42.085+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "10 - graded runbook relevance evaluation"
+2026-10-15T18:03:42.440+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "11 - runbook judgment agreement"
+2026-10-15T18:03:42.639+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-15T18:03:43.115+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "13 - incident postmortems"
+2026-10-15T18:03:43.288+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "14 - incident analytics and follow up escalations"
+2026-10-15T18:03:43.375+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "15 - recurring incident problems"
+2026-10-15T18:03:43.551+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "16 - agent event outbox"
+2026-10-15T18:03:43.635+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "17 - outbox timestamp precision"
+2026-10-15T18:03:44.012+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "18 - outbox retention index"
+2026-10-15T18:03:44.046+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "19 - service slo objectives"
+2026-10-15T18:03:44.154+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "20 - alert ingest rejections"
+2026-10-15T18:03:44.267+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "21 - alert rejection lifecycle"
+2026-10-15T18:03:45.054+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "22 - follow up notification outbox"
+2026-10-15T18:03:45.129+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "23 - follow up owner acknowledgement"
+2026-10-15T18:03:45.414+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "24 - incident escalation execution"
+2026-10-15T18:03:45.517+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "25 - oncall roster management"
+2026-10-15T18:03:45.629+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "26 - oncall rotations"
+2026-10-15T18:03:46.005+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "27 - oncall handoff requests"
+2026-10-15T18:03:46.119+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "28 - oncall handoff revocations"
+2026-10-15T18:03:46.168+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "29 - runbook returned document count"
+2026-10-15T18:03:46.377+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "30 - runbook publication review"
+2026-10-15T18:03:47.212+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "31 - account auth version"
+2026-10-15T18:03:47.483+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "32 - assistant request idempotency"
+2026-10-15T18:03:47.552+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "33 - assistant queue and cancel"
+2026-10-15T18:03:47.683+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "34 - oncall shift swaps"
+2026-10-15T18:03:47.849+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "35 - oncall swap notification outbox"
+2026-10-15T18:03:47.969+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "36 - oncall swap notification payload retention"
+2026-10-15T18:03:48.182+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "37 - oncall swap revocations"
+2026-10-15T18:03:48.244+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "38 - oncall open handoffs"
+2026-10-15T18:03:48.397+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "39 - oncall plan memberships"
+2026-10-15T18:03:48.538+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "40 - open handoff publication snapshots"
+2026-10-15T18:03:48.596+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "41 - open handoff notification outbox"
+2026-10-15T18:03:48.692+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "42 - open notification redrive receipts"
+2026-10-15T18:03:48.998+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_evaluation` to version "43 - runbook retrieval scope snapshots"
+2026-10-15T18:03:49.229+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 43 migrations to schema `opspilot_scope_evaluation`, now at version v43 (execution time 00:09.689s)
+2026-10-15T18:03:52.544+08:00  INFO 37992 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-15T18:03:53.130+08:00  INFO 37992 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1495f70, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2aa85cc4, org.springframework.security.web.context.SecurityContextHolderFilter@50c442a5, org.springframework.security.web.header.HeaderWriterFilter@1b2213b2, org.springframework.web.filter.CorsFilter@466fd19b, org.springframework.security.web.authentication.logout.LogoutFilter@7315264e, org.trigger.opspilot.security.JwtAuthenticationFilter@384b718c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3fc92211, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@63d8590c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@348d1a5e, org.springframework.security.web.session.SessionManagementFilter@4f7a2262, org.springframework.security.web.access.ExceptionTranslationFilter@17c7cc93, org.springframework.security.web.access.intercept.AuthorizationFilter@28806954]
+2026-10-15T18:03:54.600+08:00  INFO 37992 --- [opspilot] [           main] lRunbookDocumentDiversityIntegrationTest : Started MySqlRunbookDocumentDiversityIntegrationTest in 21.585 seconds (process running for 23.128)
+2026-10-15T18:03:55.563+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-15T18:03:55.570+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 23.23 s -- in org.trigger.opspilot.runbook.MySqlRunbookDocumentDiversityIntegrationTest
+[INFO] Running org.trigger.opspilot.runbook.MySqlRunbookRetrievalScopeMigrationTest
+2026-10-15T18:03:55.599+08:00  INFO 37992 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://127.0.0.1:55752/opspilot_scope_upgrade (MySQL 8.0)
+2026-10-15T18:03:55.646+08:00  INFO 37992 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table `opspilot_scope_upgrade`.`flyway_schema_history` does not exist yet
+2026-10-15T18:03:55.647+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.043s)
+2026-10-15T18:03:55.654+08:00  INFO 37992 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table `opspilot_scope_upgrade`.`flyway_schema_history` ...
+2026-10-15T18:03:55.710+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `opspilot_scope_upgrade`: << Empty Schema >>
+2026-10-15T18:03:55.718+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "1 - init opspilot"
+2026-10-15T18:03:56.501+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "2 - assistant conversations"
+2026-10-15T18:03:56.676+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "3 - agent investigation runs"
+2026-10-15T18:03:56.835+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "4 - observability evidence"
+2026-10-15T18:03:56.982+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "5 - agent events and remediation proposals"
+2026-10-15T18:03:57.172+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "6 - agent run controls"
+2026-10-15T18:03:57.965+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "7 - runbook knowledge base"
+2026-10-15T18:03:58.252+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "8 - hybrid runbook retrieval"
+2026-10-15T18:03:58.457+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "9 - runbook relevance feedback"
+2026-10-15T18:03:58.917+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "10 - graded runbook relevance evaluation"
+2026-10-15T18:03:59.278+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "11 - runbook judgment agreement"
+2026-10-15T18:03:59.481+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-15T18:03:59.979+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "13 - incident postmortems"
+2026-10-15T18:04:00.182+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "14 - incident analytics and follow up escalations"
+2026-10-15T18:04:00.280+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "15 - recurring incident problems"
+2026-10-15T18:04:00.470+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "16 - agent event outbox"
+2026-10-15T18:04:00.550+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "17 - outbox timestamp precision"
+2026-10-15T18:04:00.920+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "18 - outbox retention index"
+2026-10-15T18:04:00.951+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "19 - service slo objectives"
+2026-10-15T18:04:01.081+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "20 - alert ingest rejections"
+2026-10-15T18:04:01.210+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "21 - alert rejection lifecycle"
+2026-10-15T18:04:02.011+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "22 - follow up notification outbox"
+2026-10-15T18:04:02.096+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "23 - follow up owner acknowledgement"
+2026-10-15T18:04:02.407+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "24 - incident escalation execution"
+2026-10-15T18:04:02.517+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "25 - oncall roster management"
+2026-10-15T18:04:02.647+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "26 - oncall rotations"
+2026-10-15T18:04:02.940+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "27 - oncall handoff requests"
+2026-10-15T18:04:03.079+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "28 - oncall handoff revocations"
+2026-10-15T18:04:03.136+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "29 - runbook returned document count"
+2026-10-15T18:04:03.350+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "30 - runbook publication review"
+2026-10-15T18:04:04.258+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "31 - account auth version"
+2026-10-15T18:04:04.515+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "32 - assistant request idempotency"
+2026-10-15T18:04:04.577+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "33 - assistant queue and cancel"
+2026-10-15T18:04:04.697+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "34 - oncall shift swaps"
+2026-10-15T18:04:04.853+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "35 - oncall swap notification outbox"
+2026-10-15T18:04:04.937+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "36 - oncall swap notification payload retention"
+2026-10-15T18:04:05.197+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "37 - oncall swap revocations"
+2026-10-15T18:04:05.255+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "38 - oncall open handoffs"
+2026-10-15T18:04:05.405+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "39 - oncall plan memberships"
+2026-10-15T18:04:05.540+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "40 - open handoff publication snapshots"
+2026-10-15T18:04:05.588+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "41 - open handoff notification outbox"
+2026-10-15T18:04:05.679+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "42 - open notification redrive receipts"
+2026-10-15T18:04:05.943+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 42 migrations to schema `opspilot_scope_upgrade`, now at version v42 (execution time 00:09.686s)
+2026-10-15T18:04:05.993+08:00  INFO 37992 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://127.0.0.1:55752/opspilot_scope_upgrade (MySQL 8.0)
+2026-10-15T18:04:06.040+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.042s)
+2026-10-15T18:04:06.046+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `opspilot_scope_upgrade`: 42
+2026-10-15T18:04:06.050+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_scope_upgrade` to version "43 - runbook retrieval scope snapshots"
+2026-10-15T18:04:06.206+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 1 migration to schema `opspilot_scope_upgrade`, now at version v43 (execution time 00:00.146s)
+2026-10-15T18:04:06.227+08:00  INFO 37992 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://127.0.0.1:55752/opspilot_scope_upgrade (MySQL 8.0)
+2026-10-15T18:04:06.263+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.032s)
+2026-10-15T18:04:06.267+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `opspilot_scope_upgrade`: 43
+2026-10-15T18:04:06.268+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Schema `opspilot_scope_upgrade` is up to date. No migration necessary.
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.69 s -- in org.trigger.opspilot.runbook.MySqlRunbookRetrievalScopeMigrationTest
+[INFO] Running org.trigger.opspilot.runbook.MySqlScopedEvaluationIntegrationTest
+2026-10-15T18:04:06.275+08:00  INFO 37992 --- [opspilot] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.trigger.opspilot.runbook.MySqlScopedEvaluationIntegrationTest]: MySqlScopedEvaluationIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-15T18:04:06.280+08:00  INFO 37992 --- [opspilot] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.runbook.MySqlScopedEvaluationIntegrationTest
+2026-10-15T18:04:06.284+08:00  INFO 37992 --- [opspilot] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-15T18:04:06.340+08:00  INFO 37992 --- [opspilot] [           main] o.r.MySqlScopedEvaluationIntegrationTest : Starting MySqlScopedEvaluationIntegrationTest using Java 21.0.2 with PID 37992 (started by lenovo in D:\Codex\国网\央国企求职\OpsPilot)
+2026-10-15T18:04:06.340+08:00  INFO 37992 --- [opspilot] [           main] o.r.MySqlScopedEvaluationIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-15T18:04:07.306+08:00  INFO 37992 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-15T18:04:07.307+08:00  INFO 37992 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-15T18:04:07.336+08:00  INFO 37992 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 28 ms. Found 0 Redis repository interfaces.
+2026-10-15T18:04:07.440+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-10-15T18:04:07.447+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7672ea5f
+2026-10-15T18:04:07.448+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-10-15T18:04:07.469+08:00  INFO 37992 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://127.0.0.1:55752/opspilot_scope_evaluation (MySQL 8.0)
+2026-10-15T18:04:07.515+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.041s)
+2026-10-15T18:04:07.520+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `opspilot_scope_evaluation`: 43
+2026-10-15T18:04:07.520+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Schema `opspilot_scope_evaluation` is up to date. No migration necessary.
+2026-10-15T18:04:07.749+08:00  INFO 37992 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-15T18:04:07.818+08:00  INFO 37992 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4310d985, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@61e67cc1, org.springframework.security.web.context.SecurityContextHolderFilter@79893462, org.springframework.security.web.header.HeaderWriterFilter@12e37ab2, org.springframework.web.filter.CorsFilter@118bace5, org.springframework.security.web.authentication.logout.LogoutFilter@76da91cf, org.trigger.opspilot.security.JwtAuthenticationFilter@548051d7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@583c416c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@51038633, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@55002de6, org.springframework.security.web.session.SessionManagementFilter@72ecb71d, org.springframework.security.web.access.ExceptionTranslationFilter@1626e651, org.springframework.security.web.access.intercept.AuthorizationFilter@128acee]
+2026-10-15T18:04:07.991+08:00  INFO 37992 --- [opspilot] [           main] o.r.MySqlScopedEvaluationIntegrationTest : Started MySqlScopedEvaluationIntegrationTest in 1.706 seconds (process running for 36.519)
+2026-10-15T18:04:08.457+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown initiated...
+2026-10-15T18:04:08.460+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Shutdown completed.
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.190 s -- in org.trigger.opspilot.runbook.MySqlScopedEvaluationIntegrationTest
+[INFO] Running org.trigger.opspilot.runbook.RunbookDocumentDiversityIntegrationTest
+2026-10-15T18:04:08.465+08:00  INFO 37992 --- [opspilot] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.trigger.opspilot.runbook.RunbookDocumentDiversityIntegrationTest]: RunbookDocumentDiversityIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-15T18:04:08.478+08:00  INFO 37992 --- [opspilot] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.runbook.RunbookDocumentDiversityIntegrationTest
+2026-10-15T18:04:08.483+08:00  INFO 37992 --- [opspilot] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-15T18:04:08.538+08:00  INFO 37992 --- [opspilot] [           main] .RunbookDocumentDiversityIntegrationTest : Starting RunbookDocumentDiversityIntegrationTest using Java 21.0.2 with PID 37992 (started by lenovo in D:\Codex\国网\央国企求职\OpsPilot)
+2026-10-15T18:04:08.539+08:00  INFO 37992 --- [opspilot] [           main] .RunbookDocumentDiversityIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-15T18:04:09.286+08:00  INFO 37992 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-15T18:04:09.286+08:00  INFO 37992 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-15T18:04:09.316+08:00  INFO 37992 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 29 ms. Found 0 Redis repository interfaces.
+2026-10-15T18:04:09.391+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Starting...
+2026-10-15T18:04:09.646+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-3 - Added connection conn0: url=jdbc:h2:mem:opspilot-document-diversity user=SA
+2026-10-15T18:04:09.647+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Start completed.
+2026-10-15T18:04:09.705+08:00  INFO 37992 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:opspilot-document-diversity (H2 2.2)
+2026-10-15T18:04:09.759+08:00  INFO 37992 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-15T18:04:09.760+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.041s)
+2026-10-15T18:04:09.765+08:00  INFO 37992 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-15T18:04:09.781+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-15T18:04:09.790+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-15T18:04:09.859+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-15T18:04:09.870+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-15T18:04:09.880+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-15T18:04:09.895+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-15T18:04:09.903+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-15T18:04:09.953+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-15T18:04:09.970+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-15T18:04:09.986+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-15T18:04:10.006+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-15T18:04:10.016+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-15T18:04:10.025+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-15T18:04:10.037+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-15T18:04:10.047+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-15T18:04:10.057+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-15T18:04:10.068+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-15T18:04:10.072+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-15T18:04:10.080+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-15T18:04:10.085+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-15T18:04:10.097+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-15T18:04:10.104+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-15T18:04:10.138+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-15T18:04:10.155+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-15T18:04:10.167+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-15T18:04:10.175+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-15T18:04:10.185+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-15T18:04:10.196+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-15T18:04:10.202+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-15T18:04:10.205+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-15T18:04:10.214+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-15T18:04:10.243+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-15T18:04:10.254+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-15T18:04:10.257+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-15T18:04:10.261+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-15T18:04:10.271+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-15T18:04:10.277+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-15T18:04:10.285+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-15T18:04:10.290+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-15T18:04:10.299+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "39 - oncall plan memberships"
+2026-10-15T18:04:10.310+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "40 - open handoff publication snapshots"
+2026-10-15T18:04:10.314+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "41 - open handoff notification outbox"
+2026-10-15T18:04:10.320+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "42 - open notification redrive receipts"
+2026-10-15T18:04:10.330+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "43 - runbook retrieval scope snapshots"
+2026-10-15T18:04:10.345+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 43 migrations to schema "public", now at version v43 (execution time 00:00.357s)
+2026-10-15T18:04:10.602+08:00  INFO 37992 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-15T18:04:10.675+08:00  INFO 37992 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4f3db580, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6b975803, org.springframework.security.web.context.SecurityContextHolderFilter@5fd4377, org.springframework.security.web.header.HeaderWriterFilter@35ad6d3, org.springframework.web.filter.CorsFilter@45153059, org.springframework.security.web.authentication.logout.LogoutFilter@545e1a0e, org.trigger.opspilot.security.JwtAuthenticationFilter@50c59289, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5dc38bc, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@50659a9a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@78a7a3ca, org.springframework.security.web.session.SessionManagementFilter@485461b7, org.springframework.security.web.access.ExceptionTranslationFilter@21743abe, org.springframework.security.web.access.intercept.AuthorizationFilter@4c6e3c25]
+2026-10-15T18:04:10.855+08:00  INFO 37992 --- [opspilot] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:opspilot-document-diversity'
+2026-10-15T18:04:10.879+08:00  INFO 37992 --- [opspilot] [           main] .RunbookDocumentDiversityIntegrationTest : Started RunbookDocumentDiversityIntegrationTest in 2.397 seconds (process running for 39.408)
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.624 s -- in org.trigger.opspilot.runbook.RunbookDocumentDiversityIntegrationTest
+[INFO] Running org.trigger.opspilot.runbook.RunbookRetrievalScopeMigrationTest
+2026-10-15T18:04:11.107+08:00  INFO 37992 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:scope-upgrade (H2 2.2)
+2026-10-15T18:04:11.145+08:00  INFO 37992 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-15T18:04:11.146+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.037s)
+2026-10-15T18:04:11.147+08:00  INFO 37992 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-15T18:04:11.150+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-15T18:04:11.154+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-15T18:04:11.172+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-15T18:04:11.176+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-15T18:04:11.183+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-15T18:04:11.189+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-15T18:04:11.195+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-15T18:04:11.207+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-15T18:04:11.214+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-15T18:04:11.220+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-15T18:04:11.228+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-15T18:04:11.236+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-15T18:04:11.239+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-15T18:04:11.248+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-15T18:04:11.255+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-15T18:04:11.260+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-15T18:04:11.264+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-15T18:04:11.267+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-15T18:04:11.286+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-15T18:04:11.289+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-15T18:04:11.294+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-15T18:04:11.314+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-15T18:04:11.326+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-15T18:04:11.330+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-15T18:04:11.337+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-15T18:04:11.342+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-15T18:04:11.348+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-15T18:04:11.355+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-15T18:04:11.360+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-15T18:04:11.361+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-15T18:04:11.365+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-15T18:04:11.381+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-15T18:04:11.388+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-15T18:04:11.389+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-15T18:04:11.392+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-15T18:04:11.397+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-15T18:04:11.401+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-15T18:04:11.405+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-15T18:04:11.409+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-15T18:04:11.413+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "39 - oncall plan memberships"
+2026-10-15T18:04:11.418+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "40 - open handoff publication snapshots"
+2026-10-15T18:04:11.422+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "41 - open handoff notification outbox"
+2026-10-15T18:04:11.427+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "42 - open notification redrive receipts"
+2026-10-15T18:04:11.431+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 42 migrations to schema "public", now at version v42 (execution time 00:00.148s)
+2026-10-15T18:04:11.450+08:00  INFO 37992 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:scope-upgrade (H2 2.2)
+2026-10-15T18:04:11.495+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.043s)
+2026-10-15T18:04:11.498+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 42
+2026-10-15T18:04:11.500+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "43 - runbook retrieval scope snapshots"
+2026-10-15T18:04:11.509+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 1 migration to schema "public", now at version v43 (execution time 00:00.008s)
+2026-10-15T18:04:11.528+08:00  INFO 37992 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:scope-upgrade (H2 2.2)
+2026-10-15T18:04:11.568+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.039s)
+2026-10-15T18:04:11.570+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": 43
+2026-10-15T18:04:11.570+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Schema "public" is up to date. No migration necessary.
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.482 s -- in org.trigger.opspilot.runbook.RunbookRetrievalScopeMigrationTest
+[INFO] Running org.trigger.opspilot.runbook.RunbookScopedEvaluationIntegrationTest
+2026-10-15T18:04:11.575+08:00  INFO 37992 --- [opspilot] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.trigger.opspilot.runbook.RunbookScopedEvaluationIntegrationTest]: RunbookScopedEvaluationIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-15T18:04:11.580+08:00  INFO 37992 --- [opspilot] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.runbook.RunbookScopedEvaluationIntegrationTest
+2026-10-15T18:04:11.583+08:00  INFO 37992 --- [opspilot] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-15T18:04:11.617+08:00  INFO 37992 --- [opspilot] [           main] r.RunbookScopedEvaluationIntegrationTest : Starting RunbookScopedEvaluationIntegrationTest using Java 21.0.2 with PID 37992 (started by lenovo in D:\Codex\国网\央国企求职\OpsPilot)
+2026-10-15T18:04:11.617+08:00  INFO 37992 --- [opspilot] [           main] r.RunbookScopedEvaluationIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-15T18:04:12.391+08:00  INFO 37992 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-15T18:04:12.392+08:00  INFO 37992 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-15T18:04:12.432+08:00  INFO 37992 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 38 ms. Found 0 Redis repository interfaces.
+2026-10-15T18:04:12.485+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
+2026-10-15T18:04:12.487+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-4 - Added connection conn17: url=jdbc:h2:mem:opspilot-scoped-eval user=SA
+2026-10-15T18:04:12.487+08:00  INFO 37992 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Start completed.
+2026-10-15T18:04:12.503+08:00  INFO 37992 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:opspilot-scoped-eval (H2 2.2)
+2026-10-15T18:04:12.536+08:00  INFO 37992 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-15T18:04:12.536+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.032s)
+2026-10-15T18:04:12.537+08:00  INFO 37992 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-15T18:04:12.540+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-15T18:04:12.545+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-15T18:04:12.558+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-15T18:04:12.562+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-15T18:04:12.566+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-15T18:04:12.571+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-15T18:04:12.575+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-15T18:04:12.589+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-15T18:04:12.595+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-15T18:04:12.601+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-15T18:04:12.608+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-15T18:04:12.614+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-15T18:04:12.618+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-15T18:04:12.625+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-15T18:04:12.629+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-15T18:04:12.632+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-15T18:04:12.637+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-15T18:04:12.639+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-15T18:04:12.644+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-15T18:04:12.645+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-15T18:04:12.650+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-15T18:04:12.655+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-15T18:04:12.669+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-15T18:04:12.673+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-15T18:04:12.679+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-15T18:04:12.683+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-15T18:04:12.686+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-15T18:04:12.693+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-15T18:04:12.697+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-15T18:04:12.698+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-15T18:04:12.702+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-15T18:04:12.717+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-15T18:04:12.723+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-15T18:04:12.725+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-15T18:04:12.728+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-15T18:04:12.734+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-15T18:04:12.737+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-15T18:04:12.742+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-15T18:04:12.744+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-15T18:04:12.747+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "39 - oncall plan memberships"
+2026-10-15T18:04:12.751+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "40 - open handoff publication snapshots"
+2026-10-15T18:04:12.754+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "41 - open handoff notification outbox"
+2026-10-15T18:04:12.759+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "42 - open notification redrive receipts"
+2026-10-15T18:04:12.764+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "43 - runbook retrieval scope snapshots"
+2026-10-15T18:04:12.770+08:00  INFO 37992 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 43 migrations to schema "public", now at version v43 (execution time 00:00.105s)
+2026-10-15T18:04:13.001+08:00  INFO 37992 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-15T18:04:13.059+08:00  INFO 37992 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7518dd02, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4ff43de, org.springframework.security.web.context.SecurityContextHolderFilter@765f934e, org.springframework.security.web.header.HeaderWriterFilter@3e6b1a0d, org.springframework.web.filter.CorsFilter@75610768, org.springframework.security.web.authentication.logout.LogoutFilter@7fe1dee9, org.trigger.opspilot.security.JwtAuthenticationFilter@5f8958af, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7c397b0c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1ae4bdf4, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1bab71f5, org.springframework.security.web.session.SessionManagementFilter@9ccdd34, org.springframework.security.web.access.ExceptionTranslationFilter@4ef88293, org.springframework.security.web.access.intercept.AuthorizationFilter@778324fd]
+2026-10-15T18:04:13.206+08:00  INFO 37992 --- [opspilot] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:opspilot-scoped-eval'
+2026-10-15T18:04:13.232+08:00  INFO 37992 --- [opspilot] [           main] r.RunbookScopedEvaluationIntegrationTest : Started RunbookScopedEvaluationIntegrationTest in 1.649 seconds (process running for 41.76)
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.814 s -- in org.trigger.opspilot.runbook.RunbookScopedEvaluationIntegrationTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 24, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  46.809 s
+[INFO] Finished at: 2026-10-15T18:04:14+08:00
+[INFO] ------------------------------------------------------------------------

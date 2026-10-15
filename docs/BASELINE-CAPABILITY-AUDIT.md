@@ -2,14 +2,20 @@
 
 2026-10-11。结论：OpsPilot 已增强 Incident 业务闭环和运行控制，但不是原版所有接口、工具和检索实现的兼容替代。本文按源码与已有证据区分“能力重写”“已增强”“未保留”“未验证”，不把模型回答看起来相似当作等价。
 
-## 审计对象与证据等级
+## 2026-10-15 后续增量说明
+
+下方对照表与来源哈希保留的是 2026-10-11 封版审计时点，不应再当成“最新助手没有问题驱动检索”的证明。之后 [CP01](acceptance/V1.8-checkpoint-01-assistant-runbook.md) 已接入逐问题 Runbook 检索，[CP02/03](acceptance/V1.8-checkpoint-03-assistant-observations.md) 增加引用/取证边界，[CP04/05](acceptance/V1.8-checkpoint-05-scoped-evaluation.md) 加入 Incident 范围与可追溯评测。本轮 [CP07](acceptance/V1.8-checkpoint-07-document-diversity.md) 又用同语料固定 32 题、真实 H2/MySQL 和整包 SSE 验证了手册级结果预算。最近身份说明由系统直答，不无谓检索故障资料。
+
+这些是原“部分迁移”缺口上的实际增量，不证明原版 Milvus/gte-rerank 已等价迁移或质量被超越，也不恢复任意模型工具调用、天气、TXT/旧 API 等未保留功能。原版固定归档和历史 Demo 继续保留。用户新目标中的冗余功能删除，需要结合实际使用与当前行为判断，不能仅因旧表列为“未保留”就认定它无用。
+
+## 审计对象与证据等级（2026-10-11）
 
 - 原版：本机/远端 `archive/oncall-original-2026-08-19` 均为 `0cd654ea49957d05c0e5c683c0e945a5a87c5bab`，代码位于 `SuperBizAgent-release-2026-05-17`。只读 Git 对象，不检出、不启动需要外部凭证的旧应用。
 - 当前：交付分支在审计时为 `23f534c0135240e29aa80bf82ac2fba9713aa87f`；封版业务 tag 仍为 `bb012bf`。本轮只写文档和来源清单，不改代码、不重新执行测试。
 - **源码存在**仅说明接口/接线已实现；**已有验收**仅覆盖链接报告的实际场景，不扩展为本轮重跑或生产证明。**未保留**指当前源码没有对应接线/兼容接口；不推断原版功能无价值，也不否定可从归档单独演示。
 - [Git 来源与当前文件一致性清单](assets/v1.7-baseline-audit/source-proof.json)记录固定提交、原始 blob、当前 blob 与物理文件核对。不是行为回归或检索质量测试。
 
-## 原版能力逐项对照
+## 原版能力逐项对照（封版时点）
 
 原版主接口可在[固定 ChatController](https://github.com/Trigger726/OnCall-Agent/blob/0cd654ea49957d05c0e5c683c0e945a5a87c5bab/SuperBizAgent-release-2026-05-17/src/main/java/org/example/controller/ChatController.java)查看；其他原文件的具体路径/blob 见来源清单。
 

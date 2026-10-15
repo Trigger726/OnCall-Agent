@@ -90,7 +90,9 @@ function psLiteral(value) { return "'"+value.replaceAll("'","''")+"'"; }
       OPSPILOT_SCOPED_MYSQL_UPGRADE_URL:jdbc(report.testSchemas[1]),OPSPILOT_SCOPED_MYSQL_USER:'root',OPSPILOT_SCOPED_MYSQL_PASSWORD:password};
     const classes=['RunbookScopedEvaluationIntegrationTest','RunbookRetrievalScopeMigrationTest',
       'MySqlScopedEvaluationIntegrationTest','MySqlRunbookRetrievalScopeMigrationTest'];
-    console.log(JSON.stringify({phase:'contracts',port,expectedTests:16}));
+    if(args.includes('--include-diversity')) classes.push('RunbookDocumentDiversityIntegrationTest','MySqlRunbookDocumentDiversityIntegrationTest');
+    const expectedTests=args.includes('--include-diversity')?24:16;
+    console.log(JSON.stringify({phase:'contracts',port,expectedTests}));
     const mvnArgs=['-o',`-Dmaven.repo.local=${m2}`,`-Dtest=${classes.join(',')}`,'-Dopspilot.scoped.eval.mysql.enabled=true','test'];
     const command=`& ${psLiteral(maven)} ${mvnArgs.map(psLiteral).join(' ')}; exit $LASTEXITCODE`;
     const testedAt=Date.now();
@@ -106,8 +108,8 @@ function psLiteral(value) { return "'"+value.replaceAll("'","''")+"'"; }
       report.tests.push({name,...counts});
     }
     assert.equal(tested.code,0,'Maven failed; first failure and database are retained.');
-    assert.equal(report.tests.length,4);
-    assert.equal(report.tests.reduce((sum,test)=>sum+test.tests,0),16);
+    assert.equal(report.tests.length,classes.length);
+    assert.equal(report.tests.reduce((sum,test)=>sum+test.tests,0),expectedTests);
     assert.ok(report.tests.every(test=>test.errors===0&&test.failures===0&&test.skipped===0));
     report.schemaVersions=await sql("SELECT 'evaluation',version FROM opspilot_scope_evaluation.flyway_schema_history WHERE version='43' AND success=1 UNION ALL SELECT 'upgrade',version FROM opspilot_scope_upgrade.flyway_schema_history WHERE version='43' AND success=1;",'versions.log');
     assert.equal(report.schemaVersions.split(/\r?\n/).length,2);

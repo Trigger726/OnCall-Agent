@@ -23,9 +23,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class RunbookSemanticIndexService {
@@ -195,11 +197,15 @@ public class RunbookSemanticIndexService {
             if (queryVectors == null || queryVectors.size() != 1) throw new IllegalStateException("Missing query vector");
             float[] queryVector = queryVectors.get(0);
             validateVector(queryVector, vectors.values().stream().findFirst().map(value -> value.length).orElse(null));
+            Map<Long, Long> documentIds = new HashMap<>();
+            candidates.forEach(candidate -> documentIds.put(candidate.chunkId(), candidate.documentId()));
+            Set<Long> selectedDocuments = new HashSet<>();
             List<SemanticScore> scores = candidates.stream()
                     .filter(candidate -> vectors.containsKey(candidate.chunkId()))
                     .map(candidate -> new SemanticScore(candidate.chunkId(), cosine(queryVector, vectors.get(candidate.chunkId()))))
                     .sorted(Comparator.comparingDouble(SemanticScore::score).reversed()
                             .thenComparingLong(SemanticScore::chunkId))
+                    .filter(score -> selectedDocuments.add(documentIds.get(score.chunkId())))
                     .limit(topK)
                     .toList();
             return new RankOutcome(true, "READY", visibleCoverage, scores, null);
@@ -352,7 +358,10 @@ public class RunbookSemanticIndexService {
         }
     }
 
-    record SemanticDocument(long chunkId, String text) {
+    record SemanticDocument(long chunkId, long documentId, String text) {
+        SemanticDocument(long chunkId, String text) {
+            this(chunkId, chunkId, text);
+        }
     }
 
     record SemanticScore(long chunkId, double score) {

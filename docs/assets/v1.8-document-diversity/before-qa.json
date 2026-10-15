@@ -1,0 +1,830 @@
+{
+  "status": "BASELINE",
+  "label": "before",
+  "out": "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-diversity-before-H5RY9j",
+  "jar": "D:\\Codex\\国网\\央国企求职\\OpsPilot\\target\\opspilot-v1.8-assistant-identity-ui-final.jar",
+  "jarSha256": "9b109c2e78f5a6933536c2cad4ea51b084ec2510d40b4413ac9bfc6c72449b1c",
+  "datasetVersion": "runbook-document-diversity-v1",
+  "datasetSha256": "dd3b516870188520aae39e8430e8faacd7a243466d8760a0949ee001b609026e",
+  "aiEnabled": false,
+  "semanticEnabled": false,
+  "port": 9913,
+  "browser": "Browser plugin not available; existing Playwright 1.63.0 / Chrome",
+  "cases": [
+    {
+      "id": "keyword-redis-multi",
+      "group": "exact-keyword",
+      "incidentId": null,
+      "question": "Redis 连接池 active pending",
+      "relevantKeys": [
+        "legacy-runbook-2",
+        "diversity-redis-deep",
+        "diversity-foreign-redis"
+      ],
+      "sessionId": 1,
+      "messageId": 2,
+      "returned": [
+        "diversity-redis-deep",
+        "diversity-redis-deep",
+        "diversity-redis-deep"
+      ],
+      "citations": [
+        "runbook:diversity-redis-deep:v1#chunk-1",
+        "runbook:diversity-redis-deep:v1#chunk-0",
+        "runbook:diversity-redis-deep:v1#chunk-4"
+      ],
+      "completedReplay": true
+    },
+    {
+      "id": "keyword-redis-slowlog",
+      "group": "exact-keyword",
+      "incidentId": null,
+      "question": "Redis slowlog 慢命令 连接等待",
+      "relevantKeys": [
+        "legacy-runbook-2",
+        "diversity-redis-deep",
+        "diversity-foreign-redis"
+      ],
+      "sessionId": 2,
+      "messageId": 4,
+      "returned": [
+        "diversity-redis-deep",
+        "diversity-foreign-redis",
+        "diversity-redis-deep"
+      ],
+      "citations": [
+        "runbook:diversity-redis-deep:v1#chunk-2",
+        "runbook:diversity-foreign-redis:v1#chunk-2",
+        "runbook:diversity-redis-deep:v1#chunk-0"
+      ]
+    },
+    {
+      "id": "keyword-auth-token",
+      "group": "exact-keyword",
+      "incidentId": null,
+      "question": "登录 token 刷新 旧客户端",
+      "relevantKeys": [
+        "legacy-runbook-3",
+        "diversity-auth-deep"
+      ],
+      "sessionId": 3,
+      "messageId": 6,
+      "returned": [
+        "diversity-auth-deep",
+        "diversity-auth-deep",
+        "diversity-auth-deep"
+      ],
+      "citations": [
+        "runbook:diversity-auth-deep:v1#chunk-1",
+        "runbook:diversity-auth-deep:v1#chunk-3",
+        "runbook:diversity-auth-deep:v1#chunk-0"
+      ],
+      "completedReplay": true
+    },
+    {
+      "id": "keyword-auth-release",
+      "group": "exact-keyword",
+      "incidentId": null,
+      "question": "认证 错误码 token 发布批次",
+      "relevantKeys": [
+        "legacy-runbook-3",
+        "diversity-auth-deep"
+      ],
+      "sessionId": 4,
+      "messageId": 8,
+      "returned": [
+        "diversity-auth-deep",
+        "diversity-auth-deep",
+        "diversity-auth-deep"
+      ],
+      "citations": [
+        "runbook:diversity-auth-deep:v1#chunk-0",
+        "runbook:diversity-auth-deep:v1#chunk-2",
+        "runbook:diversity-auth-deep:v1#chunk-3"
+      ]
+    },
+    {
+      "id": "keyword-kafka",
+      "group": "exact-keyword",
+      "incidentId": null,
+      "question": "Kafka consumer lag group offset commit",
+      "relevantKeys": [
+        "kafka-consumer-lag"
+      ],
+      "sessionId": 5,
+      "messageId": 10,
+      "returned": [
+        "kafka-consumer-lag"
+      ],
+      "citations": [
+        "runbook:kafka-consumer-lag:v1#chunk-0"
+      ]
+    },
+    {
+      "id": "keyword-mysql",
+      "group": "exact-keyword",
+      "incidentId": null,
+      "question": "MySQL too many connections max_connections",
+      "relevantKeys": [
+        "mysql-connection-saturation"
+      ],
+      "sessionId": 6,
+      "messageId": 12,
+      "returned": [
+        "mysql-connection-saturation"
+      ],
+      "citations": [
+        "runbook:mysql-connection-saturation:v1#chunk-0"
+      ]
+    },
+    {
+      "id": "keyword-kubernetes",
+      "group": "exact-keyword",
+      "incidentId": null,
+      "question": "Kubernetes OOMKilled CrashLoopBackOff",
+      "relevantKeys": [
+        "kubernetes-crashloop"
+      ],
+      "sessionId": 7,
+      "messageId": 14,
+      "returned": [
+        "kubernetes-crashloop"
+      ],
+      "citations": [
+        "runbook:kubernetes-crashloop:v1#chunk-0"
+      ]
+    },
+    {
+      "id": "keyword-incident",
+      "group": "exact-keyword",
+      "incidentId": null,
+      "question": "Incident 通用排查 证据确认",
+      "relevantKeys": [
+        "diversity-incident-triage"
+      ],
+      "sessionId": 8,
+      "messageId": 16,
+      "returned": [
+        "diversity-incident-triage",
+        "diversity-incident-triage",
+        "diversity-incident-triage"
+      ],
+      "citations": [
+        "runbook:diversity-incident-triage:v1#chunk-0",
+        "runbook:diversity-incident-triage:v1#chunk-1",
+        "runbook:diversity-incident-triage:v1#chunk-2"
+      ]
+    },
+    {
+      "id": "task-redis-queue",
+      "group": "symptom-task",
+      "incidentId": null,
+      "question": "缓存客户端连接排队 pending，怎样区分慢命令与连接池等待",
+      "relevantKeys": [
+        "legacy-runbook-2",
+        "diversity-redis-deep",
+        "diversity-foreign-redis"
+      ],
+      "sessionId": 9,
+      "messageId": 18,
+      "returned": [
+        "diversity-redis-deep",
+        "diversity-foreign-redis",
+        "diversity-redis-deep"
+      ],
+      "citations": [
+        "runbook:diversity-redis-deep:v1#chunk-0",
+        "runbook:diversity-foreign-redis:v1#chunk-2",
+        "runbook:diversity-redis-deep:v1#chunk-2"
+      ]
+    },
+    {
+      "id": "task-redis-recovery",
+      "group": "symptom-task",
+      "incidentId": null,
+      "question": "Redis 回滚客户端后，如何验证 pending 回落和连接稳定",
+      "relevantKeys": [
+        "legacy-runbook-2",
+        "diversity-redis-deep",
+        "diversity-foreign-redis"
+      ],
+      "sessionId": 10,
+      "messageId": 20,
+      "returned": [
+        "diversity-redis-deep",
+        "diversity-foreign-redis",
+        "diversity-redis-deep"
+      ],
+      "citations": [
+        "runbook:diversity-redis-deep:v1#chunk-4",
+        "runbook:diversity-foreign-redis:v1#chunk-1",
+        "runbook:diversity-redis-deep:v1#chunk-3"
+      ]
+    },
+    {
+      "id": "task-auth-compat",
+      "group": "symptom-task",
+      "incidentId": null,
+      "question": "旧客户端刷新凭证失败，需要比较哪些 token 格式和发布批次",
+      "relevantKeys": [
+        "legacy-runbook-3",
+        "diversity-auth-deep"
+      ],
+      "sessionId": 11,
+      "messageId": 22,
+      "returned": [
+        "diversity-auth-deep",
+        "diversity-auth-deep",
+        "diversity-auth-deep"
+      ],
+      "citations": [
+        "runbook:diversity-auth-deep:v1#chunk-1",
+        "runbook:diversity-auth-deep:v1#chunk-0",
+        "runbook:diversity-auth-deep:v1#chunk-2"
+      ]
+    },
+    {
+      "id": "task-auth-redaction",
+      "group": "symptom-task",
+      "incidentId": null,
+      "question": "登录 token 刷新失败的错误码如何对比，避免记录原始凭证",
+      "relevantKeys": [
+        "diversity-auth-deep",
+        "legacy-runbook-3"
+      ],
+      "sessionId": 12,
+      "messageId": 24,
+      "returned": [
+        "diversity-auth-deep",
+        "diversity-auth-deep",
+        "diversity-auth-deep"
+      ],
+      "citations": [
+        "runbook:diversity-auth-deep:v1#chunk-1",
+        "runbook:diversity-auth-deep:v1#chunk-0",
+        "runbook:diversity-auth-deep:v1#chunk-2"
+      ]
+    },
+    {
+      "id": "task-kafka-rebalance",
+      "group": "symptom-task",
+      "incidentId": null,
+      "question": "消息积压 partition rebalance 抖动，扩容前如何检查 offset commit",
+      "relevantKeys": [
+        "kafka-consumer-lag"
+      ],
+      "sessionId": 13,
+      "messageId": 26,
+      "returned": [
+        "kafka-consumer-lag",
+        "diversity-incident-triage",
+        "diversity-foreign-redis"
+      ],
+      "citations": [
+        "runbook:kafka-consumer-lag:v1#chunk-0",
+        "runbook:diversity-incident-triage:v1#chunk-0",
+        "runbook:diversity-foreign-redis:v1#chunk-0"
+      ]
+    },
+    {
+      "id": "task-mysql-leak",
+      "group": "symptom-task",
+      "incidentId": null,
+      "question": "数据库 active connections 打满疑似连接泄漏，要检查慢 SQL 和事务持有",
+      "relevantKeys": [
+        "mysql-connection-saturation"
+      ],
+      "sessionId": 14,
+      "messageId": 28,
+      "returned": [
+        "mysql-connection-saturation",
+        "diversity-foreign-redis",
+        "diversity-redis-deep"
+      ],
+      "citations": [
+        "runbook:mysql-connection-saturation:v1#chunk-0",
+        "runbook:diversity-foreign-redis:v1#chunk-0",
+        "runbook:diversity-redis-deep:v1#chunk-1"
+      ]
+    },
+    {
+      "id": "task-kubernetes-logs",
+      "group": "symptom-task",
+      "incidentId": null,
+      "question": "Pod 反复重启，previous logs 退出码和 liveness probe 怎么排查",
+      "relevantKeys": [
+        "kubernetes-crashloop"
+      ],
+      "sessionId": 15,
+      "messageId": 30,
+      "returned": [
+        "kubernetes-crashloop",
+        "legacy-runbook-3",
+        "legacy-runbook-2"
+      ],
+      "citations": [
+        "runbook:kubernetes-crashloop:v1#chunk-0",
+        "runbook:legacy-runbook-3:v1#chunk-0",
+        "runbook:legacy-runbook-2:v1#chunk-0"
+      ]
+    },
+    {
+      "id": "task-api-latency",
+      "group": "symptom-task",
+      "incidentId": null,
+      "question": "服务接口 P95 P99 升高，应该核对哪些下游依赖和最近两小时变更",
+      "relevantKeys": [
+        "legacy-runbook-1"
+      ],
+      "sessionId": 16,
+      "messageId": 32,
+      "returned": [
+        "legacy-runbook-1",
+        "diversity-incident-triage",
+        "legacy-runbook-3"
+      ],
+      "citations": [
+        "runbook:legacy-runbook-1:v1#chunk-0",
+        "runbook:diversity-incident-triage:v1#chunk-1",
+        "runbook:legacy-runbook-3:v1#chunk-0"
+      ]
+    },
+    {
+      "id": "scope-settlement-redis",
+      "group": "incident-scope",
+      "incidentId": 1,
+      "question": "Redis 连接池 active pending",
+      "relevantKeys": [
+        "legacy-runbook-2",
+        "diversity-redis-deep"
+      ],
+      "sessionId": 17,
+      "messageId": 34,
+      "returned": [
+        "diversity-redis-deep",
+        "diversity-redis-deep",
+        "diversity-redis-deep"
+      ],
+      "citations": [
+        "runbook:diversity-redis-deep:v1#chunk-1",
+        "runbook:diversity-redis-deep:v1#chunk-0",
+        "runbook:diversity-redis-deep:v1#chunk-4"
+      ],
+      "completedReplay": true
+    },
+    {
+      "id": "scope-settlement-slowlog",
+      "group": "incident-scope",
+      "incidentId": 1,
+      "question": "缓存客户端 slowlog 慢命令和连接等待",
+      "relevantKeys": [
+        "legacy-runbook-2",
+        "diversity-redis-deep"
+      ],
+      "sessionId": 18,
+      "messageId": 36,
+      "returned": [
+        "diversity-redis-deep",
+        "diversity-redis-deep",
+        "diversity-redis-deep"
+      ],
+      "citations": [
+        "runbook:diversity-redis-deep:v1#chunk-2",
+        "runbook:diversity-redis-deep:v1#chunk-3",
+        "runbook:diversity-redis-deep:v1#chunk-0"
+      ]
+    },
+    {
+      "id": "scope-settlement-max-active",
+      "group": "incident-scope",
+      "incidentId": 1,
+      "question": "Redis max-active 连接池上限与客户端命令超时",
+      "relevantKeys": [
+        "legacy-runbook-2",
+        "diversity-redis-deep"
+      ],
+      "sessionId": 19,
+      "messageId": 38,
+      "returned": [
+        "diversity-redis-deep",
+        "legacy-runbook-2",
+        "diversity-redis-deep"
+      ],
+      "citations": [
+        "runbook:diversity-redis-deep:v1#chunk-1",
+        "runbook:legacy-runbook-2:v1#chunk-0",
+        "runbook:diversity-redis-deep:v1#chunk-3"
+      ]
+    },
+    {
+      "id": "scope-settlement-api",
+      "group": "incident-scope",
+      "incidentId": 1,
+      "question": "接口 P99 下游依赖 最近两小时变更",
+      "relevantKeys": [
+        "legacy-runbook-1"
+      ],
+      "sessionId": 20,
+      "messageId": 40,
+      "returned": [
+        "legacy-runbook-1",
+        "diversity-incident-triage",
+        "diversity-redis-deep"
+      ],
+      "citations": [
+        "runbook:legacy-runbook-1:v1#chunk-0",
+        "runbook:diversity-incident-triage:v1#chunk-1",
+        "runbook:diversity-redis-deep:v1#chunk-1"
+      ]
+    },
+    {
+      "id": "scope-auth-token",
+      "group": "incident-scope",
+      "incidentId": 2,
+      "question": "登录 token 刷新 旧客户端",
+      "relevantKeys": [
+        "legacy-runbook-3",
+        "diversity-auth-deep"
+      ],
+      "sessionId": 21,
+      "messageId": 42,
+      "returned": [
+        "diversity-auth-deep",
+        "diversity-auth-deep",
+        "diversity-auth-deep"
+      ],
+      "citations": [
+        "runbook:diversity-auth-deep:v1#chunk-1",
+        "runbook:diversity-auth-deep:v1#chunk-3",
+        "runbook:diversity-auth-deep:v1#chunk-0"
+      ]
+    },
+    {
+      "id": "scope-auth-release",
+      "group": "incident-scope",
+      "incidentId": 2,
+      "question": "登录凭证格式兼容 错误码 发布批次",
+      "relevantKeys": [
+        "legacy-runbook-3",
+        "diversity-auth-deep"
+      ],
+      "sessionId": 22,
+      "messageId": 44,
+      "returned": [
+        "diversity-auth-deep",
+        "diversity-auth-deep",
+        "diversity-auth-deep"
+      ],
+      "citations": [
+        "runbook:diversity-auth-deep:v1#chunk-0",
+        "runbook:diversity-auth-deep:v1#chunk-1",
+        "runbook:diversity-auth-deep:v1#chunk-2"
+      ]
+    },
+    {
+      "id": "scope-auth-broad",
+      "group": "incident-scope",
+      "incidentId": 2,
+      "question": "推荐当前 Incident 的排查手册",
+      "relevantKeys": [
+        "legacy-runbook-3",
+        "diversity-auth-deep",
+        "diversity-incident-triage"
+      ],
+      "sessionId": 23,
+      "messageId": 46,
+      "returned": [
+        "diversity-incident-triage",
+        "legacy-runbook-1",
+        "diversity-incident-triage"
+      ],
+      "citations": [
+        "runbook:diversity-incident-triage:v1#chunk-0",
+        "runbook:legacy-runbook-1:v1#chunk-0",
+        "runbook:diversity-incident-triage:v1#chunk-2"
+      ]
+    },
+    {
+      "id": "scope-auth-triage",
+      "group": "incident-scope",
+      "incidentId": 2,
+      "question": "Incident 证据确认 未验证假设 缺失数据",
+      "relevantKeys": [
+        "diversity-incident-triage"
+      ],
+      "sessionId": 24,
+      "messageId": 48,
+      "returned": [
+        "diversity-incident-triage",
+        "diversity-incident-triage",
+        "diversity-incident-triage"
+      ],
+      "citations": [
+        "runbook:diversity-incident-triage:v1#chunk-1",
+        "runbook:diversity-incident-triage:v1#chunk-2",
+        "runbook:diversity-incident-triage:v1#chunk-0"
+      ]
+    },
+    {
+      "id": "negative-global-no-match",
+      "group": "negative-fences",
+      "incidentId": null,
+      "question": "noLexicalDiversityProbe9172x",
+      "relevantKeys": [],
+      "sessionId": 25,
+      "messageId": 50,
+      "returned": [],
+      "citations": []
+    },
+    {
+      "id": "negative-settlement-kafka",
+      "group": "negative-fences",
+      "incidentId": 1,
+      "question": "Kafka consumer group offset commit partition rebalance",
+      "relevantKeys": [],
+      "sessionId": 26,
+      "messageId": 52,
+      "returned": [],
+      "citations": []
+    },
+    {
+      "id": "negative-auth-kafka",
+      "group": "negative-fences",
+      "incidentId": 2,
+      "question": "Kafka consumer group offset commit partition rebalance",
+      "relevantKeys": [],
+      "sessionId": 27,
+      "messageId": 54,
+      "returned": [],
+      "citations": []
+    },
+    {
+      "id": "negative-auth-kubernetes",
+      "group": "negative-fences",
+      "incidentId": 2,
+      "question": "Kubernetes OOMKilled CrashLoopBackOff liveness probe",
+      "relevantKeys": [],
+      "sessionId": 28,
+      "messageId": 56,
+      "returned": [],
+      "citations": []
+    },
+    {
+      "id": "negative-private-global",
+      "group": "negative-fences",
+      "incidentId": null,
+      "question": "privateScopeProbe739x",
+      "relevantKeys": [],
+      "sessionId": 29,
+      "messageId": 58,
+      "returned": [],
+      "citations": []
+    },
+    {
+      "id": "negative-private-auth",
+      "group": "negative-fences",
+      "incidentId": 2,
+      "question": "privateScopeProbe739x",
+      "relevantKeys": [],
+      "sessionId": 30,
+      "messageId": 60,
+      "returned": [],
+      "citations": [],
+      "completedReplay": true
+    },
+    {
+      "id": "negative-draft-global",
+      "group": "negative-fences",
+      "incidentId": null,
+      "question": "draftScopeProbe482y",
+      "relevantKeys": [],
+      "sessionId": 31,
+      "messageId": 62,
+      "returned": [],
+      "citations": []
+    },
+    {
+      "id": "negative-draft-auth",
+      "group": "negative-fences",
+      "incidentId": 2,
+      "question": "draftScopeProbe482y",
+      "relevantKeys": [],
+      "sessionId": 32,
+      "messageId": 64,
+      "returned": [],
+      "citations": []
+    }
+  ],
+  "publications": [
+    {
+      "stableKey": "diversity-redis-deep",
+      "writer": "admin",
+      "reviewer": "lina",
+      "published": true,
+      "chunkCount": 6
+    },
+    {
+      "stableKey": "diversity-auth-deep",
+      "writer": "admin",
+      "reviewer": "lina",
+      "published": true,
+      "chunkCount": 4
+    },
+    {
+      "stableKey": "diversity-incident-triage",
+      "writer": "admin",
+      "reviewer": "lina",
+      "published": true,
+      "chunkCount": 3
+    },
+    {
+      "stableKey": "diversity-foreign-redis",
+      "writer": "admin",
+      "reviewer": "lina",
+      "published": true,
+      "chunkCount": 4
+    },
+    {
+      "stableKey": "diversity-private",
+      "writer": "admin",
+      "reviewer": "lina",
+      "published": true,
+      "chunkCount": 1
+    },
+    {
+      "stableKey": "diversity-draft",
+      "writer": "admin",
+      "reviewer": null,
+      "published": false,
+      "chunkCount": 1
+    }
+  ],
+  "screenshots": [
+    "before-initial-light1440.png",
+    "before-references-light1440.png",
+    "before-references-dark390.png"
+  ],
+  "errors": [],
+  "corpus": [
+    {
+      "stableKey": "diversity-auth-deep",
+      "versionNo": 1,
+      "resourceType": "APPLICATION",
+      "serviceCode": "APP-AUTH",
+      "contentHash": "beff3900fbe4f6e722f59544f8247ae0e2e746d7e04ce07148de10d787487ee2"
+    },
+    {
+      "stableKey": "diversity-foreign-redis",
+      "versionNo": 1,
+      "resourceType": "MIDDLEWARE",
+      "serviceCode": "MID-OTHER",
+      "contentHash": "a1b741a5e247911093163fd0347088ccd192a362de450265657eff7688838d43"
+    },
+    {
+      "stableKey": "diversity-incident-triage",
+      "versionNo": 1,
+      "resourceType": "SERVICE",
+      "serviceCode": null,
+      "contentHash": "294d63208543babc1663d4f5a8ba72055c529b13c9fcbe56b399de02ff4a9d01"
+    },
+    {
+      "stableKey": "diversity-redis-deep",
+      "versionNo": 1,
+      "resourceType": "MIDDLEWARE",
+      "serviceCode": "MID-REDIS-01",
+      "contentHash": "e3573c872a47ceeff0d33c6ab0398afbf8cec378997567fd4231176cc1fbfc77"
+    },
+    {
+      "stableKey": "kafka-consumer-lag",
+      "versionNo": 1,
+      "resourceType": "MIDDLEWARE",
+      "serviceCode": "KAFKA-ORDER",
+      "contentHash": "d10eda4033f969a72ae8043649602956a635127c23532b23ea44d8d407654257"
+    },
+    {
+      "stableKey": "kubernetes-crashloop",
+      "versionNo": 1,
+      "resourceType": "APPLICATION",
+      "serviceCode": "K8S-PLATFORM",
+      "contentHash": "bbb29e9664ace82f2b0829a841b2d75d3eb3fbe36411d538a4e8c22581d9269f"
+    },
+    {
+      "stableKey": "legacy-runbook-1",
+      "versionNo": 1,
+      "resourceType": "APPLICATION",
+      "serviceCode": null,
+      "contentHash": "18c01d48a2c1649a88e19bb2816a106cb7f4ed158f8c0eaa3749bbecc596fc7c"
+    },
+    {
+      "stableKey": "legacy-runbook-2",
+      "versionNo": 1,
+      "resourceType": "MIDDLEWARE",
+      "serviceCode": null,
+      "contentHash": "56267f119845f2489a6a0e2974f88e8f0e51ff479dfbf518b9a34e5cc19811a7"
+    },
+    {
+      "stableKey": "legacy-runbook-3",
+      "versionNo": 1,
+      "resourceType": "APPLICATION",
+      "serviceCode": null,
+      "contentHash": "6fbb3bb52e3e1ed2951b8978f3faa6c0a793c9949d802b594f51ad53da17826e"
+    },
+    {
+      "stableKey": "mysql-connection-saturation",
+      "versionNo": 1,
+      "resourceType": "DATABASE",
+      "serviceCode": "MYSQL-CORE",
+      "contentHash": "b1bc1c2277021b3a422e078ce7c2829faf56aa9d5313ff82aa5be769d71ab8d8"
+    }
+  ],
+  "corpusSha256": "04c43fa965a9200006bfb3e39c6b091cbf4e83384d904d9982bf733682dd2c4a",
+  "metrics": {
+    "rows": 32,
+    "judged": 24,
+    "negative": 8,
+    "hitAt3": 1,
+    "recallAt3": 0.736111,
+    "mrr": 1,
+    "precisionAt3": 0.388889,
+    "ndcgAt3": 0.797492,
+    "duplicateSlots": 27,
+    "negativeWithResults": 0
+  },
+  "groups": {
+    "exact-keyword": {
+      "rows": 8,
+      "judged": 8,
+      "negative": 0,
+      "hitAt3": 1,
+      "recallAt3": 0.75,
+      "mrr": 1,
+      "precisionAt3": 0.375,
+      "ndcgAt3": 0.807617,
+      "duplicateSlots": 9,
+      "negativeWithResults": 0
+    },
+    "symptom-task": {
+      "rows": 8,
+      "judged": 8,
+      "negative": 0,
+      "hitAt3": 1,
+      "recallAt3": 0.791667,
+      "mrr": 1,
+      "precisionAt3": 0.416667,
+      "ndcgAt3": 0.844627,
+      "duplicateSlots": 6,
+      "negativeWithResults": 0
+    },
+    "incident-scope": {
+      "rows": 8,
+      "judged": 8,
+      "negative": 0,
+      "hitAt3": 1,
+      "recallAt3": 0.666667,
+      "mrr": 1,
+      "precisionAt3": 0.375,
+      "ndcgAt3": 0.740233,
+      "duplicateSlots": 12,
+      "negativeWithResults": 0
+    },
+    "negative-fences": {
+      "rows": 8,
+      "judged": 0,
+      "negative": 8,
+      "hitAt3": null,
+      "recallAt3": null,
+      "mrr": null,
+      "precisionAt3": null,
+      "ndcgAt3": null,
+      "duplicateSlots": 0,
+      "negativeWithResults": 0
+    }
+  },
+  "ui": {
+    "session": 33,
+    "runbookKeys": [
+      "diversity-redis-deep",
+      "diversity-redis-deep",
+      "diversity-redis-deep"
+    ],
+    "sse": true,
+    "persisted": true,
+    "flow": "login -> empty unbound assistant -> send Redis question -> saved citation panel",
+    "reloadRestored": true,
+    "light1440": {
+      "width": 1440,
+      "height": 1000,
+      "overflow": false,
+      "composerVisible": true
+    },
+    "dark390": {
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "composerVisible": true
+    }
+  },
+  "shutdown": true,
+  "exitCode": 0,
+  "portsFree": true
+}

@@ -54,11 +54,13 @@ final class Bm25Retriever {
             }
             if (score > 0) scored.add(new ScoredDocument(documents.get(index), round(score)));
         }
+        Set<Long> selectedDocuments = new LinkedHashSet<>();
         return scored.stream()
                 .sorted((left, right) -> {
                     int byScore = Double.compare(right.score(), left.score());
                     return byScore != 0 ? byScore : Long.compare(left.document().chunkId(), right.document().chunkId());
                 })
+                .filter(item -> selectedDocuments.add(item.document().documentId()))
                 .limit(topK)
                 .toList();
     }
@@ -67,7 +69,10 @@ final class Bm25Retriever {
         return Math.round(score * 10_000.0) / 10_000.0;
     }
 
-    record Document(long chunkId, String searchableText) {
+    record Document(long chunkId, long documentId, String searchableText) {
+        Document(long chunkId, String searchableText) {
+            this(chunkId, chunkId, searchableText);
+        }
     }
 
     record ScoredDocument(Document document, double score) {

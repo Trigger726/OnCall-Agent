@@ -149,7 +149,7 @@ public class RunbookService {
         Map<Long, SearchCandidate> candidatesById = new HashMap<>();
         candidates.forEach(candidate -> candidatesById.put(candidate.chunkId(), candidate));
         List<Bm25Retriever.Document> documents = candidates.stream()
-                .map(candidate -> new Bm25Retriever.Document(candidate.chunkId(), candidate.searchableText()))
+                .map(candidate -> new Bm25Retriever.Document(candidate.chunkId(), candidate.documentId(), candidate.searchableText()))
                 .toList();
         int retrievalWindow = Math.max(topK, candidateWindow);
         List<Bm25Retriever.ScoredDocument> lexicalRanking = Bm25Retriever.search(query, documents, retrievalWindow);
@@ -162,7 +162,7 @@ public class RunbookService {
         RunbookSemanticIndexService.RankOutcome semantic = semanticRequested
                 ? semanticIndexService.rank(query, candidates.stream()
                 .map(candidate -> new RunbookSemanticIndexService.SemanticDocument(
-                        candidate.chunkId(), candidate.searchableText())).toList(), retrievalWindow)
+                        candidate.chunkId(), candidate.documentId(), candidate.searchableText())).toList(), retrievalWindow)
                 : null;
         List<RankedChunk> finalRanking;
         String engine;
@@ -176,7 +176,7 @@ public class RunbookService {
             List<ReciprocalRankFusion.FusedDocument> fused = ReciprocalRankFusion.fuse(
                     lexicalRanking.stream().map(item -> item.document().chunkId()).toList(),
                     semantic.scores().stream().map(RunbookSemanticIndexService.SemanticScore::chunkId).toList(),
-                    rrfRankConstant, topK);
+                    rrfRankConstant, retrievalWindow * 2);
             Map<Long, Double> semanticScores = new HashMap<>();
             semantic.scores().forEach(item -> semanticScores.put(item.chunkId(), item.score()));
             finalRanking = fused.stream().map(item -> new RankedChunk(item.chunkId(), item.score(),
@@ -199,15 +199,17 @@ public class RunbookService {
             }
         }
         List<SearchResult> results = new ArrayList<>();
+        Set<Long> selectedDocuments = new LinkedHashSet<>();
         for (RankedChunk item : finalRanking) {
             SearchCandidate candidate = candidatesById.get(item.chunkId());
-            if (candidate == null) continue;
+            if (candidate == null || !selectedDocuments.add(candidate.documentId())) continue;
             results.add(new SearchResult(candidate.documentId(), candidate.stableKey(), candidate.versionNo(),
                     candidate.resourceType(), candidate.serviceCode(), candidate.title(), candidate.sourceType(),
                     candidate.chunkIndex(), candidate.heading(), clip(candidate.content(), 600),
                     BigDecimal.valueOf(item.score()).setScale(4, RoundingMode.HALF_UP),
                     item.lexicalRank(), item.semanticRank(), decimal(item.semanticScore()),
                     citation(candidate), candidate.publishedAt()));
+            if (results.size() == topK) break;
         }
         Long searchId = sourceType == null ? null : feedbackService.recordSearch(
                 query, sourceType, mode, engine, role, semanticStatus, semanticCoverage,
@@ -328,6 +330,7 @@ public class RunbookService {
                 ? "Hybrid 在完整向量覆盖下完成全部固定样例"
                 : "Hybrid 未计分：" + hybridNote;
         evaluationNote += "；按问题 + 原范围快照分组并重放；排除范围未知的 enabled qrel " + unknownCases + " 条";
+        evaluationNote += "；DOCUMENT_DIVERSITY_V1：每份手册最多一个排名片段，Top 3 按手册计预算";
         String datasetVersion = datasetVersion(queries, unknownCases);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcClient.sql("""
@@ -621,7 +624,7 @@ public class RunbookService {
                         """)
                 .query((rs, rowNum) -> rs.getString("stable_key") + ":" + rs.getInt("version_no"))
                 .list().toString();
-        return sha256(queries.toString() + documents + "|SCOPE_SNAPSHOT_V1|unknown=" + unknownCases).substring(0, 16);
+        return sha256(queries.toString() + documents + "|SCOPE_SNAPSHOT_V1|DOCUMENT_DIVERSITY_V1|unknown=" + unknownCases).substring(0, 16);
     }
 
     private String json(Object value) {
