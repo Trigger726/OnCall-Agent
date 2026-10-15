@@ -1,0 +1,2210 @@
+﻿2026-10-15T11:43:55.8679502Z Current runner version: '2.337.0'
+2026-10-15T11:43:55.8714533Z ##[group]Runner Image Provisioner
+2026-10-15T11:43:55.8716314Z Hosted Compute Agent
+2026-10-15T11:43:55.8717336Z Version: 20261002.596
+2026-10-15T11:43:55.8718391Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+2026-10-15T11:43:55.8719763Z Build Date: 2026-10-02T22:28:27Z
+2026-10-15T11:43:55.8720917Z Worker ID: {56a63d73-19d7-42b2-a24c-8f5d3d35a8f7}
+2026-10-15T11:43:55.8722132Z Region: eastus
+2026-10-15T11:43:55.8723049Z Cloud: Azure
+2026-10-15T11:43:55.8723936Z ##[endgroup]
+2026-10-15T11:43:55.8727220Z ##[group]Operating System
+2026-10-15T11:43:55.8728264Z Ubuntu
+2026-10-15T11:43:55.8729225Z 24.04.5
+2026-10-15T11:43:55.8730063Z LTS
+2026-10-15T11:43:55.8731063Z ##[endgroup]
+2026-10-15T11:43:55.8732061Z ##[group]Runner Image
+2026-10-15T11:43:55.8733007Z Image: ubuntu-24.04
+2026-10-15T11:43:55.8734561Z Version: 20261004.327.1
+2026-10-15T11:43:55.8736944Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-15T11:43:55.8739817Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+2026-10-15T11:43:55.8741477Z ##[endgroup]
+2026-10-15T11:43:55.8743376Z ##[group]GITHUB_TOKEN Permissions
+2026-10-15T11:43:55.8746468Z Contents: read
+2026-10-15T11:43:55.8747593Z Metadata: read
+2026-10-15T11:43:55.8748565Z ##[endgroup]
+2026-10-15T11:43:55.8751639Z Secret source: Actions
+2026-10-15T11:43:55.8753241Z Cache mode: write
+2026-10-15T11:43:55.8754875Z Prepare workflow directory
+2026-10-15T11:43:55.9237399Z Prepare all required actions
+2026-10-15T11:43:55.9309273Z Getting action download info
+2026-10-15T11:43:56.1610077Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+2026-10-15T11:43:56.2845835Z Download action repository 'actions/setup-java@v5' (SHA:b6effb05e454b25005698d916606bdc6ffcbf961)
+2026-10-15T11:43:56.5129112Z Download action repository 'actions/setup-node@v5' (SHA:a0853c24544627f65ddf259abe73b1d18a591444)
+2026-10-15T11:43:56.5995544Z Download action repository 'actions/upload-artifact@v5' (SHA:330a01c490aca151604b8cf639adc76d48f6c5d4)
+2026-10-15T11:43:56.8611276Z Complete job name: Fresh packaged citation UI on Linux
+2026-10-15T11:43:56.9510509Z ##[group]Run actions/checkout@v5
+2026-10-15T11:43:56.9511438Z with:
+2026-10-15T11:43:56.9511937Z   repository: Trigger726/OnCall-Agent
+2026-10-15T11:43:56.9516300Z   token: ***
+2026-10-15T11:43:56.9516836Z   ssh-strict: true
+2026-10-15T11:43:56.9517304Z   ssh-user: git
+2026-10-15T11:43:56.9517785Z   persist-credentials: true
+2026-10-15T11:43:56.9518301Z   clean: true
+2026-10-15T11:43:56.9518773Z   sparse-checkout-cone-mode: true
+2026-10-15T11:43:56.9519319Z   fetch-depth: 1
+2026-10-15T11:43:56.9519770Z   fetch-tags: false
+2026-10-15T11:43:56.9520237Z   show-progress: true
+2026-10-15T11:43:56.9520716Z   lfs: false
+2026-10-15T11:43:56.9521172Z   submodules: false
+2026-10-15T11:43:56.9521652Z   set-safe-directory: true
+2026-10-15T11:43:56.9522190Z   allow-unsafe-pr-checkout: false
+2026-10-15T11:43:56.9523041Z ##[endgroup]
+2026-10-15T11:43:57.0545929Z Syncing repository: Trigger726/OnCall-Agent
+2026-10-15T11:43:57.0548711Z ##[group]Getting Git version info
+2026-10-15T11:43:57.0550085Z Working directory is '/home/runner/work/OnCall-Agent/OnCall-Agent'
+2026-10-15T11:43:57.0551869Z [command]/usr/bin/git version
+2026-10-15T11:43:57.0685099Z git version 2.55.0
+2026-10-15T11:43:57.0708055Z ##[endgroup]
+2026-10-15T11:43:57.0723322Z Temporarily overriding HOME='/home/runner/work/_temp/da4e0ec5-b5c8-4f27-8a5c-a346a8907268' before making global git config changes
+2026-10-15T11:43:57.0726253Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-15T11:43:57.0729258Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-15T11:43:57.0791148Z Deleting the contents of '/home/runner/work/OnCall-Agent/OnCall-Agent'
+2026-10-15T11:43:57.0800782Z ##[group]Initializing the repository
+2026-10-15T11:43:57.0811520Z [command]/usr/bin/git init /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-15T11:43:57.0930953Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-15T11:43:57.0932940Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-15T11:43:57.0935016Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-15T11:43:57.0936939Z hint: call:
+2026-10-15T11:43:57.0937571Z hint:
+2026-10-15T11:43:57.0947677Z hint: 	git config --global init.defaultBranch <name>
+2026-10-15T11:43:57.0958739Z hint:
+2026-10-15T11:43:57.0959793Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-15T11:43:57.0961458Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-15T11:43:57.0962767Z hint:
+2026-10-15T11:43:57.0963506Z hint: 	git branch -m <name>
+2026-10-15T11:43:57.0964343Z hint:
+2026-10-15T11:43:57.0965729Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-15T11:43:57.0968075Z Initialized empty Git repository in /home/runner/work/OnCall-Agent/OnCall-Agent/.git/
+2026-10-15T11:43:57.0971750Z [command]/usr/bin/git remote add origin https://github.com/Trigger726/OnCall-Agent
+2026-10-15T11:43:57.1009955Z ##[endgroup]
+2026-10-15T11:43:57.1011137Z ##[group]Disabling automatic garbage collection
+2026-10-15T11:43:57.1013767Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-15T11:43:57.1071047Z ##[endgroup]
+2026-10-15T11:43:57.1072232Z ##[group]Setting up auth
+2026-10-15T11:43:57.1079562Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T11:43:57.1116874Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-15T11:43:57.1519750Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-15T11:43:57.1558721Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-15T11:43:57.1782645Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-15T11:43:57.1817979Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-15T11:43:57.2043822Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-15T11:43:57.2086773Z ##[endgroup]
+2026-10-15T11:43:57.2087671Z ##[group]Fetching the repository
+2026-10-15T11:43:57.2097105Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +85ed35a83ca524d4da6b088c15dca7fe6ff2b19f:refs/remotes/origin/work/opspilot-citation-mysql-20261015
+2026-10-15T11:44:02.0534796Z From https://github.com/Trigger726/OnCall-Agent
+2026-10-15T11:44:02.0538336Z  * [new ref]         85ed35a83ca524d4da6b088c15dca7fe6ff2b19f -> origin/work/opspilot-citation-mysql-20261015
+2026-10-15T11:44:02.0618605Z ##[endgroup]
+2026-10-15T11:44:02.0620493Z ##[group]Determining the checkout info
+2026-10-15T11:44:02.0621520Z ##[endgroup]
+2026-10-15T11:44:02.0622144Z [command]/usr/bin/git sparse-checkout disable
+2026-10-15T11:44:02.0624484Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-15T11:44:02.0647554Z ##[group]Checking out the ref
+2026-10-15T11:44:02.0654022Z [command]/usr/bin/git checkout --progress --force -B work/opspilot-citation-mysql-20261015 refs/remotes/origin/work/opspilot-citation-mysql-20261015
+2026-10-15T11:44:02.9377617Z Switched to a new branch 'work/opspilot-citation-mysql-20261015'
+2026-10-15T11:44:02.9383812Z branch 'work/opspilot-citation-mysql-20261015' set up to track 'origin/work/opspilot-citation-mysql-20261015'.
+2026-10-15T11:44:02.9449307Z ##[endgroup]
+2026-10-15T11:44:02.9520235Z [command]/usr/bin/git log -1 --format=%H
+2026-10-15T11:44:02.9547703Z 85ed35a83ca524d4da6b088c15dca7fe6ff2b19f
+2026-10-15T11:44:02.9864119Z ##[group]Run actions/setup-java@v5
+2026-10-15T11:44:02.9864464Z with:
+2026-10-15T11:44:02.9864674Z   distribution: temurin
+2026-10-15T11:44:02.9864906Z   java-version: 17
+2026-10-15T11:44:02.9865113Z   cache: maven
+2026-10-15T11:44:02.9865745Z   java-package: jdk
+2026-10-15T11:44:02.9866040Z   check-latest: false
+2026-10-15T11:44:02.9866266Z   set-default: true
+2026-10-15T11:44:02.9866482Z   verify-signature: false
+2026-10-15T11:44:02.9866718Z   server-id: github
+2026-10-15T11:44:02.9866936Z   server-username: GITHUB_ACTOR
+2026-10-15T11:44:02.9867212Z   server-password: GITHUB_TOKEN
+2026-10-15T11:44:02.9867463Z   overwrite-settings: true
+2026-10-15T11:44:02.9867697Z   job-status: success
+2026-10-15T11:44:02.9870418Z   token: ***
+2026-10-15T11:44:02.9870674Z   show-download-progress: false
+2026-10-15T11:44:02.9870974Z ##[endgroup]
+2026-10-15T11:44:03.1396453Z ##[group]Installed distributions
+2026-10-15T11:44:03.1542327Z Resolved Java 17.0.20+1 from tool-cache
+2026-10-15T11:44:03.1543006Z Setting Java 17.0.20+1 as the default
+2026-10-15T11:44:03.1554267Z Creating toolchains.xml for JDK version 17 from temurin
+2026-10-15T11:44:03.1631480Z Writing to /home/runner/.m2/toolchains.xml
+2026-10-15T11:44:03.1631908Z 
+2026-10-15T11:44:03.1632084Z Java configuration:
+2026-10-15T11:44:03.1632496Z   Distribution: temurin
+2026-10-15T11:44:03.1632908Z   Version: 17.0.20+1
+2026-10-15T11:44:03.1633501Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T11:44:03.1634032Z 
+2026-10-15T11:44:03.1634652Z ##[endgroup]
+2026-10-15T11:44:03.1674547Z Creating settings.xml with server-id: github
+2026-10-15T11:44:03.1675517Z Writing to /home/runner/.m2/settings.xml
+2026-10-15T11:44:03.1687058Z Configured MAVEN_ARGS to include -ntp to suppress Maven transfer progress logs. Set 'show-download-progress: true' to keep the download progress output.
+2026-10-15T11:44:03.8424092Z maven cache is not found
+2026-10-15T11:44:04.3516738Z ##[group]Run actions/setup-node@v5
+2026-10-15T11:44:04.3517053Z with:
+2026-10-15T11:44:04.3517257Z   node-version: 22
+2026-10-15T11:44:04.3517471Z   cache: npm
+2026-10-15T11:44:04.3517850Z   cache-dependency-path: web/package-lock.json
+scripts/browser/package-lock.json
+
+2026-10-15T11:44:04.3518299Z   always-auth: false
+2026-10-15T11:44:04.3518518Z   check-latest: false
+2026-10-15T11:44:04.3521238Z   token: ***
+2026-10-15T11:44:04.3521479Z   package-manager-cache: true
+2026-10-15T11:44:04.3521728Z env:
+2026-10-15T11:44:04.3522025Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T11:44:04.3522532Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T11:44:04.3522945Z   MAVEN_ARGS: -ntp
+2026-10-15T11:44:04.3523175Z ##[endgroup]
+2026-10-15T11:44:04.4990519Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+2026-10-15T11:44:04.4995553Z (node:2471) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-15T11:44:04.4996977Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-15T11:44:04.4999251Z ##[group]Environment details
+2026-10-15T11:44:04.9222646Z node: v22.23.3
+2026-10-15T11:44:04.9223226Z npm: 10.9.9
+2026-10-15T11:44:04.9223588Z yarn: 1.22.22
+2026-10-15T11:44:04.9224316Z ##[endgroup]
+2026-10-15T11:44:04.9251681Z [command]/opt/hostedtoolcache/node/22.23.3/x64/bin/npm config get cache
+2026-10-15T11:44:05.0454018Z /home/runner/.npm
+2026-10-15T11:44:05.1403628Z npm cache is not found
+2026-10-15T11:44:05.1533315Z ##[group]Run npm ci --prefix web
+2026-10-15T11:44:05.1533694Z [36;1mnpm ci --prefix web[0m
+2026-10-15T11:44:05.1533955Z [36;1mnpm test --prefix web[0m
+2026-10-15T11:44:05.1534240Z [36;1mnpm run build --prefix web[0m
+2026-10-15T11:44:05.1534549Z [36;1mchmod +x mvnw[0m
+2026-10-15T11:44:05.1534802Z [36;1m./mvnw -B -DskipTests package[0m
+2026-10-15T11:44:05.1839589Z shell: /usr/bin/bash -e {0}
+2026-10-15T11:44:05.1840110Z env:
+2026-10-15T11:44:05.1840489Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T11:44:05.1841120Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T11:44:05.1841650Z   MAVEN_ARGS: -ntp
+2026-10-15T11:44:05.1841899Z ##[endgroup]
+2026-10-15T11:44:09.6721211Z 
+2026-10-15T11:44:09.6730480Z added 61 packages, and audited 62 packages in 4s
+2026-10-15T11:44:09.6731008Z 
+2026-10-15T11:44:09.6731371Z 8 packages are looking for funding
+2026-10-15T11:44:09.6732020Z   run `npm fund` for details
+2026-10-15T11:44:09.6735007Z 
+2026-10-15T11:44:09.6735630Z found 0 vulnerabilities
+2026-10-15T11:44:09.8149838Z 
+2026-10-15T11:44:09.8150545Z > opspilot-web@0.1.0 test
+2026-10-15T11:44:09.8151231Z > node --test tests/*.test.mjs
+2026-10-15T11:44:09.8151574Z 
+2026-10-15T11:44:09.8753997Z TAP version 13
+2026-10-15T11:44:10.1176255Z # Subtest: truncated POST resumes GET, ignores duplicates and rotates key only on terminal
+2026-10-15T11:44:10.1220872Z ok 1 - truncated POST resumes GET, ignores duplicates and rotates key only on terminal
+2026-10-15T11:44:10.1258461Z   ---
+2026-10-15T11:44:10.1273429Z   duration_ms: 43.246749
+2026-10-15T11:44:10.1309083Z   type: 'test'
+2026-10-15T11:44:10.1339620Z   ...
+2026-10-15T11:44:10.1356685Z # Subtest: header recovers an empty reused POST before any event arrives
+2026-10-15T11:44:10.1363322Z ok 2 - header recovers an empty reused POST before any event arrives
+2026-10-15T11:44:10.1364510Z   ---
+2026-10-15T11:44:10.1380790Z   duration_ms: 1.929944
+2026-10-15T11:44:10.1381510Z   type: 'test'
+2026-10-15T11:44:10.1382068Z   ...
+2026-10-15T11:44:10.1383131Z # Subtest: ambiguous POST network failure reuses the original idempotency key
+2026-10-15T11:44:10.1416159Z ok 3 - ambiguous POST network failure reuses the original idempotency key
+2026-10-15T11:44:10.1416955Z   ---
+2026-10-15T11:44:10.1417342Z   duration_ms: 1.277489
+2026-10-15T11:44:10.1417773Z   type: 'test'
+2026-10-15T11:44:10.1418165Z   ...
+2026-10-15T11:44:10.1418953Z # Subtest: UTF-8 byte chunks, CRLF and multiline data parse without corruption
+2026-10-15T11:44:10.1419793Z ok 4 - UTF-8 byte chunks, CRLF and multiline data parse without corruption
+2026-10-15T11:44:10.1420198Z   ---
+2026-10-15T11:44:10.1420412Z   duration_ms: 10.774758
+2026-10-15T11:44:10.1420671Z   type: 'test'
+2026-10-15T11:44:10.1420876Z   ...
+2026-10-15T11:44:10.1421356Z # Subtest: all five terminal kinds stop reconnection, queue rejection remains actionable
+2026-10-15T11:44:10.1422432Z ok 5 - all five terminal kinds stop reconnection, queue rejection remains actionable
+2026-10-15T11:44:10.1423194Z   ---
+2026-10-15T11:44:10.1423557Z   duration_ms: 5.793721
+2026-10-15T11:44:10.1423986Z   type: 'test'
+2026-10-15T11:44:10.1424192Z   ...
+2026-10-15T11:44:10.1424628Z # Subtest: 401 expires authentication once without retrying or clearing the run key
+2026-10-15T11:44:10.1425536Z ok 6 - 401 expires authentication once without retrying or clearing the run key
+2026-10-15T11:44:10.1426243Z   ---
+2026-10-15T11:44:10.1426626Z   duration_ms: 1.559955
+2026-10-15T11:44:10.1427088Z   type: 'test'
+2026-10-15T11:44:10.1427461Z   ...
+2026-10-15T11:44:10.1428315Z # Subtest: no-progress retries have a hard limit and preserve key for manual recovery
+2026-10-15T11:44:10.1429633Z ok 7 - no-progress retries have a hard limit and preserve key for manual recovery
+2026-10-15T11:44:10.1430379Z   ---
+2026-10-15T11:44:10.1430750Z   duration_ms: 2.483976
+2026-10-15T11:44:10.1431179Z   type: 'test'
+2026-10-15T11:44:10.1431539Z   ...
+2026-10-15T11:44:10.1432745Z # Subtest: abort during retry backoff stops requests without calling cancel API
+2026-10-15T11:44:10.1433785Z ok 8 - abort during retry backoff stops requests without calling cancel API
+2026-10-15T11:44:10.1434502Z   ---
+2026-10-15T11:44:10.1434859Z   duration_ms: 1.419995
+2026-10-15T11:44:10.1435468Z   type: 'test'
+2026-10-15T11:44:10.1435805Z   ...
+2026-10-15T11:44:10.1436481Z # Subtest: foreign events and handler errors never advance cursor or retry
+2026-10-15T11:44:10.1437784Z ok 9 - foreign events and handler errors never advance cursor or retry
+2026-10-15T11:44:10.1438428Z   ---
+2026-10-15T11:44:10.1438733Z   duration_ms: 1.503139
+2026-10-15T11:44:10.1438971Z   type: 'test'
+2026-10-15T11:44:10.1439171Z   ...
+2026-10-15T11:44:10.1439669Z # Subtest: fresh-page subscription is GET-only, replays history and does not touch POST keys
+2026-10-15T11:44:10.1440428Z ok 10 - fresh-page subscription is GET-only, replays history and does not touch POST keys
+2026-10-15T11:44:10.1441132Z   ---
+2026-10-15T11:44:10.1441485Z   duration_ms: 1.3795
+2026-10-15T11:44:10.1441902Z   type: 'test'
+2026-10-15T11:44:10.1442251Z   ...
+2026-10-15T11:44:10.1442876Z # Subtest: subscription rejects invalid IDs and foreign events without any start request
+2026-10-15T11:44:10.1443552Z ok 11 - subscription rejects invalid IDs and foreign events without any start request
+2026-10-15T11:44:10.1443964Z   ---
+2026-10-15T11:44:10.1444165Z   duration_ms: 1.217688
+2026-10-15T11:44:10.1444402Z   type: 'test'
+2026-10-15T11:44:10.1444630Z   ...
+2026-10-15T11:44:10.1445120Z # Subtest: failed auto-attachment has bounded retries and never becomes a POST
+2026-10-15T11:44:10.1446425Z ok 12 - failed auto-attachment has bounded retries and never becomes a POST
+2026-10-15T11:44:10.1447181Z   ---
+2026-10-15T11:44:10.1447539Z   duration_ms: 3.482557
+2026-10-15T11:44:10.1447941Z   type: 'test'
+2026-10-15T11:44:10.1448281Z   ...
+2026-10-15T11:44:10.1449081Z # Subtest: already aborted subscription neither fetches nor touches browser storage
+2026-10-15T11:44:10.1450366Z ok 13 - already aborted subscription neither fetches nor touches browser storage
+2026-10-15T11:44:10.1451083Z   ---
+2026-10-15T11:44:10.1451446Z   duration_ms: 1.158237
+2026-10-15T11:44:10.1451860Z   type: 'test'
+2026-10-15T11:44:10.1452205Z   ...
+2026-10-15T11:44:10.1452888Z # Subtest: late POST stream 401 cannot expire a newly signed-in session
+2026-10-15T11:44:10.1453895Z ok 14 - late POST stream 401 cannot expire a newly signed-in session
+2026-10-15T11:44:10.1454580Z   ---
+2026-10-15T11:44:10.1454946Z   duration_ms: 0.952013
+2026-10-15T11:44:10.1455635Z   type: 'test'
+2026-10-15T11:44:10.1456001Z   ...
+2026-10-15T11:44:10.1456698Z # Subtest: late GET stream 401 cannot expire a newly signed-in session
+2026-10-15T11:44:10.1457684Z ok 15 - late GET stream 401 cannot expire a newly signed-in session
+2026-10-15T11:44:10.1458333Z   ---
+2026-10-15T11:44:10.1458720Z   duration_ms: 0.417878
+2026-10-15T11:44:10.1459149Z   type: 'test'
+2026-10-15T11:44:10.1459513Z   ...
+2026-10-15T11:44:10.1460348Z # Subtest: late successful stream frames cannot render under a replacement session
+2026-10-15T11:44:10.1461575Z ok 16 - late successful stream frames cannot render under a replacement session
+2026-10-15T11:44:10.1462319Z   ---
+2026-10-15T11:44:10.1462679Z   duration_ms: 0.621217
+2026-10-15T11:44:10.1463086Z   type: 'test'
+2026-10-15T11:44:10.1463440Z   ...
+2026-10-15T11:44:10.1464131Z # Subtest: a reconnect never switches to newly signed-in credentials
+2026-10-15T11:44:10.1465141Z ok 17 - a reconnect never switches to newly signed-in credentials
+2026-10-15T11:44:10.1466063Z   ---
+2026-10-15T11:44:10.1466463Z   duration_ms: 0.875521
+2026-10-15T11:44:10.1466852Z   type: 'test'
+2026-10-15T11:44:10.1467185Z   ...
+2026-10-15T11:44:10.1468038Z # Subtest: pending POST idempotency keys are isolated by the verified UI account identity
+2026-10-15T11:44:10.1469395Z ok 18 - pending POST idempotency keys are isolated by the verified UI account identity
+2026-10-15T11:44:10.1470208Z   ---
+2026-10-15T11:44:10.1470598Z   duration_ms: 1.296485
+2026-10-15T11:44:10.1471361Z   type: 'test'
+2026-10-15T11:44:10.1471768Z   ...
+2026-10-15T11:44:10.1472564Z # Subtest: storage cancels a pending reader and releases every session listener
+2026-10-15T11:44:10.1473723Z ok 19 - storage cancels a pending reader and releases every session listener
+2026-10-15T11:44:10.1474416Z   ---
+2026-10-15T11:44:10.1474787Z   duration_ms: 1.317053
+2026-10-15T11:44:10.1475550Z   type: 'test'
+2026-10-15T11:44:10.1552832Z   ...
+2026-10-15T11:44:10.1553859Z # Subtest: opspilot-auth-session-changed cancels a pending reader and releases every session listener
+2026-10-15T11:44:10.1555627Z ok 20 - opspilot-auth-session-changed cancels a pending reader and releases every session listener
+2026-10-15T11:44:10.1556457Z   ---
+2026-10-15T11:44:10.1556809Z   duration_ms: 0.664007
+2026-10-15T11:44:10.1557316Z   type: 'test'
+2026-10-15T11:44:10.1557690Z   ...
+2026-10-15T11:44:10.1558473Z # Subtest: caller-abort cancels a pending reader and releases every session listener
+2026-10-15T11:44:10.1559600Z ok 21 - caller-abort cancels a pending reader and releases every session listener
+2026-10-15T11:44:10.1560232Z   ---
+2026-10-15T11:44:10.1560561Z   duration_ms: 0.630404
+2026-10-15T11:44:10.1560938Z   type: 'test'
+2026-10-15T11:44:10.1561260Z   ...
+2026-10-15T11:44:10.1562172Z # Subtest: successful and failed streams release listeners without aborting caller or cancelling server runs
+2026-10-15T11:44:10.1563558Z ok 22 - successful and failed streams release listeners without aborting caller or cancelling server runs
+2026-10-15T11:44:10.1564354Z   ---
+2026-10-15T11:44:10.1564685Z   duration_ms: 1.065083
+2026-10-15T11:44:10.1565050Z   type: 'test'
+2026-10-15T11:44:10.1565578Z   ...
+2026-10-15T11:44:10.1566415Z # Subtest: unrelated storage notifications do not interrupt a current authenticated stream
+2026-10-15T11:44:10.1567509Z ok 23 - unrelated storage notifications do not interrupt a current authenticated stream
+2026-10-15T11:44:10.1568198Z   ---
+2026-10-15T11:44:10.1568541Z   duration_ms: 0.93468
+2026-10-15T11:44:10.1569070Z   type: 'test'
+2026-10-15T11:44:10.1569379Z   ...
+2026-10-15T11:44:10.1570239Z # Subtest: malformed account namespaces fail before POST without inheriting a legacy unowned key
+2026-10-15T11:44:10.1571473Z ok 24 - malformed account namespaces fail before POST without inheriting a legacy unowned key
+2026-10-15T11:44:10.1572209Z   ---
+2026-10-15T11:44:10.1572529Z   duration_ms: 3.703177
+2026-10-15T11:44:10.1572894Z   type: 'test'
+2026-10-15T11:44:10.1573191Z   ...
+2026-10-15T11:44:10.1573934Z # Subtest: a fresh login of the same actor preserves an ambiguous command for same-key recovery
+2026-10-15T11:44:10.1575104Z ok 25 - a fresh login of the same actor preserves an ambiguous command for same-key recovery
+2026-10-15T11:44:10.1583834Z   ---
+2026-10-15T11:44:10.1584230Z   duration_ms: 2.750403
+2026-10-15T11:44:10.1584656Z   type: 'test'
+2026-10-15T11:44:10.1585015Z   ...
+2026-10-15T11:44:10.1742382Z # Subtest: a matched committed answer restores input without a second confirmation
+2026-10-15T11:44:10.1783174Z ok 26 - a matched committed answer restores input without a second confirmation
+2026-10-15T11:44:10.1805839Z   ---
+2026-10-15T11:44:10.1809458Z   duration_ms: 4.186588
+2026-10-15T11:44:10.1873382Z   type: 'test'
+2026-10-15T11:44:10.1902378Z   ...
+2026-10-15T11:44:10.1906367Z # Subtest: completion needs exact session, original question ID/content and a non-provisional answer
+2026-10-15T11:44:10.1908188Z ok 27 - completion needs exact session, original question ID/content and a non-provisional answer
+2026-10-15T11:44:10.1909354Z   ---
+2026-10-15T11:44:10.1909995Z   duration_ms: 4.940602
+2026-10-15T11:44:10.1910688Z   type: 'test'
+2026-10-15T11:44:10.1911316Z   ...
+2026-10-15T11:44:10.1912605Z # Subtest: unknown and running states remain locked and never cancel or clear the original request
+2026-10-15T11:44:10.1914304Z ok 28 - unknown and running states remain locked and never cancel or clear the original request
+2026-10-15T11:44:10.1915723Z   ---
+2026-10-15T11:44:10.1916389Z   duration_ms: 2.197874
+2026-10-15T11:44:10.1917480Z   type: 'test'
+2026-10-15T11:44:10.1918262Z   ...
+2026-10-15T11:44:10.1919359Z # Subtest: cancelled, timed-out and failed requests retain explicit acknowledgement
+2026-10-15T11:44:10.1920967Z ok 29 - cancelled, timed-out and failed requests retain explicit acknowledgement
+2026-10-15T11:44:10.1921943Z   ---
+2026-10-15T11:44:10.1922552Z   duration_ms: 2.832162
+2026-10-15T11:44:10.1923220Z   type: 'test'
+2026-10-15T11:44:10.1924129Z   ...
+2026-10-15T11:44:10.1925492Z # Subtest: storage cleanup failure preserves the receipt, visible error and recovery action
+2026-10-15T11:44:10.1927112Z ok 30 - storage cleanup failure preserves the receipt, visible error and recovery action
+2026-10-15T11:44:10.1928154Z   ---
+2026-10-15T11:44:10.1928770Z   duration_ms: 0.845174
+2026-10-15T11:44:10.1929432Z   type: 'test'
+2026-10-15T11:44:10.1929963Z   ...
+2026-10-15T11:44:10.1930880Z # Subtest: late readback cannot clear a newer request on the same conversation
+2026-10-15T11:44:10.1932132Z ok 31 - late readback cannot clear a newer request on the same conversation
+2026-10-15T11:44:10.1933153Z   ---
+2026-10-15T11:44:10.1933667Z   duration_ms: 0.706376
+2026-10-15T11:44:10.1934240Z   type: 'test'
+2026-10-15T11:44:10.1934734Z   ...
+2026-10-15T11:44:10.1935910Z # Subtest: an older running snapshot cannot regress an already confirmed terminal
+2026-10-15T11:44:10.1937187Z ok 32 - an older running snapshot cannot regress an already confirmed terminal
+2026-10-15T11:44:10.1938052Z   ---
+2026-10-15T11:44:10.1938562Z   duration_ms: 0.706646
+2026-10-15T11:44:10.1939119Z   type: 'test'
+2026-10-15T11:44:10.1939630Z   ...
+2026-10-15T11:44:10.1940435Z # Subtest: revoked lease cannot apply an answer or clear storage
+2026-10-15T11:44:10.1941595Z ok 33 - revoked lease cannot apply an answer or clear storage
+2026-10-15T11:44:10.1942381Z   ---
+2026-10-15T11:44:10.1942889Z   duration_ms: 0.681399
+2026-10-15T11:44:10.1943462Z   type: 'test'
+2026-10-15T11:44:10.1943980Z   ...
+2026-10-15T11:44:10.1944894Z # Subtest: busy acknowledgement cannot unlock another in-flight operation
+2026-10-15T11:44:10.1946309Z ok 34 - busy acknowledgement cannot unlock another in-flight operation
+2026-10-15T11:44:10.1947111Z   ---
+2026-10-15T11:44:10.1947625Z   duration_ms: 1.093958
+2026-10-15T11:44:10.1948197Z   type: 'test'
+2026-10-15T11:44:10.1948715Z   ...
+2026-10-15T11:44:10.1949698Z # Subtest: sources are a native disclosure and duplicate sidebar mode has been removed
+2026-10-15T11:44:10.1951168Z ok 35 - sources are a native disclosure and duplicate sidebar mode has been removed
+2026-10-15T11:44:10.1952192Z   ---
+2026-10-15T11:44:10.1952803Z   duration_ms: 0.717857
+2026-10-15T11:44:10.1953492Z   type: 'test'
+2026-10-15T11:44:10.1954097Z   ...
+2026-10-15T11:44:10.1955136Z # Subtest: Enter sends once, but IME composition and modified Enter never submit
+2026-10-15T11:44:10.1956849Z ok 36 - Enter sends once, but IME composition and modified Enter never submit
+2026-10-15T11:44:10.1957836Z   ---
+2026-10-15T11:44:10.1958441Z   duration_ms: 2.605052
+2026-10-15T11:44:10.1959114Z   type: 'test'
+2026-10-15T11:44:10.1959712Z   ...
+2026-10-15T11:44:10.1960806Z # Subtest: runtime label comes from the server, not a guessed brand or model
+2026-10-15T11:44:10.1962183Z ok 37 - runtime label comes from the server, not a guessed brand or model
+2026-10-15T11:44:10.1963115Z   ---
+2026-10-15T11:44:10.1963715Z   duration_ms: 0.340624
+2026-10-15T11:44:10.1964381Z   type: 'test'
+2026-10-15T11:44:10.1965041Z   ...
+2026-10-15T11:44:10.1966505Z # Subtest: existing themes and native motion stay intact, narrow screens prioritise conversation
+2026-10-15T11:44:10.1968213Z ok 38 - existing themes and native motion stay intact, narrow screens prioritise conversation
+2026-10-15T11:44:10.1969325Z   ---
+2026-10-15T11:44:10.1969915Z   duration_ms: 0.374678
+2026-10-15T11:44:10.1970591Z   type: 'test'
+2026-10-15T11:44:10.1971169Z   ...
+2026-10-15T11:44:10.2407668Z # Subtest: native generation and token previews have no durable ID until committed done
+2026-10-15T11:44:10.2438446Z ok 39 - native generation and token previews have no durable ID until committed done
+2026-10-15T11:44:10.2466072Z   ---
+2026-10-15T11:44:10.2467246Z   duration_ms: 39.896118
+2026-10-15T11:44:10.2496140Z   type: 'test'
+2026-10-15T11:44:10.2526287Z   ...
+2026-10-15T11:44:10.2576862Z # Subtest: freezes and persists the original question before POST; refresh uses the same key and cannot overwrite
+2026-10-15T11:44:10.2647242Z ok 40 - freezes and persists the original question before POST; refresh uses the same key and cannot overwrite
+2026-10-15T11:44:10.2687394Z   ---
+2026-10-15T11:44:10.2745666Z   duration_ms: 1.187101
+2026-10-15T11:44:10.2766722Z   type: 'test'
+2026-10-15T11:44:10.2786316Z   ...
+2026-10-15T11:44:10.2787523Z # Subtest: native previews reject premature IDs, missing generation, mixed protocols and empty completion
+2026-10-15T11:44:10.2789137Z ok 41 - native previews reject premature IDs, missing generation, mixed protocols and empty completion
+2026-10-15T11:44:10.2790096Z   ---
+2026-10-15T11:44:10.2790723Z   duration_ms: 13.132941
+2026-10-15T11:44:10.2791303Z   type: 'test'
+2026-10-15T11:44:10.2791789Z   ...
+2026-10-15T11:44:10.2792817Z # Subtest: native EOF and terminal error never turn partial output into a saved answer or retry
+2026-10-15T11:44:10.2794253Z ok 42 - native EOF and terminal error never turn partial output into a saved answer or retry
+2026-10-15T11:44:10.2795163Z   ---
+2026-10-15T11:44:10.2796354Z   duration_ms: 2.07808
+2026-10-15T11:44:10.2797018Z   type: 'test'
+2026-10-15T11:44:10.2797594Z   ...
+2026-10-15T11:44:10.2800626Z # Subtest: native cancellation after one-byte UTF-8 previews retains the frozen intent for SQL reconciliation
+2026-10-15T11:44:10.2806700Z ok 43 - native cancellation after one-byte UTF-8 previews retains the frozen intent for SQL reconciliation
+2026-10-15T11:44:10.2807858Z   ---
+2026-10-15T11:44:10.2808399Z   duration_ms: 19.533983
+2026-10-15T11:44:10.2809059Z   type: 'test'
+2026-10-15T11:44:10.2809576Z   ...
+2026-10-15T11:44:10.2810813Z # Subtest: account and session namespaces isolate pending intents; a refreshed token for the same owner may query
+2026-10-15T11:44:10.2812636Z ok 44 - account and session namespaces isolate pending intents; a refreshed token for the same owner may query
+2026-10-15T11:44:10.2813717Z   ---
+2026-10-15T11:44:10.2814200Z   duration_ms: 1.661414
+2026-10-15T11:44:10.2814731Z   type: 'test'
+2026-10-15T11:44:10.2815186Z   ...
+2026-10-15T11:44:10.2816389Z # Subtest: storage failure, damaged intent and missing owner reject before any command
+2026-10-15T11:44:10.2817737Z ok 45 - storage failure, damaged intent and missing owner reject before any command
+2026-10-15T11:44:10.2818618Z   ---
+2026-10-15T11:44:10.2819096Z   duration_ms: 0.565233
+2026-10-15T11:44:10.2819625Z   type: 'test'
+2026-10-15T11:44:10.2820076Z   ...
+2026-10-15T11:44:10.2821105Z # Subtest: network failure is ambiguous, does not retry and retains exactly the frozen payload/key
+2026-10-15T11:44:10.2822469Z ok 46 - network failure is ambiguous, does not retry and retains exactly the frozen payload/key
+2026-10-15T11:44:10.2823385Z   ---
+2026-10-15T11:44:10.2823901Z   duration_ms: 0.580051
+2026-10-15T11:44:10.2824404Z   type: 'test'
+2026-10-15T11:44:10.2824858Z   ...
+2026-10-15T11:44:10.2826178Z # Subtest: EOF without done, truncated done and unknown protocol cannot be claimed completed or auto-retried
+2026-10-15T11:44:10.2827721Z ok 47 - EOF without done, truncated done and unknown protocol cannot be claimed completed or auto-retried
+2026-10-15T11:44:10.2828650Z   ---
+2026-10-15T11:44:10.2829127Z   duration_ms: 2.138122
+2026-10-15T11:44:10.2829639Z   type: 'test'
+2026-10-15T11:44:10.2830080Z   ...
+2026-10-15T11:44:10.2831069Z # Subtest: UTF-8 one-byte chunks, CRLF and multi-line data require a real done and stable message ID
+2026-10-15T11:44:10.2832678Z ok 48 - UTF-8 one-byte chunks, CRLF and multi-line data require a real done and stable message ID
+2026-10-15T11:44:10.2833641Z   ---
+2026-10-15T11:44:10.2834135Z   duration_ms: 12.041104
+2026-10-15T11:44:10.2834697Z   type: 'test'
+2026-10-15T11:44:10.2835186Z   ...
+2026-10-15T11:44:10.2837064Z # Subtest: different answer IDs and non-SSE success are unsafe; explicit cancelled is a distinct terminal
+2026-10-15T11:44:10.2838791Z ok 49 - different answer IDs and non-SSE success are unsafe; explicit cancelled is a distinct terminal
+2026-10-15T11:44:10.2839895Z   ---
+2026-10-15T11:44:10.2840498Z   duration_ms: 1.791617
+2026-10-15T11:44:10.2841107Z   type: 'test'
+2026-10-15T11:44:10.2841930Z   ...
+2026-10-15T11:44:10.2843072Z # Subtest: query and cancellation use original key, no question body, no automatic POST after 404/409/503
+2026-10-15T11:44:10.2844819Z ok 50 - query and cancellation use original key, no question body, no automatic POST after 404/409/503
+2026-10-15T11:44:10.2846324Z   ---
+2026-10-15T11:44:10.2846897Z   duration_ms: 3.941742
+2026-10-15T11:44:10.2847497Z   type: 'test'
+2026-10-15T11:44:10.2848036Z   ...
+2026-10-15T11:44:10.2849219Z # Subtest: completed before cancellation preserves the original IDs; all documented statuses validate
+2026-10-15T11:44:10.2850973Z ok 51 - completed before cancellation preserves the original IDs; all documented statuses validate
+2026-10-15T11:44:10.2852070Z   ---
+2026-10-15T11:44:10.2852622Z   duration_ms: 3.618159
+2026-10-15T11:44:10.2853258Z   type: 'test'
+2026-10-15T11:44:10.2853801Z   ...
+2026-10-15T11:44:10.2854953Z # Subtest: lost cancellation response stays ambiguous and can be queried without a second cancellation
+2026-10-15T11:44:10.2857004Z ok 52 - lost cancellation response stays ambiguous and can be queried without a second cancellation
+2026-10-15T11:44:10.2858037Z   ---
+2026-10-15T11:44:10.2858515Z   duration_ms: 0.804729
+2026-10-15T11:44:10.2859024Z   type: 'test'
+2026-10-15T11:44:10.2859477Z   ...
+2026-10-15T11:44:10.2860426Z # Subtest: late old 401 and late old success cannot expire or update the replacement account
+2026-10-15T11:44:10.2861803Z ok 53 - late old 401 and late old success cannot expire or update the replacement account
+2026-10-15T11:44:10.2862661Z   ---
+2026-10-15T11:44:10.2863133Z   duration_ms: 1.125927
+2026-10-15T11:44:10.2863679Z   type: 'test'
+2026-10-15T11:44:10.2864184Z   ...
+2026-10-15T11:44:10.2865010Z # Subtest: current 401 expires once and keeps the recoverable intent
+2026-10-15T11:44:10.2866449Z ok 54 - current 401 expires once and keeps the recoverable intent
+2026-10-15T11:44:10.2867164Z   ---
+2026-10-15T11:44:10.2867622Z   duration_ms: 0.631286
+2026-10-15T11:44:10.2868138Z   type: 'test'
+2026-10-15T11:44:10.2868583Z   ...
+2026-10-15T11:44:10.2869584Z # Subtest: caller abort and identity change while reading cancel the reader without backend cancellation
+2026-10-15T11:44:10.2871097Z ok 55 - caller abort and identity change while reading cancel the reader without backend cancellation
+2026-10-15T11:44:10.2872021Z   ---
+2026-10-15T11:44:10.2872469Z   duration_ms: 18.743761
+2026-10-15T11:44:10.2872974Z   type: 'test'
+2026-10-15T11:44:10.2873410Z   ...
+2026-10-15T11:44:10.2874248Z # Subtest: owner metadata change after fetch is fenced even if token did not change
+2026-10-15T11:44:10.2876373Z ok 56 - owner metadata change after fetch is fenced even if token did not change
+2026-10-15T11:44:10.2877207Z   ---
+2026-10-15T11:44:10.2877647Z   duration_ms: 3.099743
+2026-10-15T11:44:10.2878133Z   type: 'test'
+2026-10-15T11:44:10.2878560Z   ...
+2026-10-15T11:44:10.2879398Z # Subtest: late token change during JSON decoding fences query and cancel results
+2026-10-15T11:44:10.2880638Z ok 57 - late token change during JSON decoding fences query and cancel results
+2026-10-15T11:44:10.2881407Z   ---
+2026-10-15T11:44:10.2881896Z   duration_ms: 0.639371
+2026-10-15T11:44:10.2882411Z   type: 'test'
+2026-10-15T11:44:10.2882861Z   ...
+2026-10-15T11:44:10.2883656Z # Subtest: every helper releases account listeners on success and failure
+2026-10-15T11:44:10.2884778Z ok 58 - every helper releases account listeners on success and failure
+2026-10-15T11:44:10.2885806Z   ---
+2026-10-15T11:44:10.2886337Z   duration_ms: 1.860145
+2026-10-15T11:44:10.2886947Z   type: 'test'
+2026-10-15T11:44:10.2887501Z   ...
+2026-10-15T11:44:10.2888776Z # Subtest: already aborted caller never reaches fetch or removes original storage
+2026-10-15T11:44:10.2890217Z ok 59 - already aborted caller never reaches fetch or removes original storage
+2026-10-15T11:44:10.2891153Z   ---
+2026-10-15T11:44:10.2891714Z   duration_ms: 0.685727
+2026-10-15T11:44:10.2892342Z   type: 'test'
+2026-10-15T11:44:10.2892883Z   ...
+2026-10-15T11:44:10.2894063Z # Subtest: manual continuation after a missing request sends byte-identical payload without rotating key
+2026-10-15T11:44:10.2896459Z ok 60 - manual continuation after a missing request sends byte-identical payload without rotating key
+2026-10-15T11:44:10.2897530Z   ---
+2026-10-15T11:44:10.2898064Z   duration_ms: 0.902
+2026-10-15T11:44:10.2898681Z   type: 'test'
+2026-10-15T11:44:10.2899213Z   ...
+2026-10-15T11:44:10.2900277Z # Subtest: SSE preference still parses typed JSON rejection without retry or clearing the original key
+2026-10-15T11:44:10.2901945Z ok 61 - SSE preference still parses typed JSON rejection without retry or clearing the original key
+2026-10-15T11:44:10.2902929Z   ---
+2026-10-15T11:44:10.2903418Z   duration_ms: 1.177213
+2026-10-15T11:44:10.2903953Z   type: 'test'
+2026-10-15T11:44:10.2904416Z   ...
+2026-10-15T11:44:10.2905802Z # Subtest: empty 503 response preserves HTTP status and gives actionable unavailability feedback, not a guessed terminal
+2026-10-15T11:44:10.2907619Z ok 62 - empty 503 response preserves HTTP status and gives actionable unavailability feedback, not a guessed terminal
+2026-10-15T11:44:10.2908666Z   ---
+2026-10-15T11:44:10.2909187Z   duration_ms: 0.527212
+2026-10-15T11:44:10.2909707Z   type: 'test'
+2026-10-15T11:44:10.2910192Z   ...
+2026-10-15T11:44:10.2911297Z # Subtest: incorrect current password preserves a still-valid session and exposes credential error
+2026-10-15T11:44:10.2912790Z ok 63 - incorrect current password preserves a still-valid session and exposes credential error
+2026-10-15T11:44:10.2913688Z   ---
+2026-10-15T11:44:10.2914167Z   duration_ms: 37.576377
+2026-10-15T11:44:10.2914705Z   type: 'test'
+2026-10-15T11:44:10.2915153Z   ...
+2026-10-15T11:44:10.2916339Z # Subtest: a revoked password command expires authentication without retrying
+2026-10-15T11:44:10.2917500Z ok 64 - a revoked password command expires authentication without retrying
+2026-10-15T11:44:10.2918276Z   ---
+2026-10-15T11:44:10.2918730Z   duration_ms: 1.201738
+2026-10-15T11:44:10.2919233Z   type: 'test'
+2026-10-15T11:44:10.2919695Z   ...
+2026-10-15T11:44:10.2920549Z # Subtest: ordinary protected 401 still expires even with a credential error body
+2026-10-15T11:44:10.2921871Z ok 65 - ordinary protected 401 still expires even with a credential error body
+2026-10-15T11:44:10.2922657Z   ---
+2026-10-15T11:44:10.2923129Z   duration_ms: 1.08466
+2026-10-15T11:44:10.2923644Z   type: 'test'
+2026-10-15T11:44:10.2924098Z   ...
+2026-10-15T11:44:10.2924930Z # Subtest: a delayed old-session 401 cannot sign out a newly signed-in identity
+2026-10-15T11:44:10.2926496Z ok 66 - a delayed old-session 401 cannot sign out a newly signed-in identity
+2026-10-15T11:44:10.2927291Z   ---
+2026-10-15T11:44:10.2927756Z   duration_ms: 1.107994
+2026-10-15T11:44:10.2928259Z   type: 'test'
+2026-10-15T11:44:10.2928723Z   ...
+2026-10-15T11:44:10.2929720Z # Subtest: malformed 401 remains authentication failure, not an invalid-format success
+2026-10-15T11:44:10.2931084Z ok 67 - malformed 401 remains authentication failure, not an invalid-format success
+2026-10-15T11:44:10.2932021Z   ---
+2026-10-15T11:44:10.2932793Z   duration_ms: 1.862539
+2026-10-15T11:44:10.2933567Z   type: 'test'
+2026-10-15T11:44:10.2934042Z   ...
+2026-10-15T11:44:10.2935202Z # Subtest: password policy counts Unicode codepoints and rejects UTF8 truncation, invalid Unicode and NUL
+2026-10-15T11:44:10.2937172Z ok 68 - password policy counts Unicode codepoints and rejects UTF8 truncation, invalid Unicode and NUL
+2026-10-15T11:44:10.2938196Z   ---
+2026-10-15T11:44:10.2938648Z   duration_ms: 1.479115
+2026-10-15T11:44:10.2939149Z   type: 'test'
+2026-10-15T11:44:10.2939615Z   ...
+2026-10-15T11:44:10.2940773Z # Subtest: confirmation and unchanged passwords fail without trimming legitimate input
+2026-10-15T11:44:10.2942150Z ok 69 - confirmation and unchanged passwords fail without trimming legitimate input
+2026-10-15T11:44:10.2942992Z   ---
+2026-10-15T11:44:10.2943459Z   duration_ms: 1.038965
+2026-10-15T11:44:10.2943987Z   type: 'test'
+2026-10-15T11:44:10.2944460Z   ...
+2026-10-15T11:44:10.2945711Z # Subtest: self-session commands send exact payload once with bounded signal and no target account
+2026-10-15T11:44:10.2947667Z ok 70 - self-session commands send exact payload once with bounded signal and no target account
+2026-10-15T11:44:10.2948586Z   ---
+2026-10-15T11:44:10.2949020Z   duration_ms: 5.291656
+2026-10-15T11:44:10.2949490Z   type: 'test'
+2026-10-15T11:44:10.2949909Z   ...
+2026-10-15T11:44:10.2950864Z # Subtest: ambiguous mutation is not retried or called successful and no password draft is stored
+2026-10-15T11:44:10.2952247Z ok 71 - ambiguous mutation is not retried or called successful and no password draft is stored
+2026-10-15T11:44:10.2953077Z   ---
+2026-10-15T11:44:10.2953498Z   duration_ms: 0.665409
+2026-10-15T11:44:10.2953974Z   type: 'test'
+2026-10-15T11:44:10.2954389Z   ...
+2026-10-15T11:44:10.2955656Z # Subtest: malformed successful mutation contract is uncertainty, not a successful logout claim
+2026-10-15T11:44:10.2957126Z ok 72 - malformed successful mutation contract is uncertainty, not a successful logout claim
+2026-10-15T11:44:10.2957988Z   ---
+2026-10-15T11:44:10.2958406Z   duration_ms: 1.081945
+2026-10-15T11:44:10.2958881Z   type: 'test'
+2026-10-15T11:44:10.2959297Z   ...
+2026-10-15T11:44:13.5885159Z # Subtest: build glob engine handles nested single set without stack exhaustion
+2026-10-15T11:44:13.5889727Z ok 73 - build glob engine handles nested single set without stack exhaustion
+2026-10-15T11:44:13.5890654Z   ---
+2026-10-15T11:44:13.5891086Z   duration_ms: 1047.683173
+2026-10-15T11:44:13.5891542Z   type: 'test'
+2026-10-15T11:44:13.5891927Z   ...
+2026-10-15T11:44:13.5892867Z # Subtest: build glob engine handles nested comma alternatives without stack exhaustion
+2026-10-15T11:44:13.5894212Z ok 74 - build glob engine handles nested comma alternatives without stack exhaustion
+2026-10-15T11:44:13.5895034Z   ---
+2026-10-15T11:44:13.5895702Z   duration_ms: 759.210789
+2026-10-15T11:44:13.5896174Z   type: 'test'
+2026-10-15T11:44:13.5896562Z   ...
+2026-10-15T11:44:13.5897431Z # Subtest: normal Vue compiler attribute globs and include patterns keep their meaning
+2026-10-15T11:44:13.5899858Z ok 75 - normal Vue compiler attribute globs and include patterns keep their meaning
+2026-10-15T11:44:13.5901043Z   ---
+2026-10-15T11:44:13.5901657Z   duration_ms: 10.330744
+2026-10-15T11:44:13.5902112Z   type: 'test'
+2026-10-15T11:44:13.5902439Z   ...
+2026-10-15T11:44:13.5903193Z # Subtest: actual Vue compiler does not silently print a glob stack error with exit zero
+2026-10-15T11:44:13.5904178Z ok 76 - actual Vue compiler does not silently print a glob stack error with exit zero
+2026-10-15T11:44:13.5904999Z   ---
+2026-10-15T11:44:13.5905709Z   duration_ms: 1534.422998
+2026-10-15T11:44:13.5906262Z   type: 'test'
+2026-10-15T11:44:13.5906652Z   ...
+2026-10-15T11:44:13.6006679Z # Subtest: UI uses locally bundled MiSans while code retains monospace
+2026-10-15T11:44:13.6008192Z ok 77 - UI uses locally bundled MiSans while code retains monospace
+2026-10-15T11:44:13.6009353Z   ---
+2026-10-15T11:44:13.6009998Z   duration_ms: 1.829968
+2026-10-15T11:44:13.6010555Z   type: 'test'
+2026-10-15T11:44:13.6011159Z   ...
+2026-10-15T11:44:13.6012039Z # Subtest: publisher variable weights, unicode ranges and swap are retained without remote requests
+2026-10-15T11:44:13.6013241Z ok 78 - publisher variable weights, unicode ranges and swap are retained without remote requests
+2026-10-15T11:44:13.6014041Z   ---
+2026-10-15T11:44:13.6014404Z   duration_ms: 0.687931
+2026-10-15T11:44:13.6014852Z   type: 'test'
+2026-10-15T11:44:13.6015431Z   ...
+2026-10-15T11:44:13.6016791Z # Subtest: all official font bytes and bundled license match the source manifest
+2026-10-15T11:44:13.6018071Z ok 79 - all official font bytes and bundled license match the source manifest
+2026-10-15T11:44:13.6018707Z   ---
+2026-10-15T11:44:13.6019031Z   duration_ms: 11.993428
+2026-10-15T11:44:13.6019450Z   type: 'test'
+2026-10-15T11:44:13.6019765Z   ...
+2026-10-15T11:44:13.6020511Z # Subtest: clock retains database local seconds without browser timezone conversion
+2026-10-15T11:44:13.6023768Z ok 80 - clock retains database local seconds without browser timezone conversion
+2026-10-15T11:44:13.6039092Z   ---
+2026-10-15T11:44:13.6042467Z   duration_ms: 1.266379
+2026-10-15T11:44:13.6042953Z   type: 'test'
+2026-10-15T11:44:13.6043328Z   ...
+2026-10-15T11:44:13.6044257Z # Subtest: state distinguishes gaps, inactive schedules, unavailable members and winning layers
+2026-10-15T11:44:13.6048557Z ok 81 - state distinguishes gaps, inactive schedules, unavailable members and winning layers
+2026-10-15T11:44:13.6051980Z   ---
+2026-10-15T11:44:13.6052350Z   duration_ms: 1.500835
+2026-10-15T11:44:13.6052812Z   type: 'test'
+2026-10-15T11:44:13.6053151Z   ...
+2026-10-15T11:44:13.6056539Z # Subtest: warnings do not count shadowed or ineligible shifts as additional coverage
+2026-10-15T11:44:13.6057259Z ok 82 - warnings do not count shadowed or ineligible shifts as additional coverage
+2026-10-15T11:44:13.6057667Z   ---
+2026-10-15T11:44:13.6057882Z   duration_ms: 0.948146
+2026-10-15T11:44:13.6058120Z   type: 'test'
+2026-10-15T11:44:13.6058334Z   ...
+2026-10-15T11:44:13.6058678Z # Subtest: hours preserve fractional windows and zero gaps
+2026-10-15T11:44:13.6059141Z ok 83 - hours preserve fractional windows and zero gaps
+2026-10-15T11:44:13.6059536Z   ---
+2026-10-15T11:44:13.6059939Z   duration_ms: 54.371768
+2026-10-15T11:44:13.6060329Z   type: 'test'
+2026-10-15T11:44:13.6060661Z   ...
+2026-10-15T11:44:13.6061616Z # Subtest: calendar splits midnight without double counting, retains clipped segments and leap days
+2026-10-15T11:44:13.6063061Z ok 84 - calendar splits midnight without double counting, retains clipped segments and leap days
+2026-10-15T11:44:13.6063562Z   ---
+2026-10-15T11:44:13.6063778Z   duration_ms: 1.294682
+2026-10-15T11:44:13.6064018Z   type: 'test'
+2026-10-15T11:44:13.6064223Z   ...
+2026-10-15T11:44:13.6064755Z # Subtest: calendar uses zone-less arithmetic, end-midnight is excluded and gap totals remain explicit
+2026-10-15T11:44:13.6066288Z ok 85 - calendar uses zone-less arithmetic, end-midnight is excluded and gap totals remain explicit
+2026-10-15T11:44:13.6067168Z   ---
+2026-10-15T11:44:13.6067528Z   duration_ms: 0.49374
+2026-10-15T11:44:13.6067931Z   type: 'test'
+2026-10-15T11:44:13.6068291Z   ...
+2026-10-15T11:44:13.6068987Z # Subtest: read-only query sends exact local timestamps and no mutation
+2026-10-15T11:44:13.6069997Z ok 86 - read-only query sends exact local timestamps and no mutation
+2026-10-15T11:44:13.6070634Z   ---
+2026-10-15T11:44:13.6071006Z   duration_ms: 27.820907
+2026-10-15T11:44:13.6071437Z   type: 'test'
+2026-10-15T11:44:13.6071792Z   ...
+2026-10-15T11:44:13.6072599Z # Subtest: dense coverage error propagates without retry or a fabricated result
+2026-10-15T11:44:13.6073692Z ok 87 - dense coverage error propagates without retry or a fabricated result
+2026-10-15T11:44:13.6074364Z   ---
+2026-10-15T11:44:13.6074692Z   duration_ms: 1.280936
+2026-10-15T11:44:13.6075074Z   type: 'test'
+2026-10-15T11:44:13.6075649Z   ...
+2026-10-15T11:44:13.6076494Z # Subtest: source entry requires eligible owner, ordinary noncancelled and unexpired source
+2026-10-15T11:44:13.6077771Z ok 88 - source entry requires eligible owner, ordinary noncancelled and unexpired source
+2026-10-15T11:44:13.6078512Z   ---
+2026-10-15T11:44:13.6078872Z   duration_ms: 1.572358
+2026-10-15T11:44:13.6079292Z   type: 'test'
+2026-10-15T11:44:13.6079637Z   ...
+2026-10-15T11:44:13.6080655Z # Subtest: only actual participants get actions; expired pending permits reject/withdraw but never accept
+2026-10-15T11:44:13.6082205Z ok 89 - only actual participants get actions; expired pending permits reject/withdraw but never accept
+2026-10-15T11:44:13.6083334Z   ---
+2026-10-15T11:44:13.6083717Z   duration_ms: 0.844844
+2026-10-15T11:44:13.6084124Z   type: 'test'
+2026-10-15T11:44:13.6084469Z   ...
+2026-10-15T11:44:13.6085710Z # Subtest: clock stays zone-less with seconds and expiry never invents a persisted EXPIRED state
+2026-10-15T11:44:13.6087104Z ok 90 - clock stays zone-less with seconds and expiry never invents a persisted EXPIRED state
+2026-10-15T11:44:13.6088149Z   ---
+2026-10-15T11:44:13.6088506Z   duration_ms: 0.406227
+2026-10-15T11:44:13.6088913Z   type: 'test'
+2026-10-15T11:44:13.6089257Z   ...
+2026-10-15T11:44:13.6090275Z # Subtest: canonical draft rejects wrong source/version, self target and out-of-window/fractional timestamps
+2026-10-15T11:44:13.6091860Z ok 91 - canonical draft rejects wrong source/version, self target and out-of-window/fractional timestamps
+2026-10-15T11:44:13.6092797Z   ---
+2026-10-15T11:44:13.6093189Z   duration_ms: 0.646925
+2026-10-15T11:44:13.6093617Z   type: 'test'
+2026-10-15T11:44:13.6093962Z   ...
+2026-10-15T11:44:13.6094864Z # Subtest: storage restores exact frozen command per account and never includes credentials
+2026-10-15T11:44:13.6096421Z ok 92 - storage restores exact frozen command per account and never includes credentials
+2026-10-15T11:44:13.6097232Z   ---
+2026-10-15T11:44:13.6097598Z   duration_ms: 0.924311
+2026-10-15T11:44:13.6098023Z   type: 'test'
+2026-10-15T11:44:13.6098385Z   ...
+2026-10-15T11:44:13.6099358Z # Subtest: corrupt or foreign drafts fail without erasing recovery data; storage failures propagate
+2026-10-15T11:44:13.6100796Z ok 93 - corrupt or foreign drafts fail without erasing recovery data; storage failures propagate
+2026-10-15T11:44:13.6101627Z   ---
+2026-10-15T11:44:13.6101988Z   duration_ms: 0.681009
+2026-10-15T11:44:13.6102398Z   type: 'test'
+2026-10-15T11:44:13.6102747Z   ...
+2026-10-15T11:44:13.6103708Z # Subtest: reads send server-side scope/status filters; all status is omitted and truncation retained
+2026-10-15T11:44:13.6105473Z ok 94 - reads send server-side scope/status filters; all status is omitted and truncation retained
+2026-10-15T11:44:13.6106366Z   ---
+2026-10-15T11:44:13.6106731Z   duration_ms: 27.199681
+2026-10-15T11:44:13.6107156Z   type: 'test'
+2026-10-15T11:44:13.6107510Z   ...
+2026-10-15T11:44:13.6108381Z # Subtest: ambiguous request failure does not retry, change key or mutate the caller payload
+2026-10-15T11:44:13.6109705Z ok 95 - ambiguous request failure does not retry, change key or mutate the caller payload
+2026-10-15T11:44:13.6110220Z   ---
+2026-10-15T11:44:13.6110434Z   duration_ms: 1.179537
+2026-10-15T11:44:13.6110724Z   type: 'test'
+2026-10-15T11:44:13.6110930Z   ...
+2026-10-15T11:44:13.6111462Z # Subtest: decision keeps captured version/reason; 409 propagates without rebasing or automatic retry
+2026-10-15T11:44:13.6112247Z ok 96 - decision keeps captured version/reason; 409 propagates without rebasing or automatic retry
+2026-10-15T11:44:13.6112699Z   ---
+2026-10-15T11:44:13.6112901Z   duration_ms: 1.309509
+2026-10-15T11:44:13.6113134Z   type: 'test'
+2026-10-15T11:44:13.6113338Z   ...
+2026-10-15T11:44:13.6113751Z # Subtest: 401 raises auth expiry once without rotating the idempotency key
+2026-10-15T11:44:13.6114322Z ok 97 - 401 raises auth expiry once without rotating the idempotency key
+2026-10-15T11:44:13.6114991Z   ---
+2026-10-15T11:44:13.6115513Z   duration_ms: 1.303478
+2026-10-15T11:44:13.6115905Z   type: 'test'
+2026-10-15T11:44:13.6116260Z   ...
+2026-10-15T11:44:13.6117110Z # Subtest: coverage display separates accepted consent from scheduled/ended/cancelled coverage facts
+2026-10-15T11:44:13.6118628Z ok 98 - coverage display separates accepted consent from scheduled/ended/cancelled coverage facts
+2026-10-15T11:44:13.6119515Z   ---
+2026-10-15T11:44:13.6119841Z   duration_ms: 0.340394
+2026-10-15T11:44:13.6120200Z   type: 'test'
+2026-10-15T11:44:13.6120555Z   ...
+2026-10-15T11:44:13.6121402Z # Subtest: new revocation requires management and a fresh accepted unended uncancelled replacement
+2026-10-15T11:44:13.6123135Z ok 99 - new revocation requires management and a fresh accepted unended uncancelled replacement
+2026-10-15T11:44:13.6124115Z   ---
+2026-10-15T11:44:13.6124492Z   duration_ms: 0.297254
+2026-10-15T11:44:13.6124908Z   type: 'test'
+2026-10-15T11:44:13.6125527Z   ...
+2026-10-15T11:44:13.6126434Z # Subtest: revocation payload validates captured versions, canonical key and bounded reason
+2026-10-15T11:44:13.6127801Z ok 100 - revocation payload validates captured versions, canonical key and bounded reason
+2026-10-15T11:44:13.6128878Z   ---
+2026-10-15T11:44:13.6129229Z   duration_ms: 0.283618
+2026-10-15T11:44:13.6129632Z   type: 'test'
+2026-10-15T11:44:13.6129968Z   ...
+2026-10-15T11:44:13.6130938Z # Subtest: revocation storage restores exact versions/key/reason and persisted conflict lock per actor
+2026-10-15T11:44:13.6132436Z ok 101 - revocation storage restores exact versions/key/reason and persisted conflict lock per actor
+2026-10-15T11:44:13.6133311Z   ---
+2026-10-15T11:44:13.6133674Z   duration_ms: 0.45103
+2026-10-15T11:44:13.6134098Z   type: 'test'
+2026-10-15T11:44:13.6134444Z   ...
+2026-10-15T11:44:13.6135615Z # Subtest: corrupt revocation storage is retained and quota failure propagates before any request
+2026-10-15T11:44:13.6137029Z ok 102 - corrupt revocation storage is retained and quota failure propagates before any request
+2026-10-15T11:44:13.6137875Z   ---
+2026-10-15T11:44:13.6138246Z   duration_ms: 0.517383
+2026-10-15T11:44:13.6138661Z   type: 'test'
+2026-10-15T11:44:13.6139003Z   ...
+2026-10-15T11:44:13.6139779Z # Subtest: coverage read uses the independent snapshot endpoint without mutation
+2026-10-15T11:44:13.6140958Z ok 103 - coverage read uses the independent snapshot endpoint without mutation
+2026-10-15T11:44:13.6141684Z   ---
+2026-10-15T11:44:13.6142050Z   duration_ms: 0.674957
+2026-10-15T11:44:13.6142476Z   type: 'test'
+2026-10-15T11:44:13.6142839Z   ...
+2026-10-15T11:44:13.6143671Z # Subtest: revocation ambiguous response manually retries exact frozen payload only
+2026-10-15T11:44:13.6144931Z ok 104 - revocation ambiguous response manually retries exact frozen payload only
+2026-10-15T11:44:13.6145964Z   ---
+2026-10-15T11:44:13.6146290Z   duration_ms: 0.573618
+2026-10-15T11:44:13.6146661Z   type: 'test'
+2026-10-15T11:44:13.6147031Z   ...
+2026-10-15T11:44:13.6147782Z # Subtest: revocation 409 and 403 preserve captured intent without rotating versions or key
+2026-10-15T11:44:13.6149098Z ok 105 - revocation 409 and 403 preserve captured intent without rotating versions or key
+2026-10-15T11:44:13.6149987Z   ---
+2026-10-15T11:44:13.6150356Z   duration_ms: 0.937036
+2026-10-15T11:44:13.6150778Z   type: 'test'
+2026-10-15T11:44:13.6151136Z   ...
+2026-10-15T11:44:13.6152232Z # Subtest: publication is owned ordinary live source for all three operational roles, never manager impersonation
+2026-10-15T11:44:13.6153969Z ok 106 - publication is owned ordinary live source for all three operational roles, never manager impersonation
+2026-10-15T11:44:13.6154807Z   ---
+2026-10-15T11:44:13.6155169Z   duration_ms: 2.105692
+2026-10-15T11:44:13.6155787Z   type: 'test'
+2026-10-15T11:44:13.6156105Z   ...
+2026-10-15T11:44:13.6157126Z # Subtest: strict naive time accepts minute inputs and whole seconds, rejects invalid dates and fractional commands
+2026-10-15T11:44:13.6158796Z ok 107 - strict naive time accepts minute inputs and whole seconds, rejects invalid dates and fractional commands
+2026-10-15T11:44:13.6159677Z   ---
+2026-10-15T11:44:13.6160024Z   duration_ms: 0.331507
+2026-10-15T11:44:13.6160400Z   type: 'test'
+2026-10-15T11:44:13.6160706Z   ...
+2026-10-15T11:44:13.6161488Z # Subtest: claimants must be themselves and cannot self-claim; readers cannot write
+2026-10-15T11:44:13.6162741Z ok 108 - claimants must be themselves and cannot self-claim; readers cannot write
+2026-10-15T11:44:13.6163445Z   ---
+2026-10-15T11:44:13.6163756Z   duration_ms: 0.635343
+2026-10-15T11:44:13.6164119Z   type: 'test'
+2026-10-15T11:44:13.6164460Z   ...
+2026-10-15T11:44:13.6165825Z # Subtest: ongoing request allows remaining claim, exact DB end rejects new claim but owner withdrawal remains
+2026-10-15T11:44:13.6167473Z ok 109 - ongoing request allows remaining claim, exact DB end rejects new claim but owner withdrawal remains
+2026-10-15T11:44:13.6168393Z   ---
+2026-10-15T11:44:13.6168761Z   duration_ms: 0.545636
+2026-10-15T11:44:13.6169200Z   type: 'test'
+2026-10-15T11:44:13.6169510Z   ...
+2026-10-15T11:44:13.6170269Z # Subtest: closed unknown or inconsistent receipt facts do not offer a new operation
+2026-10-15T11:44:13.6171613Z ok 110 - closed unknown or inconsistent receipt facts do not offer a new operation
+2026-10-15T11:44:13.6172031Z   ---
+2026-10-15T11:44:13.6172256Z   duration_ms: 1.674829
+2026-10-15T11:44:13.6172642Z   type: 'test'
+2026-10-15T11:44:13.6172895Z   ...
+2026-10-15T11:44:13.6173625Z # Subtest: all command versions explicit integers, lower UUID, bounded reason and original identity mandatory
+2026-10-15T11:44:13.6175068Z ok 111 - all command versions explicit integers, lower UUID, bounded reason and original identity mandatory
+2026-10-15T11:44:13.6176061Z   ---
+2026-10-15T11:44:13.6176426Z   duration_ms: 0.779683
+2026-10-15T11:44:13.6176670Z   type: 'test'
+2026-10-15T11:44:13.6176866Z   ...
+2026-10-15T11:44:13.6177531Z # Subtest: publication subwindow must stay within captured source and retain canonical seconds
+2026-10-15T11:44:13.6178564Z ok 112 - publication subwindow must stay within captured source and retain canonical seconds
+2026-10-15T11:44:13.6179286Z   ---
+2026-10-15T11:44:13.6179679Z   duration_ms: 0.454987
+2026-10-15T11:44:13.6180039Z   type: 'test'
+2026-10-15T11:44:13.6180354Z   ...
+2026-10-15T11:44:13.6181197Z # Subtest: preflight reads exact source version, owner and active plan/users; no silent rebase
+2026-10-15T11:44:13.6182120Z ok 113 - preflight reads exact source version, owner and active plan/users; no silent rebase
+2026-10-15T11:44:13.6182590Z   ---
+2026-10-15T11:44:13.6182795Z   duration_ms: 0.985135
+2026-10-15T11:44:13.6183023Z   type: 'test'
+2026-10-15T11:44:13.6183423Z   ...
+2026-10-15T11:44:13.6184235Z # Subtest: latest coverage ID/version or deadline changes block a first claim without rebasing
+2026-10-15T11:44:13.6185831Z ok 114 - latest coverage ID/version or deadline changes block a first claim without rebasing
+2026-10-15T11:44:13.6186531Z   ---
+2026-10-15T11:44:13.6186797Z   duration_ms: 0.416095
+2026-10-15T11:44:13.6187229Z   type: 'test'
+2026-10-15T11:44:13.6187521Z   ...
+2026-10-15T11:44:13.6188411Z # Subtest: remaining-window conflicts reject while an earlier ended override does not
+2026-10-15T11:44:13.6189576Z ok 115 - remaining-window conflicts reject while an earlier ended override does not
+2026-10-15T11:44:13.6190259Z   ---
+2026-10-15T11:44:13.6190590Z   duration_ms: 0.47824
+2026-10-15T11:44:13.6190990Z   type: 'test'
+2026-10-15T11:44:13.6191278Z   ...
+2026-10-15T11:44:13.6191790Z # Subtest: owner withdrawal needs request but not ongoing source/active schedule
+2026-10-15T11:44:13.6192526Z ok 116 - owner withdrawal needs request but not ongoing source/active schedule
+2026-10-15T11:44:13.6192958Z   ---
+2026-10-15T11:44:13.6193317Z   duration_ms: 0.192799
+2026-10-15T11:44:13.6193675Z   type: 'test'
+2026-10-15T11:44:13.6193989Z   ...
+2026-10-15T11:44:13.6194727Z # Subtest: original per actor intent roundtrips with blocked flag and no network/retry
+2026-10-15T11:44:13.6196127Z ok 117 - original per actor intent roundtrips with blocked flag and no network/retry
+2026-10-15T11:44:13.6196550Z   ---
+2026-10-15T11:44:13.6196863Z   duration_ms: 1.116179
+2026-10-15T11:44:13.6197309Z   type: 'test'
+2026-10-15T11:44:13.6197648Z   ...
+2026-10-15T11:44:13.6198479Z # Subtest: corrupt foreign empty or structurally invalid saved intent retained and rejected
+2026-10-15T11:44:13.6199730Z ok 118 - corrupt foreign empty or structurally invalid saved intent retained and rejected
+2026-10-15T11:44:13.6200427Z   ---
+2026-10-15T11:44:13.6200779Z   duration_ms: 0.558069
+2026-10-15T11:44:13.6201186Z   type: 'test'
+2026-10-15T11:44:13.6201515Z   ...
+2026-10-15T11:44:13.6202295Z # Subtest: quota read denial silent no-op save and removal errors propagate without POST
+2026-10-15T11:44:13.6203582Z ok 119 - quota read denial silent no-op save and removal errors propagate without POST
+2026-10-15T11:44:13.6204294Z   ---
+2026-10-15T11:44:13.6204609Z   duration_ms: 0.706956
+2026-10-15T11:44:13.6204979Z   type: 'test'
+2026-10-15T11:44:13.6205499Z   ...
+2026-10-15T11:44:13.6206275Z # Subtest: list/coverage/roster actual API paths retain SQL filters and captured naive interval
+2026-10-15T11:44:13.6207856Z ok 120 - list/coverage/roster actual API paths retain SQL filters and captured naive interval
+2026-10-15T11:44:13.6208632Z   ---
+2026-10-15T11:44:13.6208984Z   duration_ms: 25.323166
+2026-10-15T11:44:13.6209386Z   type: 'test'
+2026-10-15T11:44:13.6209720Z   ...
+2026-10-15T11:44:13.6210596Z # Subtest: foreign or invalid coverage response rejects and cannot masquerade as selected request
+2026-10-15T11:44:13.6211933Z ok 121 - foreign or invalid coverage response rejects and cannot masquerade as selected request
+2026-10-15T11:44:13.6212714Z   ---
+2026-10-15T11:44:13.6213057Z   duration_ms: 1.597465
+2026-10-15T11:44:13.6213450Z   type: 'test'
+2026-10-15T11:44:13.6213783Z   ...
+2026-10-15T11:44:13.6214601Z # Subtest: publish sends only exact original command and requires its own matching receipt
+2026-10-15T11:44:13.6216035Z ok 122 - publish sends only exact original command and requires its own matching receipt
+2026-10-15T11:44:13.6216777Z   ---
+2026-10-15T11:44:13.6236955Z   duration_ms: 0.890138
+2026-10-15T11:44:13.6237480Z   type: 'test'
+2026-10-15T11:44:13.6237838Z   ...
+2026-10-15T11:44:13.6238723Z # Subtest: claim and withdrawal send original keys/version, never targetUserId or new identity
+2026-10-15T11:44:13.6240040Z ok 123 - claim and withdrawal send original keys/version, never targetUserId or new identity
+2026-10-15T11:44:13.6240806Z   ---
+2026-10-15T11:44:13.6241159Z   duration_ms: 1.919045
+2026-10-15T11:44:13.6241557Z   type: 'test'
+2026-10-15T11:44:13.6241897Z   ...
+2026-10-15T11:44:13.6242764Z # Subtest: foreign actor key version kind or reason in POST receipt cannot clear original intent
+2026-10-15T11:44:13.6244090Z ok 124 - foreign actor key version kind or reason in POST receipt cannot clear original intent
+2026-10-15T11:44:13.6244620Z   ---
+2026-10-15T11:44:13.6244841Z   duration_ms: 2.823309
+2026-10-15T11:44:13.6245094Z   type: 'test'
+2026-10-15T11:44:13.6245459Z   ...
+2026-10-15T11:44:13.6246054Z # Subtest: HTTP409 and transport loss are single calls, with no implicit retry
+2026-10-15T11:44:13.6247155Z ok 125 - HTTP409 and transport loss are single calls, with no implicit retry
+2026-10-15T11:44:13.6247814Z   ---
+2026-10-15T11:44:13.6248158Z   duration_ms: 0.717416
+2026-10-15T11:44:13.6248549Z   type: 'test'
+2026-10-15T11:44:13.6248882Z   ...
+2026-10-15T11:44:13.6249713Z # Subtest: silent removal and failed clear readback do not claim original intent was removed
+2026-10-15T11:44:13.6250948Z ok 126 - silent removal and failed clear readback do not claim original intent was removed
+2026-10-15T11:44:13.6251817Z   ---
+2026-10-15T11:44:13.6252169Z   duration_ms: 0.395106
+2026-10-15T11:44:13.6252566Z   type: 'test'
+2026-10-15T11:44:13.6252920Z   ...
+2026-10-15T11:44:13.6253804Z # Subtest: successful clear verifies null for exactly this actor and leaves another actor untouched
+2026-10-15T11:44:13.6255164Z ok 127 - successful clear verifies null for exactly this actor and leaves another actor untouched
+2026-10-15T11:44:13.6256131Z   ---
+2026-10-15T11:44:13.6256464Z   duration_ms: 0.290962
+2026-10-15T11:44:13.6256863Z   type: 'test'
+2026-10-15T11:44:13.6257209Z   ...
+2026-10-15T11:44:13.6257715Z # Subtest: history response rejects contradictory request operation replacement relationships
+2026-10-15T11:44:13.6258858Z ok 128 - history response rejects contradictory request operation replacement relationships
+2026-10-15T11:44:13.6259619Z   ---
+2026-10-15T11:44:13.6259975Z   duration_ms: 7.710891
+2026-10-15T11:44:13.6260370Z   type: 'test'
+2026-10-15T11:44:13.6260710Z   ...
+2026-10-15T11:44:13.6261879Z # Subtest: POST receipt preserves all immutable captured request fields before clearing original intent
+2026-10-15T11:44:13.6263406Z ok 129 - POST receipt preserves all immutable captured request fields before clearing original intent
+2026-10-15T11:44:13.6264326Z   ---
+2026-10-15T11:44:13.6264724Z   duration_ms: 5.012096
+2026-10-15T11:44:13.6265144Z   type: 'test'
+2026-10-15T11:44:13.6266457Z   ...
+2026-10-15T11:44:13.6267384Z # Subtest: real cancelled ended claim receipt remains valid without inventing current responsibility
+2026-10-15T11:44:13.6269182Z ok 130 - real cancelled ended claim receipt remains valid without inventing current responsibility
+2026-10-15T11:44:13.6270013Z   ---
+2026-10-15T11:44:13.6270366Z   duration_ms: 0.931955
+2026-10-15T11:44:13.6270773Z   type: 'test'
+2026-10-15T11:44:13.6271125Z   ...
+2026-10-15T11:44:13.6271920Z # Subtest: withdrawal cannot acknowledge a claim coverage or another actor operation
+2026-10-15T11:44:13.6273114Z ok 131 - withdrawal cannot acknowledge a claim coverage or another actor operation
+2026-10-15T11:44:13.6273853Z   ---
+2026-10-15T11:44:13.6274230Z   duration_ms: 1.582848
+2026-10-15T11:44:13.6274648Z   type: 'test'
+2026-10-15T11:44:13.6275011Z   ...
+2026-10-15T11:44:13.6276168Z # Subtest: publication original receipt may already be closed but cannot move to another schedule
+2026-10-15T11:44:13.6278023Z ok 132 - publication original receipt may already be closed but cannot move to another schedule
+2026-10-15T11:44:13.6278869Z   ---
+2026-10-15T11:44:13.6279248Z   duration_ms: 1.889009
+2026-10-15T11:44:13.6279657Z   type: 'test'
+2026-10-15T11:44:13.6280000Z   ...
+2026-10-15T11:44:13.6281016Z # Subtest: shared queue and per-process statistics retain distinct scopes without cluster or human acceptance
+2026-10-15T11:44:13.6282545Z ok 133 - shared queue and per-process statistics retain distinct scopes without cluster or human acceptance
+2026-10-15T11:44:13.6283393Z   ---
+2026-10-15T11:44:13.6283736Z   duration_ms: 2.282191
+2026-10-15T11:44:13.6284124Z   type: 'test'
+2026-10-15T11:44:13.6284462Z   ...
+2026-10-15T11:44:13.6285681Z # Subtest: disabled configuration permits real historical backlog without an active or fictitious worker
+2026-10-15T11:44:13.6286809Z ok 134 - disabled configuration permits real historical backlog without an active or fictitious worker
+2026-10-15T11:44:13.6287314Z   ---
+2026-10-15T11:44:13.6287526Z   duration_ms: 0.391679
+2026-10-15T11:44:13.6287761Z   type: 'test'
+2026-10-15T11:44:13.6287962Z   ...
+2026-10-15T11:44:13.6288389Z # Subtest: empty SQL aggregate uses actual null oldest time not an invented date
+2026-10-15T11:44:13.6289022Z ok 135 - empty SQL aggregate uses actual null oldest time not an invented date
+2026-10-15T11:44:13.6289410Z   ---
+2026-10-15T11:44:13.6289610Z   duration_ms: 0.566875
+2026-10-15T11:44:13.6289838Z   type: 'test'
+2026-10-15T11:44:13.6290031Z   ...
+2026-10-15T11:44:13.6290519Z # Subtest: inconsistent partitions pending-due expired lease and metadata scopes fail closed
+2026-10-15T11:44:13.6291250Z ok 136 - inconsistent partitions pending-due expired lease and metadata scopes fail closed
+2026-10-15T11:44:13.6291689Z   ---
+2026-10-15T11:44:13.6291889Z   duration_ms: 0.684194
+2026-10-15T11:44:13.6292118Z   type: 'test'
+2026-10-15T11:44:13.6292311Z   ...
+2026-10-15T11:44:13.6292827Z # Subtest: invalid timestamps unsafe numbers negative fractions and nonzero local queue are rejected
+2026-10-15T11:44:13.6293607Z ok 137 - invalid timestamps unsafe numbers negative fractions and nonzero local queue are rejected
+2026-10-15T11:44:13.6294076Z   ---
+2026-10-15T11:44:13.6294273Z   duration_ms: 1.063631
+2026-10-15T11:44:13.6294502Z   type: 'test'
+2026-10-15T11:44:13.6294720Z   ...
+2026-10-15T11:44:13.6295186Z # Subtest: shutdown request is not termination and may coexist with one in-flight worker
+2026-10-15T11:44:13.6296748Z ok 138 - shutdown request is not termination and may coexist with one in-flight worker
+2026-10-15T11:44:13.6297469Z   ---
+2026-10-15T11:44:13.6297812Z   duration_ms: 0.493008
+2026-10-15T11:44:13.6298205Z   type: 'test'
+2026-10-15T11:44:13.6298547Z   ...
+2026-10-15T11:44:13.6299554Z # Subtest: runtime whitelist drops provider payload secrets and recipient identifiers
+2026-10-15T11:44:13.6300470Z ok 139 - runtime whitelist drops provider payload secrets and recipient identifiers
+2026-10-15T11:44:13.6300892Z   ---
+2026-10-15T11:44:13.6301099Z   duration_ms: 0.528374
+2026-10-15T11:44:13.6301338Z   type: 'test'
+2026-10-15T11:44:13.6301538Z   ...
+2026-10-15T11:44:13.6301986Z # Subtest: database formatter retains microseconds without browser timezone conversion
+2026-10-15T11:44:13.6302810Z ok 140 - database formatter retains microseconds without browser timezone conversion
+2026-10-15T11:44:13.6303227Z   ---
+2026-10-15T11:44:13.6303430Z   duration_ms: 0.281454
+2026-10-15T11:44:13.6303661Z   type: 'test'
+2026-10-15T11:44:13.6303856Z   ...
+2026-10-15T11:44:13.6304283Z # Subtest: captured admin read is exactly one GET with no body and an abort signal
+2026-10-15T11:44:13.6304901Z ok 141 - captured admin read is exactly one GET with no body and an abort signal
+2026-10-15T11:44:13.6305594Z   ---
+2026-10-15T11:44:13.6305822Z   duration_ms: 37.666596
+2026-10-15T11:44:13.6306073Z   type: 'test'
+2026-10-15T11:44:13.6306267Z   ...
+2026-10-15T11:44:13.6306664Z # Subtest: bad role identity or native token replacement produces zero reads
+2026-10-15T11:44:13.6307245Z ok 142 - bad role identity or native token replacement produces zero reads
+2026-10-15T11:44:13.6307616Z   ---
+2026-10-15T11:44:13.6307820Z   duration_ms: 0.982309
+2026-10-15T11:44:13.6308049Z   type: 'test'
+2026-10-15T11:44:13.6308251Z   ...
+2026-10-15T11:44:13.6308701Z # Subtest: 503 or contradictory 200 facts never become zero backlog or an automatic retry
+2026-10-15T11:44:13.6309370Z ok 143 - 503 or contradictory 200 facts never become zero backlog or an automatic retry
+2026-10-15T11:44:13.6309778Z   ---
+2026-10-15T11:44:13.6309986Z   duration_ms: 1.493132
+2026-10-15T11:44:13.6310211Z   type: 'test'
+2026-10-15T11:44:13.6310412Z   ...
+2026-10-15T11:44:13.6310800Z # Subtest: service 401 emits session expiry and does not retain global facts
+2026-10-15T11:44:13.6311448Z ok 144 - service 401 emits session expiry and does not retain global facts
+2026-10-15T11:44:13.6311845Z   ---
+2026-10-15T11:44:13.6312046Z   duration_ms: 0.842008
+2026-10-15T11:44:13.6312295Z   type: 'test'
+2026-10-15T11:44:13.6312490Z   ...
+2026-10-15T11:44:13.6313109Z # Subtest: five technical states never imply human acceptance; disabled configuration preserves historical success
+2026-10-15T11:44:13.6314056Z ok 145 - five technical states never imply human acceptance; disabled configuration preserves historical success
+2026-10-15T11:44:13.6314598Z   ---
+2026-10-15T11:44:13.6314825Z   duration_ms: 3.240295
+2026-10-15T11:44:13.6315056Z   type: 'test'
+2026-10-15T11:44:13.6315581Z   ...
+2026-10-15T11:44:13.6316247Z # Subtest: missing implementation enabled time array or contradictory delivery metadata fails closed
+2026-10-15T11:44:13.6317099Z ok 146 - missing implementation enabled time array or contradictory delivery metadata fails closed
+2026-10-15T11:44:13.6317584Z   ---
+2026-10-15T11:44:13.6317811Z   duration_ms: 0.918792
+2026-10-15T11:44:13.6318046Z   type: 'test'
+2026-10-15T11:44:13.6318278Z   ...
+2026-10-15T11:44:13.6318824Z # Subtest: cross-request duplicate recipient key or invalid versions cannot render as current facts
+2026-10-15T11:44:13.6319639Z ok 147 - cross-request duplicate recipient key or invalid versions cannot render as current facts
+2026-10-15T11:44:13.6320110Z   ---
+2026-10-15T11:44:13.6320330Z   duration_ms: 0.847388
+2026-10-15T11:44:13.6320581Z   type: 'test'
+2026-10-15T11:44:13.6320809Z   ...
+2026-10-15T11:44:13.6321327Z # Subtest: lifetime attempts above ten survive explicit redrive without claiming delivery
+2026-10-15T11:44:13.6322081Z ok 148 - lifetime attempts above ten survive explicit redrive without claiming delivery
+2026-10-15T11:44:13.6322524Z   ---
+2026-10-15T11:44:13.6322745Z   duration_ms: 0.37074
+2026-10-15T11:44:13.6322975Z   type: 'test'
+2026-10-15T11:44:13.6323200Z   ...
+2026-10-15T11:44:13.6323897Z # Subtest: delivered requires actual 2xx attempt timestamp with no lease or error
+2026-10-15T11:44:13.6324608Z ok 149 - delivered requires actual 2xx attempt timestamp with no lease or error
+2026-10-15T11:44:13.6325022Z   ---
+2026-10-15T11:44:13.6325402Z   duration_ms: 1.142337
+2026-10-15T11:44:13.6325640Z   type: 'test'
+2026-10-15T11:44:13.6325864Z   ...
+2026-10-15T11:44:13.6326303Z # Subtest: claimed is only a lease observation, never client expiry or delivery
+2026-10-15T11:44:13.6327114Z ok 150 - claimed is only a lease observation, never client expiry or delivery
+2026-10-15T11:44:13.6327556Z   ---
+2026-10-15T11:44:13.6327783Z   duration_ms: 0.624042
+2026-10-15T11:44:13.6328038Z   type: 'test'
+2026-10-15T11:44:13.6328263Z   ...
+2026-10-15T11:44:13.6328812Z # Subtest: technical parser drops payload URL channel token lease owner and unknown receipt fields
+2026-10-15T11:44:13.6329635Z ok 151 - technical parser drops payload URL channel token lease owner and unknown receipt fields
+2026-10-15T11:44:13.6330136Z   ---
+2026-10-15T11:44:13.6330339Z   duration_ms: 1.583129
+2026-10-15T11:44:13.6330598Z   type: 'test'
+2026-10-15T11:44:13.6330871Z   ...
+2026-10-15T11:44:13.6331406Z # Subtest: bounded array allows empty and 500 distinct original recipients, rejects 501
+2026-10-15T11:44:13.6332072Z ok 152 - bounded array allows empty and 500 distinct original recipients, rejects 501
+2026-10-15T11:44:13.6332477Z   ---
+2026-10-15T11:44:13.6332673Z   duration_ms: 8.164574
+2026-10-15T11:44:13.6332938Z   type: 'test'
+2026-10-15T11:44:13.6333164Z   ...
+2026-10-15T11:44:13.6333633Z # Subtest: database timestamp formatting does not use browser timezone or lose microseconds
+2026-10-15T11:44:13.6334361Z ok 153 - database timestamp formatting does not use browser timezone or lose microseconds
+2026-10-15T11:44:13.6334789Z   ---
+2026-10-15T11:44:13.6334990Z   duration_ms: 1.268763
+2026-10-15T11:44:13.6335506Z   type: 'test'
+2026-10-15T11:44:13.6335890Z   ...
+2026-10-15T11:44:13.6336811Z # Subtest: authenticated read is exact GET with captured token and no commands or body
+2026-10-15T11:44:13.6337978Z ok 154 - authenticated read is exact GET with captured token and no commands or body
+2026-10-15T11:44:13.6338542Z   ---
+2026-10-15T11:44:13.6338800Z   duration_ms: 28.177161
+2026-10-15T11:44:13.6339041Z   type: 'test'
+2026-10-15T11:44:13.6339240Z   ...
+2026-10-15T11:44:13.6339661Z # Subtest: bad target session or native token switch causes zero network reads
+2026-10-15T11:44:13.6340278Z ok 155 - bad target session or native token switch causes zero network reads
+2026-10-15T11:44:13.6340657Z   ---
+2026-10-15T11:44:13.6340860Z   duration_ms: 0.76791
+2026-10-15T11:44:13.6341083Z   type: 'test'
+2026-10-15T11:44:13.6341288Z   ...
+2026-10-15T11:44:13.6341812Z # Subtest: 503 malformed facts and transport errors never become empty success or trigger retry commands
+2026-10-15T11:44:13.6342605Z ok 156 - 503 malformed facts and transport errors never become empty success or trigger retry commands
+2026-10-15T11:44:13.6343076Z   ---
+2026-10-15T11:44:13.6343278Z   duration_ms: 1.904387
+2026-10-15T11:44:13.6343507Z   type: 'test'
+2026-10-15T11:44:13.6343708Z   ...
+2026-10-15T11:44:13.6344153Z # Subtest: service 401 emits existing session expiration and never stores channel data
+2026-10-15T11:44:13.6344805Z ok 157 - service 401 emits existing session expiration and never stores channel data
+2026-10-15T11:44:13.6345456Z   ---
+2026-10-15T11:44:13.6345812Z   duration_ms: 1.034817
+2026-10-15T11:44:13.6346203Z   type: 'test'
+2026-10-15T11:44:13.6346501Z   ...
+2026-10-15T11:44:13.6346973Z # Subtest: explicit null first insert is distinct from missing, zero and saturated version
+2026-10-15T11:44:13.6347673Z ok 158 - explicit null first insert is distinct from missing, zero and saturated version
+2026-10-15T11:44:13.6348088Z   ---
+2026-10-15T11:44:13.6348284Z   duration_ms: 1.8576
+2026-10-15T11:44:13.6348512Z   type: 'test'
+2026-10-15T11:44:13.6348717Z   ...
+2026-10-15T11:44:13.6349111Z # Subtest: flags independent and tombstone may retain stored permissions
+2026-10-15T11:44:13.6349863Z ok 159 - flags independent and tombstone may retain stored permissions
+2026-10-15T11:44:13.6350252Z   ---
+2026-10-15T11:44:13.6350457Z   duration_ms: 0.482288
+2026-10-15T11:44:13.6350694Z   type: 'test'
+2026-10-15T11:44:13.6350889Z   ...
+2026-10-15T11:44:13.6351336Z # Subtest: strict actor plan target boolean canonical UUID and bounded trimmed reason
+2026-10-15T11:44:13.6352014Z ok 160 - strict actor plan target boolean canonical UUID and bounded trimmed reason
+2026-10-15T11:44:13.6352584Z   ---
+2026-10-15T11:44:13.6352785Z   duration_ms: 0.588857
+2026-10-15T11:44:13.6353029Z   type: 'test'
+2026-10-15T11:44:13.6353223Z   ...
+2026-10-15T11:44:13.6353692Z # Subtest: preflight scopes manager to exact plan, ADMIN recovery does not imply response
+2026-10-15T11:44:13.6354392Z ok 161 - preflight scopes manager to exact plan, ADMIN recovery does not imply response
+2026-10-15T11:44:13.6354814Z   ---
+2026-10-15T11:44:13.6355019Z   duration_ms: 1.21311
+2026-10-15T11:44:13.6355507Z   type: 'test'
+2026-10-15T11:44:13.6355722Z   ...
+2026-10-15T11:44:13.6356170Z # Subtest: preflight first insert uses explicit absence; stale or tombstone not absent
+2026-10-15T11:44:13.6356829Z ok 162 - preflight first insert uses explicit absence; stale or tombstone not absent
+2026-10-15T11:44:13.6357235Z   ---
+2026-10-15T11:44:13.6357435Z   duration_ms: 2.011136
+2026-10-15T11:44:13.6357666Z   type: 'test'
+2026-10-15T11:44:13.6357862Z   ...
+2026-10-15T11:44:13.6358333Z # Subtest: contradictory effectiveness, duplicate/cross-plan and malformed facts rejected
+2026-10-15T11:44:13.6359074Z ok 163 - contradictory effectiveness, duplicate/cross-plan and malformed facts rejected
+2026-10-15T11:44:13.6359500Z   ---
+2026-10-15T11:44:13.6359700Z   duration_ms: 0.868377
+2026-10-15T11:44:13.6359923Z   type: 'test'
+2026-10-15T11:44:13.6360124Z   ...
+2026-10-15T11:44:13.6360566Z # Subtest: ON_CALL cannot receive management flag; inactive target cannot be activated
+2026-10-15T11:44:13.6361217Z ok 164 - ON_CALL cannot receive management flag; inactive target cannot be activated
+2026-10-15T11:44:13.6361615Z   ---
+2026-10-15T11:44:13.6361830Z   duration_ms: 0.373816
+2026-10-15T11:44:13.6362059Z   type: 'test'
+2026-10-15T11:44:13.6362261Z   ...
+2026-10-15T11:44:13.6362687Z # Subtest: actor-scoped exact reliable storage round-trip, blocked state retained
+2026-10-15T11:44:13.6363317Z ok 165 - actor-scoped exact reliable storage round-trip, blocked state retained
+2026-10-15T11:44:13.6363706Z   ---
+2026-10-15T11:44:13.6363906Z   duration_ms: 1.459078
+2026-10-15T11:44:13.6364176Z   type: 'test'
+2026-10-15T11:44:13.6364372Z   ...
+2026-10-15T11:44:13.6364778Z # Subtest: quota silent save and readback failure never pass reliable-save gate
+2026-10-15T11:44:13.6365602Z ok 166 - quota silent save and readback failure never pass reliable-save gate
+2026-10-15T11:44:13.6366024Z   ---
+2026-10-15T11:44:13.6366234Z   duration_ms: 0.853229
+2026-10-15T11:44:13.6366488Z   type: 'test'
+2026-10-15T11:44:13.6366683Z   ...
+2026-10-15T11:44:13.6367054Z # Subtest: corrupt or foreign stored intent and denied reads fail closed
+2026-10-15T11:44:13.6368066Z ok 167 - corrupt or foreign stored intent and denied reads fail closed
+2026-10-15T11:44:13.6368739Z   ---
+2026-10-15T11:44:13.6369086Z   duration_ms: 0.742773
+2026-10-15T11:44:13.6369421Z   type: 'test'
+2026-10-15T11:44:13.6369617Z   ...
+2026-10-15T11:44:13.6370036Z # Subtest: remove failure silent no-op and readback denial retain original intent
+2026-10-15T11:44:13.6370658Z ok 168 - remove failure silent no-op and readback denial retain original intent
+2026-10-15T11:44:13.6371053Z   ---
+2026-10-15T11:44:13.6371256Z   duration_ms: 0.491937
+2026-10-15T11:44:13.6371481Z   type: 'test'
+2026-10-15T11:44:13.6371676Z   ...
+2026-10-15T11:44:13.6372170Z # Subtest: manual ack restores only absent exact original after remove succeeded but readback failed
+2026-10-15T11:44:13.6372928Z ok 169 - manual ack restores only absent exact original after remove succeeded but readback failed
+2026-10-15T11:44:13.6373374Z   ---
+2026-10-15T11:44:13.6373582Z   duration_ms: 26.725971
+2026-10-15T11:44:13.6373815Z   type: 'test'
+2026-10-15T11:44:13.6374185Z   ...
+2026-10-15T11:44:13.6374679Z # Subtest: manual recovery never overwrites a different frozen command or a blocked intent
+2026-10-15T11:44:13.6375719Z ok 170 - manual recovery never overwrites a different frozen command or a blocked intent
+2026-10-15T11:44:13.6376173Z   ---
+2026-10-15T11:44:13.6376374Z   duration_ms: 0.812253
+2026-10-15T11:44:13.6376605Z   type: 'test'
+2026-10-15T11:44:13.6376964Z   ...
+2026-10-15T11:44:13.6377452Z # Subtest: manual recovery requires reliable storage again and denied reads never trigger a save
+2026-10-15T11:44:13.6378185Z ok 171 - manual recovery requires reliable storage again and denied reads never trigger a save
+2026-10-15T11:44:13.6378630Z   ---
+2026-10-15T11:44:13.6378829Z   duration_ms: 0.4513
+2026-10-15T11:44:13.6379052Z   type: 'test'
+2026-10-15T11:44:13.6379248Z   ...
+2026-10-15T11:44:13.6379721Z # Subtest: submit requires reliable exact original stored content and refuses blocked zero POST
+2026-10-15T11:44:13.6380452Z ok 172 - submit requires reliable exact original stored content and refuses blocked zero POST
+2026-10-15T11:44:13.6380902Z   ---
+2026-10-15T11:44:13.6381101Z   duration_ms: 0.841608
+2026-10-15T11:44:13.6381324Z   type: 'test'
+2026-10-15T11:44:13.6381518Z   ...
+2026-10-15T11:44:13.6382003Z # Subtest: captured member session never substitutes a different current token or actor zero POST
+2026-10-15T11:44:13.6382752Z ok 173 - captured member session never substitutes a different current token or actor zero POST
+2026-10-15T11:44:13.6383203Z   ---
+2026-10-15T11:44:13.6383414Z   duration_ms: 0.596471
+2026-10-15T11:44:13.6383644Z   type: 'test'
+2026-10-15T11:44:13.6383844Z   ...
+2026-10-15T11:44:13.6384357Z # Subtest: member Authorization stays pinned if current token changes after the final synchronous check
+2026-10-15T11:44:13.6385162Z ok 174 - member Authorization stays pinned if current token changes after the final synchronous check
+2026-10-15T11:44:13.6386071Z   ---
+2026-10-15T11:44:13.6386274Z   duration_ms: 3.28048
+2026-10-15T11:44:13.6386506Z   type: 'test'
+2026-10-15T11:44:13.6386702Z   ...
+2026-10-15T11:44:13.6387174Z # Subtest: POST transmits exact nullable original command, not auto-rebased current version
+2026-10-15T11:44:13.6387898Z ok 175 - POST transmits exact nullable original command, not auto-rebased current version
+2026-10-15T11:44:13.6388335Z   ---
+2026-10-15T11:44:13.6388532Z   duration_ms: 1.081054
+2026-10-15T11:44:13.6388768Z   type: 'test'
+2026-10-15T11:44:13.6388965Z   ...
+2026-10-15T11:44:13.6389433Z # Subtest: immutable original receipt survives higher current version and revoked privileges
+2026-10-15T11:44:13.6390155Z ok 176 - immutable original receipt survives higher current version and revoked privileges
+2026-10-15T11:44:13.6390589Z   ---
+2026-10-15T11:44:13.6390790Z   duration_ms: 0.877425
+2026-10-15T11:44:13.6391020Z   type: 'test'
+2026-10-15T11:44:13.6391213Z   ...
+2026-10-15T11:44:13.6391698Z # Subtest: wrong actor plan original command result version timestamp or missing receipt rejected
+2026-10-15T11:44:13.6392446Z ok 177 - wrong actor plan original command result version timestamp or missing receipt rejected
+2026-10-15T11:44:13.6392897Z   ---
+2026-10-15T11:44:13.6393095Z   duration_ms: 9.57306
+2026-10-15T11:44:13.6393324Z   type: 'test'
+2026-10-15T11:44:13.6393525Z   ...
+2026-10-15T11:44:13.6393943Z # Subtest: current row cannot precede receipt or contradict flags at same version
+2026-10-15T11:44:13.6394558Z ok 178 - current row cannot precede receipt or contradict flags at same version
+2026-10-15T11:44:13.6394949Z   ---
+2026-10-15T11:44:13.6395142Z   duration_ms: 2.116783
+2026-10-15T11:44:13.6395589Z   type: 'test'
+2026-10-15T11:44:13.6395795Z   ...
+2026-10-15T11:44:13.6396246Z # Subtest: member list only contains matching actual member rows, validates duplicates
+2026-10-15T11:44:13.6396901Z ok 179 - member list only contains matching actual member rows, validates duplicates
+2026-10-15T11:44:13.6397303Z   ---
+2026-10-15T11:44:13.6397504Z   duration_ms: 1.157926
+2026-10-15T11:44:13.6397736Z   type: 'test'
+2026-10-15T11:44:13.6398093Z   ...
+2026-10-15T11:44:13.6398559Z # Subtest: plan options do not turn global users into members or tolerate duplicate IDs
+2026-10-15T11:44:13.6399229Z ok 180 - plan options do not turn global users into members or tolerate duplicate IDs
+2026-10-15T11:44:13.6399650Z   ---
+2026-10-15T11:44:13.6399856Z   duration_ms: 0.947815
+2026-10-15T11:44:13.6400083Z   type: 'test'
+2026-10-15T11:44:13.6400485Z   ...
+2026-10-15T11:44:13.6401216Z # Subtest: database local time is not converted across browser timezones
+2026-10-15T11:44:13.6402250Z ok 181 - database local time is not converted across browser timezones
+2026-10-15T11:44:13.6402998Z   ---
+2026-10-15T11:44:13.6403374Z   duration_ms: 1.602375
+2026-10-15T11:44:13.6403712Z   type: 'test'
+2026-10-15T11:44:13.6403947Z   ...
+2026-10-15T11:44:13.6404520Z # Subtest: cancelled generated slot and current ineligible member are not mislabeled as coverage
+2026-10-15T11:44:13.6405683Z ok 182 - cancelled generated slot and current ineligible member are not mislabeled as coverage
+2026-10-15T11:44:13.6406141Z   ---
+2026-10-15T11:44:13.6406353Z   duration_ms: 0.500973
+2026-10-15T11:44:13.6406591Z   type: 'test'
+2026-10-15T11:44:13.6406795Z   ...
+2026-10-15T11:44:13.6407334Z # Subtest: warning labels preserve failure/inactive/blocked distinctions and never assert full coverage
+2026-10-15T11:44:13.6408156Z ok 183 - warning labels preserve failure/inactive/blocked distinctions and never assert full coverage
+2026-10-15T11:44:13.6408645Z   ---
+2026-10-15T11:44:13.6408852Z   duration_ms: 0.41879
+2026-10-15T11:44:13.6409079Z   type: 'test'
+2026-10-15T11:44:13.6409277Z   ...
+2026-10-15T11:44:13.6409596Z # Subtest: manager role gate excludes ON_CALL and AUDITOR
+2026-10-15T11:44:13.6410045Z ok 184 - manager role gate excludes ON_CALL and AUDITOR
+2026-10-15T11:44:13.6410351Z   ---
+2026-10-15T11:44:13.6410549Z   duration_ms: 0.476367
+2026-10-15T11:44:13.6410775Z   type: 'test'
+2026-10-15T11:44:13.6410978Z   ...
+2026-10-15T11:44:13.6411410Z # Subtest: draft boundary checks keep ordered membership and whole-minute anchor
+2026-10-15T11:44:13.6412028Z ok 185 - draft boundary checks keep ordered membership and whole-minute anchor
+2026-10-15T11:44:13.6412415Z   ---
+2026-10-15T11:44:13.6412616Z   duration_ms: 1.17617
+2026-10-15T11:44:13.6412848Z   type: 'test'
+2026-10-15T11:44:13.6413050Z   ...
+2026-10-15T11:44:13.6413540Z # Subtest: create request preserves member order and database local anchor, without mutating draft
+2026-10-15T11:44:13.6414306Z ok 186 - create request preserves member order and database local anchor, without mutating draft
+2026-10-15T11:44:13.6414760Z   ---
+2026-10-15T11:44:13.6414960Z   duration_ms: 32.511043
+2026-10-15T11:44:13.6415385Z   type: 'test'
+2026-10-15T11:44:13.6415666Z   ...
+2026-10-15T11:44:13.6416141Z # Subtest: state command uses captured version and reason; conflicts propagate without retry
+2026-10-15T11:44:13.6416849Z ok 187 - state command uses captured version and reason; conflicts propagate without retry
+2026-10-15T11:44:13.6417287Z   ---
+2026-10-15T11:44:13.6417508Z   duration_ms: 1.742034
+2026-10-15T11:44:13.6417747Z   type: 'test'
+2026-10-15T11:44:13.6417959Z   ...
+2026-10-15T11:44:13.6418417Z # Subtest: list/slot reads preserve truncation and scan partial failures remain explicit
+2026-10-15T11:44:13.6419098Z ok 188 - list/slot reads preserve truncation and scan partial failures remain explicit
+2026-10-15T11:44:13.6419514Z   ---
+2026-10-15T11:44:13.6419721Z   duration_ms: 1.688575
+2026-10-15T11:44:13.6419949Z   type: 'test'
+2026-10-15T11:44:13.6420151Z   ...
+2026-10-15T11:44:13.6420604Z # Subtest: technical delivered and historical decisions never imply human read or consent
+2026-10-15T11:44:13.6421302Z ok 189 - technical delivered and historical decisions never imply human read or consent
+2026-10-15T11:44:13.6421725Z   ---
+2026-10-15T11:44:13.6421923Z   duration_ms: 1.797968
+2026-10-15T11:44:13.6422148Z   type: 'test'
+2026-10-15T11:44:13.6422345Z   ...
+2026-10-15T11:44:13.6422951Z # Subtest: retry is enabled only for failed delivery and manager or actual participant
+2026-10-15T11:44:13.6423685Z ok 190 - retry is enabled only for failed delivery and manager or actual participant
+2026-10-15T11:44:13.6424098Z   ---
+2026-10-15T11:44:13.6424305Z   duration_ms: 1.072528
+2026-10-15T11:44:13.6424535Z   type: 'test'
+2026-10-15T11:44:13.6424731Z   ...
+2026-10-15T11:44:13.6425163Z # Subtest: explicit valid captured version and nonempty bounded reason are required
+2026-10-15T11:44:13.6426406Z ok 191 - explicit valid captured version and nonempty bounded reason are required
+2026-10-15T11:44:13.6426810Z   ---
+2026-10-15T11:44:13.6427021Z   duration_ms: 0.559071
+2026-10-15T11:44:13.6427256Z   type: 'test'
+2026-10-15T11:44:13.6427459Z   ...
+2026-10-15T11:44:13.6427933Z # Subtest: original retry survives read and is isolated by actor without network side effects
+2026-10-15T11:44:13.6428647Z ok 192 - original retry survives read and is isolated by actor without network side effects
+2026-10-15T11:44:13.6429114Z   ---
+2026-10-15T11:44:13.6429321Z   duration_ms: 1.257452
+2026-10-15T11:44:13.6429551Z   type: 'test'
+2026-10-15T11:44:13.6429767Z   ...
+2026-10-15T11:44:13.6430244Z # Subtest: corrupt or mismatched storage remains present and is rejected rather than reset
+2026-10-15T11:44:13.6430936Z ok 193 - corrupt or mismatched storage remains present and is rejected rather than reset
+2026-10-15T11:44:13.6431363Z   ---
+2026-10-15T11:44:13.6431563Z   duration_ms: 1.060856
+2026-10-15T11:44:13.6431797Z   type: 'test'
+2026-10-15T11:44:13.6432007Z   ...
+2026-10-15T11:44:13.6432398Z # Subtest: persisted 403/409 lock cannot be silently discarded on refresh
+2026-10-15T11:44:13.6432966Z ok 194 - persisted 403/409 lock cannot be silently discarded on refresh
+2026-10-15T11:44:13.6433326Z   ---
+2026-10-15T11:44:13.6433524Z   duration_ms: 0.474924
+2026-10-15T11:44:13.6433750Z   type: 'test'
+2026-10-15T11:44:13.6433954Z   ...
+2026-10-15T11:44:13.6434385Z # Subtest: storage quota failure is surfaced before an unrecorded request can proceed
+2026-10-15T11:44:13.6435054Z ok 195 - storage quota failure is surfaced before an unrecorded request can proceed
+2026-10-15T11:44:13.6435858Z   ---
+2026-10-15T11:44:13.6436174Z   duration_ms: 0.481366
+2026-10-15T11:44:13.6436431Z   type: 'test'
+2026-10-15T11:44:13.6436627Z   ...
+2026-10-15T11:44:13.6437072Z # Subtest: read only GET and explicit retry use original body, not latest server version
+2026-10-15T11:44:13.6437734Z ok 196 - read only GET and explicit retry use original body, not latest server version
+2026-10-15T11:44:13.6438146Z   ---
+2026-10-15T11:44:13.6438347Z   duration_ms: 31.171101
+2026-10-15T11:44:13.6438584Z   type: 'test'
+2026-10-15T11:44:13.6438779Z   ...
+2026-10-15T11:44:13.6439259Z # Subtest: failed retry does not automatically post a second time or mutate original payload
+2026-10-15T11:44:13.6439965Z ok 197 - failed retry does not automatically post a second time or mutate original payload
+2026-10-15T11:44:13.6440387Z   ---
+2026-10-15T11:44:13.6440588Z   duration_ms: 1.30998
+2026-10-15T11:44:13.6440816Z   type: 'test'
+2026-10-15T11:44:13.6441013Z   ...
+2026-10-15T11:44:13.6441549Z # Subtest: database snapshot compares fractional precision and exact expiry without a browser clock
+2026-10-15T11:44:13.6442325Z ok 198 - database snapshot compares fractional precision and exact expiry without a browser clock
+2026-10-15T11:44:13.6442787Z   ---
+2026-10-15T11:44:13.6442991Z   duration_ms: 0.587975
+2026-10-15T11:44:13.6443216Z   type: 'test'
+2026-10-15T11:44:13.6443413Z   ...
+2026-10-15T11:44:13.6443872Z # Subtest: expired and erased rows never offer a new retry, but retained disabled policy can
+2026-10-15T11:44:13.6444575Z ok 199 - expired and erased rows never offer a new retry, but retained disabled policy can
+2026-10-15T11:44:13.6444997Z   ---
+2026-10-15T11:44:13.6445388Z   duration_ms: 0.427276
+2026-10-15T11:44:13.6445806Z   type: 'test'
+2026-10-15T11:44:13.6446070Z   ...
+2026-10-15T11:44:13.6446518Z # Subtest: missing invalid zoned or impossible database facts fail closed for new retries
+2026-10-15T11:44:13.6447341Z ok 200 - missing invalid zoned or impossible database facts fail closed for new retries
+2026-10-15T11:44:13.6447782Z   ---
+2026-10-15T11:44:13.6447994Z   duration_ms: 0.474765
+2026-10-15T11:44:13.6448224Z   type: 'test'
+2026-10-15T11:44:13.6448428Z   ...
+2026-10-15T11:44:13.6448940Z # Subtest: only managers may create paired intent; participants and readers cannot substitute
+2026-10-15T11:44:13.6449676Z ok 201 - only managers may create paired intent; participants and readers cannot substitute
+2026-10-15T11:44:13.6450240Z   ---
+2026-10-15T11:44:13.6450444Z   duration_ms: 2.791609
+2026-10-15T11:44:13.6450697Z   type: 'test'
+2026-10-15T11:44:13.6450907Z   ...
+2026-10-15T11:44:13.6451347Z # Subtest: historical acceptance does not imply complete or live paired coverage
+2026-10-15T11:44:13.6452289Z ok 202 - historical acceptance does not imply complete or live paired coverage
+2026-10-15T11:44:13.6452949Z   ---
+2026-10-15T11:44:13.6453286Z   duration_ms: 0.55318
+2026-10-15T11:44:13.6453667Z   type: 'test'
+2026-10-15T11:44:13.6454019Z   ...
+2026-10-15T11:44:13.6454919Z # Subtest: every replacement identity and original exchanged participant/schedule must match
+2026-10-15T11:44:13.6456057Z ok 203 - every replacement identity and original exchanged participant/schedule must match
+2026-10-15T11:44:13.6456504Z   ---
+2026-10-15T11:44:13.6456716Z   duration_ms: 0.683042
+2026-10-15T11:44:13.6456946Z   type: 'test'
+2026-10-15T11:44:13.6457141Z   ...
+2026-10-15T11:44:13.6457666Z # Subtest: either cancelled or unknown cancellation blocks a new pair without repairing counterpart
+2026-10-15T11:44:13.6458456Z ok 204 - either cancelled or unknown cancellation blocks a new pair without repairing counterpart
+2026-10-15T11:44:13.6458915Z   ---
+2026-10-15T11:44:13.6459114Z   duration_ms: 0.605377
+2026-10-15T11:44:13.6459340Z   type: 'test'
+2026-10-15T11:44:13.6459537Z   ...
+2026-10-15T11:44:13.6459982Z # Subtest: already started remaining pair is eligible but either actual end is not
+2026-10-15T11:44:13.6460619Z ok 205 - already started remaining pair is eligible but either actual end is not
+2026-10-15T11:44:13.6461009Z   ---
+2026-10-15T11:44:13.6461208Z   duration_ms: 0.816811
+2026-10-15T11:44:13.6461438Z   type: 'test'
+2026-10-15T11:44:13.6461633Z   ...
+2026-10-15T11:44:13.6462179Z # Subtest: strict naive database timestamp comparison retains fractional precision without browser clock
+2026-10-15T11:44:13.6462997Z ok 206 - strict naive database timestamp comparison retains fractional precision without browser clock
+2026-10-15T11:44:13.6463477Z   ---
+2026-10-15T11:44:13.6463675Z   duration_ms: 0.911597
+2026-10-15T11:44:13.6463901Z   type: 'test'
+2026-10-15T11:44:13.6464105Z   ...
+2026-10-15T11:44:13.6464589Z # Subtest: equivalent timestamp precision matches snapshots but changed intervals fail closed
+2026-10-15T11:44:13.6465616Z ok 207 - equivalent timestamp precision matches snapshots but changed intervals fail closed
+2026-10-15T11:44:13.6466292Z   ---
+2026-10-15T11:44:13.6466497Z   duration_ms: 1.317153
+2026-10-15T11:44:13.6466737Z   type: 'test'
+2026-10-15T11:44:13.6466941Z   ...
+2026-10-15T11:44:13.6467370Z # Subtest: three explicit integer versions and overflow protection are mandatory
+2026-10-15T11:44:13.6468323Z ok 208 - three explicit integer versions and overflow protection are mandatory
+2026-10-15T11:44:13.6469027Z   ---
+2026-10-15T11:44:13.6469382Z   duration_ms: 0.610307
+2026-10-15T11:44:13.6469798Z   type: 'test'
+2026-10-15T11:44:13.6470147Z   ...
+2026-10-15T11:44:13.6470885Z # Subtest: canonical stable key and bounded original reason are required
+2026-10-15T11:44:13.6471985Z ok 209 - canonical stable key and bounded original reason are required
+2026-10-15T11:44:13.6472644Z   ---
+2026-10-15T11:44:13.6472996Z   duration_ms: 0.633089
+2026-10-15T11:44:13.6473419Z   type: 'test'
+2026-10-15T11:44:13.6473766Z   ...
+2026-10-15T11:44:13.6474553Z # Subtest: all original versions and both IDs must match; no silent version rebase
+2026-10-15T11:44:13.6475960Z ok 210 - all original versions and both IDs must match; no silent version rebase
+2026-10-15T11:44:13.6476644Z   ---
+2026-10-15T11:44:13.6477185Z   duration_ms: 0.633249
+2026-10-15T11:44:13.6477596Z   type: 'test'
+2026-10-15T11:44:13.6477933Z   ...
+2026-10-15T11:44:13.6478676Z # Subtest: per-actor original intent survives storage with no API or automatic retry
+2026-10-15T11:44:13.6479817Z ok 211 - per-actor original intent survives storage with no API or automatic retry
+2026-10-15T11:44:13.6480516Z   ---
+2026-10-15T11:44:13.6481026Z   duration_ms: 1.416699
+2026-10-15T11:44:13.6481410Z   type: 'test'
+2026-10-15T11:44:13.6481739Z   ...
+2026-10-15T11:44:13.6482501Z # Subtest: corrupt foreign missing identity or versions remain stored and fail closed
+2026-10-15T11:44:13.6483657Z ok 212 - corrupt foreign missing identity or versions remain stored and fail closed
+2026-10-15T11:44:13.6484364Z   ---
+2026-10-15T11:44:13.6484714Z   duration_ms: 0.623472
+2026-10-15T11:44:13.6485095Z   type: 'test'
+2026-10-15T11:44:13.6485634Z   ...
+2026-10-15T11:44:13.6486468Z # Subtest: persisted blocked original survives read; storage errors propagate without discard
+2026-10-15T11:44:13.6487711Z ok 213 - persisted blocked original survives read; storage errors propagate without discard
+2026-10-15T11:44:13.6488461Z   ---
+2026-10-15T11:44:13.6488789Z   duration_ms: 0.874599
+2026-10-15T11:44:13.6489164Z   type: 'test'
+2026-10-15T11:44:13.6489487Z   ...
+2026-10-15T11:44:13.6490279Z # Subtest: API transmits only original explicit command and uses the keyed swap endpoint
+2026-10-15T11:44:13.6491501Z ok 214 - API transmits only original explicit command and uses the keyed swap endpoint
+2026-10-15T11:44:13.6492263Z   ---
+2026-10-15T11:44:13.6492603Z   duration_ms: 31.11013
+2026-10-15T11:44:13.6492985Z   type: 'test'
+2026-10-15T11:44:13.6493313Z   ...
+2026-10-15T11:44:13.6494112Z # Subtest: read identity mismatch is rejected rather than publishing foreign pair facts
+2026-10-15T11:44:13.6495548Z ok 215 - read identity mismatch is rejected rather than publishing foreign pair facts
+2026-10-15T11:44:13.6496290Z   ---
+2026-10-15T11:44:13.6496645Z   duration_ms: 0.88015
+2026-10-15T11:44:13.6497031Z   type: 'test'
+2026-10-15T11:44:13.6497371Z   ...
+2026-10-15T11:44:13.6498152Z # Subtest: entry only permits actual eligible owner of complete future ordinary source
+2026-10-15T11:44:13.6500239Z ok 216 - entry only permits actual eligible owner of complete future ordinary source
+2026-10-15T11:44:13.6500986Z   ---
+2026-10-15T11:44:13.6501333Z   duration_ms: 2.41589
+2026-10-15T11:44:13.6501728Z   type: 'test'
+2026-10-15T11:44:13.6502057Z   ...
+2026-10-15T11:44:13.6503022Z # Subtest: candidates allow same or different plans but never owner, same source, started or cancelled overrides
+2026-10-15T11:44:13.6504595Z ok 217 - candidates allow same or different plans but never owner, same source, started or cancelled overrides
+2026-10-15T11:44:13.6505691Z   ---
+2026-10-15T11:44:13.6506040Z   duration_ms: 0.476157
+2026-10-15T11:44:13.6506427Z   type: 'test'
+2026-10-15T11:44:13.6506762Z   ...
+2026-10-15T11:44:13.6507694Z # Subtest: actual participants only; either started source removes accept but retains reject/withdraw
+2026-10-15T11:44:13.6509107Z ok 218 - actual participants only; either started source removes accept but retains reject/withdraw
+2026-10-15T11:44:13.6509921Z   ---
+2026-10-15T11:44:13.6510253Z   duration_ms: 1.404947
+2026-10-15T11:44:13.6510636Z   type: 'test'
+2026-10-15T11:44:13.6510962Z   ...
+2026-10-15T11:44:13.6511872Z # Subtest: accepted history never claims coverage is still active and clocks stay database-local
+2026-10-15T11:44:13.6513243Z ok 219 - accepted history never claims coverage is still active and clocks stay database-local
+2026-10-15T11:44:13.6513991Z   ---
+2026-10-15T11:44:13.6514315Z   duration_ms: 0.511853
+2026-10-15T11:44:13.6514706Z   type: 'test'
+2026-10-15T11:44:13.6515046Z   ...
+2026-10-15T11:44:13.6516233Z # Subtest: request keeps both explicit versions/canonical key; wrong snapshots and invalid reasons fail
+2026-10-15T11:44:13.6517694Z ok 220 - request keeps both explicit versions/canonical key; wrong snapshots and invalid reasons fail
+2026-10-15T11:44:13.6518737Z   ---
+2026-10-15T11:44:13.6519079Z   duration_ms: 1.082646
+2026-10-15T11:44:13.6519470Z   type: 'test'
+2026-10-15T11:44:13.6519817Z   ...
+2026-10-15T11:44:13.6520829Z # Subtest: request and decision intents restore exact contents and conflict lock per actor, without credentials
+2026-10-15T11:44:13.6522379Z ok 221 - request and decision intents restore exact contents and conflict lock per actor, without credentials
+2026-10-15T11:44:13.6523521Z   ---
+2026-10-15T11:44:13.6523872Z   duration_ms: 1.260858
+2026-10-15T11:44:13.6524271Z   type: 'test'
+2026-10-15T11:44:13.6524607Z   ...
+2026-10-15T11:44:13.6525778Z # Subtest: corrupt, foreign, missing source facts and malformed decision drafts are retained and fail closed
+2026-10-15T11:44:13.6527298Z ok 222 - corrupt, foreign, missing source facts and malformed decision drafts are retained and fail closed
+2026-10-15T11:44:13.6527911Z   ---
+2026-10-15T11:44:13.6528129Z   duration_ms: 1.091793
+2026-10-15T11:44:13.6528363Z   type: 'test'
+2026-10-15T11:44:13.6528769Z   ...
+2026-10-15T11:44:13.6529616Z # Subtest: storage write/remove failures propagate and cannot silently rotate an intent
+2026-10-15T11:44:13.6530937Z ok 223 - storage write/remove failures propagate and cannot silently rotate an intent
+2026-10-15T11:44:13.6531665Z   ---
+2026-10-15T11:44:13.6532037Z   duration_ms: 1.540599
+2026-10-15T11:44:13.6532444Z   type: 'test'
+2026-10-15T11:44:13.6532798Z   ...
+2026-10-15T11:44:13.6533724Z # Subtest: decisions validate captured version and bounded reason, never imply missing version zero
+2026-10-15T11:44:13.6535156Z ok 224 - decisions validate captured version and bounded reason, never imply missing version zero
+2026-10-15T11:44:13.6536194Z   ---
+2026-10-15T11:44:13.6536533Z   duration_ms: 0.626297
+2026-10-15T11:44:13.6536929Z   type: 'test'
+2026-10-15T11:44:13.6537265Z   ...
+2026-10-15T11:44:13.6538041Z # Subtest: list filters both-side plan/scope/status on server and retains truncation
+2026-10-15T11:44:13.6539207Z ok 225 - list filters both-side plan/scope/status on server and retains truncation
+2026-10-15T11:44:13.6539940Z   ---
+2026-10-15T11:44:13.6540325Z   duration_ms: 28.893926
+2026-10-15T11:44:13.6540723Z   type: 'test'
+2026-10-15T11:44:13.6541942Z   ...
+2026-10-15T11:44:13.6544207Z # Subtest: ambiguous request and decision responses have no auto-retry; manual retry keeps exact bodies
+2026-10-15T11:44:13.6546480Z ok 226 - ambiguous request and decision responses have no auto-retry; manual retry keeps exact bodies
+2026-10-15T11:44:13.6547327Z   ---
+2026-10-15T11:44:13.6547675Z   duration_ms: 1.693675
+2026-10-15T11:44:13.6548061Z   type: 'test'
+2026-10-15T11:44:13.6548400Z   ...
+2026-10-15T11:44:13.6549102Z # Subtest: 403/409 preserve captured content and do not automatically rebase
+2026-10-15T11:44:13.6550117Z ok 227 - 403/409 preserve captured content and do not automatically rebase
+2026-10-15T11:44:13.6550753Z   ---
+2026-10-15T11:44:13.6551085Z   duration_ms: 1.619426
+2026-10-15T11:44:13.6551470Z   type: 'test'
+2026-10-15T11:44:13.6551795Z   ...
+2026-10-15T11:44:13.6552759Z # Subtest: detail and current coverage are independent read-only requests with exact database-local window
+2026-10-15T11:44:13.6554223Z ok 228 - detail and current coverage are independent read-only requests with exact database-local window
+2026-10-15T11:44:13.6555032Z   ---
+2026-10-15T11:44:13.6555584Z   duration_ms: 1.470238
+2026-10-15T11:44:13.6564921Z   type: 'test'
+2026-10-15T11:44:13.6565612Z   ...
+2026-10-15T11:44:13.6566462Z # Subtest: only canonical bounded runbook coordinates are actionable, never arbitrary links
+2026-10-15T11:44:13.6567729Z ok 229 - only canonical bounded runbook coordinates are actionable, never arbitrary links
+2026-10-15T11:44:13.6568473Z   ---
+2026-10-15T11:44:13.6568811Z   duration_ms: 2.622745
+2026-10-15T11:44:13.6569199Z   type: 'test'
+2026-10-15T11:44:13.6569529Z   ...
+2026-10-15T11:44:13.6570256Z # Subtest: reads exactly the saved historical version and preserves raw content
+2026-10-15T11:44:13.6571561Z ok 230 - reads exactly the saved historical version and preserves raw content
+2026-10-15T11:44:13.6572235Z   ---
+2026-10-15T11:44:13.6572598Z   duration_ms: 30.833649
+2026-10-15T11:44:13.6572990Z   type: 'test'
+2026-10-15T11:44:13.6573323Z   ...
+2026-10-15T11:44:13.6573937Z # Subtest: bad coordinates or no login never make an HTTP request
+2026-10-15T11:44:13.6574794Z ok 231 - bad coordinates or no login never make an HTTP request
+2026-10-15T11:44:13.6575707Z   ---
+2026-10-15T11:44:13.6576050Z   duration_ms: 1.633512
+2026-10-15T11:44:13.6576431Z   type: 'test'
+2026-10-15T11:44:13.6576764Z   ...
+2026-10-15T11:44:13.6577672Z # Subtest: mismatched versions, chunks, identifiers, statuses and malformed payloads are never sources
+2026-10-15T11:44:13.6579074Z ok 232 - mismatched versions, chunks, identifiers, statuses and malformed payloads are never sources
+2026-10-15T11:44:13.6579876Z   ---
+2026-10-15T11:44:13.6580205Z   duration_ms: 6.42689
+2026-10-15T11:44:13.6580585Z   type: 'test'
+2026-10-15T11:44:13.6580911Z   ...
+2026-10-15T11:44:13.6581736Z # Subtest: denied and missing are the same user-visible failure, no fallback to newest version
+2026-10-15T11:44:13.6582965Z ok 233 - denied and missing are the same user-visible failure, no fallback to newest version
+2026-10-15T11:44:13.6583766Z   ---
+2026-10-15T11:44:13.6584095Z   duration_ms: 1.485357
+2026-10-15T11:44:13.6584474Z   type: 'test'
+2026-10-15T11:44:13.6584799Z   ...
+2026-10-15T11:44:13.6585755Z # Subtest: account change while reading JSON discards stale source and releases listeners
+2026-10-15T11:44:13.6586962Z ok 234 - account change while reading JSON discards stale source and releases listeners
+2026-10-15T11:44:13.6587669Z   ---
+2026-10-15T11:44:13.6588001Z   duration_ms: 0.692961
+2026-10-15T11:44:13.6588378Z   type: 'test'
+2026-10-15T11:44:13.6588704Z   ...
+2026-10-15T11:44:13.6589365Z # Subtest: close aborts original HTTP read, with no retry and no source
+2026-10-15T11:44:13.6590306Z ok 235 - close aborts original HTTP read, with no retry and no source
+2026-10-15T11:44:13.6590898Z   ---
+2026-10-15T11:44:13.6591233Z   duration_ms: 0.947195
+2026-10-15T11:44:13.6591624Z   type: 'test'
+2026-10-15T11:44:13.6591948Z   ...
+2026-10-15T11:44:13.6592692Z # Subtest: expired current authentication dispatches the shared expiry event once
+2026-10-15T11:44:13.6593785Z ok 236 - expired current authentication dispatches the shared expiry event once
+2026-10-15T11:44:13.6594489Z   ---
+2026-10-15T11:44:13.6594845Z   duration_ms: 0.816801
+2026-10-15T11:44:13.6595518Z   type: 'test'
+2026-10-15T11:44:13.6595900Z   ...
+2026-10-15T11:44:13.6596830Z # Subtest: reader uses native modal, escaped original text, original-version warning and abort cleanup
+2026-10-15T11:44:13.6598252Z ok 237 - reader uses native modal, escaped original text, original-version warning and abort cleanup
+2026-10-15T11:44:13.6599078Z   ---
+2026-10-15T11:44:13.6599418Z   duration_ms: 17.89527
+2026-10-15T11:44:13.6599853Z   type: 'test'
+2026-10-15T11:44:13.6600203Z   ...
+2026-10-15T11:44:13.6601051Z # Subtest: capture binds actor document version canonical key decision and normalized reason
+2026-10-15T11:44:13.6602349Z ok 238 - capture binds actor document version canonical key decision and normalized reason
+2026-10-15T11:44:13.6603109Z   ---
+2026-10-15T11:44:13.6603448Z   duration_ms: 2.970773
+2026-10-15T11:44:13.6603846Z   type: 'test'
+2026-10-15T11:44:13.6604179Z   ...
+2026-10-15T11:44:13.6604878Z # Subtest: storage restores exact frozen command and lock only for its actor
+2026-10-15T11:44:13.6606170Z ok 239 - storage restores exact frozen command and lock only for its actor
+2026-10-15T11:44:13.6606866Z   ---
+2026-10-15T11:44:13.6607198Z   duration_ms: 0.502476
+2026-10-15T11:44:13.6607592Z   type: 'test'
+2026-10-15T11:44:13.6607928Z   ...
+2026-10-15T11:44:13.6608772Z # Subtest: corrupt or foreign stored command fails closed and original bytes remain available
+2026-10-15T11:44:13.6609972Z ok 240 - corrupt or foreign stored command fails closed and original bytes remain available
+2026-10-15T11:44:13.6610686Z   ---
+2026-10-15T11:44:13.6611326Z   duration_ms: 0.893985
+2026-10-15T11:44:13.6611713Z   type: 'test'
+2026-10-15T11:44:13.6612029Z   ...
+2026-10-15T11:44:13.6612604Z # Subtest: quota failure propagates before command can be sent
+2026-10-15T11:44:13.6613425Z ok 241 - quota failure propagates before command can be sent
+2026-10-15T11:44:13.6613972Z   ---
+2026-10-15T11:44:13.6614312Z   duration_ms: 0.957583
+2026-10-15T11:44:13.6614692Z   type: 'test'
+2026-10-15T11:44:13.6615207Z   ...
+2026-10-15T11:44:13.6616364Z # Subtest: ambiguous response requires manual retry of byte-identical payload without automatic retry
+2026-10-15T11:44:13.6617828Z ok 242 - ambiguous response requires manual retry of byte-identical payload without automatic retry
+2026-10-15T11:44:13.6618677Z   ---
+2026-10-15T11:44:13.6619031Z   duration_ms: 30.649886
+2026-10-15T11:44:13.6619425Z   type: 'test'
+2026-10-15T11:44:13.6619757Z   ...
+2026-10-15T11:44:13.6620464Z # Subtest: 403 and 409 are terminal intent errors and never rebase or retry
+2026-10-15T11:44:13.6621496Z ok 243 - 403 and 409 are terminal intent errors and never rebase or retry
+2026-10-15T11:44:13.6622137Z   ---
+2026-10-15T11:44:13.6622479Z   duration_ms: 1.949641
+2026-10-15T11:44:13.6622871Z   type: 'test'
+2026-10-15T11:44:13.6623211Z   ...
+2026-10-15T11:44:13.6623906Z # Subtest: locked command or switched actor cannot reach fetch
+2026-10-15T11:44:13.6624775Z ok 244 - locked command or switched actor cannot reach fetch
+2026-10-15T11:44:13.6625551Z   ---
+2026-10-15T11:44:13.6625894Z   duration_ms: 0.433127
+2026-10-15T11:44:13.6626289Z   type: 'test'
+2026-10-15T11:44:13.6626624Z   ...
+2026-10-15T11:44:13.6627454Z # Subtest: explicit discard removes only that actor local intent and sends no cancellation
+2026-10-15T11:44:13.6628727Z ok 245 - explicit discard removes only that actor local intent and sends no cancellation
+2026-10-15T11:44:13.6629489Z   ---
+2026-10-15T11:44:13.6629837Z   duration_ms: 0.309256
+2026-10-15T11:44:13.6630236Z   type: 'test'
+2026-10-15T11:44:13.6630577Z   ...
+2026-10-15T11:44:13.6631198Z # Subtest: null quality remains N/A while real zero remains 0%
+2026-10-15T11:44:13.6632084Z ok 246 - null quality remains N/A while real zero remains 0%
+2026-10-15T11:44:13.6632652Z   ---
+2026-10-15T11:44:13.6632996Z   duration_ms: 1.079631
+2026-10-15T11:44:13.6633393Z   type: 'test'
+2026-10-15T11:44:13.6633725Z   ...
+2026-10-15T11:44:13.6634670Z # Subtest: trend uses exact source actual engine K and literal date strings without timezone conversion
+2026-10-15T11:44:13.6636308Z ok 247 - trend uses exact source actual engine K and literal date strings without timezone conversion
+2026-10-15T11:44:13.6637139Z   ---
+2026-10-15T11:44:13.6637492Z   duration_ms: 27.643848
+2026-10-15T11:44:13.6637892Z   type: 'test'
+2026-10-15T11:44:13.6638235Z   ...
+2026-10-15T11:44:13.6639089Z # Subtest: default date window belongs to database and failed GET is never replaced or retried
+2026-10-15T11:44:13.6640400Z ok 248 - default date window belongs to database and failed GET is never replaced or retried
+2026-10-15T11:44:13.6641171Z   ---
+2026-10-15T11:44:13.6641526Z   duration_ms: 1.317243
+2026-10-15T11:44:13.6641916Z   type: 'test'
+2026-10-15T11:44:13.6642255Z   ...
+2026-10-15T11:44:13.6642788Z # Subtest: prepaint uses safe dark default for null
+2026-10-15T11:44:13.6643521Z ok 249 - prepaint uses safe dark default for null
+2026-10-15T11:44:13.6644035Z   ---
+2026-10-15T11:44:13.6644374Z   duration_ms: 2.21725
+2026-10-15T11:44:13.6644766Z   type: 'test'
+2026-10-15T11:44:13.6645106Z   ...
+2026-10-15T11:44:13.6645821Z # Subtest: prepaint uses safe dark default for dark
+2026-10-15T11:44:13.6646553Z ok 250 - prepaint uses safe dark default for dark
+2026-10-15T11:44:13.6647068Z   ---
+2026-10-15T11:44:13.6647409Z   duration_ms: 0.704592
+2026-10-15T11:44:13.6647803Z   type: 'test'
+2026-10-15T11:44:13.6648145Z   ...
+2026-10-15T11:44:13.6648697Z # Subtest: prepaint uses safe dark default for invalid
+2026-10-15T11:44:13.6649461Z ok 251 - prepaint uses safe dark default for invalid
+2026-10-15T11:44:13.6649989Z   ---
+2026-10-15T11:44:13.6650336Z   duration_ms: 0.666551
+2026-10-15T11:44:13.6650929Z   type: 'test'
+2026-10-15T11:44:13.6651282Z   ...
+2026-10-15T11:44:13.6651837Z # Subtest: prepaint uses safe dark default for <script>
+2026-10-15T11:44:13.6652608Z ok 252 - prepaint uses safe dark default for <script>
+2026-10-15T11:44:13.6653133Z   ---
+2026-10-15T11:44:13.6653467Z   duration_ms: 0.611098
+2026-10-15T11:44:13.6653850Z   type: 'test'
+2026-10-15T11:44:13.6654180Z   ...
+2026-10-15T11:44:13.6654999Z # Subtest: saved light is applied before the Vue store initializes
+2026-10-15T11:44:13.6656137Z ok 253 - saved light is applied before the Vue store initializes
+2026-10-15T11:44:13.6656731Z   ---
+2026-10-15T11:44:13.6657063Z   duration_ms: 0.812293
+2026-10-15T11:44:13.6657450Z   type: 'test'
+2026-10-15T11:44:13.6657786Z   ...
+2026-10-15T11:44:13.6658485Z # Subtest: two toggles update theme, metadata and only the preference key
+2026-10-15T11:44:13.6659512Z ok 254 - two toggles update theme, metadata and only the preference key
+2026-10-15T11:44:13.6660146Z   ---
+2026-10-15T11:44:13.6660494Z   duration_ms: 0.819396
+2026-10-15T11:44:13.6660884Z   type: 'test'
+2026-10-15T11:44:13.6661222Z   ...
+2026-10-15T11:44:13.6661880Z # Subtest: disabled storage never prevents boot or an in-page toggle
+2026-10-15T11:44:13.6662857Z ok 255 - disabled storage never prevents boot or an in-page toggle
+2026-10-15T11:44:13.6663459Z   ---
+2026-10-15T11:44:13.6663791Z   duration_ms: 0.854001
+2026-10-15T11:44:13.6664171Z   type: 'test'
+2026-10-15T11:44:13.6664500Z   ...
+2026-10-15T11:44:13.6665111Z # Subtest: missing browser theme metadata does not prevent switching
+2026-10-15T11:44:13.6666246Z ok 256 - missing browser theme metadata does not prevent switching
+2026-10-15T11:44:13.6666843Z   ---
+2026-10-15T11:44:13.6667193Z   duration_ms: 0.677031
+2026-10-15T11:44:13.6667577Z   type: 'test'
+2026-10-15T11:44:13.6667917Z   ...
+2026-10-15T11:44:13.6668498Z # Subtest: reduced motion never mounts or loads a GPU effect
+2026-10-15T11:44:13.6669304Z ok 257 - reduced motion never mounts or loads a GPU effect
+2026-10-15T11:44:13.6669848Z   ---
+2026-10-15T11:44:13.6670181Z   duration_ms: 2.383409
+2026-10-15T11:44:13.6670565Z   type: 'test'
+2026-10-15T11:44:13.6670896Z   ...
+2026-10-15T11:44:13.6671734Z # Subtest: always-on background ignores legacy pause preferences and has no control button
+2026-10-15T11:44:13.6672981Z ok 258 - always-on background ignores legacy pause preferences and has no control button
+2026-10-15T11:44:13.6673722Z   ---
+2026-10-15T11:44:13.6674043Z   duration_ms: 0.888485
+2026-10-15T11:44:13.6674410Z   type: 'test'
+2026-10-15T11:44:13.6674717Z   ...
+2026-10-15T11:44:13.6675580Z # Subtest: unsupported GPU becomes a static fallback without an exception
+2026-10-15T11:44:13.6676553Z ok 259 - unsupported GPU becomes a static fallback without an exception
+2026-10-15T11:44:13.6677165Z   ---
+2026-10-15T11:44:13.6677523Z   duration_ms: 0.76253
+2026-10-15T11:44:13.6677898Z   type: 'test'
+2026-10-15T11:44:13.6678217Z   ...
+2026-10-15T11:44:13.6678959Z # Subtest: visibility and system reduced motion still control the native renderer
+2026-10-15T11:44:13.6680057Z ok 260 - visibility and system reduced motion still control the native renderer
+2026-10-15T11:44:13.6680769Z   ---
+2026-10-15T11:44:13.6681127Z   duration_ms: 0.815669
+2026-10-15T11:44:13.6681521Z   type: 'test'
+2026-10-15T11:44:13.6681862Z   ...
+2026-10-15T11:44:13.6682610Z # Subtest: blocked storage remains usable and route disposal removes listeners
+2026-10-15T11:44:13.6683722Z ok 261 - blocked storage remains usable and route disposal removes listeners
+2026-10-15T11:44:13.6684399Z   ---
+2026-10-15T11:44:13.6684745Z   duration_ms: 0.815278
+2026-10-15T11:44:13.6685149Z   type: 'test'
+2026-10-15T11:44:13.6685717Z   ...
+2026-10-15T11:44:13.6686483Z # Subtest: resuming a frozen frame waits for the replacement renderer to be ready
+2026-10-15T11:44:13.6687621Z ok 262 - resuming a frozen frame waits for the replacement renderer to be ready
+2026-10-15T11:44:13.6688323Z   ---
+2026-10-15T11:44:13.6688665Z   duration_ms: 0.733476
+2026-10-15T11:44:13.6689061Z   type: 'test'
+2026-10-15T11:44:13.6689612Z   ...
+2026-10-15T11:44:13.6690296Z # Subtest: native Vue renderer is local, capped and telemetry-free
+2026-10-15T11:44:13.6691229Z ok 263 - native Vue renderer is local, capped and telemetry-free
+2026-10-15T11:44:13.6691848Z   ---
+2026-10-15T11:44:13.6692191Z   duration_ms: 0.334092
+2026-10-15T11:44:13.6692587Z   type: 'test'
+2026-10-15T11:44:13.6692924Z   ...
+2026-10-15T11:44:13.6693882Z # Subtest: native cursor motion warps the gradient and adds restrained fluid ripples
+2026-10-15T11:44:13.6695054Z ok 264 - native cursor motion warps the gradient and adds restrained fluid ripples
+2026-10-15T11:44:13.6695963Z   ---
+2026-10-15T11:44:13.6696311Z   duration_ms: 0.210723
+2026-10-15T11:44:13.6696712Z   type: 'test'
+2026-10-15T11:44:13.6697046Z   ...
+2026-10-15T11:44:13.6697930Z # Subtest: paused renderer releases cursor/GPU and stale captures cannot overwrite resumed state
+2026-10-15T11:44:13.6699338Z ok 265 - paused renderer releases cursor/GPU and stale captures cannot overwrite resumed state
+2026-10-15T11:44:13.6700143Z   ---
+2026-10-15T11:44:13.6700488Z   duration_ms: 11.629668
+2026-10-15T11:44:13.6700893Z   type: 'test'
+2026-10-15T11:44:13.6701226Z   ...
+2026-10-15T11:44:13.6702123Z # Subtest: login welcome and assistant welcome/conversation share one full-surface backdrop each
+2026-10-15T11:44:13.6703504Z ok 266 - login welcome and assistant welcome/conversation share one full-surface backdrop each
+2026-10-15T11:44:13.6704305Z   ---
+2026-10-15T11:44:13.6704662Z   duration_ms: 0.859521
+2026-10-15T11:44:13.6705056Z   type: 'test'
+2026-10-15T11:44:13.6705619Z   ...
+2026-10-15T11:44:13.6705928Z 1..266
+2026-10-15T11:44:13.6706259Z # tests 266
+2026-10-15T11:44:13.6706586Z # suites 0
+2026-10-15T11:44:13.6706925Z # pass 266
+2026-10-15T11:44:13.6707249Z # fail 0
+2026-10-15T11:44:13.6707579Z # cancelled 0
+2026-10-15T11:44:13.6707919Z # skipped 0
+2026-10-15T11:44:13.6708246Z # todo 0
+2026-10-15T11:44:13.6708619Z # duration_ms 3752.123662
+2026-10-15T11:44:13.7463030Z 
+2026-10-15T11:44:13.7463785Z > opspilot-web@0.1.0 build
+2026-10-15T11:44:13.7464458Z > vue-tsc -b && vite build
+2026-10-15T11:44:13.7464815Z 
+2026-10-15T11:44:20.7846076Z [36mvite v6.4.3 [32mbuilding for production...[36m[39m
+2026-10-15T11:44:20.8912781Z transforming...
+2026-10-15T11:44:29.3547425Z [32m✓[39m 2505 modules transformed.
+2026-10-15T11:44:29.9230889Z rendering chunks...
+2026-10-15T11:44:30.3570918Z computing gzip size...
+2026-10-15T11:44:30.4233154Z [2m../src/main/resources/static/[22m[32mindex.html                           [39m[1m[2m    0.57 kB[22m[1m[22m[2m │ gzip:   0.36 kB[22m
+2026-10-15T11:44:30.4235001Z [2m../src/main/resources/static/[22m[2massets/[22m[35mWorkbenchShader-CmNkJHi4.css  [39m[1m[2m    0.23 kB[22m[1m[22m[2m │ gzip:   0.14 kB[22m
+2026-10-15T11:44:30.4236641Z [2m../src/main/resources/static/[22m[2massets/[22m[35mindex-_M2bH0RX.css            [39m[1m[2m  241.34 kB[22m[1m[22m[2m │ gzip:  56.19 kB[22m
+2026-10-15T11:44:30.4238122Z [2m../src/main/resources/static/[22m[2massets/[22m[36mindex-CAah-bii.js             [39m[1m[2m  485.24 kB[22m[1m[22m[2m │ gzip: 152.35 kB[22m
+2026-10-15T11:44:30.4239452Z [2m../src/main/resources/static/[22m[2massets/[22m[36mWorkbenchShader-C0LyOz3z.js   [39m[1m[33m2,647.24 kB[39m[22m[2m │ gzip: 731.38 kB[22m
+2026-10-15T11:44:30.4240400Z [33m
+2026-10-15T11:44:30.4240848Z (!) Some chunks are larger than 500 kB after minification. Consider:
+2026-10-15T11:44:30.4241430Z - Using dynamic import() to code-split the application
+2026-10-15T11:44:30.4242474Z - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+2026-10-15T11:44:30.4243635Z - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+2026-10-15T11:44:30.4244222Z [32m✓ built in 9.61s[39m
+2026-10-15T11:44:33.6334992Z [INFO] Scanning for projects...
+2026-10-15T11:44:37.4807671Z [INFO] 
+2026-10-15T11:44:37.4809361Z [INFO] ------------------------< org.trigger:opspilot >------------------------
+2026-10-15T11:44:37.4810789Z [INFO] Building OpsPilot 0.1.0-SNAPSHOT
+2026-10-15T11:44:37.4811814Z [INFO]   from pom.xml
+2026-10-15T11:44:37.4812814Z [INFO] --------------------------------[ jar ]---------------------------------
+2026-10-15T11:44:49.2326636Z [INFO] 
+2026-10-15T11:44:49.2327982Z [INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+2026-10-15T11:44:49.8273901Z [INFO] Copying 1 resource from src/main/resources to target/classes
+2026-10-15T11:44:49.8534093Z [INFO] Copying 108 resources from src/main/resources to target/classes
+2026-10-15T11:44:49.8722277Z [INFO] 
+2026-10-15T11:44:49.8723393Z [INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+2026-10-15T11:44:51.1165623Z [INFO] Changes detected - recompiling the module! :source
+2026-10-15T11:44:51.1194404Z [INFO] Compiling 145 source files with javac [debug release 17] to target/classes
+2026-10-15T11:44:56.9098529Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java uses unchecked or unsafe operations.
+2026-10-15T11:44:56.9154161Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: Recompile with -Xlint:unchecked for details.
+2026-10-15T11:44:56.9175873Z [INFO] 
+2026-10-15T11:44:56.9206199Z [INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+2026-10-15T11:44:56.9236099Z [INFO] Copying 1 resource from src/test/resources to target/test-classes
+2026-10-15T11:44:56.9265729Z [INFO] 
+2026-10-15T11:44:56.9296126Z [INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+2026-10-15T11:44:56.9356105Z [INFO] Changes detected - recompiling the module! :dependency
+2026-10-15T11:44:56.9386240Z [INFO] Compiling 141 source files with javac [debug release 17] to target/test-classes
+2026-10-15T11:45:04.1723296Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/runbook/RunbookDocumentDiversityIntegrationTest.java: Some input files use unchecked or unsafe operations.
+2026-10-15T11:45:04.1748057Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/runbook/RunbookDocumentDiversityIntegrationTest.java: Recompile with -Xlint:unchecked for details.
+2026-10-15T11:45:04.1775837Z [INFO] 
+2026-10-15T11:45:04.1776482Z [INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+2026-10-15T11:45:06.7011631Z [INFO] Tests are skipped.
+2026-10-15T11:45:06.7036180Z [INFO] 
+2026-10-15T11:45:06.7053815Z [INFO] --- jar:3.3.0:jar (default-jar) @ opspilot ---
+2026-10-15T11:45:07.6477192Z [INFO] Building jar: /home/runner/work/OnCall-Agent/OnCall-Agent/target/opspilot-0.1.0-SNAPSHOT.jar
+2026-10-15T11:45:07.8550478Z [INFO] 
+2026-10-15T11:45:07.8566762Z [INFO] --- spring-boot:3.2.0:repackage (repackage) @ opspilot ---
+2026-10-15T11:45:10.0157192Z [INFO] Replacing main artifact /home/runner/work/OnCall-Agent/OnCall-Agent/target/opspilot-0.1.0-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+2026-10-15T11:45:10.0159783Z [INFO] The original artifact has been renamed to /home/runner/work/OnCall-Agent/OnCall-Agent/target/opspilot-0.1.0-SNAPSHOT.jar.original
+2026-10-15T11:45:10.0176791Z [INFO] ------------------------------------------------------------------------
+2026-10-15T11:45:10.0177706Z [INFO] BUILD SUCCESS
+2026-10-15T11:45:10.0178718Z [INFO] ------------------------------------------------------------------------
+2026-10-15T11:45:10.0179703Z [INFO] Total time:  36.410 s
+2026-10-15T11:45:10.0180545Z [INFO] Finished at: 2026-10-15T11:45:10Z
+2026-10-15T11:45:10.0181586Z [INFO] ------------------------------------------------------------------------
+2026-10-15T11:45:10.0698671Z ##[group]Run npm ci --prefix scripts/browser
+2026-10-15T11:45:10.0699088Z [36;1mnpm ci --prefix scripts/browser[0m
+2026-10-15T11:45:10.0699560Z [36;1mnode scripts/browser/node_modules/playwright/cli.js install --with-deps chromium[0m
+2026-10-15T11:45:10.0700097Z [36;1mnode --test scripts/tests/citation-source-ci.test.cjs[0m
+2026-10-15T11:45:10.0765909Z shell: /usr/bin/bash -e {0}
+2026-10-15T11:45:10.0766177Z env:
+2026-10-15T11:45:10.0766501Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T11:45:10.0767053Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T11:45:10.0767673Z   MAVEN_ARGS: -ntp
+2026-10-15T11:45:10.0767891Z ##[endgroup]
+2026-10-15T11:45:10.6963856Z 
+2026-10-15T11:45:10.6964587Z added 2 packages, and audited 3 packages in 560ms
+2026-10-15T11:45:10.6971917Z 
+2026-10-15T11:45:10.6972134Z found 0 vulnerabilities
+2026-10-15T11:45:11.2074673Z Installing dependencies...
+2026-10-15T11:45:11.2136518Z Switching to root user to install dependencies...
+2026-10-15T11:45:11.3035169Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-15T11:45:11.3332785Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-10-15T11:45:11.3466790Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-10-15T11:45:11.3514263Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-10-15T11:45:11.3541014Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-10-15T11:45:11.3580639Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-10-15T11:45:11.4221941Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [523 kB]
+2026-10-15T11:45:11.4387071Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.4 kB]
+2026-10-15T11:45:11.4418314Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [581 kB]
+2026-10-15T11:45:11.4483792Z Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main all Packages [640 B]
+2026-10-15T11:45:11.5373878Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1397 kB]
+2026-10-15T11:45:11.5447605Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [308 kB]
+2026-10-15T11:45:11.5469475Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1702 kB]
+2026-10-15T11:45:11.5548955Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [342 kB]
+2026-10-15T11:45:11.5571521Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1805 kB]
+2026-10-15T11:45:11.5661880Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [411 kB]
+2026-10-15T11:45:11.5691403Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [50.7 kB]
+2026-10-15T11:45:11.5697424Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.0 kB]
+2026-10-15T11:45:11.5941671Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [748 B]
+2026-10-15T11:45:11.6455834Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1144 kB]
+2026-10-15T11:45:11.6950396Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [231 kB]
+2026-10-15T11:45:11.6968450Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1221 kB]
+2026-10-15T11:45:11.7026033Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
+2026-10-15T11:45:11.7044019Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1713 kB]
+2026-10-15T11:45:11.7128574Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [392 kB]
+2026-10-15T11:45:11.7156185Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [45.4 kB]
+2026-10-15T11:45:11.7165923Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [12.1 kB]
+2026-10-15T11:45:14.7189520Z Fetched 12.5 MB in 1s (9728 kB/s)
+2026-10-15T11:45:15.6078251Z Reading package lists...
+2026-10-15T11:45:15.6319172Z Reading package lists...
+2026-10-15T11:45:15.8169243Z Building dependency tree...
+2026-10-15T11:45:15.8176699Z Reading state information...
+2026-10-15T11:45:15.9689026Z libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+2026-10-15T11:45:15.9690073Z libasound2t64 set to manually installed.
+2026-10-15T11:45:15.9691684Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-15T11:45:15.9692703Z libatk-bridge2.0-0t64 set to manually installed.
+2026-10-15T11:45:15.9693272Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-15T11:45:15.9693774Z libatk1.0-0t64 set to manually installed.
+2026-10-15T11:45:15.9694311Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+2026-10-15T11:45:15.9694829Z libatspi2.0-0t64 set to manually installed.
+2026-10-15T11:45:15.9695679Z libcairo2 is already the newest version (1.18.0-3build1).
+2026-10-15T11:45:15.9696420Z libcairo2 set to manually installed.
+2026-10-15T11:45:15.9697021Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+2026-10-15T11:45:15.9697524Z libcups2t64 set to manually installed.
+2026-10-15T11:45:15.9698033Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+2026-10-15T11:45:15.9698523Z libdbus-1-3 set to manually installed.
+2026-10-15T11:45:15.9699051Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+2026-10-15T11:45:15.9699760Z libdrm2 set to manually installed.
+2026-10-15T11:45:15.9700262Z libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.4).
+2026-10-15T11:45:15.9700748Z libgbm1 set to manually installed.
+2026-10-15T11:45:15.9701254Z libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.9).
+2026-10-15T11:45:15.9701776Z libglib2.0-0t64 set to manually installed.
+2026-10-15T11:45:15.9702295Z libnspr4 is already the newest version (2:4.35-1.1build1).
+2026-10-15T11:45:15.9702770Z libnspr4 set to manually installed.
+2026-10-15T11:45:15.9703316Z libnss3 is already the newest version (2:3.98-1ubuntu0.2).
+2026-10-15T11:45:15.9703694Z libnss3 set to manually installed.
+2026-10-15T11:45:15.9704105Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+2026-10-15T11:45:15.9704520Z libpango-1.0-0 set to manually installed.
+2026-10-15T11:45:15.9704901Z libxcb1 is already the newest version (1.15-1ubuntu2).
+2026-10-15T11:45:15.9705513Z libxcb1 set to manually installed.
+2026-10-15T11:45:15.9706022Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+2026-10-15T11:45:15.9706443Z libxcomposite1 set to manually installed.
+2026-10-15T11:45:15.9706959Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+2026-10-15T11:45:15.9707352Z libxdamage1 set to manually installed.
+2026-10-15T11:45:15.9707750Z libxext6 is already the newest version (2:1.3.4-1build2).
+2026-10-15T11:45:15.9708119Z libxext6 set to manually installed.
+2026-10-15T11:45:15.9708504Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+2026-10-15T11:45:15.9708897Z libxfixes3 set to manually installed.
+2026-10-15T11:45:15.9709292Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+2026-10-15T11:45:15.9709682Z libxkbcommon0 set to manually installed.
+2026-10-15T11:45:15.9710080Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+2026-10-15T11:45:15.9710454Z libxrandr2 set to manually installed.
+2026-10-15T11:45:15.9710851Z xvfb is already the newest version (2:21.1.12-1ubuntu1.8).
+2026-10-15T11:45:15.9711397Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+2026-10-15T11:45:15.9711959Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+2026-10-15T11:45:15.9712469Z libfontconfig1 set to manually installed.
+2026-10-15T11:45:15.9713103Z fonts-liberation is already the newest version (1:2.1.5-3).
+2026-10-15T11:45:15.9713547Z fonts-liberation set to manually installed.
+2026-10-15T11:45:15.9713958Z The following additional packages will be installed:
+2026-10-15T11:45:15.9714380Z   libx11-data libx11-xcb1 xfonts-encodings xfonts-utils
+2026-10-15T11:45:15.9714720Z Recommended packages:
+2026-10-15T11:45:15.9714993Z   fonts-ipafont-mincho fonts-tlwg-loma
+2026-10-15T11:45:15.9917687Z The following NEW packages will be installed:
+2026-10-15T11:45:15.9918507Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+2026-10-15T11:45:15.9923369Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+2026-10-15T11:45:15.9924455Z   xfonts-utils
+2026-10-15T11:45:15.9927622Z The following packages will be upgraded:
+2026-10-15T11:45:15.9931871Z   libfreetype6 libx11-6 libx11-data libx11-xcb1
+2026-10-15T11:45:16.0097636Z 4 upgraded, 9 newly installed, 0 to remove and 55 not upgraded.
+2026-10-15T11:45:16.0098342Z Need to get 22.3 MB of archives.
+2026-10-15T11:45:16.0098832Z After this operation, 79.6 MB of additional disk space will be used.
+2026-10-15T11:45:16.0099350Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-10-15T11:45:16.0406295Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+2026-10-15T11:45:16.0760864Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 libx11-6 amd64 2:1.8.7-1ubuntu0.1 [653 kB]
+2026-10-15T11:45:16.0939648Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 libx11-xcb1 amd64 2:1.8.7-1ubuntu0.1 [7796 B]
+2026-10-15T11:45:16.1082727Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 libx11-data all 2:1.8.7-1ubuntu0.1 [116 kB]
+2026-10-15T11:45:16.1234362Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+2026-10-15T11:45:16.1702522Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+2026-10-15T11:45:16.1851222Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+2026-10-15T11:45:16.2155453Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+2026-10-15T11:45:16.2709256Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libfreetype6 amd64 2.13.2+dfsg-1ubuntu0.2 [403 kB]
+2026-10-15T11:45:16.2874922Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+2026-10-15T11:45:16.3049956Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+2026-10-15T11:45:16.3199186Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+2026-10-15T11:45:16.3363771Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+2026-10-15T11:45:16.5912675Z Fetched 22.3 MB in 0s (65.7 MB/s)
+2026-10-15T11:45:16.6157269Z Selecting previously unselected package fonts-ipafont-gothic.
+2026-10-15T11:45:16.6472448Z (Reading database ... 
+2026-10-15T11:45:16.6472839Z (Reading database ... 5%
+2026-10-15T11:45:16.6473189Z (Reading database ... 10%
+2026-10-15T11:45:16.6473795Z (Reading database ... 15%
+2026-10-15T11:45:16.6474721Z (Reading database ... 20%
+2026-10-15T11:45:16.6475571Z (Reading database ... 25%
+2026-10-15T11:45:16.6476106Z (Reading database ... 30%
+2026-10-15T11:45:16.6476692Z (Reading database ... 35%
+2026-10-15T11:45:16.6477209Z (Reading database ... 40%
+2026-10-15T11:45:16.6477716Z (Reading database ... 45%
+2026-10-15T11:45:16.6478245Z (Reading database ... 50%
+2026-10-15T11:45:16.6528511Z (Reading database ... 55%
+2026-10-15T11:45:16.7338161Z (Reading database ... 60%
+2026-10-15T11:45:16.9359265Z (Reading database ... 65%
+2026-10-15T11:45:17.1277943Z (Reading database ... 70%
+2026-10-15T11:45:17.3272007Z (Reading database ... 75%
+2026-10-15T11:45:17.4778791Z (Reading database ... 80%
+2026-10-15T11:45:17.6750455Z (Reading database ... 85%
+2026-10-15T11:45:17.8270907Z (Reading database ... 90%
+2026-10-15T11:45:17.9904728Z (Reading database ... 95%
+2026-10-15T11:45:17.9905475Z (Reading database ... 100%
+2026-10-15T11:45:17.9906302Z (Reading database ... 203191 files and directories currently installed.)
+2026-10-15T11:45:17.9949133Z Preparing to unpack .../00-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+2026-10-15T11:45:18.0040977Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-15T11:45:18.2413985Z Preparing to unpack .../01-libx11-6_2%3a1.8.7-1ubuntu0.1_amd64.deb ...
+2026-10-15T11:45:18.2443878Z Unpacking libx11-6:amd64 (2:1.8.7-1ubuntu0.1) over (2:1.8.7-1build1) ...
+2026-10-15T11:45:18.2852275Z Preparing to unpack .../02-libx11-xcb1_2%3a1.8.7-1ubuntu0.1_amd64.deb ...
+2026-10-15T11:45:18.2879823Z Unpacking libx11-xcb1:amd64 (2:1.8.7-1ubuntu0.1) over (2:1.8.7-1build1) ...
+2026-10-15T11:45:18.3221353Z Preparing to unpack .../03-libx11-data_2%3a1.8.7-1ubuntu0.1_all.deb ...
+2026-10-15T11:45:18.3240291Z Unpacking libx11-data (2:1.8.7-1ubuntu0.1) over (2:1.8.7-1build1) ...
+2026-10-15T11:45:18.4174609Z Selecting previously unselected package fonts-freefont-ttf.
+2026-10-15T11:45:18.4306480Z Preparing to unpack .../04-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+2026-10-15T11:45:18.4314448Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-15T11:45:18.5072847Z Selecting previously unselected package fonts-tlwg-loma-otf.
+2026-10-15T11:45:18.5202152Z Preparing to unpack .../05-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+2026-10-15T11:45:18.5208797Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-15T11:45:18.5403716Z Selecting previously unselected package fonts-unifont.
+2026-10-15T11:45:18.5532255Z Preparing to unpack .../06-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+2026-10-15T11:45:18.5538770Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+2026-10-15T11:45:18.6548520Z Selecting previously unselected package fonts-wqy-zenhei.
+2026-10-15T11:45:18.6680653Z Preparing to unpack .../07-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+2026-10-15T11:45:18.6778927Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-15T11:45:19.1532747Z Preparing to unpack .../08-libfreetype6_2.13.2+dfsg-1ubuntu0.2_amd64.deb ...
+2026-10-15T11:45:19.1557020Z Unpacking libfreetype6:amd64 (2.13.2+dfsg-1ubuntu0.2) over (2.13.2+dfsg-1ubuntu0.1) ...
+2026-10-15T11:45:19.1817074Z Selecting previously unselected package xfonts-encodings.
+2026-10-15T11:45:19.1947430Z Preparing to unpack .../09-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+2026-10-15T11:45:19.1957320Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-15T11:45:19.2231101Z Selecting previously unselected package xfonts-utils.
+2026-10-15T11:45:19.2360743Z Preparing to unpack .../10-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+2026-10-15T11:45:19.2371207Z Unpacking xfonts-utils (1:7.7+6build3) ...
+2026-10-15T11:45:19.2729066Z Selecting previously unselected package xfonts-cyrillic.
+2026-10-15T11:45:19.2857685Z Preparing to unpack .../11-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+2026-10-15T11:45:19.2866420Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-15T11:45:19.3200615Z Selecting previously unselected package xfonts-scalable.
+2026-10-15T11:45:19.3327836Z Preparing to unpack .../12-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+2026-10-15T11:45:19.3335862Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-15T11:45:19.3761469Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-15T11:45:19.3877809Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+2026-10-15T11:45:19.3896678Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+2026-10-15T11:45:19.3913675Z Setting up libfreetype6:amd64 (2.13.2+dfsg-1ubuntu0.2) ...
+2026-10-15T11:45:19.3933315Z Setting up libx11-data (2:1.8.7-1ubuntu0.1) ...
+2026-10-15T11:45:19.3951429Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+2026-10-15T11:45:19.3969298Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+2026-10-15T11:45:19.4033442Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+2026-10-15T11:45:19.4051438Z Setting up libx11-6:amd64 (2:1.8.7-1ubuntu0.1) ...
+2026-10-15T11:45:19.4078361Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+2026-10-15T11:45:19.4100325Z Setting up libx11-xcb1:amd64 (2:1.8.7-1ubuntu0.1) ...
+2026-10-15T11:45:19.4116979Z Setting up xfonts-utils (1:7.7+6build3) ...
+2026-10-15T11:45:19.4154341Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+2026-10-15T11:45:19.4434115Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+2026-10-15T11:45:19.4710231Z Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+2026-10-15T11:45:19.5060035Z Processing triggers for man-db (2.12.0-4build2) ...
+2026-10-15T11:45:19.5083046Z Not building database; man-db/auto-update is not 'true'.
+2026-10-15T11:45:19.5097819Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+2026-10-15T11:45:20.2616369Z 
+2026-10-15T11:45:20.2617027Z Running kernel seems to be up-to-date.
+2026-10-15T11:45:20.2626492Z 
+2026-10-15T11:45:20.2626728Z Restarting services...
+2026-10-15T11:45:20.2694615Z  systemctl restart php8.3-fpm.service
+2026-10-15T11:45:20.3756167Z 
+2026-10-15T11:45:20.3757342Z No containers need to be restarted.
+2026-10-15T11:45:20.3757776Z 
+2026-10-15T11:45:20.3758192Z No user sessions are running outdated binaries.
+2026-10-15T11:45:20.3758592Z 
+2026-10-15T11:45:20.3759137Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-10-15T11:45:21.2586926Z Downloading Chrome for Testing 153.0.8010.12 (playwright chromium v1243) from https://cdn.playwright.dev/builds/cft/153.0.8010.12/linux64/chrome-linux64.zip
+2026-10-15T11:45:21.6467584Z |                                                                                |   0% of 186.8 MiB
+2026-10-15T11:45:21.8152734Z |■■■■■■■■                                                                        |  10% of 186.8 MiB
+2026-10-15T11:45:21.9103184Z |■■■■■■■■■■■■■■■■                                                                |  20% of 186.8 MiB
+2026-10-15T11:45:21.9879890Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 186.8 MiB
+2026-10-15T11:45:22.0648782Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 186.8 MiB
+2026-10-15T11:45:22.1329218Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 186.8 MiB
+2026-10-15T11:45:22.2181746Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 186.8 MiB
+2026-10-15T11:45:22.2983776Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 186.8 MiB
+2026-10-15T11:45:22.3660664Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 186.8 MiB
+2026-10-15T11:45:22.4407270Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 186.8 MiB
+2026-10-15T11:45:22.5086076Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 186.8 MiB
+2026-10-15T11:45:25.2905407Z Chrome for Testing 153.0.8010.12 (playwright chromium v1243) downloaded to /home/runner/.cache/ms-playwright/chromium-1243
+2026-10-15T11:45:25.2909146Z Downloading FFmpeg (playwright ffmpeg v1011) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux.zip
+2026-10-15T11:45:25.6488647Z |                                                                                |   0% of 2.3 MiB
+2026-10-15T11:45:25.6522877Z |■■■■■■■■                                                                        |  10% of 2.3 MiB
+2026-10-15T11:45:25.6551462Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.3 MiB
+2026-10-15T11:45:25.6575985Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.3 MiB
+2026-10-15T11:45:25.6596436Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.3 MiB
+2026-10-15T11:45:25.6610796Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.3 MiB
+2026-10-15T11:45:25.6629897Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.3 MiB
+2026-10-15T11:45:25.6644510Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.3 MiB
+2026-10-15T11:45:25.6664395Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.3 MiB
+2026-10-15T11:45:25.6682974Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.3 MiB
+2026-10-15T11:45:25.6693656Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.3 MiB
+2026-10-15T11:45:25.7429140Z FFmpeg (playwright ffmpeg v1011) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1011
+2026-10-15T11:45:25.7432307Z Downloading Chrome Headless Shell 153.0.8010.12 (playwright chromium-headless-shell v1243) from https://cdn.playwright.dev/builds/cft/153.0.8010.12/linux64/chrome-headless-shell-linux64.zip
+2026-10-15T11:45:26.1459726Z |                                                                                |   0% of 114.3 MiB
+2026-10-15T11:45:26.2856899Z |■■■■■■■■                                                                        |  10% of 114.3 MiB
+2026-10-15T11:45:26.3547343Z |■■■■■■■■■■■■■■■■                                                                |  20% of 114.3 MiB
+2026-10-15T11:45:26.4178511Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 114.3 MiB
+2026-10-15T11:45:26.4786519Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 114.3 MiB
+2026-10-15T11:45:26.5503399Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 114.3 MiB
+2026-10-15T11:45:26.5981063Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 114.3 MiB
+2026-10-15T11:45:26.6495124Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 114.3 MiB
+2026-10-15T11:45:26.7082628Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 114.3 MiB
+2026-10-15T11:45:26.7717667Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 114.3 MiB
+2026-10-15T11:45:26.8154077Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 114.3 MiB
+2026-10-15T11:45:28.7814960Z Chrome Headless Shell 153.0.8010.12 (playwright chromium-headless-shell v1243) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1243
+2026-10-15T11:45:28.8371385Z TAP version 13
+2026-10-15T11:45:28.8813680Z # Subtest: accepts only both fresh, identical six-case products
+2026-10-15T11:45:28.8822203Z ok 1 - accepts only both fresh, identical six-case products
+2026-10-15T11:45:28.8823680Z   ---
+2026-10-15T11:45:28.8824098Z   duration_ms: 3.655728
+2026-10-15T11:45:28.8824571Z   type: 'test'
+2026-10-15T11:45:28.8825014Z   ...
+2026-10-15T11:45:28.8830250Z # Subtest: rejects stale XML, skipped cases and wrong database product
+2026-10-15T11:45:28.8832649Z ok 2 - rejects stale XML, skipped cases and wrong database product
+2026-10-15T11:45:28.8833389Z   ---
+2026-10-15T11:45:28.8833783Z   duration_ms: 3.703267
+2026-10-15T11:45:28.8834219Z   type: 'test'
+2026-10-15T11:45:28.8834593Z   ...
+2026-10-15T11:45:28.8835971Z # Subtest: rejects divergent or duplicate scenarios instead of trusting aggregate counts
+2026-10-15T11:45:28.8839048Z ok 3 - rejects divergent or duplicate scenarios instead of trusting aggregate counts
+2026-10-15T11:45:28.8839927Z   ---
+2026-10-15T11:45:28.8840463Z   duration_ms: 1.799221
+2026-10-15T11:45:28.8841083Z   type: 'test'
+2026-10-15T11:45:28.8841612Z   ...
+2026-10-15T11:45:28.8848219Z # Subtest: Linux UI gates retain all flows and force the freshly packaged default JAR in CI
+2026-10-15T11:45:28.8849734Z ok 4 - Linux UI gates retain all flows and force the freshly packaged default JAR in CI
+2026-10-15T11:45:28.8850710Z   ---
+2026-10-15T11:45:28.8851236Z   duration_ms: 0.576934
+2026-10-15T11:45:28.8851829Z   type: 'test'
+2026-10-15T11:45:28.8852342Z   ...
+2026-10-15T11:45:28.8853476Z # Subtest: database CI requires opt-in MySQL plus non-skipping evidence, browser CI builds actual source
+2026-10-15T11:45:28.8855211Z ok 5 - database CI requires opt-in MySQL plus non-skipping evidence, browser CI builds actual source
+2026-10-15T11:45:28.8856528Z   ---
+2026-10-15T11:45:28.8857045Z   duration_ms: 0.398122
+2026-10-15T11:45:28.8857531Z   type: 'test'
+2026-10-15T11:45:28.8857912Z   ...
+2026-10-15T11:45:28.8924683Z 1..5
+2026-10-15T11:45:28.8925072Z # tests 5
+2026-10-15T11:45:28.8925827Z # suites 0
+2026-10-15T11:45:28.8926474Z # pass 5
+2026-10-15T11:45:28.8936145Z # fail 0
+2026-10-15T11:45:28.8946436Z # cancelled 0
+2026-10-15T11:45:28.8946857Z # skipped 0
+2026-10-15T11:45:28.8947247Z # todo 0
+2026-10-15T11:45:28.8947616Z # duration_ms 67.668239
+2026-10-15T11:45:28.9008937Z ##[group]Run node scripts/verify-runbook-citation-ui.cjs
+2026-10-15T11:45:28.9009392Z [36;1mnode scripts/verify-runbook-citation-ui.cjs[0m
+2026-10-15T11:45:28.9073534Z shell: /usr/bin/bash -e {0}
+2026-10-15T11:45:28.9073782Z env:
+2026-10-15T11:45:28.9074096Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T11:45:28.9074625Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T11:45:28.9075040Z   MAVEN_ARGS: -ntp
+2026-10-15T11:45:28.9075520Z ##[endgroup]
+2026-10-15T11:45:49.0827113Z {"status":"PASS","out":"/home/runner/work/OnCall-Agent/OnCall-Agent/target/runbook-citation-ui-it/opspilot-citation-ui-OfSSGq","mode":"CI_FRESH_BUILD","sourceCommit":"85ed35a83ca524d4da6b088c15dca7fe6ff2b19f","browser":"Browser plugin not available; existing Playwright/Chromium","userDatabaseModified":false,"realCloudModel":false,"runs":[{"label":"after","jar":"target/opspilot-0.1.0-SNAPSHOT.jar","jarSha256":"9d0607b41e8fd1eeb6022e32635fae7ff8e0338ce143159eda3f309b4101eea5","fixtureSha256":"c069eb197689e0046facd7d133d6d72aa1e04226f4a4b21f7ac5e54eeab37c54","cases":[{"name":"exact-historical-source-full-text-escaped-native-modal-and-focus","passed":true,"contentLength":988},{"name":"dark-desktop-and-two-mobile-heights","passed":true},{"name":"read-failure-retry-and-wrong-version-response-fail-closed","passed":true},{"name":"close-aborts-late-source-and-fresh-open-still-works","passed":true},{"name":"account-switch-discards-late-private-source","passed":true}],"answerSha256":"82f1904ab60784f6d913b36c7a28e78196ad5a7dd039d85cc99714cc79fa9762","savedMessages":2,"keyboardFocus":{"insideModal":true,"activeTag":"BUTTON","activeClass":"icon-button","nativeModal":true},"originalAnswerUnchanged":true,"shutdown":true,"exitCode":0,"portsFree":true}],"screenshots":[{"file":"after-source-light1440.png","width":1440,"height":1000,"scrollWidth":1440,"theme":"light"},{"file":"after-source-dark1440.png","width":1440,"height":1000,"scrollWidth":1440,"theme":"dark"},{"file":"after-source-dark390.png","width":390,"height":844,"scrollWidth":390,"theme":"dark"},{"file":"after-source-dark390x600.png","width":390,"height":600,"scrollWidth":390,"theme":"dark"},{"file":"source-unavailable-mobile.png","width":390,"height":600,"scrollWidth":390,"theme":"dark"},{"file":"source-mismatch-mobile.png","width":390,"height":600,"scrollWidth":390,"theme":"dark"}],"errors":[],"expectedErrors":[{"label":"after","type":"console","message":"Failed to load resource: the server responded with a status of 503 (Service Unavailable)"}],"warnings":[]}
+2026-10-15T11:45:49.0988774Z ##[group]Run actions/upload-artifact@v5
+2026-10-15T11:45:49.0989108Z with:
+2026-10-15T11:45:49.0989343Z   name: citation-browser-evidence
+2026-10-15T11:45:49.0989639Z   path: target/runbook-citation-ui-it/
+2026-10-15T11:45:49.0989936Z   retention-days: 30
+2026-10-15T11:45:49.0990169Z   if-no-files-found: warn
+2026-10-15T11:45:49.0990399Z   compression-level: 6
+2026-10-15T11:45:49.0990613Z   overwrite: false
+2026-10-15T11:45:49.0990827Z   include-hidden-files: false
+2026-10-15T11:45:49.0991059Z env:
+2026-10-15T11:45:49.0991371Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T11:45:49.0991878Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T11:45:49.0992281Z   MAVEN_ARGS: -ntp
+2026-10-15T11:45:49.0992492Z ##[endgroup]
+2026-10-15T11:45:49.2657484Z (node:3998) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-15T11:45:49.2658428Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-15T11:45:49.2757381Z With the provided path, there will be 9 files uploaded
+2026-10-15T11:45:49.2764022Z Artifact name is valid!
+2026-10-15T11:45:49.2764786Z Root directory input is valid!
+2026-10-15T11:45:49.4778719Z Beginning upload of artifact content to blob storage
+2026-10-15T11:45:49.5479104Z (node:3998) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-15T11:45:49.6008706Z Uploaded bytes 929817
+2026-10-15T11:45:49.6166445Z Finished uploading artifact content to blob storage!
+2026-10-15T11:45:49.6167963Z SHA256 digest of uploaded artifact zip is a4a85c8f8d0fb62237b734b042cd9e8fee6aa5ca10920c9add694eb40bede0bd
+2026-10-15T11:45:49.6169323Z Finalizing artifact upload
+2026-10-15T11:45:49.8432020Z Artifact citation-browser-evidence.zip successfully finalized. Artifact ID 11969537857
+2026-10-15T11:45:49.8433347Z Artifact citation-browser-evidence has been successfully uploaded! Final size is 929817 bytes. Artifact ID is 11969537857
+2026-10-15T11:45:49.8440096Z Artifact download URL: https://github.com/Trigger726/OnCall-Agent/actions/runs/38729410129/artifacts/11969537857
+2026-10-15T11:45:49.8623735Z Post job cleanup.
+2026-10-15T11:45:49.9903208Z (node:4010) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-15T11:45:49.9904208Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-15T11:45:50.0137016Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/OnCall-Agent/OnCall-Agent --files-from manifest.txt --use-compress-program zstdmt
+2026-10-15T11:45:50.1965671Z (node:4010) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-15T11:45:50.5817092Z Sent 27537953 of 27537953 (100.0%), 66.7 MBs/sec
+2026-10-15T11:45:50.6836251Z Cache saved with the key: node-cache-Linux-x64-npm-95d45f7052fd76153d232247837b7d8ce02f9ae26cadceac4649af5e61b27d84
+2026-10-15T11:45:50.6995193Z Post job cleanup.
+2026-10-15T11:45:50.8575709Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/OnCall-Agent/OnCall-Agent --files-from manifest.txt --use-compress-program zstdmt
+2026-10-15T11:45:50.9874394Z Failed to save: Unable to reserve cache with key setup-java-Linux-x64-maven-wrapper-4010b7b513ce627636150913aad6edbf72eda4862fdc6f4a8c75796c51ae597a, another job may be creating this cache.
+2026-10-15T11:45:50.9991805Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/OnCall-Agent/OnCall-Agent --files-from manifest.txt --use-compress-program zstdmt
+2026-10-15T11:45:51.3896831Z Failed to save: Unable to reserve cache with key setup-java-Linux-x64-maven-d32cb843aa19f08330bb1496da7a1a49cc2deb22a4e49d97b309eae19c7fe74e, another job may be creating this cache.
+2026-10-15T11:45:51.4171741Z Post job cleanup.
+2026-10-15T11:45:51.5031989Z [command]/usr/bin/git version
+2026-10-15T11:45:51.5076346Z git version 2.55.0
+2026-10-15T11:45:51.5119749Z Temporarily overriding HOME='/home/runner/work/_temp/ce33cc54-f886-4f99-81e8-17327a3bd45a' before making global git config changes
+2026-10-15T11:45:51.5121837Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-15T11:45:51.5126612Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-15T11:45:51.5172733Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T11:45:51.5218742Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-15T11:45:51.5489753Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-15T11:45:51.5520175Z http.https://github.com/.extraheader
+2026-10-15T11:45:51.5533096Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-15T11:45:51.5571325Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-15T11:45:51.5850721Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-15T11:45:51.5896846Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-15T11:45:51.6306430Z Cleaning up orphan processes
+2026-10-15T11:45:51.6705911Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/upload-artifact@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

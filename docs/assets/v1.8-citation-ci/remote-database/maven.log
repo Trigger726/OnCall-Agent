@@ -1,0 +1,218 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< org.trigger:opspilot >------------------------
+[INFO] Building OpsPilot 0.1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 143 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 145 source files with javac [debug release 17] to target/classes
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java uses unchecked or unsafe operations.
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+[INFO] Copying 1 resource from src/test/resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+[INFO] Changes detected - recompiling the module! :dependency
+[INFO] Compiling 141 source files with javac [debug release 17] to target/test-classes
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/runbook/RunbookDocumentDiversityIntegrationTest.java: Some input files use unchecked or unsafe operations.
+[INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/runbook/RunbookDocumentDiversityIntegrationTest.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.trigger.opspilot.runbook.MySqlRunbookCitationIntegrationTest
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+11:45:05.208 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.trigger.opspilot.runbook.MySqlRunbookCitationIntegrationTest]: MySqlRunbookCitationIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+11:45:05.421 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.runbook.MySqlRunbookCitationIntegrationTest
+11:45:05.572 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-15T11:45:05.893Z  INFO 3236 --- [opspilot] [           main] .o.r.MySqlRunbookCitationIntegrationTest : Starting MySqlRunbookCitationIntegrationTest using Java 17.0.20.1 with PID 3236 (started by runner in /home/runner/work/OnCall-Agent/OnCall-Agent)
+2026-10-15T11:45:05.895Z  INFO 3236 --- [opspilot] [           main] .o.r.MySqlRunbookCitationIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-15T11:45:07.563Z  INFO 3236 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-15T11:45:07.566Z  INFO 3236 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-15T11:45:07.613Z  INFO 3236 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 34 ms. Found 0 Redis repository interfaces.
+2026-10-15T11:45:08.170Z  INFO 3236 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-15T11:45:08.486Z  INFO 3236 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@300aa927
+2026-10-15T11:45:08.488Z  INFO 3236 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-15T11:45:08.579Z  INFO 3236 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
+2026-10-15T11:45:08.580Z  INFO 3236 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2026-10-15T11:45:08.580Z  INFO 3236 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : 
+2026-10-15T11:45:08.605Z  INFO 3236 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://127.0.0.1:3306/opspilot_citation_ci (MySQL 8.4)
+2026-10-15T11:45:08.622Z  WARN 3236 --- [opspilot] [           main] o.f.c.internal.database.base.Database    : Flyway upgrade recommended: MySQL 8.4 is newer than this version of Flyway and support has not been tested. The latest supported version of MySQL is 8.0.
+2026-10-15T11:45:08.668Z  INFO 3236 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table `opspilot_citation_ci`.`flyway_schema_history` does not exist yet
+2026-10-15T11:45:08.673Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.038s)
+2026-10-15T11:45:08.700Z  INFO 3236 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table `opspilot_citation_ci`.`flyway_schema_history` ...
+2026-10-15T11:45:08.759Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `opspilot_citation_ci`: << Empty Schema >>
+2026-10-15T11:45:08.796Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "1 - init opspilot"
+2026-10-15T11:45:09.036Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "2 - assistant conversations"
+2026-10-15T11:45:09.113Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "3 - agent investigation runs"
+2026-10-15T11:45:09.180Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "4 - observability evidence"
+2026-10-15T11:45:09.236Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "5 - agent events and remediation proposals"
+2026-10-15T11:45:09.287Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "6 - agent run controls"
+2026-10-15T11:45:09.476Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "7 - runbook knowledge base"
+2026-10-15T11:45:09.547Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "8 - hybrid runbook retrieval"
+2026-10-15T11:45:09.636Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "9 - runbook relevance feedback"
+2026-10-15T11:45:09.735Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "10 - graded runbook relevance evaluation"
+2026-10-15T11:45:09.793Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "11 - runbook judgment agreement"
+2026-10-15T11:45:09.841Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-15T11:45:09.942Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "13 - incident postmortems"
+2026-10-15T11:45:10.001Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "14 - incident analytics and follow up escalations"
+2026-10-15T11:45:10.031Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "15 - recurring incident problems"
+2026-10-15T11:45:10.085Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "16 - agent event outbox"
+2026-10-15T11:45:10.114Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "17 - outbox timestamp precision"
+2026-10-15T11:45:10.181Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "18 - outbox retention index"
+2026-10-15T11:45:10.199Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "19 - service slo objectives"
+2026-10-15T11:45:10.239Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "20 - alert ingest rejections"
+2026-10-15T11:45:10.292Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "21 - alert rejection lifecycle"
+2026-10-15T11:45:10.440Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "22 - follow up notification outbox"
+2026-10-15T11:45:10.468Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "23 - follow up owner acknowledgement"
+2026-10-15T11:45:10.541Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "24 - incident escalation execution"
+2026-10-15T11:45:10.581Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "25 - oncall roster management"
+2026-10-15T11:45:10.628Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "26 - oncall rotations"
+2026-10-15T11:45:10.709Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "27 - oncall handoff requests"
+2026-10-15T11:45:10.745Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "28 - oncall handoff revocations"
+2026-10-15T11:45:10.766Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "29 - runbook returned document count"
+2026-10-15T11:45:10.827Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "30 - runbook publication review"
+2026-10-15T11:45:11.049Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "31 - account auth version"
+2026-10-15T11:45:11.181Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "32 - assistant request idempotency"
+2026-10-15T11:45:11.203Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "33 - assistant queue and cancel"
+2026-10-15T11:45:11.237Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "34 - oncall shift swaps"
+2026-10-15T11:45:11.286Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "35 - oncall swap notification outbox"
+2026-10-15T11:45:11.322Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "36 - oncall swap notification payload retention"
+2026-10-15T11:45:11.365Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "37 - oncall swap revocations"
+2026-10-15T11:45:11.385Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "38 - oncall open handoffs"
+2026-10-15T11:45:11.435Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "39 - oncall plan memberships"
+2026-10-15T11:45:11.472Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "40 - open handoff publication snapshots"
+2026-10-15T11:45:11.489Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "41 - open handoff notification outbox"
+2026-10-15T11:45:11.520Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "42 - open notification redrive receipts"
+2026-10-15T11:45:11.574Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "43 - runbook retrieval scope snapshots"
+2026-10-15T11:45:11.625Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 43 migrations to schema `opspilot_citation_ci`, now at version v43 (execution time 00:02.256s)
+2026-10-15T11:45:13.223Z  INFO 3236 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-15T11:45:13.520Z  INFO 3236 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1a865ebf, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6b3d3e57, org.springframework.security.web.context.SecurityContextHolderFilter@30f54522, org.springframework.security.web.header.HeaderWriterFilter@2738a1fc, org.springframework.web.filter.CorsFilter@15251cc2, org.springframework.security.web.authentication.logout.LogoutFilter@755a4ef5, org.trigger.opspilot.security.JwtAuthenticationFilter@6277a496, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@43e9a8a2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@178617da, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7bdaf563, org.springframework.security.web.session.SessionManagementFilter@d8cece4, org.springframework.security.web.access.ExceptionTranslationFilter@3f2feab7, org.springframework.security.web.access.intercept.AuthorizationFilter@4446a191]
+2026-10-15T11:45:14.585Z  INFO 3236 --- [opspilot] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-15T11:45:14.585Z  INFO 3236 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-15T11:45:14.588Z  INFO 3236 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-10-15T11:45:14.693Z  INFO 3236 --- [opspilot] [           main] .o.r.MySqlRunbookCitationIntegrationTest : Started MySqlRunbookCitationIntegrationTest in 9.131 seconds (process running for 10.346)
+OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+CITATION_DATABASE MySqlRunbookCitationIntegrationTest|MySQL|8.4.11
+CITATION_DATABASE MySqlRunbookCitationIntegrationTest|MySQL|8.4.11
+CITATION_DATABASE MySqlRunbookCitationIntegrationTest|MySQL|8.4.11
+CITATION_DATABASE MySqlRunbookCitationIntegrationTest|MySQL|8.4.11
+CITATION_DATABASE MySqlRunbookCitationIntegrationTest|MySQL|8.4.11
+CITATION_DATABASE MySqlRunbookCitationIntegrationTest|MySQL|8.4.11
+2026-10-15T11:45:19.680Z  INFO 3236 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-15T11:45:19.688Z  INFO 3236 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 14.66 s -- in org.trigger.opspilot.runbook.MySqlRunbookCitationIntegrationTest
+[INFO] Running org.trigger.opspilot.runbook.RunbookCitationIntegrationTest
+2026-10-15T11:45:19.697Z  INFO 3236 --- [opspilot] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.trigger.opspilot.runbook.RunbookCitationIntegrationTest]: RunbookCitationIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-15T11:45:19.703Z  INFO 3236 --- [opspilot] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.runbook.RunbookCitationIntegrationTest
+2026-10-15T11:45:19.706Z  INFO 3236 --- [opspilot] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-10-15T11:45:19.746Z  INFO 3236 --- [opspilot] [           main] o.t.o.r.RunbookCitationIntegrationTest   : Starting RunbookCitationIntegrationTest using Java 17.0.20.1 with PID 3236 (started by runner in /home/runner/work/OnCall-Agent/OnCall-Agent)
+2026-10-15T11:45:19.746Z  INFO 3236 --- [opspilot] [           main] o.t.o.r.RunbookCitationIntegrationTest   : No active profile set, falling back to 1 default profile: "default"
+2026-10-15T11:45:20.321Z  INFO 3236 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-15T11:45:20.321Z  INFO 3236 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-15T11:45:20.347Z  INFO 3236 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25 ms. Found 0 Redis repository interfaces.
+2026-10-15T11:45:20.504Z  INFO 3236 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-10-15T11:45:20.712Z  INFO 3236 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection conn0: url=jdbc:h2:mem:runbook-citation user=SA
+2026-10-15T11:45:20.712Z  INFO 3236 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-10-15T11:45:20.754Z  INFO 3236 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:runbook-citation (H2 2.2)
+2026-10-15T11:45:20.775Z  INFO 3236 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-15T11:45:20.777Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.013s)
+2026-10-15T11:45:20.780Z  INFO 3236 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-15T11:45:20.795Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-15T11:45:20.802Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-15T11:45:20.877Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-15T11:45:20.888Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-15T11:45:20.900Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-15T11:45:20.914Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-15T11:45:20.927Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-15T11:45:20.985Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-15T11:45:21.009Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-15T11:45:21.027Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-15T11:45:21.050Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-15T11:45:21.067Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-15T11:45:21.077Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-15T11:45:21.093Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-15T11:45:21.105Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-15T11:45:21.114Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-15T11:45:21.125Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-15T11:45:21.130Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-15T11:45:21.140Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-15T11:45:21.144Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-15T11:45:21.157Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-15T11:45:21.166Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-15T11:45:21.201Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-15T11:45:21.207Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-15T11:45:21.222Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-15T11:45:21.232Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-15T11:45:21.247Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-15T11:45:21.262Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-15T11:45:21.271Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-15T11:45:21.276Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-15T11:45:21.285Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-15T11:45:21.331Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-15T11:45:21.346Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-15T11:45:21.352Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-15T11:45:21.356Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-15T11:45:21.368Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-15T11:45:21.374Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-15T11:45:21.388Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-15T11:45:21.393Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-15T11:45:21.403Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "39 - oncall plan memberships"
+2026-10-15T11:45:21.414Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "40 - open handoff publication snapshots"
+2026-10-15T11:45:21.418Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "41 - open handoff notification outbox"
+2026-10-15T11:45:21.425Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "42 - open notification redrive receipts"
+2026-10-15T11:45:21.435Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "43 - runbook retrieval scope snapshots"
+2026-10-15T11:45:21.454Z  INFO 3236 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 43 migrations to schema "public", now at version v43 (execution time 00:00.479s)
+2026-10-15T11:45:21.791Z  INFO 3236 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-15T11:45:21.910Z  INFO 3236 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@697c0ae6, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@28aeab8a, org.springframework.security.web.context.SecurityContextHolderFilter@48528d5d, org.springframework.security.web.header.HeaderWriterFilter@375c6b98, org.springframework.web.filter.CorsFilter@76425cc2, org.springframework.security.web.authentication.logout.LogoutFilter@276ccfec, org.trigger.opspilot.security.JwtAuthenticationFilter@79d15b02, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@369fc9bd, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@62cb645d, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1285b1f8, org.springframework.security.web.session.SessionManagementFilter@f22cf0e, org.springframework.security.web.access.ExceptionTranslationFilter@44474e84, org.springframework.security.web.access.intercept.AuthorizationFilter@56a640a2]
+2026-10-15T11:45:22.153Z  INFO 3236 --- [opspilot] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:runbook-citation'
+2026-10-15T11:45:22.177Z  INFO 3236 --- [opspilot] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-15T11:45:22.178Z  INFO 3236 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-15T11:45:22.179Z  INFO 3236 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-15T11:45:22.211Z  INFO 3236 --- [opspilot] [           main] o.t.o.r.RunbookCitationIntegrationTest   : Started RunbookCitationIntegrationTest in 2.505 seconds (process running for 17.865)
+CITATION_DATABASE RunbookCitationIntegrationTest|H2|2.2.220 (2023-07-04)
+CITATION_DATABASE RunbookCitationIntegrationTest|H2|2.2.220 (2023-07-04)
+CITATION_DATABASE RunbookCitationIntegrationTest|H2|2.2.220 (2023-07-04)
+CITATION_DATABASE RunbookCitationIntegrationTest|H2|2.2.220 (2023-07-04)
+CITATION_DATABASE RunbookCitationIntegrationTest|H2|2.2.220 (2023-07-04)
+CITATION_DATABASE RunbookCitationIntegrationTest|H2|2.2.220 (2023-07-04)
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.724 s -- in org.trigger.opspilot.runbook.RunbookCitationIntegrationTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  52.030 s
+[INFO] Finished at: 2026-10-15T11:45:25Z
+[INFO] ------------------------------------------------------------------------
