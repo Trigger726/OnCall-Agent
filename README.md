@@ -1,5 +1,7 @@
 # OpsPilot
 
+最新阅读体验：[CP10 安全代码块、原始步骤与正文引用](docs/acceptance/V1.8-checkpoint-10-answer-reader.md)。修复代码围栏内注释导致入库截断；170 Java/282 前端/299 脚本、原生 H2/MySQL 38 项及独立 Linux 两作业通过，原始附件已核验。新旧同回答对比确认步骤 1,2,1,2 不再被重排，精确来源可读；独立 Demo 9930，旧预览与 27 份命名包保留，不改密钥或冒称整个目标完成。
+
 最新工程：[CP09 引用追溯的真实 MySQL 与 Linux CI](docs/acceptance/V1.8-checkpoint-09-citation-ci.md)。本机 36 项 H2/MySQL、297 脚本通过；独立提交两作业成功，真实 MySQL 8.4.11/H2 同六场景、266 前端与五组页面流程通过，附件摘要/原 XML/来源 SHA 已核验。生产/UI/密钥和 25 份历史包不变，不冒称原完整 CI 全绿。
 
 最新业务：[CP08 引用原文版本与权限闭环](docs/acceptance/V1.8-checkpoint-08-citation-source.md)。助手证据可打开精确版本/章节的真实原文，历史版本明确警示，权限/版本错误及迟到响应拒绝。163 Java、266 前端、292 脚本与新旧整包通过；原回答字节不变，25 份命名包与旧预览保留，新 Demo 9926。未启用真实云模型或修改密钥。

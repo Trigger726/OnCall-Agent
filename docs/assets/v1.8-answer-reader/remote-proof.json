@@ -1,0 +1,104 @@
+{
+  "status": "PASS",
+  "sourceCommit": "2b68fdc143e545a2f45d63b611f85a86884ed99b",
+  "run": {
+    "id": 38735752002,
+    "url": "https://github.com/Trigger726/OnCall-Agent/actions/runs/38735752002",
+    "head_sha": "2b68fdc143e545a2f45d63b611f85a86884ed99b",
+    "head_branch": "work/opspilot-citation-reader-20261015",
+    "status": "completed",
+    "conclusion": "success",
+    "event": "push"
+  },
+  "jobs": [
+    {
+      "id": 116424494219,
+      "name": "Identical H2 and MySQL citation scenarios",
+      "conclusion": "success"
+    },
+    {
+      "id": 116424494559,
+      "name": "Fresh packaged citation UI on Linux",
+      "conclusion": "success"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 11974605647,
+      "name": "citation-browser-evidence",
+      "size": 2437074,
+      "digest": "sha256:1ba7fb4ba553a639fd48d3565f966e50ac7b6a749419f72eebcb2117da94a5f2",
+      "verified": true
+    },
+    {
+      "id": 11973920780,
+      "name": "citation-database-evidence",
+      "size": 27862,
+      "digest": "sha256:715bf23f211ad0489fd37d0db46db6cb2c0a97b21e687c2dbd5055c74dcef96a",
+      "verified": true
+    }
+  ],
+  "suites": [
+    {
+      "name": "MySqlRunbookCitationIntegrationTest",
+      "tests": 7,
+      "cases": [
+        "checksEachVersionsCurrentAclAndDoesNotRevealMissingVersusDenied",
+        "draftRejectedAndUnknownChunksAreNotPublishedSources",
+        "keepsFencedCodeCommentsInTheReferencedSourceChunk",
+        "oldCitationsRemainOnOriginalVersionAfterPublishingReplacement",
+        "readsExactPersistedChunkWithoutTruncationOrHtmlExecution",
+        "rechecksCurrentRoleAndRevokedAccountUsingTheSamePreviouslyValidToken",
+        "requiresAuthenticationSupportedRoleAndValidCoordinates"
+      ],
+      "xmlSha256": "b4a42bad9e88bcb38a6cbbc94f50bbcbdddf10410a76453253889e9465dc320d",
+      "product": "MySQL|8.4.11"
+    },
+    {
+      "name": "RunbookCitationIntegrationTest",
+      "tests": 7,
+      "cases": [
+        "checksEachVersionsCurrentAclAndDoesNotRevealMissingVersusDenied",
+        "draftRejectedAndUnknownChunksAreNotPublishedSources",
+        "keepsFencedCodeCommentsInTheReferencedSourceChunk",
+        "oldCitationsRemainOnOriginalVersionAfterPublishingReplacement",
+        "readsExactPersistedChunkWithoutTruncationOrHtmlExecution",
+        "rechecksCurrentRoleAndRevokedAccountUsingTheSamePreviouslyValidToken",
+        "requiresAuthenticationSupportedRoleAndValidCoordinates"
+      ],
+      "xmlSha256": "e913f9e0ad6013511a2eaa42ed0d57c7644db453abe8c2a086fa525316d4288c",
+      "product": "H2|2.2.220 (2023-07-04)"
+    },
+    {
+      "name": "RunbookTextProcessorTest",
+      "tests": 5,
+      "cases": [
+        "codeCommentsDoNotCreateDocumentSections",
+        "invalidBacktickInfoDoesNotOpenFence",
+        "keepsExistingCrLfNormalizationAndStableChunkIndices",
+        "tildeFencesNeedSameKindAndSufficientLengthToClose",
+        "unfinishedFencesDoNotPromoteCommentsToHeadings"
+      ],
+      "xmlSha256": "4108ee5a510265fa789a3a726c824c27189161b8aa5eb2e2fb8e054657d005ae",
+      "product": null
+    }
+  ],
+  "sharedTests": 14,
+  "totalDatabaseTests": 19,
+  "directReplay": {
+    "passed": false,
+    "error": "Stale XML: RunbookCitationIntegrationTest",
+    "reason": "Extracted ZIP timestamp translation; byte hashes and cases independently checked; original CI freshness gate succeeded. No validator changes."
+  },
+  "webTests": 282,
+  "readerFlows": 6,
+  "citationFlows": 5,
+  "screenshots": 13,
+  "freshJarSha256": "f919b474136b2392b23bc00250e77ec35ad6ef9257ae950caedcf06a109dad1f",
+  "java": "17.0.20.1",
+  "allAppsNormallyStopped": true,
+  "cloudModelCalled": false,
+  "osClipboardModified": false,
+  "databasesArchived": false,
+  "secretScanPassed": true
+}

@@ -1,0 +1,678 @@
+﻿2026-10-15T12:35:07.9314830Z Current runner version: '2.337.0'
+2026-10-15T12:35:07.9339894Z ##[group]Runner Image Provisioner
+2026-10-15T12:35:07.9340754Z Hosted Compute Agent
+2026-10-15T12:35:07.9341499Z Version: 20261012.601
+2026-10-15T12:35:07.9342199Z Commit: f3dc54e1fb89da6852db922499a0233137369e1d
+2026-10-15T12:35:07.9343021Z Build Date: 2026-10-12T17:48:21Z
+2026-10-15T12:35:07.9343760Z Worker ID: {c1ad812d-4561-4abe-a658-34e85f928301}
+2026-10-15T12:35:07.9344510Z Region: westcentralus
+2026-10-15T12:35:07.9345214Z Cloud: Azure
+2026-10-15T12:35:07.9345814Z ##[endgroup]
+2026-10-15T12:35:07.9347904Z ##[group]Operating System
+2026-10-15T12:35:07.9348597Z Ubuntu
+2026-10-15T12:35:07.9349151Z 24.04.5
+2026-10-15T12:35:07.9349738Z LTS
+2026-10-15T12:35:07.9350319Z ##[endgroup]
+2026-10-15T12:35:07.9350877Z ##[group]Runner Image
+2026-10-15T12:35:07.9351584Z Image: ubuntu-24.04
+2026-10-15T12:35:07.9352180Z Version: 20261012.334.1
+2026-10-15T12:35:07.9353539Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-15T12:35:07.9355143Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-15T12:35:07.9356225Z ##[endgroup]
+2026-10-15T12:35:07.9357660Z ##[group]GITHUB_TOKEN Permissions
+2026-10-15T12:35:07.9359710Z Contents: read
+2026-10-15T12:35:07.9360333Z Metadata: read
+2026-10-15T12:35:07.9361019Z ##[endgroup]
+2026-10-15T12:35:07.9363040Z Secret source: Actions
+2026-10-15T12:35:07.9364047Z Cache mode: write
+2026-10-15T12:35:07.9364850Z Prepare workflow directory
+2026-10-15T12:35:07.9806834Z Prepare all required actions
+2026-10-15T12:35:07.9854419Z Getting action download info
+2026-10-15T12:35:08.3209462Z Download action repository 'actions/checkout@v5' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+2026-10-15T12:35:08.4022536Z Download action repository 'actions/setup-java@v5' (SHA:b6effb05e454b25005698d916606bdc6ffcbf961)
+2026-10-15T12:35:09.2288738Z Download action repository 'actions/setup-node@v5' (SHA:a0853c24544627f65ddf259abe73b1d18a591444)
+2026-10-15T12:35:09.3325484Z Download action repository 'actions/upload-artifact@v5' (SHA:330a01c490aca151604b8cf639adc76d48f6c5d4)
+2026-10-15T12:35:09.6097357Z Complete job name: Identical H2 and MySQL citation scenarios
+2026-10-15T12:35:09.6710911Z ##[group]Checking docker version
+2026-10-15T12:35:09.6724049Z ##[command]/usr/bin/docker version --format '{{.Server.APIVersion}}'
+2026-10-15T12:35:09.7405562Z '1.48'
+2026-10-15T12:35:09.7420080Z Docker daemon API version: '1.48'
+2026-10-15T12:35:09.7420963Z ##[command]/usr/bin/docker version --format '{{.Client.APIVersion}}'
+2026-10-15T12:35:09.7586005Z '1.48'
+2026-10-15T12:35:09.7599350Z Docker client API version: '1.48'
+2026-10-15T12:35:09.7604609Z ##[endgroup]
+2026-10-15T12:35:09.7608117Z ##[group]Clean up resources from previous jobs
+2026-10-15T12:35:09.7615033Z ##[command]/usr/bin/docker ps --all --quiet --no-trunc --filter "label=d4adc9"
+2026-10-15T12:35:09.7767737Z ##[command]/usr/bin/docker network prune --force --filter "label=d4adc9"
+2026-10-15T12:35:09.7901628Z ##[endgroup]
+2026-10-15T12:35:09.7902238Z ##[group]Create local container network
+2026-10-15T12:35:09.7912733Z ##[command]/usr/bin/docker network create --label d4adc9 github_network_d7cde75f230443dc95207e691bfa7a0e
+2026-10-15T12:35:09.8564065Z 2c77253ceca93546d5aacf7d3e9ca552b3f6420739465bdbb1f4b2ff3ed62b22
+2026-10-15T12:35:09.8582431Z ##[endgroup]
+2026-10-15T12:35:09.8609359Z ##[group]Starting mysql service container
+2026-10-15T12:35:09.8631067Z ##[command]/usr/bin/docker pull mysql:8.4
+2026-10-15T12:35:10.7000122Z 8.4: Pulling from library/mysql
+2026-10-15T12:35:10.9043794Z e896da32f635: Pulling fs layer
+2026-10-15T12:35:10.9045770Z 3527249a8025: Pulling fs layer
+2026-10-15T12:35:10.9050972Z 6b54d15c954d: Pulling fs layer
+2026-10-15T12:35:10.9052106Z bf11ec3e7e56: Pulling fs layer
+2026-10-15T12:35:10.9053206Z 15ba404f5528: Pulling fs layer
+2026-10-15T12:35:10.9054342Z ad73434ffdad: Pulling fs layer
+2026-10-15T12:35:10.9055402Z 81077ec0e5ac: Pulling fs layer
+2026-10-15T12:35:10.9057138Z f51a9a1f0d20: Pulling fs layer
+2026-10-15T12:35:10.9058547Z 4ba189089539: Pulling fs layer
+2026-10-15T12:35:10.9059855Z d4cc7515d7b7: Pulling fs layer
+2026-10-15T12:35:10.9060999Z ad73434ffdad: Waiting
+2026-10-15T12:35:10.9062156Z 81077ec0e5ac: Waiting
+2026-10-15T12:35:10.9063307Z f51a9a1f0d20: Waiting
+2026-10-15T12:35:10.9064281Z 4ba189089539: Waiting
+2026-10-15T12:35:10.9065068Z d4cc7515d7b7: Waiting
+2026-10-15T12:35:10.9065832Z bf11ec3e7e56: Waiting
+2026-10-15T12:35:10.9066955Z 15ba404f5528: Waiting
+2026-10-15T12:35:11.0938868Z 3527249a8025: Verifying Checksum
+2026-10-15T12:35:11.0940983Z 3527249a8025: Download complete
+2026-10-15T12:35:11.1892403Z 6b54d15c954d: Verifying Checksum
+2026-10-15T12:35:11.1894346Z 6b54d15c954d: Download complete
+2026-10-15T12:35:11.3761886Z 15ba404f5528: Verifying Checksum
+2026-10-15T12:35:11.3763832Z 15ba404f5528: Download complete
+2026-10-15T12:35:11.4444846Z e896da32f635: Verifying Checksum
+2026-10-15T12:35:11.4446662Z e896da32f635: Download complete
+2026-10-15T12:35:11.4806964Z bf11ec3e7e56: Verifying Checksum
+2026-10-15T12:35:11.4808606Z bf11ec3e7e56: Download complete
+2026-10-15T12:35:11.5802533Z ad73434ffdad: Verifying Checksum
+2026-10-15T12:35:11.5804686Z ad73434ffdad: Download complete
+2026-10-15T12:35:11.6777729Z f51a9a1f0d20: Verifying Checksum
+2026-10-15T12:35:11.6779699Z f51a9a1f0d20: Download complete
+2026-10-15T12:35:11.8666224Z d4cc7515d7b7: Verifying Checksum
+2026-10-15T12:35:11.8686583Z d4cc7515d7b7: Download complete
+2026-10-15T12:35:12.0280460Z 81077ec0e5ac: Verifying Checksum
+2026-10-15T12:35:12.0283574Z 81077ec0e5ac: Download complete
+2026-10-15T12:35:12.4164365Z 4ba189089539: Verifying Checksum
+2026-10-15T12:35:12.4164916Z 4ba189089539: Download complete
+2026-10-15T12:35:12.9549757Z e896da32f635: Pull complete
+2026-10-15T12:35:16.0437843Z 3527249a8025: Pull complete
+2026-10-15T12:35:16.0634487Z 6b54d15c954d: Pull complete
+2026-10-15T12:35:16.2618544Z bf11ec3e7e56: Pull complete
+2026-10-15T12:35:16.2708820Z 15ba404f5528: Pull complete
+2026-10-15T12:35:16.2800622Z ad73434ffdad: Pull complete
+2026-10-15T12:35:17.0668113Z 81077ec0e5ac: Pull complete
+2026-10-15T12:35:17.1521492Z f51a9a1f0d20: Pull complete
+2026-10-15T12:35:25.0988599Z 4ba189089539: Pull complete
+2026-10-15T12:35:25.1081758Z d4cc7515d7b7: Pull complete
+2026-10-15T12:35:25.1120047Z Digest: sha256:24989179f58856db763f418010c1169fecc944e3ec1ea7e921572d83eb070f70
+2026-10-15T12:35:25.1131297Z Status: Downloaded newer image for mysql:8.4
+2026-10-15T12:35:25.1140110Z docker.io/library/mysql:8.4
+2026-10-15T12:35:25.1205256Z ##[command]/usr/bin/docker create --name 78d90919bfa14e8aa275617d9aa12111_mysql84_c6ffba --label d4adc9 --network github_network_d7cde75f230443dc95207e691bfa7a0e --network-alias mysql -p 3306:3306 --health-cmd="mysqladmin ping -h 127.0.0.1 -pcitation-ci-only" --health-interval=10s --health-timeout=5s --health-retries=12 -e "MYSQL_DATABASE=opspilot_citation_ci" -e "MYSQL_ROOT_PASSWORD=citation-ci-only" -e "MYSQL_ROOT_HOST=%" -e GITHUB_ACTIONS=true -e CI=true mysql:8.4
+2026-10-15T12:35:25.1486602Z 921f5c669dd6dcb51d7130e85308c2979d2833b1b95dedfd3db5a27bba56c35e
+2026-10-15T12:35:25.1511865Z ##[command]/usr/bin/docker start 921f5c669dd6dcb51d7130e85308c2979d2833b1b95dedfd3db5a27bba56c35e
+2026-10-15T12:35:25.3487860Z 921f5c669dd6dcb51d7130e85308c2979d2833b1b95dedfd3db5a27bba56c35e
+2026-10-15T12:35:25.3520549Z ##[command]/usr/bin/docker ps --all --filter id=921f5c669dd6dcb51d7130e85308c2979d2833b1b95dedfd3db5a27bba56c35e --filter status=running --no-trunc --format "{{.ID}} {{.Status}}"
+2026-10-15T12:35:25.3649997Z 921f5c669dd6dcb51d7130e85308c2979d2833b1b95dedfd3db5a27bba56c35e Up Less than a second (health: starting)
+2026-10-15T12:35:25.3670874Z ##[command]/usr/bin/docker port 921f5c669dd6dcb51d7130e85308c2979d2833b1b95dedfd3db5a27bba56c35e
+2026-10-15T12:35:25.3808001Z 3306/tcp -> 0.0.0.0:3306
+2026-10-15T12:35:25.3808841Z 3306/tcp -> [::]:3306
+2026-10-15T12:35:25.3949024Z ##[endgroup]
+2026-10-15T12:35:25.3958218Z ##[group]Waiting for all services to be ready
+2026-10-15T12:35:25.3971938Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 921f5c669dd6dcb51d7130e85308c2979d2833b1b95dedfd3db5a27bba56c35e
+2026-10-15T12:35:25.4123437Z starting
+2026-10-15T12:35:25.4142636Z mysql service is starting, waiting 2 seconds before checking again.
+2026-10-15T12:35:27.4140360Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 921f5c669dd6dcb51d7130e85308c2979d2833b1b95dedfd3db5a27bba56c35e
+2026-10-15T12:35:27.4271929Z starting
+2026-10-15T12:35:27.4285115Z mysql service is starting, waiting 3 seconds before checking again.
+2026-10-15T12:35:31.2279754Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 921f5c669dd6dcb51d7130e85308c2979d2833b1b95dedfd3db5a27bba56c35e
+2026-10-15T12:35:31.2415346Z starting
+2026-10-15T12:35:31.2434997Z mysql service is starting, waiting 8 seconds before checking again.
+2026-10-15T12:35:39.7893449Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 921f5c669dd6dcb51d7130e85308c2979d2833b1b95dedfd3db5a27bba56c35e
+2026-10-15T12:35:39.8023334Z healthy
+2026-10-15T12:35:39.8039150Z mysql service is healthy.
+2026-10-15T12:35:39.8039890Z ##[endgroup]
+2026-10-15T12:35:39.8325420Z ##[group]Run actions/checkout@v5
+2026-10-15T12:35:39.8325931Z with:
+2026-10-15T12:35:39.8326171Z   repository: Trigger726/OnCall-Agent
+2026-10-15T12:35:39.8329084Z   token: ***
+2026-10-15T12:35:39.8329311Z   ssh-strict: true
+2026-10-15T12:35:39.8329528Z   ssh-user: git
+2026-10-15T12:35:39.8329752Z   persist-credentials: true
+2026-10-15T12:35:39.8329995Z   clean: true
+2026-10-15T12:35:39.8330210Z   sparse-checkout-cone-mode: true
+2026-10-15T12:35:39.8330470Z   fetch-depth: 1
+2026-10-15T12:35:39.8330678Z   fetch-tags: false
+2026-10-15T12:35:39.8330903Z   show-progress: true
+2026-10-15T12:35:39.8331137Z   lfs: false
+2026-10-15T12:35:39.8331338Z   submodules: false
+2026-10-15T12:35:39.8331575Z   set-safe-directory: true
+2026-10-15T12:35:39.8331842Z   allow-unsafe-pr-checkout: false
+2026-10-15T12:35:39.8332356Z env:
+2026-10-15T12:35:39.8332900Z   OPSPILOT_SCOPED_MYSQL_URL: jdbc:mysql://127.0.0.1:3306/opspilot_citation_ci?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+2026-10-15T12:35:39.8333555Z   OPSPILOT_SCOPED_MYSQL_USER: root
+2026-10-15T12:35:39.8333859Z   OPSPILOT_SCOPED_MYSQL_PASSWORD: citation-ci-only
+2026-10-15T12:35:39.8334161Z ##[endgroup]
+2026-10-15T12:35:39.9369562Z Syncing repository: Trigger726/OnCall-Agent
+2026-10-15T12:35:39.9370925Z ##[group]Getting Git version info
+2026-10-15T12:35:39.9371335Z Working directory is '/home/runner/work/OnCall-Agent/OnCall-Agent'
+2026-10-15T12:35:39.9371923Z [command]/usr/bin/git version
+2026-10-15T12:35:39.9425814Z git version 2.55.0
+2026-10-15T12:35:39.9448001Z ##[endgroup]
+2026-10-15T12:35:39.9463042Z Temporarily overriding HOME='/home/runner/work/_temp/3182e905-1aab-48e6-8f9a-c257a90df3ac' before making global git config changes
+2026-10-15T12:35:39.9464286Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-15T12:35:39.9468707Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-15T12:35:39.9515915Z Deleting the contents of '/home/runner/work/OnCall-Agent/OnCall-Agent'
+2026-10-15T12:35:39.9520015Z ##[group]Initializing the repository
+2026-10-15T12:35:39.9525200Z [command]/usr/bin/git init /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-15T12:35:39.9603106Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-15T12:35:39.9604175Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-15T12:35:39.9605243Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-15T12:35:39.9606030Z hint: call:
+2026-10-15T12:35:39.9606657Z hint:
+2026-10-15T12:35:39.9607226Z hint: 	git config --global init.defaultBranch <name>
+2026-10-15T12:35:39.9607907Z hint:
+2026-10-15T12:35:39.9608832Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-15T12:35:39.9609631Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-15T12:35:39.9610248Z hint:
+2026-10-15T12:35:39.9610594Z hint: 	git branch -m <name>
+2026-10-15T12:35:39.9610963Z hint:
+2026-10-15T12:35:39.9611466Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-15T12:35:39.9612351Z Initialized empty Git repository in /home/runner/work/OnCall-Agent/OnCall-Agent/.git/
+2026-10-15T12:35:39.9616573Z [command]/usr/bin/git remote add origin https://github.com/Trigger726/OnCall-Agent
+2026-10-15T12:35:39.9662720Z ##[endgroup]
+2026-10-15T12:35:39.9663297Z ##[group]Disabling automatic garbage collection
+2026-10-15T12:35:39.9667934Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-15T12:35:39.9700468Z ##[endgroup]
+2026-10-15T12:35:39.9700986Z ##[group]Setting up auth
+2026-10-15T12:35:39.9708771Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T12:35:39.9743223Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-15T12:35:40.0107826Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-15T12:35:40.0150786Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-15T12:35:40.0424842Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-15T12:35:40.0465426Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-15T12:35:40.0710603Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-15T12:35:40.0753067Z ##[endgroup]
+2026-10-15T12:35:40.0753703Z ##[group]Fetching the repository
+2026-10-15T12:35:40.0762870Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +2b68fdc143e545a2f45d63b611f85a86884ed99b:refs/remotes/origin/work/opspilot-citation-reader-20261015
+2026-10-15T12:35:46.1139023Z From https://github.com/Trigger726/OnCall-Agent
+2026-10-15T12:35:46.1141924Z  * [new ref]         2b68fdc143e545a2f45d63b611f85a86884ed99b -> origin/work/opspilot-citation-reader-20261015
+2026-10-15T12:35:46.1144516Z ##[endgroup]
+2026-10-15T12:35:46.1145068Z ##[group]Determining the checkout info
+2026-10-15T12:35:46.1148099Z ##[endgroup]
+2026-10-15T12:35:46.1154288Z [command]/usr/bin/git sparse-checkout disable
+2026-10-15T12:35:46.1208529Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-15T12:35:46.1241680Z ##[group]Checking out the ref
+2026-10-15T12:35:46.1248520Z [command]/usr/bin/git checkout --progress --force -B work/opspilot-citation-reader-20261015 refs/remotes/origin/work/opspilot-citation-reader-20261015
+2026-10-15T12:35:47.0518139Z Switched to a new branch 'work/opspilot-citation-reader-20261015'
+2026-10-15T12:35:47.0521535Z branch 'work/opspilot-citation-reader-20261015' set up to track 'origin/work/opspilot-citation-reader-20261015'.
+2026-10-15T12:35:47.0595503Z ##[endgroup]
+2026-10-15T12:35:47.0645839Z [command]/usr/bin/git log -1 --format=%H
+2026-10-15T12:35:47.0676769Z 2b68fdc143e545a2f45d63b611f85a86884ed99b
+2026-10-15T12:35:47.0971225Z ##[group]Run actions/setup-java@v5
+2026-10-15T12:35:47.0971543Z with:
+2026-10-15T12:35:47.0971754Z   distribution: temurin
+2026-10-15T12:35:47.0971983Z   java-version: 17
+2026-10-15T12:35:47.0972192Z   cache: maven
+2026-10-15T12:35:47.0972402Z   java-package: jdk
+2026-10-15T12:35:47.0972620Z   check-latest: false
+2026-10-15T12:35:47.0972837Z   set-default: true
+2026-10-15T12:35:47.0973054Z   verify-signature: false
+2026-10-15T12:35:47.0973297Z   server-id: github
+2026-10-15T12:35:47.0973705Z   server-username: GITHUB_ACTOR
+2026-10-15T12:35:47.0973970Z   server-password: GITHUB_TOKEN
+2026-10-15T12:35:47.0974219Z   overwrite-settings: true
+2026-10-15T12:35:47.0974453Z   job-status: success
+2026-10-15T12:35:47.0976957Z   token: ***
+2026-10-15T12:35:47.0977203Z   show-download-progress: false
+2026-10-15T12:35:47.0977460Z env:
+2026-10-15T12:35:47.0978030Z   OPSPILOT_SCOPED_MYSQL_URL: jdbc:mysql://127.0.0.1:3306/opspilot_citation_ci?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+2026-10-15T12:35:47.0978621Z   OPSPILOT_SCOPED_MYSQL_USER: root
+2026-10-15T12:35:47.0978925Z   OPSPILOT_SCOPED_MYSQL_PASSWORD: citation-ci-only
+2026-10-15T12:35:47.0979230Z ##[endgroup]
+2026-10-15T12:35:47.2530347Z ##[group]Installed distributions
+2026-10-15T12:35:47.2589909Z Resolved Java 17.0.20+1 from tool-cache
+2026-10-15T12:35:47.2590359Z Setting Java 17.0.20+1 as the default
+2026-10-15T12:35:47.2600806Z Creating toolchains.xml for JDK version 17 from temurin
+2026-10-15T12:35:47.2670211Z Writing to /home/runner/.m2/toolchains.xml
+2026-10-15T12:35:47.2670732Z 
+2026-10-15T12:35:47.2670960Z Java configuration:
+2026-10-15T12:35:47.2671356Z   Distribution: temurin
+2026-10-15T12:35:47.2671735Z   Version: 17.0.20+1
+2026-10-15T12:35:47.2672246Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T12:35:47.2672703Z 
+2026-10-15T12:35:47.2673145Z ##[endgroup]
+2026-10-15T12:35:47.2709477Z Creating settings.xml with server-id: github
+2026-10-15T12:35:47.2710074Z Writing to /home/runner/.m2/settings.xml
+2026-10-15T12:35:47.2711228Z Configured MAVEN_ARGS to include -ntp to suppress Maven transfer progress logs. Set 'show-download-progress: true' to keep the download progress output.
+2026-10-15T12:35:47.9624844Z maven cache is not found
+2026-10-15T12:35:48.5175283Z ##[group]Run actions/setup-node@v5
+2026-10-15T12:35:48.5175564Z with:
+2026-10-15T12:35:48.5175777Z   node-version: 22
+2026-10-15T12:35:48.5175997Z   always-auth: false
+2026-10-15T12:35:48.5176234Z   check-latest: false
+2026-10-15T12:35:48.5178865Z   token: ***
+2026-10-15T12:35:48.5179093Z   package-manager-cache: true
+2026-10-15T12:35:48.5179342Z env:
+2026-10-15T12:35:48.5179865Z   OPSPILOT_SCOPED_MYSQL_URL: jdbc:mysql://127.0.0.1:3306/opspilot_citation_ci?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+2026-10-15T12:35:48.5180448Z   OPSPILOT_SCOPED_MYSQL_USER: root
+2026-10-15T12:35:48.5180750Z   OPSPILOT_SCOPED_MYSQL_PASSWORD: citation-ci-only
+2026-10-15T12:35:48.5181154Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T12:35:48.5181652Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T12:35:48.5182036Z   MAVEN_ARGS: -ntp
+2026-10-15T12:35:48.5182251Z ##[endgroup]
+2026-10-15T12:35:48.6661530Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+2026-10-15T12:35:48.6665833Z (node:2971) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-15T12:35:48.6666977Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-15T12:35:48.6668469Z ##[group]Environment details
+2026-10-15T12:35:49.0019014Z node: v22.23.3
+2026-10-15T12:35:49.0019886Z npm: 10.9.9
+2026-10-15T12:35:49.0020880Z yarn: 1.22.22
+2026-10-15T12:35:49.0021998Z ##[endgroup]
+2026-10-15T12:35:49.0174921Z ##[group]Run node --test scripts/tests/citation-source-ci.test.cjs
+2026-10-15T12:35:49.0175492Z [36;1mnode --test scripts/tests/citation-source-ci.test.cjs[0m
+2026-10-15T12:35:49.0365001Z shell: /usr/bin/bash -e {0}
+2026-10-15T12:35:49.0365278Z env:
+2026-10-15T12:35:49.0365845Z   OPSPILOT_SCOPED_MYSQL_URL: jdbc:mysql://127.0.0.1:3306/opspilot_citation_ci?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+2026-10-15T12:35:49.0366773Z   OPSPILOT_SCOPED_MYSQL_USER: root
+2026-10-15T12:35:49.0367096Z   OPSPILOT_SCOPED_MYSQL_PASSWORD: citation-ci-only
+2026-10-15T12:35:49.0367534Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T12:35:49.0368296Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T12:35:49.0368745Z   MAVEN_ARGS: -ntp
+2026-10-15T12:35:49.0368961Z ##[endgroup]
+2026-10-15T12:35:49.0940883Z TAP version 13
+2026-10-15T12:35:49.1434728Z # Subtest: accepts only both fresh, identical seven-case products
+2026-10-15T12:35:49.1445001Z ok 1 - accepts only both fresh, identical seven-case products
+2026-10-15T12:35:49.1447025Z   ---
+2026-10-15T12:35:49.1447268Z   duration_ms: 3.894478
+2026-10-15T12:35:49.1447538Z   type: 'test'
+2026-10-15T12:35:49.1447770Z   ...
+2026-10-15T12:35:49.1453824Z # Subtest: rejects stale XML, skipped cases and wrong database product
+2026-10-15T12:35:49.1455721Z ok 2 - rejects stale XML, skipped cases and wrong database product
+2026-10-15T12:35:49.1456786Z   ---
+2026-10-15T12:35:49.1457011Z   duration_ms: 4.330811
+2026-10-15T12:35:49.1457255Z   type: 'test'
+2026-10-15T12:35:49.1457463Z   ...
+2026-10-15T12:35:49.1459128Z # Subtest: rejects divergent or duplicate scenarios instead of trusting aggregate counts
+2026-10-15T12:35:49.1462409Z ok 3 - rejects divergent or duplicate scenarios instead of trusting aggregate counts
+2026-10-15T12:35:49.1463524Z   ---
+2026-10-15T12:35:49.1463735Z   duration_ms: 1.408265
+2026-10-15T12:35:49.1463969Z   type: 'test'
+2026-10-15T12:35:49.1464176Z   ...
+2026-10-15T12:35:49.1465777Z # Subtest: Linux UI gates retain all flows and force the freshly packaged default JAR in CI
+2026-10-15T12:35:49.1467722Z ok 4 - Linux UI gates retain all flows and force the freshly packaged default JAR in CI
+2026-10-15T12:35:49.1468347Z   ---
+2026-10-15T12:35:49.1468661Z   duration_ms: 0.397736
+2026-10-15T12:35:49.1471348Z   type: 'test'
+2026-10-15T12:35:49.1471966Z   ...
+2026-10-15T12:35:49.1475391Z # Subtest: database CI requires opt-in MySQL plus non-skipping evidence, browser CI builds actual source
+2026-10-15T12:35:49.1477066Z ok 5 - database CI requires opt-in MySQL plus non-skipping evidence, browser CI builds actual source
+2026-10-15T12:35:49.1477814Z   ---
+2026-10-15T12:35:49.1478065Z   duration_ms: 0.328905
+2026-10-15T12:35:49.1478386Z   type: 'test'
+2026-10-15T12:35:49.1478837Z   ...
+2026-10-15T12:35:49.1559951Z 1..5
+2026-10-15T12:35:49.1560307Z # tests 5
+2026-10-15T12:35:49.1560650Z # suites 0
+2026-10-15T12:35:49.1560969Z # pass 5
+2026-10-15T12:35:49.1561558Z # fail 0
+2026-10-15T12:35:49.1561900Z # cancelled 0
+2026-10-15T12:35:49.1562342Z # skipped 0
+2026-10-15T12:35:49.1562834Z # todo 0
+2026-10-15T12:35:49.1563326Z # duration_ms 75.238765
+2026-10-15T12:35:49.1653965Z ##[group]Run chmod +x mvnw
+2026-10-15T12:35:49.1654277Z [36;1mchmod +x mvnw[0m
+2026-10-15T12:35:49.1654557Z [36;1mmkdir -p target/citation-contract-it[0m
+2026-10-15T12:35:49.1655092Z [36;1mnode -e "require('fs').writeFileSync('target/citation-contract-it/started', String(Date.now()))"[0m
+2026-10-15T12:35:49.1655608Z [36;1mset -o pipefail[0m
+2026-10-15T12:35:49.1656783Z [36;1m./mvnw -B -Dtest=RunbookTextProcessorTest,RunbookCitationIntegrationTest,MySqlRunbookCitationIntegrationTest -Dopspilot.scoped.eval.mysql.enabled=true test 2>&1 | tee target/citation-contract-it/maven.log[0m
+2026-10-15T12:35:49.1731202Z shell: /usr/bin/bash -e {0}
+2026-10-15T12:35:49.1731465Z env:
+2026-10-15T12:35:49.1732017Z   OPSPILOT_SCOPED_MYSQL_URL: jdbc:mysql://127.0.0.1:3306/opspilot_citation_ci?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+2026-10-15T12:35:49.1732616Z   OPSPILOT_SCOPED_MYSQL_USER: root
+2026-10-15T12:35:49.1733008Z   OPSPILOT_SCOPED_MYSQL_PASSWORD: citation-ci-only
+2026-10-15T12:35:49.1733430Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T12:35:49.1733908Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T12:35:49.1734287Z   MAVEN_ARGS: -ntp
+2026-10-15T12:35:49.1734506Z ##[endgroup]
+2026-10-15T12:35:50.9454315Z [INFO] Scanning for projects...
+2026-10-15T12:35:54.0482079Z [INFO] 
+2026-10-15T12:35:54.0487225Z [INFO] ------------------------< org.trigger:opspilot >------------------------
+2026-10-15T12:35:54.0488370Z [INFO] Building OpsPilot 0.1.0-SNAPSHOT
+2026-10-15T12:35:54.0489008Z [INFO]   from pom.xml
+2026-10-15T12:35:54.0489681Z [INFO] --------------------------------[ jar ]---------------------------------
+2026-10-15T12:36:08.8278369Z [INFO] 
+2026-10-15T12:36:08.8297989Z [INFO] --- resources:3.3.1:resources (default-resources) @ opspilot ---
+2026-10-15T12:36:09.6898075Z [INFO] Copying 1 resource from src/main/resources to target/classes
+2026-10-15T12:36:09.7168577Z [INFO] Copying 146 resources from src/main/resources to target/classes
+2026-10-15T12:36:09.7490449Z [INFO] 
+2026-10-15T12:36:09.7491545Z [INFO] --- compiler:3.11.0:compile (default-compile) @ opspilot ---
+2026-10-15T12:36:10.9969126Z [INFO] Changes detected - recompiling the module! :source
+2026-10-15T12:36:11.0003597Z [INFO] Compiling 145 source files with javac [debug release 17] to target/classes
+2026-10-15T12:36:15.8948932Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java uses unchecked or unsafe operations.
+2026-10-15T12:36:15.8975530Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/main/java/org/trigger/opspilot/investigation/AgentEventReceiver.java: Recompile with -Xlint:unchecked for details.
+2026-10-15T12:36:15.8980342Z [INFO] 
+2026-10-15T12:36:15.9007369Z [INFO] --- resources:3.3.1:testResources (default-testResources) @ opspilot ---
+2026-10-15T12:36:15.9037616Z [INFO] Copying 1 resource from src/test/resources to target/test-classes
+2026-10-15T12:36:15.9057402Z [INFO] 
+2026-10-15T12:36:15.9058321Z [INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ opspilot ---
+2026-10-15T12:36:15.9109310Z [INFO] Changes detected - recompiling the module! :dependency
+2026-10-15T12:36:15.9110949Z [INFO] Compiling 142 source files with javac [debug release 17] to target/test-classes
+2026-10-15T12:36:22.8929561Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/runbook/RunbookDocumentDiversityIntegrationTest.java: Some input files use unchecked or unsafe operations.
+2026-10-15T12:36:22.8938568Z [INFO] /home/runner/work/OnCall-Agent/OnCall-Agent/src/test/java/org/trigger/opspilot/runbook/RunbookDocumentDiversityIntegrationTest.java: Recompile with -Xlint:unchecked for details.
+2026-10-15T12:36:22.8957413Z [INFO] 
+2026-10-15T12:36:22.8958649Z [INFO] --- surefire:3.1.2:test (default-test) @ opspilot ---
+2026-10-15T12:36:24.9389899Z [INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+2026-10-15T12:36:25.3920533Z [INFO] 
+2026-10-15T12:36:25.3921328Z [INFO] -------------------------------------------------------
+2026-10-15T12:36:25.3921803Z [INFO]  T E S T S
+2026-10-15T12:36:25.3922279Z [INFO] -------------------------------------------------------
+2026-10-15T12:36:26.0256499Z [INFO] Running org.trigger.opspilot.runbook.MySqlRunbookCitationIntegrationTest
+2026-10-15T12:36:26.0689556Z Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-10-15T12:36:26.2670535Z 12:36:26.207 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [org.trigger.opspilot.runbook.MySqlRunbookCitationIntegrationTest]: MySqlRunbookCitationIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-15T12:36:26.4663241Z 12:36:26.418 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.runbook.MySqlRunbookCitationIntegrationTest
+2026-10-15T12:36:26.5667234Z 12:36:26.551 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+2026-10-15T12:36:26.8687110Z 
+2026-10-15T12:36:26.8725877Z   .   ____          _            __ _ _
+2026-10-15T12:36:26.8757190Z  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+2026-10-15T12:36:26.8767556Z ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+2026-10-15T12:36:26.8791712Z  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+2026-10-15T12:36:26.8792548Z   '  |____| .__|_| |_|_| |_\__, | / / / /
+2026-10-15T12:36:26.8817110Z  =========|_|==============|___/=/_/_/_/
+2026-10-15T12:36:26.8817771Z  :: Spring Boot ::                (v3.2.0)
+2026-10-15T12:36:26.8846673Z 
+2026-10-15T12:36:26.8848517Z 2026-10-15T12:36:26.848Z  INFO 3278 --- [opspilot] [           main] .o.r.MySqlRunbookCitationIntegrationTest : Starting MySqlRunbookCitationIntegrationTest using Java 17.0.20.1 with PID 3278 (started by runner in /home/runner/work/OnCall-Agent/OnCall-Agent)
+2026-10-15T12:36:26.8851322Z 2026-10-15T12:36:26.849Z  INFO 3278 --- [opspilot] [           main] .o.r.MySqlRunbookCitationIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-10-15T12:36:28.5729115Z 2026-10-15T12:36:28.528Z  INFO 3278 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-15T12:36:28.5742028Z 2026-10-15T12:36:28.531Z  INFO 3278 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-15T12:36:28.6730944Z 2026-10-15T12:36:28.586Z  INFO 3278 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 42 ms. Found 0 Redis repository interfaces.
+2026-10-15T12:36:29.1748952Z 2026-10-15T12:36:29.120Z  INFO 3278 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-10-15T12:36:29.5763599Z 2026-10-15T12:36:29.493Z  INFO 3278 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7e691624
+2026-10-15T12:36:29.5773389Z 2026-10-15T12:36:29.496Z  INFO 3278 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-10-15T12:36:29.6800612Z 2026-10-15T12:36:29.588Z  INFO 3278 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : Flyway Community Edition 9.22.3 by Redgate
+2026-10-15T12:36:29.6837597Z 2026-10-15T12:36:29.589Z  INFO 3278 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : See release notes here: https://rd.gt/416ObMi
+2026-10-15T12:36:29.6844358Z 2026-10-15T12:36:29.589Z  INFO 3278 --- [opspilot] [           main] o.f.c.internal.license.VersionPrinter    : 
+2026-10-15T12:36:29.6851270Z 2026-10-15T12:36:29.612Z  INFO 3278 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:mysql://127.0.0.1:3306/opspilot_citation_ci (MySQL 8.4)
+2026-10-15T12:36:29.6854505Z 2026-10-15T12:36:29.630Z  WARN 3278 --- [opspilot] [           main] o.f.c.internal.database.base.Database    : Flyway upgrade recommended: MySQL 8.4 is newer than this version of Flyway and support has not been tested. The latest supported version of MySQL is 8.0.
+2026-10-15T12:36:29.6857777Z 2026-10-15T12:36:29.675Z  INFO 3278 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table `opspilot_citation_ci`.`flyway_schema_history` does not exist yet
+2026-10-15T12:36:29.7785610Z 2026-10-15T12:36:29.684Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.040s)
+2026-10-15T12:36:29.7808195Z 2026-10-15T12:36:29.712Z  INFO 3278 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table `opspilot_citation_ci`.`flyway_schema_history` ...
+2026-10-15T12:36:29.7821362Z 2026-10-15T12:36:29.763Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema `opspilot_citation_ci`: << Empty Schema >>
+2026-10-15T12:36:29.8780067Z 2026-10-15T12:36:29.801Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "1 - init opspilot"
+2026-10-15T12:36:30.0795686Z 2026-10-15T12:36:29.992Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "2 - assistant conversations"
+2026-10-15T12:36:30.0799245Z 2026-10-15T12:36:30.054Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "3 - agent investigation runs"
+2026-10-15T12:36:30.1805103Z 2026-10-15T12:36:30.124Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "4 - observability evidence"
+2026-10-15T12:36:30.2809225Z 2026-10-15T12:36:30.181Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "5 - agent events and remediation proposals"
+2026-10-15T12:36:30.2812039Z 2026-10-15T12:36:30.253Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "6 - agent run controls"
+2026-10-15T12:36:30.4804698Z 2026-10-15T12:36:30.460Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "7 - runbook knowledge base"
+2026-10-15T12:36:30.5808320Z 2026-10-15T12:36:30.532Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "8 - hybrid runbook retrieval"
+2026-10-15T12:36:30.6809340Z 2026-10-15T12:36:30.583Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "9 - runbook relevance feedback"
+2026-10-15T12:36:30.7810342Z 2026-10-15T12:36:30.688Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "10 - graded runbook relevance evaluation"
+2026-10-15T12:36:30.7812016Z 2026-10-15T12:36:30.755Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "11 - runbook judgment agreement"
+2026-10-15T12:36:30.8811813Z 2026-10-15T12:36:30.806Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-15T12:36:30.9813769Z 2026-10-15T12:36:30.904Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "13 - incident postmortems"
+2026-10-15T12:36:31.0814284Z 2026-10-15T12:36:30.960Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "14 - incident analytics and follow up escalations"
+2026-10-15T12:36:31.0815893Z 2026-10-15T12:36:30.990Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "15 - recurring incident problems"
+2026-10-15T12:36:31.0818398Z 2026-10-15T12:36:31.039Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "16 - agent event outbox"
+2026-10-15T12:36:31.0820827Z 2026-10-15T12:36:31.066Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "17 - outbox timestamp precision"
+2026-10-15T12:36:31.1845990Z 2026-10-15T12:36:31.130Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "18 - outbox retention index"
+2026-10-15T12:36:31.1849897Z 2026-10-15T12:36:31.148Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "19 - service slo objectives"
+2026-10-15T12:36:31.1853107Z 2026-10-15T12:36:31.181Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "20 - alert ingest rejections"
+2026-10-15T12:36:31.2824468Z 2026-10-15T12:36:31.222Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "21 - alert rejection lifecycle"
+2026-10-15T12:36:31.3825948Z 2026-10-15T12:36:31.372Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "22 - follow up notification outbox"
+2026-10-15T12:36:31.4828446Z 2026-10-15T12:36:31.395Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "23 - follow up owner acknowledgement"
+2026-10-15T12:36:31.4830503Z 2026-10-15T12:36:31.456Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "24 - incident escalation execution"
+2026-10-15T12:36:31.5834089Z 2026-10-15T12:36:31.489Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "25 - oncall roster management"
+2026-10-15T12:36:31.5836732Z 2026-10-15T12:36:31.527Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "26 - oncall rotations"
+2026-10-15T12:36:31.6833783Z 2026-10-15T12:36:31.634Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "27 - oncall handoff requests"
+2026-10-15T12:36:31.6836781Z 2026-10-15T12:36:31.669Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "28 - oncall handoff revocations"
+2026-10-15T12:36:31.7839085Z 2026-10-15T12:36:31.690Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "29 - runbook returned document count"
+2026-10-15T12:36:31.7860435Z 2026-10-15T12:36:31.748Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "30 - runbook publication review"
+2026-10-15T12:36:32.0840801Z 2026-10-15T12:36:32.028Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "31 - account auth version"
+2026-10-15T12:36:32.1843311Z 2026-10-15T12:36:32.153Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "32 - assistant request idempotency"
+2026-10-15T12:36:32.1844834Z 2026-10-15T12:36:32.174Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "33 - assistant queue and cancel"
+2026-10-15T12:36:32.2849207Z 2026-10-15T12:36:32.210Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "34 - oncall shift swaps"
+2026-10-15T12:36:32.2852044Z 2026-10-15T12:36:32.277Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "35 - oncall swap notification outbox"
+2026-10-15T12:36:32.3845751Z 2026-10-15T12:36:32.309Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "36 - oncall swap notification payload retention"
+2026-10-15T12:36:32.3849349Z 2026-10-15T12:36:32.354Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "37 - oncall swap revocations"
+2026-10-15T12:36:32.3854153Z 2026-10-15T12:36:32.374Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "38 - oncall open handoffs"
+2026-10-15T12:36:32.4849101Z 2026-10-15T12:36:32.419Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "39 - oncall plan memberships"
+2026-10-15T12:36:32.4850873Z 2026-10-15T12:36:32.456Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "40 - open handoff publication snapshots"
+2026-10-15T12:36:32.4852324Z 2026-10-15T12:36:32.472Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "41 - open handoff notification outbox"
+2026-10-15T12:36:32.5848605Z 2026-10-15T12:36:32.499Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "42 - open notification redrive receipts"
+2026-10-15T12:36:32.5850461Z 2026-10-15T12:36:32.550Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema `opspilot_citation_ci` to version "43 - runbook retrieval scope snapshots"
+2026-10-15T12:36:32.6853891Z 2026-10-15T12:36:32.604Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 43 migrations to schema `opspilot_citation_ci`, now at version v43 (execution time 00:02.236s)
+2026-10-15T12:36:34.0956164Z 2026-10-15T12:36:34.041Z  INFO 3278 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-15T12:36:34.3948412Z 2026-10-15T12:36:34.322Z  INFO 3278 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@40f931ec, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@528ef230, org.springframework.security.web.context.SecurityContextHolderFilter@21a462ce, org.springframework.security.web.header.HeaderWriterFilter@158cb50a, org.springframework.web.filter.CorsFilter@ae85aad, org.springframework.security.web.authentication.logout.LogoutFilter@6b8a9e1, org.trigger.opspilot.security.JwtAuthenticationFilter@50e4d8cd, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@31428f76, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4257163f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@737ae41a, org.springframework.security.web.session.SessionManagementFilter@6eff05e7, org.springframework.security.web.access.ExceptionTranslationFilter@9e092b5, org.springframework.security.web.access.intercept.AuthorizationFilter@452d6fd]
+2026-10-15T12:36:35.0958162Z 2026-10-15T12:36:35.050Z  INFO 3278 --- [opspilot] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-15T12:36:35.0960282Z 2026-10-15T12:36:35.050Z  INFO 3278 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-15T12:36:35.0962216Z 2026-10-15T12:36:35.052Z  INFO 3278 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
+2026-10-15T12:36:35.1960567Z 2026-10-15T12:36:35.133Z  INFO 3278 --- [opspilot] [           main] .o.r.MySqlRunbookCitationIntegrationTest : Started MySqlRunbookCitationIntegrationTest in 8.59 seconds (process running for 9.683)
+2026-10-15T12:36:35.7117165Z OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-10-15T12:36:36.2095798Z CITATION_DATABASE MySqlRunbookCitationIntegrationTest|MySQL|8.4.11
+2026-10-15T12:36:37.1109440Z CITATION_DATABASE MySqlRunbookCitationIntegrationTest|MySQL|8.4.11
+2026-10-15T12:36:37.5145472Z CITATION_DATABASE MySqlRunbookCitationIntegrationTest|MySQL|8.4.11
+2026-10-15T12:36:37.9164620Z CITATION_DATABASE MySqlRunbookCitationIntegrationTest|MySQL|8.4.11
+2026-10-15T12:36:38.2165441Z CITATION_DATABASE MySqlRunbookCitationIntegrationTest|MySQL|8.4.11
+2026-10-15T12:36:38.9170985Z CITATION_DATABASE MySqlRunbookCitationIntegrationTest|MySQL|8.4.11
+2026-10-15T12:36:39.5187067Z CITATION_DATABASE MySqlRunbookCitationIntegrationTest|MySQL|8.4.11
+2026-10-15T12:36:40.2158514Z 2026-10-15T12:36:40.202Z  INFO 3278 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-10-15T12:36:40.2183767Z 2026-10-15T12:36:40.208Z  INFO 3278 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-10-15T12:36:40.2948547Z [INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 14.19 s -- in org.trigger.opspilot.runbook.MySqlRunbookCitationIntegrationTest
+2026-10-15T12:36:40.2977161Z [INFO] Running org.trigger.opspilot.runbook.RunbookTextProcessorTest
+2026-10-15T12:36:40.3158075Z [INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 s -- in org.trigger.opspilot.runbook.RunbookTextProcessorTest
+2026-10-15T12:36:40.3187097Z [INFO] Running org.trigger.opspilot.runbook.RunbookCitationIntegrationTest
+2026-10-15T12:36:40.4202261Z 2026-10-15T12:36:40.235Z  INFO 3278 --- [opspilot] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [org.trigger.opspilot.runbook.RunbookCitationIntegrationTest]: RunbookCitationIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-10-15T12:36:40.4207220Z 2026-10-15T12:36:40.240Z  INFO 3278 --- [opspilot] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration org.trigger.opspilot.OpsPilotApplication for test class org.trigger.opspilot.runbook.RunbookCitationIntegrationTest
+2026-10-15T12:36:40.4210233Z 2026-10-15T12:36:40.250Z  INFO 3278 --- [opspilot] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+2026-10-15T12:36:40.4211363Z 
+2026-10-15T12:36:40.4212154Z   .   ____          _            __ _ _
+2026-10-15T12:36:40.4212822Z  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+2026-10-15T12:36:40.4213511Z ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+2026-10-15T12:36:40.4214146Z  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+2026-10-15T12:36:40.4214744Z   '  |____| .__|_| |_|_| |_\__, | / / / /
+2026-10-15T12:36:40.4215541Z  =========|_|==============|___/=/_/_/_/
+2026-10-15T12:36:40.4216612Z  :: Spring Boot ::                (v3.2.0)
+2026-10-15T12:36:40.4217115Z 
+2026-10-15T12:36:40.4219071Z 2026-10-15T12:36:40.304Z  INFO 3278 --- [opspilot] [           main] o.t.o.r.RunbookCitationIntegrationTest   : Starting RunbookCitationIntegrationTest using Java 17.0.20.1 with PID 3278 (started by runner in /home/runner/work/OnCall-Agent/OnCall-Agent)
+2026-10-15T12:36:40.4221868Z 2026-10-15T12:36:40.305Z  INFO 3278 --- [opspilot] [           main] o.t.o.r.RunbookCitationIntegrationTest   : No active profile set, falling back to 1 default profile: "default"
+2026-10-15T12:36:40.8212468Z 2026-10-15T12:36:40.794Z  INFO 3278 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2026-10-15T12:36:40.8216631Z 2026-10-15T12:36:40.794Z  INFO 3278 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-10-15T12:36:40.8219446Z 2026-10-15T12:36:40.808Z  INFO 3278 --- [opspilot] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 13 ms. Found 0 Redis repository interfaces.
+2026-10-15T12:36:40.9205806Z 2026-10-15T12:36:40.882Z  INFO 3278 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Starting...
+2026-10-15T12:36:41.1218834Z 2026-10-15T12:36:41.036Z  INFO 3278 --- [opspilot] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-2 - Added connection conn0: url=jdbc:h2:mem:runbook-citation user=SA
+2026-10-15T12:36:41.1248157Z 2026-10-15T12:36:41.036Z  INFO 3278 --- [opspilot] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-2 - Start completed.
+2026-10-15T12:36:41.1278023Z 2026-10-15T12:36:41.074Z  INFO 3278 --- [opspilot] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:h2:mem:runbook-citation (H2 2.2)
+2026-10-15T12:36:41.1280322Z 2026-10-15T12:36:41.093Z  INFO 3278 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2026-10-15T12:36:41.1307928Z 2026-10-15T12:36:41.094Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 43 migrations (execution time 00:00.012s)
+2026-10-15T12:36:41.1337943Z 2026-10-15T12:36:41.097Z  INFO 3278 --- [opspilot] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2026-10-15T12:36:41.1367878Z 2026-10-15T12:36:41.111Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2026-10-15T12:36:41.1372902Z 2026-10-15T12:36:41.116Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init opspilot"
+2026-10-15T12:36:41.2218614Z 2026-10-15T12:36:41.185Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "2 - assistant conversations"
+2026-10-15T12:36:41.2248114Z 2026-10-15T12:36:41.195Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "3 - agent investigation runs"
+2026-10-15T12:36:41.2278060Z 2026-10-15T12:36:41.205Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "4 - observability evidence"
+2026-10-15T12:36:41.2298718Z 2026-10-15T12:36:41.218Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "5 - agent events and remediation proposals"
+2026-10-15T12:36:41.3211781Z 2026-10-15T12:36:41.234Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "6 - agent run controls"
+2026-10-15T12:36:41.3228312Z 2026-10-15T12:36:41.292Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "7 - runbook knowledge base"
+2026-10-15T12:36:41.3258063Z 2026-10-15T12:36:41.310Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "8 - hybrid runbook retrieval"
+2026-10-15T12:36:41.4248785Z 2026-10-15T12:36:41.328Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "9 - runbook relevance feedback"
+2026-10-15T12:36:41.4251538Z 2026-10-15T12:36:41.351Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "10 - graded runbook relevance evaluation"
+2026-10-15T12:36:41.4278216Z 2026-10-15T12:36:41.367Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "11 - runbook judgment agreement"
+2026-10-15T12:36:41.4307941Z 2026-10-15T12:36:41.376Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "12 - runbook retrieval snapshot lifecycle"
+2026-10-15T12:36:41.4337883Z 2026-10-15T12:36:41.391Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "13 - incident postmortems"
+2026-10-15T12:36:41.4340245Z 2026-10-15T12:36:41.403Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "14 - incident analytics and follow up escalations"
+2026-10-15T12:36:41.4367955Z 2026-10-15T12:36:41.412Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "15 - recurring incident problems"
+2026-10-15T12:36:41.5258832Z 2026-10-15T12:36:41.423Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "16 - agent event outbox"
+2026-10-15T12:36:41.5261162Z 2026-10-15T12:36:41.428Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "17 - outbox timestamp precision"
+2026-10-15T12:36:41.5297933Z 2026-10-15T12:36:41.437Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "18 - outbox retention index"
+2026-10-15T12:36:41.5327780Z 2026-10-15T12:36:41.440Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "19 - service slo objectives"
+2026-10-15T12:36:41.5358110Z 2026-10-15T12:36:41.450Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "20 - alert ingest rejections"
+2026-10-15T12:36:41.5398757Z 2026-10-15T12:36:41.458Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "21 - alert rejection lifecycle"
+2026-10-15T12:36:41.5419166Z 2026-10-15T12:36:41.492Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "22 - follow up notification outbox"
+2026-10-15T12:36:41.5447887Z 2026-10-15T12:36:41.498Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "23 - follow up owner acknowledgement"
+2026-10-15T12:36:41.5469654Z 2026-10-15T12:36:41.513Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "24 - incident escalation execution"
+2026-10-15T12:36:41.5498222Z 2026-10-15T12:36:41.522Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "25 - oncall roster management"
+2026-10-15T12:36:41.6245102Z 2026-10-15T12:36:41.548Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "26 - oncall rotations"
+2026-10-15T12:36:41.6267974Z 2026-10-15T12:36:41.565Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "27 - oncall handoff requests"
+2026-10-15T12:36:41.6288352Z 2026-10-15T12:36:41.574Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "28 - oncall handoff revocations"
+2026-10-15T12:36:41.6318056Z 2026-10-15T12:36:41.577Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "29 - runbook returned document count"
+2026-10-15T12:36:41.6328001Z 2026-10-15T12:36:41.585Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "30 - runbook publication review"
+2026-10-15T12:36:41.7247846Z 2026-10-15T12:36:41.631Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "31 - account auth version"
+2026-10-15T12:36:41.7274608Z 2026-10-15T12:36:41.646Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "32 - assistant request idempotency"
+2026-10-15T12:36:41.7308003Z 2026-10-15T12:36:41.652Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "33 - assistant queue and cancel"
+2026-10-15T12:36:41.7337936Z 2026-10-15T12:36:41.656Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "34 - oncall shift swaps"
+2026-10-15T12:36:41.7367970Z 2026-10-15T12:36:41.667Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "35 - oncall swap notification outbox"
+2026-10-15T12:36:41.7383072Z 2026-10-15T12:36:41.672Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "36 - oncall swap notification payload retention"
+2026-10-15T12:36:41.7407887Z 2026-10-15T12:36:41.684Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "37 - oncall swap revocations"
+2026-10-15T12:36:41.7410084Z 2026-10-15T12:36:41.689Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "38 - oncall open handoffs"
+2026-10-15T12:36:41.7412294Z 2026-10-15T12:36:41.698Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "39 - oncall plan memberships"
+2026-10-15T12:36:41.7414503Z 2026-10-15T12:36:41.707Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "40 - open handoff publication snapshots"
+2026-10-15T12:36:41.7416938Z 2026-10-15T12:36:41.711Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "41 - open handoff notification outbox"
+2026-10-15T12:36:41.7419203Z 2026-10-15T12:36:41.717Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "42 - open notification redrive receipts"
+2026-10-15T12:36:41.8247991Z 2026-10-15T12:36:41.727Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "43 - runbook retrieval scope snapshots"
+2026-10-15T12:36:41.8278276Z 2026-10-15T12:36:41.742Z  INFO 3278 --- [opspilot] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 43 migrations to schema "public", now at version v43 (execution time 00:00.457s)
+2026-10-15T12:36:42.0259056Z 2026-10-15T12:36:41.984Z  INFO 3278 --- [opspilot] [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-10-15T12:36:42.1288021Z 2026-10-15T12:36:42.077Z  INFO 3278 --- [opspilot] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@13638ddf, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@41cf885f, org.springframework.security.web.context.SecurityContextHolderFilter@3d5a99e6, org.springframework.security.web.header.HeaderWriterFilter@4eac6cb4, org.springframework.web.filter.CorsFilter@68172eeb, org.springframework.security.web.authentication.logout.LogoutFilter@44f2d195, org.trigger.opspilot.security.JwtAuthenticationFilter@491665ab, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@44eee485, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@698af960, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@24037ea, org.springframework.security.web.session.SessionManagementFilter@7f277cf6, org.springframework.security.web.access.ExceptionTranslationFilter@6f32cfff, org.springframework.security.web.access.intercept.AuthorizationFilter@49f4792a]
+2026-10-15T12:36:42.3090645Z 2026-10-15T12:36:42.265Z  INFO 3278 --- [opspilot] [           main] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:runbook-citation'
+2026-10-15T12:36:42.3159650Z 2026-10-15T12:36:42.281Z  INFO 3278 --- [opspilot] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-10-15T12:36:42.3177937Z 2026-10-15T12:36:42.281Z  INFO 3278 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-10-15T12:36:42.3207620Z 2026-10-15T12:36:42.282Z  INFO 3278 --- [opspilot] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-10-15T12:36:42.3218136Z 2026-10-15T12:36:42.304Z  INFO 3278 --- [opspilot] [           main] o.t.o.r.RunbookCitationIntegrationTest   : Started RunbookCitationIntegrationTest in 2.055 seconds (process running for 16.854)
+2026-10-15T12:36:42.3261017Z CITATION_DATABASE RunbookCitationIntegrationTest|H2|2.2.220 (2023-07-04)
+2026-10-15T12:36:42.8287959Z CITATION_DATABASE RunbookCitationIntegrationTest|H2|2.2.220 (2023-07-04)
+2026-10-15T12:36:43.1319697Z CITATION_DATABASE RunbookCitationIntegrationTest|H2|2.2.220 (2023-07-04)
+2026-10-15T12:36:43.4303765Z CITATION_DATABASE RunbookCitationIntegrationTest|H2|2.2.220 (2023-07-04)
+2026-10-15T12:36:43.7328907Z CITATION_DATABASE RunbookCitationIntegrationTest|H2|2.2.220 (2023-07-04)
+2026-10-15T12:36:44.4363174Z CITATION_DATABASE RunbookCitationIntegrationTest|H2|2.2.220 (2023-07-04)
+2026-10-15T12:36:45.0379423Z CITATION_DATABASE RunbookCitationIntegrationTest|H2|2.2.220 (2023-07-04)
+2026-10-15T12:36:45.6328625Z [INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.390 s -- in org.trigger.opspilot.runbook.RunbookCitationIntegrationTest
+2026-10-15T12:36:46.1772484Z [INFO] 
+2026-10-15T12:36:46.1773066Z [INFO] Results:
+2026-10-15T12:36:46.1773413Z [INFO] 
+2026-10-15T12:36:46.1773916Z [INFO] Tests run: 19, Failures: 0, Errors: 0, Skipped: 0
+2026-10-15T12:36:46.1774417Z [INFO] 
+2026-10-15T12:36:46.1801515Z [INFO] ------------------------------------------------------------------------
+2026-10-15T12:36:46.1807246Z [INFO] BUILD SUCCESS
+2026-10-15T12:36:46.1807699Z [INFO] ------------------------------------------------------------------------
+2026-10-15T12:36:46.1812523Z [INFO] Total time:  55.260 s
+2026-10-15T12:36:46.1813842Z [INFO] Finished at: 2026-10-15T12:36:46Z
+2026-10-15T12:36:46.1814635Z [INFO] ------------------------------------------------------------------------
+2026-10-15T12:36:46.2127414Z ##[group]Run node scripts/verify-citation-contract-results.cjs target/surefire-reports target/citation-contract-it/started target/citation-contract-it/result.json
+2026-10-15T12:36:46.2129331Z [36;1mnode scripts/verify-citation-contract-results.cjs target/surefire-reports target/citation-contract-it/started target/citation-contract-it/result.json[0m
+2026-10-15T12:36:46.2221995Z shell: /usr/bin/bash -e {0}
+2026-10-15T12:36:46.2222266Z env:
+2026-10-15T12:36:46.2222824Z   OPSPILOT_SCOPED_MYSQL_URL: jdbc:mysql://127.0.0.1:3306/opspilot_citation_ci?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+2026-10-15T12:36:46.2223448Z   OPSPILOT_SCOPED_MYSQL_USER: root
+2026-10-15T12:36:46.2223760Z   OPSPILOT_SCOPED_MYSQL_PASSWORD: citation-ci-only
+2026-10-15T12:36:46.2224196Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T12:36:46.2224674Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T12:36:46.2225094Z   MAVEN_ARGS: -ntp
+2026-10-15T12:36:46.2225314Z ##[endgroup]
+2026-10-15T12:36:46.2608412Z {"status":"PASS","tests":14,"sameScenarios":true,"sourceCommit":"2b68fdc143e545a2f45d63b611f85a86884ed99b"}
+2026-10-15T12:36:46.2696594Z ##[group]Run actions/upload-artifact@v5
+2026-10-15T12:36:46.2696927Z with:
+2026-10-15T12:36:46.2697393Z   name: citation-database-evidence
+2026-10-15T12:36:46.2698342Z   path: target/citation-contract-it/
+target/surefire-reports/TEST-org.trigger.opspilot.runbook.*RunbookCitationIntegrationTest.xml
+target/surefire-reports/TEST-org.trigger.opspilot.runbook.RunbookTextProcessorTest.xml
+
+2026-10-15T12:36:46.2699274Z   retention-days: 30
+2026-10-15T12:36:46.2699508Z   if-no-files-found: warn
+2026-10-15T12:36:46.2699748Z   compression-level: 6
+2026-10-15T12:36:46.2699970Z   overwrite: false
+2026-10-15T12:36:46.2700190Z   include-hidden-files: false
+2026-10-15T12:36:46.2700424Z env:
+2026-10-15T12:36:46.2700976Z   OPSPILOT_SCOPED_MYSQL_URL: jdbc:mysql://127.0.0.1:3306/opspilot_citation_ci?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+2026-10-15T12:36:46.2701576Z   OPSPILOT_SCOPED_MYSQL_USER: root
+2026-10-15T12:36:46.2701917Z   OPSPILOT_SCOPED_MYSQL_PASSWORD: citation-ci-only
+2026-10-15T12:36:46.2702327Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T12:36:46.2702818Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.20-1/x64
+2026-10-15T12:36:46.2703192Z   MAVEN_ARGS: -ntp
+2026-10-15T12:36:46.2703394Z ##[endgroup]
+2026-10-15T12:36:46.4329061Z (node:3736) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-15T12:36:46.4329893Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-15T12:36:46.4418121Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-10-15T12:36:46.4422579Z The least common ancestor is /home/runner/work/OnCall-Agent/OnCall-Agent/target. This will be the root directory of the artifact
+2026-10-15T12:36:46.4424309Z With the provided path, there will be 6 files uploaded
+2026-10-15T12:36:46.4426718Z Artifact name is valid!
+2026-10-15T12:36:46.4427979Z Root directory input is valid!
+2026-10-15T12:36:46.7811493Z Beginning upload of artifact content to blob storage
+2026-10-15T12:36:46.8125672Z (node:3736) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-15T12:36:47.0701859Z Uploaded bytes 27862
+2026-10-15T12:36:47.1275657Z Finished uploading artifact content to blob storage!
+2026-10-15T12:36:47.1276953Z SHA256 digest of uploaded artifact zip is 715bf23f211ad0489fd37d0db46db6cb2c0a97b21e687c2dbd5055c74dcef96a
+2026-10-15T12:36:47.1278560Z Finalizing artifact upload
+2026-10-15T12:36:47.4230441Z Artifact citation-database-evidence.zip successfully finalized. Artifact ID 11973920780
+2026-10-15T12:36:47.4232041Z Artifact citation-database-evidence has been successfully uploaded! Final size is 27862 bytes. Artifact ID is 11973920780
+2026-10-15T12:36:47.4239033Z Artifact download URL: https://github.com/Trigger726/OnCall-Agent/actions/runs/38735752002/artifacts/11973920780
+2026-10-15T12:36:47.4418085Z Post job cleanup.
+2026-10-15T12:36:47.5674892Z (node:3748) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-15T12:36:47.5787642Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-15T12:36:47.5894217Z Post job cleanup.
+2026-10-15T12:36:47.7486021Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/OnCall-Agent/OnCall-Agent --files-from manifest.txt --use-compress-program zstdmt
+2026-10-15T12:36:48.8348993Z Sent 8928969 of 8928969 (100.0%), 10.9 MBs/sec
+2026-10-15T12:36:49.1029356Z maven-wrapper cache saved with the key: setup-java-Linux-x64-maven-wrapper-4010b7b513ce627636150913aad6edbf72eda4862fdc6f4a8c75796c51ae597a
+2026-10-15T12:36:49.1119016Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/OnCall-Agent/OnCall-Agent --files-from manifest.txt --use-compress-program zstdmt
+2026-10-15T12:36:50.5550046Z Sent 44957696 of 97693664 (46.0%), 42.9 MBs/sec
+2026-10-15T12:36:51.5555762Z Sent 97693664 of 97693664 (100.0%), 46.6 MBs/sec
+2026-10-15T12:36:51.8083952Z Cache saved with the key: setup-java-Linux-x64-maven-d32cb843aa19f08330bb1496da7a1a49cc2deb22a4e49d97b309eae19c7fe74e
+2026-10-15T12:36:51.8265553Z Post job cleanup.
+2026-10-15T12:36:51.9148592Z [command]/usr/bin/git version
+2026-10-15T12:36:51.9191738Z git version 2.55.0
+2026-10-15T12:36:51.9228281Z Temporarily overriding HOME='/home/runner/work/_temp/d501c2f9-7ba9-44e8-99ed-fddaf8911f3a' before making global git config changes
+2026-10-15T12:36:51.9229863Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-15T12:36:51.9233817Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/OnCall-Agent/OnCall-Agent
+2026-10-15T12:36:51.9274594Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-15T12:36:51.9312098Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-15T12:36:51.9598127Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-15T12:36:51.9617634Z http.https://github.com/.extraheader
+2026-10-15T12:36:51.9631012Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-15T12:36:51.9698388Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-15T12:36:52.0039940Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-15T12:36:52.0083680Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-15T12:36:52.0464902Z Print service container logs: 78d90919bfa14e8aa275617d9aa12111_mysql84_c6ffba
+2026-10-15T12:36:52.0469951Z ##[command]/usr/bin/docker logs --details 921f5c669dd6dcb51d7130e85308c2979d2833b1b95dedfd3db5a27bba56c35e
+2026-10-15T12:36:52.0601690Z  2026-10-15T12:35:25.769388Z 0 [System] [MY-015017] [Server] MySQL Server Initialization - start.
+2026-10-15T12:36:52.0602792Z  2026-10-15T12:35:25.770805Z 0 [System] [MY-013169] [Server] /usr/sbin/mysqld (mysqld 8.4.11) initializing of server in progress as process 80
+2026-10-15T12:36:52.0603820Z  2026-10-15T12:35:25.775394Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2026-10-15T12:36:52.0604416Z  2026-10-15T12:35:25.872162Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2026-10-15T12:36:52.0605061Z  2026-10-15 12:35:25+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.4.11-1.el9 started.
+2026-10-15T12:36:52.0606489Z  2026-10-15T12:35:26.456367Z 6 [Warning] [MY-010453] [Server] root@localhost is created with an empty password ! Please consider switching off the --initialize-insecure option.
+2026-10-15T12:36:52.0607597Z  2026-10-15T12:35:27.718291Z 0 [System] [MY-015018] [Server] MySQL Server Initialization - end.
+2026-10-15T12:36:52.0608373Z  2026-10-15T12:35:27.764498Z 0 [System] [MY-015015] [Server] MySQL Server - start.
+2026-10-15T12:36:52.0609217Z  2026-10-15T12:35:27.943543Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.4.11) starting as process 121
+2026-10-15T12:36:52.0610051Z  2026-10-15T12:35:27.953204Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2026-10-15T12:36:52.0610877Z  2026-10-15T12:35:28.050702Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2026-10-15T12:36:52.0611710Z  2026-10-15T12:35:28.251390Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2026-10-15T12:36:52.0612772Z  2026-10-15T12:35:28.251421Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2026-10-15T12:36:52.0614531Z  2026-10-15T12:35:28.252985Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+2026-10-15T12:36:52.0616795Z  2026-10-15T12:35:28.269193Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Socket: /var/run/mysqld/mysqlx.sock
+2026-10-15T12:36:52.0618078Z  2026-10-15T12:35:28.269294Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.4.11'  socket: '/var/run/mysqld/mysqld.sock'  port: 0  MySQL Community Server - GPL.
+2026-10-15T12:36:52.0618928Z  2026-10-15 12:35:25+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
+2026-10-15T12:36:52.0619864Z  2026-10-15T12:35:29.550975Z 11 [System] [MY-013172] [Server] Received SHUTDOWN from user root. Shutting down mysqld (Version: 8.4.11).
+2026-10-15T12:36:52.0620606Z  2026-10-15 12:35:25+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.4.11-1.el9 started.
+2026-10-15T12:36:52.0621625Z  2026-10-15T12:35:30.653305Z 0 [System] [MY-010910] [Server] /usr/sbin/mysqld: Shutdown complete (mysqld 8.4.11)  MySQL Community Server - GPL.
+2026-10-15T12:36:52.0622288Z  2026-10-15 12:35:25+00:00 [Note] [Entrypoint]: Initializing database files
+2026-10-15T12:36:52.0623002Z  2026-10-15T12:35:30.653323Z 0 [System] [MY-015016] [Server] MySQL Server - end.
+2026-10-15T12:36:52.0623490Z  2026-10-15 12:35:27+00:00 [Note] [Entrypoint]: Database files initialized
+2026-10-15T12:36:52.0624172Z  2026-10-15T12:35:31.569555Z 0 [System] [MY-015015] [Server] MySQL Server - start.
+2026-10-15T12:36:52.0624699Z  2026-10-15 12:35:27+00:00 [Note] [Entrypoint]: Starting temporary server
+2026-10-15T12:36:52.0625534Z  2026-10-15T12:35:31.754815Z 0 [System] [MY-010116] [Server] /usr/sbin/mysqld (mysqld 8.4.11) starting as process 1
+2026-10-15T12:36:52.0626103Z  2026-10-15 12:35:28+00:00 [Note] [Entrypoint]: Temporary server started.
+2026-10-15T12:36:52.0627680Z  2026-10-15T12:35:31.760272Z 1 [System] [MY-013576] [InnoDB] InnoDB initialization has started.
+2026-10-15T12:36:52.0628571Z  2026-10-15T12:35:31.861020Z 1 [System] [MY-013577] [InnoDB] InnoDB initialization has ended.
+2026-10-15T12:36:52.0629495Z  2026-10-15T12:35:32.024507Z 0 [Warning] [MY-010068] [Server] CA certificate ca.pem is self signed.
+2026-10-15T12:36:52.0630788Z  2026-10-15T12:35:32.024544Z 0 [System] [MY-013602] [Server] Channel mysql_main configured to support TLS. Encrypted connections are now supported for this channel.
+2026-10-15T12:36:52.0631925Z  2026-10-15T12:35:32.026132Z 0 [Warning] [MY-011810] [Server] Insecure configuration for --pid-file: Location '/var/run/mysqld' in the path is accessible to all OS users. Consider choosing a different directory.
+2026-10-15T12:36:52.0633034Z  2026-10-15T12:35:32.042319Z 0 [System] [MY-011323] [Server] X Plugin ready for connections. Bind-address: '::' port: 33060, socket: /var/run/mysqld/mysqlx.sock
+2026-10-15T12:36:52.0634126Z  2026-10-15T12:35:32.042400Z 0 [System] [MY-010931] [Server] /usr/sbin/mysqld: ready for connections. Version: '8.4.11'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server - GPL.
+2026-10-15T12:36:52.0634934Z  '/var/lib/mysql/mysql.sock' -> '/var/run/mysqld/mysqld.sock'
+2026-10-15T12:36:52.0635400Z  2026-10-15 12:35:29+00:00 [Note] [Entrypoint]: Creating database opspilot_citation_ci
+2026-10-15T12:36:52.0635803Z  
+2026-10-15T12:36:52.0636088Z  2026-10-15 12:35:29+00:00 [Note] [Entrypoint]: Stopping temporary server
+2026-10-15T12:36:52.0636808Z  2026-10-15 12:35:31+00:00 [Note] [Entrypoint]: Temporary server stopped
+2026-10-15T12:36:52.0637159Z  
+2026-10-15T12:36:52.0637500Z  2026-10-15 12:35:31+00:00 [Note] [Entrypoint]: MySQL init process done. Ready for start up.
+2026-10-15T12:36:52.0637905Z  
+2026-10-15T12:36:52.0642857Z Stop and remove container: 78d90919bfa14e8aa275617d9aa12111_mysql84_c6ffba
+2026-10-15T12:36:52.0647961Z ##[command]/usr/bin/docker rm --force 921f5c669dd6dcb51d7130e85308c2979d2833b1b95dedfd3db5a27bba56c35e
+2026-10-15T12:36:52.2197394Z 921f5c669dd6dcb51d7130e85308c2979d2833b1b95dedfd3db5a27bba56c35e
+2026-10-15T12:36:52.2224677Z Remove container network: github_network_d7cde75f230443dc95207e691bfa7a0e
+2026-10-15T12:36:52.2229854Z ##[command]/usr/bin/docker network rm github_network_d7cde75f230443dc95207e691bfa7a0e
+2026-10-15T12:36:52.3271764Z github_network_d7cde75f230443dc95207e691bfa7a0e
+2026-10-15T12:36:52.3344368Z Cleaning up orphan processes
+2026-10-15T12:36:52.3757645Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/upload-artifact@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
