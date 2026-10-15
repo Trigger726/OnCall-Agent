@@ -6,6 +6,7 @@ import {
   Menu, MessageSquarePlus, PanelLeft, Play, Plus, Send, Sparkles, Trash2, Workflow, X,
 } from 'lucide-vue-next'
 import ChatMessage from '@/components/ChatMessage.vue'
+import AssistantConfigurationDialog from '@/components/AssistantConfigurationDialog.vue'
 import RunbookCitationDialog from '@/components/RunbookCitationDialog.vue'
 import WorkbenchBackdrop from '@/components/WorkbenchBackdrop.vue'
 import StatusBadge from '@/components/StatusBadge.vue'
@@ -43,6 +44,7 @@ const sessions = ref<SessionSummary[]>([])
 const incidents = ref<IncidentSummary[]>([])
 const active = ref<SessionDetail | null>(null)
 const selectedCitation = ref<string | null>(null)
+const configurationOpen = ref(false)
 const loading = ref(true)
 const runtime = ref<AssistantRuntime | null>(null)
 const runtimeLabel = computed(() => runtime.value?.mode === 'MODEL'
@@ -501,6 +503,7 @@ function onComposerKeydown(event: KeyboardEvent) {
 
 function onSessionChange() {
   if (localStorage.getItem('opspilot_token') === pageToken) return
+  configurationOpen.value = false
   sessionChanged.value = true
   selectedCitation.value = null
   selectionVersion++
@@ -606,7 +609,7 @@ onBeforeUnmount(() => {
             <textarea v-model="draft" rows="2" maxlength="10000" aria-label="消息内容" :disabled="requestLocked" placeholder="输入问题，Enter 发送，Shift + Enter 换行" @keydown="onComposerKeydown" />
             <button class="assistant-send" title="发送消息" :disabled="requestLocked || !draft.trim()"><Send :size="18" /></button>
           </form>
-          <div class="assistant-composer-meta"><span><Sparkles :size="13" />{{ runtimeLabel }}</span><span>回答不会自动执行生产操作</span></div>
+          <div class="assistant-composer-meta"><button type="button" class="assistant-config-entry" aria-label="模型与 API 配置" aria-haspopup="dialog" :disabled="sessionChanged" @click="configurationOpen = true"><Sparkles :size="13" />模型与 API<ChevronRight :size="12" /></button><span>{{ runtimeLabel }}</span><span>回答不会自动执行生产操作</span></div>
         </div>
       </section>
 
@@ -641,6 +644,7 @@ onBeforeUnmount(() => {
       </aside>
     </div>
     <RunbookCitationDialog v-if="selectedCitation" :key="selectedCitation" :citation="selectedCitation" @close="selectedCitation = null" />
+    <AssistantConfigurationDialog v-if="configurationOpen" :runtime="runtime" @close="configurationOpen = false" />
   </div>
 </template>
 
@@ -687,6 +691,9 @@ onBeforeUnmount(() => {
 .assistant-composer textarea { min-height: 54px; padding: 4px 0; font-size: 14px; line-height: 1.7; }
 .assistant-send { width: 36px; height: 36px; border-radius: 50%; }
 .assistant-composer-meta { max-width: 724px; font-size: 10px; flex-wrap: wrap; gap: 4px 12px; }
+.assistant-config-entry { display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 2px 4px; border: 0; border-radius: 4px; background: transparent; color: var(--text-muted); font: inherit; cursor: pointer; }
+.assistant-config-entry:hover { color: var(--text); background: var(--surface-muted); }
+.assistant-config-entry:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .assistant-context-rail > header > span { font-size: 11px; }
 .assistant-context-title strong { font-size: 16px; line-height: 1.6; }
 .assistant-context-title > span, .assistant-context-rail dt { font-size: 11px; }
@@ -715,6 +722,7 @@ onBeforeUnmount(() => {
   .assistant-composer-wrap { padding: 8px 12px 12px; }
   .assistant-composer { padding: 10px 10px 10px 14px; }
   .assistant-composer-meta { justify-content: center; white-space: normal; }
+  .assistant-config-entry { min-height: 44px; }
 }
 @media (prefers-reduced-motion: reduce) { .assistant-session-rail, .assistant-evidence summary > svg:last-child { transition: none; } }
 </style>

@@ -1,5 +1,7 @@
 # OpsPilot
 
+最新配置入口：[CP11 模型与 API 部署说明](docs/acceptance/V1.8-checkpoint-11-assistant-config.md)。助手输入框下可直接查看当前模式、密钥配置位置及生效步骤；修正 Compose 写死关闭导致环境变量无法启用 AI 的接线，默认仍关闭。287 前端/301 脚本、四种真实 Compose 解析和新旧实页通过。独立新 Demo 9936；不是在线密钥编辑器或云模型联调证明，本轮独立 CI 待验。
+
 最新阅读体验：[CP10 安全代码块、原始步骤与正文引用](docs/acceptance/V1.8-checkpoint-10-answer-reader.md)。修复代码围栏内注释导致入库截断；170 Java/282 前端/299 脚本、原生 H2/MySQL 38 项及独立 Linux 两作业通过，原始附件已核验。新旧同回答对比确认步骤 1,2,1,2 不再被重排，精确来源可读；独立 Demo 9930，旧预览与 27 份命名包保留，不改密钥或冒称整个目标完成。
 
 最新工程：[CP09 引用追溯的真实 MySQL 与 Linux CI](docs/acceptance/V1.8-checkpoint-09-citation-ci.md)。本机 36 项 H2/MySQL、297 脚本通过；独立提交两作业成功，真实 MySQL 8.4.11/H2 同六场景、266 前端与五组页面流程通过，附件摘要/原 XML/来源 SHA 已核验。生产/UI/密钥和 25 份历史包不变，不冒称原完整 CI 全绿。
@@ -346,6 +348,8 @@ AI_ENABLED=false
 AI_ENABLED=true
 DASHSCOPE_API_KEY=your-key
 ```
+
+助手输入框下的“模型与 API”可查看配置位置。直接运行 JAR 时需由启动终端或 IDE 注入上述环境变量，`.env.example` 不会自动加载。使用 Docker Compose 时可在项目 `.env` 设置这两项，再运行 `docker compose up -d --build opspilot` 重新创建应用容器；只重启旧容器不会更新环境变量。源码 YAML 改动也不会自动更新已运行的旧 JAR。不要在聊天或前端代码中填写真实密钥。
 
 启用后，模型只能基于系统已收集的结构化证据生成研判摘要和对话回答。证据、规则假设、置信度和建议仍单独持久化，模型失败会自动回退到规则结果；OnCall 对话在没有 Key 时仍可回答告警、变更、状态和下一步动作。
 

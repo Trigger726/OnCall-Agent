@@ -2,13 +2,14 @@ name: Citation source contracts
 
 on:
   push:
-    branches: [main, master, "work/opspilot-citation-*"]
+    branches: [main, master, "work/opspilot-citation-*", "work/opspilot-assistant-config-*"]
     paths:
       - ".github/workflows/citation-source.yml"
       - "pom.xml"
       - "src/**"
       - "web/**"
       - "scripts/**"
+      - "docker-compose.yml"
   pull_request:
     paths:
       - ".github/workflows/citation-source.yml"
@@ -16,6 +17,7 @@ on:
       - "src/**"
       - "web/**"
       - "scripts/**"
+      - "docker-compose.yml"
   workflow_dispatch:
 
 permissions:
@@ -108,11 +110,15 @@ jobs:
         run: |
           npm ci --prefix scripts/browser
           node scripts/browser/node_modules/playwright/cli.js install --with-deps chromium
-          node --test scripts/tests/citation-source-ci.test.cjs scripts/tests/answer-reader-ui-ci.test.cjs
+          node --test scripts/tests/citation-source-ci.test.cjs scripts/tests/answer-reader-ui-ci.test.cjs scripts/tests/assistant-config-deployment.test.cjs
       - name: Verify all five source UI flows against the fresh default package
         run: node scripts/verify-runbook-citation-ui.cjs
       - name: Verify answer code, inline references, copy and native preview boundaries
         run: node scripts/verify-answer-reader-ui.cjs
+      - name: Verify deployment guidance and opt-in Compose configuration
+        run: |
+          node scripts/verify-assistant-config-compose.cjs
+          node scripts/verify-assistant-config-ui.cjs
       - uses: actions/upload-artifact@v5
         if: always()
         with:
@@ -120,4 +126,6 @@ jobs:
           path: |
             target/runbook-citation-ui-it/
             target/answer-reader-ui-it/
+            target/assistant-config-ui-it/
+            target/assistant-config-compose.json
           retention-days: 30

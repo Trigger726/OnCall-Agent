@@ -29,7 +29,7 @@ services:
       DB_PASSWORD: opspilot-local
       DB_DRIVER: com.mysql.cj.jdbc.Driver
       JWT_SECRET: local-compose-secret-replace-before-deployment-2026
-      AI_ENABLED: "false"
+      AI_ENABLED: ${AI_ENABLED:-false}
       # Spring AI still validates the connection property while AI features are disabled.
       # Keep the offline Compose path bootable without injecting a real credential.
       DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY:-disabled}
