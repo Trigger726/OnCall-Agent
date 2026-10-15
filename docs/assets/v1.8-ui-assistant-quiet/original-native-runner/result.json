@@ -1,0 +1,268 @@
+{
+  "status": "PASS",
+  "baselineCapture": false,
+  "url": "http://127.0.0.1:9955/assistant",
+  "browserReason": "Browser plugin not available; existing Playwright",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "flow": "send -> native preview before model completion -> committed answer or explicit terminal",
+  "fixture": "controlled real HTTP DashScope provider; not model quality or production capacity",
+  "jarSha256": "2b87dd91c65b2c87a9a3e23d33f87aac5884aa52ed4328b7073e7c5e96145873",
+  "tokensPersistedToEvidence": false,
+  "userFileDatabaseModified": false,
+  "cases": [
+    {
+      "name": "preview-before-final-commit",
+      "native": true,
+      "incremental": true,
+      "previewVisibleBeforeProviderRelease": true,
+      "databaseAnswersBeforeRelease": 0,
+      "finalAnswers": 1,
+      "modelCalls": 1
+    },
+    {
+      "name": "explicit-cancel-after-preview",
+      "status": "CANCELLED",
+      "cancelledAnswers": 0,
+      "originalKeyUsed": true,
+      "workerReusedBeforeOldProviderRelease": true,
+      "nativeHttpConnectionClosedBeforeProviderRelease": true
+    },
+    {
+      "name": "truncated-preview",
+      "status": "FAILED",
+      "partialAnswersCommitted": 0,
+      "modelCalls": 1
+    },
+    {
+      "name": "idle-after-preview",
+      "status": "TIMED_OUT",
+      "executionBudgetSeconds": 12,
+      "partialAnswersCommitted": 0,
+      "nativeHttpConnectionClosedBeforeProviderRelease": true
+    },
+    {
+      "name": "disconnect-after-preview-manual-query",
+      "status": "COMPLETED",
+      "originalAnswerIdPreserved": true,
+      "streamPosts": 1,
+      "modelCalls": 1
+    },
+    {
+      "name": "output-capacity-503-and-fixed-key-manual-recovery",
+      "actualErrorCode": "ASSISTANT_STREAM_SATURATED",
+      "errorMessageVisible": true,
+      "rejectedQuestionRows": 0,
+      "rejectedModelCalls": 0,
+      "rejectedKeyStatus": 404,
+      "noAutomaticRetry": true,
+      "sameKeyAndQuestionOnManualRetry": true,
+      "recoveredAnswerRows": 1,
+      "fixtureCancelPosts": 2
+    }
+  ],
+  "screenshots": [
+    "native-preview-desktop.png",
+    "native-preview-mobile.png",
+    "native-completed-mobile.png",
+    "native-cancelled-mobile.png",
+    "native-failed-mobile.png",
+    "native-timeout-mobile.png",
+    "native-recovered-desktop.png",
+    "output-saturated-desktop.png",
+    "output-saturated-mobile.png"
+  ],
+  "pageErrors": [],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 503 ()",
+    "Failed to load resource: the server responded with a status of 404 ()"
+  ],
+  "consoleErrorDetails": [
+    {
+      "text": "Failed to load resource: the server responded with a status of 503 ()",
+      "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/stream"
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 404 ()",
+      "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/request"
+    }
+  ],
+  "startedPid": 67984,
+  "capacityPhase": "complete",
+  "expectedConsoleErrors": [
+    {
+      "text": "Failed to load resource: the server responded with a status of 503 ()",
+      "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/stream",
+      "response": {
+        "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/stream",
+        "status": 503,
+        "code": "ASSISTANT_STREAM_SATURATED"
+      }
+    },
+    {
+      "text": "Failed to load resource: the server responded with a status of 404 ()",
+      "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/request",
+      "response": {
+        "url": "http://127.0.0.1:9955/api/v1/assistant/sessions/8/request",
+        "status": 404,
+        "code": "ASSISTANT_REQUEST_NOT_FOUND"
+      }
+    }
+  ],
+  "unexpectedConsoleErrors": [],
+  "providerRequests": [
+    {
+      "question": "cp75-first-preview-475e24b5-2ed0-4b7e-a0ab-eff77d04a400",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp75-cancel-preview-9abbe7c6-889f-4acb-8594-20a8a1eaecef",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp75-fresh-before-old-release-4e370d10-4ad1-4d1c-881c-00ac46c30733",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp75-truncated-preview-1bd7b9ac-4015-4912-90ac-24af3f948a8b",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp75-idle-timeout-78e93025-eb51-4647-a8a1-192111244056",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp75-disconnect-preview-f499d6e7-bc1f-40d6-8d7e-55b3d7cfff16",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp77-output-held-62ecc7df-7106-4e28-a237-3c8562e88728",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    },
+    {
+      "question": "cp77-output-queued-ab6cfffd-ccab-492e-b912-6768190aae43",
+      "calls": 0
+    },
+    {
+      "question": "cp77-output-rejected-62bb998d-88e2-4976-8781-586aab9f109d",
+      "calls": 1,
+      "native": true,
+      "incremental": true,
+      "transportClosed": true
+    }
+  ],
+  "streamPosts": 8,
+  "explicitCancelPosts": 1,
+  "fixtureHeldStreams": [
+    {
+      "sessionId": 6,
+      "responseStatus": 200,
+      "ended": true,
+      "cancelledEvent": true,
+      "doneEvent": false,
+      "observedBytes": 343,
+      "contentType": "text/event-stream;charset=UTF-8",
+      "observations": [
+        {
+          "phase": "request-started",
+          "elapsedMs": 0,
+          "observedBytes": 0
+        },
+        {
+          "phase": "headers-received",
+          "elapsedMs": 25,
+          "observedBytes": 0
+        },
+        {
+          "phase": "chunk-received",
+          "elapsedMs": 25,
+          "observedBytes": 22
+        },
+        {
+          "phase": "chunk-received",
+          "elapsedMs": 26,
+          "observedBytes": 235
+        },
+        {
+          "phase": "chunk-received",
+          "elapsedMs": 2527,
+          "observedBytes": 256
+        },
+        {
+          "phase": "chunk-received",
+          "elapsedMs": 2527,
+          "observedBytes": 343
+        },
+        {
+          "phase": "body-ended",
+          "elapsedMs": 2528,
+          "observedBytes": 343
+        }
+      ],
+      "controlledFixtureBody": "event:generation\ndata:{\"type\":\"generation\",\"content\":\"NATIVE\",\"messageId\":null,\"evidenceJson\":null}\n\nevent:token\ndata:{\"type\":\"token\",\"content\":\"  已知事实：受控原生片段\\uD83D\\uDE42\\n\",\"messageId\":null,\"evidenceJson\":null}\n\nevent:cancelled\ndata:{\"type\":\"cancelled\",\"content\":\"回答已取消\",\"messageId\":null,\"evidenceJson\":null}\n\n"
+    },
+    {
+      "sessionId": 7,
+      "responseStatus": 200,
+      "ended": true,
+      "cancelledEvent": true,
+      "doneEvent": false,
+      "observedBytes": 108,
+      "contentType": "text/event-stream;charset=UTF-8",
+      "observations": [
+        {
+          "phase": "request-started",
+          "elapsedMs": 0,
+          "observedBytes": 0
+        },
+        {
+          "phase": "headers-received",
+          "elapsedMs": 2509,
+          "observedBytes": 0
+        },
+        {
+          "phase": "chunk-received",
+          "elapsedMs": 2509,
+          "observedBytes": 21
+        },
+        {
+          "phase": "chunk-received",
+          "elapsedMs": 2509,
+          "observedBytes": 108
+        },
+        {
+          "phase": "body-ended",
+          "elapsedMs": 2510,
+          "observedBytes": 108
+        }
+      ],
+      "controlledFixtureBody": "event:cancelled\ndata:{\"type\":\"cancelled\",\"content\":\"回答已取消\",\"messageId\":null,\"evidenceJson\":null}\n\n"
+    }
+  ],
+  "ownedProcessStopped": true,
+  "ownedProviderStopped": true,
+  "unexpectedJarErrors": 0
+}

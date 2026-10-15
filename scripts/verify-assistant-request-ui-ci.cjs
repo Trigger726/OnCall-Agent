@@ -11,7 +11,9 @@ async function verify() {
   const baseline = process.env.OPSPILOT_ASSISTANT_UI_BASELINE === '1';
   if (baseline && process.env.CI) throw new Error('Baseline capture cannot replace assistant UI acceptance');
   const root = path.resolve(__dirname, '..');
-  const jar = path.join(root, baseline ? 'target/cp73-before/opspilot-cp72.jar' : 'target/opspilot-0.1.0-SNAPSHOT.jar');
+  const localJar = process.env.OPSPILOT_ASSISTANT_UI_JAR;
+  if (localJar && (baseline || process.env.CI)) throw new Error('Named JAR override is local-only and cannot replace CI/baseline acceptance');
+  const jar = localJar ? path.resolve(root, localJar) : path.join(root, baseline ? 'target/cp73-before/opspilot-cp72.jar' : 'target/opspilot-0.1.0-SNAPSHOT.jar');
   assert.ok(fs.existsSync(jar), 'Build or preserve the scoped JAR first');
   await requireFreePort(9945); await requireFreePort(9946);
   const parent = path.join(root, 'target/assistant-request-ui-it'); fs.mkdirSync(parent, { recursive: true });
@@ -117,6 +119,18 @@ async function verify() {
     }
     const counts = async id => (await api(context, token, '/assistant/sessions/' + id)).json.data.messages;
     const state = async (id, key) => api(context, token, '/assistant/sessions/' + id + '/request', 'GET', undefined, key);
+    async function waitForCompleted() {
+      if (baseline) { await page.getByText('回答已完成', { exact: true }).waitFor(); return; }
+      await page.waitForFunction(() => {
+        const input = document.querySelector('.assistant-composer textarea');
+        return Boolean(input && !input.disabled && !document.querySelector('.assistant-request-status'));
+      });
+      const currentId = Number(new URL(page.url()).searchParams.get('session'));
+      const current = await state(currentId, posts.at(-1).key);
+      assert.equal(current.json.data.status, 'COMPLETED');
+      assert.ok((await counts(currentId)).some(message => message.id === current.json.data.answerMessageId && message.role === 'ASSISTANT'));
+      assert.equal(await page.getByRole('button', { name: '继续提问', exact: true }).count(), 0);
+    }
     const send = async content => { await page.locator('.assistant-composer textarea').fill(content); await page.getByTitle('发送消息', { exact: true }).click(); };
     if (!baseline) {
       // Hold a real successful session GET: the composer must not accept a question before its context exists.
@@ -178,7 +192,7 @@ async function verify() {
       await page.unroute('**/api/v1/assistant/sessions/' + completedId + '/stream');
       await page.reload(); await page.getByText('结果待确认', { exact: true }).waitFor();
       await snapshot(page, 'recovery-desktop');
-      await page.getByRole('button', { name: '查询原请求', exact: true }).click(); await page.getByText('回答已完成', { exact: true }).waitFor();
+      await page.getByRole('button', { name: '查询原请求', exact: true }).click(); await waitForCompleted();
       await page.locator('.assistant-message-list').getByText(sentinel, { exact: true }).waitFor();
       assert.equal(posts.length, beforePosts + 1); assert.equal(calls, beforeCalls + 1);
       assert.equal((await state(completedId, posts.at(-1).key)).json.data.answerMessageId, (await counts(completedId)).find(x => x.role === 'ASSISTANT').id);
@@ -248,7 +262,7 @@ async function verify() {
       await page.getByRole('button', { name: '查询原请求', exact: true }).click(); await page.getByText('暂未查到原请求', { exact: true }).waitFor();
       await snapshot(page, 'saturated-desktop');
       release(); assert.equal((await blocking).status, 200); assert.equal((await occupying).status, 200);
-      await page.getByRole('button', { name: '继续原请求', exact: true }).click(); await page.getByText('回答已完成', { exact: true }).waitFor();
+      await page.getByRole('button', { name: '继续原请求', exact: true }).click(); await waitForCompleted();
       assert.equal(posts.at(-1).key, posts.at(-2).key); assert.equal(posts.at(-1).content, posts.at(-2).content);
       result.cases.push({ name: 'real-capacity-feedback', serverCapacity: 'one worker and one queue slot', actualRejectedStatus: 503,
         actualJsonErrorResponse: true, rejectedQuestionRows: 0,
@@ -261,11 +275,10 @@ async function verify() {
       await page.setViewportSize({ width: 390, height: 844 }); await snapshot(page, 'timed-out-mobile');
       release(); assert.equal((await counts(timeoutId)).filter(x => x.role === 'ASSISTANT').length, 0);
       await page.getByRole('button', { name: '继续提问', exact: true }).click(); await send('actual answer after timeout');
-      await page.getByText('回答已完成', { exact: true }).waitFor();
+      await waitForCompleted();
       result.cases.push({ name: 'real-budget-timeout', serverBudgetSeconds: 30, queriedTerminal: 'TIMED_OUT',
         originalRequestNotRerun: true, lateAnswers: 0, actualWorkerSettledByFreshAnswer: true });
 
-      await page.getByRole('button', { name: '继续提问', exact: true }).click();
       let delayedClear;
       await page.route('**/api/v1/assistant/sessions/' + timeoutId + '/messages', async route => {
         const response = await context.request.fetch(route.request()); assert.equal(response.status(), 200);

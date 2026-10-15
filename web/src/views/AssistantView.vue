@@ -337,6 +337,13 @@ async function sendFrozenRequest(intent: Readonly<AssistantIntent>) {
   }
 }
 
+function completedAnswerMatches(intent: AssistantIntent, state: AssistantRequestView, detail: SessionDetail) {
+  return detail.session.id === intent.sessionId
+    && detail.messages.some(item => item.id === state.questionMessageId && item.role === 'USER' && item.content === intent.content)
+    && detail.messages.some(item => item.id === state.answerMessageId && item.role === 'ASSISTANT'
+      && !item.provisional && Boolean(item.content.trim()))
+}
+
 async function applyRequestState(intent: AssistantIntent, state: AssistantRequestView,
   lease: ReturnType<typeof captureStreamSession>, current: () => boolean) {
   const detail = await readAssistantSession<SessionDetail>(intent, lease.signal)
@@ -344,7 +351,7 @@ async function applyRequestState(intent: AssistantIntent, state: AssistantReques
   if (!current()) return
   // An earlier GET must not regress a terminal observed by the concurrent original stream.
   if (requestState.value && assistantTerminal(requestState.value.status) && !assistantTerminal(state.status)) return
-  if (state.status === 'COMPLETED' && !detail.messages.some(item => item.id === state.answerMessageId && item.role === 'ASSISTANT')) {
+  if (state.status === 'COMPLETED' && !completedAnswerMatches(intent, state, detail)) {
     throw new Error('原答案未能回读，请再次查询原请求')
   }
   active.value = detail
@@ -357,7 +364,23 @@ async function applyRequestState(intent: AssistantIntent, state: AssistantReques
     : assistantTerminal(state.status) ? '原请求已经结束，不会自动重跑。核对记录后可继续提问。'
     : '这是查询时的服务端状态，可再次查询或显式取消；不会自动重发。'
   error.value = ''
-  if (assistantTerminal(state.status)) clearAssistantIntent(intent)
+  if (assistantTerminal(state.status)) {
+    try { clearAssistantIntent(intent) }
+    catch {
+      lease.check()
+      if (!current()) return
+      requestNotice.value = '服务端结果已确认，但本地请求记录未能清除。请重试“继续提问”，不会重新提交问题。'
+      error.value = '本地请求记录清除失败'
+      await scrollToBottom()
+      return
+    }
+    if (state.status === 'COMPLETED') {
+      // Only a persisted answer matching this exact question unlocks the composer.
+      // Stop the concurrent original reader before discarding its intent, never a server-side cancel.
+      abortController?.abort()
+      pendingRequest.value = null; requestState.value = null; requestNotice.value = ''
+    }
+  }
   await scrollToBottom()
 }
 
@@ -395,7 +418,8 @@ async function retryOriginalRequest() {
 }
 function acknowledgeRequest() {
   if (!pendingRequest.value || !requestTerminal.value || sending.value || requestControl.value) return
-  clearAssistantIntent(pendingRequest.value)
+  try { clearAssistantIntent(pendingRequest.value) }
+  catch { error.value = '本地请求记录清除失败，请重试'; return }
   pendingRequest.value = null; requestState.value = null; requestNotice.value = ''; error.value = ''
 }
 function removeBrokenRecord() {
@@ -507,7 +531,6 @@ onBeforeUnmount(() => {
             <ChevronRight :size="15" />
           </button>
         </div>
-        <footer><span class="assistant-mode-dot" /><div><strong>{{ active?.context ? 'Incident 协作' : '通用对话' }}</strong><span>{{ runtimeLabel }}</span></div></footer>
       </aside>
       <div v-if="mobileSessionsOpen" class="assistant-mobile-scrim" @click="mobileSessionsOpen = false" />
       <div v-if="mobileContextOpen" class="assistant-context-scrim" @click="mobileContextOpen = false" />
@@ -543,10 +566,10 @@ onBeforeUnmount(() => {
                 <small v-if="message.provisional" class="assistant-preview-label" role="status">模型实时生成 · 片段尚未保存</small>
                 <ChatMessage v-if="message.content" :content="message.content" />
                 <div v-else class="assistant-generating"><i /><i /><i /></div>
-                <div v-if="evidence(message).length" class="assistant-evidence">
-                  <span><FileText :size="13" />证据引用</span>
-                  <em v-for="item in evidence(message)" :key="item.ref">{{ item.ref }}</em>
-                </div>
+                <details v-if="evidence(message).length" class="assistant-evidence">
+                  <summary><FileText :size="14" /><span>{{ evidence(message).length }} 条证据</span><ChevronRight :size="14" /></summary>
+                  <ul><li v-for="item in evidence(message)" :key="item.ref"><strong>{{ item.label }}</strong><code>{{ item.ref }}</code></li></ul>
+                </details>
                 <button v-if="message.content && !message.provisional" class="assistant-copy" :title="copiedId === message.id ? '已复制' : '复制回答'" @click="copyMessage(message)"><Check v-if="copiedId === message.id" :size="14" /><Copy v-else :size="14" /></button>
               </div>
             </article>
@@ -616,8 +639,6 @@ onBeforeUnmount(() => {
 .assistant-shell { grid-template-columns: 232px minmax(0, 1fr) 280px; }
 .assistant-session-list strong { font-size: 13px; font-weight: 600; }
 .assistant-session-list span, .assistant-session-list small { font-size: 11px; }
-.assistant-session-rail > footer strong, .assistant-session-rail > footer span { font-size: 11px; }
-.assistant-session-rail > footer > div { min-width: 0; overflow-wrap: anywhere; }
 .assistant-conversation { position: relative; isolation: isolate; }
 .assistant-conversation > :not(.workbench-backdrop) { position: relative; z-index: 1; }
 .assistant-chat-head, .assistant-composer-wrap { background: color-mix(in srgb, var(--surface) 95%, transparent); }
@@ -639,7 +660,15 @@ onBeforeUnmount(() => {
 .assistant-message-body > header time { font-size: 10px; }
 .assistant-message-body :deep(.chat-markdown) { font-size: 14px; line-height: 1.85; overflow-wrap: anywhere; }
 .assistant-message-body :deep(.chat-markdown h3) { font-size: 15px; }
-.assistant-evidence > span, .assistant-evidence em { font-size: 11px; overflow-wrap: anywhere; }
+.assistant-evidence { display: block; }
+.assistant-evidence summary { width: fit-content; display: flex; align-items: center; gap: 7px; color: var(--text-muted); font-size: 12px; cursor: pointer; list-style: none; border-radius: 4px; }
+.assistant-evidence summary::-webkit-details-marker { display: none; }
+.assistant-evidence summary > svg:last-child { transition: transform 120ms ease; }
+.assistant-evidence[open] summary > svg:last-child { transform: rotate(90deg); }
+.assistant-evidence ul { display: grid; gap: 10px; margin: 12px 0 0; padding: 0; list-style: none; }
+.assistant-evidence li { display: grid; gap: 3px; overflow-wrap: anywhere; }
+.assistant-evidence li strong { font-size: 12px; font-weight: 500; }
+.assistant-evidence li code { color: var(--text-muted); font-size: 11px; white-space: normal; }
 .assistant-composer-wrap { padding: 12px 28px 16px; }
 .assistant-composer { max-width: 724px; min-height: 84px; padding: 12px 12px 12px 18px; border-radius: 16px; }
 .assistant-composer textarea { min-height: 54px; padding: 4px 0; font-size: 14px; line-height: 1.7; }
@@ -674,5 +703,5 @@ onBeforeUnmount(() => {
   .assistant-composer { padding: 10px 10px 10px 14px; }
   .assistant-composer-meta { justify-content: center; white-space: normal; }
 }
-@media (prefers-reduced-motion: reduce) { .assistant-session-rail { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .assistant-session-rail, .assistant-evidence summary > svg:last-child { transition: none; } }
 </style>

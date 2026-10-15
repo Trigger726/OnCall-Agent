@@ -23,7 +23,9 @@ async function verify() {
   const baseline = process.env.OPSPILOT_ASSISTANT_NATIVE_BASELINE === '1';
   if (baseline && process.env.CI) throw new Error('Baseline capture cannot replace native assistant UI acceptance');
   const root = path.resolve(__dirname, '..');
-  const jar = path.join(root, baseline ? 'target/cp75-before/opspilot-cp74.jar' : 'target/opspilot-0.1.0-SNAPSHOT.jar');
+  const localJar = process.env.OPSPILOT_ASSISTANT_UI_JAR;
+  if (localJar && (baseline || process.env.CI)) throw new Error('Named JAR override is local-only and cannot replace CI/baseline acceptance');
+  const jar = localJar ? path.resolve(root, localJar) : path.join(root, baseline ? 'target/cp75-before/opspilot-cp74.jar' : 'target/opspilot-0.1.0-SNAPSHOT.jar');
   assert.ok(fs.existsSync(jar)); await requireFreePort(9955); await requireFreePort(9956);
   const parent = path.join(root, 'target/assistant-native-ui-it'); fs.mkdirSync(parent, { recursive: true });
   const evidence = fs.mkdtempSync(path.join(parent, 'run-'));
@@ -117,6 +119,18 @@ async function verify() {
     }
     const messages = async id => (await api('/assistant/sessions/' + id)).messages;
     const state = (id, key) => api('/assistant/sessions/' + id + '/request', 'GET', undefined, key);
+    async function waitForCompleted() {
+      if (baseline) { await page.getByText('回答已完成', { exact: true }).waitFor(); return; }
+      await page.waitForFunction(() => {
+        const input = document.querySelector('.assistant-composer textarea');
+        return Boolean(input && !input.disabled && !document.querySelector('.assistant-request-status'));
+      });
+      const currentId = Number(new URL(page.url()).searchParams.get('session'));
+      const current = await state(currentId, posts.at(-1).key);
+      assert.equal(current.status, 'COMPLETED');
+      assert.ok((await messages(currentId)).some(message => message.id === current.answerMessageId && message.role === 'ASSISTANT'));
+      assert.equal(await page.getByRole('button', { name: '继续提问', exact: true }).count(), 0);
+    }
     async function fresh() {
       const id = (await api('/assistant/sessions', 'POST', {})).session.id;
       await page.goto(base + '/assistant?session=' + id); await page.locator('.assistant-loading').waitFor({ state: 'hidden' }); return id;
@@ -149,7 +163,7 @@ async function verify() {
     await snapshot(baseline ? 'old-waiting-desktop' : 'native-preview-desktop');
     await page.setViewportSize({ width: 390, height: 844 }); await snapshot(baseline ? 'old-waiting-mobile' : 'native-preview-mobile');
     assert.equal(control.gated, true); finish(control);
-    await page.getByText('回答已完成', { exact: true }).waitFor();
+    await waitForCompleted();
     assert.equal(await page.locator('.assistant-preview-label').count(), 0);
     assert.equal((await messages(id)).find(item => item.role === 'ASSISTANT').content, baseline ? (FIRST + LAST).trim() : FIRST + LAST);
     assert.equal(await page.locator('.assistant-message.assistant .assistant-copy').count(), 1);
@@ -165,7 +179,7 @@ async function verify() {
       assert.equal(await page.locator('.assistant-preview-label').count(), 0); assert.equal(await page.locator('.assistant-message.assistant').count(), 0);
       assert.equal(cancellations.at(-1), originalKey); await snapshot('native-cancelled-mobile');
       await page.getByRole('button', { name: '继续提问', exact: true }).click(); await send('fresh-before-old-release', false);
-      await page.getByText('回答已完成', { exact: true }).waitFor(); assert.equal(cancelled.gated, true);
+      await waitForCompleted(); assert.equal(cancelled.gated, true);
       await until(() => cancelled.transportClosed === true);
       assert.equal((await messages(cancelledId)).filter(item => item.role === 'ASSISTANT').length, 1); finish(cancelled);
       result.cases.push({ name: 'explicit-cancel-after-preview', status: 'CANCELLED', cancelledAnswers: 0, originalKeyUsed: true,
@@ -194,7 +208,7 @@ async function verify() {
       await page.reload(); await page.getByText('结果待确认', { exact: true }).waitFor();
       assert.equal((await state(recoveredId, posts.at(-1).key)).status, 'RUNNING'); finish(recovered);
       await until(async () => (await state(recoveredId, posts.at(-1).key)).status === 'COMPLETED');
-      await page.getByRole('button', { name: '查询原请求', exact: true }).click(); await page.getByText('回答已完成', { exact: true }).waitFor();
+      await page.getByRole('button', { name: '查询原请求', exact: true }).click(); await waitForCompleted();
       assert.equal(posts.length, beforePosts); assert.equal(recovered.calls, 1);
       assert.equal((await state(recoveredId, posts.at(-1).key)).answerMessageId, (await messages(recoveredId)).find(item => item.role === 'ASSISTANT').id);
       await snapshot('native-recovered-desktop');
@@ -280,7 +294,7 @@ async function verify() {
       expectedConsoleResponses.push({ url: actualMissing.url(), status: 404, code: missingBody.error.code });
       await page.getByRole('button', { name: '继续原请求', exact: true }).waitFor();
       assert.equal(posts.length, priorPosts + 1); await page.getByRole('button', { name: '继续原请求', exact: true }).click();
-      await page.getByText('回答已完成', { exact: true }).waitFor(); assert.equal(posts.length, priorPosts + 2);
+      await waitForCompleted(); assert.equal(posts.length, priorPosts + 2);
       assert.equal(posts.at(-1).key, rejectedKey); assert.equal(posts.at(-1).question, rejected.question); assert.equal(rejected.calls, 1);
       assert.equal((await messages(rejectedId)).filter(item => item.role === 'ASSISTANT').length, 1);
       result.cases.push({ name: 'output-capacity-503-and-fixed-key-manual-recovery', actualErrorCode: 'ASSISTANT_STREAM_SATURATED',

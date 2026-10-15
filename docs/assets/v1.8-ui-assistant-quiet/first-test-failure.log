@@ -1,0 +1,497 @@
+
+> opspilot-web@0.1.0 test
+> node --test tests/*.test.mjs
+
+✔ truncated POST resumes GET, ignores duplicates and rotates key only on terminal (45.9138ms)
+✔ header recovers an empty reused POST before any event arrives (1.9371ms)
+✔ ambiguous POST network failure reuses the original idempotency key (1.3309ms)
+✔ UTF-8 byte chunks, CRLF and multiline data parse without corruption (8.6719ms)
+✔ all five terminal kinds stop reconnection, queue rejection remains actionable (4.0587ms)
+✔ 401 expires authentication once without retrying or clearing the run key (1.1063ms)
+✔ no-progress retries have a hard limit and preserve key for manual recovery (1.3994ms)
+✔ abort during retry backoff stops requests without calling cancel API (0.8322ms)
+✔ foreign events and handler errors never advance cursor or retry (1.0576ms)
+✔ fresh-page subscription is GET-only, replays history and does not touch POST keys (1.0475ms)
+✔ subscription rejects invalid IDs and foreign events without any start request (0.8146ms)
+✔ failed auto-attachment has bounded retries and never becomes a POST (0.7179ms)
+✔ already aborted subscription neither fetches nor touches browser storage (0.3837ms)
+✔ late POST stream 401 cannot expire a newly signed-in session (1.1385ms)
+✔ late GET stream 401 cannot expire a newly signed-in session (0.2779ms)
+✔ late successful stream frames cannot render under a replacement session (0.5735ms)
+✔ a reconnect never switches to newly signed-in credentials (0.5501ms)
+✔ pending POST idempotency keys are isolated by the verified UI account identity (0.9107ms)
+✔ storage cancels a pending reader and releases every session listener (1.2339ms)
+✔ opspilot-auth-session-changed cancels a pending reader and releases every session listener (0.6844ms)
+✔ caller-abort cancels a pending reader and releases every session listener (0.6037ms)
+✔ successful and failed streams release listeners without aborting caller or cancelling server runs (0.8804ms)
+✔ unrelated storage notifications do not interrupt a current authenticated stream (1.2405ms)
+✔ malformed account namespaces fail before POST without inheriting a legacy unowned key (5.142ms)
+✔ a fresh login of the same actor preserves an ambiguous command for same-key recovery (0.9174ms)
+✔ a matched committed answer restores input without a second confirmation (4.4525ms)
+✔ completion needs exact session, original question ID/content and a non-provisional answer (9.1959ms)
+✔ unknown and running states remain locked and never cancel or clear the original request (2.5544ms)
+✔ cancelled, timed-out and failed requests retain explicit acknowledgement (5.3327ms)
+✔ storage cleanup failure preserves the receipt, visible error and recovery action (1.6663ms)
+✔ late readback cannot clear a newer request on the same conversation (1.4103ms)
+✔ an older running snapshot cannot regress an already confirmed terminal (1.2533ms)
+✔ revoked lease cannot apply an answer or clear storage (1.4591ms)
+✔ busy acknowledgement cannot unlock another in-flight operation (1.3114ms)
+✖ sources are a native disclosure and duplicate sidebar mode has been removed (2.7268ms)
+✔ Enter sends once, but IME composition and modified Enter never submit (2.1689ms)
+✔ runtime label comes from the server, not a guessed brand or model (0.393ms)
+✔ existing themes and native motion stay intact, narrow screens prioritise conversation (0.3928ms)
+✔ native generation and token previews have no durable ID until committed done (44.8043ms)
+✔ freezes and persists the original question before POST; refresh uses the same key and cannot overwrite (1.1797ms)
+✔ native previews reject premature IDs, missing generation, mixed protocols and empty completion (8.5999ms)
+✔ native EOF and terminal error never turn partial output into a saved answer or retry (2.512ms)
+✔ native cancellation after one-byte UTF-8 previews retains the frozen intent for SQL reconciliation (14.4977ms)
+✔ account and session namespaces isolate pending intents; a refreshed token for the same owner may query (3.4896ms)
+✔ storage failure, damaged intent and missing owner reject before any command (1.3803ms)
+✔ network failure is ambiguous, does not retry and retains exactly the frozen payload/key (0.8448ms)
+✔ EOF without done, truncated done and unknown protocol cannot be claimed completed or auto-retried (2.5422ms)
+✔ UTF-8 one-byte chunks, CRLF and multi-line data require a real done and stable message ID (6.4798ms)
+✔ different answer IDs and non-SSE success are unsafe; explicit cancelled is a distinct terminal (1.6088ms)
+✔ query and cancellation use original key, no question body, no automatic POST after 404/409/503 (2.2067ms)
+✔ completed before cancellation preserves the original IDs; all documented statuses validate (3.0261ms)
+✔ lost cancellation response stays ambiguous and can be queried without a second cancellation (1.0045ms)
+✔ late old 401 and late old success cannot expire or update the replacement account (1.3902ms)
+✔ current 401 expires once and keeps the recoverable intent (0.6808ms)
+✔ caller abort and identity change while reading cancel the reader without backend cancellation (11.9283ms)
+✔ owner metadata change after fetch is fenced even if token did not change (0.6174ms)
+✔ late token change during JSON decoding fences query and cancel results (0.389ms)
+✔ every helper releases account listeners on success and failure (0.9245ms)
+✔ already aborted caller never reaches fetch or removes original storage (0.3069ms)
+✔ manual continuation after a missing request sends byte-identical payload without rotating key (0.8934ms)
+✔ SSE preference still parses typed JSON rejection without retry or clearing the original key (1.1256ms)
+✔ empty 503 response preserves HTTP status and gives actionable unavailability feedback, not a guessed terminal (0.8462ms)
+✔ incorrect current password preserves a still-valid session and exposes credential error (38.5755ms)
+✔ a revoked password command expires authentication without retrying (1.3045ms)
+✔ ordinary protected 401 still expires even with a credential error body (3.5653ms)
+✔ a delayed old-session 401 cannot sign out a newly signed-in identity (0.9711ms)
+✔ malformed 401 remains authentication failure, not an invalid-format success (1.6388ms)
+✔ password policy counts Unicode codepoints and rejects UTF8 truncation, invalid Unicode and NUL (0.9199ms)
+✔ confirmation and unchanged passwords fail without trimming legitimate input (0.34ms)
+✔ self-session commands send exact payload once with bounded signal and no target account (2.8062ms)
+✔ ambiguous mutation is not retried or called successful and no password draft is stored (0.7059ms)
+✔ malformed successful mutation contract is uncertainty, not a successful logout claim (0.8009ms)
+✔ build glob engine handles nested single set without stack exhaustion (1019.1248ms)
+✔ build glob engine handles nested comma alternatives without stack exhaustion (705.1741ms)
+✔ normal Vue compiler attribute globs and include patterns keep their meaning (15.6181ms)
+✔ actual Vue compiler does not silently print a glob stack error with exit zero (2827.6398ms)
+✔ UI uses locally bundled MiSans while code retains monospace (2.4923ms)
+✔ publisher variable weights, unicode ranges and swap are retained without remote requests (1.4891ms)
+✔ all official font bytes and bundled license match the source manifest (49.5294ms)
+✔ clock retains database local seconds without browser timezone conversion (1.5365ms)
+✔ state distinguishes gaps, inactive schedules, unavailable members and winning layers (0.5425ms)
+✔ warnings do not count shadowed or ineligible shifts as additional coverage (1.2561ms)
+✔ hours preserve fractional windows and zero gaps (26.7584ms)
+✔ calendar splits midnight without double counting, retains clipped segments and leap days (3.1987ms)
+✔ calendar uses zone-less arithmetic, end-midnight is excluded and gap totals remain explicit (0.2846ms)
+✔ read-only query sends exact local timestamps and no mutation (25.1903ms)
+✔ dense coverage error propagates without retry or a fabricated result (1.0621ms)
+✔ source entry requires eligible owner, ordinary noncancelled and unexpired source (1.6846ms)
+✔ only actual participants get actions; expired pending permits reject/withdraw but never accept (1.388ms)
+✔ clock stays zone-less with seconds and expiry never invents a persisted EXPIRED state (0.4946ms)
+✔ canonical draft rejects wrong source/version, self target and out-of-window/fractional timestamps (0.7028ms)
+✔ storage restores exact frozen command per account and never includes credentials (0.8366ms)
+✔ corrupt or foreign drafts fail without erasing recovery data; storage failures propagate (0.9339ms)
+✔ reads send server-side scope/status filters; all status is omitted and truncation retained (28.3795ms)
+✔ ambiguous request failure does not retry, change key or mutate the caller payload (0.8941ms)
+✔ decision keeps captured version/reason; 409 propagates without rebasing or automatic retry (1.0709ms)
+✔ 401 raises auth expiry once without rotating the idempotency key (0.9038ms)
+✔ coverage display separates accepted consent from scheduled/ended/cancelled coverage facts (0.3726ms)
+✔ new revocation requires management and a fresh accepted unended uncancelled replacement (0.45ms)
+✔ revocation payload validates captured versions, canonical key and bounded reason (0.3351ms)
+✔ revocation storage restores exact versions/key/reason and persisted conflict lock per actor (0.4974ms)
+✔ corrupt revocation storage is retained and quota failure propagates before any request (0.5617ms)
+✔ coverage read uses the independent snapshot endpoint without mutation (1.2214ms)
+✔ revocation ambiguous response manually retries exact frozen payload only (0.6091ms)
+✔ revocation 409 and 403 preserve captured intent without rotating versions or key (1.0021ms)
+✔ publication is owned ordinary live source for all three operational roles, never manager impersonation (2.0345ms)
+✔ strict naive time accepts minute inputs and whole seconds, rejects invalid dates and fractional commands (0.3864ms)
+✔ claimants must be themselves and cannot self-claim; readers cannot write (0.6193ms)
+✔ ongoing request allows remaining claim, exact DB end rejects new claim but owner withdrawal remains (0.5958ms)
+✔ closed unknown or inconsistent receipt facts do not offer a new operation (0.6104ms)
+✔ all command versions explicit integers, lower UUID, bounded reason and original identity mandatory (1.0671ms)
+✔ publication subwindow must stay within captured source and retain canonical seconds (0.3996ms)
+✔ preflight reads exact source version, owner and active plan/users; no silent rebase (1.1947ms)
+✔ latest coverage ID/version or deadline changes block a first claim without rebasing (0.5177ms)
+✔ remaining-window conflicts reject while an earlier ended override does not (0.4206ms)
+✔ owner withdrawal needs request but not ongoing source/active schedule (0.1874ms)
+✔ original per actor intent roundtrips with blocked flag and no network/retry (0.9761ms)
+✔ corrupt foreign empty or structurally invalid saved intent retained and rejected (1.1522ms)
+✔ quota read denial silent no-op save and removal errors propagate without POST (0.5778ms)
+✔ list/coverage/roster actual API paths retain SQL filters and captured naive interval (26.306ms)
+✔ foreign or invalid coverage response rejects and cannot masquerade as selected request (1.7876ms)
+✔ publish sends only exact original command and requires its own matching receipt (0.9106ms)
+✔ claim and withdrawal send original keys/version, never targetUserId or new identity (2.4445ms)
+✔ foreign actor key version kind or reason in POST receipt cannot clear original intent (2.3855ms)
+✔ HTTP409 and transport loss are single calls, with no implicit retry (0.7015ms)
+✔ silent removal and failed clear readback do not claim original intent was removed (0.3747ms)
+✔ successful clear verifies null for exactly this actor and leaves another actor untouched (0.3402ms)
+✔ history response rejects contradictory request operation replacement relationships (4.7274ms)
+✔ POST receipt preserves all immutable captured request fields before clearing original intent (5.5125ms)
+✔ real cancelled ended claim receipt remains valid without inventing current responsibility (0.8147ms)
+✔ withdrawal cannot acknowledge a claim coverage or another actor operation (1.6198ms)
+✔ publication original receipt may already be closed but cannot move to another schedule (0.7408ms)
+✔ shared queue and per-process statistics retain distinct scopes without cluster or human acceptance (2.1311ms)
+✔ disabled configuration permits real historical backlog without an active or fictitious worker (0.5023ms)
+✔ empty SQL aggregate uses actual null oldest time not an invented date (0.6776ms)
+✔ inconsistent partitions pending-due expired lease and metadata scopes fail closed (0.669ms)
+✔ invalid timestamps unsafe numbers negative fractions and nonzero local queue are rejected (0.7983ms)
+✔ shutdown request is not termination and may coexist with one in-flight worker (0.3886ms)
+✔ runtime whitelist drops provider payload secrets and recipient identifiers (1.1075ms)
+✔ database formatter retains microseconds without browser timezone conversion (0.2737ms)
+✔ captured admin read is exactly one GET with no body and an abort signal (44.8373ms)
+✔ bad role identity or native token replacement produces zero reads (1.3176ms)
+✔ 503 or contradictory 200 facts never become zero backlog or an automatic retry (1.9087ms)
+✔ service 401 emits session expiry and does not retain global facts (0.9908ms)
+✔ five technical states never imply human acceptance; disabled configuration preserves historical success (2.8967ms)
+✔ missing implementation enabled time array or contradictory delivery metadata fails closed (0.922ms)
+✔ cross-request duplicate recipient key or invalid versions cannot render as current facts (0.6814ms)
+✔ lifetime attempts above ten survive explicit redrive without claiming delivery (0.4717ms)
+✔ delivered requires actual 2xx attempt timestamp with no lease or error (0.8183ms)
+✔ claimed is only a lease observation, never client expiry or delivery (0.4798ms)
+✔ technical parser drops payload URL channel token lease owner and unknown receipt fields (0.4681ms)
+✔ bounded array allows empty and 500 distinct original recipients, rejects 501 (5.857ms)
+✔ database timestamp formatting does not use browser timezone or lose microseconds (0.4944ms)
+✔ authenticated read is exact GET with captured token and no commands or body (40.9376ms)
+✔ bad target session or native token switch causes zero network reads (0.7249ms)
+✔ 503 malformed facts and transport errors never become empty success or trigger retry commands (1.8533ms)
+✔ service 401 emits existing session expiration and never stores channel data (0.6598ms)
+✔ explicit null first insert is distinct from missing, zero and saturated version (2.6347ms)
+✔ flags independent and tombstone may retain stored permissions (0.5995ms)
+✔ strict actor plan target boolean canonical UUID and bounded trimmed reason (0.5741ms)
+✔ preflight scopes manager to exact plan, ADMIN recovery does not imply response (1.0806ms)
+✔ preflight first insert uses explicit absence; stale or tombstone not absent (0.5246ms)
+✔ contradictory effectiveness, duplicate/cross-plan and malformed facts rejected (0.7157ms)
+✔ ON_CALL cannot receive management flag; inactive target cannot be activated (0.3754ms)
+✔ actor-scoped exact reliable storage round-trip, blocked state retained (1.2291ms)
+✔ quota silent save and readback failure never pass reliable-save gate (0.6916ms)
+✔ corrupt or foreign stored intent and denied reads fail closed (0.613ms)
+✔ remove failure silent no-op and readback denial retain original intent (0.4263ms)
+✔ manual ack restores only absent exact original after remove succeeded but readback failed (35.7277ms)
+✔ manual recovery never overwrites a different frozen command or a blocked intent (0.6635ms)
+✔ manual recovery requires reliable storage again and denied reads never trigger a save (0.307ms)
+✔ submit requires reliable exact original stored content and refuses blocked zero POST (0.656ms)
+✔ captured member session never substitutes a different current token or actor zero POST (0.4178ms)
+✔ member Authorization stays pinned if current token changes after the final synchronous check (1.0327ms)
+✔ POST transmits exact nullable original command, not auto-rebased current version (1.4286ms)
+✔ immutable original receipt survives higher current version and revoked privileges (1.0777ms)
+✔ wrong actor plan original command result version timestamp or missing receipt rejected (7.135ms)
+✔ current row cannot precede receipt or contradict flags at same version (2.1917ms)
+✔ member list only contains matching actual member rows, validates duplicates (0.9655ms)
+✔ plan options do not turn global users into members or tolerate duplicate IDs (0.6527ms)
+✔ database local time is not converted across browser timezones (1.8011ms)
+✔ cancelled generated slot and current ineligible member are not mislabeled as coverage (0.3593ms)
+✔ warning labels preserve failure/inactive/blocked distinctions and never assert full coverage (0.3958ms)
+✔ manager role gate excludes ON_CALL and AUDITOR (0.2598ms)
+✔ draft boundary checks keep ordered membership and whole-minute anchor (1.0016ms)
+✔ create request preserves member order and database local anchor, without mutating draft (37.9163ms)
+✔ state command uses captured version and reason; conflicts propagate without retry (2.0786ms)
+✔ list/slot reads preserve truncation and scan partial failures remain explicit (2.2524ms)
+✔ technical delivered and historical decisions never imply human read or consent (2.2342ms)
+✔ retry is enabled only for failed delivery and manager or actual participant (1.042ms)
+✔ explicit valid captured version and nonempty bounded reason are required (0.6054ms)
+✔ original retry survives read and is isolated by actor without network side effects (1.4362ms)
+✔ corrupt or mismatched storage remains present and is rejected rather than reset (0.7427ms)
+✔ persisted 403/409 lock cannot be silently discarded on refresh (0.3478ms)
+✔ storage quota failure is surfaced before an unrecorded request can proceed (0.8953ms)
+✔ read only GET and explicit retry use original body, not latest server version (61.1498ms)
+✔ failed retry does not automatically post a second time or mutate original payload (1.3375ms)
+✔ database snapshot compares fractional precision and exact expiry without a browser clock (0.4904ms)
+✔ expired and erased rows never offer a new retry, but retained disabled policy can (0.3736ms)
+✔ missing invalid zoned or impossible database facts fail closed for new retries (0.2844ms)
+✔ only managers may create paired intent; participants and readers cannot substitute (2.9049ms)
+✔ historical acceptance does not imply complete or live paired coverage (0.6112ms)
+✔ every replacement identity and original exchanged participant/schedule must match (0.5067ms)
+✔ either cancelled or unknown cancellation blocks a new pair without repairing counterpart (0.5158ms)
+✔ already started remaining pair is eligible but either actual end is not (0.6865ms)
+✔ strict naive database timestamp comparison retains fractional precision without browser clock (1.0212ms)
+✔ equivalent timestamp precision matches snapshots but changed intervals fail closed (0.3989ms)
+✔ three explicit integer versions and overflow protection are mandatory (0.7295ms)
+✔ canonical stable key and bounded original reason are required (0.4625ms)
+✔ all original versions and both IDs must match; no silent version rebase (0.515ms)
+✔ per-actor original intent survives storage with no API or automatic retry (1.3314ms)
+✔ corrupt foreign missing identity or versions remain stored and fail closed (0.6135ms)
+✔ persisted blocked original survives read; storage errors propagate without discard (0.6291ms)
+✔ API transmits only original explicit command and uses the keyed swap endpoint (38.6624ms)
+✔ read identity mismatch is rejected rather than publishing foreign pair facts (0.965ms)
+✔ entry only permits actual eligible owner of complete future ordinary source (3.4812ms)
+✔ candidates allow same or different plans but never owner, same source, started or cancelled overrides (0.5438ms)
+✔ actual participants only; either started source removes accept but retains reject/withdraw (1.3081ms)
+✔ accepted history never claims coverage is still active and clocks stay database-local (0.4436ms)
+✔ request keeps both explicit versions/canonical key; wrong snapshots and invalid reasons fail (0.812ms)
+✔ request and decision intents restore exact contents and conflict lock per actor, without credentials (1.3904ms)
+✔ corrupt, foreign, missing source facts and malformed decision drafts are retained and fail closed (1.3283ms)
+✔ storage write/remove failures propagate and cannot silently rotate an intent (0.8564ms)
+✔ decisions validate captured version and bounded reason, never imply missing version zero (0.5578ms)
+✔ list filters both-side plan/scope/status on server and retains truncation (37.1908ms)
+✔ ambiguous request and decision responses have no auto-retry; manual retry keeps exact bodies (1.2859ms)
+✔ 403/409 preserve captured content and do not automatically rebase (1.014ms)
+✔ detail and current coverage are independent read-only requests with exact database-local window (0.7777ms)
+✔ capture binds actor document version canonical key decision and normalized reason (3.9918ms)
+✔ storage restores exact frozen command and lock only for its actor (0.6276ms)
+✔ corrupt or foreign stored command fails closed and original bytes remain available (0.6871ms)
+✔ quota failure propagates before command can be sent (1.1937ms)
+✔ ambiguous response requires manual retry of byte-identical payload without automatic retry (52.7041ms)
+✔ 403 and 409 are terminal intent errors and never rebase or retry (1.5834ms)
+✔ locked command or switched actor cannot reach fetch (0.2576ms)
+✔ explicit discard removes only that actor local intent and sends no cancellation (0.2605ms)
+✔ null quality remains N/A while real zero remains 0% (1.183ms)
+✔ trend uses exact source actual engine K and literal date strings without timezone conversion (50.8185ms)
+✔ default date window belongs to database and failed GET is never replaced or retried (1.1155ms)
+✔ prepaint uses safe dark default for null (2.8504ms)
+✔ prepaint uses safe dark default for dark (1.0593ms)
+✔ prepaint uses safe dark default for invalid (1.0223ms)
+✔ prepaint uses safe dark default for <script> (0.8558ms)
+✔ saved light is applied before the Vue store initializes (0.9153ms)
+✔ two toggles update theme, metadata and only the preference key (0.896ms)
+✔ disabled storage never prevents boot or an in-page toggle (1.0058ms)
+✔ missing browser theme metadata does not prevent switching (1.137ms)
+✔ reduced motion never mounts or loads a GPU effect (2.3249ms)
+✔ always-on background ignores legacy pause preferences and has no control button (1.3081ms)
+✔ unsupported GPU becomes a static fallback without an exception (1.2194ms)
+✔ visibility and system reduced motion still control the native renderer (0.8804ms)
+✔ blocked storage remains usable and route disposal removes listeners (0.8984ms)
+✔ resuming a frozen frame waits for the replacement renderer to be ready (0.8647ms)
+✔ native Vue renderer is local, capped and telemetry-free (0.8722ms)
+✔ native cursor motion warps the gradient and adds restrained fluid ripples (0.5848ms)
+✔ paused renderer releases cursor/GPU and stale captures cannot overwrite resumed state (9.991ms)
+✔ login welcome and assistant welcome/conversation share one full-surface backdrop each (2.6765ms)
+ℹ tests 257
+ℹ suites 0
+ℹ pass 256
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4907.7006
+
+✖ failing tests:
+
+test at tests\assistant-completion.test.mjs:80:1
+✖ sources are a native disclosure and duplicate sidebar mode has been removed (2.7268ms)
+  AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /assistant-mode-dot|<footer>/. Input:
+  
+  '<script setup lang="ts">\n' +
+    "import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'\n" +
+    "import { useRoute, useRouter } from 'vue-router'\n" +
+    'import {\n' +
+    '  Bot, Check, ChevronRight, CircleStop, Copy, Download, FileText, History,\n' +
+    '  Menu, MessageSquarePlus, PanelLeft, Play, Plus, Send, Sparkles, Trash2, Workflow, X,\n' +
+    "} from 'lucide-vue-next'\n" +
+    "import ChatMessage from '@/components/ChatMessage.vue'\n" +
+    "import WorkbenchBackdrop from '@/components/WorkbenchBackdrop.vue'\n" +
+    "import StatusBadge from '@/components/StatusBadge.vue'\n" +
+    "import { api, formatTime, RequestError, type PageResponse } from '@/services/api'\n" +
+    "import { clearAgentInvestigationIdempotency, streamAgentInvestigation, subscribeAgentInvestigation } from '@/services/agentStream'\n" +
+    "import { captureStreamSession } from '@/services/streamSession'\n" +
+    'import {\n' +
+    '  assistantStatusLabel, assistantTerminal, cancelAssistantRequest, clearAssistantIntent, freezeAssistantIntent,\n' +
+    '  readAssistantIntent, readAssistantRequest, readAssistantSession, removeUnreadableAssistantIntent, streamAssistantRequest,\n' +
+    '  type AssistantIntent, type AssistantRequestView,\n' +
+    "} from '@/services/assistantRequests'\n" +
+    "import type { AgentRun, AgentRunEvent } from '@/types/investigation'\n" +
+    '\n' +
+    'interface SessionSummary {\n' +
+    '  id: number; title: string; incidentId: number | null; incidentCode: string | null; incidentTitle: string | null\n' +
+    '  incidentSeverity: string | null; incidentStatus: string | null; messageCount: number; lastMessage: string | null; updatedAt: string\n' +
+    '}\n' +
+    "interface Message { id: number; role: 'USER' | 'ASSISTANT'; content: string; evidenceJson: string | null; createdAt: string; provisional?: boolean }\n" +
+    'interface ContextItem { code: string; type: string; title: string; time: string }\n' +
+    'interface IncidentContext {\n' +
+    '  id: number; incidentCode: string; title: string; description: string; severity: string; status: string; resourceName: string\n' +
+    '  alerts: ContextItem[]; changes: ContextItem[]; timeline: ContextItem[]\n' +
+    '  latestInvestigationId: number | null; latestHypothesis: string | null; latestSuggestions: string | null\n' +
+    '  latestAgentRun: AgentRun | null\n' +
+    '}\n' +
+    'interface SessionDetail { session: SessionSummary; messages: Message[]; context: IncidentContext | null }\n' +
+    'interface IncidentSummary { id: number; incidentCode: string; title: string; severity: string; status: string; resourceName: string }\n' +
+    'interface EvidenceRef { ref: string; type: string; label: string }\n' +
+    "interface AssistantRuntime { mode: 'RULES' | 'MODEL'; provider: string | null; model: string | null; label: string }\n" +
+    '\n' +
+    'const route = useRoute()\n' +
+    'const router = useRouter()\n' +
+    'const sessions = ref<SessionSummary[]>([])\n' +
+    'const incidents = ref<IncidentSummary[]>([])\n' +
+    'const active = ref<SessionDetail | null>(null)\n' +
+    'const loading = ref(true)\n' +
+    'const runtime = ref<AssistantRuntime | null>(null)\n' +
+    "const runtimeLabel = computed(() => runtime.value?.mode === 'MODEL'\n" +
+    "  ? `${runtime.value.provider ?? '模型'}${runtime.value.model ? ` · ${runtime.value.model}` : ''}（已配置）`\n" +
+    "  : runtime.value?.label ?? '运行模式待确认')\n" +
+    'const sending = ref(false)\n' +
+    'const pendingRequest = ref<Readonly<AssistantIntent> | null>(null)\n' +
+    'const requestState = ref<AssistantRequestView | null>(null)\n' +
+    'const requestControl = ref(false)\n' +
+    'const requestNotFound = ref(false)\n' +
+    'const requestRecordBroken = ref(false)\n' +
+    "const requestNotice = ref('')\n" +
+    'const sessionChanged = ref(false)\n' +
+    "const pageToken = localStorage.getItem('opspilot_token')\n" +
+    'const agentRunning = ref(false)\n' +
+    'const agentControlLoading = ref(false)\n' +
+    "const draft = ref('')\n" +
+    "const error = ref('')\n" +
+    'const copiedId = ref<number | null>(null)\n' +
+    'const agentEvents = ref<AgentRunEvent[]>([])\n' +
+    'const streamedAgentRunId = ref<number | null>(null)\n' +
+    'const mobileSessionsOpen = ref(false)\n' +
+    'const mobileContextOpen = ref(false)\n' +
+    'const messageViewport = ref<HTMLElement | null>(null)\n' +
+    'let abortController: AbortController | null = null\n' +
+    'let requestController: AbortController | null = null\n' +
+    'let agentAbortController: AbortController | null = null\n' +
+    'let selectionVersion = 0\n' +
+    'let disposed = false\n' +
+    '\n' +
+    'const suggestions = computed(() => active.value?.context\n' +
+    "  ? ['总结当前证据', '最可能的根因是什么？', '展示 Agent 调查过程', '下一步应该怎么验证？']\n" +
+    "  : ['当前有哪些活跃 Incident？', '告警聚合的处理流程是什么？', '如何使用 CMDB 辅助故障定位？'])\n" +
+    'const requestLocked = computed(() => loading.value || !active.value || sessionChanged.value || sending.value || requestControl.value || Boolean(pendingRequest.value) || requestRecordBroken.value)\n' +
+    'const requestTerminal = computed(() => Boolean(requestState.value && assistantTerminal(requestState.value.status)))\n' +
+    'const requestLabel = computed(() => requestState.value ? assistantStatusLabel(requestState.value.status)\n' +
+    "  : requestNotFound.value ? '暂未查到原请求' : sending.value ? '等待回答' : '结果待确认')\n" +
+    'const activeAgentRunId = computed(() => {\n' +
+    '  if (streamedAgentRunId.value) return streamedAgentRunId.value\n' +
+    '  const run = active.value?.context?.latestAgentRun\n' +
+    "  return run && (run.status === 'QUEUED' || run.status === 'RUNNING') ? run.id : null\n" +
+    '})\n' +
+    '\n' +
+    'async function load() {\n' +
+    '  loading.value = true\n' +
+    "  error.value = ''\n" +
+    '  try {\n' +
+    '    const [sessionRows, incidentPage, runtimeInfo] = await Promise.all([\n' +
+    "      api<SessionSummary[]>('/assistant/sessions'),\n" +
+    "      api<PageResponse<IncidentSummary>>('/incidents?size=100'),\n" +
+    "      api<AssistantRuntime>('/assistant/runtime').catch(() => null),\n" +
+    '    ])\n' +
+    '    if (disposed || sessionChanged.value) return\n' +
+    '    sessions.value = sessionRows\n' +
+    '    incidents.value = incidentPage.items\n' +
+    '    runtime.value = runtimeInfo\n' +
+    '    const incidentId = Number(route.query.incident)\n' +
+    '    if (Number.isFinite(incidentId) && incidentId > 0) {\n' +
+    '      const existing = sessionRows.find(item => item.incidentId === incidentId)\n' +
+    '      if (existing) await selectSession(existing.id)\n' +
+    '      else await createSession(incidentId)\n' +
+    '    } else if (sessionRows.some(item => item.id === Number(route.query.session))) {\n' +
+    '      await selectSession(Number(route.query.session))\n' +
+    '    } else if (sessionRows[0]) await selectSession(sessionRows[0].id)\n' +
+    '    else await createSession()\n' +
+    '  } catch (caught) {\n' +
+    "    error.value = caught instanceof Error ? caught.message : '加载 OnCall 助手失败'\n" +
+    '  } finally { loading.value = false }\n' +
+    '}\n' +
+    '\n' +
+    'async function refreshSessions() {\n' +
+    '  const version = selectionVersion\n' +
+    "  const rows = await api<SessionSummary[]>('/assistant/sessions')\n" +
+    '  if (disposed || sessionChanged.value || version !== selectionVersion) return\n' +
+    '  sessions.value = rows\n' +
+    '  if (active.value) {\n' +
+    '    const summary = sessions.value.find(item => item.id === active.value?.session.id)\n' +
+    '    if (summary) active.value = { ...active.value, session: summary }\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    'async function runAgentInvestigation() {\n' +
+    '  await followAgentRun(activeAgentRunId.value ?? undefined)\n' +
+    '}\n' +
+    '\n' +
+    'async function followAgentRun(existingRunId?: number) {\n' +
+    '  if (!active.value?.context || agentRunning.value) return\n' +
+    '  const incidentId = active.value.context.id\n' +
+    '  const sessionId = active.value.session.id\n' +
+    '  let runId: number | null = existingRunId ?? null\n' +
+    '  let streamError: string | null = null\n' +
+    '  agentRunning.value = true\n' +
+    '  agentEvents.value = []\n' +
+    '  const controller = new AbortController()\n' +
+    '  agentAbortController = controller\n' +
+    "  error.value = ''\n" +
+    '  try {\n' +
+    '    const onEvent = (event: AgentRunEvent) => {\n' +
+    '      if (controller.signal.aborted || agentAbortController !== controller) return\n' +
+    '      agentEvents.value.push(event)\n' +
+    '      runId ??= event.runId\n' +
+    "      if (event.eventType === 'RUN_QUEUED') streamedAgentRunId.value = event.runId\n" +
+    "      if (['RUN_COMPLETED', 'RUN_FAILED', 'RUN_CANCELLED', 'RUN_TIMED_OUT', 'RUN_REJECTED']\n" +
+    '        .includes(event.eventType)) streamedAgentRunId.value = null\n' +
+    '    }\n' +
+    '    if (existingRunId) await subscribeAgentInvestigation(existingRunId, onEvent, controller.signal)\n' +
+    "    else await streamAgentInvestigation(incidentId, 'ONCALL_ASSISTANT', onEvent, controller.signal)\n" +
+    '  } catch (caught) {\n' +
+    "    if (caught instanceof DOMException && caught.name === 'AbortError') controller.abort(caught)\n" +
+    '    else {\n' +
+    "      streamError = caught instanceof Error ? caught.message : 'Agent 调查启动失败'\n" +
+    '    }\n' +
+    '  } finally {\n' +
+    '    if (agentAbortController !== controller) return\n' +
+    '    try {\n' +
+    '      if (!controller.signal.aborted && active.value?.session.id === sessionId) {\n' +
+    '        try {\n' +
+    '          const version = selectionVersion\n' +
+    '          const detail = await api<SessionDetail>(`/assistant/sessions/${sessionId}`)\n' +
+    '          if (version !== selectionVersion || active.value?.session.id !== sessionId) return\n' +
+    '          active.value = detail\n' +
+    '          const persistedRun = active.value.context?.latestAgentRun\n' +
+    '          if (persistedRun && persistedRun.id === runId\n' +
+    "            && ['COMPLETED', 'PARTIAL', 'FAILED', 'CANCELLED', 'TIMED_OUT', 'QUEUE_REJECTED'].includes(persistedRun.status)) {\n" +
+    '            clearAgentInvestigationIdempotency(incidentId)\n' +
+    '            streamedAgentRunId.value = null\n' +
+    "            error.value = persistedRun.status === 'FAILED' ? (streamError ?? 'Agent 调查失败') : ''\n" +
+    '          } else if (streamError) {\n' +
+    '            error.value = streamError\n' +
+    '          }\n' +
+    '        } catch (caught) {\n' +
+    '          if (agentAbortController !== controller) return\n' +
+    "          error.value = streamError ?? (caught instanceof Error ? caught.message : 'Agent 调查状态刷新失败')\n" +
+    '        }\n' +
+    '      } else if (streamError) {\n' +
+    '        error.value = streamError\n' +
+    '      }\n' +
+    '    } finally {\n' +
+    '      if (agentAbortController === controller) {\n' +
+    '        agentRunning.value = false\n' +
+    '        agentAbortController = null\n' +
+    '      }\n' +
+    '    }\n' +
+    '  }\n' +
+    '}\n' +
+    '\n' +
+    'async function cancelAgentInvestigation() {\n' +
+    '  if (!activeAgentRunId.value || agentControlLoading.value) return\n' +
+    '  const runId = activeAgentRunId.value\n' +
+    '  agentControlLoading.value = true\n' +
+    '  try {\n' +
+    '    await api<AgentRun>(`/agent-runs/${runId}/cancel`, {\n' +
+    "      method: 'POST', body: JSON.stringify({ reason: 'OnCall 助手显式取消' }),\n" +
+    '    })\n' +
+    '    if (disposed || sessionChanged.value) return\n' +
+    '    // The original POST stream runs on the interrupted execution thread and may\n' +
+    '    // close before its terminal frame is flushed. Reattach to durable events so\n' +
+    '    // the UI always observes the persisted cancellation for this exact run.\n' +
+    '    stopAgentSubscription()\n' +
+    '    await followAgentRun(runId)\n' +
+    "    error.value = ''\n" +
+    '  } catch (caught) {\n' +
+    '    if (di'... 30338 more characters
+  
+      at TestContext.<anonymous> (file:///D:/Codex/%E5%9B%BD%E7%BD%91/%E5%A4%AE%E5%9B%BD%E4%BC%81%E6%B1%82%E8%81%8C/OpsPilot/web/tests/assistant-completion.test.mjs:83:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1306:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:897:18)
+      at Test.postRun (node:internal/test_runner/test:1447:19)
+      at Test.run (node:internal/test_runner/test:1372:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<script setup lang="ts">\nimport { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from \'vue\'\nimport { useRoute, useRouter } from \'vue-router\'\nimport {\n  Bot, Check, ChevronRight, CircleStop, Copy, Download, FileText, History,\n  Menu, MessageSquarePlus, PanelLeft, Play, Plus, Send, Sparkles, Trash2, Workflow, X,\n} from \'lucide-vue-next\'\nimport ChatMessage from \'@/components/ChatMessage.vue\'\nimport WorkbenchBackdrop from \'@/components/WorkbenchBackdrop.vue\'\nimport StatusBadge from \'@/components/StatusBadge.vue\'\nimport { api, formatTime, RequestError, type PageResponse } from \'@/services/api\'\nimport { clearAgentInvestigationIdempotency, streamAgentInvestigation, subscribeAgentInvestigation } from \'@/services/agentStream\'\nimport { captureStreamSession } from \'@/services/streamSession\'\nimport {\n  assistantStatusLabel, assistantTerminal, cancelAssistantRequest, clearAssistantIntent, freezeAssistantIntent,\n  readAssistantIntent, readAssistantRequest, readAssistantSession, removeUnreadableAssistantIntent, streamAssistantRequest,\n  type AssistantIntent, type AssistantRequestView,\n} from \'@/services/assistantRequests\'\nimport type { AgentRun, AgentRunEvent } from \'@/types/investigation\'\n\ninterface SessionSummary {\n  id: number; title: string; incidentId: number | null; incidentCode: string | null; incidentTitle: string | null\n  incidentSeverity: string | null; incidentStatus: string | null; messageCount: number; lastMessage: string | null; updatedAt: string\n}\ninterface Message { id: number; role: \'USER\' | \'ASSISTANT\'; content: string; evidenceJson: string | null; createdAt: string; provisional?: boolean }\ninterface ContextItem { code: string; type: string; title: string; time: string }\ninterface IncidentContext {\n  id: number; incidentCode: string; title: string; description: string; severity: string; status: string; resourceName: string\n  alerts: ContextItem[]; changes: ContextItem[]; timeline: ContextItem[]\n  latestInvestigationId: number | null; latestHypothesis: string | null; latestSuggestions: string | null\n  latestAgentRun: AgentRun | null\n}\ninterface SessionDetail { session: SessionSummary; messages: Message[]; context: IncidentContext | null }\ninterface IncidentSummary { id: number; incidentCode: string; title: string; severity: string; status: string; resourceName: string }\ninterface EvidenceRef { ref: string; type: string; label: string }\ninterface AssistantRuntime { mode: \'RULES\' | \'MODEL\'; provider: string | null; model: string | null; label: string }\n\nconst route = useRoute()\nconst router = useRouter()\nconst sessions = ref<SessionSummary[]>([])\nconst incidents = ref<IncidentSummary[]>([])\nconst active = ref<SessionDetail | null>(null)\nconst loading = ref(true)\nconst runtime = ref<AssistantRuntime | null>(null)\nconst runtimeLabel = computed(() => runtime.value?.mode === \'MODEL\'\n  ? `${runtime.value.provider ?? \'模型\'}${runtime.value.model ? ` · ${runtime.value.model}` : \'\'}（已配置）`\n  : runtime.value?.label ?? \'运行模式待确认\')\nconst sending = ref(false)\nconst pendingRequest = ref<Readonly<AssistantIntent> | null>(null)\nconst requestState = ref<AssistantRequestView | null>(null)\nconst requestControl = ref(false)\nconst requestNotFound = ref(false)\nconst requestRecordBroken = ref(false)\nconst requestNotice = ref(\'\')\nconst sessionChanged = ref(false)\nconst pageToken = localStorage.getItem(\'opspilot_token\')\nconst agentRunning = ref(false)\nconst agentControlLoading = ref(false)\nconst draft = ref(\'\')\nconst error = ref(\'\')\nconst copiedId = ref<number | null>(null)\nconst agentEvents = ref<AgentRunEvent[]>([])\nconst streamedAgentRunId = ref<number | null>(null)\nconst mobileSessionsOpen = ref(false)\nconst mobileContextOpen = ref(false)\nconst messageViewport = ref<HTMLElement | null>(null)\nlet abortController: AbortController | null = null\nlet requestController: AbortController | null = null\nlet agentAbortController: AbortController | null = null\nlet selectionVersion = 0\nlet disposed = false\n\nconst suggestions = computed(() => active.value?.context\n  ? [\'总结当前证据\', \'最可能的根因是什么？\', \'展示 Agent 调查过程\', \'下一步应该怎么验证？\']\n  : [\'当前有哪些活跃 Incident？\', \'告警聚合的处理流程是什么？\', \'如何使用 CMDB 辅助故障定位？\'])\nconst requestLocked = computed(() => loading.value || !active.value || sessionChanged.value || sending.value || requestControl.value || Boolean(pendingRequest.value) || requestRecordBroken.value)\nconst requestTerminal = computed(() => Boolean(requestState.value && assistantTerminal(requestState.value.status)))\nconst requestLabel = computed(() => requestState.value ? assistantStatusLabel(requestState.value.status)\n  : requestNotFound.value ? \'暂未查到原请求\' : sending.value ? \'等待回答\' : \'结果待确认\')\nconst activeAgentRunId = computed(() => {\n  if (streamedAgentRunId.value) return streamedAgentRunId.value\n  const run = active.value?.context?.latestAgentRun\n  return run && (run.status === \'QUEUED\' || run.status === \'RUNNING\') ? run.id : null\n})\n\nasync function load() {\n  loading.value = true\n  error.value = \'\'\n  try {\n    const [sessionRows, incidentPage, runtimeInfo] = await Promise.all([\n      api<SessionSummary[]>(\'/assistant/sessions\'),\n      api<PageResponse<IncidentSummary>>(\'/incidents?size=100\'),\n      api<AssistantRuntime>(\'/assistant/runtime\').catch(() => null),\n    ])\n    if (disposed || sessionChanged.value) return\n    sessions.value = sessionRows\n    incidents.value = incidentPage.items\n    runtime.value = runtimeInfo\n    const incidentId = Number(route.query.incident)\n    if (Number.isFinite(incidentId) && incidentId > 0) {\n      const existing = sessionRows.find(item => item.incidentId === incidentId)\n      if (existing) await selectSession(existing.id)\n      else await createSession(incidentId)\n    } else if (sessionRows.some(item => item.id === Number(route.query.session))) {\n      await selectSession(Number(route.query.session))\n    } else if (sessionRows[0]) await selectSession(sessionRows[0].id)\n    else await createSession()\n  } catch (caught) {\n    error.value = caught instanceof Error ? caught.message : \'加载 OnCall 助手失败\'\n  } finally { loading.value = false }\n}\n\nasync function refreshSessions() {\n  const version = selectionVersion\n  const rows = await api<SessionSummary[]>(\'/assistant/sessions\')\n  if (disposed || sessionChanged.value || version !== selectionVersion) return\n  sessions.value = rows\n  if (active.value) {\n    const summary = sessions.value.find(item => item.id === active.value?.session.id)\n    if (summary) active.value = { ...active.value, session: summary }\n  }\n}\n\nasync function runAgentInvestigation() {\n  await followAgentRun(activeAgentRunId.value ?? undefined)\n}\n\nasync function followAgentRun(existingRunId?: number) {\n  if (!active.value?.context || agentRunning.value) return\n  const incidentId = active.value.context.id\n  const sessionId = active.value.session.id\n  let runId: number | null = existingRunId ?? null\n  let streamError: string | null = null\n  agentRunning.value = true\n  agentEvents.value = []\n  const controller = new AbortController()\n  agentAbortController = controller\n  error.value = \'\'\n  try {\n    const onEvent = (event: AgentRunEvent) => {\n      if (controller.signal.aborted || agentAbortController !== controller) return\n      agentEvents.value.push(event)\n      runId ??= event.runId\n      if (event.eventType === \'RUN_QUEUED\') streamedAgentRunId.value = event.runId\n      if ([\'RUN_COMPLETED\', \'RUN_FAILED\', \'RUN_CANCELLED\', \'RUN_TIMED_OUT\', \'RUN_REJECTED\']\n        .includes(event.eventType)) streamedAgentRunId.value = null\n    }\n    if (existingRunId) await subscribeAgentInvestigation(existingRunId, onEvent, controller.signal)\n    else await streamAgentInvestigation(incidentId, \'ONCALL_ASSISTANT\', onEvent, controller.signal)\n  } catch (caught) {\n    if (caught instanceof DOMException && caught.name === \'AbortError\') controller.abort(caught)\n    else {\n      streamError = caught instanceof Error ? caught.message : \'Agent 调查启动失败\'\n    }\n  } finally {\n    if (agentAbortController !== controller) return\n    try {\n      if (!controller.signal.aborted && active.value?.session.id === sessionId) {\n        try {\n          const version = selectionVersion\n          const detail = await api<SessionDetail>(`/assistant/sessions/${sessionId}`)\n          if (version !== selectionVersion || active.value?.session.id !== sessionId) return\n          active.value = detail\n          const persistedRun = active.value.context?.latestAgentRun\n          if (persistedRun && persistedRun.id === runId\n            && [\'COMPLETED\', \'PARTIAL\', \'FAILED\', \'CANCELLED\', \'TIMED_OUT\', \'QUEUE_REJECTED\'].includes(persistedRun.status)) {\n            clearAgentInvestigationIdempotency(incidentId)\n            streamedAgentRunId.value = null\n            error.value = persistedRun.status === \'FAILED\' ? (streamError ?? \'Agent 调查失败\') : \'\'\n          } else if (streamError) {\n            error.value = streamError\n          }\n        } catch (caught) {\n          if (agentAbortController !== controller) return\n          error.value = streamError ?? (caught instanceof Error ? caught.message : \'Agent 调查状态刷新失败\')\n        }\n      } else if (streamError) {\n        error.value = streamError\n      }\n    } finally {\n      if (agentAbortController === controller) {\n        agentRunning.value = false\n        agentAbortController = null\n      }\n    }\n  }\n}\n\nasync function cancelAgentInvestigation() {\n  if (!activeAgentRunId.value || agentControlLoading.value) return\n  const runId = activeAgentRunId.value\n  agentControlLoading.value = true\n  try {\n    await api<AgentRun>(`/agent-runs/${runId}/cancel`, {\n      method: \'POST\', body: JSON.stringify({ reason: \'OnCall 助手显式取消\' }),\n    })\n    if (disposed || sessionChanged.value) return\n    // The original POST stream runs on the interrupted execution thread and may\n    // close before its terminal frame is flushed. Reattach to durable events so\n    // the UI always observes the persisted cancellation for this exact run.\n    stopAgentSubscription()\n    await followAgentRun(runId)\n    error.value = \'\'\n  } catch (caught) {\n    if (di'... 30338 more characters,
+    expected: /assistant-mode-dot|<footer>/,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }
