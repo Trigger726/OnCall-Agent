@@ -1,0 +1,118 @@
+name: Citation source contracts
+
+on:
+  push:
+    branches: [main, master, "work/opspilot-citation-*"]
+    paths:
+      - ".github/workflows/citation-source.yml"
+      - "pom.xml"
+      - "src/**"
+      - "web/**"
+      - "scripts/**"
+  pull_request:
+    paths:
+      - ".github/workflows/citation-source.yml"
+      - "pom.xml"
+      - "src/**"
+      - "web/**"
+      - "scripts/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: citation-source-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  database-contracts:
+    name: Identical H2 and MySQL citation scenarios
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_DATABASE: opspilot_citation_ci
+          MYSQL_ROOT_PASSWORD: citation-ci-only
+          MYSQL_ROOT_HOST: "%"
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -pcitation-ci-only"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=12
+    env:
+      OPSPILOT_SCOPED_MYSQL_URL: jdbc:mysql://127.0.0.1:3306/opspilot_citation_ci?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      OPSPILOT_SCOPED_MYSQL_USER: root
+      OPSPILOT_SCOPED_MYSQL_PASSWORD: citation-ci-only
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Verify evidence gates
+        run: node --test scripts/tests/citation-source-ci.test.cjs
+      - name: Run the same six scenarios on both real database products
+        run: |
+          chmod +x mvnw
+          mkdir -p target/citation-contract-it
+          node -e "require('fs').writeFileSync('target/citation-contract-it/started', String(Date.now()))"
+          set -o pipefail
+          ./mvnw -B -Dtest=RunbookCitationIntegrationTest,MySqlRunbookCitationIntegrationTest -Dopspilot.scoped.eval.mysql.enabled=true test 2>&1 | tee target/citation-contract-it/maven.log
+      - name: Reject skipped, stale, mismatched or wrong-product results
+        run: node scripts/verify-citation-contract-results.cjs target/surefire-reports target/citation-contract-it/started target/citation-contract-it/result.json
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: citation-database-evidence
+          path: |
+            target/citation-contract-it/
+            target/surefire-reports/TEST-org.trigger.opspilot.runbook.*RunbookCitationIntegrationTest.xml
+          retention-days: 30
+
+  citation-browser:
+    name: Fresh packaged citation UI on Linux
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: maven
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            web/package-lock.json
+            scripts/browser/package-lock.json
+      - name: Build this checkout, not a historical named JAR
+        run: |
+          npm ci --prefix web
+          npm test --prefix web
+          npm run build --prefix web
+          chmod +x mvnw
+          ./mvnw -B -DskipTests package
+      - name: Install existing pinned browser and verify gates
+        run: |
+          npm ci --prefix scripts/browser
+          node scripts/browser/node_modules/playwright/cli.js install --with-deps chromium
+          node --test scripts/tests/citation-source-ci.test.cjs
+      - name: Verify all five source UI flows against the fresh default package
+        run: node scripts/verify-runbook-citation-ui.cjs
+      - uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: citation-browser-evidence
+          path: target/runbook-citation-ui-it/
+          retention-days: 30

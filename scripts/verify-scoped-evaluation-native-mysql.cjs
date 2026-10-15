@@ -91,7 +91,8 @@ function psLiteral(value) { return "'"+value.replaceAll("'","''")+"'"; }
     const classes=['RunbookScopedEvaluationIntegrationTest','RunbookRetrievalScopeMigrationTest',
       'MySqlScopedEvaluationIntegrationTest','MySqlRunbookRetrievalScopeMigrationTest'];
     if(args.includes('--include-diversity')) classes.push('RunbookDocumentDiversityIntegrationTest','MySqlRunbookDocumentDiversityIntegrationTest');
-    const expectedTests=args.includes('--include-diversity')?24:16;
+    if(args.includes('--include-citations')) classes.push('RunbookCitationIntegrationTest','MySqlRunbookCitationIntegrationTest');
+    const expectedTests=16+(args.includes('--include-diversity')?8:0)+(args.includes('--include-citations')?12:0);
     console.log(JSON.stringify({phase:'contracts',port,expectedTests}));
     const mvnArgs=['-o',`-Dmaven.repo.local=${m2}`,`-Dtest=${classes.join(',')}`,'-Dopspilot.scoped.eval.mysql.enabled=true','test'];
     const command=`& ${psLiteral(maven)} ${mvnArgs.map(psLiteral).join(' ')}; exit $LASTEXITCODE`;

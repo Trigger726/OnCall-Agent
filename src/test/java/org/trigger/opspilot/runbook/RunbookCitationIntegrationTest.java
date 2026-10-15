@@ -2,6 +2,7 @@ package org.trigger.opspilot.runbook;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import javax.sql.DataSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,12 +27,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.ai.dashscope.api-key=disabled", "spring.ai.dashscope.embedding.enabled=false",
         "opspilot.ai.enabled=false", "opspilot.runbook.semantic.enabled=false"
 })
+class RunbookCitationIntegrationTest extends CitationScenarios {}
+
 @AutoConfigureMockMvc
 @Transactional
-class RunbookCitationIntegrationTest {
+abstract class CitationScenarios {
     @Autowired MockMvc mvc;
     @Autowired ObjectMapper json;
     @Autowired JdbcClient jdbc;
+    @Autowired DataSource dataSource;
+
+    @BeforeEach void verifiesActualDatabaseProduct() throws Exception {
+        try (var connection = dataSource.getConnection()) {
+            var metadata = connection.getMetaData();
+            String expected = getClass().getSimpleName().startsWith("MySql") ? "MySQL" : "H2";
+            assertThat(metadata.getDatabaseProductName()).isEqualTo(expected);
+            System.out.printf("CITATION_DATABASE %s|%s|%s%n", getClass().getSimpleName(),
+                    metadata.getDatabaseProductName(), metadata.getDatabaseProductVersion());
+        }
+    }
 
     @Test void readsExactPersistedChunkWithoutTruncationOrHtmlExecution() throws Exception {
         String content = "原始片段🙂\n" + "保留完整处置细节。".repeat(95) + "\n<script>alert('not executable')</script>";
@@ -83,6 +98,16 @@ class RunbookCitationIntegrationTest {
         mvc.perform(get(url("redis-connection-pool", 1, 0)).header("Authorization", bearer("auditor"))).andExpect(status().isForbidden());
         for (String path : List.of(url("valid-key", 0, 0), url("valid-key", 1, -1), url("bad_key", 1, 0)))
             mvc.perform(get(path).header("Authorization", bearer("admin"))).andExpect(status().isBadRequest());
+    }
+
+    @Test void rechecksCurrentRoleAndRevokedAccountUsingTheSamePreviouslyValidToken() throws Exception {
+        approve(submit("citation-session", "# 会话\n只能由当前获授权账号读取。", List.of("ADMIN", "ON_CALL")));
+        String token = bearer("zhangwei");
+        mvc.perform(get(url("citation-session", 1, 0)).header("Authorization", token)).andExpect(status().isOk());
+        jdbc.sql("UPDATE sys_user SET role_code='AUDITOR' WHERE username='zhangwei'").update();
+        mvc.perform(get(url("citation-session", 1, 0)).header("Authorization", token)).andExpect(status().isForbidden());
+        jdbc.sql("UPDATE sys_user SET role_code='ON_CALL',auth_version=auth_version+1 WHERE username='zhangwei'").update();
+        mvc.perform(get(url("citation-session", 1, 0)).header("Authorization", token)).andExpect(status().isUnauthorized());
     }
 
     private long submit(String key, String markdown, List<String> roles) throws Exception {

@@ -1,19 +1,23 @@
 // Actual saved assistant citations and exact source reads; only isolated controlled data is modified.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),crypto=require('node:crypto'),assert=require('node:assert/strict');
 const {spawn}=require('node:child_process'),{chromium}=require('./browser/node_modules/playwright'),{javaArgs,free}=require('./verify-ui-packaged.cjs');
-const root=path.resolve(__dirname,'..'),out=fs.mkdtempSync(path.join(os.tmpdir(),'opspilot-citation-ui-')),port=9913,base='http://127.0.0.1:'+port;
-const before='target/opspilot-v1.8-assistant-quiet-ui.jar',after='target/opspilot-v1.8-citation-source-final.jar';
+const root=path.resolve(__dirname,'..'),ci=Boolean(process.env.CI),port=9913,base='http://127.0.0.1:'+port;
+assert.ok(!process.env.OPSPILOT_ASSISTANT_UI_JAR,'Citation acceptance does not accept named JAR overrides');
+const parent=ci?path.join(root,'target/runbook-citation-ui-it'):os.tmpdir();fs.mkdirSync(parent,{recursive:true});
+const out=fs.mkdtempSync(path.join(parent,'opspilot-citation-ui-'));
+const before='target/opspilot-v1.8-assistant-quiet-ui.jar',after=ci?'target/opspilot-0.1.0-SNAPSHOT.jar':'target/opspilot-v1.8-citation-source-final.jar';
+const java=process.env.JAVA_HOME?path.join(process.env.JAVA_HOME,'bin',process.platform==='win32'?'java.exe':'java'):'java';
 const original='CITATIONTRACE 连接池核对原文。\n'+('核对 pending 与 active 指标，确认连接池是否耗尽，再检查慢命令和回滚条件。\n'.repeat(20))+'<img src=x onerror="window.__sourceXss=true">';
 const updated='CITATIONTRACE 这是新版本内容，不能替代旧引用。';
 const sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex'),delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 const request=(url,options={})=>fetch(url,{...options,signal:AbortSignal.timeout(12000)});
-const report={status:'RUNNING',out,browser:'Browser plugin not available; existing Playwright/Chrome',userDatabaseModified:false,realCloudModel:false,runs:[],screenshots:[],errors:[],expectedErrors:[],warnings:[]};
+const report={status:'RUNNING',out,mode:ci?'CI_FRESH_BUILD':'LOCAL_COMPARISON',sourceCommit:process.env.GITHUB_SHA??null,browser:'Browser plugin not available; existing Playwright/Chromium',userDatabaseModified:false,realCloudModel:false,runs:[],screenshots:[],errors:[],expectedErrors:[],warnings:[]};
 async function run(label,jar,browser){
   const data=path.join(out,label);fs.mkdirSync(data);let child,closed,fd,admin,context,expected=false;
   const entry={label,jar,jarSha256:sha(fs.readFileSync(jar)),fixtureSha256:sha(original+'\n'+updated),cases:[]};report.runs.push(entry);
   try{
     await free(port);await free(port+1);fd=fs.openSync(path.join(data,'backend.log'),'w');
-    child=spawn('C:/Program Files/Java/jdk-21/bin/java.exe',[...javaArgs(path.resolve(root,jar),data,port),'--opspilot.observability.prometheus.enabled=false','--opspilot.observability.loki.enabled=false'],{cwd:data,windowsHide:true,env:{...process.env,JWT_SECRET:crypto.randomBytes(48).toString('hex')},stdio:['ignore',fd,fd]});
+    child=spawn(java,[...javaArgs(path.resolve(root,jar),data,port),'--opspilot.observability.prometheus.enabled=false','--opspilot.observability.loki.enabled=false'],{cwd:data,windowsHide:true,env:{...process.env,JWT_SECRET:crypto.randomBytes(48).toString('hex')},stdio:['ignore',fd,fd]});
     closed=new Promise(resolve=>{child.once('close',code=>resolve({code}));child.once('error',error=>resolve({error:error.message}));});
     const deadline=Date.now()+60000;while(true){assert.equal(child.exitCode,null);try{const res=await request(base.replace(':9913',':9914')+'/actuator/health');if(res.ok&&(await res.json()).status==='UP')break;}catch{}assert.ok(Date.now()<deadline);await delay(500);}
     async function api(route,token,body,key,status=200){const response=await request(base+'/api/v1'+route,{method:body===undefined?'GET':'POST',headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{}),...(key?{'Idempotency-Key':key}:{})},...(body===undefined?{}:{body:JSON.stringify(body)})});assert.equal(response.status,status,route);return await response.json();}
@@ -85,5 +89,5 @@ async function run(label,jar,browser){
     if(fd!==undefined)fs.closeSync(fd);try{await free(port);await free(port+1);entry.portsFree=true;}catch{entry.portsFree=false;}
   }
 }
-(async()=>{let browser;try{browser=await chromium.launch({headless:true,executablePath:process.env.OPSPILOT_CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe'});await run('before',before,browser);await run('after',after,browser);assert.deepEqual(report.errors,[]);assert.equal(report.runs[0].fixtureSha256,report.runs[1].fixtureSha256);assert.ok(report.runs.every(run=>run.shutdown&&run.exitCode===0&&run.portsFree&&!run.forcedStop));report.status='PASS';}
+(async()=>{let browser;try{browser=await chromium.launch({headless:true,...(process.env.OPSPILOT_CHROME_PATH?{executablePath:process.env.OPSPILOT_CHROME_PATH}:{})});if(!ci)await run('before',before,browser);await run('after',after,browser);assert.deepEqual(report.errors,[]);if(!ci){assert.equal(report.runs[0].fixtureSha256,report.runs[1].fixtureSha256);assert.equal(report.runs[0].answerSha256,report.runs[1].answerSha256);}assert.equal(report.runs.at(-1).cases.length,5);assert.ok(report.runs.every(run=>run.shutdown&&run.exitCode===0&&run.portsFree&&!run.forcedStop));report.status='PASS';}
   catch(error){report.status='FAIL';report.failure=error.stack;process.exitCode=1;}finally{if(browser)await browser.close();fs.writeFileSync(path.join(out,'qa.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));}})();

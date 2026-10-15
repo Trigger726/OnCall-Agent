@@ -1,0 +1,129 @@
+{
+  "status": "PASS",
+  "out": "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-citation-ui-vecqFE",
+  "mode": "LOCAL_COMPARISON",
+  "sourceCommit": null,
+  "browser": "Browser plugin not available; existing Playwright/Chromium",
+  "userDatabaseModified": false,
+  "realCloudModel": false,
+  "runs": [
+    {
+      "label": "before",
+      "jar": "target/opspilot-v1.8-assistant-quiet-ui.jar",
+      "jarSha256": "2b87dd91c65b2c87a9a3e23d33f87aac5884aa52ed4328b7073e7c5e96145873",
+      "fixtureSha256": "c069eb197689e0046facd7d133d6d72aa1e04226f4a4b21f7ac5e54eeab37c54",
+      "cases": [
+        {
+          "name": "source-is-non-actionable-and-endpoint-missing",
+          "reproduced": true
+        }
+      ],
+      "answerSha256": "82f1904ab60784f6d913b36c7a28e78196ad5a7dd039d85cc99714cc79fa9762",
+      "savedMessages": 2,
+      "shutdown": true,
+      "exitCode": 0,
+      "portsFree": true
+    },
+    {
+      "label": "after",
+      "jar": "target/opspilot-v1.8-citation-source-final.jar",
+      "jarSha256": "7cef50f1003f68f4fc12c593df428c33feb40ad5d3478d9f2d02e456a283d539",
+      "fixtureSha256": "c069eb197689e0046facd7d133d6d72aa1e04226f4a4b21f7ac5e54eeab37c54",
+      "cases": [
+        {
+          "name": "exact-historical-source-full-text-escaped-native-modal-and-focus",
+          "passed": true,
+          "contentLength": 988
+        },
+        {
+          "name": "dark-desktop-and-two-mobile-heights",
+          "passed": true
+        },
+        {
+          "name": "read-failure-retry-and-wrong-version-response-fail-closed",
+          "passed": true
+        },
+        {
+          "name": "close-aborts-late-source-and-fresh-open-still-works",
+          "passed": true
+        },
+        {
+          "name": "account-switch-discards-late-private-source",
+          "passed": true
+        }
+      ],
+      "answerSha256": "82f1904ab60784f6d913b36c7a28e78196ad5a7dd039d85cc99714cc79fa9762",
+      "savedMessages": 2,
+      "keyboardFocus": {
+        "insideModal": true,
+        "activeTag": "BUTTON",
+        "activeClass": "icon-button",
+        "nativeModal": true
+      },
+      "originalAnswerUnchanged": true,
+      "shutdown": true,
+      "exitCode": 0,
+      "portsFree": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "before-reference-desktop.png",
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440,
+      "theme": "light"
+    },
+    {
+      "file": "after-source-light1440.png",
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440,
+      "theme": "light"
+    },
+    {
+      "file": "after-source-dark1440.png",
+      "width": 1440,
+      "height": 1000,
+      "scrollWidth": 1440,
+      "theme": "dark"
+    },
+    {
+      "file": "after-source-dark390.png",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "theme": "dark"
+    },
+    {
+      "file": "after-source-dark390x600.png",
+      "width": 390,
+      "height": 600,
+      "scrollWidth": 390,
+      "theme": "dark"
+    },
+    {
+      "file": "source-unavailable-mobile.png",
+      "width": 390,
+      "height": 600,
+      "scrollWidth": 390,
+      "theme": "dark"
+    },
+    {
+      "file": "source-mismatch-mobile.png",
+      "width": 390,
+      "height": 600,
+      "scrollWidth": 390,
+      "theme": "dark"
+    }
+  ],
+  "errors": [],
+  "expectedErrors": [
+    {
+      "label": "after",
+      "type": "console",
+      "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+    }
+  ],
+  "warnings": []
+}
