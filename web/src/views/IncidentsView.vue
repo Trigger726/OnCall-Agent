@@ -595,7 +595,7 @@ onBeforeUnmount(() => {
               <article v-for="alert in selected.alerts" :key="alert.id"><StatusBadge :value="alert.severity" /><div><strong>{{ alert.title }}</strong><span>{{ alert.source }} · 最近 {{ formatTime(alert.lastOccurredAt) }}</span></div><em>× {{ alert.occurrenceCount }}</em></article>
             </div>
 
-            <div class="section-heading"><h3>Agent 调查轨迹</h3><span>{{ selected.agentRuns.length }}</span></div>
+            <div v-if="selected.agentRuns.length || liveAgentEvents.length" class="section-heading"><h3>Agent 调查轨迹</h3><span>{{ selected.agentRuns.length }}</span></div>
             <section v-if="liveAgentEvents.length" class="agent-live-panel" :class="{ complete: !activeAgentRunId }">
               <header><span><Radio :size="14" />LIVE RUN #{{ liveAgentEvents[0].runId }}</span><em>{{ activeAgentRunId ? (agentStreaming ? 'STREAMING' : 'RUNNING') : 'FINISHED' }}</em></header>
               <ol><li v-for="event in liveAgentEvents.slice(-8)" :key="event.id" :class="event.status?.toLowerCase()"><i /><span>{{ eventLabel(event) }}</span><strong>{{ eventSummary(event) }}</strong><small>#{{ event.sequence }}</small></li></ol>
@@ -620,17 +620,15 @@ onBeforeUnmount(() => {
                 </div>
               </article>
             </div>
-            <button v-if="!selected.agentRuns.length" class="empty-action" @click="investigate"><Workflow :size="20" />运行第一次可追踪 Agent 调查</button>
 
-            <div class="section-heading"><h3>调查报告</h3><span>{{ selected.investigations.length }}</span></div>
+            <div v-if="selected.investigations.length" class="section-heading"><h3>调查报告</h3><span>{{ selected.investigations.length }}</span></div>
             <article v-for="report in selected.investigations" :key="report.id" class="investigation-report">
               <header><div><Bot :size="17" /><strong>{{ report.engine }}</strong></div><span>置信度 {{ Math.round(Number(report.confidence) * 100) }}%</span></header>
               <p>{{ report.summary }}</p><h4>推测根因</h4><p>{{ report.hypothesis }}</p><h4>建议动作</h4><p class="pre-line">{{ report.suggestions }}</p>
               <footer><FileText :size="14" />{{ formatTime(report.createdAt, true) }}</footer>
             </article>
-            <button v-if="!selected.investigations.length && selected.agentRuns.length" class="empty-action" @click="investigate"><Bot :size="20" />重新生成调查报告</button>
 
-            <div class="section-heading"><h3>受控处置提案</h3><span>{{ selected.remediationProposals.length }}</span></div>
+            <div v-if="selected.remediationProposals.length" class="section-heading"><h3>受控处置提案</h3><span>{{ selected.remediationProposals.length }}</span></div>
             <div class="remediation-list">
               <article v-for="proposal in selected.remediationProposals" :key="proposal.id" class="remediation-card" :class="proposal.status.toLowerCase()">
                 <header><span><ShieldAlert :size="15" />{{ proposal.riskLevel }} RISK</span><em>{{ proposal.status }}</em></header>
@@ -640,10 +638,9 @@ onBeforeUnmount(() => {
                 <footer v-else-if="proposal.reviewedByName"><span>{{ proposal.reviewedByName }} · {{ formatTime(proposal.reviewedAt, true) }}</span><strong>{{ proposal.reviewComment }}</strong></footer>
                 <footer v-else><span>{{ proposal.requestedById === auth.state.user?.id ? '等待其他审批人复核' : '等待管理员或运维经理审批' }}</span></footer>
               </article>
-              <div v-if="!selected.remediationProposals.length" class="remediation-empty"><ShieldAlert :size="18" />当前没有待治理动作</div>
             </div>
 
-            <div class="section-heading"><h3>无责事故复盘</h3><span>{{ selected.postmortem ? 1 : 0 }}</span></div>
+            <div v-if="selected.postmortem || selected.incident.status === 'RESOLVED' || selected.incident.status === 'CLOSED'" class="section-heading"><h3>无责事故复盘</h3><span>{{ selected.postmortem ? 1 : 0 }}</span></div>
             <section v-if="selected.postmortem" class="postmortem-card" :class="selected.postmortem.status.toLowerCase()">
               <header class="postmortem-head">
                 <div><ClipboardCheck :size="17" /><span><strong>{{ postmortemStatusLabel(selected.postmortem.status) }}</strong><small>v{{ selected.postmortem.version }} · {{ selected.postmortem.createdByName }}</small></span></div>
@@ -692,7 +689,6 @@ onBeforeUnmount(() => {
               <footer v-if="selected.postmortem.status === 'PUBLISHED'" class="postmortem-published"><CheckCircle2 :size="15" /><span>{{ selected.postmortem.reviewedByName }} 于 {{ formatTime(selected.postmortem.publishedAt, true) }} 发布</span><strong>{{ selected.postmortem.reviewComment }}</strong></footer>
             </section>
             <button v-else-if="selected.incident.status === 'RESOLVED' || selected.incident.status === 'CLOSED'" class="empty-action" :disabled="postmortemLoading" @click="createPostmortem"><ClipboardCheck :size="20" />从真实证据生成复盘草稿</button>
-            <div v-else class="remediation-empty"><ClipboardCheck :size="18" />Incident 恢复后开放复盘，当前不会提前生成结论</div>
           </div>
 
           <aside class="timeline-column">

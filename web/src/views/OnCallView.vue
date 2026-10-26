@@ -85,7 +85,7 @@ onMounted(load)
     <OnCallRosterPanel ref="rosterPanel" @changed="rosterChanged" @handoff="source => handoffPanel?.open(source)" @swap="source => swapPanel?.open(source)" @open-handoff="source => openPanel?.open(source)" />
     <OnCallCoveragePanel ref="coveragePanel" />
     <section class="content-panel policy-panel">
-      <div class="panel-heading"><div><h2>升级策略</h2><span>P1 Incident 未确认时自动逐级通知</span></div><PhoneForwarded :size="18" /></div>
+      <div class="panel-heading"><div><h2>升级策略</h2><span>未确认事件按策略记录站内路由；外部送达需单独配置与核验</span></div><PhoneForwarded :size="18" /></div>
       <div class="policy-flow" v-for="group in [...new Set(policies.map(item => item.policyId))]" :key="group">
         <div class="policy-name"><strong>{{ policies.find(item => item.policyId === group)?.policyName }}</strong><span>{{ policies.find(item => item.policyId === group)?.resourceName }} · {{ policies.find(item => item.policyId === group)?.severity ?? '全部级别' }}</span></div>
         <div class="policy-steps">

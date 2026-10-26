@@ -8,8 +8,8 @@ import WorkbenchBackdrop from '@/components/WorkbenchBackdrop.vue'
 
 const router = useRouter()
 const route = useRoute()
-const username = ref(typeof route.query.username === 'string' && route.query.username.length <= 64 ? route.query.username : 'admin')
-const password = ref(route.query.reason ? '' : 'OpsPilot@2026')
+const username = ref(typeof route.query.username === 'string' && route.query.username.length <= 64 ? route.query.username : '')
+const password = ref('')
 const loading = ref(false)
 const error = ref('')
 const notice = computed(() => ({
@@ -54,7 +54,7 @@ async function submit() {
         <button class="primary-button login-submit" type="submit" :disabled="loading">
           <span>{{ loading ? '正在验证' : '进入控制台' }}</span><ArrowRight :size="17" />
         </button>
-        <div class="login-meta">演示账号仅用于本地试用</div>
+        <div class="login-meta">仅限已授权的值班与运维人员</div>
       </form>
     </section>
   </main>

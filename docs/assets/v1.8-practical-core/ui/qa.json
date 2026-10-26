@@ -1,0 +1,137 @@
+{
+  "status": "PASS",
+  "out": "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-practical-ui-gkDWwb",
+  "browser": "Browser plugin not available; existing Playwright/Chrome",
+  "viewports": [
+    "1440x1000",
+    "390x844"
+  ],
+  "frequencyWasNotMeasured": true,
+  "realUserDatabaseUsed": false,
+  "runs": [
+    {
+      "label": "before",
+      "loginPrefilled": true,
+      "cases": [],
+      "pages": [],
+      "initialRunbookRequests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/runbooks/searches/trend"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runbooks/publications"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runbooks"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runbooks/semantic-index"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runbooks/evaluations/latest"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runbooks/evaluations/history"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runbooks/judgments/pending"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runbooks/judgments/agreement"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runbooks/searches/retention"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runbooks/search"
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/runbooks/searches/retention"
+        }
+      ]
+    },
+    {
+      "label": "after",
+      "loginPrefilled": false,
+      "cases": [
+        {
+          "name": "blank-login-and-daily-document-read-only-without-demo-query-or-scoreboard",
+          "passed": true
+        },
+        {
+          "name": "maintenance-is-explicit-and-can-be-closed-without-removing-actual-tools",
+          "passed": true
+        },
+        {
+          "name": "only-static-graph-deleted-resource-relations-and-changes-still-visible",
+          "passed": true
+        },
+        {
+          "name": "test-injection-ui-deleted-real-alert-and-rejection-readers-retained",
+          "passed": true
+        },
+        {
+          "name": "duplicate-empty-actions-removed-but-controlled-real-data-approval-and-postmortem-still-render",
+          "passed": true,
+          "fixtureOnly": true
+        },
+        {
+          "name": "all-eleven-authenticated-pages-remain-readable-for-administrator",
+          "passed": true
+        },
+        {
+          "name": "home-keeps-three-actionable-counts-and-mobile-dark-core-pages-fit",
+          "passed": true
+        },
+        {
+          "name": "oncaller-can-search-published-runbooks-without-engineering-controls",
+          "passed": true
+        }
+      ],
+      "pages": [
+        "/",
+        "/incidents",
+        "/assistant",
+        "/alerts",
+        "/cmdb",
+        "/on-call",
+        "/runbooks",
+        "/analytics",
+        "/problems",
+        "/audit",
+        "/account/security"
+      ],
+      "initialRunbookRequests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/runbooks"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "expectedErrors": [
+    {
+      "label": "before",
+      "url": "http://127.0.0.1:9940/api/v1/runbooks/evaluations/latest",
+      "message": "Failed to load resource: the server responded with a status of 404 ()"
+    },
+    {
+      "label": "after",
+      "url": "http://127.0.0.1:9950/api/v1/runbooks/evaluations/latest",
+      "message": "Failed to load resource: the server responded with a status of 404 ()"
+    }
+  ],
+  "warnings": []
+}

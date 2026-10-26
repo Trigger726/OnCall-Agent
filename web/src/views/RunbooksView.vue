@@ -180,7 +180,9 @@ interface EvaluationHistory {
 interface ImportResult { document: RunbookDocument; reused: boolean }
 
 const documents = ref<RunbookDocument[]>([])
-const query = ref('Redis 连接池 pending 慢命令')
+const query = ref('')
+const maintenanceOpen = ref(false)
+const maintenanceLoading = ref(false)
 const searchMode = ref<'AUTO' | 'BM25' | 'HYBRID'>('AUTO')
 const searchResponse = ref<SearchResponse | null>(null)
 const evaluation = ref<Evaluation | null>(null)
@@ -215,9 +217,6 @@ const failedCases = computed(() => {
   if (!evaluation.value) return 0
   try { return (JSON.parse(evaluation.value.failuresJson) as unknown[]).length } catch { return 0 }
 })
-const baselineMetric = computed(() => evaluation.value?.metrics.find((item) => item.engine === 'LEGACY_CONTAINS_V1'))
-const bm25Metric = computed(() => evaluation.value?.metrics.find((item) => item.engine === 'BM25_LOCAL_V1'))
-const hybridMetric = computed(() => evaluation.value?.metrics.find((item) => item.engine === 'HYBRID_RRF_V1'))
 const historyDelta = computed(() => {
   const [latest, previous] = evaluationHistory.value
   if (!latest || !previous || latest.datasetVersion !== previous.datasetVersion || latest.engine !== previous.engine) return null
@@ -229,13 +228,20 @@ onMounted(async () => {
     error.value = '当前角色不能访问 Runbook；检索质量趋势仅管理角色可见'
     return
   }
-  await loadDocuments()
-  await loadSemanticIndex()
-  await loadLatestEvaluation()
-  await loadEvaluationHistory()
-  if (canManage.value) await Promise.all([loadPendingJudgments(), loadAgreement(), loadRetentionStatus()])
-  await search()
+  try { await loadDocuments() }
+  catch (caught) { error.value = caught instanceof Error ? caught.message : '手册列表读取失败' }
 })
+
+async function toggleMaintenance() {
+  if (!canManage.value || maintenanceLoading.value) return
+  maintenanceOpen.value = !maintenanceOpen.value
+  if (!maintenanceOpen.value) { searchMode.value = 'AUTO'; return }
+  maintenanceLoading.value = true
+  try {
+    await Promise.all([loadSemanticIndex(), loadLatestEvaluation(), loadEvaluationHistory(), loadPendingJudgments(), loadAgreement(), loadRetentionStatus()])
+  } catch (caught) { error.value = caught instanceof Error ? caught.message : '知识维护数据读取失败' }
+  finally { maintenanceLoading.value = false }
+}
 
 async function loadDocuments() {
   documents.value = await api<RunbookDocument[]>('/runbooks')
@@ -279,7 +285,7 @@ async function search() {
   try {
     judgmentsByKey.value = {}
     searchResponse.value = await api<SearchResponse>(`/runbooks/search?q=${encodeURIComponent(query.value.trim())}&topK=5&mode=${searchMode.value}`)
-    if (canManage.value) await loadRetentionStatus()
+    if (canManage.value && maintenanceOpen.value) await loadRetentionStatus()
   } catch (caught) {
     error.value = caught instanceof Error ? caught.message : '检索失败'
   } finally {
@@ -457,27 +463,21 @@ function retentionLabel(value: string) {
 <template>
   <div class="page-content runbook-page">
     <div class="page-toolbar runbook-toolbar">
-      <div><strong>版本化 Runbook 知识库</strong><span>{{ documents.length }} 份文档 · ACL 过滤 · BM25 / 向量 RRF · 分级 qrels 评测 · 快照留存治理</span></div>
+      <div><strong>处置手册</strong><span>{{ documents.length }} 份文档 · 查找处理步骤、适用条件与恢复验证</span></div>
       <div class="toolbar-group">
-        <button v-if="canManage && semanticIndex?.enabled" class="secondary-button" :disabled="loading" @click="rebuildSemanticIndex"><RefreshCw :size="15" />重建向量索引</button>
-        <button v-if="canManage" class="secondary-button" :disabled="loading" @click="runEvaluation"><FlaskConical :size="15" />运行评测</button>
+        <button v-if="canManage" type="button" class="secondary-button" :disabled="maintenanceLoading" :aria-expanded="maintenanceOpen" @click="toggleMaintenance">{{ maintenanceLoading ? '正在读取维护数据…' : maintenanceOpen ? '收起知识维护' : '知识维护' }}</button>
+        <button v-if="canManage && maintenanceOpen && semanticIndex?.enabled" class="secondary-button" :disabled="loading" @click="rebuildSemanticIndex"><RefreshCw :size="15" />重建向量索引</button>
+        <button v-if="canManage && maintenanceOpen" class="secondary-button" :disabled="loading" @click="runEvaluation"><FlaskConical :size="15" />运行评测</button>
         <button v-if="canManage" class="primary-button" @click="showImport = true"><Upload :size="15" />导入 Runbook</button>
       </div>
     </div>
 
-    <section v-if="canRead" class="runbook-comparison content-panel" aria-label="新旧 Runbook 能力对比">
-      <article><span>原演示 · contains</span><strong>{{ baselineMetric ? `Recall@3 ${metric(baselineMetric.recallAt3)}` : '3 条内置文本' }}</strong><small>LEGACY_CONTAINS_V1 / 无分数、版本与引用</small></article>
-      <article><span>词法基线 · BM25</span><strong>{{ bm25Metric ? `Recall@3 ${metric(bm25Metric.recallAt3)}` : '尚未评测' }}</strong><small>{{ bm25Metric ? `NDCG@3 ${metric(bm25Metric.ndcgAt3)} · MRR ${metric(bm25Metric.mrr)} · 引用 ${metric(bm25Metric.citationHitRate)}` : '13 条固定改写查询' }}</small></article>
-      <article><span>混合检索 · RRF</span><strong>{{ hybridMetric?.available ? `Recall@3 ${metric(hybridMetric.recallAt3)}` : '本次不可用' }}</strong><small>{{ hybridMetric?.available ? `NDCG@3 ${metric(hybridMetric.ndcgAt3)} · MRR ${metric(hybridMetric.mrr)} · 引用 ${metric(hybridMetric.citationHitRate)}` : (hybridMetric?.note ?? '构建完整向量索引后计分') }}</small></article>
-      <article><span>语义索引</span><strong>{{ semanticIndex ? `${semanticIndex.state} · ${metric(semanticIndex.coverage)}` : '读取中' }}</strong><small>{{ semanticIndex ? `${semanticIndex.indexedChunkCount}/${semanticIndex.publishedChunkCount} chunks · ${semanticIndex.provider}/${semanticIndex.model}` : '索引状态可观测' }}</small></article>
-    </section>
+    <p v-if="canManage && maintenanceOpen && evaluation" class="evaluation-note">固定集 {{ evaluation.caseCount }} 个查询 · {{ evaluation.judgmentCount }} 个 qrels · 版本 {{ evaluation.datasetVersion }} · {{ evaluation.evaluationNote }} · 选择引擎 {{ evaluation.engine }} · NDCG@3 {{ metric(evaluation.ndcgAt3) }} · 失败 {{ failedCases }}</p>
 
-    <p v-if="evaluation" class="evaluation-note">固定集 {{ evaluation.caseCount }} 个查询 · {{ evaluation.judgmentCount }} 个 qrels · 版本 {{ evaluation.datasetVersion }} · {{ evaluation.evaluationNote }} · 选择引擎 {{ evaluation.engine }} · NDCG@3 {{ metric(evaluation.ndcgAt3) }} · 失败 {{ failedCases }}</p>
+    <RunbookRetrievalTrend v-if="canManage && maintenanceOpen" :key="auth.state.user?.id" />
+    <RunbookPublicationQueue v-if="canManage && maintenanceOpen" :key="auth.state.user?.id" :refresh-token="publicationRefresh" @changed="loadDocuments" />
 
-    <RunbookRetrievalTrend v-if="canManage" :key="auth.state.user?.id" />
-    <RunbookPublicationQueue v-if="canManage" :key="auth.state.user?.id" :refresh-token="publicationRefresh" @changed="loadDocuments" />
-
-    <section v-if="canRead" class="content-panel evaluation-history" aria-label="Runbook 固定集评测历史">
+    <section v-if="canManage && maintenanceOpen" class="content-panel evaluation-history" aria-label="Runbook 固定集评测历史">
       <header class="panel-heading"><div><h2>固定集评测历史</h2><span>最近 12 次离线运行；只在数据集版本与实际引擎都相同时比较，不代表生产查询命中率</span></div><span v-if="historyDelta !== null" class="keyword-tag">Recall@3 较上次 {{ Number(historyDelta) >= 0 ? '+' : '' }}{{ historyDelta }} 个百分点</span></header>
       <div v-if="evaluationHistory.length" class="evaluation-history-scroll">
         <table>
@@ -497,7 +497,7 @@ function retentionLabel(value: string) {
     <form v-if="canRead" class="runbook-search content-panel" @submit.prevent="search">
       <Search :size="17" />
       <input v-model="query" aria-label="Runbook 检索语句" placeholder="输入故障症状、指标、组件或恢复动作" />
-      <div class="segmented-control search-mode" aria-label="检索模式">
+      <div v-if="canManage && maintenanceOpen" class="segmented-control search-mode" aria-label="检索模式">
         <button v-for="mode in ['AUTO','BM25','HYBRID']" :key="mode" type="button" :class="{ active: searchMode === mode }" @click="setSearchMode(mode)">{{ mode }}</button>
       </div>
       <button class="primary-button" :disabled="loading">{{ loading ? '检索中…' : '检索' }}</button>
@@ -529,7 +529,7 @@ function retentionLabel(value: string) {
       <div v-else class="empty-state">当前角色可访问的 Runbook 中没有相关分块</div>
     </section>
 
-    <section v-if="canManage" class="content-panel judgment-panel">
+    <section v-if="canManage && maintenanceOpen" class="content-panel judgment-panel">
       <header class="panel-heading"><div><h2>待复核相关性判断</h2><span>原始等级隐藏；独立复核 ≥ 2 且范围已知才进入固定评测集</span></div><div class="agreement-summary"><span class="keyword-tag">{{ pendingJudgments.length }} PENDING</span><span v-if="agreement" :title="agreement.note">κ {{ kappa(agreement.linearWeightedKappa) }} · 精确 {{ metric(agreement.exactAgreementRate) }} · {{ agreement.sampleCount }} 对</span></div></header>
       <div v-if="pendingJudgments.length" class="judgment-list">
         <article v-for="judgment in pendingJudgments" :key="judgment.id">
@@ -543,7 +543,7 @@ function retentionLabel(value: string) {
       <div v-else class="empty-state">当前没有可由你独立复核的判断</div>
     </section>
 
-    <section v-if="canManage && retentionStatus" class="content-panel retention-panel">
+    <section v-if="canManage && maintenanceOpen && retentionStatus" class="content-panel retention-panel">
       <header class="panel-heading">
         <div><h2>检索快照生命周期</h2><span>入库前屏蔽凭据、邮箱和完整 IPv4；到期擦除正文与操作者，结构化 qrel 继续可用</span></div>
         <button class="secondary-button" :disabled="retentionLoading || retentionStatus.expiredSnapshots === 0" @click="purgeExpiredSnapshots"><ShieldCheck :size="14" />{{ retentionLoading ? '清理中…' : '清理到期快照' }}</button>
@@ -595,11 +595,6 @@ function retentionLabel(value: string) {
 .import-mode-field > span { color: #52646b; font-size: 10px; font-weight: 650; }
 .runbook-page { display: flex; flex-direction: column; gap: 16px; }
 .runbook-toolbar { margin-bottom: 0; }
-.runbook-comparison { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: hidden; }
-.runbook-comparison article { min-height: 92px; padding: 17px 19px; display: flex; flex-direction: column; justify-content: center; gap: 5px; border-right: 1px solid var(--line); }
-.runbook-comparison article:last-child { border-right: 0; }
-.runbook-comparison span, .runbook-comparison small { color: var(--text-muted); font-size: 10px; }
-.runbook-comparison strong { font-size: 16px; }
 .evaluation-note { margin: -7px 2px 0; color: var(--text-muted); font-size: 9px; }
 .evaluation-history { overflow: hidden; }
 .evaluation-history-scroll { overflow-x: auto; }
@@ -657,7 +652,5 @@ function retentionLabel(value: string) {
 .role-options { min-height: 38px; display: flex; align-items: center; gap: 16px; }
 .role-options label { display: flex; flex-direction: row; align-items: center; gap: 6px; color: #55555a; font-size: 10px; }
 .role-options input { width: 15px; min-height: 15px; }
-@media (min-width: 1101px) { .runbook-comparison { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (max-width: 1100px) { .runbook-comparison { grid-template-columns: repeat(2, minmax(0, 1fr)); }.runbook-comparison article:nth-child(2) { border-right: 0; }.runbook-comparison article:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }
-@media (max-width: 640px) { .runbook-comparison { grid-template-columns: 1fr; }.runbook-comparison article { min-height: 72px; border-right: 0; border-bottom: 1px solid var(--line); }.runbook-comparison article:last-child { border-bottom: 0; }.runbook-toolbar { align-items: flex-start; flex-direction: column; }.runbook-toolbar .toolbar-group { width: 100%; flex-wrap: wrap; }.runbook-toolbar button { flex: 1; }.runbook-search { align-items: stretch; flex-wrap: wrap; }.runbook-search input { min-height: 34px; }.runbook-search > button { width: 100%; }.search-mode { width: 100%; }.search-mode button { flex: 1; }.retrieval-results article { grid-template-columns: 1fr; gap: 5px; }.retrieval-results header { align-items: flex-start; flex-direction: column; }.judgment-list article { align-items: flex-start; flex-direction: column; }.judgment-actions { width: 100%; }.judgment-actions button { flex: 1; }.retention-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }.retention-stats article:nth-child(2) { border-right: 0; }.retention-stats article:nth-child(-n+2) { border-bottom: 1px solid var(--line); }.form-grid { grid-template-columns: 1fr; }.span-2 { grid-column: 1; }.role-options { align-items: flex-start; flex-direction: column; gap: 8px; } }
+@media (max-width: 640px) {.runbook-toolbar { align-items: flex-start; flex-direction: column; }.runbook-toolbar .toolbar-group { width: 100%; flex-wrap: wrap; }.runbook-toolbar button { flex: 1; }.runbook-search { align-items: stretch; flex-wrap: wrap; }.runbook-search input { min-height: 34px; }.runbook-search > button { width: 100%; }.search-mode { width: 100%; }.search-mode button { flex: 1; }.retrieval-results article { grid-template-columns: 1fr; gap: 5px; }.retrieval-results header { align-items: flex-start; flex-direction: column; }.judgment-list article { align-items: flex-start; flex-direction: column; }.judgment-actions { width: 100%; }.judgment-actions button { flex: 1; }.retention-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }.retention-stats article:nth-child(2) { border-right: 0; }.retention-stats article:nth-child(-n+2) { border-bottom: 1px solid var(--line); }.form-grid { grid-template-columns: 1fr; }.span-2 { grid-column: 1; }.role-options { align-items: flex-start; flex-direction: column; gap: 8px; } }
 </style>

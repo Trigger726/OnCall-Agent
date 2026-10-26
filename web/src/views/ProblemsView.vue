@@ -242,7 +242,7 @@ onMounted(load)
 
     <div class="method-banner">
       <GitBranch :size="17" />
-      <div><strong>高精度确定性基线</strong><span>同一归属服务 + 完全相同告警指纹，且跨至少 2 个不同 Incident；同一事故内重复告警只增加信号次数，不增加复发次数。</span></div>
+      <div><strong>重复事故识别口径</strong><span>同一归属服务 + 完全相同告警指纹，且跨至少 2 个不同 Incident；同一事故内重复告警只增加信号次数，不增加复发次数。</span></div>
       <em>EXACT_ALERT_FINGERPRINT</em>
     </div>
     <div v-if="error" class="inline-error"><AlertTriangle :size="16" />{{ error }}</div>

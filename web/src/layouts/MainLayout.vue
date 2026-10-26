@@ -20,7 +20,7 @@ const nav = [
   { to: '/incidents', label: 'Incident', icon: RadioTower },
   { to: '/assistant', label: 'OnCall 助手', icon: MessageSquareText },
   { to: '/alerts', label: '告警中心', icon: BellRing },
-  { to: '/cmdb', label: '资源与拓扑', icon: Boxes },
+  { to: '/cmdb', label: '资源台账', icon: Boxes },
   { to: '/on-call', label: '值班与升级', icon: AlarmClock },
   { to: '/runbooks', label: '处置手册', icon: BookOpenCheck },
   { to: '/analytics', label: '运营分析', icon: BarChart3 },

@@ -26,7 +26,7 @@ const router = createRouter({
         { path: 'incidents', name: 'incidents', component: IncidentsView, meta: { title: 'Incident 工作台' } },
         { path: 'assistant', name: 'assistant', component: AssistantView, meta: { title: 'OnCall 助手' } },
         { path: 'alerts', name: 'alerts', component: AlertsView, meta: { title: '告警中心' } },
-        { path: 'cmdb', name: 'cmdb', component: CmdbView, meta: { title: '资源与拓扑' } },
+        { path: 'cmdb', name: 'cmdb', component: CmdbView, meta: { title: '资源台账' } },
         { path: 'on-call', name: 'on-call', component: OnCallView, meta: { title: '值班与升级' } },
         { path: 'runbooks', name: 'runbooks', component: RunbooksView, meta: { title: '处置手册' } },
         { path: 'audit', name: 'audit', component: AuditView, meta: { title: '审计日志' } },

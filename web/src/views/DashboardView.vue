@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { AlertTriangle, ArrowRight, BellRing, Boxes, Clock3, RadioTower, RefreshCw, Users } from 'lucide-vue-next'
+import { AlertTriangle, ArrowRight, BellRing, Boxes, RadioTower, RefreshCw, Users } from 'lucide-vue-next'
 import StatusBadge from '@/components/StatusBadge.vue'
 import WorkbenchBackdrop from '@/components/WorkbenchBackdrop.vue'
 import { api, formatTime, type PageResponse } from '@/services/api'
@@ -81,8 +81,7 @@ onMounted(load)
     <section class="metric-strip" aria-label="核心指标">
       <article><span class="metric-icon danger"><RadioTower :size="18" /></span><div><small>活跃 Incident</small><strong>{{ dashboard?.activeIncidents ?? '-' }}</strong><em>{{ dashboard?.p1Incidents ?? '-' }} 个 P1</em></div></article>
       <article><span class="metric-icon warning"><BellRing :size="18" /></span><div><small>触发中告警</small><strong>{{ dashboard?.firingAlerts ?? '-' }}</strong><em>压缩 {{ dashboard?.alertCompressionPercent ?? '-' }}%</em></div></article>
-      <article><span class="metric-icon info"><Clock3 :size="18" /></span><div><small>平均确认时间</small><strong>{{ dashboard?.mttaMinutes ?? '-' }}<i>min</i></strong><em>目标 ≤ 5 min</em></div></article>
-      <article><span class="metric-icon neutral"><Boxes :size="18" /></span><div><small>异常资源</small><strong>{{ dashboard?.degradedResources ?? '-' }}</strong><em>CMDB 实时关联</em></div></article>
+      <article><span class="metric-icon neutral"><Boxes :size="18" /></span><div><small>异常资源</small><strong>{{ dashboard?.degradedResources ?? '-' }}</strong><em>按资源台账状态统计</em></div></article>
     </section>
 
     <section class="dashboard-grid">
@@ -143,6 +142,7 @@ onMounted(load)
 
 <style scoped>
 .dashboard-page { position: relative; isolation: isolate; }
+.dashboard-page .metric-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .dashboard-page > :not(.workbench-backdrop) { position: relative; z-index: 1; }
 .dashboard-page :is(.content-panel, .metric-strip) { background: color-mix(in srgb, var(--surface) 91%, transparent); }
 .workbench-hero { position: relative; min-height: 260px; margin-bottom: 22px; border: 0; background: transparent; }
@@ -150,5 +150,5 @@ onMounted(load)
 .workbench-intro h1 { margin: 0; font-size: 28px; font-weight: 600; line-height: 1.25; letter-spacing: -.6px; }
 .workbench-intro p { margin: 9px 0 18px; color: var(--text-muted); font-size: 14px; line-height: 1.5; }
 .workbench-intro button { font-size: 12px; }
-@media (max-width: 640px) { .workbench-hero { min-height: 250px; margin-bottom: 16px; } .workbench-intro { padding: 68px 4px 22px; max-width: 100%; } .workbench-intro h1 { font-size: 25px; } .workbench-intro p { font-size: 13px; } }
+@media (max-width: 640px) { .dashboard-page .metric-strip { grid-template-columns: 1fr; } .workbench-hero { min-height: 250px; margin-bottom: 16px; } .workbench-intro { padding: 68px 4px 22px; max-width: 100%; } .workbench-intro h1 { font-size: 25px; } .workbench-intro p { font-size: 13px; } }
 </style>

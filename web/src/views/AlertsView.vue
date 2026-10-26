@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue'
-import { BellPlus, RefreshCw, RotateCcw, Send, ShieldAlert, X } from 'lucide-vue-next'
+import { computed, onMounted, ref, watch } from 'vue'
+import { RefreshCw, RotateCcw, ShieldAlert } from 'lucide-vue-next'
 import StatusBadge from '@/components/StatusBadge.vue'
 import { api, formatTime, type PageResponse } from '@/services/api'
 import { auth } from '@/stores/auth'
@@ -28,16 +28,11 @@ const rejections = ref<RejectionItem[]>([])
 const statusFilter = ref('')
 const severityFilter = ref('')
 const rejectionStatus = ref('OPEN')
-const showIntake = ref(false)
 const loading = ref(false)
 const rejectionLoading = ref(false)
 const replayingId = ref<number | null>(null)
 const resultMessage = ref('')
 const canReplay = computed(() => ['ADMIN', 'OPS_MANAGER', 'ON_CALL'].includes(auth.state.user?.roleCode ?? ''))
-const form = reactive({
-  source: 'prometheus', resourceCode: 'APP-PORTAL', severity: 'P3', status: 'FIRING',
-  title: '客户门户接口错误率升高', description: '5xx 错误率连续 5 分钟超过阈值',
-})
 
 async function loadAlerts() {
   loading.value = true
@@ -61,18 +56,6 @@ async function loadRejections() {
 
 async function load() {
   await Promise.all([loadAlerts(), loadRejections()])
-}
-
-async function submitIntake() {
-  loading.value = true
-  try {
-    const result = await api<{ action: string; alertId: number; incidentId: number | null; message: string }>('/alerts/intake', {
-      method: 'POST', body: JSON.stringify({ ...form, labels: { cluster: 'prod-east', manual: 'true' } }),
-    })
-    resultMessage.value = `${result.message} · Alert #${result.alertId}`
-    showIntake.value = false
-    await loadAlerts()
-  } finally { loading.value = false }
 }
 
 async function replay(item: RejectionItem) {
@@ -99,7 +82,6 @@ onMounted(load)
         <select v-model="severityFilter"><option value="">全部等级</option><option v-for="level in ['P1','P2','P3','P4']" :key="level">{{ level }}</option></select>
         <select v-model="statusFilter"><option value="">全部状态</option><option value="FIRING">FIRING</option><option value="RESOLVED">RESOLVED</option></select>
         <button class="secondary-button" @click="loadAlerts"><RefreshCw :size="15" :class="{ spin: loading }" />刷新</button>
-        <button class="primary-button" @click="showIntake = true"><BellPlus :size="16" />接入告警</button>
       </div>
     </div>
     <div v-if="resultMessage" class="success-banner">{{ resultMessage }}</div>
@@ -152,20 +134,6 @@ onMounted(load)
       </div>
     </section>
 
-    <div v-if="showIntake" class="dialog-backdrop" @click.self="showIntake = false">
-      <form class="dialog-panel" @submit.prevent="submitIntake">
-        <header><div><h2>接入测试告警</h2><span>提交后立即执行指纹去重与 Incident 聚合</span></div><button type="button" class="icon-button" title="关闭" @click="showIntake = false"><X :size="18" /></button></header>
-        <div class="form-grid">
-          <label><span>告警来源</span><input v-model="form.source" required /></label>
-          <label><span>资源编码</span><select v-model="form.resourceCode"><option value="APP-SETTLEMENT">APP-SETTLEMENT</option><option value="APP-PORTAL">APP-PORTAL</option><option value="APP-AUTH">APP-AUTH</option><option value="MID-REDIS-01">MID-REDIS-01</option></select></label>
-          <label><span>严重等级</span><select v-model="form.severity"><option v-for="level in ['P1','P2','P3','P4']" :key="level">{{ level }}</option></select></label>
-          <label><span>事件状态</span><select v-model="form.status"><option>FIRING</option><option>RESOLVED</option></select></label>
-          <label class="span-2"><span>告警主题</span><input v-model="form.title" required /></label>
-          <label class="span-2"><span>观测描述</span><textarea v-model="form.description" rows="4" /></label>
-        </div>
-        <footer><button type="button" class="secondary-button" @click="showIntake = false">取消</button><button class="primary-button" :disabled="loading"><Send :size="15" />提交事件</button></footer>
-      </form>
-    </div>
   </div>
 </template>
 
