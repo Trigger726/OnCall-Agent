@@ -47,6 +47,17 @@ const loading = ref(false)
 const actionLoading = ref(false)
 const statusFilter = ref('')
 const severityFilter = ref('')
+const searchDraft = ref('')
+const searchQuery = ref('')
+const pageNumber = ref(1)
+const total = ref(0)
+const listError = ref('')
+const hasListResult = ref(false)
+const pageSize = 20
+const pageCount = computed(() => Math.max(1, Math.ceil(total.value / pageSize)))
+const pageToken = localStorage.getItem('opspilot_token')
+let listVersion = 0
+let listController: AbortController | null = null
 const note = ref('')
 const toast = ref('')
 const expandedRunId = ref<number | null>(null)
@@ -80,21 +91,71 @@ const canReviewPostmortem = computed(() => {
     && postmortem.submittedById !== auth.state.user?.id
 })
 
-async function loadList(preferredId?: number) {
+async function loadList(preferredId?: number, honorRoute = false) {
+  listController?.abort()
+  const controller = new AbortController()
+  listController = controller
+  const version = ++listVersion
+  selectionVersion++
+  if (agentAbortController) {
+    agentAbortController.abort()
+    agentAbortController = null
+    agentStreaming.value = false
+    actionLoading.value = false
+  }
   loading.value = true
-  const query = new URLSearchParams({ size: '100' })
+  listError.value = ''
+  const current = () => !disposed && version === listVersion && localStorage.getItem('opspilot_token') === pageToken
+  const query = new URLSearchParams({ size: String(pageSize), page: String(pageNumber.value) })
   if (statusFilter.value) query.set('status', statusFilter.value)
   if (severityFilter.value) query.set('severity', severityFilter.value)
+  if (searchQuery.value) query.set('q', searchQuery.value)
   try {
-    const page = await api<PageResponse<IncidentSummary>>(`/incidents?${query}`)
-    if (disposed) return
+    const page = await api<PageResponse<IncidentSummary>>(`/incidents?${query}`, { signal: controller.signal })
+    if (!current()) return
+    total.value = page.total
+    hasListResult.value = true
+    if (page.total > 0 && pageNumber.value > pageCount.value) {
+      pageNumber.value = pageCount.value
+      await loadList()
+      return
+    }
     incidents.value = page.items
     const routeId = Number(route.query.selected)
-    const target = preferredId ?? (Number.isFinite(routeId) && routeId > 0 ? routeId : page.items[0]?.id)
+    const preferred = preferredId ?? selected.value?.incident.id
+    const target = page.items.find(item => item.id === preferred)?.id
+      ?? (honorRoute && Number.isFinite(routeId) && routeId > 0 ? routeId : page.items[0]?.id)
     if (target) await selectIncident(target)
     else selected.value = null
+  } catch (cause) {
+    if (!current() || controller.signal.aborted) return
+    listError.value = cause instanceof Error ? cause.message : '无法读取事件队列，请重试'
+    hasListResult.value = false
+    incidents.value = []
+    selected.value = null
   } finally {
-    loading.value = false
+    if (current()) loading.value = false
+  }
+}
+
+function applySearch() {
+  searchQuery.value = searchDraft.value.trim()
+  pageNumber.value = 1
+  void loadList()
+}
+function changePage(delta: number) {
+  const target = pageNumber.value + delta
+  if (loading.value || target < 1 || target > pageCount.value) return
+  pageNumber.value = target
+  void loadList()
+}
+
+async function openIncident(id: number) {
+  const version = selectionVersion + 1
+  listError.value = ''
+  try { await selectIncident(id) }
+  catch (cause) {
+    if (!disposed && version === selectionVersion) listError.value = cause instanceof Error ? cause.message : '事件详情读取失败'
   }
 }
 
@@ -113,7 +174,7 @@ async function selectIncident(id: number, resume = true) {
     api<RemediationProposal[]>(`/incidents/${id}/remediation-proposals`),
     api<Postmortem | null>(`/incidents/${id}/postmortem`),
   ])
-  if (version !== selectionVersion) return
+  if (disposed || version !== selectionVersion || localStorage.getItem('opspilot_token') !== pageToken) return
   selected.value = { ...detail, remediationProposals, postmortem }
   syncPostmortemDraft(postmortem)
   activeAgentRunId.value = detail.agentRuns.find(run => run.status === 'QUEUED' || run.status === 'RUNNING')?.id ?? null
@@ -456,11 +517,11 @@ async function addNote() {
   } finally { actionLoading.value = false }
 }
 
-watch([statusFilter, severityFilter], () => void loadList())
+watch([statusFilter, severityFilter], () => { pageNumber.value = 1; void loadList() })
 onMounted(async () => {
   try {
     users.value = await api<UserOption[]>('/reference/users')
-    await loadList()
+    await loadList(undefined, true)
   } catch (cause) {
     // The API has already redirected a revoked session; do not turn it into an unhandled mount error.
     if (!(cause instanceof RequestError && cause.status === 401)) throw cause
@@ -468,6 +529,8 @@ onMounted(async () => {
 })
 onBeforeUnmount(() => {
   disposed = true
+  listVersion++
+  listController?.abort()
   selectionVersion++
   agentAbortController?.abort()
   agentAbortController = null
@@ -477,7 +540,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="page-content incident-workspace">
     <div class="page-toolbar">
-      <div><strong>Incident 队列</strong><span>{{ incidents.length }} 条记录</span></div>
+      <div><strong>Incident 工作台</strong><span>查找事件，围绕证据推进处置</span></div>
       <div class="toolbar-group">
         <select v-model="severityFilter" aria-label="严重等级"><option value="">全部等级</option><option v-for="level in ['P1','P2','P3','P4']" :key="level">{{ level }}</option></select>
         <select v-model="statusFilter" aria-label="Incident 状态"><option value="">全部状态</option><option v-for="item in ['OPEN','ACKNOWLEDGED','INVESTIGATING','MITIGATED','RESOLVED','CLOSED']" :key="item">{{ item }}</option></select>
@@ -485,17 +548,30 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
+    <form class="incident-search" role="search" @submit.prevent="applySearch">
+      <input v-model="searchDraft" type="search" maxlength="120" aria-label="搜索 Incident" placeholder="搜索事件编号、标题或影响服务" />
+      <button type="submit" class="secondary-button">搜索</button>
+      <button v-if="searchQuery" type="button" class="incident-clear-search" @click="searchDraft = ''; applySearch()">清除搜索</button>
+      <span v-if="hasListResult" role="status">共 {{ total }} 个事件</span>
+      <span v-else-if="loading" role="status">正在读取队列…</span>
+    </form>
+    <div v-if="listError" class="incident-list-error" role="alert"><span>{{ listError }}</span><button type="button" class="secondary-button" @click="loadList()">重新读取</button></div>
+
     <div class="incident-split">
-      <section class="incident-queue">
-        <button v-for="item in incidents" :key="item.id" :class="{ active: selected?.incident.id === item.id }" @click="selectIncident(item.id)">
+      <section class="incident-queue" aria-label="事件队列" :aria-busy="loading">
+        <header class="incident-queue-summary"><strong>事件队列</strong><span>{{ loading ? '读取中…' : hasListResult ? `本页 ${incidents.length} 个` : '暂未读取' }}</span></header>
+        <div class="incident-queue-items">
+        <button v-for="item in incidents" :key="item.id" :disabled="loading" :class="{ active: selected?.incident.id === item.id }" @click="openIncident(item.id)">
           <StatusBadge :value="item.severity" />
           <div><span>{{ item.incidentCode }}</span><strong>{{ item.title }}</strong><small>{{ item.resourceName }} · {{ item.alertCount }} 条告警 · {{ formatTime(item.updatedAt) }}</small></div>
           <StatusBadge :value="item.status" /><ChevronRight :size="16" />
         </button>
-        <div v-if="!incidents.length && !loading" class="empty-state"><Check :size="24" /><strong>当前筛选下没有 Incident</strong></div>
+        <div v-if="!incidents.length && !loading && !listError" class="empty-state"><Check :size="24" /><strong>没有匹配的事件</strong><span>试试更短的关键词，或调整状态与等级</span></div>
+        </div>
+        <nav class="incident-pagination" aria-label="事件分页"><button type="button" :disabled="loading || !hasListResult || pageNumber <= 1" @click="changePage(-1)">上一页</button><span>{{ pageNumber }} / {{ pageCount }}</span><button type="button" :disabled="loading || !hasListResult || pageNumber >= pageCount" @click="changePage(1)">下一页</button></nav>
       </section>
 
-      <section v-if="selected" class="incident-detail">
+      <section v-if="selected" class="incident-detail" :inert="loading || undefined">
         <header class="incident-detail-head">
           <div><div class="eyebrow"><StatusBadge :value="selected.incident.severity" /><span>{{ selected.incident.incidentCode }}</span><StatusBadge :value="selected.incident.status" /></div><h2>{{ selected.incident.title }}</h2><p>{{ selected.description }}</p></div>
           <div class="incident-actions">
@@ -628,8 +704,30 @@ onBeforeUnmount(() => {
           </aside>
         </div>
       </section>
-      <div v-else class="workspace-loading"><LoaderCircle :size="24" class="spin" /></div>
+      <div v-else class="workspace-loading"><LoaderCircle v-if="loading" :size="24" class="spin" /><span v-else>从队列选择一个事件查看详情</span></div>
     </div>
     <div v-if="toast" class="toast" @click="toast = ''">{{ toast }}</div>
   </div>
 </template>
+
+<style scoped>
+.incident-search { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+.incident-search input { flex: 1; min-width: 220px; max-width: 560px; height: 44px; border: 1px solid var(--line); border-radius: 8px; padding: 0 14px; background: var(--surface); color: var(--text); }
+.incident-search button { min-height: 44px; }
+.incident-search > span, .incident-queue-summary span { color: var(--text-muted); font-size: 12px; }
+.incident-clear-search { border: 0; background: none; color: var(--text-muted); padding: 0 8px; }
+.incident-list-error { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px; margin-bottom: 16px; border: 1px solid var(--line); border-radius: 8px; color: var(--danger); }
+.incident-queue { display: flex; flex-direction: column; align-self: start; min-width: 0; }
+.incident-queue-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 14px; border-bottom: 1px solid var(--line); font-size: 13px; }
+.incident-queue-items { max-height: min(660px, calc(100dvh - 310px)); min-height: 120px; overflow-y: auto; }
+.incident-queue-items > button { display: flex; width: 100%; align-items: center; gap: 10px; min-height: 96px; padding: 14px; text-align: left; border: 0; border-bottom: 1px solid var(--line); background: var(--surface); }
+.incident-queue-items > button > div { display: flex; flex: 1; flex-direction: column; min-width: 0; gap: 5px; }
+.incident-queue-items > button strong { font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+.incident-queue-items > button span, .incident-queue-items > button small { font-size: 11px; color: var(--text-muted); }
+.incident-queue-items > button:hover { background: var(--surface-muted); }
+.incident-queue-items > button.active { background: var(--active); box-shadow: inset 2px 0 var(--highlight); }
+.incident-pagination { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; border-top: 1px solid var(--line); font-size: 12px; }
+.incident-pagination button { min-height: 40px; padding: 0 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+.incident-detail { min-width: 0; }
+@media (max-width: 760px) { .incident-search input { min-width: 0; width: 100%; max-width: none; flex-basis: calc(100% - 80px); }.incident-queue-items { max-height: 320px; }.incident-pagination button { min-height: 44px; } }
+</style>

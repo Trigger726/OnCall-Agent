@@ -29,9 +29,10 @@ public class IncidentController {
     public ApiResponse<PageResponse<IncidentService.IncidentSummary>> list(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String severity,
+            @RequestParam(required = false) String q,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size) {
-        return ApiResponse.ok(service.list(status, severity, page, size));
+        return ApiResponse.ok(service.list(status, severity, q, page, size));
     }
 
     @GetMapping("/{id}")

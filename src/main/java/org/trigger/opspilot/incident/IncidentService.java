@@ -26,13 +26,22 @@ public class IncidentService {
     }
 
     public PageResponse<IncidentSummary> list(String status, String severity, int page, int size) {
+        return list(status, severity, null, page, size);
+    }
+
+    public PageResponse<IncidentSummary> list(String status, String severity, String query, int page, int size) {
+        String needle = query == null ? "" : query.strip();
+        if (needle.length() > 120) throw new ApiException(HttpStatus.BAD_REQUEST, "INVALID_QUERY", "搜索关键词不能超过 120 个字符");
         String normalizedStatus = status == null ? "" : status.toUpperCase();
         String normalizedSeverity = severity == null ? "" : severity.toUpperCase();
         int safePage = Math.max(1, page);
         int safeSize = Math.max(1, Math.min(100, size));
-        String where = "WHERE (:status = '' OR i.status = :status) AND (:severity = '' OR i.severity = :severity)";
-        long total = jdbcClient.sql("SELECT COUNT(*) FROM incident i " + where)
+        String where = "WHERE (:status = '' OR i.status = :status) AND (:severity = '' OR i.severity = :severity)"
+                + " AND (:q = '' OR LOCATE(LOWER(:q), LOWER(i.incident_code)) > 0"
+                + " OR LOCATE(LOWER(:q), LOWER(i.title)) > 0 OR LOCATE(LOWER(:q), LOWER(r.name)) > 0)";
+        long total = jdbcClient.sql("SELECT COUNT(*) FROM incident i JOIN cmdb_resource r ON r.id = i.service_resource_id " + where)
                 .param("status", normalizedStatus).param("severity", normalizedSeverity)
+                .param("q", needle)
                 .query(Long.class).single();
         List<IncidentSummary> items = jdbcClient.sql("""
                         SELECT i.id, i.incident_code, i.title, i.severity, i.status, i.version,
@@ -44,9 +53,10 @@ public class IncidentService {
                         JOIN cmdb_resource r ON r.id = i.service_resource_id
                         LEFT JOIN sys_user commander ON commander.id = i.commander_id
                         LEFT JOIN sys_user assignee ON assignee.id = i.assignee_id
-                        """ + where + " ORDER BY CASE i.severity WHEN 'P1' THEN 1 WHEN 'P2' THEN 2 WHEN 'P3' THEN 3 ELSE 4 END, i.updated_at DESC LIMIT :limit OFFSET :offset")
+                        """ + where + " ORDER BY CASE i.severity WHEN 'P1' THEN 1 WHEN 'P2' THEN 2 WHEN 'P3' THEN 3 ELSE 4 END, i.updated_at DESC, i.id DESC LIMIT :limit OFFSET :offset")
                 .param("status", normalizedStatus).param("severity", normalizedSeverity)
-                .param("limit", safeSize).param("offset", (safePage - 1) * safeSize)
+                .param("q", needle)
+                .param("limit", safeSize).param("offset", (safePage - 1L) * safeSize)
                 .query(IncidentService::mapSummary).list();
         return new PageResponse<>(items, total, safePage, safeSize);
     }
