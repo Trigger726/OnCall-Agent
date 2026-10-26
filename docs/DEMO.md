@@ -1,5 +1,7 @@
 # OpsPilot 10 分钟演示脚本
 
+2026-10-26 当前差异：[V1.8 CP14](acceptance/V1.8-checkpoint-14-intake-auth.md)为兼容 `/api/v1/alerts/intake` 加入写入角色与有效会话校验，历史匿名调用示例只适用于旧包；新包需先登录并发送 Bearer，会记录操作者审计。正式 Alertmanager 仍使用独立 Secret。新旧 HTTP 对照使用脚本自行启动的临时数据库，未向旧 Demo 注入告警；已有历史预览与业务数据保留。
+
 当前 CP107没有新用户可见功能：[测试强化报告](acceptance/V1.7-checkpoint-107.md)。CP106自己Linux原生六/后续通知12、成对14、开放33已由[原始工件](assets/v1.7-cp106/remote-close-proof.json)限定核验；CP105首FAIL仍保留，成功不等于唯一根因修复。历史原始与CP103旧等待→新片段Demo继续，成员页面尚未实现，不能生成‘已有计划隔离’的新旧图。以下历史待验按当时阅读。
 
 CP106没有新视觉功能：[报告与本轮QA](acceptance/V1.7-checkpoint-106.md#4-本机页面复核与新旧对照)。本机原生六流程在观测增强前后均PASS，已目视新的1440桌面/390px手机容量拒绝截图，实际503提示与冻结原键仍显示；CP103旧等待/新片段和所有历史Demo保持。CP105自身Linux第六流程仍首FAIL，不能用本机新图冒称远端已修复；它的真实MySQL旧新包升级10则已有[自身工件](assets/v1.7-cp105/remote-first-proof.json)。演示时分别陈述两者范围。

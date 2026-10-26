@@ -86,6 +86,7 @@ class OpsPilotApiIntegrationTest {
 
     @Test
     void shouldDedupeFingerprintAndAttachBothEventsToOneIncident() throws Exception {
+        String token = login("zhangwei", "OpsPilot@2026");
         String payload = """
                 {
                   "source": "prometheus",
@@ -97,11 +98,13 @@ class OpsPilotApiIntegrationTest {
                 }
                 """;
         String first = mockMvc.perform(post("/api/v1/alerts/intake")
+                        .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON).content(payload))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.action").value("CREATED"))
                 .andReturn().getResponse().getContentAsString();
         String second = mockMvc.perform(post("/api/v1/alerts/intake")
+                        .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON).content(payload))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.action").value("DEDUPLICATED"))

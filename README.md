@@ -1,5 +1,7 @@
 # OpsPilot
 
+最新落地修复：[CP14 告警摄取鉴权](docs/acceptance/V1.8-checkpoint-14-intake-auth.md)。以用户确认的“小团队日常值班”为范围，封住兼容单事件接口的匿名写入，增加当前会话复核及与业务同事务的操作者审计；正式 Alertmanager 继续使用独立 Secret。35 项回归、H2/MySQL 同九场景及新旧打包 HTTP 通过，独立新版预览 [9952](http://127.0.0.1:9952/login)，历史 Demo 不覆盖。
+
 最新场景审查：[功能实用性与落地清单](docs/FUNCTION-PRACTICALITY-AUDIT.md)及 [CP13 删减验收](docs/acceptance/V1.8-checkpoint-13-practical-core.md)。删除固定拓扑图、手工测试注入、登录演示凭证自动填充、旧引擎展示和首页含糊 MTTA；工程维护按需打开，手册初始相关请求实测 11→1。304 前端/301 Node、八组实页和管理员 11 页冒烟通过；新版 9950，32 份命名包保留。频率不是线上统计，兼容摄取鉴权、资源维护等上线阻断仍须先解决，不再默认堆无场景功能。
 
 最新功能与页面：[CP12 Incident 搜索、分页与队列阅读](docs/acceptance/V1.8-checkpoint-12-incident-query.md)。后端按编号/标题/资源查完整记录，真实总数/稳定分页与迟到响应围栏；双主题、队列独立滚动、空结果和失败重试同步优化。295 前端/301 脚本、H2/MySQL 同六场景 12 项及六组实页通过，107 条同数据旧/新比较；新版 9940、旧版 9944，31 份命名包保留。本轮独立远端 CI 尚未验。
@@ -413,6 +415,8 @@ bash scripts/verify-tracing-pipeline.sh
 
 ## Alertmanager webhook
 
+兼容单事件 `POST /api/v1/alerts/intake` 现在要求有效登录，允许 `ADMIN / OPS_MANAGER / ON_CALL`；匿名、无效/过期/撤销会话与停用账户返回 401，当前只读审计角色返回 403。旧调用方需先登录，再传 `Authorization: Bearer <accessToken>`。每次成功授权调用新增 `ALERT_INTAKE` 操作者审计；相同外部事件同状态重试仍返回 `REPLAYED`、不增加告警次数，但会新增本次调用审计。审计与告警/事件写入共同提交或回滚。持续机器投递优先使用以下独立 Secret webhook，不要硬编码个人会话。
+
 接入端点默认关闭。生产或联调环境必须显式设置共享密钥，并在 Alertmanager webhook receiver 中发送 `Authorization: OpsPilot <secret>`：
 
 ```bash
@@ -483,7 +487,7 @@ Runbook 页面保留原版/BM25/Hybrid 当前对照，并列出最近 12 次持�
 | --- | --- | --- |
 | POST | `/api/v1/auth/login` | 登录并签发 JWT |
 | GET | `/api/v1/dashboard` | 运行指标总览 |
-| POST | `/api/v1/alerts/intake` | 接入告警并执行去重/聚合 |
+| POST | `/api/v1/alerts/intake` | 有效 ADMIN/OPS_MANAGER/ON_CALL 会话接入告警、去重/聚合与操作者审计 |
 | POST | `/api/v1/integrations/alertmanager/webhook` | 接收专用密钥保护的 Alertmanager v4 批量 webhook，返回逐项接入结果 |
 | GET | `/api/v1/integrations/alertmanager/rejections` | 分页查询脱敏拒绝台账，支持 `OPEN/SUCCEEDED` 筛选 |
 | POST | `/api/v1/integrations/alertmanager/rejections/{id}/replay` | 用短租约受控重放，成功/失败写审计 |

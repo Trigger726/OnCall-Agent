@@ -1,0 +1,94 @@
+{
+  "status": "PASS",
+  "out": "C:\\Users\\lenovo\\AppData\\Local\\Temp\\opspilot-intake-http-3egrNe",
+  "ownedDatabasesOnly": true,
+  "cloudCalls": false,
+  "runs": [
+    {
+      "kind": "before",
+      "jarSha256": "01d0733bd7d96ffcec76e987625880827cb35b064b75c7eeff740b293ffa9cd6",
+      "port": 30865,
+      "checks": [
+        {
+          "name": "anonymous-intake",
+          "status": 200
+        }
+      ],
+      "status": "PASS",
+      "shutdownHttp": 200,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "portsFree": true
+    },
+    {
+      "kind": "after",
+      "jarSha256": "5f8654733dafcb2675c1534a6772a93465c0c8da1e0ad6809d39fc1bca539cdd",
+      "port": 12388,
+      "checks": [
+        {
+          "name": "anonymous-intake",
+          "status": 401
+        },
+        {
+          "name": "anonymous",
+          "status": 401
+        },
+        {
+          "name": "invalid-token",
+          "status": 401
+        },
+        {
+          "name": "auditor",
+          "status": 403
+        },
+        {
+          "name": "anonymous-malformed",
+          "status": 401
+        },
+        {
+          "name": "admin-write-replay-audit",
+          "actions": [
+            "CREATED",
+            "REPLAYED"
+          ],
+          "auditRows": 2
+        },
+        {
+          "name": "lina-write-replay-audit",
+          "actions": [
+            "CREATED",
+            "REPLAYED"
+          ],
+          "auditRows": 2
+        },
+        {
+          "name": "zhangwei-write-replay-audit",
+          "actions": [
+            "CREATED",
+            "REPLAYED"
+          ],
+          "auditRows": 2
+        },
+        {
+          "name": "independent-webhook-secret",
+          "userJwtRejected": true,
+          "secretOnlyActions": [
+            "CREATED",
+            "REPLAYED",
+            "UPDATED"
+          ]
+        }
+      ],
+      "deniedSnapshotsUnchanged": true,
+      "status": "PASS",
+      "shutdownHttp": 200,
+      "exit": {
+        "code": 0,
+        "signal": null
+      },
+      "portsFree": true
+    }
+  ]
+}

@@ -67,7 +67,7 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/actuator/prometheus")).permitAll()
                         .requestMatchers("/api/v1/auth/login", "/swagger-ui/**", "/v3/api-docs/**", "/h2-console/**",
                                 "/", "/index.html", "/favicon.svg", "/assets/**", "/login", "/incidents", "/assistant", "/alerts", "/cmdb", "/on-call", "/runbooks", "/audit", "/analytics", "/problems", "/account/security").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/alerts/intake").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/alerts/intake").hasAnyRole("ADMIN", "OPS_MANAGER", "ON_CALL")
                         .requestMatchers(HttpMethod.POST, "/api/v1/integrations/alertmanager/webhook").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

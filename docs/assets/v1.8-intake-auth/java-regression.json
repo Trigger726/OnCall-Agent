@@ -1,0 +1,95 @@
+{
+  "status": "PASS",
+  "tests": 35,
+  "suites": [
+    {
+      "name": "alert.AlertIntakeAuthorizationIntegrationTest",
+      "tests": 9,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "cases": [
+        "unauthorizedUpdateCannotChangeEventAndAuthorizedReplayPreservesBusinessRows",
+        "auditorCannotWrite",
+        "everyWriterRoleHasBoundedActorAudit",
+        "auditFailureRollsBackAlertIncidentAndTimeline",
+        "revokedAndDisabledAccountsCannotUseOldTokens",
+        "invalidBodyAndUnknownResourceCannotWrite",
+        "anonymousInvalidAndMalformedAnonymousRequestsCannotWrite",
+        "roleDowngradeTakesEffectForAlreadyIssuedToken",
+        "signedExpiredTokenCannotWrite"
+      ]
+    },
+    {
+      "name": "alert.AlertmanagerWebhookDisabledIntegrationTest",
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "cases": [
+        "shouldRefuseWebhookWhenSecretIsNotConfigured"
+      ]
+    },
+    {
+      "name": "alert.AlertmanagerWebhookIntegrationTest",
+      "tests": 5,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "cases": [
+        "shouldPersistDeduplicateAndRedactRejectedDeliveryWithReadOnlyAuditAccess",
+        "shouldAcceptValidAlertAndIsolatePermanentBadItem",
+        "shouldMakeRetryIdempotentAndRecordResolvedTransitionOnce",
+        "shouldReplayOnceAfterCmdbFixAcrossConcurrentRequests",
+        "shouldRequireDedicatedWebhookCredentialAndBoundBatchSize"
+      ]
+    },
+    {
+      "name": "OpsPilotApiIntegrationTest",
+      "tests": 9,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "cases": [
+        "shouldReturnStructuredUnauthorizedResponse",
+        "shouldPersistInspectableAgentInvestigationTrace",
+        "shouldStreamAndReplayPersistedAgentRunEvents",
+        "shouldRequireIndependentVersionedReviewForHighRiskProposal",
+        "shouldDedupeFingerprintAndAttachBothEventsToOneIncident",
+        "shouldAuthenticateAndLoadCoreOperationalViews",
+        "shouldPersistRunCancellationTimeoutAndQueueRejection",
+        "shouldPersistIncidentAwareAssistantConversationAndIsolateUsers",
+        "shouldEnforceRoleAndOptimisticIncidentTransition"
+      ]
+    },
+    {
+      "name": "problem.ProblemManagementIntegrationTest",
+      "tests": 3,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "cases": [
+        "shouldServeEverySpaRouteThroughOneUnambiguousForwarder",
+        "shouldTurnExactCrossIncidentRecurrenceIntoAuditedProblemLifecycle",
+        "shouldPromoteMaximumLengthEvidenceWithoutLosingOriginalTitles"
+      ]
+    },
+    {
+      "name": "security.AccountStatusHttpIntegrationTest",
+      "tests": 8,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "cases": [
+        "shouldReloadCurrentRoleButKeepActiveAuthentication",
+        "shouldRejectDisabledWriteWithoutAuditOrTimeline",
+        "shouldRejectMalformedSignedIdentityWithoutBusinessWrites",
+        "shouldRejectOldJwtWhenUsernameIsRecreated",
+        "shouldRejectOldJwtAfterAccountRemoval",
+        "shouldRejectOutOfRangeJwtDatesWithoutServerErrors",
+        "shouldRejectDisabledReadsAndLogin",
+        "shouldUseRealServletRequestForAuthenticatedHttpWrite"
+      ]
+    }
+  ]
+}

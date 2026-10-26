@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "command": "D:/Git/bin/bash.exe",
+      "args": [
+        "-n",
+        "scripts/verify-tracing-pipeline.sh"
+      ],
+      "exit": 0
+    },
+    {
+      "command": "D:\\Node\\node.exe",
+      "args": [
+        "--check",
+        "scripts/verify-oncall-rotation-ui.cjs"
+      ],
+      "exit": 0
+    },
+    {
+      "command": "D:\\Node\\node.exe",
+      "args": [
+        "--check",
+        "scripts/verify-alert-intake-packaged.cjs"
+      ],
+      "exit": 0
+    },
+    {
+      "command": "D:\\Node\\node.exe",
+      "args": [
+        "--check",
+        "scripts/verify-alert-intake-native-mysql.cjs"
+      ],
+      "exit": 0
+    }
+  ],
+  "fullDockerTracingPipelineRun": false,
+  "rotationBrowserFlowRun": false
+}

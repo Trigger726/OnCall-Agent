@@ -22,6 +22,8 @@ assert.notEqual(new URL(root).port, '9900', 'Do not target the daily demo listen
   page.on('response', response => { if(response.status() >= 400) expected409.push({status:response.status(),path:new URL(response.url()).pathname}); });
   try {
     await page.goto(root + '/on-call');
+    await page.locator('input[autocomplete="username"]').fill('admin');
+    await page.locator('input[autocomplete="current-password"]').fill('OpsPilot@2026');
     await page.getByRole('button', {name:'进入控制台',exact:true}).click();
     await page.waitForURL(root + '/');
     await page.goto(root + '/on-call');

@@ -195,10 +195,12 @@ class ProblemManagementIntegrationTest {
                 "resourceCode", "APP-AUTH", "severity", "P2", "status", "FIRING",
                 "title", SIGNAL_TITLE, "description", "解决后再次出现", "labels", Map.of()));
         mockMvc.perform(post("/api/v1/alerts/intake")
+                        .header("Authorization", bearer(manager))
                         .contentType(MediaType.APPLICATION_JSON).content(intake))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.incidentId").value(203));
         mockMvc.perform(post("/api/v1/alerts/intake")
+                        .header("Authorization", bearer(manager))
                         .contentType(MediaType.APPLICATION_JSON).content(intake))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.action").value("REPLAYED"));

@@ -64,16 +64,17 @@ alert_payload="$(jq -n \
 
 curl --fail --silent --show-error \
   -H 'Content-Type: application/json' \
-  -d "$alert_payload" \
-  http://localhost:9900/api/v1/alerts/intake > "$evidence_dir/alert-response.json"
-incident_id="$(jq -er '.data.incidentId' "$evidence_dir/alert-response.json")"
-
-curl --fail --silent --show-error \
-  -H 'Content-Type: application/json' \
   -d '{"username":"admin","password":"OpsPilot@2026"}' \
   http://localhost:9900/api/v1/auth/login > "$evidence_dir/login-response.json"
 token="$(jq -er '.data.accessToken' "$evidence_dir/login-response.json")"
 rm "$evidence_dir/login-response.json"
+
+curl --fail --silent --show-error \
+  -H 'Content-Type: application/json' \
+  -H "Authorization: Bearer $token" \
+  -d "$alert_payload" \
+  http://localhost:9900/api/v1/alerts/intake > "$evidence_dir/alert-response.json"
+incident_id="$(jq -er '.data.incidentId' "$evidence_dir/alert-response.json")"
 
 curl --fail --silent --show-error \
   -X POST \
