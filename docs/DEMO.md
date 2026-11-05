@@ -1,5 +1,7 @@
 # OpsPilot 10 分钟演示脚本
 
+2026-11-05 当前演示见 [CP15](acceptance/V1.8-checkpoint-15-daily-workbench.md)：打开 `http://127.0.0.1:9960`，登录后进入资源台账，由管理角色登记/编辑资源并刷新搜索，值班角色只能读取。最终包 `target/opspilot-v1.8-daily-workbench-20261105-delivery.jar` 使用独立数据库副本和用户指定的本机凭证。数据含 QA 标记，不是生产使用统计；旧包和数据库保留，历史端口不保证仍在线。
+
 2026-10-26 当前差异：[V1.8 CP14](acceptance/V1.8-checkpoint-14-intake-auth.md)为兼容 `/api/v1/alerts/intake` 加入写入角色与有效会话校验，历史匿名调用示例只适用于旧包；新包需先登录并发送 Bearer，会记录操作者审计。正式 Alertmanager 仍使用独立 Secret。新旧 HTTP 对照使用脚本自行启动的临时数据库，未向旧 Demo 注入告警；已有历史预览与业务数据保留。
 
 当前 CP107没有新用户可见功能：[测试强化报告](acceptance/V1.7-checkpoint-107.md)。CP106自己Linux原生六/后续通知12、成对14、开放33已由[原始工件](assets/v1.7-cp106/remote-close-proof.json)限定核验；CP105首FAIL仍保留，成功不等于唯一根因修复。历史原始与CP103旧等待→新片段Demo继续，成员页面尚未实现，不能生成‘已有计划隔离’的新旧图。以下历史待验按当时阅读。

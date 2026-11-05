@@ -15,8 +15,16 @@ interface LoginResponse {
   user: UserView
 }
 
+function readStoredUser(): UserView | null {
+  try {
+    const user = JSON.parse(localStorage.getItem('opspilot_user') ?? 'null')
+    if(user && Number.isSafeInteger(user.id) && user.id > 0 && ['username','displayName','roleCode'].every(key => typeof user[key] === 'string')) return user
+  } catch { /* Corrupt local state must not prevent the login screen from rendering. */ }
+  localStorage.removeItem('opspilot_user')
+  return null
+}
 const state = reactive<{ user: UserView | null; initialized: boolean }>({
-  user: JSON.parse(localStorage.getItem('opspilot_user') ?? 'null') as UserView | null,
+  user: readStoredUser(),
   initialized: false,
 })
 

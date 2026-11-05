@@ -2,17 +2,17 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { auth } from '@/stores/auth'
 import MainLayout from '@/layouts/MainLayout.vue'
 import LoginView from '@/views/LoginView.vue'
-import DashboardView from '@/views/DashboardView.vue'
-import IncidentsView from '@/views/IncidentsView.vue'
-import AlertsView from '@/views/AlertsView.vue'
-import CmdbView from '@/views/CmdbView.vue'
-import OnCallView from '@/views/OnCallView.vue'
-import RunbooksView from '@/views/RunbooksView.vue'
-import AuditView from '@/views/AuditView.vue'
-import AssistantView from '@/views/AssistantView.vue'
-import AnalyticsView from '@/views/AnalyticsView.vue'
-import ProblemsView from '@/views/ProblemsView.vue'
-import AccountSecurityView from '@/views/AccountSecurityView.vue'
+const DashboardView = () => import('@/views/DashboardView.vue')
+const IncidentsView = () => import('@/views/IncidentsView.vue')
+const AlertsView = () => import('@/views/AlertsView.vue')
+const CmdbView = () => import('@/views/CmdbView.vue')
+const OnCallView = () => import('@/views/OnCallView.vue')
+const RunbooksView = () => import('@/views/RunbooksView.vue')
+const AuditView = () => import('@/views/AuditView.vue')
+const AssistantView = () => import('@/views/AssistantView.vue')
+const AnalyticsView = () => import('@/views/AnalyticsView.vue')
+const ProblemsView = () => import('@/views/ProblemsView.vue')
+const AccountSecurityView = () => import('@/views/AccountSecurityView.vue')
 
 const router = createRouter({
   history: createWebHistory(),

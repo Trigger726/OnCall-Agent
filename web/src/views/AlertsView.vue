@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import { RefreshCw, RotateCcw, ShieldAlert } from 'lucide-vue-next'
 import StatusBadge from '@/components/StatusBadge.vue'
 import { api, formatTime, type PageResponse } from '@/services/api'
@@ -32,26 +32,37 @@ const loading = ref(false)
 const rejectionLoading = ref(false)
 const replayingId = ref<number | null>(null)
 const resultMessage = ref('')
+const alertError = ref(''), rejectionError = ref(''), actionError = ref('')
+const page = ref(1), total = ref(0)
+let alertSeq = 0, rejectionSeq = 0, disposed = false
+const token = localStorage.getItem('opspilot_token')
+const current = () => !disposed && token === localStorage.getItem('opspilot_token')
+onBeforeUnmount(() => { disposed = true; ++alertSeq; ++rejectionSeq })
 const canReplay = computed(() => ['ADMIN', 'OPS_MANAGER', 'ON_CALL'].includes(auth.state.user?.roleCode ?? ''))
 
 async function loadAlerts() {
+  const seq = ++alertSeq; alertError.value = ''
   loading.value = true
-  const query = new URLSearchParams({ size: '100' })
+  const query = new URLSearchParams({ size: '20', page: String(page.value) })
   if (statusFilter.value) query.set('status', statusFilter.value)
   if (severityFilter.value) query.set('severity', severityFilter.value)
-  try { alerts.value = (await api<PageResponse<AlertItem>>(`/alerts?${query}`)).items }
-  finally { loading.value = false }
+  try { const result = await api<PageResponse<AlertItem>>(`/alerts?${query}`); if(seq === alertSeq && current()) { alerts.value = result.items; total.value = result.total } }
+  catch(e) { if(seq === alertSeq && current()) { alerts.value = []; alertError.value = e instanceof Error ? e.message : '告警读取失败' } }
+  finally { if(seq === alertSeq && current()) loading.value = false }
 }
 
 async function loadRejections() {
+  const seq = ++rejectionSeq; rejectionError.value = ''
   rejectionLoading.value = true
   const query = new URLSearchParams({ size: '50' })
   if (rejectionStatus.value) query.set('status', rejectionStatus.value)
   try {
-    rejections.value = (await api<PageResponse<RejectionItem>>(
+    const result = await api<PageResponse<RejectionItem>>(
       `/integrations/alertmanager/rejections?${query}`,
-    )).items
-  } finally { rejectionLoading.value = false }
+    )
+    if(seq === rejectionSeq && current()) rejections.value = result.items
+  } catch(e) { if(seq === rejectionSeq && current()) { rejections.value = []; rejectionError.value = e instanceof Error ? e.message : '拒绝台账读取失败' } }
+  finally { if(seq === rejectionSeq && current()) rejectionLoading.value = false }
 }
 
 async function load() {
@@ -59,17 +70,21 @@ async function load() {
 }
 
 async function replay(item: RejectionItem) {
+  if(replayingId.value !== null) return
+  actionError.value = ''; resultMessage.value = ''
   replayingId.value = item.id
   try {
     const result = await api<{ action: string; alertId: number | null; incidentId: number | null; message: string }>(
       `/integrations/alertmanager/rejections/${item.id}/replay`, { method: 'POST' },
     )
+    if(!current()) return
     resultMessage.value = `${result.message}${result.alertId ? ` · Alert #${result.alertId}` : ''}`
     await Promise.all([loadAlerts(), loadRejections()])
-  } finally { replayingId.value = null }
+  } catch(e) { if(current()) actionError.value = e instanceof Error ? e.message : '重放失败，请重试' }
+  finally { replayingId.value = null }
 }
 
-watch([statusFilter, severityFilter], loadAlerts)
+watch([statusFilter, severityFilter], () => { page.value = 1; void loadAlerts() })
 watch(rejectionStatus, loadRejections)
 onMounted(load)
 </script>
@@ -85,12 +100,16 @@ onMounted(load)
       </div>
     </div>
     <div v-if="resultMessage" class="success-banner">{{ resultMessage }}</div>
+    <div v-if="actionError" role="alert" class="inline-error">{{ actionError }}</div>
+    <div v-if="alertError" role="alert" class="inline-error">{{ alertError }}<button class="secondary-button" @click="loadAlerts">重试读取告警</button></div>
+    <p v-else-if="loading" role="status" class="muted">正在读取告警…</p>
+    <p v-else-if="!alerts.length" class="muted">当前筛选下没有告警。</p>
     <section class="content-panel full-table-panel">
       <div class="table-scroll">
         <table class="data-table">
           <thead><tr><th>等级</th><th>告警主题</th><th>来源</th><th>资源</th><th>状态</th><th>压缩次数</th><th>关联 Incident</th><th>最近发生</th></tr></thead>
           <tbody>
-            <tr v-for="alert in alerts" :key="alert.id">
+            <tr v-for="alert in loading ? [] : alerts" :key="alert.id">
               <td><StatusBadge :value="alert.severity" /></td>
               <td><div class="primary-cell"><span>#{{ alert.id }} · {{ alert.externalEventId ?? 'fingerprint' }}</span><strong>{{ alert.title }}</strong></div></td>
               <td><span class="source-tag">{{ alert.source }}</span></td><td>{{ alert.resourceName }}</td>
@@ -103,6 +122,7 @@ onMounted(load)
       </div>
     </section>
 
+    <nav v-if="!alertError" class="page-toolbar" aria-label="告警分页"><span>共 {{ total }} 条 · 第 {{ page }} / {{ Math.max(1, Math.ceil(total / 20)) }} 页</span><div class="toolbar-group"><button class="secondary-button" :disabled="loading || page <= 1" @click="page--; loadAlerts()">上一页</button><button class="secondary-button" :disabled="loading || page * 20 >= total" @click="page++; loadAlerts()">下一页</button></div></nav>
     <div class="page-toolbar rejection-toolbar">
       <div><strong>Alertmanager 拒绝台账</strong><span>脱敏快照按保留期清理；补录 CMDB 后可自动或手动重放</span></div>
       <div class="toolbar-group">
@@ -113,7 +133,8 @@ onMounted(load)
       </div>
     </div>
     <section class="content-panel full-table-panel rejection-panel">
-      <div v-if="!rejections.length && !rejectionLoading" class="empty-state compact-empty">
+      <div v-if="rejectionError" role="alert" class="inline-error">{{ rejectionError }}<button class="secondary-button" @click="loadRejections">重试读取台账</button></div>
+      <div v-else-if="!rejections.length && !rejectionLoading" class="empty-state compact-empty">
         <ShieldAlert :size="22" /><strong>当前没有匹配的拒绝项</strong>
       </div>
       <div v-else class="table-scroll">

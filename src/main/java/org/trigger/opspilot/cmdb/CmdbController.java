@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.trigger.opspilot.common.ApiResponse;
 import org.trigger.opspilot.common.PageResponse;
+import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/v1/cmdb")
@@ -35,5 +40,17 @@ public class CmdbController {
     @GetMapping("/topology")
     public ApiResponse<CmdbService.Topology> topology() {
         return ApiResponse.ok(service.topology());
+    }
+
+    @PostMapping("/resources")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
+    public ApiResponse<CmdbService.ResourceDetail> create(@Valid @RequestBody CmdbService.ResourceCommand command) {
+        return ApiResponse.ok(service.save(null, command));
+    }
+
+    @PutMapping("/resources/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','OPS_MANAGER')")
+    public ApiResponse<CmdbService.ResourceDetail> update(@PathVariable long id, @Valid @RequestBody CmdbService.ResourceCommand command) {
+        return ApiResponse.ok(service.save(id, command));
     }
 }

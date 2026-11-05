@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   Activity, AlarmClock, BellRing, BookOpenCheck, Boxes, ChevronLeft, ChevronRight,
@@ -30,12 +30,17 @@ const nav = [
 ]
 
 const pageTitle = computed(() => String(route.meta.title ?? 'OpsPilot'))
+const visibleNav = computed(() => nav.filter(item => item.to !== '/audit' || ['ADMIN','OPS_MANAGER','AUDITOR'].includes(auth.state.user?.roleCode ?? '')))
+const menuButton = ref<HTMLButtonElement | null>(null)
+const mobileClose = ref<HTMLButtonElement | null>(null)
+watch(mobileOpen, async open => { if(open) { await nextTick(); mobileClose.value?.focus() } else menuButton.value?.focus() })
+function escapeNav(event: KeyboardEvent) { if(event.key === 'Escape' && mobileOpen.value) mobileOpen.value = false }
 const clock = computed(() => new Intl.DateTimeFormat('zh-CN', {
   month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
 }).format(now.value))
 
-onMounted(() => { timer = window.setInterval(() => { now.value = new Date() }, 1000) })
-onBeforeUnmount(() => window.clearInterval(timer))
+onMounted(() => { timer = window.setInterval(() => { now.value = new Date() }, 1000); window.addEventListener('keydown', escapeNav) })
+onBeforeUnmount(() => { window.clearInterval(timer); window.removeEventListener('keydown', escapeNav) })
 
 function signOut() {
   auth.logout()
@@ -45,17 +50,17 @@ function signOut() {
 
 <template>
   <div class="app-shell" :class="{ 'sidebar-collapsed': collapsed }">
-    <aside class="sidebar" :class="{ 'mobile-open': mobileOpen }">
+    <aside id="primary-sidebar" class="sidebar" :class="{ 'mobile-open': mobileOpen }">
       <div class="brand-row">
         <span class="brand-mark"><Activity :size="18" /></span>
         <div class="brand-copy">
           <strong>OpsPilot</strong>
           <span>智能运维平台</span>
         </div>
-        <button class="icon-button mobile-close" title="关闭导航" @click="mobileOpen = false"><X :size="18" /></button>
+        <button ref="mobileClose" class="icon-button mobile-close" title="关闭导航" @click="mobileOpen = false"><X :size="18" /></button>
       </div>
       <nav class="primary-nav" aria-label="主导航">
-        <RouterLink v-for="item in nav" :key="item.to" :to="item.to" :title="collapsed ? item.label : undefined" @click="mobileOpen = false">
+        <RouterLink v-for="item in visibleNav" :key="item.to" :to="item.to" :title="collapsed ? item.label : undefined" @click="mobileOpen = false">
           <component :is="item.icon" :size="18" />
           <span>{{ item.label }}</span>
         </RouterLink>
@@ -74,7 +79,7 @@ function signOut() {
 
     <main class="main-frame">
       <header class="topbar">
-        <button class="icon-button mobile-menu" title="打开导航" @click="mobileOpen = true"><Menu :size="20" /></button>
+        <button ref="menuButton" class="icon-button mobile-menu" title="打开导航" :aria-expanded="mobileOpen" aria-controls="primary-sidebar" @click="mobileOpen = true"><Menu :size="20" /></button>
         <div class="page-heading">
           <h1>{{ pageTitle }}</h1>
         </div>

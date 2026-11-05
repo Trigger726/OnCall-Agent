@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, onBeforeUnmount, ref } from 'vue'
 import { AlertTriangle, ArrowRight, BellRing, Boxes, RadioTower, RefreshCw, Users } from 'lucide-vue-next'
 import StatusBadge from '@/components/StatusBadge.vue'
 import WorkbenchBackdrop from '@/components/WorkbenchBackdrop.vue'
@@ -43,23 +43,33 @@ const incidents = ref<Incident[]>([])
 const onCall = ref<OnCall[]>([])
 const loading = ref(true)
 const error = ref('')
+const incidentError = ref(false), shiftError = ref(false), refreshedAt = ref('')
+let loadSeq = 0
+const token = localStorage.getItem('opspilot_token')
+onBeforeUnmount(() => { ++loadSeq })
 
 async function load() {
+  const seq = ++loadSeq
   loading.value = true
   error.value = ''
   try {
-    const [overview, incidentPage, shifts] = await Promise.all([
+    const [overview, incidentPage, shifts] = await Promise.allSettled([
       api<Dashboard>('/dashboard'),
       api<PageResponse<Incident>>('/incidents?size=6'),
       api<OnCall[]>('/on-call/current'),
     ])
-    dashboard.value = overview
-    incidents.value = incidentPage.items
-    onCall.value = shifts
+    if(seq !== loadSeq || localStorage.getItem('opspilot_token') !== token) return
+    dashboard.value = overview.status === 'fulfilled' ? overview.value : null
+    incidents.value = incidentPage.status === 'fulfilled' ? incidentPage.value.items : []
+    onCall.value = shifts.status === 'fulfilled' ? shifts.value : []
+    incidentError.value = incidentPage.status === 'rejected'; shiftError.value = shifts.status === 'rejected'
+    error.value = [overview.status === 'rejected' ? '运行指标读取失败' : '', incidentError.value ? '事件列表读取失败' : '', shiftError.value ? '值班信息读取失败' : ''].filter(Boolean).join('；')
+    if(error.value) error.value += '。其他已成功读取的信息仍可查看，请刷新重试。'
+    refreshedAt.value = new Date().toLocaleTimeString('zh-CN', { hour12: false })
   } catch (caught) {
     error.value = caught instanceof Error ? caught.message : '加载失败'
   } finally {
-    loading.value = false
+    if(seq === loadSeq) loading.value = false
   }
 }
 
@@ -71,8 +81,8 @@ onMounted(load)
     <WorkbenchBackdrop />
     <section class="workbench-hero" aria-labelledby="workbench-title">
       <div class="workbench-intro">
-        <h1 id="workbench-title">生产运行态势</h1>
-        <p>告警、事故与资源健康的统一视图</p>
+        <h1 id="workbench-title">值班工作台</h1>
+        <p>先看待处理信号，再找到服务与负责人。<span v-if="refreshedAt"> 最近读取 {{ refreshedAt }}</span></p>
         <button class="secondary-button" :disabled="loading" @click="load"><RefreshCw :size="15" :class="{ spin: loading }" />刷新数据</button>
       </div>
     </section>
@@ -86,7 +96,8 @@ onMounted(load)
 
     <section class="dashboard-grid">
       <div class="content-panel incident-panel">
-        <div class="panel-heading"><div><h2>当前 Incident</h2><span>按严重等级与更新时间排序</span></div><RouterLink to="/incidents">全部 <ArrowRight :size="14" /></RouterLink></div>
+        <div class="panel-heading"><div><h2>事件队列</h2><span>按严重等级与更新时间排序，含已恢复事件</span></div><RouterLink to="/incidents">全部 <ArrowRight :size="14" /></RouterLink></div>
+        <p v-if="!incidents.length && !loading" class="dashboard-empty">{{ incidentError ? '暂时无法读取事件，请刷新重试。' : '暂无事件。监控告警接入后会在这里显示。' }}</p>
         <div class="table-scroll">
           <table class="data-table">
             <thead><tr><th>等级</th><th>编号 / 主题</th><th>影响服务</th><th>状态</th><th>处置人</th><th>最近更新</th></tr></thead>
@@ -105,6 +116,7 @@ onMounted(load)
       <aside class="content-panel oncall-panel">
         <div class="panel-heading"><div><h2>当前值班</h2><span>生产域责任人</span></div><Users :size="17" /></div>
         <div class="oncall-list">
+          <p v-if="!onCall.length && !loading" class="dashboard-empty">{{ shiftError ? '暂时无法读取排班，请刷新重试。' : '暂无值班计划，请先配置服务负责人和排班。' }}</p>
           <div v-for="shift in onCall" :key="shift.scheduleId" class="oncall-item">
             <span class="user-avatar compact">{{ shift.userName?.slice(0, 1) ?? '?' }}</span>
             <div><strong>{{ shift.userName ?? '暂无排班' }}</strong><span>{{ shift.scheduleName }}</span><small>{{ shift.resourceName }}</small></div>
@@ -142,10 +154,11 @@ onMounted(load)
 
 <style scoped>
 .dashboard-page { position: relative; isolation: isolate; }
+.dashboard-empty { color:var(--text-muted); padding:16px 22px; line-height:1.7; font-size:13px; }
 .dashboard-page .metric-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .dashboard-page > :not(.workbench-backdrop) { position: relative; z-index: 1; }
 .dashboard-page :is(.content-panel, .metric-strip) { background: color-mix(in srgb, var(--surface) 91%, transparent); }
-.workbench-hero { position: relative; min-height: 260px; margin-bottom: 22px; border: 0; background: transparent; }
+.workbench-hero { position: relative; min-height: 170px; margin-bottom: 22px; border: 0; background: transparent; }
 .workbench-intro { position: relative; z-index: 1; padding: 26px 30px; width: fit-content; max-width: calc(100% - 130px); }
 .workbench-intro h1 { margin: 0; font-size: 28px; font-weight: 600; line-height: 1.25; letter-spacing: -.6px; }
 .workbench-intro p { margin: 9px 0 18px; color: var(--text-muted); font-size: 14px; line-height: 1.5; }
